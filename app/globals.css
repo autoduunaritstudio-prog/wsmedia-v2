@@ -237,21 +237,29 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 #prog { position: fixed; top: 0; left: 0; height: 2px; width: 0; z-index: 100; background: var(--blue) }
 
 /* ---------- nav ---------- */
-nav {
+/* HUOM valitsimesta: tama oli aiemmin paljas `nav`, jolloin se osui myos
+   taysvalikon <nav class="fsnav-links">-elementtiin. Sarake sai siita
+   valkoisen taustan ja peitti taustamerkin vasemmalta - samalla se sai
+   backdrop-filterin, joka olisi tehnyt siita containing blockin. Kaikki
+   ylapalkin saannot ovat siksi #nav-kohtaisia. */
+#nav {
   position: sticky; top: 0; z-index: 50;
-  /* Taustakuvio on teknista viivaa, joka nakyy lapi liian ohuella peitolla.
-     Levossa .82, skrollattuna .93 + vahvempi blur. */
-  background: rgba(255,255,255,.82);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid transparent;
-  transition: border-color .3s, background-color .3s, backdrop-filter .3s;
-}
-nav.scrolled {
-  border-bottom-color: rgba(0,0,0,.08);
-  background: rgba(255,255,255,.93);
-  backdrop-filter: saturate(180%) blur(26px);
-  -webkit-backdrop-filter: saturate(180%) blur(26px);
+  /* Ei palkkia: logo ja valikkopainike kelluvat suoraan sisallon paalla,
+     ilman taustaa, backdrop-filteria ja erottavaa viivaa. Sivun oma
+     tausta nakyy niiden takaa lapi koko matkan. */
+  background: none;
+  border: none;
+  /* Ilman palkkia logo ja painike kelluvat vaihtuvan taustan paalla:
+     etusivun tyonaytekaista on lahes musta ja veisi mustan logon kokonaan.
+     difference kaantaa varit taustan mukaan, joten molemmat pysyvat
+     luettavina ilman skrolliin sidottua varinvaihtoa. Kaikki sisalla
+     piirretaan valkoisella, jolloin vaalealla taustalla lopputulos on
+     musta - eli sama ilme kuin ennen.
+
+     Blendin on oltava tassa, ei .navinissa: #nav on z-indexin ja sticky-
+     sijoituksen takia oma pinoamiskonteksti, joten sen sisalla oleva
+     elementti sekoittuisi vain naviin - eli tyhjaan - eika sivun sisaltoon. */
+  mix-blend-mode: difference;
 }
 .navin {
   max-width: 1440px; margin: 0 auto; padding: 0 28px;
@@ -260,13 +268,13 @@ nav.scrolled {
 }
 /* Kevyt tiivistyminen skrollatessa. Tila vaihtuu kertaalleen hystereesilla,
    joten 4px siirtyma ei toistu edestakaisin kynnyksen tuntumassa. */
-nav.scrolled .navin { height: 64px }
+#nav.scrolled .navin { height: 64px }
 /* Logo on nyt inline-SVG. Korkeus ohjaa kokoa ja width:auto sailyttaa
    kuvasuhteen viewBoxista; vari tulee color-arvosta currentColorin kautta. */
-.logo { display: inline-flex; align-items: center; color: var(--ink) }
+#nav .logo { display: inline-flex; align-items: center; color: #fff }
 .logo svg { height: 38px; width: auto; display: block }
-nav.scrolled .logo svg { height: 34px }
-.logo svg, nav.scrolled .logo svg { transition: height .28s cubic-bezier(.2,.6,.2,1) }
+#nav.scrolled .logo svg { height: 34px }
+.logo svg, #nav.scrolled .logo svg { transition: height .28s cubic-bezier(.2,.6,.2,1) }
 @media (max-width: 520px) { .logo svg { height: 30px } }
 /* Ylapalkki on minimaalinen: logo, valikkopainike ja CTA. Kaikki muu
    navigointi on taysvalikossa, joten palkki ei kasva sivumaaran myota. */
@@ -275,16 +283,20 @@ nav.scrolled .logo svg { height: 34px }
    aksenttivari jaa yhdelle elementille kerrallaan. */
 .navtoggle {
   flex: none; width: 54px; height: 54px; border-radius: 50%;
-  background: var(--ink); border: none; cursor: pointer; padding: 0;
+  background: #fff; border: none; cursor: pointer; padding: 0;
   display: inline-flex; align-items: center; justify-content: center;
-  transition: background .2s, transform .2s cubic-bezier(.2,.6,.2,1), width .28s, height .28s;
+  transition: transform .2s cubic-bezier(.2,.6,.2,1), width .28s, height .28s;
 }
-.navtoggle:hover { background: #000; transform: scale(1.05) }
-.navtoggle:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,113,227,.35) }
-nav.scrolled .navtoggle { width: 48px; height: 48px }
+/* Hover on pelkka skaalaus: difference-tilassa tummempi tayttö nayttaisi
+   vaalealla taustalla vaaleammalta, eli painike haipyisi hoverilla. */
+.navtoggle:hover { transform: scale(1.05) }
+.navtoggle:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,113,227,.55) }
+#nav.scrolled .navtoggle { width: 48px; height: 48px }
 
 .navtoggle-bars { display: flex; flex-direction: column; gap: 5px; width: 21px }
-.navtoggle-bars i { display: block; height: 1.8px; border-radius: 2px; background: #fff }
+/* Viivat mustina: ne ovat samassa sekoitusryhmassa kuin valkoinen ympyra,
+   joten kaannon jalkeen kontrasti sailyy molempiin suuntiin. */
+.navtoggle-bars i { display: block; height: 1.8px; border-radius: 2px; background: #000 }
 .navtoggle-bars i:nth-child(2) { width: 15px }
 
 
@@ -370,10 +382,14 @@ nav.scrolled .navtoggle { width: 48px; height: 48px }
 /* Pystyviivat syntyvat keskisarakkeen reunuksista, jolloin ne osuvat
    tarkalleen sarakerajoille ja kulkevat koko sisallon korkeudelta. */
 .fsnav-links { padding-right: 46px }
+/* Palvelulista on pystysuunnassa keskitetty paavalikkolistaan nahden:
+   sarake venyy gridissa taydelle korkeudelle (jolloin reunusviivat
+   kulkevat koko matkan), mutta sisalto istuu keskella. */
 .fsnav-sub {
   padding: 0 46px;
   border-left: 1px solid var(--hair);
   border-right: 1px solid var(--hair);
+  display: flex; flex-direction: column; justify-content: center;
 }
 .fsnav-side { padding-left: 46px }
 
@@ -402,8 +418,14 @@ nav.scrolled .navtoggle { width: 48px; height: 48px }
   .fsnav-side { grid-column: auto }
 }
 
-.fsnav-links ul { list-style: none }
-.fsnav-links li + li { margin-top: 2px }
+/* Lista levittautuu koko sarakkeen korkeudelle. Jos sisalto on
+   korkeampi kuin tila, flex-container kasvaa sisallon mukaan eika
+   space-evenly jata mitaan reunojen ulkopuolelle; .fsnav-in vierittaa. */
+.fsnav-links { display: flex }
+.fsnav-links ul {
+  list-style: none; flex: 1;
+  display: flex; flex-direction: column; justify-content: space-evenly;
+}
 .fsnav-links a {
   display: block; text-decoration: none; color: var(--ink);
   font-size: var(--text-nav-huge); font-weight: var(--weight-bold);
@@ -1877,7 +1899,6 @@ footer .base { padding-top: 18px }
    ================================================================== */
 .page-hakukoneoptimointi body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Instrument Sans','Helvetica Neue',sans-serif; background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased; letter-spacing:-0.011em;overflow-x:hidden; }
 .page-hakukoneoptimointi footer { background:rgba(245,245,247,.85);backdrop-filter:blur(8px);border-top:1px solid var(--hair);padding:42px 0 46px;font-size: var(--text-caption);color:var(--grey) }
-.page-hakukoneoptimointi nav { position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72); backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px); border-bottom:1px solid transparent;transition:border-color .3s; }
 .page-hakukoneoptimointi .marq { border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(6px) }
 .page-hakukoneoptimointi h1 { font-size: var(--text-h1-sm);font-weight: var(--weight-bold);letter-spacing:-0.028em;line-height:1.07 }
 .page-hakukoneoptimointi .sub { font-size: var(--text-lead);color:var(--grey);font-weight: var(--weight-regular);letter-spacing:-0.014em;line-height:1.45 }
