@@ -1,4 +1,3 @@
-import type { NavLink } from "./Nav";
 import type { FooterColumn } from "./Footer";
 
 /**
@@ -6,6 +5,14 @@ import type { FooterColumn } from "./Footer";
  * joten valikko kuuluu vain etusivun naviin (HOME_NAV). Jos se lisataan
  * alasivujen naviin, ankkurit on kirjoitettava muotoon /#palvelut.
  */
+export type NavLink = {
+  href: string;
+  label: string;
+  current?: boolean;
+  /** Kun annettu, rivi paljastaa taysvalikossa palvelujen alavalikon. */
+  menu?: ServiceMenuItem[];
+};
+
 export type ServiceMenuItem = {
   href: string;
   label: string;

@@ -255,12 +255,12 @@ nav.scrolled {
 }
 .navin {
   max-width: 1080px; margin: 0 auto; padding: 0 24px;
-  height: 48px; display: flex; align-items: center; justify-content: space-between;
+  height: 56px; display: flex; align-items: center; justify-content: space-between;
   transition: height .28s cubic-bezier(.2,.6,.2,1);
 }
 /* Kevyt tiivistyminen skrollatessa. Tila vaihtuu kertaalleen hystereesilla,
    joten 4px siirtyma ei toistu edestakaisin kynnyksen tuntumassa. */
-nav.scrolled .navin { height: 44px }
+nav.scrolled .navin { height: 50px }
 /* Logo on nyt inline-SVG. Korkeus ohjaa kokoa ja width:auto sailyttaa
    kuvasuhteen viewBoxista; vari tulee color-arvosta currentColorin kautta. */
 .logo { display: inline-flex; align-items: center; color: var(--ink) }
@@ -270,25 +270,35 @@ nav.scrolled .logo svg { height: 27px }
 @media (max-width: 520px) { .logo svg { height: 26px } }
 /* Ylapalkki on minimaalinen: logo, valikkopainike ja CTA. Kaikki muu
    navigointi on taysvalikossa, joten palkki ei kasva sivumaaran myota. */
+.navright { display: flex; align-items: center; gap: 14px }
+
+/* Pyorea ikonipainike oikeassa reunassa. Tumma tayttö valkoisin viivoin:
+   sininen olisi kilpaillut vieressa olevan CTA-pillerin kanssa, joten
+   aksenttivari jaa yhdelle elementille kerrallaan. */
 .navtoggle {
-  font-family: inherit; font-size: var(--text-label-sm);
-  font-weight: var(--weight-semibold); letter-spacing: -0.01em;
-  color: var(--ink); background: none; border: none; padding: 6px 2px;
-  cursor: pointer; display: inline-flex; align-items: center; gap: 9px;
-  opacity: .85; transition: opacity .2s;
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--ink); border: none; cursor: pointer; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .2s cubic-bezier(.2,.6,.2,1), width .28s, height .28s;
 }
-.navtoggle:hover { opacity: 1 }
-.navtoggle-bars { display: flex; flex-direction: column; gap: 4px; width: 17px }
-.navtoggle-bars i { display: block; height: 1.5px; border-radius: 2px; background: var(--ink) }
-.navtoggle-bars i:last-child { width: 11px; margin-left: auto }
+.navtoggle:hover { background: #000; transform: scale(1.05) }
+.navtoggle:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,113,227,.35) }
+nav.scrolled .navtoggle { width: 40px; height: 40px }
+
+.navtoggle-bars { display: flex; flex-direction: column; gap: 4px; width: 18px }
+.navtoggle-bars i { display: block; height: 1.8px; border-radius: 2px; background: #fff }
+.navtoggle-bars i:nth-child(2) { width: 13px }
 
 .navcta {
   font-size: var(--text-label-sm); color: #fff !important; background: var(--blue);
-  padding: 7px 16px; border-radius: 980px; opacity: 1 !important;
-  transition: background .2s !important;
+  padding: 8px 17px; border-radius: 980px; opacity: 1 !important;
+  transition: background .2s !important; white-space: nowrap;
 }
 .navcta:hover { background: var(--blue-d) }
-@media (max-width: 520px) { .navtoggle { font-size: 0; gap: 0 } }
+@media (max-width: 520px) {
+  .navcta { display: none }
+  .navright { gap: 0 }
+}
 
 /* ==================================================================
    TAYSVALIKKO
@@ -308,9 +318,9 @@ nav.scrolled .logo svg { height: 27px }
 .fsnav-scrim {
   position: absolute; inset: 0; width: 100%; height: 100%;
   border: none; padding: 0; cursor: default;
-  background: rgba(255,255,255,.96);
-  backdrop-filter: saturate(180%) blur(24px);
-  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  /* Tayysin lapinakymaton: backdrop-filter ei ole kaikkialla kaytossa, ja
+     lapikuultava valikko lukisi helposti rikkinaiselta. */
+  background: var(--bg);
 }
 
 .fsnav-in {

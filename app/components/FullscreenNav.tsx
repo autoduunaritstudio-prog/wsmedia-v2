@@ -2,43 +2,52 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
-import { LogoFull } from "./Logo";
+import { LogoFull, LogoMark } from "./Logo";
 import MenuIcon from "./MenuIcon";
 import SmartLink from "./SmartLink";
-import type { NavLink } from "./Nav";
-import { CONTACT } from "./site-data";
+import { CONTACT, type NavLink } from "./site-data";
 
 /**
- * Taysvalikko: ylapalkin valikkopainike avaa koko ruudun peittavan overlayn.
+ * Ylapalkki ja taysvalikko.
  *
- * Yksi komponentti kaikilla sivuilla. Ainoa sivukohtainen ero on anchorBase:
- * ankkurilinkit osoittavat etusivun osioihin, joten alasivuilla ne on
- * kirjoitettava muotoon /#palvelut.
+ * RAKENNE ON MERKITSEVA: overlay renderoidaan <nav>:n SISARUKSENA, ei sen
+ * sisalle. Navilla on backdrop-filter, ja se tekee elementista containing
+ * blockin position: fixed -jalkelaisille (sama vaikutus kuin transformilla tai
+ * filterilla). Navin sisalla overlay puristui palkin korkuiseksi 48px-kaistaksi
+ * - kayttajalle se nakyi niin, etta jokin vilahtaa ja katoaa. Sisaruksena
+ * fixed on jalleen viewport-suhteinen.
  *
- * Saavutettavuus:
- * - Painikkeessa aria-expanded ja aria-controls, overlayssa aria-hidden
- *   suljettuna
- * - Suljettuna overlay on visibility: hidden, joten sen linkit eivat ole
- *   tab-jarjestyksessa eika aria-hidden peita fokusoitavia elementteja
- * - Fokusansa: Tab kiertaa vain valikon sisalla niin kauan kuin se on auki
- * - Escape ja klikkaus taustaan sulkevat, ja fokus palaa valikkopainikkeeseen
- * - Sivun vieritys lukitaan valikon ollessa auki
+ * Saavutettavuus: aria-expanded painikkeessa, aria-hidden overlayssa
+ * suljettuna, fokusansa Tabille, fokus palaa painikkeeseen sulkiessa, Escape
+ * ja taustaklikkaus sulkevat, sivun vieritys lukitaan auki ollessa. Suljettuna
+ * overlay on visibility: hidden, joten sen linkit eivat ole tab-jarjestyksessa.
  */
 
 type Props = {
   links: NavLink[];
-  /** "/" alasivuilla, jotta #-ankkurit osoittavat etusivulle. Etusivulla "". */
+  ctaHref: string;
+  ctaLabel: string;
+  /** Kun annettu, logo on linkki. Etusivu jattaa taman pois. */
+  logoHref?: string;
+  /** "/" alasivuilla, jotta valikon #-ankkurit osoittavat etusivulle. */
   anchorBase?: string;
 };
 
-const FOCUSABLE =
-  'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
 
-export default function FullscreenNav({ links, anchorBase = "" }: Props) {
+export default function FullscreenNav({
+  links,
+  ctaHref,
+  ctaLabel,
+  logoHref,
+  anchorBase = "",
+}: Props) {
   const [open, setOpen] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
+  /** Vierityslukon aiemmat arvot, jotta lukko voidaan purkaa synkronisesti. */
+  const lockRef = useRef<{ overflow: string; pad: string } | null>(null);
   const panelId = useId();
 
   const resolve = useCallback(
@@ -46,20 +55,31 @@ export default function FullscreenNav({ links, anchorBase = "" }: Props) {
     [anchorBase],
   );
 
+  const unlockScroll = useCallback(() => {
+    if (!lockRef.current) return;
+    document.body.style.overflow = lockRef.current.overflow;
+    document.body.style.paddingRight = lockRef.current.pad;
+    lockRef.current = null;
+  }, []);
+
   const close = useCallback(() => {
+    // Lukko puretaan heti, ei vasta efektin siivouksessa. Ankkurilinkkia
+    // klikatessa selain hyppaa kohteeseen samassa tapahtumassa, ja jos body on
+    // viela overflow: hidden, hyppy jaa tekematta eika palaa myohemmin.
+    unlockScroll();
     setOpen(false);
     setShowServices(false);
     btnRef.current?.focus();
-  }, []);
+  }, [unlockScroll]);
 
   useEffect(() => {
     if (!open) return;
 
-    // Sivun vieritys lukkoon, mutta pidetaan vierityspalkin tila ennallaan
-    // jotta sisalto ei hyppaa sivusuunnassa.
-    const prevOverflow = document.body.style.overflow;
+    lockRef.current = {
+      overflow: document.body.style.overflow,
+      pad: document.body.style.paddingRight,
+    };
     const gap = window.innerWidth - document.documentElement.clientWidth;
-    const prevPad = document.body.style.paddingRight;
     document.body.style.overflow = "hidden";
     if (gap > 0) document.body.style.paddingRight = `${gap}px`;
 
@@ -84,42 +104,60 @@ export default function FullscreenNav({ links, anchorBase = "" }: Props) {
     };
 
     document.addEventListener("keydown", onKey);
-    // Fokus valikon ensimmaiseen kohteeseen kun se avataan.
-    panelRef.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
+    // Fokus ensimmaiseen linkkiin, ei taustan sulkupainikkeeseen.
+    panelRef.current?.querySelector<HTMLElement>(".fsnav-in a, .fsnav-in button")?.focus();
 
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
-      document.body.style.paddingRight = prevPad;
+      unlockScroll();
     };
-  }, [open, close]);
+  }, [open, close, unlockScroll]);
 
   const services = links.find((l) => l.menu)?.menu ?? [];
 
   return (
     <>
-      <button
-        type="button"
-        className="navtoggle"
-        ref={btnRef}
-        aria-expanded={open}
-        aria-controls={panelId}
-        onClick={() => setOpen(true)}
-      >
-        <span className="navtoggle-bars" aria-hidden="true">
-          <i />
-          <i />
-        </span>
-        Valikko
-      </button>
+      <nav id="nav" aria-label="Ylävalikko">
+        <div className="navin">
+          {/* Logo on aria-hidden ja nimi tulee .vh-tekstista, jotta
+              saavutettava nimi ja hakukoneteksti sailyvat. */}
+          {logoHref ? (
+            <SmartLink className="logo" href={logoHref}>
+              <LogoMark />
+              <span className="vh">WS Media</span>
+            </SmartLink>
+          ) : (
+            <span className="logo">
+              <LogoMark />
+              <span className="vh">WS Media</span>
+            </span>
+          )}
 
-      <div
-        className={`fsnav${open ? " on" : ""}`}
-        id={panelId}
-        aria-hidden={!open}
-        ref={panelRef}
-      >
-        {/* Tausta sulkee klikatessa; itse sisalto on tamän paalla. */}
+          <div className="navright">
+            <SmartLink className="navcta" href={ctaHref}>
+              {ctaLabel}
+            </SmartLink>
+
+            <button
+              type="button"
+              className="navtoggle"
+              ref={btnRef}
+              aria-expanded={open}
+              aria-controls={panelId}
+              aria-label="Avaa valikko"
+              onClick={() => setOpen(true)}
+            >
+              <span className="navtoggle-bars" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div className={`fsnav${open ? " on" : ""}`} id={panelId} aria-hidden={!open} ref={panelRef}>
         <button
           type="button"
           className="fsnav-scrim"
@@ -136,12 +174,7 @@ export default function FullscreenNav({ links, anchorBase = "" }: Props) {
             </SmartLink>
             <button type="button" className="fsnav-close" onClick={close} aria-label="Sulje valikko">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                <path
-                  d="M3 3 L15 15 M15 3 L3 15"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
+                <path d="M3 3 L15 15 M15 3 L3 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
               </svg>
             </button>
           </div>
@@ -150,10 +183,7 @@ export default function FullscreenNav({ links, anchorBase = "" }: Props) {
             <nav className="fsnav-links" aria-label="Päävalikko">
               <ul onMouseLeave={() => setShowServices(false)}>
                 {links.map((l) => (
-                  <li
-                    key={l.label}
-                    onMouseEnter={() => setShowServices(Boolean(l.menu))}
-                  >
+                  <li key={l.label} onMouseEnter={() => setShowServices(Boolean(l.menu))}>
                     <SmartLink
                       href={resolve(l.href)}
                       onClick={close}
