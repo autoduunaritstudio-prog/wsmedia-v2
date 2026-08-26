@@ -246,8 +246,8 @@ export const FAQ_GROUPS: FaqGroup[] = [
           <>
             Kyllä. WS Media tekee lyhytvideoiden lisäksi{" "}
             <SmartLink href="/verkkosivut">hakukoneoptimoidut verkkosivut</SmartLink>,{" "}
-            <SmartLink href="/meta-mainonta">Meta-mainonnan</SmartLink> ja{" "}
-            <SmartLink href="/tapahtumat">tapahtumatuotannot</SmartLink>. Kun sisältö, sivusto ja mainonta tulevat
+            Meta-mainonnan ja{" "}
+            <SmartLink href="/#palvelut">tapahtumatuotannot</SmartLink>. Kun sisältö, sivusto ja mainonta tulevat
             samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee kaikkia
             kolmea.
           </>

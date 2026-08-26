@@ -65,7 +65,7 @@ export default function Verkkosivut() {
               <SmartLink href="/">Etusivu</SmartLink>
             </li>
             <li>
-              <SmartLink href="/palvelut">Palvelut</SmartLink>
+              <SmartLink href="/#palvelut">Palvelut</SmartLink>
             </li>
             <li aria-current="page">Verkkosivut</li>
           </ol>

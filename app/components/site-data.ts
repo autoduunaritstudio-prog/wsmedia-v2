@@ -1,6 +1,27 @@
 import type { FooterColumn } from "./Footer";
 
 /**
+ * Olemassa olevat reitit. Naiden ulkopuolelle ei saa linkittaa: kaikki muu
+ * 404aa. Suunniteltujen mutta toteuttamattomien sivujen (Tapahtumat,
+ * Tyonaytteet, Hinnoittelu, Yhteystiedot, Blogi) tilalla kaytetaan etusivun
+ * osioita, jotta yksikaan linkki ei osoita tyhjaan.
+ */
+export const ROUTES = {
+  etusivu: "/",
+  lyhytvideot: "/lyhytvideot",
+  verkkosivut: "/verkkosivut",
+  seo: "/hakukoneoptimointi",
+  tietosuoja: "/tietosuoja",
+  /** Sivua ei viela ole -> etusivun Palvelut-osio. */
+  tapahtumat: "/#palvelut",
+  palvelut: "/#palvelut",
+  tyonaytteet: "/#tyot",
+  prosessi: "/#prosessi",
+  hinnoittelu: "/#paketit",
+  yhteys: "/#lomake",
+} as const;
+
+/**
  * Navin Palvelut-pudotusvalikko. Ankkurit osoittavat etusivun Palvelut-osioon,
  * joten valikko kuuluu vain etusivun naviin (HOME_NAV). Jos se lisataan
  * alasivujen naviin, ankkurit on kirjoitettava muotoon /#palvelut.
@@ -22,37 +43,32 @@ export type ServiceMenuItem = {
 
 export const SERVICE_MENU: ServiceMenuItem[] = [
   {
-    href: "/lyhytvideot",
+    href: ROUTES.lyhytvideot,
     label: "Lyhytvideot",
     desc: "TikTok, Reels ja Shorts avaimet käteen",
     icon: "video",
   },
   {
-    href: "#palvelut",
+    href: ROUTES.verkkosivut,
     label: "Verkkosivut",
     desc: "Nopeat, hakukoneoptimoidut sivustot",
     icon: "site",
   },
   {
+    // Ankkuri, ei ROUTES.tapahtumat: FullscreenNav prefiksoi #-alkuiset
+    // hrefit anchorBasella, jolloin alasivuilta tulee /#palvelut ja
+    // etusivulla linkki vierittaa samalla sivulla.
     href: "#palvelut",
     label: "Tapahtumat",
     desc: "Suunnittelu, toteutus ja taltiointi",
     icon: "event",
   },
   {
-    href: "#palvelut",
+    href: ROUTES.seo,
     label: "SEO-optimointi",
     desc: "Näkyvyys niissä hauissa jotka tuovat liidit",
     icon: "seo",
   },
-];
-
-/** Etusivun navigaatio: ankkurilinkit samalle sivulle. */
-export const HOME_NAV: NavLink[] = [
-  { href: "#palvelut", label: "Palvelut", menu: SERVICE_MENU },
-  { href: "#tyot", label: "Työnäytteet" },
-  { href: "#prosessi", label: "Prosessi" },
-  { href: "#paketit", label: "Hinnoittelu" },
 ];
 
 /**
@@ -66,7 +82,8 @@ export const OVERLAY_NAV: NavLink[] = [
   { href: "#tyot", label: "Työnäytteet" },
   { href: "#prosessi", label: "Prosessi" },
   { href: "#paketit", label: "Hinnoittelu" },
-  { href: "/yhteystiedot", label: "Yhteystiedot" },
+  // Yhteystiedot-sivua ei ole; ankkuri etusivun lomakkeeseen.
+  { href: "#lomake", label: "Yhteystiedot" },
 ];
 
 /** Yhteystiedot yhdessa paikassa: taysvalikko ja tietosuojasivu kayttavat samoja. */
@@ -89,69 +106,66 @@ export const SOCIAL: SocialLink[] = [
   { href: "https://fi.linkedin.com/company/ws-media-oy", label: "LinkedIn", icon: "linkedin" },
 ];
 
+/**
+ * Etusivun footer. Ankkurit ovat tarkoituksella ilman /-etuliitetta: footer
+ * on vain etusivulla, joten #tyot vierittaa samalla sivulla sen sijaan etta
+ * kaynnistaisi reittinavigaation.
+ */
 export const HOME_FOOTER: FooterColumn[] = [
   {
     title: "Palvelut",
     links: [
-      { href: "#", label: "Lyhytvideot" },
-      { href: "#", label: "TikTok-videot" },
-      { href: "#", label: "Instagram Reels" },
-      { href: "#", label: "YouTube Shorts" },
-      { href: "#", label: "Verkkosivut" },
-      { href: "#", label: "Tapahtumat" },
+      { href: ROUTES.lyhytvideot, label: "Lyhytvideot" },
+      // TikTok, Reels ja Shorts kasitellaan lyhytvideosivulla; omia
+      // alasivuja ei ole, joten kaikki kolme osoittavat sinne.
+      { href: ROUTES.lyhytvideot, label: "TikTok-videot" },
+      { href: ROUTES.lyhytvideot, label: "Instagram Reels" },
+      { href: ROUTES.lyhytvideot, label: "YouTube Shorts" },
+      { href: ROUTES.verkkosivut, label: "Verkkosivut" },
+      { href: ROUTES.seo, label: "Hakukoneoptimointi" },
+      { href: "#palvelut", label: "Tapahtumat" },
     ],
   },
   {
     title: "Yritys",
     links: [
-      { href: "#", label: "Työnäytteet" },
-      { href: "#", label: "Prosessi" },
-      { href: "#", label: "Hinnoittelu" },
-      { href: "#", label: "Blogi" },
-      { href: "#", label: "Ota yhteyttä" },
-      { href: "/tietosuoja", label: "Tietosuojaseloste" },
+      { href: "#tyot", label: "Työnäytteet" },
+      { href: "#prosessi", label: "Prosessi" },
+      { href: "#paketit", label: "Hinnoittelu" },
+      { href: "#lomake", label: "Ota yhteyttä" },
+      { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },
     ],
   },
 ];
 
-/** Alasivujen navigaatio: oikeat sivupolut. */
-export const SUBPAGE_NAV: NavLink[] = [
-  { href: "/lyhytvideot", label: "Lyhytvideot" },
-  { href: "/verkkosivut", label: "Verkkosivut" },
-  { href: "/hakukoneoptimointi", label: "Hakukoneoptimointi" },
-  { href: "/tapahtumat", label: "Tapahtumat" },
-  { href: "/tyonaytteet", label: "Työnäytteet" },
-  { href: "/hinnoittelu", label: "Hinnoittelu" },
-];
-
 export const SUBPAGE_FOOTER: FooterColumn[] = [
   {
-    title: "Lyhytvideot",
+    title: "Palvelut",
     links: [
-      { href: "/lyhytvideot", label: "Lyhytvideotuotanto" },
-      { href: "/lyhytvideot/tiktok", label: "TikTok-videot" },
-      { href: "/lyhytvideot/instagram-reels", label: "Instagram Reels" },
-      { href: "/lyhytvideot/youtube-shorts", label: "YouTube Shorts" },
-      { href: "/lyhytvideot/linkedin", label: "LinkedIn-videot" },
+      { href: ROUTES.lyhytvideot, label: "Lyhytvideot" },
+      { href: ROUTES.verkkosivut, label: "Verkkosivut" },
+      { href: ROUTES.seo, label: "Hakukoneoptimointi" },
+      { href: ROUTES.tapahtumat, label: "Tapahtumat" },
     ],
   },
   {
-    title: "Muut palvelut",
+    title: "Lyhytvideot",
     links: [
-      { href: "/verkkosivut", label: "Verkkosivut" },
-      { href: "/hakukoneoptimointi", label: "Hakukoneoptimointi" },
-      { href: "/meta-mainonta", label: "Meta-mainonta" },
-      { href: "/tapahtumat", label: "Tapahtumat" },
-      { href: "/hinnoittelu", label: "Hinnoittelu" },
-      { href: "/blogi", label: "Blogi" },
+      { href: ROUTES.lyhytvideot, label: "Lyhytvideotuotanto" },
+      { href: "/lyhytvideot#sisalto", label: "Palvelun sisältö" },
+      { href: "/lyhytvideot#prosessi", label: "Prosessi" },
+      { href: "/lyhytvideot#hinnoittelu", label: "Lyhytvideon hinta" },
+      { href: "/lyhytvideot#ukk", label: "Usein kysyttyä" },
     ],
   },
   {
     title: "Yritys",
     links: [
-      { href: "/yhteystiedot", label: "Ota yhteyttä" },
-      { href: "/tietosuoja", label: "Tietosuojaseloste" },
+      { href: ROUTES.tyonaytteet, label: "Työnäytteet" },
+      { href: ROUTES.hinnoittelu, label: "Hinnoittelu" },
+      { href: ROUTES.yhteys, label: "Ota yhteyttä" },
+      { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },
     ],
   },
@@ -162,11 +176,11 @@ export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
   {
     title: "Palvelut",
     links: [
-      { href: "/lyhytvideot", label: "Lyhytvideot" },
-      { href: "/verkkosivut", label: "Verkkosivut yritykselle" },
+      { href: ROUTES.lyhytvideot, label: "Lyhytvideot" },
+      { href: ROUTES.verkkosivut, label: "Verkkosivut yritykselle" },
+      { href: ROUTES.seo, label: "Hakukoneoptimointi" },
       { href: "/verkkosivut#toteutustapa", label: "Räätälöidyt verkkosivut" },
-      { href: "/verkkosivut#hakukoneoptimointi", label: "Hakukoneoptimointi" },
-      { href: "/tapahtumat", label: "Tapahtumat" },
+      { href: ROUTES.tapahtumat, label: "Tapahtumat" },
     ],
   },
   {
@@ -174,19 +188,18 @@ export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
     links: [
       { href: "/verkkosivut#hinnoittelu", label: "Verkkosivujen hinta" },
       { href: "/verkkosivut#prosessi", label: "Prosessi" },
+      { href: "/verkkosivut#sisalto", label: "Palvelun sisältö" },
+      { href: "/verkkosivut#hakukoneoptimointi", label: "Hakukoneoptimoidut sivut" },
       { href: "/verkkosivut#ukk", label: "Usein kysyttyä" },
-      { href: "/verkkosivut/espoo", label: "Verkkosivut Espoo" },
-      { href: "/verkkosivut/helsinki", label: "Verkkosivut Helsinki" },
     ],
   },
   {
     title: "Yritys",
     links: [
-      { href: "/tyonaytteet", label: "Työnäytteet" },
-      { href: "/hinnoittelu", label: "Hinnoittelu" },
-      { href: "/blogi", label: "Blogi" },
-      { href: "/yhteystiedot", label: "Ota yhteyttä" },
-      { href: "/tietosuoja", label: "Tietosuojaseloste" },
+      { href: ROUTES.tyonaytteet, label: "Työnäytteet" },
+      { href: ROUTES.hinnoittelu, label: "Hinnoittelu" },
+      { href: ROUTES.yhteys, label: "Ota yhteyttä" },
+      { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },
     ],
   },
@@ -197,11 +210,11 @@ export const SEO_FOOTER: FooterColumn[] = [
   {
     title: "Palvelut",
     links: [
-      { href: "/lyhytvideot", label: "Lyhytvideot" },
-      { href: "/verkkosivut", label: "Verkkosivut yritykselle" },
-      { href: "/hakukoneoptimointi", label: "Hakukoneoptimointi" },
+      { href: ROUTES.lyhytvideot, label: "Lyhytvideot" },
+      { href: ROUTES.verkkosivut, label: "Verkkosivut yritykselle" },
+      { href: ROUTES.seo, label: "Hakukoneoptimointi" },
       { href: "/hakukoneoptimointi#paikallinen", label: "Paikallinen SEO" },
-      { href: "/tapahtumat", label: "Tapahtumat" },
+      { href: ROUTES.tapahtumat, label: "Tapahtumat" },
     ],
   },
   {
@@ -211,17 +224,15 @@ export const SEO_FOOTER: FooterColumn[] = [
       { href: "/hakukoneoptimointi#sisalto", label: "Palvelun sisältö" },
       { href: "/hakukoneoptimointi#mittarit", label: "Mittarit ja raportointi" },
       { href: "/hakukoneoptimointi#ukk", label: "Usein kysyttyä" },
-      { href: "/hakukoneoptimointi/espoo", label: "Hakukoneoptimointi Espoo" },
     ],
   },
   {
     title: "Yritys",
     links: [
-      { href: "/tyonaytteet", label: "Työnäytteet" },
-      { href: "/hinnoittelu", label: "Hinnoittelu" },
-      { href: "/blogi", label: "Blogi" },
-      { href: "/yhteystiedot", label: "Ota yhteyttä" },
-      { href: "/tietosuoja", label: "Tietosuojaseloste" },
+      { href: ROUTES.tyonaytteet, label: "Työnäytteet" },
+      { href: ROUTES.hinnoittelu, label: "Hinnoittelu" },
+      { href: ROUTES.yhteys, label: "Ota yhteyttä" },
+      { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },
     ],
   },

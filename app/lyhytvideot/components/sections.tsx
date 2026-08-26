@@ -207,9 +207,6 @@ export function Kokonaisuus() {
               Sisältö on jo todistettu yleisöllä, joten mainoseuro menee toistoihin ja tarkkaan
               kohdennukseen. Mainonta ohjaa liikenteen verkkosivullesi, jossa konversio tapahtuu.
             </p>
-            <SmartLink className="tlink" href="/meta-mainonta">
-              Lue lisää Meta-mainonnasta
-            </SmartLink>
           </div>
           <div>
             <p className="role">Liidit</p>

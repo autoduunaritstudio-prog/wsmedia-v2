@@ -68,7 +68,7 @@ export default function Hakukoneoptimointi() {
               <SmartLink href="/">Etusivu</SmartLink>
             </li>
             <li>
-              <SmartLink href="/palvelut">Palvelut</SmartLink>
+              <SmartLink href="/#palvelut">Palvelut</SmartLink>
             </li>
             <li aria-current="page">Hakukoneoptimointi</li>
           </ol>

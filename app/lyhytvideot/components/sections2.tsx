@@ -82,7 +82,7 @@ export function Hinnoittelu() {
         <p className="pricenote rv">
           Yksittäiset lyhytvideot ja kampanjatuotannot hinnoitellaan projekteina alkaen [HINTA] €.
           Katso koko{" "}
-          <SmartLink href="/hinnoittelu" className="tlink" style={{ fontSize: "12.5px" }}>
+          <SmartLink href="/#paketit" className="tlink" style={{ fontSize: "12.5px" }}>
             hinnoittelu
           </SmartLink>
         </p>
@@ -118,9 +118,7 @@ export function Kenelle() {
                   verkkosivut
                 </SmartLink>
                 , hakukoneoptimoinnin ja{" "}
-                <SmartLink href="/meta-mainonta" style={LINK_STYLE}>
-                  Meta-mainonnan
-                </SmartLink>
+                Meta-mainonnan
               </li>
             </ul>
           </div>
@@ -296,7 +294,7 @@ export function Kaytannossa() {
           <p>
             WS Media tuottaa lyhytvideot Espoosta ja kuvaa päivittäin pääkaupunkiseudulla. Koska
             teemme myös <SmartLink href="/verkkosivut">verkkosivut</SmartLink>, hakukoneoptimoinnin,{" "}
-            <SmartLink href="/meta-mainonta">Meta-mainonnan</SmartLink> ja <SmartLink href="/tapahtumat">tapahtumat</SmartLink>, sama
+            Meta-mainonnan ja <SmartLink href="/#palvelut">tapahtumat</SmartLink>, sama
             kuvausmateriaali palvelee somen lisäksi sivustoasi ja mainontaasi — ja viesti pysyy
             yhtenäisenä kanavasta riippumatta.
           </p>

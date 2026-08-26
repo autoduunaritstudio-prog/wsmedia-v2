@@ -113,7 +113,7 @@ export default function Lyhytvideot() {
               <SmartLink href="/">Etusivu</SmartLink>
             </li>
             <li>
-              <SmartLink href="/palvelut">Palvelut</SmartLink>
+              <SmartLink href="/#palvelut">Palvelut</SmartLink>
             </li>
             <li aria-current="page">Lyhytvideotuotanto</li>
           </ol>

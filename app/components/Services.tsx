@@ -115,9 +115,9 @@ export default function Services() {
               <li>Hakukoneoptimointi rakennettu sisään alusta asti</li>
               <li>Video ja sivusto samalta tiimiltä, viesti pysyy yhtenäisenä</li>
             </ul>
-            <a className="tlink" href="#">
+            <SmartLink className="tlink" href="/verkkosivut">
               Lue lisää verkkosivuista
-            </a>
+            </SmartLink>
           </div>
         </div>
 
@@ -156,7 +156,9 @@ export default function Services() {
               <li>[Tapahtumapalvelun sisältö 2, täytetään]</li>
               <li>Aftermovie ja some-nostot samasta tuotannosta</li>
             </ul>
-            <a className="tlink" href="#">
+            {/* Tapahtumat-sivua ei ole viela; ankkuri pitaa kayttajan
+                paikallaan sen sijaan etta tyhja "#" hyppaisi sivun ylalaitaan. */}
+            <a className="tlink" href="#palvelut">
               Lue lisää tapahtumista
             </a>
           </div>
