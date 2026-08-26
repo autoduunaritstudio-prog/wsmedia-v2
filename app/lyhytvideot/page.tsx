@@ -93,7 +93,7 @@ const STATS = [
 
 export default function Lyhytvideot() {
   return (
-    <div className="page-lyhytvideot">
+    <div className="page-palvelu page-lyhytvideot">
       {/* Alasivun mockupissa taustassa ei ole piirtyvia bdP-polkuja. */}
       <Backdrop variant="simple" />
       <div id="prog" />

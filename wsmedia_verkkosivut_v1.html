@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     ON-PAGE SEO  ·  pääavainsana: "verkkosivut yritykselle"
+     tukiavainsanat: kotisivut yritykselle, nettisivut yritykselle,
+     verkkosivujen suunnittelu ja toteutus, hakukoneoptimoidut
+     verkkosivut, räätälöidyt verkkosivut, verkkosivujen hinta
+     ============================================================ -->
+<title>Verkkosivut yritykselle | Kotisivujen suunnittelu ja toteutus | WS Media</title>
+<meta name="description" content="Verkkosivut yritykselle avaimet käteen: suunnittelu, tekstit ja tekninen hakukoneoptimointi. Nopeat kotisivut kiinteällä projektihinnalla, ei piilokuluja. Espoo ja koko Suomi.">
+<link rel="canonical" href="https://wsmedia.fi/verkkosivut">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="author" content="WS Media Oy">
+<meta name="geo.region" content="FI-18">
+<meta name="geo.placename" content="Espoo">
+<meta name="theme-color" content="#0071e3">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fi_FI">
+<meta property="og:site_name" content="WS Media">
+<meta property="og:url" content="https://wsmedia.fi/verkkosivut">
+<meta property="og:title" content="Verkkosivut yritykselle | Kotisivujen suunnittelu ja toteutus | WS Media">
+<meta property="og:description" content="Nopeat ja hakukoneoptimoidut verkkosivut yritykselle. Suunnittelu, tekstit ja toteutus kiinteällä projektihinnalla, ei piilokuluja.">
+<meta property="og:image" content="https://wsmedia.fi/og/verkkosivut-yritykselle.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="WS Media – verkkosivut yritykselle, suunnittelu ja toteutus">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Verkkosivut yritykselle | WS Media">
+<meta name="twitter:description" content="Nopeat ja hakukoneoptimoidut kotisivut yritykselle kiinteällä projektihinnalla. Ei piilokuluja.">
+<meta name="twitter:image" content="https://wsmedia.fi/og/verkkosivut-yritykselle.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#1d1d1f;
+    --grey:#6e6e73;
+    --hair:#e8e8ed;
+    --blue:#0071e3;
+    --blue-d:#0062c4;
+    --blue-tint:#f0f6ff;
+    --dark:#0d0d10;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Instrument Sans','Helvetica Neue',sans-serif;
+    background:var(--bg);color:var(--ink);
+    line-height:1.5;-webkit-font-smoothing:antialiased;
+    letter-spacing:-0.011em;overflow-x:hidden;
+  }
+  ::selection{background:rgba(0,113,227,.15)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .wrap-n{max-width:820px;margin:0 auto;padding:0 24px}
+
+  /* ============ STICKY TAUSTA ============ */
+  .backdrop{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  .backdrop svg{position:absolute;inset:0;width:100%;height:100%}
+  #bdGrid,#bdRing,#bdWave{will-change:transform}
+  .backdrop::after{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(70% 60% at 50% 42%,rgba(255,255,255,.92) 30%,rgba(255,255,255,.55) 65%,rgba(255,255,255,.15) 100%),
+      linear-gradient(to bottom,rgba(255,255,255,.6),transparent 20%,transparent 80%,rgba(255,255,255,.7));
+  }
+  header,section,footer,nav,.marq{position:relative;z-index:1}
+  #prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:100;background:var(--blue)}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid transparent;transition:border-color .3s;
+  }
+  nav.scrolled{border-bottom-color:rgba(0,0,0,.08)}
+  .navin{
+    max-width:1080px;margin:0 auto;padding:0 24px;
+    height:52px;display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{font-size:15px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);text-decoration:none}
+  .navlinks{display:flex;gap:26px;align-items:center}
+  .navlinks a{font-size:12.5px;color:var(--ink);text-decoration:none;opacity:.8;transition:opacity .2s}
+  .navlinks a:hover{opacity:1}
+  .navlinks a[aria-current="page"]{opacity:1;color:var(--blue);font-weight:600}
+  .navcta{
+    font-size:12.5px;color:#fff !important;background:var(--blue);
+    padding:7px 15px;border-radius:980px;opacity:1 !important;transition:background .2s !important;
+  }
+  .navcta:hover{background:var(--blue-d)}
+  @media(max-width:760px){.navlinks a:not(.navcta){display:none}}
+
+  /* ---------- type ---------- */
+  h1{font-size:clamp(38px,6vw,68px);font-weight:700;letter-spacing:-0.028em;line-height:1.06}
+  h2{font-size:clamp(28px,4.2vw,44px);font-weight:700;letter-spacing:-0.024em;line-height:1.09}
+  h2.big{font-size:clamp(32px,5vw,54px)}
+  h3{letter-spacing:-0.018em}
+  .sub{
+    font-size:clamp(17px,2vw,21px);color:var(--grey);
+    font-weight:400;letter-spacing:-0.014em;line-height:1.45;
+  }
+  .accent{color:var(--blue)}
+  .kick{
+    font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--blue);display:block;
+  }
+  .lead{font-size:17px;color:var(--grey);max-width:64ch;margin-top:16px}
+  .lead strong{color:var(--ink);font-weight:600}
+  .lead a{color:var(--blue);text-decoration:none}
+  .lead a:hover{text-decoration:underline}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-block;background:var(--blue);color:#fff;
+    font-size:15px;font-weight:500;text-decoration:none;
+    padding:12px 24px;border-radius:980px;border:none;cursor:pointer;
+    transition:background .2s, transform .25s, box-shadow .25s;will-change:transform;
+  }
+  .btn:hover{background:var(--blue-d);box-shadow:0 8px 24px rgba(0,113,227,.28)}
+  .btn.alt{background:transparent;color:var(--blue);border:1px solid var(--hair)}
+  .btn.alt:hover{background:rgba(0,0,0,.03);box-shadow:none}
+  .tlink{font-size:15px;color:var(--blue);text-decoration:none;font-weight:500}
+  .tlink:hover{text-decoration:underline}
+  .tlink::after{content:" ›"}
+
+  /* ---------- murupolku ---------- */
+  .crumbs{padding:14px 0 0;font-size:12.5px;color:var(--grey)}
+  .crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .crumbs a{color:var(--grey);text-decoration:none}
+  .crumbs a:hover{color:var(--ink)}
+  .crumbs li+li::before{content:"›";margin-right:6px;color:#c2c2c8}
+  .crumbs [aria-current]{color:var(--ink)}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;text-align:center;padding:56px 0 60px}
+  .hero .kick{color:var(--grey);letter-spacing:.08em;margin-bottom:18px}
+  .hero h1{max-width:30ch;margin:0 auto;text-wrap:balance}
+  .hero .sub{max-width:54ch;margin:22px auto 0}
+  .heroctas{margin-top:34px;display:flex;gap:26px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .herotrust{margin-top:22px;font-size:12.5px;color:var(--grey);display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+  .herotrust span{display:inline-flex;align-items:center;gap:6px}
+  .herotrust i{width:5px;height:5px;border-radius:50%;background:var(--blue);font-style:normal}
+
+  .li{opacity:0;transform:translateY(22px);animation:liin 1s cubic-bezier(.2,.6,.2,1) forwards}
+  .li.d1{animation-delay:.05s}.li.d2{animation-delay:.18s}.li.d3{animation-delay:.34s}.li.d4{animation-delay:.5s}.li.d5{animation-delay:.68s}
+  @keyframes liin{to{opacity:1;transform:none}}
+
+  .swapclip{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em;margin-bottom:-.08em}
+  .swap{display:inline-grid;text-align:left;grid-template-columns:1fr;color:var(--blue)}
+  .swap span{
+    grid-area:1/1;white-space:nowrap;opacity:0;transform:translateY(112%);
+    transition:opacity .55s cubic-bezier(.2,.6,.2,1),transform .55s cubic-bezier(.2,.6,.2,1);
+  }
+  .swap span.act{opacity:1;transform:none}
+  .swap span.out{opacity:0;transform:translateY(-70%)}
+  /* kapealla ruudulla vaihtuva lause rivittyy normaalisti eikä työnnä sivua leveäksi */
+  @media(max-width:760px){
+    .swapclip{display:inline;overflow:visible;padding-bottom:0;margin-bottom:0}
+    .swap{display:inline}
+    .swap span{position:static;display:none;white-space:normal;opacity:1;transform:none !important;transition:none}
+    .swap span.act{display:inline}
+    .swap span.out{display:none}
+  }
+
+  /* ============ HERON SELAINNÄYTTÄMÖ ============ */
+  .bstage{
+    position:relative;max-width:1080px;margin:58px auto 0;
+    perspective:1400px;padding:0 24px;
+  }
+  .bwrap{position:relative;transform-style:preserve-3d;will-change:transform}
+  .bwin{
+    border-radius:18px;overflow:hidden;background:#fff;text-align:left;
+    border:1px solid var(--hair);
+    box-shadow:0 60px 120px -40px rgba(29,29,31,.42), 0 8px 24px -12px rgba(29,29,31,.16);
+  }
+  .bbar{
+    display:flex;align-items:center;gap:8px;
+    padding:12px 16px;background:#f5f5f7;border-bottom:1px solid var(--hair);
+  }
+  .bdot{width:10px;height:10px;border-radius:50%;background:#d9d9de;flex:none}
+  .burl{
+    flex:1;margin-left:10px;background:#fff;border:1px solid var(--hair);
+    border-radius:8px;padding:6px 14px;font-size:11.5px;color:var(--grey);
+    display:flex;align-items:center;gap:7px;
+  }
+  .burl em{font-style:normal;color:#9a9aa1;font-size:10px}
+  .bpage{padding:34px 34px 40px;position:relative;overflow:hidden;min-height:300px}
+  @media(max-width:640px){.bpage{padding:22px 20px 26px;min-height:240px}}
+
+  /* rakentuva minisivu */
+  .sk{opacity:0;transform:translateY(14px);animation:skin .7s cubic-bezier(.2,.6,.2,1) forwards}
+  .sk1{animation-delay:.9s}.sk2{animation-delay:1.05s}.sk3{animation-delay:1.2s}
+  .sk4{animation-delay:1.4s}.sk5{animation-delay:1.6s}
+  @keyframes skin{to{opacity:1;transform:none}}
+  .sk-kick{width:104px;height:9px;border-radius:5px;background:var(--blue-tint)}
+  .sk-h{margin-top:14px;width:66%;height:22px;border-radius:7px;background:#ececf0;position:relative;overflow:hidden}
+  .sk-h.short{width:44%;height:22px;margin-top:9px}
+  .sk-h::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.85) 50%,transparent 70%);
+    background-size:250% 100%;animation:shine 3.6s ease-in-out infinite;
+  }
+  @keyframes shine{0%,55%{background-position:135% 0}100%{background-position:-60% 0}}
+  .sk-btns{display:flex;gap:9px;margin-top:18px}
+  .sk-btn{width:96px;height:28px;border-radius:980px;background:var(--blue)}
+  .sk-btn.o{background:#fff;border:1px solid var(--hair)}
+  .sk-cards{display:flex;gap:11px;margin-top:26px}
+  .sk-card{
+    flex:1;height:78px;border-radius:11px;background:#f5f5f7;border:1px solid var(--hair);
+    position:relative;overflow:hidden;animation:mfloat 5.5s ease-in-out infinite alternate;
+  }
+  .sk-card:nth-child(2){animation-delay:-1.8s}
+  .sk-card:nth-child(3){animation-delay:-3.6s}
+  @keyframes mfloat{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+  @media(max-width:640px){.sk-cards .sk-card:nth-child(3){display:none}}
+
+  /* pagespeed-mittari selaimen sisällä */
+  .bscore{
+    position:absolute;right:30px;top:28px;
+    width:82px;height:82px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:conic-gradient(var(--blue) 0 calc(var(--p,0) * 1%), #e9e9ee calc(var(--p,0) * 1%) 100%);
+    transition:background .1s linear;
+  }
+  .bscore i{
+    width:66px;height:66px;border-radius:50%;background:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-style:normal;font-size:21px;font-weight:700;color:var(--blue);
+    font-variant-numeric:tabular-nums;line-height:1;
+  }
+  .bscore i small{font-size:7px;letter-spacing:.1em;color:var(--grey);font-weight:600;margin-top:3px}
+  @media(max-width:640px){.bscore{right:16px;top:16px;width:60px;height:60px}.bscore i{width:48px;height:48px;font-size:16px}}
+
+  /* mobiiliversio selaimen kulmassa */
+  .bphone{
+    position:absolute;right:-14px;bottom:-34px;z-index:4;
+    width:132px;aspect-ratio:9/19;border-radius:22px;background:#0f0f11;
+    box-shadow:0 34px 70px -22px rgba(29,29,31,.45),inset 0 0 0 2.5px #232327;
+    overflow:hidden;animation:cfl 7s ease-in-out infinite alternate;
+  }
+  .bphone .pscr{position:absolute;inset:3px;border-radius:19px;background:#fff;overflow:hidden;padding:16px 11px}
+  .bphone .pk{width:38px;height:5px;border-radius:3px;background:var(--blue-tint)}
+  .bphone .ph{margin-top:8px;width:84%;height:11px;border-radius:4px;background:#ececf0}
+  .bphone .ph.s{width:58%;margin-top:5px}
+  .bphone .pb{margin-top:11px;width:60px;height:15px;border-radius:980px;background:var(--blue)}
+  .bphone .pc{margin-top:13px;height:26px;border-radius:7px;background:#f5f5f7;border:1px solid var(--hair)}
+  .bphone .pc+.pc{margin-top:7px}
+  @media(max-width:900px){.bphone{display:none}}
+
+  /* hakutuloskortti */
+  .serp{
+    position:absolute;left:-26px;bottom:-30px;z-index:5;width:270px;
+    background:#fff;border:1px solid var(--hair);border-radius:14px;
+    box-shadow:0 26px 60px -20px rgba(29,29,31,.32);
+    padding:13px 14px 12px;text-align:left;
+  }
+  .serp .st{
+    font-size:9.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--grey);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .serp .st b{color:var(--blue);font-size:10px;letter-spacing:0;text-transform:none}
+  .serplist{position:relative;height:102px}
+  .serprow{
+    position:absolute;left:0;right:0;height:30px;padding:5px 0;
+    display:flex;align-items:center;gap:9px;
+  }
+  .serprow i{
+    font-style:normal;width:16px;height:16px;border-radius:5px;flex:none;
+    background:#f0f0f3;color:#9a9aa1;font-size:9px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .serprow u{display:block;text-decoration:none;flex:1}
+  .serprow u s{display:block;text-decoration:none;height:7px;border-radius:4px;background:#e6e6eb;width:74%}
+  .serprow u s+s{margin-top:5px;height:5px;width:52%;background:#f0f0f4}
+  .serprow.us i{background:var(--blue);color:#fff}
+  .serprow.us u s{background:#bcd9ff;width:82%}
+  .serprow.us u s+s{background:#ddeaff;width:60%}
+  .serprow.r1{top:0}.serprow.r2{top:34px}.serprow.r3{top:68px}
+  .rv.on .serprow.us{animation:rankUp 1.5s .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .rv.on .serprow.up1{animation:pushDn 1.5s .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .rv.on .serprow.up2{animation:pushDn 1.5s .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes rankUp{to{translate:0 -68px}}
+  @keyframes pushDn{to{translate:0 34px}}
+  @media(max-width:900px){.serp{display:none}}
+
+  .chip-f{
+    position:absolute;z-index:6;
+    display:flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.86);backdrop-filter:blur(12px);
+    border:1px solid rgba(0,0,0,.06);border-radius:14px;
+    box-shadow:0 18px 44px -16px rgba(29,29,31,.28);
+    padding:10px 14px;font-size:12.5px;font-weight:600;white-space:nowrap;text-align:left;
+  }
+  .chip-f em{
+    font-style:normal;width:26px;height:26px;border-radius:8px;
+    background:var(--blue-tint);color:var(--blue);
+    display:flex;align-items:center;justify-content:center;font-size:12px;
+  }
+  .chip-f small{display:block;font-weight:500;color:var(--grey);font-size:10.5px;margin-top:1px}
+  .cf1{left:-34px;top:56px;animation:cfl 6s ease-in-out infinite alternate}
+  .cf2{right:-30px;top:-22px;animation:cfl 7s ease-in-out -2s infinite alternate}
+  @keyframes cfl{from{translate:0 0}to{translate:0 -12px}}
+  @media(max-width:1100px){.cf1{left:6px}.cf2{right:6px}}
+  @media(max-width:900px){.chip-f{display:none}}
+
+  /* ---------- marquee ---------- */
+  .marq{
+    margin-top:78px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+    overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(6px);
+  }
+  .marq .track{display:flex;gap:0;width:max-content;animation:marq 30s linear infinite}
+  .marq:hover .track{animation-play-state:paused}
+  @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .marq span{
+    display:flex;align-items:center;gap:26px;
+    padding:16px 26px 16px 0;
+    font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--grey);
+    white-space:nowrap;
+  }
+  .marq b{color:var(--blue);font-weight:700}
+
+  /* ============ OSIOT ============ */
+  section{padding:110px 0}
+  @media(max-width:760px){
+    section{padding:66px 0 !important}
+    .shead{margin-bottom:32px}
+    .final{padding:80px 0 !important}
+  }
+  .shead{margin-bottom:52px;max-width:660px}
+  .shead h2{margin-top:12px}
+  .shead .sub{margin-top:14px;font-size:18px}
+  .shead.center{margin-left:auto;margin-right:auto;text-align:center}
+
+  .card{
+    background:#fff;border:1px solid var(--hair);
+    box-shadow:0 24px 60px -24px rgba(29,29,31,.16);
+    transition:transform .4s cubic-bezier(.2,.6,.2,1), box-shadow .4s;
+    will-change:transform;
+  }
+  .card:hover{transform:translateY(-6px);box-shadow:0 34px 80px -28px rgba(29,29,31,.24)}
+
+  /* ---------- lukukaista ---------- */
+  .statband{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+    border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+    padding:44px 0;
+  }
+  @media(max-width:760px){.statband{grid-template-columns:repeat(2,1fr);gap:28px 16px}}
+  .stat{text-align:center}
+  .stat .num{
+    font-size:clamp(28px,3.4vw,42px);font-weight:700;letter-spacing:-0.028em;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat p{font-size:12.5px;color:var(--grey);font-weight:500;margin-top:6px}
+
+  /* ---------- rivilista ---------- */
+  .rows{display:grid;grid-template-columns:1fr 1fr;gap:0 48px;border-top:1px solid var(--hair)}
+  @media(max-width:820px){.rows{grid-template-columns:1fr}}
+  .rows > div{padding:17px 0;border-bottom:1px solid var(--hair)}
+  .rows h3{font-size:15.5px;font-weight:600;margin-bottom:5px;letter-spacing:-0.012em}
+  .rows p{font-size:14px;color:var(--grey);line-height:1.55}
+
+  /* ---------- sisältölista ---------- */
+  .incl{display:grid;grid-template-columns:1fr 1fr;gap:0 48px;border-top:1px solid var(--hair)}
+  @media(max-width:820px){.incl{grid-template-columns:1fr}}
+  .incl div{padding:14px 0 14px 26px;border-bottom:1px solid var(--hair);position:relative}
+  .incl div::before{
+    content:"✓";position:absolute;left:0;top:15px;
+    color:var(--blue);font-size:12px;font-weight:700;
+  }
+  .incl b{display:block;font-size:14.5px;font-weight:600}
+  .incl s{display:block;text-decoration:none;font-size:13px;color:var(--grey);margin-top:3px;line-height:1.5}
+
+  /* ---------- ruudukot ---------- */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:900px){.grid3{grid-template-columns:1fr}}
+  .plat{
+    padding:30px 26px 26px;border-radius:18px;display:flex;flex-direction:column;
+    text-decoration:none;color:inherit;
+  }
+  .plat .pchip{
+    align-self:flex-start;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--blue);background:var(--blue-tint);border-radius:980px;padding:5px 11px;margin-bottom:16px;
+  }
+  .plat h3{font-size:19px;font-weight:600;margin-bottom:8px}
+  .plat p{font-size:14.5px;color:var(--grey);flex:1}
+  .plat ul{list-style:none;margin-top:14px}
+  .plat li{font-size:13.5px;color:var(--ink);padding:6px 0 6px 18px;position:relative;line-height:1.45}
+  .plat li::before{content:"—";position:absolute;left:0;color:var(--blue)}
+  @media(max-width:560px){
+    .plat{padding:22px 20px 20px}
+    .plat .pchip{margin-bottom:12px}
+    .plat h3{font-size:17.5px;margin-bottom:6px}
+  }
+
+  /* ---------- vertailu: valmispohja vs. käsin koodattu ---------- */
+  .cmp{
+    margin-top:40px;border:1px solid var(--hair);border-radius:20px;background:#fff;
+    padding:32px 30px 28px;box-shadow:0 24px 60px -30px rgba(29,29,31,.18);
+  }
+  @media(max-width:640px){.cmp{padding:24px 20px 20px}}
+  .cmp .ct{
+    font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--grey);margin-bottom:20px;
+  }
+  .cmprow{display:grid;grid-template-columns:150px 1fr 92px;gap:16px;align-items:center;padding:11px 0}
+  @media(max-width:640px){.cmprow{grid-template-columns:1fr;gap:6px;padding:12px 0;border-bottom:1px solid var(--hair)}}
+  .cmprow .lb{font-size:14px;font-weight:600}
+  .cmprow .lb s{display:block;text-decoration:none;font-size:12px;color:var(--grey);font-weight:400;margin-top:2px}
+  .cmpbar{height:10px;border-radius:6px;background:#f0f0f4;overflow:hidden}
+  .cmpbar i{
+    display:block;height:100%;border-radius:6px;width:0;
+    background:linear-gradient(90deg,#c8c8d0,#a8a8b2);
+    transition:width 1.4s cubic-bezier(.2,.6,.2,1);
+  }
+  .cmpbar.good i{background:linear-gradient(90deg,var(--blue),#5aa9ff)}
+  .rv.on .cmpbar i{width:var(--w,50%)}
+  .cmprow .vv{font-size:13.5px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;color:var(--grey)}
+  @media(max-width:640px){.cmprow .vv{text-align:left}}
+  .cmprow.good .vv{color:var(--blue)}
+  .cmpnote{margin-top:18px;padding-top:16px;border-top:1px solid var(--hair);font-size:13.5px;color:var(--grey);line-height:1.6}
+
+  /* ---------- core web vitals -mittarit ---------- */
+
+  /* ---------- prosessi ---------- */
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;counter-reset:s;position:relative}
+  .steps::before{
+    content:"";position:absolute;top:56px;left:7%;right:7%;height:1px;
+    background:repeating-linear-gradient(90deg,var(--hair) 0 8px,transparent 8px 16px);
+    z-index:-1;
+  }
+  @media(max-width:1000px){.steps{grid-template-columns:repeat(2,1fr)}.steps::before{display:none}}
+  @media(max-width:560px){.steps{grid-template-columns:1fr}}
+  .step{padding:30px 24px;border-radius:16px}
+  .step::before{
+    counter-increment:s;content:counter(s);
+    display:flex;align-items:center;justify-content:center;
+    width:34px;height:34px;border-radius:50%;
+    background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;
+    margin-bottom:16px;box-shadow:0 0 0 6px #fff;
+  }
+  .step h3{font-size:16px;font-weight:600;margin-bottom:7px}
+  .step p{font-size:13.5px;color:var(--grey);line-height:1.55}
+  .step .sw{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);display:block;margin-top:10px}
+
+  /* ---------- ennen / jälkeen ---------- */
+  .ba{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);aspect-ratio:16/6;background:#17171b}
+  @media(max-width:640px){.ba{aspect-ratio:4/3}}
+  .ba .lay{position:absolute;inset:0;padding:24px 28px 46px;display:flex;flex-direction:column}
+  .ba .old{background:#1a1a1f}
+  .ba .new{
+    background:
+      radial-gradient(80% 95% at 74% 105%,rgba(0,113,227,.28),transparent 62%),
+      #0e0e13;
+    clip-path:inset(0 0 0 var(--x,50%));
+  }
+  .ba .fnav{display:flex;gap:9px;align-items:center;margin-bottom:22px}
+  .ba .fnav span{width:40px;height:7px;border-radius:3px;background:rgba(255,255,255,.14)}
+  .ba .fnav span:first-child{width:62px;background:rgba(255,255,255,.26)}
+  .ba .new .fnav span{border-radius:4px;background:rgba(150,199,255,.32)}
+  .ba .new .fnav span:first-child{background:#6fb1ff}
+  .ba .bl{height:9px;border-radius:3px;background:rgba(255,255,255,.13);width:46%}
+  .ba .bl+.bl{margin-top:8px;width:30%;height:7px}
+  .ba .bbtn{margin-top:15px;width:78px;height:20px;border-radius:4px;background:rgba(255,255,255,.15)}
+  .ba .new .bl{background:rgba(180,215,255,.62);width:60%;height:13px;border-radius:6px}
+  .ba .new .bl+.bl{background:rgba(150,199,255,.3);width:40%;height:9px}
+  .ba .new .bbtn{background:var(--blue);width:96px;height:26px;border-radius:980px}
+  .ba .btxt{margin-top:20px;max-width:58%}
+  .ba .btxt span{display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.08);margin-bottom:7px}
+  .ba .btxt span:nth-child(2){width:88%}
+  .ba .btxt span:nth-child(3){width:66%}
+  .ba .new .btxt span{background:rgba(160,205,255,.18)}
+  .ba .bcards{display:flex;gap:10px;margin-top:auto}
+  .ba .bcards span{flex:1;height:54px;border-radius:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
+  .ba .new .bcards span{
+    border-radius:11px;background:rgba(0,113,227,.15);border-color:rgba(120,180,255,.28);
+    box-shadow:0 10px 26px -12px rgba(0,113,227,.6);
+  }
+  .ba .tag{
+    position:absolute;bottom:14px;font-size:9.5px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:rgba(255,255,255,.55);
+  }
+  .ba .tag.l{left:16px}.ba .tag.r{right:16px;color:#6fb1ff}
+  .ba .handle{
+    position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.85);
+    left:var(--x,50%);transform:translateX(-1px);pointer-events:none;
+  }
+  .ba .handle::after{
+    content:"⟷";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:34px;height:34px;border-radius:50%;background:#fff;color:var(--ink);
+    font-size:13px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.3);
+  }
+  .ba input[type=range]{
+    position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;
+    -webkit-appearance:none;appearance:none;background:transparent;
+  }
+
+  /* ---------- paketit ---------- */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+  @media(max-width:820px){.plans{grid-template-columns:1fr}}
+  .plan{padding:38px 30px;display:flex;flex-direction:column;border-radius:20px}
+  .plan.pop{background:var(--ink);color:#fff;border-color:var(--ink);border-radius:26px}
+  .plan .pt{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;height:18px;margin-bottom:6px;color:var(--blue)}
+  .plan.pop .pt{color:#6fb1ff}
+  .plan h3{font-size:20px;font-weight:600}
+  .plan .for{font-size:13.5px;color:var(--grey);margin:6px 0 20px;min-height:40px}
+  .plan.pop .for{color:#a1a1a6}
+  .plan .price{font-size:30px;font-weight:700;letter-spacing:-0.028em}
+  .plan .price small{font-size:14px;font-weight:400;color:var(--grey)}
+  .plan.pop .price small{color:#a1a1a6}
+  .plan ul{list-style:none;margin:22px 0 26px;flex:1}
+  .plan li{font-size:14px;padding:9px 0;color:var(--ink);border-bottom:1px solid rgba(0,0,0,.06)}
+  .plan.pop li{color:#f5f5f7;border-color:rgba(255,255,255,.12)}
+  .plan li:last-child{border:none}
+  .plan .btn{text-align:center}
+  .plan.pop .btn{background:#fff;color:var(--ink)}
+  .plan.pop .btn:hover{background:#f0f0f2;box-shadow:none}
+  .pricenote{text-align:center;font-size:12.5px;color:var(--grey);margin-top:24px;max-width:70ch;margin-left:auto;margin-right:auto;line-height:1.6}
+
+  /* jatkuva paketti */
+  .care{
+    margin-top:16px;border-radius:22px;border:1px solid var(--hair);background:var(--blue-tint);
+    padding:34px 34px 30px;display:grid;grid-template-columns:1fr auto;gap:26px;align-items:center;
+  }
+  @media(max-width:820px){.care{grid-template-columns:1fr;padding:26px 22px 24px}}
+  .care .kick{margin-bottom:8px}
+  .care h3{font-size:20px;font-weight:600;margin-bottom:8px}
+  .care p{font-size:14.5px;color:var(--grey);max-width:58ch;line-height:1.6}
+  .care ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .care li{font-size:12.5px;background:#fff;border:1px solid #dbe9ff;border-radius:980px;padding:6px 13px;color:var(--ink)}
+  .careprice{text-align:right;white-space:nowrap}
+  @media(max-width:820px){.careprice{text-align:left}}
+  .careprice .price{font-size:30px;font-weight:700;letter-spacing:-0.028em}
+  .careprice .price small{font-size:14px;font-weight:400;color:var(--grey)}
+  .careprice .btn{margin-top:14px}
+
+  /* ---------- kenelle ---------- */
+  .fit{display:grid;grid-template-columns:1fr 1fr;gap:0 48px;border-top:1px solid var(--hair)}
+  @media(max-width:820px){.fit{grid-template-columns:1fr}}
+  .fitbox{padding:24px 0 22px}
+  .fitbox+.fitbox{border-top:1px solid var(--hair)}
+  @media(min-width:821px){.fitbox+.fitbox{border-top:none}}
+  .fitbox h3{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-bottom:12px}
+  .fitbox ul{list-style:none}
+  .fitbox li{font-size:14.5px;padding:7px 0 7px 22px;position:relative;color:var(--ink);line-height:1.5}
+  .fitbox li::before{position:absolute;left:0;font-weight:700}
+  .fitbox.yes li::before{content:"+";color:var(--blue)}
+  .fitbox.no li{color:var(--grey)}
+  .fitbox.no li::before{content:"–";color:#c2c2c8}
+
+  /* ---------- faq ---------- */
+  .faqgroup{
+    font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--grey);margin:36px 0 0;padding-bottom:8px;border-bottom:1px solid var(--hair);
+  }
+  .faqgroup:first-child{margin-top:0}
+  .faq{max-width:820px;margin:0 auto}
+  .faq details{border-bottom:1px solid var(--hair)}
+  .faq summary{
+    list-style:none;cursor:pointer;padding:16px 40px 16px 0;position:relative;
+    font-size:15.5px;font-weight:600;letter-spacing:-0.014em;line-height:1.35;
+  }
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{
+    content:"";position:absolute;right:8px;top:50%;
+    width:9px;height:9px;border-right:1.8px solid var(--grey);border-bottom:1.8px solid var(--grey);
+    transform:translateY(-70%) rotate(45deg);transition:transform .25s;
+  }
+  .faq details[open] summary::after{transform:translateY(-30%) rotate(225deg)}
+  .faq summary:hover{color:var(--blue)}
+  .faq .a{padding:0 36px 20px 0;font-size:14.5px;color:var(--grey);line-height:1.6}
+  .faq .a a{color:var(--blue);text-decoration:none}
+  .faq .a a:hover{text-decoration:underline}
+
+  /* ---------- juokseva teksti ---------- */
+  .prose{max-width:68ch;margin:0 auto}
+  .prose h3{font-size:17.5px;font-weight:600;margin:30px 0 10px}
+  .prose h3:first-child{margin-top:0}
+  .prose p{font-size:15.5px;color:var(--grey);line-height:1.7;margin-bottom:14px}
+  .prose strong{color:var(--ink);font-weight:600}
+  .prose a{color:var(--blue);text-decoration:none}
+  .prose a:hover{text-decoration:underline}
+
+  /* ---------- blogirivit ---------- */
+  .postrows{border-top:1px solid var(--hair)}
+  .postrows a{
+    display:grid;grid-template-columns:118px 1fr auto;gap:20px;align-items:baseline;
+    padding:17px 0;border-bottom:1px solid var(--hair);
+    text-decoration:none;color:inherit;transition:color .2s;
+  }
+  .postrows a:hover{color:var(--blue)}
+  .postrows span{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--grey)}
+  .postrows b{font-size:15.5px;font-weight:600;letter-spacing:-0.012em}
+  .postrows i{font-style:normal;color:var(--blue);font-size:15px}
+  @media(max-width:640px){
+    .postrows a{grid-template-columns:1fr;gap:5px;padding:15px 0}
+    .postrows i{display:none}
+  }
+
+  /* ---------- tumma referenssikaista ---------- */
+  .work{
+    background:var(--dark);color:#f5f5f7;
+    border-radius:28px;max-width:1240px;margin:0 auto;
+    padding:90px 0;position:relative;overflow:hidden;
+  }
+  @media(max-width:1280px){.work{margin:0 16px}}
+  .work::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(40% 50% at 12% 18%,rgba(0,113,227,.16),transparent 70%),
+      radial-gradient(38% 48% at 88% 82%,rgba(100,168,255,.12),transparent 70%);
+  }
+  .work .wrap{position:relative}
+  .work .sub{color:#a1a1a6}
+  .wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+  @media(max-width:820px){.wgrid{grid-template-columns:1fr}}
+  .w-item{
+    border-radius:16px;overflow:hidden;position:relative;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+    min-height:210px;padding:26px 24px;display:flex;flex-direction:column;justify-content:flex-end;
+    transition:transform .4s cubic-bezier(.2,.6,.2,1), border-color .4s;
+  }
+  .w-item:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.25)}
+  .w-item .thumb{
+    position:absolute;inset:0;
+    background:radial-gradient(95% 75% at 28% 86%,rgba(0,113,227,.4),transparent 60%),#141418;
+  }
+  .w-item .fillchip{
+    position:absolute;top:14px;right:14px;z-index:2;
+    font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:#c7c7cc;border:1px solid rgba(255,255,255,.22);border-radius:980px;padding:4px 10px;
+  }
+  .w-item .n{position:relative;z-index:2;font-size:clamp(28px,3.2vw,38px);font-weight:700;letter-spacing:-0.028em}
+  .w-item b{position:relative;z-index:2;font-size:14px;font-weight:600;margin-top:10px;display:block}
+  .w-item s{position:relative;z-index:2;text-decoration:none;font-size:12.5px;color:#a1a1a6;margin-top:4px;display:block}
+
+  /* ---------- paikkakunnat ---------- */
+  .cities{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+  .cities a{
+    font-size:13px;color:var(--ink);text-decoration:none;
+    border:1px solid var(--hair);border-radius:980px;padding:8px 15px;
+    transition:border-color .2s,color .2s,background .2s;background:#fff;
+  }
+  .cities a:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-tint)}
+
+  /* ---------- lomake ---------- */
+  .fcard{max-width:620px;margin:0 auto;padding:44px 40px;border-radius:24px}
+  @media(max-width:640px){.fcard{padding:32px 22px}}
+  .fcard label{display:block;font-size:12.5px;font-weight:600;margin:20px 0 8px}
+  .fcard input[type=text],.fcard input[type=email],.fcard textarea{
+    width:100%;border:1px solid var(--hair);border-radius:10px;
+    padding:13px 15px;font-family:inherit;font-size:15px;color:var(--ink);
+    background:#fff;transition:border-color .2s, box-shadow .2s;
+  }
+  .fcard input:focus,.fcard textarea:focus{
+    outline:none;border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(0,113,227,.16);
+  }
+  .budget{display:flex;align-items:center;gap:18px}
+  .budget input[type=range]{
+    flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;
+    background:linear-gradient(90deg,var(--blue) var(--p,14%),#e5e5ea var(--p,14%));outline:none;
+  }
+  .budget input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:#fff;border:1px solid var(--hair);box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:pointer;
+  }
+  .budget output{font-size:17px;font-weight:700;min-width:104px;text-align:right;font-variant-numeric:tabular-nums}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}}
+  .fcard .btn{width:100%;margin-top:26px;padding:14px}
+  .fnote{text-align:center;font-size:12.5px;color:var(--grey);margin-top:13px}
+
+  .final{text-align:center;padding:130px 0}
+  .final h2{margin:0 auto;max-width:20ch}
+  .final .sub{max-width:46ch;margin:18px auto 0;font-size:18px}
+  .final .btn{margin-top:32px}
+
+  footer{
+    background:rgba(245,245,247,.85);backdrop-filter:blur(8px);
+    border-top:1px solid var(--hair);
+    padding:42px 0 46px;font-size:12px;color:var(--grey);
+  }
+  footer .cols{display:flex;gap:56px;flex-wrap:wrap;padding-bottom:26px;border-bottom:1px solid var(--hair)}
+  footer h2,footer h4{font-size:12px;color:var(--ink);font-weight:600;margin-bottom:10px;letter-spacing:0}
+  footer a{display:block;color:var(--grey);text-decoration:none;padding:4px 0}
+  footer a:hover{color:var(--ink)}
+  footer .base{padding-top:18px}
+
+  .deco{position:absolute;pointer-events:none;z-index:0}
+  .deco.ring{width:64px;height:64px;border-radius:50%;border:1.6px solid #dbe9ff}
+  .deco.dot{width:8px;height:8px;border-radius:50%;background:var(--blue);opacity:.35}
+
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+  .rv.on{opacity:1;transform:none}
+  .stagger > *{transition-delay:calc(var(--i,0) * 90ms)}
+  [data-par]{will-change:translate}
+
+  @media(prefers-reduced-motion:reduce){
+    .li,.rv,.sk{opacity:1 !important;transform:none !important;animation:none !important;transition:none !important}
+    .swap span,.marq .track,.chip-f,.sk-card,.sk-h::after,.bphone,.serprow{animation:none !important}
+    [data-par]{translate:none !important}
+  }
+
+  /* ============================================================
+     UUDET LAYOUT-ARKKITYYPIT
+     Jokaisella osiolla oma rytminsä: tumma kaista, sticky-otsikko +
+     akkordioni, leveät vaihtoehtorivit, vertailutaulukko, teksti +
+     tumma paneeli, aikajana, iso sitaatti, hintarivit, kaksi paneelia.
+     ============================================================ */
+
+  /* --- otsikkovariantti: iso otsikko vasemmalla, ingressi oikealla --- */
+  .hsplit{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:56px;align-items:end;margin-bottom:54px}
+  @media(max-width:820px){.hsplit{grid-template-columns:1fr;gap:14px;align-items:start;margin-bottom:32px}}
+  .hsplit .sub{font-size:17px;padding-bottom:6px}
+  .hsplit h2{margin-top:12px}
+
+  /* ============ TUMMA ONGELMAKAISTA (reunasta reunaan) ============ */
+  .band{background:var(--dark);color:#f5f5f7;position:relative;overflow:hidden}
+  .band::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(46% 62% at 6% 0%,rgba(0,113,227,.22),transparent 68%),
+      radial-gradient(42% 55% at 94% 100%,rgba(100,168,255,.14),transparent 70%);
+  }
+  .band .wrap{position:relative}
+  .band .kick{color:#6fb1ff}
+  .band h2{color:#f5f5f7}
+  .band .sub{color:#a1a1a6}
+  .band .hsplit{align-items:end}
+
+  .probs{display:grid;grid-template-columns:repeat(2,1fr);gap:0 60px}
+  @media(max-width:820px){.probs{grid-template-columns:1fr;gap:0}}
+  .prob{
+    padding:24px 0;border-top:1px solid rgba(255,255,255,.13);
+    display:grid;grid-template-columns:auto 1fr;gap:20px;
+    transition:border-color .3s;
+  }
+  .prob:hover{border-top-color:rgba(111,177,255,.5)}
+  .prob em{font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.1em;color:#6fb1ff;padding-top:5px}
+  .prob h3{font-size:17.5px;font-weight:600;margin-bottom:7px;letter-spacing:-.016em}
+  .prob p{font-size:14.5px;color:#a1a1a6;line-height:1.6}
+
+  .bstats{display:flex;flex-wrap:wrap;margin-top:56px;border-top:1px solid rgba(255,255,255,.13);padding-top:34px}
+  .bstat{flex:1;min-width:140px;padding:8px 24px 8px 0}
+  .bstat+.bstat{padding-left:24px;border-left:1px solid rgba(255,255,255,.13)}
+  @media(max-width:640px){
+    .bstat{flex:0 0 50%;min-width:0;padding:12px 16px 12px 0}
+    .bstat+.bstat{padding-left:0;border-left:none}
+    .bstat:nth-child(even){padding-left:16px;border-left:1px solid rgba(255,255,255,.13)}
+  }
+  .bstat .n{font-size:clamp(25px,3vw,36px);font-weight:700;letter-spacing:-.028em;font-variant-numeric:tabular-nums}
+  .bstat p{font-size:12.5px;color:#a1a1a6;margin-top:6px;line-height:1.45}
+
+  /* ============ STICKY-OTSIKKO + AKKORDIONI ============ */
+  .split{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:72px;align-items:start}
+  @media(max-width:900px){.split{grid-template-columns:1fr;gap:32px}}
+  .split .stick{position:sticky;top:92px}
+  @media(max-width:900px){.split .stick{position:static}}
+  .split .stick h2{margin-top:12px}
+  .split .stick p{font-size:16px;color:var(--grey);margin-top:14px;line-height:1.6}
+  .split .stick .btn{margin-top:26px}
+  .split.rev{grid-template-columns:minmax(0,1fr) minmax(0,360px)}
+  @media(max-width:900px){.split.rev{grid-template-columns:1fr}}
+
+  .acc{border-top:1px solid var(--hair)}
+  .acc details{border-bottom:1px solid var(--hair)}
+  .acc summary{
+    list-style:none;cursor:pointer;padding:19px 46px 19px 34px;position:relative;
+    font-size:16.5px;font-weight:600;letter-spacing:-.014em;transition:color .2s;
+  }
+  .acc summary::-webkit-details-marker{display:none}
+  .acc summary::before{
+    content:"✓";position:absolute;left:0;top:21px;
+    color:var(--blue);font-size:12px;font-weight:700;
+  }
+  .acc summary::after{
+    content:"";position:absolute;right:8px;top:25px;width:10px;height:10px;
+    border-right:1.8px solid #c2c2c8;border-bottom:1.8px solid #c2c2c8;
+    transform:rotate(45deg);transition:transform .25s,border-color .2s;
+  }
+  .acc details[open] summary::after{transform:rotate(225deg);border-color:var(--blue)}
+  .acc summary:hover,.acc details[open] summary{color:var(--blue)}
+  .acc .ab{padding:0 46px 22px 34px;font-size:14.5px;color:var(--grey);line-height:1.65}
+
+  /* ============ LEVEÄT VAIHTOEHTORIVIT ============ */
+  .opts{border-top:1px solid var(--hair)}
+  .opt{
+    display:grid;grid-template-columns:52px minmax(0,1fr) minmax(0,1.05fr);gap:30px;
+    padding:32px 0;border-bottom:1px solid var(--hair);position:relative;
+  }
+  @media(max-width:880px){.opt{grid-template-columns:1fr;gap:14px;padding:26px 0}}
+  .opt::before{
+    content:"";position:absolute;left:-20px;right:-20px;top:1px;bottom:1px;border-radius:16px;
+    background:var(--blue-tint);opacity:0;transition:opacity .35s;z-index:-1;
+  }
+  .opt:hover::before{opacity:1}
+  .opt .idx{font-size:12.5px;font-weight:700;color:var(--blue);letter-spacing:.08em;padding-top:7px}
+  @media(max-width:880px){.opt .idx{padding-top:0}}
+  .opt .oc{font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--grey);display:block;margin-bottom:9px}
+  .opt h3{font-size:clamp(20px,2.4vw,25px);font-weight:600;letter-spacing:-.022em;line-height:1.2}
+  .opt p{font-size:14.5px;color:var(--grey);margin-top:11px;line-height:1.6;max-width:42ch}
+  .opt ul{list-style:none;align-self:center}
+  .opt li{font-size:14px;padding:8px 0 8px 24px;position:relative;border-bottom:1px solid var(--hair)}
+  .opt li:last-child{border-bottom:none}
+  .opt li::before{content:"✓";position:absolute;left:0;top:9px;color:var(--blue);font-size:11.5px;font-weight:700}
+
+  /* ============ VERTAILUTAULUKKO ============ */
+  .vs{margin-top:46px;border:1px solid var(--hair);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 24px 60px -32px rgba(29,29,31,.18)}
+  .vsr{display:grid;grid-template-columns:minmax(0,1.15fr) 1fr 1fr;border-bottom:1px solid var(--hair)}
+  .vsr:last-child{border-bottom:none}
+  .vsr > div{padding:15px 22px;font-size:13.5px;color:var(--grey);line-height:1.5}
+  .vsr > div:first-child{color:var(--ink);font-weight:500;font-size:14px}
+  .vsr .hl{background:rgba(240,246,255,.6)}
+  .vsr.head{background:#fafafc;border-bottom-color:var(--hair)}
+  .vsr.head > div{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+  .vsr.head > div:first-child{color:var(--grey);font-weight:500}
+  .vsr.head .hl{background:var(--blue-tint);color:var(--blue)}
+  @media(max-width:760px){
+    .vsr{grid-template-columns:1fr;padding:12px 0}
+    .vsr.head{display:none}
+    .vsr > div{padding:5px 18px}
+    .vsr > div:first-child{padding-top:12px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--grey);font-weight:600}
+    .vsr > div:not(:first-child)::before{content:attr(data-l) " — ";font-weight:600;color:var(--ink)}
+  }
+
+  /* ============ TEKSTI + TUMMA PANEELI ============ */
+  .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center}
+  @media(max-width:960px){.duo{grid-template-columns:1fr;gap:38px}}
+  .numlist{border-top:1px solid var(--hair);counter-reset:nl;margin-top:28px}
+  .numlist li{
+    list-style:none;counter-increment:nl;position:relative;
+    padding:19px 0 19px 46px;border-bottom:1px solid var(--hair);
+  }
+  .numlist li::before{
+    content:counter(nl,decimal-leading-zero);position:absolute;left:0;top:21px;
+    font-size:11.5px;font-weight:700;color:var(--blue);letter-spacing:.08em;
+  }
+  .numlist h3{font-size:16px;font-weight:600;margin-bottom:6px;letter-spacing:-.014em}
+  .numlist p{font-size:14px;color:var(--grey);line-height:1.6}
+
+  /* ============ SIVURAKENNEPUU: yksi sivu, yksi haku ============ */
+  .tree{
+    border:1px solid var(--hair);border-radius:24px;background:#fff;padding:32px 30px 28px;
+    box-shadow:0 30px 80px -44px rgba(29,29,31,.3);
+  }
+  @media(max-width:560px){.tree{padding:24px 20px 20px}}
+  .tree .tt{
+    font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--blue);margin-bottom:6px;
+  }
+  .tree .td{font-size:13.5px;color:var(--grey);line-height:1.55;margin-bottom:22px}
+  .trow{display:flex;align-items:center;gap:14px;padding:11px 0}
+  .kids .trow+.trow{border-top:1px dashed var(--hair)}
+  .trow .path{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12px;background:#f5f5f7;border:1px solid var(--hair);border-radius:7px;
+    padding:5px 9px;white-space:nowrap;letter-spacing:-.01em;
+  }
+  .trow .q{font-size:13.5px;color:var(--grey);margin-left:auto;text-align:right}
+  .trow.root{padding-top:0}
+  .trow.root .path{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .trow.root .q{color:var(--ink);font-weight:500}
+  .kids{padding-left:22px;margin-left:11px;border-left:1px solid var(--hair);position:relative}
+  .kids .trow{position:relative}
+  .kids .trow::before{
+    content:"";position:absolute;left:-22px;top:50%;width:14px;height:1px;background:var(--hair);
+  }
+  @media(max-width:560px){
+    .trow{flex-direction:column;align-items:flex-start;gap:6px}
+    .trow .q{margin-left:0;text-align:left}
+    .kids{padding-left:16px;margin-left:6px}
+    .kids .trow::before{display:none}
+  }
+  .tree .tn{
+    margin-top:22px;padding-top:18px;border-top:1px solid var(--hair);
+    font-size:13.5px;color:var(--grey);line-height:1.6;
+  }
+
+  /* ============ AIKAJANA ============ */
+  .tl{position:relative;max-width:880px;margin:0 auto}
+  .tl::before{
+    content:"";position:absolute;left:50%;top:14px;bottom:14px;width:1px;
+    background:repeating-linear-gradient(180deg,var(--hair) 0 7px,transparent 7px 14px);
+    transform:translateX(-.5px);
+  }
+  @media(max-width:820px){.tl::before{left:18px}}
+  .tlrow{display:grid;grid-template-columns:1fr 78px 1fr;align-items:center;margin-bottom:14px}
+  .tlrow:last-child{margin-bottom:0}
+  @media(max-width:820px){.tlrow{grid-template-columns:38px 1fr;gap:16px;margin-bottom:12px}}
+  .tlrow .dot{
+    grid-column:2;justify-self:center;
+    width:38px;height:38px;border-radius:50%;background:#fff;border:1px solid var(--hair);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;color:var(--blue);position:relative;z-index:1;
+    box-shadow:0 0 0 6px #fff;
+  }
+  @media(max-width:820px){.tlrow .dot{grid-column:1;justify-self:start;box-shadow:0 0 0 5px #fff}}
+  .tlbox{
+    grid-row:1;padding:22px 26px;border:1px solid var(--hair);border-radius:16px;background:#fff;
+    box-shadow:0 20px 50px -30px rgba(29,29,31,.22);transition:transform .35s cubic-bezier(.2,.6,.2,1),box-shadow .35s;
+  }
+  .tlbox:hover{transform:translateY(-4px);box-shadow:0 30px 70px -34px rgba(29,29,31,.3)}
+  .tlrow:nth-child(odd) .tlbox{grid-column:1;text-align:right}
+  .tlrow:nth-child(even) .tlbox{grid-column:3}
+  @media(max-width:820px){
+    .tlrow:nth-child(odd) .tlbox,.tlrow:nth-child(even) .tlbox{grid-column:2;text-align:left}
+    .tlbox{padding:18px 20px}
+  }
+  .tlbox h3{font-size:17px;font-weight:600;margin-bottom:7px;letter-spacing:-.016em}
+  .tlbox p{font-size:14px;color:var(--grey);line-height:1.55}
+  .tlbox .sw{display:inline-block;margin-top:11px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--blue)}
+
+  /* ============ TULOKSET (vaalea, kehystetty) ============ */
+  .frame{
+    border:1px solid var(--hair);border-radius:24px;padding:18px;background:#fff;
+    box-shadow:0 34px 90px -44px rgba(29,29,31,.3);
+  }
+  @media(max-width:640px){.frame{padding:10px;border-radius:18px}}
+  .figs{display:grid;grid-template-columns:repeat(3,1fr);gap:0 40px;margin-top:52px;border-top:1px solid var(--hair)}
+  @media(max-width:820px){.figs{grid-template-columns:1fr;gap:0}}
+  .fig{padding:28px 0;position:relative}
+  @media(max-width:820px){.fig+.fig{border-top:1px solid var(--hair)}}
+  .fig .n{font-size:clamp(34px,4.6vw,52px);font-weight:700;letter-spacing:-.03em;color:var(--blue);line-height:1;font-variant-numeric:tabular-nums}
+  .fig b{display:block;font-size:15px;font-weight:600;margin-top:14px}
+  .fig s{display:block;text-decoration:none;font-size:12.5px;color:var(--grey);margin-top:5px}
+  .fig .tag{
+    display:inline-block;margin-bottom:16px;font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--grey);border:1px solid var(--hair);border-radius:980px;padding:4px 10px;
+  }
+
+  /* ============ ISO SITAATTI ============ */
+  .pull{
+    display:grid;grid-template-columns:auto minmax(0,1fr);gap:34px;align-items:start;
+    padding:52px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  }
+  @media(max-width:760px){.pull{grid-template-columns:1fr;gap:18px;padding:38px 0}}
+  .pull .mark{font-size:76px;line-height:.7;color:var(--blue);opacity:.28;font-weight:700}
+  @media(max-width:760px){.pull .mark{font-size:52px}}
+  .pull blockquote{font-size:clamp(20px,2.7vw,30px);font-weight:600;letter-spacing:-.022em;line-height:1.3;text-wrap:balance}
+  .pull figcaption{margin-top:24px;font-size:13.5px;color:var(--grey)}
+  .pull figcaption b{color:var(--ink);font-weight:600}
+  .refchips{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+  .refchip{
+    border:1px dashed #d8d8de;border-radius:12px;padding:13px 18px;min-width:150px;
+    font-size:12.5px;color:var(--grey);transition:border-color .3s,color .3s;
+  }
+  .refchip:hover{border-color:var(--blue);color:var(--blue)}
+  .refchip b{display:block;color:var(--ink);font-weight:600;font-size:13.5px;margin-bottom:3px}
+  .refchip:hover b{color:var(--blue)}
+
+  /* ============ HINNOITTELU RIVEINÄ ============ */
+  .prows{margin-top:8px}
+  .prow{
+    display:grid;grid-template-columns:minmax(0,250px) minmax(0,1fr) 190px;gap:34px;align-items:center;
+    padding:30px 0;border-bottom:1px solid var(--hair);position:relative;
+  }
+  .prow:first-child{border-top:1px solid var(--hair)}
+  @media(max-width:900px){.prow{grid-template-columns:1fr;gap:16px;padding:26px 0}}
+  .prow.hl::before{
+    content:"";position:absolute;left:-20px;right:-20px;top:0;bottom:0;
+    background:var(--blue-tint);border-radius:20px;z-index:-1;
+  }
+  @media(max-width:640px){.opt::before,.prow.hl::before{left:-12px;right:-12px}}
+  .prow .badge{
+    display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--blue);margin-bottom:8px;
+  }
+  .prow h3{font-size:21px;font-weight:600;letter-spacing:-.018em}
+  .prow .for{font-size:13.5px;color:var(--grey);margin-top:7px;line-height:1.55;max-width:34ch}
+  .prow ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+  @media(max-width:560px){.prow ul{grid-template-columns:1fr}}
+  .prow li{font-size:13.5px;color:var(--grey);padding:6px 0 6px 21px;position:relative;line-height:1.45}
+  .prow li::before{content:"✓";position:absolute;left:0;top:7px;color:var(--blue);font-size:11px;font-weight:700}
+  .prow .pp{text-align:right}
+  @media(max-width:900px){.prow .pp{text-align:left}}
+  .prow .price{font-size:27px;font-weight:700;letter-spacing:-.028em;white-space:nowrap}
+  .prow .price small{font-size:13px;font-weight:400;color:var(--grey)}
+  .prow .pp .btn{margin-top:12px;padding:10px 20px;font-size:14px}
+
+  /* ============ KAKSI PANEELIA (kenelle) ============ */
+  .twopanel{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.twopanel{grid-template-columns:1fr}}
+  .pan{border-radius:24px;padding:38px 34px;border:1px solid var(--hair);background:#fff}
+  @media(max-width:560px){.pan{padding:28px 24px}}
+  .pan.dark{background:var(--dark);color:#f5f5f7;border-color:var(--dark)}
+  .pan h3{font-size:12.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:18px}
+  .pan.dark h3{color:#6fb1ff}
+  .pan ul{list-style:none}
+  .pan li{font-size:14.5px;padding:11px 0 11px 26px;position:relative;line-height:1.5;border-bottom:1px solid var(--hair)}
+  .pan li:last-child{border-bottom:none}
+  .pan.dark li{border-color:rgba(255,255,255,.1);color:#d6d6da}
+  .pan li::before{position:absolute;left:0;top:11px;font-weight:700;font-size:13px}
+  .pan.yes li::before{content:"+";color:var(--blue)}
+  .pan.dark li::before{content:"–";color:#6e6e73}
+
+  /* ============ FAQ KAKSIPALSTAISENA ============ */
+  .faq2{display:grid;grid-template-columns:1fr 1fr;gap:0 58px;align-items:start;max-width:1000px;margin:0 auto}
+  @media(max-width:900px){.faq2{grid-template-columns:1fr;gap:0}}
+  .askbox{
+    margin-top:34px;border:1px solid var(--hair);border-radius:18px;padding:26px 24px;background:var(--blue-tint);
+  }
+  .askbox b{display:block;font-size:15.5px;font-weight:600;margin-bottom:7px}
+  .askbox p{font-size:14px;color:var(--grey);line-height:1.55;margin-bottom:16px}
+
+  /* ============ LOMAKE KAHDESSA PALSTASSA ============ */
+  .formsplit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:64px;align-items:start}
+  @media(max-width:900px){.formsplit{grid-template-columns:1fr;gap:32px}}
+  .formsplit .fcard{max-width:none;margin:0}
+  .flist{list-style:none;margin-top:26px;border-top:1px solid var(--hair)}
+  .flist li{font-size:14.5px;padding:13px 0 13px 26px;position:relative;border-bottom:1px solid var(--hair);color:var(--ink)}
+  .flist li::before{content:"✓";position:absolute;left:0;top:14px;color:var(--blue);font-size:12px;font-weight:700}
+  .flist li s{display:block;text-decoration:none;font-size:13px;color:var(--grey);margin-top:3px}
+
+  /* ============ TUMMA LOPPU-CTA ============ */
+  .closer{
+    background:var(--dark);color:#f5f5f7;border-radius:28px;max-width:1240px;margin:0 auto;
+    padding:76px 60px;position:relative;overflow:hidden;
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:44px;align-items:center;
+  }
+  @media(max-width:1280px){.closer{margin:0 16px}}
+  @media(max-width:820px){.closer{grid-template-columns:1fr;padding:48px 30px;gap:28px}}
+  .closer::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(44% 60% at 88% 6%,rgba(0,113,227,.3),transparent 68%),
+      radial-gradient(40% 55% at 4% 100%,rgba(100,168,255,.14),transparent 70%);
+  }
+  .closer > *{position:relative}
+  .closer h2{color:#f5f5f7;max-width:16ch}
+  .closer p{color:#a1a1a6;font-size:17px;margin-top:16px;max-width:46ch;line-height:1.55}
+  .closer .btn{background:#fff;color:var(--ink);white-space:nowrap}
+  .closer .btn:hover{background:#f0f0f2;box-shadow:none}
+  .closer .cnote{font-size:12.5px;color:#8a8a90;margin-top:14px;text-align:center}
+  @media(max-width:820px){.closer .cnote{text-align:left}}
+
+  @media(prefers-reduced-motion:reduce){
+    .opt::before,.tlbox,.refchip{transition:none !important}
+  }
+
+</style>
+<noscript><style>
+  /* Ilman JS:ää kaikki sisältö näkyy heti — mikään teksti ei jää opacity:0 -tilaan */
+  .rv,.li,.sk{opacity:1 !important;transform:none !important;animation:none !important}
+</style></noscript>
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true">
+  <svg id="bdSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+    <g id="bdGrid" stroke="#e4e4e9" stroke-width="1">
+      <line x1="0" y1="150" x2="1440" y2="150"/>
+      <line x1="0" y1="450" x2="1440" y2="450"/>
+      <line x1="0" y1="750" x2="1440" y2="750"/>
+      <line x1="240" y1="0" x2="240" y2="900"/>
+      <line x1="720" y1="0" x2="720" y2="900"/>
+      <line x1="1200" y1="0" x2="1200" y2="900"/>
+    </g>
+    <g stroke="#c7c7ce" stroke-width="1.3">
+      <path d="M 90 90 L 90 340 L 340 340"/>
+      <path d="M 90 90 L 340 90"/>
+      <circle cx="90" cy="90" r="3" fill="#c7c7ce" stroke="none"/>
+      <circle cx="340" cy="340" r="3" fill="#c7c7ce" stroke="none"/>
+      <path d="M 140 210 L 260 210" stroke-dasharray="3 5"/>
+    </g>
+    <g stroke="#c7c7ce" stroke-width="1.3">
+      <path d="M 1150 60 L 1380 60 L 1380 260"/>
+      <circle cx="1150" cy="60" r="3" fill="#c7c7ce" stroke="none"/>
+      <circle cx="1380" cy="260" r="3" fill="#c7c7ce" stroke="none"/>
+    </g>
+    <g id="bdRing" transform="translate(770,110)">
+      <circle cx="0" cy="0" r="46" stroke="#d6d6dc" stroke-width="1.2" stroke-dasharray="5 9"/>
+      <circle cx="0" cy="-46" r="3" fill="#bcbcc4"/>
+    </g>
+    <path id="bdWave" d="M 0 500 C 260 470, 520 540, 780 500 S 1200 460, 1440 505" stroke="#dedee3" stroke-width="1"/>
+  </svg>
+</div>
+
+<div id="prog"></div>
+
+<nav id="nav">
+  <div class="navin">
+    <a class="logo" href="/">WS Media</a>
+    <div class="navlinks">
+      <a href="/lyhytvideot">Lyhytvideot</a>
+      <a href="/verkkosivut" aria-current="page">Verkkosivut</a>
+      <a href="/tapahtumat">Tapahtumat</a>
+      <a href="/tyonaytteet">Työnäytteet</a>
+      <a href="/hinnoittelu">Hinnoittelu</a>
+      <a class="navcta" href="#tarjous">Pyydä tarjous</a>
+    </div>
+  </div>
+</nav>
+
+<!-- MURUPOLKU -->
+<div class="wrap crumbs">
+  <nav aria-label="Murupolku">
+    <ol>
+      <li><a href="/">Etusivu</a></li>
+      <li><a href="/palvelut">Palvelut</a></li>
+      <li aria-current="page">Verkkosivut</li>
+    </ol>
+  </nav>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <p class="kick li d1">Verkkosivut yritykselle</p>
+    <!-- H1 sisältää vain yhden lauseen. Vaihtuvat vaihtoehdot ovat data-attribuutissa,
+         jota hakukone ei lue tekstinä — JS rakentaa niistä animaation. -->
+    <h1 class="li d2" data-par="0.05"
+        data-swap="latautuvat sekunnissa.|muuttavat kävijät yhteydenotoiksi.|kestävät vuosia.">Verkkosivut yritykselle, jotka<br>
+      <span class="swapclip"><span class="swap" id="swap"><span class="act">löytyvät Googlesta.</span></span></span>
+    </h1>
+    <p class="sub li d3" data-par="0.035">Verkkosivujen suunnittelu ja toteutus avaimet käteen: sivurakenne, tekstit, tekninen hakukoneoptimointi ja julkaisu. Perussivustosta täysin räätälöityyn toteutukseen — kiinteällä projektihinnalla.</p>
+    <div class="heroctas li d4" data-par="0.025">
+      <a class="btn mag" href="#tarjous">Pyydä tarjous</a>
+      <a class="tlink" href="#hinnoittelu">Katso mitä verkkosivut maksavat</a>
+    </div>
+    <p class="herotrust li d4">
+      <span><i></i>Kiinteä projektihinta, ei piilokuluja</span>
+      <span><i></i>Valmis 2–4 viikossa</span>
+      <span><i></i>Espoo · Helsinki · koko Suomi</span>
+    </p>
+  </div>
+
+  <!-- SELAINNÄYTTÄMÖ: sivusto rakentuu, PageSpeed nousee, hakutulos nousee sijalle 1 -->
+  <div class="bstage li d5" data-par="-0.03" aria-label="Havainnekuva WS Median toteuttamasta verkkosivustosta">
+    <div class="bwrap" id="bwrap">
+      <div class="chip-f cf1"><em>✓</em><span>Toimitus<small>2–4 viikkoa</small></span></div>
+      <div class="chip-f cf2"><em>⚡</em><span>Latausaika<small>alle 1,5 s mobiilissa</small></span></div>
+
+      <div class="bwin">
+        <div class="bbar">
+          <span class="bdot"></span><span class="bdot"></span><span class="bdot"></span>
+          <span class="burl"><em>🔒</em>asiakkaasi.fi</span>
+        </div>
+        <div class="bpage">
+          <div class="bscore" id="bscore" title="PageSpeed-pisteet"><i><span id="bscoreN">0</span><small>PAGESPEED</small></i></div>
+          <div class="sk sk1 sk-kick"></div>
+          <div class="sk sk2 sk-h"></div>
+          <div class="sk sk3 sk-h short"></div>
+          <div class="sk sk4 sk-btns"><span class="sk-btn"></span><span class="sk-btn o"></span></div>
+          <div class="sk sk5 sk-cards">
+            <span class="sk-card"></span><span class="sk-card"></span><span class="sk-card"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bphone" aria-hidden="true">
+        <div class="pscr">
+          <div class="pk"></div>
+          <div class="ph"></div>
+          <div class="ph s"></div>
+          <div class="pb"></div>
+          <div class="pc"></div><div class="pc"></div><div class="pc"></div>
+        </div>
+      </div>
+
+      <div class="serp rv" aria-hidden="true">
+        <div class="st"><span>Google · palvelu + paikkakunta</span><b>#1</b></div>
+        <div class="serplist">
+          <div class="serprow r1 up1"><i>1</i><u><s></s><s></s></u></div>
+          <div class="serprow r2 up2"><i>2</i><u><s></s><s></s></u></div>
+          <div class="serprow r3 us"><i>3</i><u><s></s><s></s></u></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ONGELMA: tumma kaista heti heron jälkeen ============ -->
+<section class="band" id="miksi">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Tuttu tilanne</span>
+        <h2>Sivusto on olemassa.<br>Se ei vain tee mitään.</h2>
+      </div>
+      <p class="sub">Asiakas etsii palvelun Googlesta, avaa kaksi tai kolme sivustoa ja valitsee sen, joka latautuu nopeasti, vastaa hänen kysymykseensä ja tekee yhteydenotosta helppoa. Kaikki muu on toissijaista.</p>
+    </div>
+
+    <div class="probs stagger">
+      <div class="prob rv" style="--i:0">
+        <em>01</em>
+        <div>
+          <h3>Sivusto ei löydy Googlesta</h3>
+          <p>Ilman selkeää sivurakennetta, hakusanoja ja teknistä hakukoneoptimointia sivusto jää hakutulosten toiselle sivulle. Asiakas ei etsi sinua nimellä — hän etsii palvelua, ja päätyy kilpailijan sivuille.</p>
+        </div>
+      </div>
+      <div class="prob rv" style="--i:1">
+        <em>02</em>
+        <div>
+          <h3>Kävijät tulevat, mutta eivät ota yhteyttä</h3>
+          <p>Sivuilla käydään, mutta lomakkeita ei täytetä. Syy on lähes aina sama: kävijä ei löydä nopeasti vastausta siihen, mitä palvelu maksaa, kenelle se on ja miten edetään.</p>
+        </div>
+      </div>
+      <div class="prob rv" style="--i:2">
+        <em>03</em>
+        <div>
+          <h3>Sivut latautuvat hitaasti mobiilissa</h3>
+          <p>Raskaat valmispohjat ja kymmenet lisäosat lataavat omat tiedostonsa jokaisella sivunlatauksella. Hidas mobiilisivu menettää kävijän ennen kuin sisältö ehtii näkyä ruudulla.</p>
+        </div>
+      </div>
+      <div class="prob rv" style="--i:3">
+        <em>04</em>
+        <div>
+          <h3>Ilme ei vastaa sitä, mitä yritys oikeasti on</h3>
+          <p>Moni yritys on selvästi parempi kuin miltä se verkossa näyttää. Vanhentunut ulkoasu on asiakkaalle vihje siitä, miten muutkin asiat mahdollisesti hoidetaan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bstats rv">
+      <div class="bstat"><div class="n">2–4</div><p>viikkoa suunnittelusta julkaisuun</p></div>
+      <div class="bstat"><div class="n">95+/100</div><p>PageSpeed-tavoite mobiilissa</p></div>
+      <div class="bstat"><div class="n">24&nbsp;h</div><p>vastaus tarjouspyyntöön</p></div>
+      <div class="bstat"><div class="n">63&nbsp;%</div><p>kävijöistä saapuu mobiililaitteella</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MITÄ SISÄLTYY: sticky-otsikko + akkordioni ============ -->
+<section id="sisalto">
+  <div class="wrap">
+    <div class="split">
+      <div class="stick rv" data-par="0.02">
+        <span class="kick">Palvelun sisältö</span>
+        <h2>Mitä verkkosivujen suunnittelu ja toteutus sisältää?</h2>
+        <p>Avaimet käteen tarkoittaa, ettei sinun tarvitse kirjoittaa tekstejä, valita fontteja tai opetella hakukoneoptimointia. Sinä kerrot yrityksestäsi ja palveluistasi, me hoidamme loput.</p>
+        <a class="btn" href="#tarjous">Pyydä tarjous</a>
+      </div>
+
+      <div class="acc rv">
+        <details open>
+          <summary>Sivurakenne ja hakusanat</summary>
+          <div class="ab">Selvitämme mitä asiakkaasi oikeasti hakevat Googlesta ja rakennamme sivuston niin, että jokaiselle palvelulle on oma alasivunsa. Tämä on yksittäisistä ratkaisuista se, joka vaikuttaa näkyvyyteen eniten.</div>
+        </details>
+        <details>
+          <summary>Ulkoasu yrityksesi näköisenä</summary>
+          <div class="ab">Yksilöllinen ulkoasu yrityksesi väreillä ja materiaaleilla. Ei tunnistettavaa valmisteemaa, jonka näkee joka toisella sivustolla.</div>
+        </details>
+        <details>
+          <summary>Tekstit ja sisällöntuotanto</summary>
+          <div class="ab">Kirjoitamme palvelukuvaukset, otsikot ja yhteydenottoon ohjaavat tekstit valmiiksi. Sinä hyväksyt ennen julkaisua.</div>
+        </details>
+        <details>
+          <summary>Tekninen hakukoneoptimointi</summary>
+          <div class="ab">Otsikkorakenne, metatiedot, sivustokartta, indeksoitavuus, sisäinen linkitys ja strukturoitu data kuntoon jo ennen julkaisua — ei jälkikäteen korjauksena.</div>
+        </details>
+        <details>
+          <summary>Responsiivinen ja mobiilioptimoitu toteutus</summary>
+          <div class="ab">Sivusto suunnitellaan mobiili edellä ja testataan puhelimella, tabletilla ja työpöydällä ennen kuin se menee live-tilaan.</div>
+        </details>
+        <details>
+          <summary>Lomakkeet ja yhteydenottopolut</summary>
+          <div class="ab">Yhteydenotto- ja tarjouspyyntölomakkeet, soittopainikkeet ja selkeät CTA-napit siellä, missä kävijä on valmis toimimaan.</div>
+        </details>
+        <details>
+          <summary>Analytiikka ja mittaus</summary>
+          <div class="ab">Google Analytics ja Search Console asennettuna, jotta näet mistä kävijät tulevat ja mikä sivu tuottaa yhteydenottoja.</div>
+        </details>
+        <details>
+          <summary>Verkkotunnus, palvelintila ja SSL-suojaus</summary>
+          <div class="ab">Hoidamme verkkotunnuksen, palvelintilan ja SSL-suojauksen puolestasi. Verkkotunnus rekisteröidään sinun yrityksesi nimiin.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOTEUTUSTAPA: leveät rivit + vertailutaulukko ============ -->
+<section id="toteutustapa" style="padding-top:20px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Toteutustapa</span>
+        <h2>Perussivusto vai räätälöidyt verkkosivut?</h2>
+      </div>
+      <p class="sub">Teemme molemmat. Ero ei ole laadussa vaan siinä, kuinka paljon sivustolta vaaditaan — ja kuinka pitkälle sen pitää skaalautua.</p>
+    </div>
+
+    <div class="opts">
+      <div class="opt rv">
+        <div class="idx">01</div>
+        <div>
+          <span class="oc">Perussivusto</span>
+          <h3>Nopein tapa saada uskottava sivusto verkkoon</h3>
+          <p>Selkeä kokonaisuus yritykselle, joka tarvitsee toimivat kotisivut nyt eikä kolmen kuukauden päästä.</p>
+        </div>
+        <ul>
+          <li>Yhdestä viiteen sisältösivua</li>
+          <li>Testattu rakenne, oma ulkoasu</li>
+          <li>Tekninen hakukoneoptimointi mukana</li>
+          <li>Julkaisu 2 viikossa</li>
+        </ul>
+      </div>
+      <div class="opt rv">
+        <div class="idx">02</div>
+        <div>
+          <span class="oc">Räätälöity</span>
+          <h3>Käsin koodattu sivusto, joka tehdään tyhjästä</h3>
+          <p>Kun sivuston pitää olla nopeampi, uniikimpi tai monipuolisempi kuin valmis pohja sallii.</p>
+        </div>
+        <ul>
+          <li>Ei valmisteemoja eikä turhia lisäosia</li>
+          <li>Kevyt koodi ja nopeat latausajat</li>
+          <li>Omat toiminnallisuudet ja integraatiot</li>
+          <li>Skaalautuu, kun yritys kasvaa</li>
+        </ul>
+      </div>
+      <div class="opt rv">
+        <div class="idx">03</div>
+        <div>
+          <span class="oc">Verkkokauppa</span>
+          <h3>Kun tuotteet myydään suoraan verkossa</h3>
+          <p>Verkkokauppa rakennetaan saman sivuston osaksi, ei erilliseksi saarekkeeksi.</p>
+        </div>
+        <ul>
+          <li>Tuotehallinta ja maksutavat</li>
+          <li>Toimitustavat ja tilausten seuranta</li>
+          <li>Tuotesivujen hakukoneoptimointi</li>
+          <li>Myynnin raportointi</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- VERTAILUTAULUKKO -->
+    <div class="vs rv">
+      <div class="vsr head">
+        <div>Vertailu</div>
+        <div>Valmis pohja</div>
+        <div class="hl">Käsin koodattu</div>
+      </div>
+      <div class="vsr">
+        <div>Nopeus</div>
+        <div data-l="Valmis pohja">Työn tulos — vaatii jatkuvaa optimointia</div>
+        <div class="hl" data-l="Käsin koodattu">Lähtökohta — mukana on vain tarvittava koodi</div>
+      </div>
+      <div class="vsr">
+        <div>Ulkoasu</div>
+        <div data-l="Valmis pohja">Teeman rajoissa, muistuttaa muita sivustoja</div>
+        <div class="hl" data-l="Käsin koodattu">Täysin vapaa, yrityksesi näköinen</div>
+      </div>
+      <div class="vsr">
+        <div>Toiminnallisuudet</div>
+        <div data-l="Valmis pohja">Lisäosien varassa</div>
+        <div class="hl" data-l="Käsin koodattu">Rakennetaan juuri tarpeeseen</div>
+      </div>
+      <div class="vsr">
+        <div>Ylläpito</div>
+        <div data-l="Valmis pohja">Ydin, teema ja lisäosat päivittyvät jatkuvasti</div>
+        <div class="hl" data-l="Käsin koodattu">Ei riipu alustapäivityksistä</div>
+      </div>
+      <div class="vsr">
+        <div>Tietoturva</div>
+        <div data-l="Valmis pohja">Laaja hyökkäyspinta, tunnetut haavoittuvuudet</div>
+        <div class="hl" data-l="Käsin koodattu">Pieni hyökkäyspinta, vähemmän liikkuvia osia</div>
+      </div>
+      <div class="vsr">
+        <div>Alkuinvestointi</div>
+        <div data-l="Valmis pohja">Matalampi</div>
+        <div class="hl" data-l="Käsin koodattu">Korkeampi, mutta pienemmät jatkuvat kulut</div>
+      </div>
+      <div class="vsr">
+        <div>Sopii kun</div>
+        <div data-l="Valmis pohja">Tarpeet ovat tavanomaisia ja sivusto halutaan nopeasti</div>
+        <div class="hl" data-l="Käsin koodattu">Ala on kilpailtu ja nopeus tai erottuvuus ratkaisee</div>
+      </div>
+    </div>
+
+    <!-- MITATUT EROT -->
+    <div class="cmp rv">
+      <p class="ct">Sama sivu, kaksi toteutustapaa</p>
+
+      <div class="cmprow">
+        <div class="lb">Sivun koko<s>Raskas valmispohja</s></div>
+        <div class="cmpbar" style="--w:92%"><i></i></div>
+        <div class="vv">2&nbsp;800 kt</div>
+      </div>
+      <div class="cmprow good">
+        <div class="lb">Sivun koko<s>Käsin koodattu</s></div>
+        <div class="cmpbar good" style="--w:14%"><i></i></div>
+        <div class="vv">420 kt</div>
+      </div>
+
+      <div class="cmprow">
+        <div class="lb">Latausaika mobiilissa<s>Raskas valmispohja</s></div>
+        <div class="cmpbar" style="--w:90%"><i></i></div>
+        <div class="vv">4,8 s</div>
+      </div>
+      <div class="cmprow good">
+        <div class="lb">Latausaika mobiilissa<s>Käsin koodattu</s></div>
+        <div class="cmpbar good" style="--w:21%"><i></i></div>
+        <div class="vv">1,1 s</div>
+      </div>
+
+      <div class="cmprow">
+        <div class="lb">Päivitettäviä lisäosia<s>Raskas valmispohja</s></div>
+        <div class="cmpbar" style="--w:86%"><i></i></div>
+        <div class="vv">24 kpl</div>
+      </div>
+      <div class="cmprow good">
+        <div class="lb">Päivitettäviä lisäosia<s>Käsin koodattu</s></div>
+        <div class="cmpbar good" style="--w:0%"><i></i></div>
+        <div class="vv">0 kpl</div>
+      </div>
+
+      <p class="cmpnote">Luvut ovat tyypillisiä mittausarvoja: raskas valmispohja tarkoittaa sivupohjaa ja parikymmentä lisäosaa, käsin koodattu samaa sisältöä ilman ylimääräistä. Latausaika on mitattu mobiiliyhteydellä. Toteutuneet arvot vaihtelevat sisällön ja kuvien määrän mukaan, mutta suuruusluokka pysyy: valmispohjassa nopeus on työn tulos, käsin koodatussa se on lähtökohta.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NÄKYVYYS: teksti vasemmalla, tumma mittaripaneeli oikealla ============ -->
+<section id="hakukoneoptimointi" style="padding-top:20px">
+  <div class="wrap">
+    <div class="duo">
+      <div class="rv" data-par="0.02">
+        <span class="kick">Näkyvyys</span>
+        <h2 style="margin-top:12px">Näin verkkosivut näkyvät Googlessa</h2>
+        <p class="lead">Hakukoneoptimointi ei ole erillinen lisäpalvelu, joka ostetaan sivuston jälkeen. Se on tapa rakentaa sivusto: rakenne, sisältö ja tekniikka ratkaisevat sen, löytyykö sivusto ollenkaan.</p>
+        <ul class="numlist">
+          <li>
+            <h3>Nopeat latausajat</h3>
+            <p>Google mittaa sivuston nopeutta oikeilta käyttäjiltä. Hidas sivu ei ainoastaan menetä kävijää, se menettää myös sijoituksia — ja mobiilissa ero on suurin.</p>
+          </li>
+          <li>
+            <h3>Selkeä sivurakenne ja sisäinen linkitys</h3>
+            <p>Jokaiselle palvelulle oma alasivunsa. Näin sivusto voi näkyä useilla eri hauilla sen sijaan, että kaikki puristetaan yhdelle etusivulle.</p>
+          </li>
+          <li>
+            <h3>Optimoitu sisältö ja oikeat hakusanat</h3>
+            <p>Tekstit kirjoitetaan niillä sanoilla, joilla asiakkaat oikeasti hakevat. Otsikot, metatiedot ja sisältö vastaavat siihen kysymykseen, joka hakuun johti.</p>
+          </li>
+          <li>
+            <h3>Hyvä käyttäjäkokemus</h3>
+            <p>Google seuraa, jääkö kävijä sivulle vai palaako hän hakutuloksiin. Selkeä rakenne, luettava teksti ja toimiva mobiilinäkymä pitävät kävijän sivulla.</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="tree rv" data-par="-0.02">
+        <p class="tt">Yksi sivu, yksi haku</p>
+        <p class="td">Näin sivurakenne rakennetaan: jokainen palvelu ja paikkakunta saa oman osoitteensa, joka tähtää yhteen hakuun.</p>
+
+        <div class="trow root">
+          <span class="path">yrityksesi.fi</span>
+          <span class="q">yrityksen nimi</span>
+        </div>
+
+        <div class="kids">
+          <div class="trow">
+            <span class="path">/verkkosivut</span>
+            <span class="q">”verkkosivut yritykselle”</span>
+          </div>
+          <div class="trow">
+            <span class="path">/verkkosivut/espoo</span>
+            <span class="q">”verkkosivut espoo”</span>
+          </div>
+          <div class="trow">
+            <span class="path">/verkkokauppa</span>
+            <span class="q">”verkkokaupan rakentaminen”</span>
+          </div>
+          <div class="trow">
+            <span class="path">/blogi/verkkosivujen-hinta</span>
+            <span class="q">”paljonko verkkosivut maksavat”</span>
+          </div>
+        </div>
+
+        <p class="tn">Jokainen sivu voi sijoittua omalla hakusanallaan. Yhdelle etusivulle puristettuna ne kilpailisivat keskenään — ja Google ei tietäisi, mikä sivu vastaa mihinkin hakuun.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROSESSI: aikajana ============ -->
+<section id="prosessi" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Prosessi</span>
+      <h2>Näin verkkosivuprojekti etenee</h2>
+      <p class="sub">Sinun ei tarvitse tietää etukäteen, mitä sivustolle tulee. Koko oma työmääräsi on käytännössä yksi puhelu ja kaksi hyväksyntäkierrosta.</p>
+    </div>
+
+    <div class="tl">
+      <div class="tlrow rv">
+        <div class="tlbox">
+          <h3>Kartoitus</h3>
+          <p>Käymme läpi mitä yritys tekee, kenelle ja millä hauilla asiakkaat etsivät palvelua. Et tarvitse mitään valmiiksi.</p>
+          <span class="sw">noin 30 min</span>
+        </div>
+        <div class="dot">1</div>
+      </div>
+      <div class="tlrow rv">
+        <div class="dot">2</div>
+        <div class="tlbox">
+          <h3>Rakenne ja hakusanat</h3>
+          <p>Päätämme mitkä sivut tehdään ja millä hakusanoilla kukin sivu pyrkii näkymään. Hyväksyt sivustokartan.</p>
+          <span class="sw">2–3 päivää</span>
+        </div>
+      </div>
+      <div class="tlrow rv">
+        <div class="tlbox">
+          <h3>Suunnittelu</h3>
+          <p>Rakennamme ulkoasun ja näytämme sen sinulle. Kommentoit, me viilaamme — vasta sitten siirrytään toteutukseen.</p>
+          <span class="sw">3–5 päivää</span>
+        </div>
+        <div class="dot">3</div>
+      </div>
+      <div class="tlrow rv">
+        <div class="dot">4</div>
+        <div class="tlbox">
+          <h3>Toteutus ja sisältö</h3>
+          <p>Koodaus, tekstit, kuvat, lomakkeet ja tekninen hakukoneoptimointi. Seuraat etenemistä demo-osoitteesta.</p>
+          <span class="sw">1–2 viikkoa</span>
+        </div>
+      </div>
+      <div class="tlrow rv">
+        <div class="tlbox">
+          <h3>Julkaisu ja ylläpito</h3>
+          <p>Testaamme lomakkeet, mobiilinäkymän, metatiedot ja mittauksen, siirrämme verkkotunnuksen ja julkaisemme.</p>
+          <span class="sw">1–2 päivää</span>
+        </div>
+        <div class="dot">5</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TULOKSET: kehystetty ennen/jälkeen + isot luvut ============ -->
+<section id="tulokset" style="padding-top:20px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Tulokset</span>
+        <h2>Ero näkyy heti — ja se mitataan.</h2>
+      </div>
+      <p class="sub">Vedä kahvasta ja katso ero. Jokainen sivusto mitataan ennen julkaisua, ja nämä tasot ovat se rima, jonka alle ei mennä.</p>
+    </div>
+
+    <div class="frame rv">
+      <div class="ba" id="ba">
+        <div class="lay old">
+          <div class="fnav"><span></span><span></span><span></span><span></span></div>
+          <div class="bl"></div><div class="bl"></div><div class="bbtn"></div>
+          <div class="btxt"><span></span><span></span><span></span></div>
+          <div class="bcards"><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="lay new" id="baNew">
+          <div class="fnav"><span></span><span></span><span></span><span></span></div>
+          <div class="bl"></div><div class="bl"></div><div class="bbtn"></div>
+          <div class="btxt"><span></span><span></span><span></span></div>
+          <div class="bcards"><span></span><span></span><span></span><span></span></div>
+        </div>
+        <span class="tag l">Ennen</span>
+        <span class="tag r">Jälkeen</span>
+        <span class="handle" id="baHandle"></span>
+        <input type="range" id="baRange" min="0" max="100" value="50" aria-label="Vertaa vanhaa ja uutta sivustoa">
+      </div>
+    </div>
+
+    <div class="figs stagger">
+      <div class="fig rv" style="--i:0">
+        <span class="tag">Mitataan</span>
+        <div class="n">95+/100</div>
+        <b>PageSpeed-pisteet mobiilissa</b>
+        <s>Mitataan Googlen työkalulla ennen julkaisua</s>
+      </div>
+      <div class="fig rv" style="--i:1">
+        <span class="tag">Mitataan</span>
+        <div class="n">alle 1,5 s</div>
+        <b>Sisällön latautuminen mobiilissa</b>
+        <s>Testataan mobiiliyhteydellä, ei vain toimiston verkossa</s>
+      </div>
+      <div class="fig rv" style="--i:2">
+        <span class="tag">Mitataan</span>
+        <div class="n">100&nbsp;%</div>
+        <b>Sivuista indeksoitavissa julkaisupäivänä</b>
+        <s>Sivustokartta ja metatiedot tarkistetaan sivu kerrallaan</s>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LUPAUS: iso sitaatti + toimialat ============ -->
+<section id="asiakkaat" style="padding-top:20px">
+  <div class="wrap">
+    <figure class="pull rv">
+      <span class="mark" aria-hidden="true">”</span>
+      <div>
+        <blockquote>Sivusto ei ole valmis silloin kun se näyttää hyvältä. Se on valmis silloin kun se latautuu sekunnissa, löytyy Googlesta ja tuottaa yhteydenottoja.</blockquote>
+        <figcaption><b>WS Media</b> · Espoo</figcaption>
+      </div>
+    </figure>
+    <div class="refchips rv">
+      <div class="refchip"><b>Rakennus ja LVI</b>Verkkosivut ja palvelusivut</div>
+      <div class="refchip"><b>Terveys ja hyvinvointi</b>Sivustouudistus</div>
+      <div class="refchip"><b>Erikoisliikkeet</b>Verkkokauppa</div>
+      <div class="refchip"><b>Ammattipalvelut</b>Verkkosivut ja hakukoneoptimointi</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HINNOITTELU: rivit ============ -->
+<section id="hinnoittelu">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Hinnoittelu</span>
+      <h2>Paljonko verkkosivut maksavat yritykselle?</h2>
+      <p class="sub">Kiinteä projektihinta kattaa suunnittelun, toteutuksen, tekstit, teknisen hakukoneoptimoinnin ja julkaisun. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja siitä, kuinka paljon sivuston halutaan tukevan hakukonenäkyvyyttä.</p>
+    </div>
+
+    <div class="prows">
+      <div class="prow rv">
+        <div>
+          <h3>Startti</h3>
+          <p class="for">Yritykselle, joka tarvitsee uskottavat kotisivut nopeasti.</p>
+        </div>
+        <ul>
+          <li>Etusivu ja 3 alasivua</li>
+          <li>Ulkoasu ja tekstit valmiina</li>
+          <li>Tekninen hakukoneoptimointi</li>
+          <li>Yhteydenottolomake ja analytiikka</li>
+          <li>Julkaisu 2 viikossa</li>
+        </ul>
+        <div class="pp">
+          <div class="price">1&nbsp;490 <small>€ + alv</small></div>
+          <a class="btn alt" href="#tarjous">Pyydä tarjous</a>
+        </div>
+      </div>
+
+      <div class="prow hl rv">
+        <div>
+          <span class="badge">Suosituin</span>
+          <h3>Yrityssivusto</h3>
+          <p class="for">Yritykselle, jolla on useita palveluita ja jonka pitää näkyä hauissa.</p>
+        </div>
+        <ul>
+          <li>6–12 sisältösivua</li>
+          <li>Oma alasivu jokaiselle palvelulle</li>
+          <li>Laajempi sisältö- ja hakusanatyö</li>
+          <li>Referenssit ja työnäytteet</li>
+          <li>Lomakkeet ja analytiikka</li>
+          <li>Laajennettava rakenne</li>
+        </ul>
+        <div class="pp">
+          <div class="price">2&nbsp;990 <small>€ + alv</small></div>
+          <a class="btn" href="#tarjous">Pyydä tarjous</a>
+        </div>
+      </div>
+
+      <div class="prow rv">
+        <div>
+          <h3>Räätälöity</h3>
+          <p class="for">Kun tarpeet menevät pakettien yli.</p>
+        </div>
+        <ul>
+          <li>Käsin koodattu toteutus</li>
+          <li>Omat toiminnallisuudet ja integraatiot</li>
+          <li>Verkkokauppa tai varausjärjestelmä</li>
+          <li>Monikieliset sivut</li>
+          <li>Ei ylärajaa sivumäärässä</li>
+        </ul>
+        <div class="pp">
+          <div class="price">alk. 5&nbsp;900 <small>€ + alv</small></div>
+          <a class="btn alt" href="#tarjous">Pyydä tarjous</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- JATKUVA PAKETTI -->
+    <div class="care rv">
+      <div>
+        <span class="kick">Jatkuva näkyvyys</span>
+        <h3>Ylläpito ja hakukoneoptimointi</h3>
+        <p>Projektihinta vie sivuston verkkoon. Sijoitukset syntyvät kuitenkin ajan kanssa: sisältöä pitää lisätä, hakusanoja seurata ja tekniikka pitää ajan tasalla. Jatkuva paketti hoitaa tämän kuukausittain, eikä sinun tarvitse muistaa mitään.</p>
+        <ul>
+          <li>Päivitykset ja tietoturva</li>
+          <li>Palvelintila ja varmuuskopiot</li>
+          <li>Sisältömuutokset</li>
+          <li>Hakusanaseuranta ja kuukausiraportti</li>
+          <li>Jatkuva sisällöntuotanto</li>
+        </ul>
+      </div>
+      <div class="careprice">
+        <div class="price">390 <small>€/kk + alv</small></div>
+        <a class="btn" href="#tarjous">Pyydä suunnitelma</a>
+      </div>
+    </div>
+
+    <p class="pricenote rv">Kaikki hinnat + alv 25,5 %. Projektihinta on kertaluonteinen eikä sivusto vaadi pakollista kuukausisitoutumista. Verkkotunnus, palvelintila ja SSL-suojaus sisältyvät ensimmäiseen vuoteen. Jatkuvan paketin voi lopettaa kuukauden irtisanomisajalla — sivusto ja verkkotunnus jäävät joka tapauksessa sinulle.</p>
+  </div>
+</section>
+
+<!-- ============ KENELLE: kaksi paneelia ============ -->
+<section id="kenelle" style="padding-top:20px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Kenelle</span>
+        <h2>Kenelle verkkosivut kannattaa teettää meillä?</h2>
+      </div>
+      <p class="sub">Emme sovi kaikille, ja se on rehellisempää sanoa etukäteen kuin kolmannessa palaverissa.</p>
+    </div>
+    <div class="twopanel stagger">
+      <div class="pan yes rv" style="--i:0">
+        <h3>Sopii sinulle, jos</h3>
+        <ul>
+          <li>Yritykselläsi on useampi palvelu, joilla jokaisella on oma asiakaskuntansa</li>
+          <li>Haluat näkyä Googlessa palveluhauilla, et vain yrityksen nimellä</li>
+          <li>Nykyinen sivusto on hidas, vanhentunut tai sitä ei voi päivittää itse</li>
+          <li>Haluat kiinteän hinnan ja tietää etukäteen mitä siihen sisältyy</li>
+          <li>Toivot, että tekstit, kuvat ja tekniikka hoituvat samalta tiimiltä</li>
+        </ul>
+      </div>
+      <div class="pan dark rv" style="--i:1">
+        <h3>Ei ehkä vielä, jos</h3>
+        <ul>
+          <li>Etsit halvinta mahdollista sivustoa etkä välitä siitä, löytyykö se hakukoneista</li>
+          <li>Haluat rakentaa sivut itse ja tarvitset vain alustan ja mallipohjan</li>
+          <li>Palvelusi tai kohderyhmäsi on vielä auki — kannattaa ensin päättää mitä myyt</li>
+          <li>Odotat sijoituksia Googlessa muutamassa viikossa julkaisun jälkeen</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOIMINTA-ALUE ============ -->
+<section id="alueet" style="padding-top:20px">
+  <div class="wrap-n">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Toiminta-alue</span>
+      <h2>Verkkosivut yritykselle Espoosta koko Suomeen</h2>
+      <p class="sub">Verkkosivuprojekti ei vaadi paikallaoloa. Kartoitus hoituu puhelimessa, suunnittelua seurataan demo-osoitteesta ja julkaisu tapahtuu verkossa — joten sijainti ei vaikuta hintaan eikä aikatauluun.</p>
+    </div>
+    <p class="lead rv" style="text-align:center;margin:0 auto">Kotipaikkamme on <strong>Espoo</strong> ja suurin osa asiakkaistamme on pääkaupunkiseudulta, mutta toteutamme verkkosivuja yrityksille ympäri Suomen. Paikkakunnalla on merkitystä yhdessä asiassa: jos yrityksesi palvelee tiettyä aluetta, sivusto kannattaa rakentaa niin, että se näkyy juuri niillä palveluhauilla, joissa paikkakunta on mukana.</p>
+    <div class="cities rv" style="justify-content:center">
+      <a href="/verkkosivut/espoo">Verkkosivut Espoo</a>
+      <a href="/verkkosivut/helsinki">Verkkosivut Helsinki</a>
+      <a href="/verkkosivut/vantaa">Verkkosivut Vantaa</a>
+      <a href="/verkkosivut/tampere">Verkkosivut Tampere</a>
+      <a href="/verkkosivut/turku">Verkkosivut Turku</a>
+      <a href="/verkkosivut/oulu">Verkkosivut Oulu</a>
+      <a href="/verkkosivut/lahti">Verkkosivut Lahti</a>
+      <a href="/verkkosivut/kuopio">Verkkosivut Kuopio</a>
+      <a href="/verkkosivut/pori">Verkkosivut Pori</a>
+      <a href="/verkkosivut/joensuu">Verkkosivut Joensuu</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ: kaksi palstaa ============ -->
+<section id="ukk" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Usein kysyttyä</span>
+      <h2>Usein kysytyt kysymykset verkkosivuista</h2>
+    </div>
+
+    <div class="faq2 rv">
+      <div class="faq">
+        <p class="faqgroup">Hinta ja aikataulu</p>
+        <details>
+          <summary>Paljonko verkkosivut maksavat yritykselle?</summary>
+          <div class="a">Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista.</div>
+        </details>
+        <details>
+          <summary>Mitä verkkosivujen hinta sisältää?</summary>
+          <div class="a">Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Verkkotunnus, palvelintila ja SSL-suojaus sisältyvät ensimmäiseen vuoteen. Ei aloitusmaksuja eikä piilokuluja.</div>
+        </details>
+        <details>
+          <summary>Kuinka nopeasti verkkosivut valmistuvat?</summary>
+          <div class="a">Suppea kokonaisuus on julkaisukunnossa tyypillisesti 2 viikossa, laajempi yrityssivusto vie 3–5 viikkoa ja räätälöity toteutus 6–10 viikkoa. Suurin yksittäinen aikatauluun vaikuttava tekijä on se, kuinka nopeasti saamme sinulta kuvat ja hyväksynnät.</div>
+        </details>
+        <details>
+          <summary>Onko pakko sitoutua kuukausimaksuun?</summary>
+          <div class="a">Ei. Projektihinta on kertaluonteinen ja sivusto on sen jälkeen sinun. Ylläpito ja hakukoneoptimointi ovat erillinen kuukausipalvelu, jonka voi lopettaa kuukauden irtisanomisajalla.</div>
+        </details>
+        <details>
+          <summary>Miten hakukoneoptimointi vaikuttaa hintaan?</summary>
+          <div class="a">Tekninen hakukoneoptimointi sisältyy jokaiseen toteutukseen. Hintaa nostaa sisältötyö: mitä useammalle palvelulle tehdään oma alasivunsa ja mitä laajempi hakusanatyö tehdään, sitä enemmän sivuja kirjoitetaan — ja sitä useammalla haulla sivusto voi näkyä.</div>
+        </details>
+
+        <p class="faqgroup">Toteutus ja tekniikka</p>
+        <details>
+          <summary>Perussivusto vai räätälöidyt verkkosivut — kumpi kannattaa valita?</summary>
+          <div class="a">Perussivusto riittää, kun palveluita on muutama, tarpeet ovat tavanomaisia ja sivusto halutaan nopeasti verkkoon. Räätälöity kannattaa, kun nopeus ja erottuvuus ovat tärkeitä kilpaillulla alalla, tarvitset toiminnallisuuksia joita valmiit ratkaisut eivät kata, tai haluat minimoida jatkuvan ylläpidon ja tietoturvahuolet.</div>
+        </details>
+        <details>
+          <summary>Käytättekö WordPressiä?</summary>
+          <div class="a">Käytämme silloin, kun asiakas haluaa päivittää sisältöä paljon itse ja valmis hallintanäkymä on siihen luontevin työkalu. Muuten koodaamme sivuston itse, koska kevyempi toteutus latautuu nopeammin, siinä on vähemmän päivitettävää ja pienempi hyökkäyspinta.</div>
+        </details>
+        <details>
+          <summary>Voinko päivittää sisältöä itse?</summary>
+          <div class="a">Voit. Räätälöity toteutus ei tarkoita, etteikö tekstejä ja kuvia voisi vaihtaa itse: teemme muokattavat osat hallintanäkymään ja opastamme käytön. Halutessasi hoidamme päivitykset puolestasi ylläpitopaketissa.</div>
+        </details>
+        <details>
+          <summary>Toimiiko sivusto varmasti mobiilissa?</summary>
+          <div class="a">Sivusto suunnitellaan mobiili edellä, koska valtaosa kävijöistä saapuu puhelimella. Testaamme jokaisen sivun puhelimella, tabletilla ja työpöydällä ennen julkaisua.</div>
+        </details>
+      </div>
+
+      <div class="faq">
+        <p class="faqgroup">Omistus ja sisältö</p>
+        <details>
+          <summary>Kuka omistaa sivuston ja verkkotunnuksen?</summary>
+          <div class="a">Sinä. Verkkotunnus rekisteröidään yrityksesi nimiin ja saat sivustoon täydet oikeudet. Emme lukitse sivustoa omalle alustallemme.</div>
+        </details>
+        <details>
+          <summary>Tarvitseeko minulla olla valmiit tekstit ja kuvat?</summary>
+          <div class="a">Ei tarvitse. Kirjoitamme tekstit puolestasi ja käsittelemme olemassa olevan kuvamateriaalin. Jos kuvia ei ole, voimme kuvata ne tai käyttää kuvapankkia — kuvaus hinnoitellaan erikseen.</div>
+        </details>
+
+        <p class="faqgroup">Näkyvyys ja jatko</p>
+        <details>
+          <summary>Näkyykö sivusto Googlessa heti julkaisun jälkeen?</summary>
+          <div class="a">Sivusto indeksoituu yleensä muutamassa päivässä, mutta sijoitukset kilpailluilla hauilla kertyvät kuukausien kuluessa. Realistinen aikajänne on 3–6 kuukautta, ja lopputulos riippuu siitä, tehdäänkö sisältötyötä myös julkaisun jälkeen.</div>
+        </details>
+        <details>
+          <summary>Voiko vanhat sivut uudistaa ilman että Google-näkyvyys katoaa?</summary>
+          <div class="a">Voi. Vanha verkkotunnus säilyy ja teemme vanhoista osoitteista uudelleenohjaukset uusiin, jolloin kertynyt näkyvyys siirtyy uudelle sivustolle. Tämä on se kohta, jossa sivustouudistus useimmiten epäonnistuu, joten se suunnitellaan ennen julkaisua eikä sen jälkeen.</div>
+        </details>
+        <details>
+          <summary>Voiko sivustoa laajentaa myöhemmin?</summary>
+          <div class="a">Voi. Rakenne tehdään alusta asti niin, että uusia palvelu- tai sisältösivuja voi lisätä ilman että koko sivustoa tarvitsee rakentaa uudelleen.</div>
+        </details>
+        <details>
+          <summary>Teettekö myös verkkokaupan?</summary>
+          <div class="a">Teemme. Verkkokauppa rakennetaan saman sivuston osaksi, jolloin tuotesivut hyötyvät samasta rakenteesta ja hakukoneoptimoinnista kuin muukin sisältö.</div>
+        </details>
+        <details>
+          <summary>Teettekö myös lyhytvideot ja mainonnan?</summary>
+          <div class="a">Kyllä. WS Media tekee verkkosivujen lisäksi <a href="/lyhytvideot">lyhytvideot</a> TikTokiin, Instagram Reelsiin ja YouTube Shortsiin sekä Meta-mainonnan ja tapahtumatuotannot. Kun sivusto ja sisältö tulevat samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee sekä sivustoa että somekanavia.</div>
+        </details>
+
+        <div class="askbox">
+          <b>Jäikö jokin mietityttämään?</b>
+          <p>Vastaamme mielellämme myös puhelimessa. Kartoitus kestää noin puoli tuntia eikä sido mihinkään.</p>
+          <a class="btn alt" href="#tarjous">Kysy suoraan</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marq" aria-hidden="true" style="margin-top:0">
+  <div class="track">
+    <span>Verkkosivut yritykselle <b>·</b> Kotisivut <b>·</b> Nettisivut <b>·</b> Verkkosivujen suunnittelu ja toteutus <b>·</b> Hakukoneoptimointi <b>·</b> Responsiivinen <b>·</b> Verkkokauppa <b>·</b> Ylläpito <b>·</b> Sivustouudistus <b>·</b>&nbsp;</span>
+    <span>Verkkosivut yritykselle <b>·</b> Kotisivut <b>·</b> Nettisivut <b>·</b> Verkkosivujen suunnittelu ja toteutus <b>·</b> Hakukoneoptimointi <b>·</b> Responsiivinen <b>·</b> Verkkokauppa <b>·</b> Ylläpito <b>·</b> Sivustouudistus <b>·</b>&nbsp;</span>
+  </div>
+</div>
+
+<!-- ============ JUOKSEVA TEKSTI ============ -->
+<section id="kaytannossa">
+  <div class="wrap-n">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Taustaa</span>
+      <h2>Verkkosivut yritykselle käytännössä</h2>
+    </div>
+    <div class="prose rv">
+      <h3>Mikä verkkosivuilla oikeasti ratkaisee</h3>
+      <p>Verkkosivujen tehtävä on kolme asiaa tässä järjestyksessä: <strong>löytyä</strong>, <strong>vakuuttaa</strong> ja <strong>tehdä yhteydenotosta helppoa</strong>. Kaunis sivusto, jota kukaan ei löydä, ei tuota mitään. Löydettävä sivusto, joka ei vakuuta, menettää kävijän kymmenessä sekunnissa. Ja vakuuttava sivusto, jolta ei löydä yhteystietoja tai lomaketta, jättää kaupan tekemättä.</p>
+      <p>Käytännössä tämä tarkoittaa, että sivusto suunnitellaan sisällöstä ulospäin eikä toisin päin. Ensin päätetään mitä sivuja tarvitaan ja millä hauilla ne pyrkivät näkymään, sitten kirjoitetaan tekstit, ja vasta lopuksi mietitään miltä kaikki näyttää. Kun järjestys on toinen, syntyy sivusto joka näyttää hyvältä mutta jää löytymättä.</p>
+
+      <h3>Perussivusto vai räätälöity toteutus</h3>
+      <p>Valmiiseen pohjaan rakennettu sivusto on alkuinvestointina edullisempi, koska valmis rakenne nopeuttaa työtä. Sen hinta maksetaan myöhemmin: raskaat teemat ja lisäosat lataavat omat tiedostonsa jokaisella sivunlatauksella, päivityksiä tulee jatkuvasti ja jokainen lisäosa on yksi tietoturvariski lisää.</p>
+      <p><strong>Käsin koodatussa toteutuksessa sivustolla on vain se koodi, jota oikeasti tarvitaan.</strong> Se näkyy latausajoissa, ylläpitotaakassa ja siinä, ettei ulkoasu muistuta muita samalla pohjalla tehtyjä sivustoja. Kumpikaan ei kuitenkaan nouse Googlessa itsestään — toteutustapa ratkaisee lähtötason, sisältö ratkaisee sijoituksen.</p>
+
+      <h3>Miksi nopeus on osa hakukoneoptimointia</h3>
+      <p>Google mittaa sivuston nopeutta oikeilta käyttäjiltä ja käyttää sitä yhtenä sijoitustekijänä. Suurempi vaikutus on kuitenkin epäsuora: hidas sivu saa kävijän palaamaan takaisin hakutuloksiin, ja se on hakukoneelle signaali siitä, ettei sivu vastannut kysymykseen. Mobiilissa ero on suurin, koska yhteys on epävakaampi ja kärsivällisyys lyhyempi.</p>
+
+      <h3>Sivusto on markkinoinnin perusta, ei sen lopputulos</h3>
+      <p>Lyhytvideot ja mainonta tuovat liikennettä, mutta liikenne päätyy aina samaan paikkaan: verkkosivuille. Jos sivusto on hidas tai epäselvä, koko mainosbudjetti valuu hukkaan viimeisellä metrillä. Siksi järjestys kannattaa pitää selvänä — ensin sivusto kuntoon, sitten liikennettä sen päälle.</p>
+      <p>Käytännössä tämä on myös kustannuskysymys. Sama kuvausmateriaali, joka kuvataan <a href="/lyhytvideot">lyhytvideoita</a> varten, toimii sellaisenaan sivuston etusivulla ja palvelusivuilla. Kun sisältö, sivusto ja mainonta tulevat samalta tiimiltä, mitään ei tarvitse tehdä kahteen kertaan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLOGI ============ -->
+<section id="blogi" style="padding-top:20px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Blogi</span>
+        <h2>Lue lisää verkkosivuista</h2>
+      </div>
+      <p class="sub">Käymme läpi ne kysymykset, jotka tulevat vastaan ennen tarjouspyyntöä.</p>
+    </div>
+    <div class="postrows rv">
+      <a href="#"><span>Opas</span><b>Verkkosivujen hinta — mistä nettisivujen hinta oikeasti muodostuu</b><i>→</i></a>
+      <a href="#"><span>Vertailu</span><b>WordPress vai räätälöidyt verkkosivut? Näin valitset yritykselle</b><i>→</i></a>
+      <a href="#"><span>Hakukoneoptimointi</span><b>Hakukoneoptimoidut verkkosivut — mitä niissä kannattaa oikeasti tehdä</b><i>→</i></a>
+      <a href="#"><span>Sivustouudistus</span><b>Sivustouudistus ilman että Google-näkyvyys katoaa</b><i>→</i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LOMAKE: kaksi palstaa ============ -->
+<section id="tarjous" style="padding-top:20px">
+  <div class="wrap">
+    <div class="formsplit">
+      <div class="rv" data-par="0.02">
+        <span class="kick">Tarjous</span>
+        <h2 style="margin-top:12px">Pyydä tarjous verkkosivuista</h2>
+        <p class="lead">Kerro lyhyesti mitä yritys tekee ja millainen sivusto on mielessä. Saat kiinteähintaisen tarjouksen 24 tunnin sisällä, eikä yhteydenotto sido sinua mihinkään.</p>
+        <ul class="flist">
+          <li>Vastaus 24 tunnin sisällä<s>Arkipäivisin useimmiten samana päivänä.</s></li>
+          <li>Kiinteä hinta ennen aloitusta<s>Näet mitä hintaan sisältyy — ei piilokuluja eikä aloitusmaksuja.</s></li>
+          <li>Et tarvitse mitään valmiiksi<s>Sisältö, tekstit ja rakenne suunnitellaan yhdessä kartoituksessa.</s></li>
+          <li>Ei sitoutumista<s>Tarjouspyyntö ei velvoita mihinkään.</s></li>
+        </ul>
+      </div>
+
+      <div class="card fcard rv">
+        <label for="bud">Projektin budjetti</label>
+        <div class="budget">
+          <input type="range" id="bud" min="500" max="20000" step="250" value="3000">
+          <output id="budout">3 000 €</output>
+        </div>
+        <div class="row2">
+          <div>
+            <label for="nimi">Nimi</label>
+            <input type="text" id="nimi" autocomplete="name">
+          </div>
+          <div>
+            <label for="mail">Sähköposti</label>
+            <input type="email" id="mail" autocomplete="email">
+          </div>
+          <div>
+            <label for="puh">Puhelinnumero</label>
+            <input type="text" id="puh" autocomplete="tel">
+          </div>
+          <div>
+            <label for="pk">Paikkakunta</label>
+            <input type="text" id="pk">
+          </div>
+        </div>
+        <label for="nyk">Nykyiset verkkosivut (jos on)</label>
+        <input type="text" id="nyk" placeholder="esimerkki.fi">
+        <label for="lisa">Millainen sivusto on mielessä? Uudet sivut, uudistus vai verkkokauppa?</label>
+        <textarea id="lisa" rows="3"></textarea>
+        <button class="btn" type="button">Lähetä tarjouspyyntö</button>
+        <p class="fnote">Vastaamme 24 tunnin sisällä. Ei sitoumuksia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LOPPU-CTA: tumma kortti ============ -->
+<section style="padding-top:20px">
+  <div class="closer rv">
+    <div>
+      <h2>Valmis uudistamaan <span style="color:#6fb1ff">verkkosivusi?</span></h2>
+      <p>Varaa maksuton 30 minuutin kartoitus. Käymme läpi nykyisen sivuston, kilpailijoiden näkyvyyden ja sen, mitä kannattaa tehdä ensin.</p>
+    </div>
+    <div>
+      <a class="btn mag" href="#tarjous">Varaa maksuton kartoitus</a>
+      <p class="cnote">Ei sitoumuksia</p>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div style="max-width:280px">
+        <h4>WS Media</h4>
+        <p>Lyhytvideot, verkkosivut ja tapahtumat. Espoo ja Helsinki, koko Suomi. Yrityksille jotka haluavat kasvaa.</p>
+      </div>
+      <div>
+        <h4>Palvelut</h4>
+        <a href="/lyhytvideot">Lyhytvideot</a>
+        <a href="/verkkosivut">Verkkosivut yritykselle</a>
+        <a href="/verkkosivut#toteutustapa">Räätälöidyt verkkosivut</a>
+        <a href="/verkkosivut#hakukoneoptimointi">Hakukoneoptimointi</a>
+        <a href="/tapahtumat">Tapahtumat</a>
+      </div>
+      <div>
+        <h4>Verkkosivut</h4>
+        <a href="/verkkosivut#hinnoittelu">Verkkosivujen hinta</a>
+        <a href="/verkkosivut#prosessi">Prosessi</a>
+        <a href="/verkkosivut#ukk">Usein kysyttyä</a>
+        <a href="/verkkosivut/espoo">Verkkosivut Espoo</a>
+        <a href="/verkkosivut/helsinki">Verkkosivut Helsinki</a>
+      </div>
+      <div>
+        <h4>Yritys</h4>
+        <a href="/tyonaytteet">Työnäytteet</a>
+        <a href="/hinnoittelu">Hinnoittelu</a>
+        <a href="/blogi">Blogi</a>
+        <a href="/yhteystiedot">Ota yhteyttä</a>
+      </div>
+    </div>
+    <div class="base">© 2026 WS Media Oy · Espoo · Y-tunnus 3615084-4</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     STRUKTUROITU DATA (JSON-LD)
+     ============================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://wsmedia.fi/#organisaatio",
+      "name": "WS Media Oy",
+      "alternateName": "WS Media",
+      "url": "https://wsmedia.fi/",
+      "description": "WS Media on espoolainen verkkosivuihin, lyhytvideotuotantoon ja tapahtumiin erikoistunut toimisto.",
+      "vatID": "FI36150844",
+      "taxID": "3615084-4",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Espoo",
+        "addressRegion": "Uusimaa",
+        "addressCountry": "FI"
+      },
+      "areaServed": [
+        {"@type":"Country","name":"Suomi"},
+        {"@type":"City","name":"Espoo"},
+        {"@type":"City","name":"Helsinki"},
+        {"@type":"City","name":"Vantaa"}
+      ],
+      "knowsAbout": [
+        "verkkosivujen suunnittelu",
+        "verkkosivujen toteutus",
+        "kotisivut yritykselle",
+        "nettisivut yritykselle",
+        "räätälöidyt verkkosivut",
+        "hakukoneoptimointi",
+        "verkkokauppa",
+        "verkkosivujen ylläpito",
+        "sivustouudistus",
+        "lyhytvideotuotanto",
+        "Meta-mainonta"
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://wsmedia.fi/verkkosivut#sivu",
+      "url": "https://wsmedia.fi/verkkosivut",
+      "name": "Verkkosivut yritykselle | Kotisivujen suunnittelu ja toteutus | WS Media",
+      "description": "Verkkosivut yritykselle avaimet käteen: suunnittelu, tekstit, tekninen hakukoneoptimointi ja julkaisu. Nopeat ja mobiilioptimoidut kotisivut kiinteällä projektihinnalla.",
+      "inLanguage": "fi-FI",
+      "isPartOf": {"@id": "https://wsmedia.fi/#organisaatio"},
+      "primaryImageOfPage": "https://wsmedia.fi/og/verkkosivut-yritykselle.jpg"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://wsmedia.fi/verkkosivut#murupolku",
+      "itemListElement": [
+        {"@type":"ListItem","position":1,"name":"Etusivu","item":"https://wsmedia.fi/"},
+        {"@type":"ListItem","position":2,"name":"Palvelut","item":"https://wsmedia.fi/palvelut"},
+        {"@type":"ListItem","position":3,"name":"Verkkosivut","item":"https://wsmedia.fi/verkkosivut"}
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://wsmedia.fi/verkkosivut#palvelu",
+      "name": "Verkkosivut yritykselle",
+      "serviceType": "Verkkosivujen suunnittelu ja toteutus",
+      "url": "https://wsmedia.fi/verkkosivut",
+      "description": "Avaimet käteen -verkkosivut yritykselle: sivurakenne ja hakusanat, ulkoasu, tekstit, tekninen hakukoneoptimointi, responsiivinen toteutus, lomakkeet, analytiikka sekä verkkotunnus, palvelintila ja SSL-suojaus. Perussivustosta räätälöityyn, käsin koodattuun toteutukseen ja verkkokauppaan.",
+      "provider": {"@id": "https://wsmedia.fi/#organisaatio"},
+      "areaServed": {"@type":"Country","name":"Suomi"},
+      "audience": {"@type":"BusinessAudience","name":"Pk-yritykset"},
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Verkkosivupaketit",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "Startti",
+            "description": "Etusivu ja 3 alasivua, ulkoasu ja tekstit valmiina, tekninen hakukoneoptimointi, yhteydenottolomake ja analytiikka.",
+            "priceCurrency": "EUR",
+            "price": "1490",
+            "priceSpecification": {"@type":"UnitPriceSpecification","priceCurrency":"EUR","price":"1490","valueAddedTaxIncluded": false}
+          },
+          {
+            "@type": "Offer",
+            "name": "Yrityssivusto",
+            "description": "6–12 sisältösivua, oma alasivu jokaiselle palvelulle, laajempi sisältö- ja hakusanatyö, referenssit ja lomakkeet.",
+            "priceCurrency": "EUR",
+            "price": "2990",
+            "priceSpecification": {"@type":"UnitPriceSpecification","priceCurrency":"EUR","price":"2990","valueAddedTaxIncluded": false}
+          },
+          {
+            "@type": "Offer",
+            "name": "Räätälöity",
+            "description": "Käsin koodattu toteutus, omat toiminnallisuudet ja integraatiot, verkkokauppa tai varausjärjestelmä, monikieliset sivut.",
+            "priceCurrency": "EUR",
+            "price": "5900",
+            "priceSpecification": {"@type":"UnitPriceSpecification","priceCurrency":"EUR","price":"5900","valueAddedTaxIncluded": false}
+          },
+          {
+            "@type": "Offer",
+            "name": "Ylläpito ja hakukoneoptimointi",
+            "description": "Jatkuva kuukausipalvelu: päivitykset ja tietoturva, palvelintila ja varmuuskopiot, sisältömuutokset, hakusanaseuranta ja kuukausiraportti sekä jatkuva sisällöntuotanto.",
+            "priceCurrency": "EUR",
+            "price": "390",
+            "priceSpecification": {"@type":"UnitPriceSpecification","priceCurrency":"EUR","price":"390","unitCode":"MON","valueAddedTaxIncluded": false}
+          }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://wsmedia.fi/verkkosivut#ukk",
+      "mainEntity": [
+        {"@type":"Question","name":"Paljonko verkkosivut maksavat yritykselle?","acceptedAnswer":{"@type":"Answer","text":"Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista."}},
+        {"@type":"Question","name":"Mitä verkkosivujen hinta sisältää?","acceptedAnswer":{"@type":"Answer","text":"Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Verkkotunnus, palvelintila ja SSL-suojaus sisältyvät ensimmäiseen vuoteen. Ei aloitusmaksuja eikä piilokuluja."}},
+        {"@type":"Question","name":"Kuinka nopeasti verkkosivut valmistuvat?","acceptedAnswer":{"@type":"Answer","text":"Suppea kokonaisuus on julkaisukunnossa tyypillisesti 2 viikossa, laajempi yrityssivusto vie 3–5 viikkoa ja räätälöity toteutus 6–10 viikkoa. Suurin yksittäinen aikatauluun vaikuttava tekijä on se, kuinka nopeasti saamme sinulta kuvat ja hyväksynnät."}},
+        {"@type":"Question","name":"Onko pakko sitoutua kuukausimaksuun?","acceptedAnswer":{"@type":"Answer","text":"Ei. Projektihinta on kertaluonteinen ja sivusto on sen jälkeen sinun. Ylläpito ja hakukoneoptimointi ovat erillinen kuukausipalvelu, jonka voi lopettaa kuukauden irtisanomisajalla."}},
+        {"@type":"Question","name":"Miten hakukoneoptimointi vaikuttaa hintaan?","acceptedAnswer":{"@type":"Answer","text":"Tekninen hakukoneoptimointi sisältyy jokaiseen toteutukseen. Hintaa nostaa sisältötyö: mitä useammalle palvelulle tehdään oma alasivunsa ja mitä laajempi hakusanatyö tehdään, sitä enemmän sivuja kirjoitetaan — ja sitä useammalla haulla sivusto voi näkyä."}},
+        {"@type":"Question","name":"Perussivusto vai räätälöidyt verkkosivut — kumpi kannattaa valita?","acceptedAnswer":{"@type":"Answer","text":"Perussivusto riittää, kun palveluita on muutama, tarpeet ovat tavanomaisia ja sivusto halutaan nopeasti verkkoon. Räätälöity kannattaa, kun nopeus ja erottuvuus ovat tärkeitä kilpaillulla alalla, tarvitset toiminnallisuuksia joita valmiit ratkaisut eivät kata, tai haluat minimoida jatkuvan ylläpidon ja tietoturvahuolet."}},
+        {"@type":"Question","name":"Käytättekö WordPressiä?","acceptedAnswer":{"@type":"Answer","text":"Käytämme silloin, kun asiakas haluaa päivittää sisältöä paljon itse ja valmis hallintanäkymä on siihen luontevin työkalu. Muuten koodaamme sivuston itse, koska kevyempi toteutus latautuu nopeammin, siinä on vähemmän päivitettävää ja pienempi hyökkäyspinta."}},
+        {"@type":"Question","name":"Voinko päivittää sisältöä itse?","acceptedAnswer":{"@type":"Answer","text":"Voit. Räätälöity toteutus ei tarkoita, etteikö tekstejä ja kuvia voisi vaihtaa itse: teemme muokattavat osat hallintanäkymään ja opastamme käytön. Halutessasi hoidamme päivitykset puolestasi ylläpitopaketissa."}},
+        {"@type":"Question","name":"Kuka omistaa sivuston ja verkkotunnuksen?","acceptedAnswer":{"@type":"Answer","text":"Sinä. Verkkotunnus rekisteröidään yrityksesi nimiin ja saat sivustoon täydet oikeudet. Emme lukitse sivustoa omalle alustallemme."}},
+        {"@type":"Question","name":"Tarvitseeko minulla olla valmiit tekstit ja kuvat?","acceptedAnswer":{"@type":"Answer","text":"Ei tarvitse. Kirjoitamme tekstit puolestasi ja käsittelemme olemassa olevan kuvamateriaalin. Jos kuvia ei ole, voimme kuvata ne tai käyttää kuvapankkia — kuvaus hinnoitellaan erikseen."}},
+        {"@type":"Question","name":"Toimiiko sivusto varmasti mobiilissa?","acceptedAnswer":{"@type":"Answer","text":"Sivusto suunnitellaan mobiili edellä, koska valtaosa kävijöistä saapuu puhelimella. Testaamme jokaisen sivun puhelimella, tabletilla ja työpöydällä ennen julkaisua."}},
+        {"@type":"Question","name":"Näkyykö sivusto Googlessa heti julkaisun jälkeen?","acceptedAnswer":{"@type":"Answer","text":"Sivusto indeksoituu yleensä muutamassa päivässä, mutta sijoitukset kilpailluilla hauilla kertyvät kuukausien kuluessa. Realistinen aikajänne on 3–6 kuukautta, ja lopputulos riippuu siitä, tehdäänkö sisältötyötä myös julkaisun jälkeen."}},
+        {"@type":"Question","name":"Voiko vanhat sivut uudistaa ilman että Google-näkyvyys katoaa?","acceptedAnswer":{"@type":"Answer","text":"Voi. Vanha verkkotunnus säilyy ja teemme vanhoista osoitteista uudelleenohjaukset uusiin, jolloin kertynyt näkyvyys siirtyy uudelle sivustolle. Tämä on se kohta, jossa sivustouudistus useimmiten epäonnistuu, joten se suunnitellaan ennen julkaisua eikä sen jälkeen."}},
+        {"@type":"Question","name":"Voiko sivustoa laajentaa myöhemmin?","acceptedAnswer":{"@type":"Answer","text":"Voi. Rakenne tehdään alusta asti niin, että uusia palvelu- tai sisältösivuja voi lisätä ilman että koko sivustoa tarvitsee rakentaa uudelleen."}},
+        {"@type":"Question","name":"Teettekö myös verkkokaupan?","acceptedAnswer":{"@type":"Answer","text":"Teemme. Verkkokauppa rakennetaan saman sivuston osaksi, jolloin tuotesivut hyötyvät samasta rakenteesta ja hakukoneoptimoinnista kuin muukin sisältö."}},
+        {"@type":"Question","name":"Teettekö myös lyhytvideot ja mainonnan?","acceptedAnswer":{"@type":"Answer","text":"Kyllä. WS Media tekee verkkosivujen lisäksi lyhytvideot TikTokiin, Instagram Reelsiin ja YouTube Shortsiin sekä Meta-mainonnan ja tapahtumatuotannot. Kun sivusto ja sisältö tulevat samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee sekä sivustoa että somekanavia."}}
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(pointer: fine)').matches;
+  const nav = document.getElementById('nav'), prog = document.getElementById('prog');
+
+  /* vaihtuva sana: vaihtoehdot luetaan H1:n data-swap-attribuutista ja lisätään
+     DOM:iin vasta ajossa, jotta H1 pysyy hakukoneelle yhtenä lauseena */
+  const swap = document.getElementById('swap');
+  const h1 = document.querySelector('h1[data-swap]');
+  if (swap && h1 && !reduce){
+    h1.dataset.swap.split('|').forEach(txt=>{
+      const s = document.createElement('span');
+      s.textContent = txt;
+      swap.appendChild(s);
+    });
+    const words = [...swap.children];
+    let i = 0;
+    setInterval(()=>{
+      const cur = words[i];
+      i = (i + 1) % words.length;
+      const nxt = words[i];
+      cur.classList.remove('act'); cur.classList.add('out');
+      nxt.classList.remove('out'); nxt.classList.add('act');
+      setTimeout(()=>cur.classList.remove('out'), 600);
+    }, 2900);
+  }
+
+  /* taustakuvio + parallaksi + skrollipalkki */
+  const bdGrid = document.getElementById('bdGrid');
+  const bdRing = document.getElementById('bdRing');
+  const bdWave = document.getElementById('bdWave');
+  const pars = [...document.querySelectorAll('[data-par]')];
+  let ticking = false;
+  const onScroll = ()=>{
+    const vh = innerHeight, h = document.documentElement, sc = scrollY;
+    pars.forEach(el=>{
+      const sp = parseFloat(el.dataset.par);
+      const r = el.getBoundingClientRect();
+      const mid = r.top + r.height/2 - vh/2;
+      el.style.translate = `0 ${(-mid * sp).toFixed(1)}px`;
+    });
+    if (bdGrid && !reduce){
+      bdGrid.style.transform = `translate(${(-((sc*0.02)%240)).toFixed(1)}px, ${(-((sc*0.012)%300)).toFixed(1)}px)`;
+      bdRing.style.transform = `translate(770px,110px) rotate(${(sc*0.14).toFixed(1)}deg)`;
+      bdWave.style.transform = `translateX(${(-(sc*0.05)%660).toFixed(1)}px)`;
+    }
+    nav.classList.toggle('scrolled', sc > 8);
+    prog.style.width = (sc / (h.scrollHeight - innerHeight) * 100) + '%';
+    ticking = false;
+  };
+  addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(reduce ? ()=>{ nav.classList.toggle('scrolled', scrollY>8); ticking=false; } : onScroll); ticking = true; }
+  }, {passive:true});
+  if(!reduce) onScroll();
+
+  /* selainikkunan hiiriparallaksi */
+  const bstage = document.querySelector('.bstage');
+  const bwrap = document.getElementById('bwrap');
+  if (bstage && bwrap && finePointer && !reduce){
+    bstage.addEventListener('mousemove', e=>{
+      const r = bstage.getBoundingClientRect();
+      const cx = (e.clientX - r.left)/r.width - .5;
+      const cy = (e.clientY - r.top)/r.height - .5;
+      bwrap.style.transform = `rotateY(${cx*5}deg) rotateX(${-cy*4}deg) translate3d(${cx*10}px,${cy*8}px,0)`;
+    });
+    bstage.addEventListener('mouseleave', ()=>{ bwrap.style.transform=''; });
+  }
+
+  /* magneettinen nappi */
+  if (finePointer && !reduce){
+    document.querySelectorAll('.mag').forEach(b=>{
+      b.addEventListener('mousemove', e=>{
+        const r = b.getBoundingClientRect();
+        b.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.2}px, ${(e.clientY-r.top-r.height/2)*.28}px)`;
+      });
+      b.addEventListener('mouseleave', ()=>{ b.style.transform=''; });
+    });
+  }
+
+  /* reveal */
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+  /* PageSpeed-mittari heron selaimessa: laskee 0 → 100 kun sivu on rakentunut */
+  const bscore = document.getElementById('bscore');
+  const bscoreN = document.getElementById('bscoreN');
+  const countTo = (el, node, target, dur, delay)=>{
+    if(!el) return;
+    if(reduce){ el.style.setProperty('--p', target); if(node) node.textContent = target; return; }
+    setTimeout(()=>{
+      let t0 = null;
+      const tick = ts=>{
+        if(!t0) t0 = ts;
+        const p = Math.min((ts-t0)/dur, 1);
+        const eased = 1 - Math.pow(1-p, 3);
+        const v = Math.round(eased * target);
+        el.style.setProperty('--p', v);
+        if(node) node.textContent = v;
+        if(p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }, delay);
+  };
+  countTo(bscore, bscoreN, 100, 1400, 1900);
+
+
+  /* hakutuloskortti: sijaluvut päivittyvät kun rivit ovat nousseet */
+  const serp = document.querySelector('.serp');
+  if (serp){
+    const ioS = new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        if(!e.isIntersecting) return;
+        ioS.unobserve(e.target);
+        if(reduce) return;
+        setTimeout(()=>{
+          const us = serp.querySelector('.serprow.us i');
+          const a = serp.querySelector('.serprow.up1 i');
+          const b = serp.querySelector('.serprow.up2 i');
+          if(us) us.textContent = '1';
+          if(a) a.textContent = '2';
+          if(b) b.textContent = '3';
+        }, 2000);
+      });
+    },{threshold:.4});
+    ioS.observe(serp);
+  }
+
+  /* ennen / jälkeen -liuku */
+  const baRange = document.getElementById('baRange');
+  const ba = document.getElementById('ba');
+  if (baRange && ba){
+    const setBa = ()=>{ ba.style.setProperty('--x', baRange.value + '%'); };
+    baRange.addEventListener('input', setBa);
+    setBa();
+  }
+
+  /* budjettislider */
+  const bud = document.getElementById('bud'), out = document.getElementById('budout');
+  if (bud && out){
+    const upd = ()=>{
+      const p = (bud.value - bud.min)/(bud.max - bud.min)*100;
+      bud.style.setProperty('--p', p + '%');
+      out.textContent = (+bud.value).toLocaleString('fi-FI') + ' €';
+    };
+    bud.addEventListener('input', upd); upd();
+  }
+</script>
+
+
+</body>
+</html>
