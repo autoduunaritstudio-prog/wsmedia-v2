@@ -254,38 +254,38 @@ nav.scrolled {
   -webkit-backdrop-filter: saturate(180%) blur(26px);
 }
 .navin {
-  max-width: 1080px; margin: 0 auto; padding: 0 24px;
-  height: 56px; display: flex; align-items: center; justify-content: space-between;
+  max-width: 1440px; margin: 0 auto; padding: 0 28px;
+  height: 72px; display: flex; align-items: center; justify-content: space-between;
   transition: height .28s cubic-bezier(.2,.6,.2,1);
 }
 /* Kevyt tiivistyminen skrollatessa. Tila vaihtuu kertaalleen hystereesilla,
    joten 4px siirtyma ei toistu edestakaisin kynnyksen tuntumassa. */
-nav.scrolled .navin { height: 50px }
+nav.scrolled .navin { height: 64px }
 /* Logo on nyt inline-SVG. Korkeus ohjaa kokoa ja width:auto sailyttaa
    kuvasuhteen viewBoxista; vari tulee color-arvosta currentColorin kautta. */
 .logo { display: inline-flex; align-items: center; color: var(--ink) }
-.logo svg { height: 30px; width: auto; display: block }
-nav.scrolled .logo svg { height: 27px }
+.logo svg { height: 38px; width: auto; display: block }
+nav.scrolled .logo svg { height: 34px }
 .logo svg, nav.scrolled .logo svg { transition: height .28s cubic-bezier(.2,.6,.2,1) }
-@media (max-width: 520px) { .logo svg { height: 26px } }
+@media (max-width: 520px) { .logo svg { height: 30px } }
 /* Ylapalkki on minimaalinen: logo, valikkopainike ja CTA. Kaikki muu
    navigointi on taysvalikossa, joten palkki ei kasva sivumaaran myota. */
 /* Pyorea ikonipainike oikeassa reunassa. Tumma tayttö valkoisin viivoin:
    sininen olisi kilpaillut vieressa olevan CTA-pillerin kanssa, joten
    aksenttivari jaa yhdelle elementille kerrallaan. */
 .navtoggle {
-  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  flex: none; width: 54px; height: 54px; border-radius: 50%;
   background: var(--ink); border: none; cursor: pointer; padding: 0;
   display: inline-flex; align-items: center; justify-content: center;
   transition: background .2s, transform .2s cubic-bezier(.2,.6,.2,1), width .28s, height .28s;
 }
 .navtoggle:hover { background: #000; transform: scale(1.05) }
 .navtoggle:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,113,227,.35) }
-nav.scrolled .navtoggle { width: 40px; height: 40px }
+nav.scrolled .navtoggle { width: 48px; height: 48px }
 
-.navtoggle-bars { display: flex; flex-direction: column; gap: 4px; width: 18px }
+.navtoggle-bars { display: flex; flex-direction: column; gap: 5px; width: 21px }
 .navtoggle-bars i { display: block; height: 1.8px; border-radius: 2px; background: #fff }
-.navtoggle-bars i:nth-child(2) { width: 13px }
+.navtoggle-bars i:nth-child(2) { width: 15px }
 
 
 /* ==================================================================
@@ -313,7 +313,7 @@ nav.scrolled .navtoggle { width: 40px; height: 40px }
 
 .fsnav-in {
   position: relative; height: 100%; overflow-y: auto;
-  max-width: 1080px; margin: 0 auto; padding: 0 24px;
+  max-width: 1440px; margin: 0 auto; padding: 0 28px;
   display: flex; flex-direction: column;
   transform: translateY(-10px);
   transition: transform .3s cubic-bezier(.2,.6,.2,1);
@@ -321,26 +321,43 @@ nav.scrolled .navtoggle { width: 40px; height: 40px }
 .fsnav.on .fsnav-in { transform: none }
 
 .fsnav-top {
-  flex: none; padding: 13px 0;
-  display: flex; align-items: center; justify-content: space-between;
+  flex: none; height: 72px;
+  display: flex; align-items: center; justify-content: flex-end;
 }
-.fsnav-logo { display: inline-flex; align-items: center; color: var(--ink) }
-.fsnav-logo svg { height: 46px; width: auto; display: block }
-@media (max-width: 520px) { .fsnav-logo svg { height: 38px } }
+
+/* Iso haivytetty merkki taustalla. Osittain ruudun ulkopuolella oikealla,
+   koko overlayn korkeudelta. pointer-events: none, jotta se ei ota
+   klikkauksia taustan sulkemiselta. */
+.fsnav-watermark {
+  position: absolute; right: -14%; top: 50%; transform: translateY(-50%);
+  width: 62%; color: var(--ink); opacity: .05;
+  pointer-events: none; z-index: 0; line-height: 0;
+}
+.fsnav-watermark svg { width: 100%; height: auto; display: block }
+@media (max-width: 860px) {
+  .fsnav-watermark { right: -26%; width: 92%; opacity: .04 }
+}
 .fsnav-close {
   background: none; border: 1px solid var(--hair); border-radius: 50%;
-  width: 34px; height: 34px; cursor: pointer; color: var(--ink);
+  width: 44px; height: 44px; cursor: pointer; color: var(--ink);
   display: flex; align-items: center; justify-content: center;
   transition: border-color .2s, color .2s;
 }
 .fsnav-close:hover { border-color: var(--blue); color: var(--blue) }
 
 .fsnav-body {
-  flex: 1; display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr);
-  gap: 48px; align-items: start; padding: 40px 0 56px;
+  position: relative; z-index: 1;
+  flex: 1; display: grid;
+  grid-template-columns: minmax(0,1.15fr) minmax(0,1fr) minmax(0,.85fr);
+  gap: 56px; align-items: start; padding: 24px 0 56px;
+}
+@media (max-width: 1080px) {
+  .fsnav-body { grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: 40px }
+  .fsnav-side { grid-column: 1 / -1 }
 }
 @media (max-width: 860px) {
-  .fsnav-body { grid-template-columns: 1fr; gap: 36px; padding: 24px 0 40px }
+  .fsnav-body { grid-template-columns: 1fr; gap: 32px; padding: 16px 0 40px }
+  .fsnav-side { grid-column: auto }
 }
 
 .fsnav-links ul { list-style: none }
@@ -354,16 +371,10 @@ nav.scrolled .navtoggle { width: 40px; height: 40px }
 .fsnav-links a:hover, .fsnav-links a:focus-visible { color: var(--blue) }
 .fsnav-links a[aria-current="page"] { color: var(--blue) }
 
-.fsnav-side { display: flex; flex-direction: column; gap: 32px; padding-top: 10px }
+.fsnav-side { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding-top: 8px }
 
-/* Alavalikko paljastuu Palvelut-rivin kohdalla. Kapealla naytolla se on
-   aina nakyvissa, koska hoveria ei ole. */
-.fsnav-sub {
-  opacity: 0; transform: translateY(6px);
-  transition: opacity .25s cubic-bezier(.2,.6,.2,1), transform .25s cubic-bezier(.2,.6,.2,1);
-}
-.fsnav-sub.on { opacity: 1; transform: none }
-@media (max-width: 860px) { .fsnav-sub { opacity: 1; transform: none } }
+/* Palvelut on oma sarakkeensa ja aina nakyvissa. */
+.fsnav-sub { padding-top: 8px }
 .fsnav-subt {
   font-size: var(--text-caption-sm); font-weight: var(--weight-semibold);
   letter-spacing: .12em; text-transform: uppercase; color: var(--grey);
@@ -392,6 +403,27 @@ nav.scrolled .navtoggle { width: 40px; height: 40px }
 /* Tarjouspyynto valikossa: ainoa sininen elementti overlayssa, joten se
    erottuu selvasti isojen mustien linkkien joukosta. */
 .fsnav-cta { align-self: flex-start; font-size: var(--text-body); padding: 13px 26px }
+
+.fsnav-call {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: var(--text-ui); font-weight: var(--weight-semibold);
+  color: var(--ink); text-decoration: none;
+  border: 1px solid var(--hair); border-radius: 980px; padding: 11px 20px;
+  transition: border-color .2s, color .2s;
+}
+.fsnav-call:hover { border-color: var(--blue); color: var(--blue) }
+.fsnav-callico { display: flex; color: var(--blue) }
+
+/* Somerivi sarakkeen alaosassa. */
+.fsnav-social { list-style: none; display: flex; gap: 10px; margin-top: auto; padding-top: 12px }
+.fsnav-social a {
+  display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1px solid var(--hair); color: var(--grey);
+  transition: border-color .2s, color .2s;
+}
+.fsnav-social a:hover { border-color: var(--blue); color: var(--blue) }
+@media (min-width: 861px) { .fsnav-side { height: 100% } }
 
 @media (prefers-reduced-motion: reduce) {
   .fsnav, .fsnav-in, .fsnav-sub { transition: none }

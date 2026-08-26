@@ -80,6 +80,15 @@ export const CONTACT = {
   businessId: "3615084-4",
 };
 
+/** Some-kanavat. Avautuvat uuteen valilehteen. */
+export type SocialLink = { href: string; label: string; icon: "instagram" | "tiktok" | "linkedin" };
+
+export const SOCIAL: SocialLink[] = [
+  { href: "https://www.instagram.com/wsmedia.fi/", label: "Instagram", icon: "instagram" },
+  { href: "https://www.tiktok.com/@wsmedia.fi", label: "TikTok", icon: "tiktok" },
+  { href: "https://fi.linkedin.com/company/ws-media-oy", label: "LinkedIn", icon: "linkedin" },
+];
+
 export const HOME_FOOTER: FooterColumn[] = [
   {
     title: "Palvelut",

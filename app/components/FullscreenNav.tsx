@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
-import { LogoFull, LogoMark } from "./Logo";
+import { LogoMark } from "./Logo";
 import MenuIcon from "./MenuIcon";
 import SmartLink from "./SmartLink";
-import { CONTACT, type NavLink } from "./site-data";
+import SocialIcon from "./SocialIcon";
+import { CONTACT, SOCIAL, type NavLink } from "./site-data";
 
 /**
  * Ylapalkki ja taysvalikko.
@@ -43,7 +44,6 @@ export default function FullscreenNav({
   anchorBase = "",
 }: Props) {
   const [open, setOpen] = useState(false);
-  const [showServices, setShowServices] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
   /** Vierityslukon aiemmat arvot, jotta lukko voidaan purkaa synkronisesti. */
@@ -68,7 +68,6 @@ export default function FullscreenNav({
     // viela overflow: hidden, hyppy jaa tekematta eika palaa myohemmin.
     unlockScroll();
     setOpen(false);
-    setShowServices(false);
     btnRef.current?.focus();
   }, [unlockScroll]);
 
@@ -163,23 +162,36 @@ export default function FullscreenNav({
         />
 
         <div className="fsnav-in">
+          {/* Iso haivytetty merkki taustalla. aria-hidden ja pointer-events:
+              none, joten se ei vaikuta luettavuuteen eika osoittimeen. */}
+          <span className="fsnav-watermark" aria-hidden="true">
+            <LogoMark />
+          </span>
+
           <div className="fsnav-top">
-            <SmartLink className="fsnav-logo" href="/" onClick={close}>
-              <LogoFull />
-              <span className="vh">WS Media</span>
-            </SmartLink>
-            <button type="button" className="fsnav-close" onClick={close} aria-label="Sulje valikko">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                <path d="M3 3 L15 15 M15 3 L3 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            <button
+              type="button"
+              className="fsnav-close"
+              onClick={close}
+              aria-label="Sulje valikko"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path
+                  d="M12 4 L6 10 L12 16"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </div>
 
           <div className="fsnav-body">
             <nav className="fsnav-links" aria-label="Päävalikko">
-              <ul onMouseLeave={() => setShowServices(false)}>
+              <ul>
                 {links.map((l) => (
-                  <li key={l.label} onMouseEnter={() => setShowServices(Boolean(l.menu))}>
+                  <li key={l.label}>
                     <SmartLink
                       href={resolve(l.href)}
                       onClick={close}
@@ -192,27 +204,30 @@ export default function FullscreenNav({
               </ul>
             </nav>
 
-            <div className="fsnav-side">
-              <div className={`fsnav-sub${showServices ? " on" : ""}`}>
-                <p className="fsnav-subt">Palvelut</p>
-                {services.map((item) => (
-                  <SmartLink
-                    href={resolve(item.href)}
-                    className="fsnav-subitem"
-                    key={item.label}
-                    onClick={close}
-                  >
-                    <span className="fsnav-subico">
-                      <MenuIcon name={item.icon} />
-                    </span>
-                    <span>
-                      <b>{item.label}</b>
-                      <small>{item.desc}</small>
-                    </span>
-                  </SmartLink>
-                ))}
-              </div>
+            {/* Palvelut omana sarakkeenaan, aina nakyvissa. Aiemmin tama oli
+                hoverin takana Palvelut-rivilla, mika piilotti sen kosketuksella
+                ja hakukoneelta yhta lailla. */}
+            <div className="fsnav-sub">
+              <p className="fsnav-subt">Palvelut</p>
+              {services.map((item) => (
+                <SmartLink
+                  href={resolve(item.href)}
+                  className="fsnav-subitem"
+                  key={item.label}
+                  onClick={close}
+                >
+                  <span className="fsnav-subico">
+                    <MenuIcon name={item.icon} />
+                  </span>
+                  <span>
+                    <b>{item.label}</b>
+                    <small>{item.desc}</small>
+                  </span>
+                </SmartLink>
+              ))}
+            </div>
 
+            <div className="fsnav-side">
               <address className="fsnav-contact">
                 <b>{CONTACT.company}</b>
                 {CONTACT.street}
@@ -221,17 +236,44 @@ export default function FullscreenNav({
                 <br />
                 <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
                 <br />
-                <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>
-                <br />
                 <small>Y-tunnus {CONTACT.businessId}</small>
               </address>
 
-              {/* ctaHref annetaan sivulta valmiiksi oikeana: palvelusivujen lomake on
-                  samalla sivulla (#tarjous), tietosuojasivu osoittaa etusivulle.
-                  Sita ei siis saa prefiksoida anchorBasella. */}
+              {/* ctaHref annetaan sivulta valmiiksi oikeana: palvelusivujen
+                  lomake on samalla sivulla, tietosuojasivu osoittaa etusivulle.
+                  Sita ei siis prefiksoida anchorBasella. */}
               <SmartLink className="btn fsnav-cta" href={ctaHref} onClick={close}>
                 {ctaLabel}
               </SmartLink>
+
+              <a className="fsnav-call" href={CONTACT.phoneHref}>
+                <span className="fsnav-callico" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                    <path
+                      d="M6.2 3.5 L8.2 3.5 L9.3 6.6 L7.9 7.7 a9 9 0 0 0 4.4 4.4 L13.4 10.7 L16.5 11.8 L16.5 13.8 a1.8 1.8 0 0 1-2 1.8 A12.4 12.4 0 0 1 4.4 5.5 a1.8 1.8 0 0 1 1.8-2 Z"
+                      stroke="currentColor"
+                      strokeWidth="1.3"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                {CONTACT.phone}
+              </a>
+
+              <ul className="fsnav-social">
+                {SOCIAL.map((sm) => (
+                  <li key={sm.label}>
+                    <a
+                      href={sm.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${sm.label} (avautuu uuteen välilehteen)`}
+                    >
+                      <SocialIcon name={sm.icon} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
