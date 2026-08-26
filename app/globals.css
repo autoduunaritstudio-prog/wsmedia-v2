@@ -237,6 +237,11 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 #prog { position: fixed; top: 0; left: 0; height: 2px; width: 0; z-index: 100; background: var(--blue) }
 
 /* ---------- nav ---------- */
+/* Logo ja valikkopainike eivat istu kiinni sivun ylareunassa vaan
+   kelluvat hieman alempana. Sama offset annetaan taysvalikon
+   sulkupainikkeelle, jotta painike ei hyppaa valikkoa avatessa. */
+:root { --nav-top: 44px }
+@media (max-width: 520px) { :root { --nav-top: 24px } }
 /* HUOM valitsimesta: tama oli aiemmin paljas `nav`, jolloin se osui myos
    taysvalikon <nav class="fsnav-links">-elementtiin. Sarake sai siita
    valkoisen taustan ja peitti taustamerkin vasemmalta - samalla se sai
@@ -262,13 +267,16 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   mix-blend-mode: difference;
 }
 .navin {
-  max-width: 1440px; margin: 0 auto; padding: 0 28px;
-  height: 72px; display: flex; align-items: center; justify-content: space-between;
+  max-width: 1440px; margin: 0 auto; padding: var(--nav-top) 28px 0;
+  /* box-sizing on border-box, joten offset lisataan korkeuteen: sisalto-
+     alue pysyy 72px:na ja logo/painike keskittyvat siihen kuten ennen. */
+  height: calc(72px + var(--nav-top));
+  display: flex; align-items: center; justify-content: space-between;
   transition: height .28s cubic-bezier(.2,.6,.2,1);
 }
 /* Kevyt tiivistyminen skrollatessa. Tila vaihtuu kertaalleen hystereesilla,
    joten 4px siirtyma ei toistu edestakaisin kynnyksen tuntumassa. */
-#nav.scrolled .navin { height: 64px }
+#nav.scrolled .navin { height: calc(64px + var(--nav-top)) }
 /* Logo on nyt inline-SVG. Korkeus ohjaa kokoa ja width:auto sailyttaa
    kuvasuhteen viewBoxista; vari tulee color-arvosta currentColorin kautta. */
 #nav .logo { display: inline-flex; align-items: center; color: #fff }
@@ -334,8 +342,10 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 }
 .fsnav.on .fsnav-in { transform: none }
 
+/* Sama ylaoffset kuin suljetussa palkissa, jotta sulkupainike osuu
+   samalle korkeudelle kuin valikkopainike jonka se korvaa. */
 .fsnav-top {
-  flex: none; height: 72px;
+  flex: none; height: calc(72px + var(--nav-top)); padding-top: var(--nav-top);
   display: flex; align-items: center; justify-content: flex-end;
 }
 
@@ -379,6 +389,15 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
      flex-lapsi jonka min-height on auto, joten se kasvaa aina vahintaan
      sisallon korkuiseksi eika keskitettavaa vapaata tilaa jaa miinukselle. */
   align-content: center;
+  /* Rivigeometria yhdesta paikasta: riviväli, palvelusarakkeen ankkuri ja
+     Palvelut-yhdysviiva johdetaan kaikki naista, joten ne pysyvat
+     synkassa jos fonttikoko tai riviväli muuttuu. */
+  --fsnav-lh: 1.16;                 /* .fsnav-links a line-height */
+  --fsnav-pitch: 1.42;              /* rivin pitch kerrannaisena fonttikoosta */
+  --fsnav-gutter: 46px;             /* sarakkeen ja erotinviivan valinen rako */
+  /* "Palvelut" on listan toinen rivi: sen pystykeskikohta listan
+     ylareunasta = 1 x pitch + puoli rivikorkeutta = 2,00 x font-size. */
+  --fsnav-palvelut-mid: calc(var(--text-nav-huge) * (var(--fsnav-pitch) + var(--fsnav-lh) / 2));
   /* Erotinviivat piirretaan taustasta eika .fsnav-subin reunuksista: rivi on
      nyt sisallon korkuinen, joten reunusviiva loppuisi blokin mukana. Tausta
      kattaa sarakkeiden koko korkeuden riippumatta rivin koosta. Prosentit
@@ -401,12 +420,35 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 
 /* Sarakkeiden sisapadding. Pystyviivat tulevat .fsnav-bodyn taustasta
    (ks. yllä), joten sarakkeilla itsellaan ei ole reunuksia. */
-.fsnav-links { padding-right: 46px }
-/* Palvelulista on ylatasattu: ensimmainen rivi alkaa samalta korkeudelta
-   kuin paavalikon "Etusivu". Ei omaa keskitysta - rivin keskitys hoituu
-   .fsnav-bodyn align-contentilla, ja sarake venyy rivin korkuiseksi. */
-.fsnav-sub { padding: 0 46px }
-.fsnav-side { padding-left: 46px }
+.fsnav-links { padding-right: var(--fsnav-gutter); position: relative }
+/* Palvelulista kohdistuu "Palvelut"-sanaan: ankkurilaatikon ylareuna on
+   sarakkeen ylareunassa ja korkeus tasan kaksi kertaa Palvelut-rivin
+   keskikohta, joten laatikon keskikohta osuu siihen. Sisalto keskitetaan
+   laatikkoon, jolloin nelja rivia haarautuu symmetrisesti ylos ja alas.
+   align-self: start estaa venymisen; erotinviivat eivat ole enaa taman
+   sarakkeen reunuksia vaan .fsnav-bodyn taustaa, joten korkeus on vapaa.
+   Jos sisalto on laatikkoa korkeampi, se vuotaa symmetrisesti yli eika
+   mikaan leikkaudu - laatikko on vain asemointiapu. */
+.fsnav-sub {
+  padding: 0 var(--fsnav-gutter);
+  align-self: start;
+  height: calc(var(--fsnav-palvelut-mid) * 2);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.fsnav-side { padding-left: var(--fsnav-gutter) }
+
+/* Yhdysviiva "Palvelut"-sanasta pystyerottimeen: kytkee alasivut
+   visuaalisesti Palvelut-kokonaisuuteen. right: 0 on sarakerajalla eli
+   tarkalleen pystyviivan kohdalla, ja leveys on rako sarakkeen tekstin ja
+   rajan valissa - molemmat samasta gutter-tokenista, joten viiva seuraa
+   sarakeleveyksia automaattisesti. */
+.fsnav-links::after {
+  content: ""; position: absolute; right: 0;
+  top: calc(var(--fsnav-palvelut-mid) - .5px);
+  width: var(--fsnav-gutter); height: 1px;
+  background: var(--hair); pointer-events: none;
+}
+
 
 @media (max-width: 1080px) {
   /* Kapeammalla naytolla yhteystiedot siirtyvat omalle rivilleen, jolloin
@@ -425,7 +467,13 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
      taustaviiva jatkuisi sen lapi. Yksi erotin riittaa, ja reunuksena se
      rajautuu oikein pelkkaan ensimmaiseen riviin. */
   .fsnav-body { background-image: none }
-  .fsnav-sub { border-left: 1px solid var(--hair); padding-right: 0 }
+  /* Ankkurointi ja yhdysviiva ovat kolmen sarakkeen asettelun juttuja:
+     kapeammalla naytolla sarake venyy taas riviin ja erotin on reunus. */
+  .fsnav-sub {
+    border-left: 1px solid var(--hair); padding-right: 0;
+    align-self: stretch; height: auto; display: block;
+  }
+  .fsnav-links::after { display: none }
 }
 @media (max-width: 860px) {
   .fsnav-body { grid-template-columns: 1fr; padding: 8px 0 48px }
@@ -445,11 +493,11 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
    0,70em, joten pitch = 1,42 x font-size. line-height 1,16 kattaa siita
    osan, loput tulee marginaalista (1,42 - 1,16 = 0,26). em ei kay: li perii
    perusfonttikoon, ei linkin --text-nav-huge -kokoa. */
-.fsnav-links li + li { margin-top: calc(var(--text-nav-huge) * 0.26) }
+.fsnav-links li + li { margin-top: calc(var(--text-nav-huge) * (var(--fsnav-pitch) - var(--fsnav-lh))) }
 .fsnav-links a {
   display: block; text-decoration: none; color: var(--ink);
   font-size: var(--text-nav-huge); font-weight: var(--weight-bold);
-  letter-spacing: -0.035em; line-height: 1.16; text-transform: uppercase;
+  letter-spacing: -0.035em; line-height: var(--fsnav-lh); text-transform: uppercase;
   transition: color .2s;
 }
 .fsnav-links a:hover, .fsnav-links a:focus-visible { color: var(--blue) }
@@ -463,7 +511,9 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   display: block; padding: 9px 0; text-decoration: none; color: var(--ink);
   transition: color .18s;
 }
-.fsnav-subitem:first-child { padding-top: 0 }
+/* Ei erillista :first-child-poikkeusta: kun lista keskitetaan
+   ankkurilaatikkoon, epasymmetrinen padding siirtaisi tekstiblokin
+   visuaalista keskikohtaa puolella paddingilla alaspain. */
 .fsnav-subitem:hover { color: var(--blue) }
 .fsnav-subitem b {
   display: block; font-size: var(--text-title-xs); font-weight: var(--weight-regular);
