@@ -1,4 +1,5 @@
 import FullscreenNav from "./FullscreenNav";
+import { LogoMark } from "./Logo";
 import SmartLink from "./SmartLink";
 import type { ServiceMenuItem } from "./site-data";
 
@@ -32,12 +33,18 @@ export default function Nav({ links, ctaHref, ctaLabel, logoHref, anchorBase }: 
     // oma nimi, jotta ruudunlukija erottaa ne toisistaan.
     <nav id="nav" aria-label="Ylävalikko">
       <div className="navin">
+        {/* Logo on aria-hidden ja nimi tulee .vh-tekstista, jotta
+            saavutettava nimi ja hakukoneteksti sailyvat. */}
         {logoHref ? (
           <SmartLink className="logo" href={logoHref}>
-            WS Media
+            <LogoMark />
+            <span className="vh">WS Media</span>
           </SmartLink>
         ) : (
-          <span className="logo">WS Media</span>
+          <span className="logo">
+            <LogoMark />
+            <span className="vh">WS Media</span>
+          </span>
         )}
 
         <FullscreenNav links={links} anchorBase={anchorBase} />

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
+import { LogoFull } from "./Logo";
 import MenuIcon from "./MenuIcon";
 import SmartLink from "./SmartLink";
 import type { NavLink } from "./Nav";
@@ -129,8 +130,9 @@ export default function FullscreenNav({ links, anchorBase = "" }: Props) {
 
         <div className="fsnav-in">
           <div className="fsnav-top">
-            <SmartLink className="logo" href="/" onClick={close}>
-              WS Media
+            <SmartLink className="fsnav-logo" href="/" onClick={close}>
+              <LogoFull />
+              <span className="vh">WS Media</span>
             </SmartLink>
             <button type="button" className="fsnav-close" onClick={close} aria-label="Sulje valikko">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">

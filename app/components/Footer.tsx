@@ -1,3 +1,4 @@
+import { LogoMark } from "./Logo";
 import SmartLink from "./SmartLink";
 import CookieSettingsButton from "./consent/CookieSettingsButton";
 
@@ -29,6 +30,9 @@ export default function Footer({ intro, columns, base, brandHeading = "h4" }: Pr
       <div className="wrap">
         <div className="cols">
           <div style={{ maxWidth: "280px" }}>
+            <span className="footer-mark" aria-hidden="true">
+              <LogoMark />
+            </span>
             <Brand>WS Media</Brand>
             <p>{intro}</p>
           </div>

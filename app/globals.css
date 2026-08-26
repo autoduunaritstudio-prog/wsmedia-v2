@@ -199,6 +199,12 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box }
 
+/* Vain ruudunlukijalle: saavutettava nimi kuvakkeille ja logolle. */
+.vh {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
 /* Tailwindin preflight pakottaa lomakekontrolleille font: inherit ja
    letter-spacing: inherit. Mockup nojaa selaimen oletuksiin, joten palautetaan
    ne; muuten napit, kentat ja textarea kasvavat ja kirjainvali muuttuu.
@@ -255,7 +261,13 @@ nav.scrolled {
 /* Kevyt tiivistyminen skrollatessa. Tila vaihtuu kertaalleen hystereesilla,
    joten 4px siirtyma ei toistu edestakaisin kynnyksen tuntumassa. */
 nav.scrolled .navin { height: 44px }
-.logo { font-size: var(--text-body); font-weight: var(--weight-bold); letter-spacing: -0.02em }
+/* Logo on nyt inline-SVG. Korkeus ohjaa kokoa ja width:auto sailyttaa
+   kuvasuhteen viewBoxista; vari tulee color-arvosta currentColorin kautta. */
+.logo { display: inline-flex; align-items: center; color: var(--ink) }
+.logo svg { height: 30px; width: auto; display: block }
+nav.scrolled .logo svg { height: 27px }
+.logo svg, nav.scrolled .logo svg { transition: height .28s cubic-bezier(.2,.6,.2,1) }
+@media (max-width: 520px) { .logo svg { height: 26px } }
 /* Ylapalkki on minimaalinen: logo, valikkopainike ja CTA. Kaikki muu
    navigointi on taysvalikossa, joten palkki ei kasva sivumaaran myota. */
 .navtoggle {
@@ -311,9 +323,12 @@ nav.scrolled .navin { height: 44px }
 .fsnav.on .fsnav-in { transform: none }
 
 .fsnav-top {
-  height: 48px; flex: none;
+  flex: none; padding: 13px 0;
   display: flex; align-items: center; justify-content: space-between;
 }
+.fsnav-logo { display: inline-flex; align-items: center; color: var(--ink) }
+.fsnav-logo svg { height: 46px; width: auto; display: block }
+@media (max-width: 520px) { .fsnav-logo svg { height: 38px } }
 .fsnav-close {
   background: none; border: 1px solid var(--hair); border-radius: 50%;
   width: 34px; height: 34px; cursor: pointer; color: var(--ink);
@@ -835,6 +850,8 @@ footer {
   padding: 42px 0 46px; font-size: var(--text-caption); color: var(--grey);
 }
 footer .cols { display: flex; gap: var(--space-gap-footer); flex-wrap: wrap; padding-bottom: 26px; border-bottom: 1px solid var(--hair) }
+footer .footer-mark { display: block; color: var(--ink); margin-bottom: 12px }
+footer .footer-mark svg { height: 26px; width: auto; display: block }
 footer h4 { font-size: var(--text-caption); color: var(--ink); font-weight: var(--weight-semibold); margin-bottom: 10px }
 footer a { display: block; color: var(--grey); text-decoration: none; padding: 4px 0 }
 footer a:hover { color: var(--ink) }
