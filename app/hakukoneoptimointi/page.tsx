@@ -7,7 +7,7 @@ import Nav from "../components/Nav";
 import SearchDemo from "../components/SearchDemo";
 import SiteEffects from "../components/SiteEffects";
 import SmartLink from "../components/SmartLink";
-import { SEO_FOOTER, SUBPAGE_NAV } from "../components/site-data";
+import { SEO_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import { buildJsonLd } from "./jsonld";
 import { Aikataulu, Mittarit, Nakyvyys, Paikallinen, Sisalto } from "./sections";
@@ -54,7 +54,8 @@ export default function Hakukoneoptimointi() {
       <div id="prog" />
 
       <Nav
-        links={SUBPAGE_NAV.map((l) => ({ ...l, current: l.href === "/hakukoneoptimointi" }))}
+        anchorBase="/"
+        links={OVERLAY_NAV}
         ctaHref="#tarjous"
         ctaLabel="Pyydä tarjous"
         logoHref="/"

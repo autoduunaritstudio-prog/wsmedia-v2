@@ -50,6 +50,7 @@
    MIHIN MITAKIN
      Hero-otsikko, etusivu ........ --text-display
      Palvelualasivun h1 ........... --text-h1 / --text-h1-sm
+     Taysvalikon paalinkit ........ --text-nav-huge
      Dokumenttisivun h1 ........... --text-h1-doc
      Osio-h2, korostettu .......... --text-h2-hero / --text-h2-hero-sub
      Osio-h2, tavallinen .......... --text-h2 / --text-h2-sub
@@ -77,6 +78,7 @@
   --text-h1: clamp(38px,6vw,68px);
   --text-h1-doc: clamp(34px,5vw,52px);
   --text-h1-sm: clamp(36px,5.4vw,62px);   /* tiiviimpi palvelusivun h1 */
+  --text-nav-huge: clamp(30px,5.2vw,64px);   /* taysvalikon paalinkit */
   --text-h2-hero: clamp(34px,5vw,56px);
   --text-h2-hero-sub: clamp(32px,5vw,54px);
   --text-h2: clamp(30px,4.4vw,46px);
@@ -254,73 +256,132 @@ nav.scrolled {
    joten 4px siirtyma ei toistu edestakaisin kynnyksen tuntumassa. */
 nav.scrolled .navin { height: 44px }
 .logo { font-size: var(--text-body); font-weight: var(--weight-bold); letter-spacing: -0.02em }
-.navlinks { display: flex; gap: var(--space-gap-lg); align-items: center }
-.navlinks > a, .navmenu-btn {
-  font-size: var(--text-label-sm); color: var(--ink); text-decoration: none;
-  opacity: .8; transition: opacity .2s;
+/* Ylapalkki on minimaalinen: logo, valikkopainike ja CTA. Kaikki muu
+   navigointi on taysvalikossa, joten palkki ei kasva sivumaaran myota. */
+.navtoggle {
+  font-family: inherit; font-size: var(--text-label-sm);
+  font-weight: var(--weight-semibold); letter-spacing: -0.01em;
+  color: var(--ink); background: none; border: none; padding: 6px 2px;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 9px;
+  opacity: .85; transition: opacity .2s;
 }
-.navlinks > a:hover, .navmenu-btn:hover { opacity: 1 }
+.navtoggle:hover { opacity: 1 }
+.navtoggle-bars { display: flex; flex-direction: column; gap: 4px; width: 17px }
+.navtoggle-bars i { display: block; height: 1.5px; border-radius: 2px; background: var(--ink) }
+.navtoggle-bars i:last-child { width: 11px; margin-left: auto }
+
 .navcta {
   font-size: var(--text-label-sm); color: #fff !important; background: var(--blue);
   padding: 7px 16px; border-radius: 980px; opacity: 1 !important;
   transition: background .2s !important;
 }
 .navcta:hover { background: var(--blue-d) }
-@media (max-width: 760px) {
-  .navlinks > a:not(.navcta), .navmenu { display: none }
-  .navlinks { gap: 0 }
-}
+@media (max-width: 520px) { .navtoggle { font-size: 0; gap: 0 } }
 
-/* ---------- Palvelut-pudotusvalikko ---------- */
-.navmenu { position: relative; display: flex; align-items: center }
-.navmenu-btn {
-  font-family: inherit; font-weight: inherit; letter-spacing: inherit;
-  background: none; border: none; padding: 0; cursor: pointer;
-  display: inline-flex; align-items: center; gap: 5px;
-}
-.navmenu-chev { transition: transform .2s cubic-bezier(.2,.6,.2,1) }
-.navmenu-btn[aria-expanded="true"] { opacity: 1 }
-.navmenu-btn[aria-expanded="true"] .navmenu-chev { transform: rotate(180deg) }
-
-.navmenu-pop {
-  position: absolute; top: 100%; left: 50%;
-  padding-top: 11px; width: 296px;
+/* ==================================================================
+   TAYSVALIKKO
+   Vaalea overlay: sivuston identiteetti on valkoinen pinta, musta
+   teksti ja yksi sininen aksentti, joten valikko pysyy samassa
+   maailmassa. Tumma sävy (--dark) on varattu sisallolle
+   (tyonaytekaista, loppukortti), ei kromille.
+   ================================================================== */
+.fsnav {
+  position: fixed; inset: 0; z-index: 120;
   opacity: 0; visibility: hidden; pointer-events: none;
-  transform: translateX(-50%) translateY(-6px);
-  transition: opacity .2s cubic-bezier(.2,.6,.2,1),
-              transform .2s cubic-bezier(.2,.6,.2,1),
-              visibility .2s;
+  transition: opacity .28s cubic-bezier(.2,.6,.2,1),
+              visibility .28s cubic-bezier(.2,.6,.2,1);
 }
-.navmenu-pop[data-open] {
-  opacity: 1; visibility: visible; pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
-}
-.navmenu-card {
-  background: rgba(255,255,255,.94);
+.fsnav.on { opacity: 1; visibility: visible; pointer-events: auto }
+
+.fsnav-scrim {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  border: none; padding: 0; cursor: default;
+  background: rgba(255,255,255,.96);
   backdrop-filter: saturate(180%) blur(24px);
   -webkit-backdrop-filter: saturate(180%) blur(24px);
-  border: 1px solid var(--hair); border-radius: 16px;
-  box-shadow: 0 26px 60px -22px rgba(29,29,31,.3);
-  padding: 7px;
 }
-.navmenu-item {
-  display: flex; gap: 11px; align-items: flex-start;
-  padding: 9px 10px; border-radius: 11px;
-  text-decoration: none; color: var(--ink); opacity: 1;
-  transition: background .18s;
+
+.fsnav-in {
+  position: relative; height: 100%; overflow-y: auto;
+  max-width: 1080px; margin: 0 auto; padding: 0 24px;
+  display: flex; flex-direction: column;
+  transform: translateY(-10px);
+  transition: transform .3s cubic-bezier(.2,.6,.2,1);
 }
-.navmenu-item:hover { background: rgba(0,0,0,.04) }
-.navmenu-ico {
-  flex: none; display: flex; align-items: center; justify-content: center;
-  width: 20px; margin-top: 1px;
-  color: #b4b4bc; transition: color .18s;
+.fsnav.on .fsnav-in { transform: none }
+
+.fsnav-top {
+  height: 48px; flex: none;
+  display: flex; align-items: center; justify-content: space-between;
 }
-.navmenu-item:hover .navmenu-ico { color: var(--blue) }
-.navmenu-txt b { display: block; font-size: var(--text-label); font-weight: var(--weight-semibold); letter-spacing: -0.012em }
-.navmenu-txt small { display: block; font-size: var(--text-caption-sm); color: var(--grey); margin-top: 2px; line-height: 1.4 }
+.fsnav-close {
+  background: none; border: 1px solid var(--hair); border-radius: 50%;
+  width: 34px; height: 34px; cursor: pointer; color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s, color .2s;
+}
+.fsnav-close:hover { border-color: var(--blue); color: var(--blue) }
+
+.fsnav-body {
+  flex: 1; display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr);
+  gap: 48px; align-items: start; padding: 40px 0 56px;
+}
+@media (max-width: 860px) {
+  .fsnav-body { grid-template-columns: 1fr; gap: 36px; padding: 24px 0 40px }
+}
+
+.fsnav-links ul { list-style: none }
+.fsnav-links li + li { margin-top: 2px }
+.fsnav-links a {
+  display: block; text-decoration: none; color: var(--ink);
+  font-size: var(--text-nav-huge); font-weight: var(--weight-bold);
+  letter-spacing: -0.035em; line-height: 1.16; text-transform: uppercase;
+  transition: color .2s;
+}
+.fsnav-links a:hover, .fsnav-links a:focus-visible { color: var(--blue) }
+.fsnav-links a[aria-current="page"] { color: var(--blue) }
+
+.fsnav-side { display: flex; flex-direction: column; gap: 32px; padding-top: 10px }
+
+/* Alavalikko paljastuu Palvelut-rivin kohdalla. Kapealla naytolla se on
+   aina nakyvissa, koska hoveria ei ole. */
+.fsnav-sub {
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .25s cubic-bezier(.2,.6,.2,1), transform .25s cubic-bezier(.2,.6,.2,1);
+}
+.fsnav-sub.on { opacity: 1; transform: none }
+@media (max-width: 860px) { .fsnav-sub { opacity: 1; transform: none } }
+.fsnav-subt {
+  font-size: var(--text-caption-sm); font-weight: var(--weight-semibold);
+  letter-spacing: .12em; text-transform: uppercase; color: var(--grey);
+  padding-bottom: 10px; border-bottom: 1px solid var(--hair); margin-bottom: 6px;
+}
+.fsnav-subitem {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 11px 10px 11px 0; border-radius: 10px;
+  text-decoration: none; color: var(--ink); transition: color .18s;
+}
+.fsnav-subitem:hover { color: var(--blue) }
+.fsnav-subico { flex: none; width: 20px; margin-top: 2px; color: #b4b4bc; transition: color .18s }
+.fsnav-subitem:hover .fsnav-subico { color: var(--blue) }
+.fsnav-subitem b { display: block; font-size: var(--text-ui); font-weight: var(--weight-semibold) }
+.fsnav-subitem small { display: block; font-size: var(--text-caption-sm); color: var(--grey); margin-top: 2px }
+
+.fsnav-contact {
+  font-style: normal; font-size: var(--text-ui-sm); color: var(--grey);
+  line-height: 1.75; padding-top: 24px; border-top: 1px solid var(--hair);
+}
+.fsnav-contact b { display: block; color: var(--ink); font-weight: var(--weight-semibold) }
+.fsnav-contact a { color: var(--blue); text-decoration: none }
+.fsnav-contact a:hover { text-decoration: underline }
+.fsnav-contact small { font-size: var(--text-caption-sm) }
 
 @media (prefers-reduced-motion: reduce) {
-  .navin, .navmenu-pop, .navmenu-chev, .navmenu-item, .navmenu-ico { transition: none }
+  .fsnav, .fsnav-in, .fsnav-sub { transition: none }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navin { transition: none }
 }
 
 /* ---------- type ---------- */
@@ -1089,7 +1150,6 @@ footer .base { padding-top: 18px }
    LYHYTVIDEOT-ALASIVU  ·  vain taman sivun omat poikkeamat
    Jaettu perusta tulee .page-palvelu-kerroksesta.
    ================================================================== */
-.navlinks > a[aria-current="page"] { opacity: 1; color: var(--blue); font-weight: var(--weight-semibold) }
 .page-lyhytvideot .shead { margin-bottom: var(--space-shead-gap-sub); max-width: 640px }
 .page-lyhytvideot .hero h1 { max-width: 24ch; margin: 0 auto; text-wrap: balance }
 .page-lyhytvideot .hero .sub { max-width: 52ch; margin: 22px auto 0 }
@@ -1714,12 +1774,7 @@ footer .base { padding-top: 18px }
 .page-hakukoneoptimointi nav { position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72); backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px); border-bottom:1px solid transparent;transition:border-color .3s; }
 .page-hakukoneoptimointi .marq { border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(6px) }
 .page-hakukoneoptimointi .navin { max-width:1080px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between }
-.page-hakukoneoptimointi .navlinks { display:flex;gap:22px;align-items:center }
-.page-hakukoneoptimointi .navlinks a { font-size: var(--text-label-sm);color:var(--ink);text-decoration:none;opacity:.8;transition:opacity .2s;white-space:nowrap }
 .page-hakukoneoptimointi .navcta { font-size: var(--text-label-sm);color:#fff !important;background:var(--blue);padding:7px 15px;border-radius:980px;opacity:1 !important;transition:background .2s !important }
-@media (max-width:860px) {
-  .page-hakukoneoptimointi .navlinks a:not(.navcta) { display:none }
-}
 .page-hakukoneoptimointi h1 { font-size: var(--text-h1-sm);font-weight: var(--weight-bold);letter-spacing:-0.028em;line-height:1.07 }
 .page-hakukoneoptimointi .sub { font-size: var(--text-lead);color:var(--grey);font-weight: var(--weight-regular);letter-spacing:-0.014em;line-height:1.45 }
 .page-hakukoneoptimointi .kick { font-size: var(--text-label-sm);font-weight: var(--weight-semibold);letter-spacing:.08em;text-transform:uppercase;color:var(--blue);display:block }

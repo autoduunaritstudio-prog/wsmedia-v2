@@ -13,7 +13,7 @@ import Pricing from "./components/Pricing";
 import Contact from "./components/Contact";
 import FinalCta from "./components/FinalCta";
 import Footer from "./components/Footer";
-import { HOME_FOOTER, HOME_NAV } from "./components/site-data";
+import { HOME_FOOTER, OVERLAY_NAV } from "./components/site-data";
 
 const MARQUEE = [
   "Lyhytvideot",
@@ -38,7 +38,7 @@ export default function Home() {
     <>
       <Backdrop />
       <div id="prog" />
-      <Nav links={HOME_NAV} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
+      <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
       <Hero />
       <Marquee items={MARQUEE} />
       <Logos />

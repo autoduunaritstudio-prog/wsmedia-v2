@@ -9,7 +9,7 @@ import Marquee from "../components/Marquee";
 import Nav from "../components/Nav";
 import SiteEffects from "../components/SiteEffects";
 import StatBand from "../components/StatBand";
-import { SUBPAGE_FOOTER, SUBPAGE_NAV } from "../components/site-data";
+import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import Hero from "./components/Hero";
 import { Alustat, Kokonaisuus, Miksi, Prosessi, Sisalto, Tulokset } from "./components/sections";
@@ -99,7 +99,8 @@ export default function Lyhytvideot() {
       <div id="prog" />
 
       <Nav
-        links={SUBPAGE_NAV.map((l) => ({ ...l, current: l.href === "/lyhytvideot" }))}
+        anchorBase="/"
+        links={OVERLAY_NAV}
         ctaHref="#tarjous"
         ctaLabel="Pyydä tarjous"
         logoHref="/"

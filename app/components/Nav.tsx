@@ -1,4 +1,4 @@
-import PalvelutDropdown from "./PalvelutDropdown";
+import FullscreenNav from "./FullscreenNav";
 import SmartLink from "./SmartLink";
 import type { ServiceMenuItem } from "./site-data";
 
@@ -6,21 +6,31 @@ export type NavLink = {
   href: string;
   label: string;
   current?: boolean;
-  /** Kun annettu, linkki avaa pudotusvalikon sen sijaan etta navigoisi. */
+  /** Kun annettu, rivi paljastaa taysvalikossa palvelujen alavalikon. */
   menu?: ServiceMenuItem[];
 };
 
 type Props = {
+  /** Taysvalikon paalinkit. */
   links: NavLink[];
   ctaHref: string;
   ctaLabel: string;
   /** Kun annettu, logo on linkki. Etusivu jattaa taman pois, jolloin logo on span. */
   logoHref?: string;
+  /** "/" alasivuilla, jotta valikon #-ankkurit osoittavat etusivulle. */
+  anchorBase?: string;
 };
 
-export default function Nav({ links, ctaHref, ctaLabel, logoHref }: Props) {
+/**
+ * Ylapalkki on tarkoituksella minimaalinen: logo, valikkopainike ja CTA.
+ * Kaikki navigointi on taysvalikossa (FullscreenNav), joten palkki pysyy
+ * samana joka sivulla eika kasva sivumaaran myota.
+ */
+export default function Nav({ links, ctaHref, ctaLabel, logoHref, anchorBase }: Props) {
   return (
-    <nav id="nav">
+    // Kaksi navigaatiomaamerkkia: ylapalkki ja taysvalikko. Molemmilla on
+    // oma nimi, jotta ruudunlukija erottaa ne toisistaan.
+    <nav id="nav" aria-label="Ylävalikko">
       <div className="navin">
         {logoHref ? (
           <SmartLink className="logo" href={logoHref}>
@@ -29,20 +39,12 @@ export default function Nav({ links, ctaHref, ctaLabel, logoHref }: Props) {
         ) : (
           <span className="logo">WS Media</span>
         )}
-        <div className="navlinks">
-          {links.map((l) =>
-            l.menu ? (
-              <PalvelutDropdown key={l.label} label={l.label} items={l.menu} />
-            ) : (
-              <SmartLink key={l.href} href={l.href} aria-current={l.current ? "page" : undefined}>
-                {l.label}
-              </SmartLink>
-            ),
-          )}
-          <SmartLink className="navcta" href={ctaHref}>
-            {ctaLabel}
-          </SmartLink>
-        </div>
+
+        <FullscreenNav links={links} anchorBase={anchorBase} />
+
+        <SmartLink className="navcta" href={ctaHref}>
+          {ctaLabel}
+        </SmartLink>
       </div>
     </nav>
   );

@@ -48,6 +48,31 @@ export const HOME_NAV: NavLink[] = [
   { href: "#paketit", label: "Hinnoittelu" },
 ];
 
+/**
+ * Taysvalikon paalinkit. Sama lista kaikilla sivuilla; ankkurit (#-alkuiset)
+ * osoittavat etusivun osioihin, joten alasivut antavat FullscreenNaville
+ * anchorBase="/" ja etusivu jattaa sen pois.
+ */
+export const OVERLAY_NAV: NavLink[] = [
+  { href: "/", label: "Etusivu" },
+  { href: "#palvelut", label: "Palvelut", menu: SERVICE_MENU },
+  { href: "#tyot", label: "Työnäytteet" },
+  { href: "#prosessi", label: "Prosessi" },
+  { href: "#paketit", label: "Hinnoittelu" },
+  { href: "/yhteystiedot", label: "Yhteystiedot" },
+];
+
+/** Yhteystiedot yhdessa paikassa: taysvalikko ja tietosuojasivu kayttavat samoja. */
+export const CONTACT = {
+  company: "WS Media Oy",
+  street: "Kuusiniementie 8 A 3",
+  city: "02710 Espoo",
+  email: "info@wsmedia.fi",
+  phone: "040 564 8770",
+  phoneHref: "tel:+358405648770",
+  businessId: "3615084-4",
+};
+
 export const HOME_FOOTER: FooterColumn[] = [
   {
     title: "Palvelut",

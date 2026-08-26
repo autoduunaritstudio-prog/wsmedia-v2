@@ -7,7 +7,7 @@ import Nav from "../components/Nav";
 import SiteEffects from "../components/SiteEffects";
 import SmartLink from "../components/SmartLink";
 import WordSwap from "../components/WordSwap";
-import { SUBPAGE_NAV, VERKKOSIVUT_FOOTER } from "../components/site-data";
+import { OVERLAY_NAV, VERKKOSIVUT_FOOTER } from "../components/site-data";
 
 import { buildJsonLd } from "./jsonld";
 import { Asiakkaat, Nakyvyys, Ongelma, Prosessi, Sisalto, Toteutustapa } from "./sections";
@@ -51,7 +51,8 @@ export default function Verkkosivut() {
       <div id="prog" />
 
       <Nav
-        links={SUBPAGE_NAV.map((l) => ({ ...l, current: l.href === "/verkkosivut" }))}
+        anchorBase="/"
+        links={OVERLAY_NAV}
         ctaHref="#tarjous"
         ctaLabel="Pyydä tarjous"
         logoHref="/"

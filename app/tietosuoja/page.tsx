@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 import SiteEffects from "../components/SiteEffects";
 import SmartLink from "../components/SmartLink";
-import { SUBPAGE_FOOTER, SUBPAGE_NAV } from "../components/site-data";
+import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 import CookieSettingsButton from "../components/consent/CookieSettingsButton";
 
 import { COOKIE_ROWS, SECTIONS } from "./content";
@@ -39,7 +39,8 @@ export default function Tietosuoja() {
       <Backdrop variant="simple" />
       <div id="prog" />
 
-      <Nav links={SUBPAGE_NAV} ctaHref="/#lomake" ctaLabel="Pyydä tarjous" logoHref="/" />
+      <Nav
+        anchorBase="/" links={OVERLAY_NAV} ctaHref="/#lomake" ctaLabel="Pyydä tarjous" logoHref="/" />
 
       <div className="wrap crumbs">
         <nav aria-label="Murupolku">
