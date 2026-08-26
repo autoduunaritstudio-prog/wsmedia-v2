@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WS Media, etusivu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#1d1d1f;
+    --grey:#6e6e73;
+    --hair:#e8e8ed;
+    --blue:#0071e3;
+    --blue-d:#0062c4;
+    --blue-tint:#f0f6ff;
+    --dark:#0d0d10;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Instrument Sans','Helvetica Neue',sans-serif;
+    background:var(--bg);color:var(--ink);
+    line-height:1.5;-webkit-font-smoothing:antialiased;
+    letter-spacing:-0.011em;overflow-x:hidden;
+  }
+  ::selection{background:rgba(0,113,227,.15)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .wrap-n{max-width:820px;margin:0 auto;padding:0 24px}
+
+  /* ============ STICKY KUVA ============ */
+  .backdrop{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  .backdrop svg{position:absolute;inset:0;width:100%;height:100%}
+  #bdGrid,#bdRing,#bdWave{will-change:transform}
+  #bdP1,#bdP2,#bdP3,#bdP4,#bdP5{will-change:stroke-dashoffset}
+  .backdrop::after{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(70% 60% at 50% 42%,rgba(255,255,255,.92) 30%,rgba(255,255,255,.55) 65%,rgba(255,255,255,.15) 100%),
+      linear-gradient(to bottom,rgba(255,255,255,.6),transparent 20%,transparent 80%,rgba(255,255,255,.7));
+  }
+
+  header,section,footer,nav,.marq{position:relative;z-index:1}
+  #prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:100;background:var(--blue)}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid transparent;transition:border-color .3s;
+  }
+  nav.scrolled{border-bottom-color:rgba(0,0,0,.08)}
+  .navin{
+    max-width:1080px;margin:0 auto;padding:0 24px;
+    height:52px;display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{font-size:15px;font-weight:700;letter-spacing:-0.02em}
+  .navlinks{display:flex;gap:26px;align-items:center}
+  .navlinks a{font-size:12.5px;color:var(--ink);text-decoration:none;opacity:.8;transition:opacity .2s}
+  .navlinks a:hover{opacity:1}
+  .navcta{
+    font-size:12.5px;color:#fff !important;background:var(--blue);
+    padding:7px 15px;border-radius:980px;opacity:1 !important;transition:background .2s !important;
+  }
+  .navcta:hover{background:var(--blue-d)}
+  @media(max-width:760px){.navlinks a:not(.navcta){display:none}}
+
+  /* ---------- type ---------- */
+  h1{font-size:clamp(44px,7vw,80px);font-weight:700;letter-spacing:-0.028em;line-height:1.05}
+  h2{font-size:clamp(30px,4.4vw,46px);font-weight:700;letter-spacing:-0.024em;line-height:1.08}
+  h2.big{font-size:clamp(34px,5vw,56px)}
+  .sub{
+    font-size:clamp(17px,2vw,21px);color:var(--grey);
+    font-weight:400;letter-spacing:-0.014em;line-height:1.45;
+  }
+  .accent{color:var(--blue)}
+  .kick{
+    font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--blue);display:block;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-block;background:var(--blue);color:#fff;
+    font-size:15px;font-weight:500;text-decoration:none;
+    padding:12px 24px;border-radius:980px;border:none;cursor:pointer;
+    transition:background .2s, transform .25s, box-shadow .25s;will-change:transform;
+  }
+  .btn:hover{background:var(--blue-d);box-shadow:0 8px 24px rgba(0,113,227,.28)}
+  .btn.alt{background:transparent;color:var(--blue);border:1px solid var(--hair)}
+  .btn.alt:hover{background:rgba(0,0,0,.03);box-shadow:none}
+  .tlink{font-size:15px;color:var(--blue);text-decoration:none;font-weight:500}
+  .tlink:hover{text-decoration:underline}
+  .tlink::after{content:" ›"}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;text-align:center;padding:100px 0 60px}
+  .hero .kick{color:var(--grey);letter-spacing:.08em;margin-bottom:18px}
+  .hero h1{max-width:15ch;margin:0 auto}
+  .hero .sub{max-width:46ch;margin:22px auto 0}
+  .heroctas{margin-top:34px;display:flex;gap:26px;justify-content:center;align-items:center;flex-wrap:wrap}
+
+  .li{opacity:0;transform:translateY(22px);animation:liin 1s cubic-bezier(.2,.6,.2,1) forwards}
+  .li.d1{animation-delay:.05s}.li.d2{animation-delay:.18s}.li.d3{animation-delay:.34s}.li.d4{animation-delay:.5s}.li.d5{animation-delay:.68s}
+  @keyframes liin{to{opacity:1;transform:none}}
+
+  .swapclip{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em;margin-bottom:-.08em}
+  .swap{display:inline-grid;text-align:left;grid-template-columns:1fr;color:var(--blue)}
+  .swap span{
+    grid-area:1/1;white-space:nowrap;opacity:0;transform:translateY(112%);
+    transition:opacity .55s cubic-bezier(.2,.6,.2,1),transform .55s cubic-bezier(.2,.6,.2,1);
+  }
+  .swap span.act{opacity:1;transform:none}
+  .swap span.out{opacity:0;transform:translateY(-70%)}
+
+  /* ---------- puhelimet herossa ---------- */
+  .stage{position:relative;max-width:1180px;margin:62px auto 0;perspective:1300px;height:500px}
+  @media(max-width:900px){.stage{height:auto;perspective:none;margin-top:48px}}
+  .phone{
+    position:absolute;width:224px;aspect-ratio:9/19;
+    border-radius:34px;background:#0f0f11;
+    box-shadow:0 50px 100px -30px rgba(29,29,31,.35),inset 0 0 0 3px #232327;
+    overflow:hidden;transform-style:preserve-3d;will-change:transform;
+  }
+  .phone::before{
+    content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
+    width:72px;height:20px;border-radius:11px;background:#000;z-index:6;
+  }
+  .phone .scr{position:absolute;inset:3px;border-radius:31px;overflow:hidden;background:#0c0c0e}
+  .phone .vid{
+    position:absolute;inset:-12%;
+    background:
+      radial-gradient(95% 75% at 28% 86%,rgba(0,113,227,.55),transparent 60%),
+      radial-gradient(75% 65% at 80% 16%,rgba(100,168,255,.35),transparent 65%),
+      radial-gradient(120% 100% at 50% 50%,#15161a 0%,#0c0c0e 80%);
+    animation:vidmove 10s ease-in-out infinite alternate;
+  }
+  .phone:nth-child(2) .vid{animation-delay:-4s;animation-duration:12s}
+  .phone:nth-child(3) .vid{animation-delay:-7s;animation-duration:14s}
+  @keyframes vidmove{from{transform:scale(1.05) translate(-2%,1%)}to{transform:scale(1.18) translate(2%,-2%)}}
+  .phone .shine{
+    position:absolute;inset:0;z-index:5;
+    background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.10) 47%,transparent 60%);
+    background-size:280% 100%;animation:shine 7s ease-in-out infinite;
+  }
+  @keyframes shine{0%,55%{background-position:135% 0}100%{background-position:-60% 0}}
+  .phone .ui{position:absolute;inset:0;z-index:4;color:#fff}
+  .phone .cap{position:absolute;left:15px;bottom:46px;right:58px;text-align:left}
+  .phone .cap b{font-size:12px;font-weight:600;display:block}
+  .phone .cap s{display:block;text-decoration:none;font-size:10.5px;opacity:.7;margin-top:4px;line-height:1.4}
+  .phone .bars{position:absolute;right:12px;bottom:52px;display:flex;flex-direction:column;gap:15px;align-items:center}
+  .phone .bars em{
+    width:29px;height:29px;border-radius:50%;font-style:normal;font-size:12px;
+    background:rgba(255,255,255,.12);backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .phone .bars small{font-size:9px;opacity:.75;margin-top:-11px}
+  .phone .prg{
+    position:absolute;left:15px;right:15px;bottom:14px;height:2px;border-radius:2px;
+    background:rgba(255,255,255,.2);overflow:hidden;
+  }
+  .phone .prg i{display:block;height:100%;background:#fff;animation:prg 6s linear infinite}
+  @keyframes prg{from{width:0}to{width:100%}}
+  .phone .ph-tag{
+    position:absolute;top:44px;left:0;right:0;text-align:center;z-index:4;
+    font-size:9.5px;font-weight:600;letter-spacing:.2em;color:rgba(255,255,255,.5);
+  }
+  .p1{left:50%;top:0;margin-left:-112px;z-index:3;animation:float1 7.5s ease-in-out infinite alternate}
+  .p2{left:10%;top:64px;transform:rotate(-8deg) scale(.85);z-index:2;animation:float2 9s ease-in-out infinite alternate}
+  .p3{right:10%;top:86px;transform:rotate(7deg) scale(.8);z-index:1;animation:float3 10s ease-in-out infinite alternate}
+  @keyframes float1{from{translate:0 0}to{translate:0 -16px}}
+  @keyframes float2{from{translate:0 0;rotate:-8deg}to{translate:0 -22px;rotate:-6deg}}
+  @keyframes float3{from{translate:0 0;rotate:7deg}to{translate:0 -18px;rotate:9deg}}
+  @media(max-width:900px){
+    .stage{display:flex;gap:14px;justify-content:center;padding:0 24px}
+    .phone{position:static;width:31%;max-width:180px;animation:none !important;transform:none !important}
+    .p2,.p3{display:none}
+    .phone.p1{width:min(62vw,230px)}
+  }
+
+  /* ---------- marquee ---------- */
+  .marq{
+    margin-top:70px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+    overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(6px);
+  }
+  .marq .track{
+    display:flex;gap:0;width:max-content;
+    animation:marq 26s linear infinite;
+  }
+  .marq:hover .track{animation-play-state:paused}
+  @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .marq span{
+    display:flex;align-items:center;gap:26px;
+    padding:16px 26px 16px 0;
+    font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--grey);
+    white-space:nowrap;
+  }
+  .marq b{color:var(--blue);font-weight:700}
+
+  /* ============ OSIOT ============ */
+  section{padding:120px 0}
+  .shead{margin-bottom:56px;max-width:600px}
+  .shead h2{margin-top:12px}
+  .shead .sub{margin-top:14px;font-size:18px}
+  .shead.right{margin-left:auto;text-align:right}
+  .shead.center{margin-left:auto;margin-right:auto;text-align:center}
+  @media(max-width:720px){.shead.right{margin-left:0;text-align:left}}
+
+  .card{
+    background:#fff;border:1px solid var(--hair);
+    box-shadow:0 24px 60px -24px rgba(29,29,31,.16);
+    transition:transform .4s cubic-bezier(.2,.6,.2,1), box-shadow .4s;
+    will-change:transform;
+  }
+  .card:hover{transform:translateY(-6px);box-shadow:0 34px 80px -28px rgba(29,29,31,.24)}
+
+  /* ============ PALVELUT: 3 isoa paneelia ============ */
+  .svc{
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+    margin-bottom:110px;
+  }
+  .svc:last-child{margin-bottom:0}
+  .svc.rev .svc-visual{order:2}
+  @media(max-width:880px){
+    .svc{grid-template-columns:1fr;gap:34px;margin-bottom:80px}
+    .svc.rev .svc-visual{order:0}
+  }
+  .svc-txt .kick{margin-bottom:10px}
+  .svc-txt h3{font-size:clamp(26px,3.4vw,36px);font-weight:700;letter-spacing:-0.022em;line-height:1.1}
+  .svc-txt p{font-size:16px;color:var(--grey);margin-top:14px;max-width:46ch}
+  .svc-txt ul{list-style:none;margin-top:18px}
+  .svc-txt li{
+    font-size:14px;color:var(--ink);padding:7px 0 7px 22px;position:relative;
+  }
+  .svc-txt li::before{content:"—";position:absolute;left:0;color:var(--blue)}
+  .svc-txt .tlink{display:inline-block;margin-top:18px}
+  .svc-visual{position:relative}
+
+  /* video-palvelun visuaali: kaksi pientä puhelinta */
+  .mini-phones{position:relative;height:360px;perspective:900px}
+  .mini{
+    position:absolute;width:170px;aspect-ratio:9/19;border-radius:26px;background:#0f0f11;
+    box-shadow:0 34px 70px -24px rgba(29,29,31,.4),inset 0 0 0 2.5px #232327;overflow:hidden;
+  }
+  .mini .vid{position:absolute;inset:-12%;
+    background:
+      radial-gradient(95% 75% at 28% 86%,rgba(0,113,227,.5),transparent 60%),
+      radial-gradient(120% 100% at 50% 50%,#15161a 0%,#0c0c0e 80%);
+    animation:vidmove 11s ease-in-out infinite alternate;
+  }
+  .mini .tag{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:9px;font-weight:600;letter-spacing:.18em;color:rgba(255,255,255,.55);z-index:2}
+  .mini:nth-child(1){left:8%;top:20px;transform:rotate(-7deg)}
+  .mini:nth-child(2){right:8%;top:70px;transform:rotate(6deg)}
+
+  /* verkkosivu-visuaali: selain jonka sisällä elävä minisivu */
+  .browser{
+    border-radius:16px;overflow:hidden;background:#fff;
+    border:1px solid var(--hair);
+    box-shadow:0 40px 90px -30px rgba(29,29,31,.3);
+  }
+  .browser .bar{
+    display:flex;align-items:center;gap:8px;
+    padding:11px 14px;background:#f5f5f7;border-bottom:1px solid var(--hair);
+  }
+  .browser .dot{width:9px;height:9px;border-radius:50%;background:#d9d9de}
+  .browser .url{
+    flex:1;margin-left:8px;background:#fff;border:1px solid var(--hair);
+    border-radius:7px;padding:5px 12px;font-size:11px;color:var(--grey);
+  }
+  .browser .page{padding:26px 26px 30px;position:relative;overflow:hidden}
+  .msite-kick{width:90px;height:8px;border-radius:4px;background:var(--blue-tint)}
+  .msite-h{margin-top:12px;width:75%;height:20px;border-radius:6px;background:#ececf0;position:relative;overflow:hidden}
+  .msite-h.short{width:52%;height:20px;margin-top:8px}
+  .msite-h::after,.msite-card::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.8) 50%,transparent 70%);
+    background-size:250% 100%;animation:shine 3.6s ease-in-out infinite;
+  }
+  .msite-btnrow{display:flex;gap:8px;margin-top:14px}
+  .msite-btn{width:86px;height:26px;border-radius:980px;background:var(--blue)}
+  .msite-btn.o{background:#fff;border:1px solid var(--hair)}
+  .msite-cards{display:flex;gap:10px;margin-top:22px}
+  .msite-card{
+    flex:1;height:74px;border-radius:10px;background:#f5f5f7;border:1px solid var(--hair);
+    position:relative;overflow:hidden;
+    animation:mfloat 5.5s ease-in-out infinite alternate;
+  }
+  .msite-card:nth-child(2){animation-delay:-1.8s}
+  .msite-card:nth-child(3){animation-delay:-3.6s}
+  @keyframes mfloat{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+  .browser .score{
+    position:absolute;right:18px;top:20px;
+    width:64px;height:64px;border-radius:50%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:conic-gradient(var(--blue) 0 97%, #e5e5ea 97% 100%);
+  }
+  .browser .score i{
+    width:52px;height:52px;border-radius:50%;background:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-style:normal;font-size:15px;font-weight:700;color:var(--blue);
+  }
+  .browser .score i small{font-size:7px;letter-spacing:.08em;color:var(--grey);font-weight:600}
+
+  /* tapahtuma-visuaali */
+  .event{
+    position:relative;border-radius:18px;overflow:hidden;background:var(--dark);
+    aspect-ratio:16/11;box-shadow:0 40px 90px -30px rgba(13,13,16,.5);
+    color:#fff;
+  }
+  .event .lights{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(45% 70% at 18% 0%,rgba(0,113,227,.4),transparent 65%),
+      radial-gradient(45% 70% at 82% 0%,rgba(100,168,255,.32),transparent 65%),
+      radial-gradient(60% 55% at 50% 108%,rgba(0,113,227,.28),transparent 70%);
+    animation:vidmove 12s ease-in-out infinite alternate;
+  }
+  .event .truss{
+    position:absolute;top:0;left:6%;right:6%;height:1px;background:rgba(255,255,255,.25);
+  }
+  .event .truss::before,.event .truss::after{
+    content:"";position:absolute;top:0;width:1px;height:26px;background:rgba(255,255,255,.2);
+  }
+  .event .truss::before{left:16%}
+  .event .truss::after{right:16%}
+  .event .crowd{
+    position:absolute;left:0;right:0;bottom:-6px;height:66px;
+    background:
+      radial-gradient(24px 40px at 8% 100%, #060608 60%, transparent 61%),
+      radial-gradient(28px 48px at 20% 100%, #08080b 60%, transparent 61%),
+      radial-gradient(22px 38px at 32% 100%, #060608 60%, transparent 61%),
+      radial-gradient(30px 50px at 46% 100%, #08080b 60%, transparent 61%),
+      radial-gradient(24px 42px at 60% 100%, #060608 60%, transparent 61%),
+      radial-gradient(28px 46px at 74% 100%, #08080b 60%, transparent 61%),
+      radial-gradient(23px 40px at 88% 100%, #060608 60%, transparent 61%),
+      radial-gradient(27px 44px at 98% 100%, #08080b 60%, transparent 61%);
+  }
+  .event .chip{
+    position:absolute;top:16px;left:16px;
+    font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+    backdrop-filter:blur(6px);border-radius:980px;padding:6px 12px;
+  }
+  .event .play{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);
+    width:60px;height:60px;border-radius:50%;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);
+    backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:center;transition:transform .25s;
+  }
+  .event:hover .play{transform:translate(-50%,-58%) scale(1.1)}
+  .event .play::after{
+    content:"";margin-left:4px;
+    border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;
+  }
+  .event .cap{position:absolute;left:18px;bottom:16px;z-index:2}
+  .event .cap b{font-size:13px;font-weight:600;display:block}
+  .event .cap s{text-decoration:none;font-size:11px;opacity:.65}
+
+  /* ============ TYÖNÄYTTEET (tumma kaista) ============ */
+  .work{
+    background:var(--dark);color:#f5f5f7;
+    border-radius:28px;max-width:1240px;margin:0 auto;
+    padding:100px 0;position:relative;overflow:hidden;
+  }
+  @media(max-width:1280px){.work{margin:0 16px}}
+  .work::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(40% 50% at 12% 18%,rgba(0,113,227,.16),transparent 70%),
+      radial-gradient(38% 48% at 88% 82%,rgba(100,168,255,.12),transparent 70%);
+  }
+  .work .wrap{position:relative}
+  .work .sub{color:#a1a1a6}
+  .workgrid{
+    display:grid;grid-template-columns:repeat(12,1fr);gap:16px;
+  }
+  .w-item{
+    border-radius:16px;overflow:hidden;position:relative;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+    min-height:230px;
+    transition:transform .4s cubic-bezier(.2,.6,.2,1), border-color .4s;
+  }
+  .w-item:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.25)}
+  .w-item .lbl{
+    position:absolute;left:16px;bottom:14px;z-index:2;
+  }
+  .w-item .lbl b{font-size:13.5px;font-weight:600;display:block}
+  .w-item .lbl s{text-decoration:none;font-size:11px;color:#a1a1a6}
+  .w-item .fillchip{
+    position:absolute;top:14px;right:14px;z-index:2;
+    font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:#c7c7cc;border:1px solid rgba(255,255,255,.22);border-radius:980px;padding:4px 10px;
+  }
+  .w-site{grid-column:span 7}
+  .w-video{grid-column:span 5}
+  .w-event{grid-column:span 5}
+  .w-site2{grid-column:span 7}
+  @media(max-width:820px){.w-site,.w-video,.w-event,.w-site2{grid-column:span 12}}
+  .w-item .thumb{position:absolute;inset:0}
+  .w-site .thumb,.w-site2 .thumb{
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.09) 0 34px,transparent 34px),
+      radial-gradient(70% 90% at 80% 100%,rgba(0,113,227,.25),transparent 65%),
+      #17171b;
+  }
+  .w-site .thumb::after,.w-site2 .thumb::after{
+    content:"";position:absolute;left:24px;top:56px;right:38%;height:14px;border-radius:5px;
+    background:rgba(255,255,255,.16);
+    box-shadow:0 26px 0 -4px rgba(255,255,255,.08), 0 52px 0 -4px rgba(255,255,255,.08);
+  }
+  .w-video .thumb{
+    background:
+      radial-gradient(95% 75% at 28% 86%,rgba(0,113,227,.4),transparent 60%),
+      #141418;
+  }
+  .w-event .thumb{
+    background:
+      radial-gradient(50% 70% at 25% 0%,rgba(0,113,227,.35),transparent 65%),
+      radial-gradient(50% 70% at 75% 0%,rgba(100,168,255,.25),transparent 65%),
+      #101014;
+  }
+
+  /* ---------- cases / steps / plans / form (kuten v7) ---------- */
+  .cases{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:820px){.cases{grid-template-columns:1fr}}
+  .case{padding:44px 30px;text-align:center;border-radius:20px}
+  .case .num{
+    font-size:clamp(38px,4.4vw,52px);font-weight:700;letter-spacing:-0.028em;
+    color:var(--blue);font-variant-numeric:tabular-nums;
+  }
+  .case h3{font-size:15.5px;font-weight:600;margin-top:12px}
+  .case p{font-size:13.5px;color:var(--grey);margin-top:7px}
+  .case .fill{
+    display:inline-block;margin-top:18px;font-size:11px;font-weight:600;
+    color:var(--grey);border:1px solid var(--hair);border-radius:980px;
+    padding:4px 12px;letter-spacing:.04em;
+  }
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:s;position:relative}
+  .steps::before{
+    content:"";position:absolute;top:60px;left:8%;right:8%;height:1px;
+    background:repeating-linear-gradient(90deg,var(--hair) 0 8px,transparent 8px 16px);
+    z-index:-1;
+  }
+  @media(max-width:820px){.steps{grid-template-columns:1fr}.steps::before{display:none}}
+  .step{padding:40px 34px;border-radius:16px}
+  .step::before{
+    counter-increment:s;content:counter(s);
+    display:flex;align-items:center;justify-content:center;
+    width:38px;height:38px;border-radius:50%;
+    background:var(--ink);color:#fff;font-size:15px;font-weight:600;
+    margin-bottom:20px;box-shadow:0 0 0 6px #fff;
+  }
+  .step h3{font-size:18px;font-weight:600;letter-spacing:-0.014em;margin-bottom:8px}
+  .step p{font-size:14.5px;color:var(--grey)}
+
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+  @media(max-width:820px){.plans{grid-template-columns:1fr}}
+  .plan{padding:40px 32px;display:flex;flex-direction:column;border-radius:20px}
+  .plan.pop{background:var(--ink);color:#fff;border-color:var(--ink);border-radius:26px}
+  .plan .pt{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;height:18px;margin-bottom:6px;color:var(--blue)}
+  .plan.pop .pt{color:#6fb1ff}
+  .plan h3{font-size:20px;font-weight:600;letter-spacing:-0.018em}
+  .plan .for{font-size:13.5px;color:var(--grey);margin:6px 0 22px;min-height:40px}
+  .plan.pop .for{color:#a1a1a6}
+  .plan .price{font-size:30px;font-weight:700;letter-spacing:-0.028em}
+  .plan .price small{font-size:14px;font-weight:400;color:var(--grey)}
+  .plan.pop .price small{color:#a1a1a6}
+  .plan ul{list-style:none;margin:24px 0 28px;flex:1}
+  .plan li{font-size:14px;padding:9px 0;color:var(--ink);border-bottom:1px solid rgba(0,0,0,.06)}
+  .plan.pop li{color:#f5f5f7;border-color:rgba(255,255,255,.12)}
+  .plan li:last-child{border:none}
+  .plan .btn{text-align:center}
+  .plan.pop .btn{background:#fff;color:var(--ink)}
+  .plan.pop .btn:hover{background:#f0f0f2;box-shadow:none}
+  .pricenote{text-align:center;font-size:12.5px;color:var(--grey);margin-top:26px}
+
+  .fcard{max-width:620px;margin:0 auto;padding:46px 42px;border-radius:24px}
+  @media(max-width:640px){.fcard{padding:32px 22px}}
+  .fcard label{display:block;font-size:12.5px;font-weight:600;margin:20px 0 8px}
+  .fcard input[type=text],.fcard input[type=email],.fcard textarea{
+    width:100%;border:1px solid var(--hair);border-radius:10px;
+    padding:13px 15px;font-family:inherit;font-size:15px;color:var(--ink);
+    background:#fff;transition:border-color .2s, box-shadow .2s;
+  }
+  .fcard input:focus,.fcard textarea:focus{
+    outline:none;border-color:var(--blue);
+    box-shadow:0 0 0 3.5px rgba(0,113,227,.16);
+  }
+  .budget{display:flex;align-items:center;gap:18px}
+  .budget input[type=range]{
+    flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;
+    background:linear-gradient(90deg,var(--blue) var(--p,14%),#e5e5ea var(--p,14%));
+    outline:none;
+  }
+  .budget input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:#fff;border:1px solid var(--hair);
+    box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:pointer;
+  }
+  .budget output{font-size:17px;font-weight:700;min-width:92px;text-align:right;font-variant-numeric:tabular-nums}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}}
+  .fcard .btn{width:100%;margin-top:26px;padding:14px}
+  .fnote{text-align:center;font-size:12.5px;color:var(--grey);margin-top:13px}
+
+  .final{text-align:center;padding:140px 0}
+  .final h2{margin:0 auto;max-width:18ch}
+  .final .sub{max-width:44ch;margin:18px auto 0;font-size:18px}
+  .final .btn{margin-top:32px}
+
+  footer{
+    background:rgba(245,245,247,.85);backdrop-filter:blur(8px);
+    border-top:1px solid var(--hair);
+    padding:42px 0 46px;font-size:12px;color:var(--grey);
+  }
+  footer .cols{display:flex;gap:64px;flex-wrap:wrap;padding-bottom:26px;border-bottom:1px solid var(--hair)}
+  footer h4{font-size:12px;color:var(--ink);font-weight:600;margin-bottom:10px}
+  footer a{display:block;color:var(--grey);text-decoration:none;padding:4px 0}
+  footer a:hover{color:var(--ink)}
+  footer .base{padding-top:18px}
+
+  /* ============ KELLUVAT TILASTOCHIPIT (hero) ============ */
+  .chip-f{
+    position:absolute;z-index:4;
+    display:flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.82);backdrop-filter:blur(12px);
+    border:1px solid rgba(0,0,0,.06);border-radius:14px;
+    box-shadow:0 18px 44px -16px rgba(29,29,31,.28);
+    padding:10px 14px;font-size:12.5px;font-weight:600;white-space:nowrap;
+  }
+  .chip-f em{
+    font-style:normal;width:26px;height:26px;border-radius:8px;
+    background:var(--blue-tint);color:var(--blue);
+    display:flex;align-items:center;justify-content:center;font-size:12px;
+  }
+  .chip-f small{display:block;font-weight:500;color:var(--grey);font-size:10.5px;margin-top:1px}
+  .cf1{left:6%;top:34px;animation:cfl 6s ease-in-out infinite alternate}
+  .cf2{right:5%;top:300px;animation:cfl 7s ease-in-out -2s infinite alternate}
+  .cf3{left:12%;bottom:36px;animation:cfl 8s ease-in-out -4s infinite alternate}
+  @keyframes cfl{from{translate:0 0}to{translate:0 -12px}}
+  @media(max-width:900px){.chip-f{display:none}}
+
+  /* ============ LOGOKAISTA ============ */
+  .logos{padding:54px 0 0}
+  .logos .t{
+    text-align:center;font-size:11.5px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--grey);margin-bottom:22px;
+  }
+  .logos .row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .logos .slot{
+    width:150px;height:52px;border-radius:12px;
+    border:1px dashed #d8d8de;color:#b6b6bc;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11.5px;font-weight:600;letter-spacing:.04em;
+    transition:border-color .3s,color .3s;
+  }
+  .logos .slot:hover{border-color:var(--blue);color:var(--blue)}
+
+  /* ============ SPARKLINE (case-kortit) ============ */
+  .spark{width:100%;height:44px;margin-top:16px}
+  .spark polyline{
+    fill:none;stroke:var(--blue);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:300;stroke-dashoffset:300;
+  }
+  .spark .fillp{fill:url(#sparkfill);stroke:none;opacity:0;transition:opacity 1s .6s}
+  .rv.on .spark polyline{animation:draw 1.6s cubic-bezier(.3,.6,.2,1) forwards}
+  .rv.on .spark .fillp{opacity:1}
+  @keyframes draw{to{stroke-dashoffset:0}}
+
+  /* ============ LUKUKAISTA ============ */
+  .statband{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+    border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+    padding:44px 0;
+  }
+  @media(max-width:760px){.statband{grid-template-columns:repeat(2,1fr);gap:28px 16px}}
+  .stat{text-align:center}
+  .stat .num{
+    font-size:clamp(30px,3.6vw,44px);font-weight:700;letter-spacing:-0.028em;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat .num b{color:var(--blue);font-weight:700}
+  .stat p{font-size:12.5px;color:var(--grey);font-weight:500;margin-top:6px}
+
+  /* ============ DEKO-ELEMENTIT ============ */
+  .deco{position:absolute;pointer-events:none;z-index:0}
+  .deco.ring{width:64px;height:64px;border-radius:50%;border:1.6px solid #dbe9ff}
+  .deco.ring.sm{width:26px;height:26px;border-color:#cfe3ff}
+  .deco.dot{width:8px;height:8px;border-radius:50%;background:var(--blue);opacity:.35}
+  .deco.plus{width:18px;height:18px;color:#c9dcf7;font-size:22px;line-height:16px;font-weight:400}
+  .deco.grid{
+    width:140px;height:100px;opacity:.5;
+    background-image:radial-gradient(#d4d4da 1.2px, transparent 1.3px);
+    background-size:14px 14px;
+  }
+
+  /* ============ TYÖNÄYTE-NUOLI ============ */
+  .w-item .go{
+    position:absolute;top:14px;left:14px;z-index:2;
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:14px;
+    opacity:0;transform:translate(-6px,6px);
+    transition:opacity .35s,transform .35s;
+  }
+  .w-item:hover .go{opacity:1;transform:none}
+
+  /* ============ PALVELUVISUAALIEN LISÄKERROKSET ============ */
+  .float-tag{
+    position:absolute;z-index:3;
+    background:#fff;border:1px solid var(--hair);border-radius:12px;
+    box-shadow:0 16px 40px -14px rgba(29,29,31,.3);
+    padding:9px 13px;font-size:11.5px;font-weight:600;
+    display:flex;align-items:center;gap:7px;white-space:nowrap;
+  }
+  .float-tag i{width:7px;height:7px;border-radius:50%;background:var(--blue);flex:none}
+  .ft-a{right:-14px;top:-16px;animation:cfl 6s ease-in-out infinite alternate}
+  .ft-b{left:-18px;bottom:24px;animation:cfl 7s ease-in-out -3s infinite alternate}
+  @media(max-width:880px){.ft-a{right:6px}.ft-b{left:6px}}
+
+  .hearts{position:absolute;inset:0;pointer-events:none;z-index:3}
+  .hearts s{
+    position:absolute;bottom:16%;text-decoration:none;font-size:15px;color:var(--blue);
+    opacity:0;animation:rise 4.5s ease-in infinite;
+  }
+  .hearts s:nth-child(1){left:34%;animation-delay:0s}
+  .hearts s:nth-child(2){left:44%;animation-delay:1.3s;font-size:12px}
+  .hearts s:nth-child(3){left:39%;animation-delay:2.5s;font-size:18px}
+  .hearts s:nth-child(4){left:49%;animation-delay:3.4s;font-size:11px}
+  @keyframes rise{
+    0%{opacity:0;transform:translateY(0) scale(.7)}
+    12%{opacity:.85}
+    100%{opacity:0;transform:translateY(-190px) translateX(14px) scale(1.15)}
+  }
+
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+  .rv.on{opacity:1;transform:none}
+  .stagger > *{transition-delay:calc(var(--i,0) * 90ms)}
+  [data-par]{will-change:translate}
+
+  @media(prefers-reduced-motion:reduce){
+    .li,.rv{opacity:1 !important;transform:none !important;animation:none !important;transition:none !important}
+    .phone,.phone *,.swap span,.marq .track,.mini .vid,.msite-h::after,.msite-card,.event .lights,
+    .chip-f,.float-tag,.hearts s{animation:none !important}
+    [data-par]{translate:none !important}
+  }
+</style>
+</head>
+<body>
+
+<!-- STICKY KUVA -->
+<div class="backdrop" aria-hidden="true">
+  <svg id="bdSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+    <!-- hienovarainen mittaruudukko, liukuu hitaasti skrollin mukana -->
+    <g id="bdGrid" stroke="#e4e4e9" stroke-width="1">
+      <line x1="0" y1="150" x2="1440" y2="150"/>
+      <line x1="0" y1="450" x2="1440" y2="450"/>
+      <line x1="0" y1="750" x2="1440" y2="750"/>
+      <line x1="240" y1="0" x2="240" y2="900"/>
+      <line x1="720" y1="0" x2="720" y2="900"/>
+      <line x1="1200" y1="0" x2="1200" y2="900"/>
+    </g>
+    <!-- tekninen kehysrakennelma, vasen: piirtyy skrollin mukaan -->
+    <g stroke="#c7c7ce" stroke-width="1.3">
+      <path id="bdP1" d="M 90 90 L 90 340 L 340 340" pathLength="100" stroke-dasharray="100"/>
+      <path id="bdP2" d="M 90 90 L 340 90" pathLength="100" stroke-dasharray="100"/>
+      <circle cx="90" cy="90" r="3" fill="#c7c7ce" stroke="none"/>
+      <circle cx="340" cy="340" r="3" fill="#c7c7ce" stroke="none"/>
+      <path d="M 140 210 L 260 210" stroke-dasharray="3 5"/>
+    </g>
+    <!-- tekninen kehysrakennelma, oikea yläkulma -->
+    <g stroke="#c7c7ce" stroke-width="1.3">
+      <path id="bdP3" d="M 1150 60 L 1380 60 L 1380 260" pathLength="100" stroke-dasharray="100"/>
+      <circle cx="1150" cy="60" r="3" fill="#c7c7ce" stroke="none"/>
+      <circle cx="1380" cy="260" r="3" fill="#c7c7ce" stroke="none"/>
+      <path d="M 1230 60 L 1230 160" stroke-dasharray="3 5"/>
+    </g>
+    <!-- kelluva rengasmerkki, keskiylä: pyörii skrollin mukaan -->
+    <g id="bdRing" transform="translate(770,110)">
+      <circle cx="0" cy="0" r="46" stroke="#d6d6dc" stroke-width="1.2" stroke-dasharray="5 9"/>
+      <circle cx="0" cy="-46" r="3" fill="#bcbcc4"/>
+    </g>
+    <!-- pitkä diagonaalinen linjapari, oikea alakulma -->
+    <g stroke="#c7c7ce" stroke-width="1.3">
+      <path id="bdP4" d="M 1180 650 L 1360 780" pathLength="100" stroke-dasharray="100"/>
+      <path d="M 1180 650 L 1120 800"/>
+      <circle cx="1180" cy="650" r="3" fill="#c7c7ce" stroke="none"/>
+    </g>
+    <!-- pieni koordinaattisolmu, vasen alakulma -->
+    <g stroke="#c7c7ce" stroke-width="1.3">
+      <path id="bdP5" d="M 210 760 L 210 860 L 400 860" pathLength="100" stroke-dasharray="100"/>
+      <circle cx="210" cy="760" r="3" fill="#c7c7ce" stroke="none"/>
+      <circle cx="400" cy="860" r="3" fill="#c7c7ce" stroke="none"/>
+    </g>
+    <!-- pitkä ohut ura-viiva, liikkuu skrollin mukana -->
+    <path id="bdWave" d="M 0 500 C 260 470, 520 540, 780 500 S 1200 460, 1440 505" stroke="#dedee3" stroke-width="1"/>
+  </svg>
+</div>
+
+<div id="prog"></div>
+
+<nav id="nav">
+  <div class="navin">
+    <span class="logo">WS Media</span>
+    <div class="navlinks">
+      <a href="#palvelut">Palvelut</a>
+      <a href="#tyot">Työnäytteet</a>
+      <a href="#prosessi">Prosessi</a>
+      <a href="#paketit">Hinnoittelu</a>
+      <a class="navcta" href="#lomake">Pyydä tarjous</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <p class="kick li d1">Lyhytvideot · Verkkosivut · Tapahtumat</p>
+    <h1 class="li d2" data-par="0.05">Sisältöä, joka<br>
+      <span class="swapclip"><span class="swap" id="swap">
+        <span class="act">tuo asiakkaita.</span>
+        <span>pysäyttää skrollauksen.</span>
+        <span>tekee kauppaa.</span>
+        <span>jää mieleen.</span>
+      </span></span>
+    </h1>
+    <p class="sub li d3" data-par="0.035">Lyhytvideot, verkkosivut ja tapahtumat samalta tiimiltä. Kiinteä hinta, ei pitkiä sopimuksia. Sinä hyväksyt, me hoidamme loput.</p>
+    <div class="heroctas li d4" data-par="0.025">
+      <a class="btn mag" href="#lomake">Pyydä tarjous</a>
+      <a class="tlink" href="#tyot">Katso työnäytteet</a>
+    </div>
+  </div>
+
+  <div class="stage li d5" id="stage" data-par="-0.03" aria-label="Esimerkkejä lyhytvideoista, paikat varattu">
+    <div class="chip-f cf1"><em>▲</em><span>Näkyvyys<small>+240 % / 30 pv</small></span></div>
+    <div class="chip-f cf2"><em>✓</em><span>Julkaistu<small>Toimitettu ajallaan</small></span></div>
+    <div class="chip-f cf3"><em>★</em><span>4,9 / 5<small>Asiakastyytyväisyys</small></span></div>
+    <div class="phone p2" data-depth="26">
+      <div class="scr">
+        <div class="vid"></div><div class="shine"></div>
+        <div class="ph-tag">ASIAKASVIDEO</div>
+        <div class="ui">
+          <div class="cap"><b>@asiakas</b><s>Ennen ja jälkeen. Katso muutos loppuun asti.</s></div>
+          <div class="bars"><em>♥</em><small>24,1k</small><em>💬</em><small>312</small></div>
+          <div class="prg"><i></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone p1" data-depth="14">
+      <div class="scr">
+        <div class="vid"></div><div class="shine"></div>
+        <div class="ph-tag">SHOWREEL</div>
+        <div class="ui">
+          <div class="cap"><b>@wsmedia</b><s>Näin teemme sisällöt jotka pysäyttävät. 30 s.</s></div>
+          <div class="bars"><em>♥</em><small>48,7k</small><em>💬</em><small>926</small></div>
+          <div class="prg"><i></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone p3" data-depth="34">
+      <div class="scr">
+        <div class="vid"></div><div class="shine"></div>
+        <div class="ph-tag">ASIAKASVIDEO</div>
+        <div class="ui">
+          <div class="cap"><b>@asiakas</b><s>Kolme virhettä jotka kaatavat somenäkyvyyden.</s></div>
+          <div class="bars"><em>♥</em><small>17,9k</small><em>💬</em><small>204</small></div>
+          <div class="prg"><i></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marq" aria-hidden="true">
+  <div class="track">
+    <span>Lyhytvideot <b>·</b> Verkkosivut <b>·</b> Tapahtumat <b>·</b> TikTok <b>·</b> Instagram Reels <b>·</b> YouTube Shorts <b>·</b> Espoo <b>·</b> Helsinki <b>·</b>&nbsp;</span>
+    <span>Lyhytvideot <b>·</b> Verkkosivut <b>·</b> Tapahtumat <b>·</b> TikTok <b>·</b> Instagram Reels <b>·</b> YouTube Shorts <b>·</b> Espoo <b>·</b> Helsinki <b>·</b>&nbsp;</span>
+  </div>
+</div>
+
+<!-- LOGOKAISTA -->
+<div class="logos rv">
+  <p class="t">Yrityksiä joiden kanssa työskentelemme</p>
+  <div class="row">
+    <div class="slot">[Asiakas]</div>
+    <div class="slot">[Asiakas]</div>
+    <div class="slot">[Asiakas]</div>
+    <div class="slot">[Asiakas]</div>
+    <div class="slot">[Asiakas]</div>
+  </div>
+</div>
+
+<!-- LUKUKAISTA -->
+<section style="padding:70px 0 20px">
+  <div class="wrap">
+    <div class="statband stagger">
+      <div class="stat rv" style="--i:0"><div class="num" data-count="00">00</div><p>toteutettua projektia</p></div>
+      <div class="stat rv" style="--i:1"><div class="num" data-count="0&nbsp;000&nbsp;000+">0&nbsp;000&nbsp;000+</div><p>katselukertaa yhteensä</p></div>
+      <div class="stat rv" style="--i:2"><div class="num" data-count="00">00</div><p>arkipäivää keskim. toimitusaika</p></div>
+      <div class="stat rv" style="--i:3"><div class="num" data-count="4,9/5">4,9/5</div><p>keskiarvosana asiakkailta</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PALVELUT: 3 isoa paneelia -->
+<section id="palvelut">
+  <div class="wrap">
+    <div class="shead rv" data-par="0.03">
+      <span class="kick">Palvelut</span>
+      <h2 class="big">Kolme tapaa erottua. Yksi tiimi.</h2>
+      <p class="sub">Video tuo huomion, sivusto tekee kaupan, tapahtuma sinetöi suhteen. Rakennamme koko polun.</p>
+    </div>
+
+    <!-- 1. Lyhytvideot -->
+    <div class="svc rv">
+      <div class="svc-visual" data-par="0.02">
+        <span class="deco grid" style="left:-30px;top:-20px"></span>
+        <span class="deco ring" style="right:6%;top:-8px"></span>
+        <span class="deco dot" style="right:2%;bottom:30%"></span>
+        <div class="mini-phones">
+          <div class="mini"><div class="vid"></div><div class="tag">REELS</div>
+            <div class="hearts"><s>♥</s><s>♥</s><s>♥</s><s>♥</s></div>
+          </div>
+          <div class="mini"><div class="vid" style="animation-delay:-5s"></div><div class="tag">TIKTOK</div></div>
+          <div class="float-tag ft-a"><i></i>Näkymät<br>+312 %</div>
+        </div>
+      </div>
+      <div class="svc-txt" data-par="0.035">
+        <span class="kick">Lyhytvideot</span>
+        <h3>Videot, jotka algoritmi nostaa ja ihmiset katsovat loppuun.</h3>
+        <p>TikTok, Instagram Reels ja YouTube Shorts. Strategia, käsikirjoitus, kuvaus ja editointi, julkaisuvalmiina sähköpostiisi.</p>
+        <ul>
+          <li>Ensimmäiset 3 sekuntia ratkaisevat, me tiedämme miten ne tehdään</li>
+          <li>Kuvaus sinun tiloissasi ammattikalustolla</li>
+          <li>Tekstitykset, grafiikat ja alustakohtainen optimointi</li>
+        </ul>
+        <a class="tlink" href="#">Lue lisää lyhytvideoista</a>
+      </div>
+    </div>
+
+    <!-- 2. Verkkosivut -->
+    <div class="svc rev rv">
+      <div class="svc-visual" data-par="0.02">
+        <span class="deco ring sm" style="left:-4%;top:-14px"></span>
+        <span class="deco plus" style="right:-4%;bottom:14%">+</span>
+        <div class="browser">
+          <div class="bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="url">asiakkaasi.fi</span>
+          </div>
+          <div class="page">
+            <div class="score" title="PageSpeed"><i>97<small>SPEED</small></i></div>
+            <div class="msite-kick"></div>
+            <div class="msite-h"></div>
+            <div class="msite-h short"></div>
+            <div class="msite-btnrow"><div class="msite-btn"></div><div class="msite-btn o"></div></div>
+            <div class="msite-cards">
+              <div class="msite-card"></div><div class="msite-card"></div><div class="msite-card"></div>
+            </div>
+          </div>
+        </div>
+        <div class="float-tag ft-b"><i></i>Hakukonesijoitus<br>#1&nbsp;paikallisesti</div>
+      </div>
+      <div class="svc-txt" data-par="0.035">
+        <span class="kick">Verkkosivut</span>
+        <h3>Sivusto, joka latautuu heti ja muuttaa kävijät yhteydenotoiksi.</h3>
+        <p>Käsin koodatut, hakukoneoptimoidut sivustot ilman raskaita sivupohjia. Tämä sivu jota katsot on työnäyte.</p>
+        <ul>
+          <li>Nopeus edellä, myös mobiilissa</li>
+          <li>Hakukoneoptimointi rakennettu sisään alusta asti</li>
+          <li>Video ja sivusto samalta tiimiltä, viesti pysyy yhtenäisenä</li>
+        </ul>
+        <a class="tlink" href="#">Lue lisää verkkosivuista</a>
+      </div>
+    </div>
+
+    <!-- 3. Tapahtumat -->
+    <div class="svc rv">
+      <div class="svc-visual" data-par="0.02">
+        <span class="deco dot" style="left:-2%;top:10%"></span>
+        <span class="deco ring sm" style="right:4%;bottom:-10px"></span>
+        <div class="event">
+          <div class="lights"></div>
+          <div class="truss"></div>
+          <span class="chip">[Tapahtuman nimi] · [pvm]</span>
+          <div class="play"></div>
+          <div class="crowd"></div>
+          <div class="cap"><b>Aftermovie</b><s>Täytetään tapahtumareferenssillä</s></div>
+        </div>
+        <div class="float-tag ft-a"><i></i>Kävijät<br>[X]&nbsp;henkeä</div>
+      </div>
+      <div class="svc-txt" data-par="0.035">
+        <span class="kick">Tapahtumat</span>
+        <h3>Tapahtumat, joista puhutaan vielä viikkoja.</h3>
+        <p>Suunnittelusta toteutukseen ja taltiointiin. Tapahtuma tuottaa samalla sisältöä someen ja sivuillesi, yksi ilta ruokkii koko vuoden markkinointia.</p>
+        <ul>
+          <li>[Tapahtumapalvelun sisältö 1, täytetään]</li>
+          <li>[Tapahtumapalvelun sisältö 2, täytetään]</li>
+          <li>Aftermovie ja some-nostot samasta tuotannosta</li>
+        </ul>
+        <a class="tlink" href="#">Lue lisää tapahtumista</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TYÖNÄYTTEET (tumma kaista) -->
+<section id="tyot" style="padding-top:0">
+  <div class="work">
+    <div class="wrap">
+      <div class="shead rv">
+        <span class="kick" style="color:#6fb1ff">Työnäytteet</span>
+        <h2 style="color:#f5f5f7">Näytämme mieluummin kuin kerromme.</h2>
+        <p class="sub">Neljä paikkaa parhaille töille. Täytetään referensseillä ennen julkaisua.</p>
+      </div>
+      <div class="workgrid stagger">
+        <div class="w-item w-site rv" style="--i:0">
+          <div class="thumb"></div>
+          <span class="go">→</span>
+          <span class="fillchip">Täytetään</span>
+          <div class="lbl"><b>[Asiakkaan verkkosivusto]</b><s>Verkkosivut · [toimiala]</s></div>
+        </div>
+        <div class="w-item w-video rv" style="--i:1">
+          <div class="thumb"></div>
+          <span class="go">→</span>
+          <span class="fillchip">Täytetään</span>
+          <div class="lbl"><b>[Asiakkaan videokampanja]</b><s>Lyhytvideot · [tulos]</s></div>
+        </div>
+        <div class="w-item w-event rv" style="--i:2">
+          <div class="thumb"></div>
+          <span class="go">→</span>
+          <span class="fillchip">Täytetään</span>
+          <div class="lbl"><b>[Tapahtuma]</b><s>Tapahtumat · [pvm ja paikka]</s></div>
+        </div>
+        <div class="w-item w-site2 rv" style="--i:3">
+          <div class="thumb"></div>
+          <span class="go">→</span>
+          <span class="fillchip">Täytetään</span>
+          <div class="lbl"><b>[Asiakkaan verkkosivusto]</b><s>Verkkosivut · [toimiala]</s></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TULOKSET -->
+<section id="tulokset" style="padding-top:110px">
+  <div class="wrap">
+    <div class="shead right rv" data-par="0.03">
+      <span class="kick">Referenssit</span>
+      <h2>Tulokset, joilla on väliä.</h2>
+      <p class="sub">Kolme casea täytetään oikeilla luvuilla ennen julkaisua.</p>
+    </div>
+    <div class="cases stagger">
+      <div class="card case rv tilt" style="--i:0" data-par="0.015">
+        <div class="num" data-count="000&nbsp;000">000&nbsp;000</div>
+        <h3>Asiakas ja toimiala</h3>
+        <p>katselukertaa orgaanisesti, ilman maksettua mainontaa</p>
+        <svg class="spark" viewBox="0 0 220 60" preserveAspectRatio="none">
+          <defs><linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0071e3" stop-opacity=".18"/>
+            <stop offset="100%" stop-color="#0071e3" stop-opacity="0"/>
+          </linearGradient></defs>
+          <polygon class="fillp" points="0,52 22,46 44,49 66,34 88,38 110,24 132,29 154,16 176,20 198,9 220,12 220,60 0,60"/>
+          <polyline points="0,52 22,46 44,49 66,34 88,38 110,24 132,29 154,16 176,20 198,9 220,12"/>
+        </svg>
+        <span class="fill">Täytetään · Case 1</span>
+      </div>
+      <div class="card case rv tilt" style="--i:1" data-par="0.035">
+        <div class="num" data-count="00&nbsp;000">00&nbsp;000</div>
+        <h3>Asiakas ja toimiala</h3>
+        <p>tulos numeroina ja asiakkaan sitaatti</p>
+        <svg class="spark" viewBox="0 0 220 60" preserveAspectRatio="none">
+          <polygon class="fillp" points="0,50 22,51 44,44 66,45 88,32 110,36 132,22 154,26 176,14 198,17 220,6 220,60 0,60" fill="url(#sparkfill)"/>
+          <polyline points="0,50 22,51 44,44 66,45 88,32 110,36 132,22 154,26 176,14 198,17 220,6"/>
+        </svg>
+        <span class="fill">Täytetään · Case 2</span>
+      </div>
+      <div class="card case rv tilt" style="--i:2" data-par="0.015">
+        <div class="num" data-count="+00&nbsp;%">+00&nbsp;%</div>
+        <h3>Asiakas ja toimiala</h3>
+        <p>seuraajakasvu tai liidit ensimmäisen kuukauden jälkeen</p>
+        <svg class="spark" viewBox="0 0 220 60" preserveAspectRatio="none">
+          <polygon class="fillp" points="0,54 22,50 44,52 66,42 88,44 110,30 132,33 154,18 176,22 198,10 220,8 220,60 0,60" fill="url(#sparkfill)"/>
+          <polyline points="0,54 22,50 44,52 66,42 88,44 110,30 132,33 154,18 176,22 198,10 220,8"/>
+        </svg>
+        <span class="fill">Täytetään · Case 3</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROSESSI -->
+<section id="prosessi">
+  <div class="wrap">
+    <div class="shead rv" data-par="0.03">
+      <span class="kick">Prosessi</span>
+      <h2>Näin helppoa se on.</h2>
+    </div>
+    <div class="steps stagger">
+      <div class="card step rv tilt" style="--i:0" data-par="0.015">
+        <h3>Täytä lomake tai soita</h3>
+        <p>Kerromme mikä kokonaisuus sopii yrityksesi tavoitteisiin.</p>
+      </div>
+      <div class="card step rv tilt" style="--i:1" data-par="0.035">
+        <h3>Sovitaan toteutus</h3>
+        <p>Strategiapalaveri ja aikataulu. Kuvaukset sinun tiloissasi, sivustot ja tapahtumat sovitusti.</p>
+      </div>
+      <div class="card step rv tilt" style="--i:2" data-par="0.015">
+        <h3>Valmis kokonaisuus</h3>
+        <p>Julkaisuvalmiit videot, käyttövalmis sivusto tai toteutettu tapahtuma. Sinä hyväksyt jokaisen vaiheen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAKETIT -->
+<section id="paketit">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Hinnoittelu</span>
+      <h2>Valitse kokonaisuus.</h2>
+    </div>
+    <div class="plans stagger">
+      <div class="card plan rv tilt" style="--i:0" data-par="0.015">
+        <span class="pt"></span>
+        <h3>[Paketti 1]</h3>
+        <p class="for">Yrityksille, jotka aloittavat some&#8209;videotuotannon.</p>
+        <div class="price">[Hinta] <small>€/kk</small></div>
+        <ul>
+          <li>[X] editoitua videota kuukaudessa</li>
+          <li>Editointi ja tekstitys</li>
+          <li>Strategiapalaveri ennen aloitusta</li>
+          <li>Toimitus [X] arkipäivässä</li>
+        </ul>
+        <a class="btn alt" href="#lomake">Pyydä suunnitelma</a>
+      </div>
+      <div class="card plan pop rv tilt" style="--i:1" data-par="0.035">
+        <span class="pt">Suosituin</span>
+        <h3>[Paketti 2]</h3>
+        <p class="for">Yrityksille, jotka haluavat nopeaa näkyvyyttä.</p>
+        <div class="price">[Hinta] <small>€/kk</small></div>
+        <ul>
+          <li>[X] editoitua videota kuukaudessa</li>
+          <li>Editointi ja tekstitys</li>
+          <li>Esiintyjä mukana</li>
+          <li>Strategiapalaveri ja kuukausiraportti</li>
+        </ul>
+        <a class="btn" href="#lomake">Pyydä suunnitelma</a>
+      </div>
+      <div class="card plan rv tilt" style="--i:2" data-par="0.015">
+        <span class="pt"></span>
+        <h3>[Paketti 3]</h3>
+        <p class="for">Yrityksille, jotka haluavat koko näkyvyyden kerralla.</p>
+        <div class="price">[Hinta] <small>€/kk</small></div>
+        <ul>
+          <li>[X] videota kuukaudessa</li>
+          <li>TikTok, Reels ja Shorts</li>
+          <li>Verkkosivut tai tapahtuma sovitusti</li>
+          <li>Kuukausittainen strategiapalaveri</li>
+        </ul>
+        <a class="btn alt" href="#lomake">Pyydä suunnitelma</a>
+      </div>
+    </div>
+    <p class="pricenote rv">Kaikissa paketeissa: ei sitoutumispakkoa, irtisanominen kuukausi kerrallaan. Verkkosivut ja tapahtumat hinnoitellaan projekteina.</p>
+  </div>
+</section>
+
+<!-- LOMAKE -->
+<section id="lomake">
+  <div class="wrap-n">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Tarjous</span>
+      <h2>Kerro budjettisi.</h2>
+      <p class="sub">Saat räätälöidyn suunnitelman juuri sinun yrityksellesi, 24 tunnin sisällä ja ilmaiseksi.</p>
+    </div>
+    <div class="card fcard rv" data-par="0.02">
+      <label for="bud">Budjetti</label>
+      <div class="budget">
+        <input type="range" id="bud" min="500" max="15000" step="250" value="2000">
+        <output id="budout">2 000 €</output>
+      </div>
+      <div class="row2">
+        <div>
+          <label for="nimi">Nimi</label>
+          <input type="text" id="nimi" autocomplete="name">
+        </div>
+        <div>
+          <label for="mail">Sähköposti</label>
+          <input type="email" id="mail" autocomplete="email">
+        </div>
+        <div>
+          <label for="puh">Puhelinnumero</label>
+          <input type="text" id="puh" autocomplete="tel">
+        </div>
+        <div>
+          <label for="pk">Paikkakunta</label>
+          <input type="text" id="pk">
+        </div>
+      </div>
+      <label for="lisa">Mitä tarvitset? Videot, sivusto, tapahtuma vai kokonaisuus?</label>
+      <textarea id="lisa" rows="3"></textarea>
+      <button class="btn" type="button">Lähetä tarjouspyyntö</button>
+      <p class="fnote">Vastaamme 24 tunnin sisällä. Ei sitoumuksia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final">
+  <div class="wrap">
+    <h2 class="rv" data-par="0.04">Valmis nostamaan näkyvyytesi <span class="accent">uudelle tasolle?</span></h2>
+    <p class="sub rv">Varaa ilmainen 30 minuutin strategiapuhelu. Käymme läpi toimialasi mahdollisuudet, ilman sitoumuksia.</p>
+    <a class="btn rv mag" href="#lomake">Varaa strategiapuhelu</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div style="max-width:280px">
+        <h4>WS Media</h4>
+        <p>Lyhytvideot, verkkosivut ja tapahtumat. Espoo ja Helsinki. Yrityksille jotka haluavat kasvaa.</p>
+      </div>
+      <div>
+        <h4>Palvelut</h4>
+        <a href="#">Lyhytvideot</a>
+        <a href="#">TikTok-videot</a>
+        <a href="#">Instagram Reels</a>
+        <a href="#">YouTube Shorts</a>
+        <a href="#">Verkkosivut</a>
+        <a href="#">Tapahtumat</a>
+      </div>
+      <div>
+        <h4>Yritys</h4>
+        <a href="#">Työnäytteet</a>
+        <a href="#">Prosessi</a>
+        <a href="#">Hinnoittelu</a>
+        <a href="#">Blogi</a>
+        <a href="#">Ota yhteyttä</a>
+      </div>
+    </div>
+    <div class="base">© 2026 WS Media Oy · Espoo</div>
+  </div>
+</footer>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(pointer: fine)').matches;
+  const nav = document.getElementById('nav'), prog = document.getElementById('prog');
+
+  // vaihtuva sana
+  const swap = document.getElementById('swap');
+  if (swap && !reduce){
+    const words = [...swap.children];
+    let i = 0;
+    setInterval(()=>{
+      const cur = words[i];
+      i = (i + 1) % words.length;
+      const nxt = words[i];
+      cur.classList.remove('act'); cur.classList.add('out');
+      nxt.classList.remove('out'); nxt.classList.add('act');
+      setTimeout(()=>cur.classList.remove('out'), 600);
+    }, 2900);
+  }
+
+  // taustakuvio: jatkuva, silmukoituva animointi suoraan skrollin funktiona
+  const bdGrid = document.getElementById('bdGrid');
+  const bdRing = document.getElementById('bdRing');
+  const bdWave = document.getElementById('bdWave');
+  const bdPaths = ['bdP1','bdP2','bdP3','bdP4','bdP5'].map(id=>document.getElementById(id));
+
+  // parallaksi
+  const pars = [...document.querySelectorAll('[data-par]')];
+  let ticking = false;
+  const onScroll = ()=>{
+    const vh = innerHeight, h = document.documentElement;
+    const sc = scrollY;
+    pars.forEach(el=>{
+      const sp = parseFloat(el.dataset.par);
+      const r = el.getBoundingClientRect();
+      const mid = r.top + r.height/2 - vh/2;
+      el.style.translate = `0 ${(-mid * sp).toFixed(1)}px`;
+    });
+
+    if (bdGrid && !reduce){
+      const gx = -((sc * 0.02) % 240);
+      const gy = -((sc * 0.012) % 300);
+      bdGrid.style.transform = `translate(${gx.toFixed(1)}px, ${gy.toFixed(1)}px)`;
+      bdRing.style.transform = `translate(770px,110px) rotate(${(sc * 0.14).toFixed(1)}deg)`;
+      bdWave.style.transform = `translateX(${(-(sc * 0.05) % 660).toFixed(1)}px)`;
+      const drawT = (Math.sin(sc / 380) + 1) / 2;
+      bdPaths.forEach((p,i)=>{
+        if(!p) return;
+        const off = 100 - (drawT * 100 - i*6 + 600) % 100;
+        p.style.strokeDashoffset = off.toFixed(1);
+      });
+    }
+
+    nav.classList.toggle('scrolled', scrollY > 8);
+    prog.style.width = (scrollY / (h.scrollHeight - innerHeight) * 100) + '%';
+    ticking = false;
+  };
+  addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(reduce ? ()=>{ nav.classList.toggle('scrolled', scrollY>8); ticking=false; } : onScroll); ticking = true; }
+  }, {passive:true});
+  if(!reduce) onScroll();
+
+  // tilt
+  if (finePointer && !reduce){
+    document.querySelectorAll('.tilt').forEach(c=>{
+      c.addEventListener('mousemove', e=>{
+        const r = c.getBoundingClientRect();
+        const x = (e.clientX - r.left)/r.width - .5;
+        const y = (e.clientY - r.top)/r.height - .5;
+        c.style.transform = `translateY(-6px) perspective(900px) rotateY(${x*4.5}deg) rotateX(${-y*4.5}deg)`;
+      });
+      c.addEventListener('mouseleave', ()=>{ c.style.transform = ''; });
+    });
+  }
+
+  // puhelinten hiiriparallaksi
+  const stage = document.getElementById('stage');
+  if (stage && finePointer && !reduce){
+    const phones = [...stage.querySelectorAll('.phone')];
+    stage.addEventListener('mousemove', e=>{
+      const r = stage.getBoundingClientRect();
+      const cx = (e.clientX - r.left)/r.width - .5;
+      const cy = (e.clientY - r.top)/r.height - .5;
+      phones.forEach(p=>{
+        const d = +p.dataset.depth;
+        p.style.transform =
+          (p.classList.contains('p2') ? 'rotate(-8deg) scale(.85) ' :
+           p.classList.contains('p3') ? 'rotate(7deg) scale(.8) ' : '') +
+          `translate3d(${cx*d}px, ${cy*d}px, 0) rotateY(${cx*7}deg) rotateX(${-cy*6}deg)`;
+      });
+    });
+    stage.addEventListener('mouseleave', ()=>{ phones.forEach(p=>{ p.style.transform=''; }); });
+  }
+
+  // magneettinen nappi
+  if (finePointer && !reduce){
+    document.querySelectorAll('.mag').forEach(b=>{
+      b.addEventListener('mousemove', e=>{
+        const r = b.getBoundingClientRect();
+        b.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.2}px, ${(e.clientY-r.top-r.height/2)*.28}px)`;
+      });
+      b.addEventListener('mouseleave', ()=>{ b.style.transform=''; });
+    });
+  }
+
+  // reveal
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target);} });
+  },{threshold:.1});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+  // case-numeroiden rullaus
+  const spin = (el)=>{
+    const target = el.dataset.count.replace(/&nbsp;/g,'\u00A0');
+    const chars = [...target];
+    let t0 = null;
+    const dur = 1100;
+    const tick = (ts)=>{
+      if(!t0) t0 = ts;
+      const p = Math.min((ts - t0)/dur, 1);
+      el.textContent = chars.map((c,i)=>{
+        if(!/[0-9]/.test(c)) return c;
+        const settle = (i+1)/chars.length * .8;
+        return p >= settle ? c : String(Math.floor(Math.random()*10));
+      }).join('');
+      if(p < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    };
+    requestAnimationFrame(tick);
+  };
+  const io2 = new IntersectionObserver((es)=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){ if(!reduce) spin(e.target); io2.unobserve(e.target); }
+    });
+  },{threshold:.5});
+  document.querySelectorAll('[data-count]').forEach(el=>io2.observe(el));
+
+  // budjettislider
+  const bud = document.getElementById('bud'), out = document.getElementById('budout');
+  const upd = ()=>{
+    const p = (bud.value - bud.min)/(bud.max - bud.min)*100;
+    bud.style.setProperty('--p', p + '%');
+    out.textContent = (+bud.value).toLocaleString('fi-FI') + ' €';
+  };
+  bud.addEventListener('input', upd); upd();
+</script>
+</body>
+</html>

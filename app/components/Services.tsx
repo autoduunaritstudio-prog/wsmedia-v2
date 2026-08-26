@@ -1,0 +1,163 @@
+export default function Services() {
+  return (
+    <section id="palvelut">
+      <div className="wrap">
+        <div className="shead rv" data-par="0.03">
+          <span className="kick">Palvelut</span>
+          <h2 className="big">Kolme tapaa erottua. Yksi tiimi.</h2>
+          <p className="sub">
+            Video tuo huomion, sivusto tekee kaupan, tapahtuma sinetöi suhteen. Rakennamme koko
+            polun.
+          </p>
+        </div>
+
+        {/* 1. Lyhytvideot */}
+        <div className="svc rv">
+          <div className="svc-visual" data-par="0.02">
+            <span className="deco deco-grid" style={{ left: "-30px", top: "-20px" }} />
+            <span className="deco deco-ring" style={{ right: "6%", top: "-8px" }} />
+            <span className="deco deco-dot" style={{ right: "2%", bottom: "30%" }} />
+            <div className="mini-phones">
+              <div className="mini">
+                <div className="vid" />
+                <div className="tag">REELS</div>
+                <div className="hearts">
+                  <s>♥</s>
+                  <s>♥</s>
+                  <s>♥</s>
+                  <s>♥</s>
+                </div>
+              </div>
+              <div className="mini">
+                <div className="vid" style={{ animationDelay: "-5s" }} />
+                <div className="tag">TIKTOK</div>
+              </div>
+              <div className="float-tag ft-a">
+                <i />
+                Näkymät
+                <br />
+                +312 %
+              </div>
+            </div>
+          </div>
+          <div className="svc-txt" data-par="0.035">
+            <span className="kick">Lyhytvideot</span>
+            <h3>Videot, jotka algoritmi nostaa ja ihmiset katsovat loppuun.</h3>
+            <p>
+              TikTok, Instagram Reels ja YouTube Shorts. Strategia, käsikirjoitus, kuvaus ja
+              editointi, julkaisuvalmiina sähköpostiisi.
+            </p>
+            <ul>
+              <li>Ensimmäiset 3 sekuntia ratkaisevat, me tiedämme miten ne tehdään</li>
+              <li>Kuvaus sinun tiloissasi ammattikalustolla</li>
+              <li>Tekstitykset, grafiikat ja alustakohtainen optimointi</li>
+            </ul>
+            <a className="tlink" href="#">
+              Lue lisää lyhytvideoista
+            </a>
+          </div>
+        </div>
+
+        {/* 2. Verkkosivut */}
+        <div className="svc rev rv">
+          <div className="svc-visual" data-par="0.02">
+            <span className="deco deco-ring deco-ring-sm" style={{ left: "-4%", top: "-14px" }} />
+            <span className="deco deco-plus" style={{ right: "-4%", bottom: "14%" }}>
+              +
+            </span>
+            <div className="browser">
+              <div className="bar">
+                <span className="dot" />
+                <span className="dot" />
+                <span className="dot" />
+                <span className="url">asiakkaasi.fi</span>
+              </div>
+              <div className="page">
+                <div className="score" title="PageSpeed">
+                  <i>
+                    97<small>SPEED</small>
+                  </i>
+                </div>
+                <div className="msite-kick" />
+                <div className="msite-h" />
+                <div className="msite-h short" />
+                <div className="msite-btnrow">
+                  <div className="msite-btn" />
+                  <div className="msite-btn o" />
+                </div>
+                <div className="msite-cards">
+                  <div className="msite-card" />
+                  <div className="msite-card" />
+                  <div className="msite-card" />
+                </div>
+              </div>
+            </div>
+            <div className="float-tag ft-b">
+              <i />
+              Hakukonesijoitus
+              <br />
+              {"#1 paikallisesti"}
+            </div>
+          </div>
+          <div className="svc-txt" data-par="0.035">
+            <span className="kick">Verkkosivut</span>
+            <h3>Sivusto, joka latautuu heti ja muuttaa kävijät yhteydenotoiksi.</h3>
+            <p>
+              Käsin koodatut, hakukoneoptimoidut sivustot ilman raskaita sivupohjia. Tämä sivu jota
+              katsot on työnäyte.
+            </p>
+            <ul>
+              <li>Nopeus edellä, myös mobiilissa</li>
+              <li>Hakukoneoptimointi rakennettu sisään alusta asti</li>
+              <li>Video ja sivusto samalta tiimiltä, viesti pysyy yhtenäisenä</li>
+            </ul>
+            <a className="tlink" href="#">
+              Lue lisää verkkosivuista
+            </a>
+          </div>
+        </div>
+
+        {/* 3. Tapahtumat */}
+        <div className="svc rv">
+          <div className="svc-visual" data-par="0.02">
+            <span className="deco deco-dot" style={{ left: "-2%", top: "10%" }} />
+            <span className="deco deco-ring deco-ring-sm" style={{ right: "4%", bottom: "-10px" }} />
+            <div className="event">
+              <div className="lights" />
+              <div className="truss" />
+              <span className="chip">[Tapahtuman nimi] · [pvm]</span>
+              <div className="play" />
+              <div className="crowd" />
+              <div className="cap">
+                <b>Aftermovie</b>
+                <s>Täytetään tapahtumareferenssillä</s>
+              </div>
+            </div>
+            <div className="float-tag ft-a">
+              <i />
+              Kävijät
+              <br />
+              {"[X] henkeä"}
+            </div>
+          </div>
+          <div className="svc-txt" data-par="0.035">
+            <span className="kick">Tapahtumat</span>
+            <h3>Tapahtumat, joista puhutaan vielä viikkoja.</h3>
+            <p>
+              Suunnittelusta toteutukseen ja taltiointiin. Tapahtuma tuottaa samalla sisältöä someen
+              ja sivuillesi, yksi ilta ruokkii koko vuoden markkinointia.
+            </p>
+            <ul>
+              <li>[Tapahtumapalvelun sisältö 1, täytetään]</li>
+              <li>[Tapahtumapalvelun sisältö 2, täytetään]</li>
+              <li>Aftermovie ja some-nostot samasta tuotannosta</li>
+            </ul>
+            <a className="tlink" href="#">
+              Lue lisää tapahtumista
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,222 @@
+"use client";
+
+import { useEffect } from "react";
+
+/**
+ * Sivun skrolli- ja osoitinsidonnaiset efektit yhdessä paikassa.
+ *
+ * Periaatteet:
+ * - Yksi scroll-kuuntelija koko sivulle, rAF-tahdistettuna. Skrollin arvoa ei
+ *   koskaan viedä Reactin stateen, joten yksikään skrollitikki ei aiheuta
+ *   uudelleenrenderöintiä.
+ * - Kaikki liike on koristetta: sisältö on DOM:issa ilman tätä komponenttia.
+ * - prefers-reduced-motion pysäyttää parallaksin ja taustan scrubin, mutta
+ *   jättää navin tilan ja lukupalkin toimimaan.
+ */
+export default function SiteEffects() {
+  useEffect(() => {
+    const ac = new AbortController();
+    const { signal } = ac;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+
+    const nav = document.getElementById("nav");
+    const prog = document.getElementById("prog");
+
+    /* ---------- taustakuvio ---------- */
+    const bdGrid = document.getElementById("bdGrid");
+    const bdRing = document.getElementById("bdRing");
+    const bdWave = document.getElementById("bdWave");
+    const bdPaths = ["bdP1", "bdP2", "bdP3", "bdP4", "bdP5"].map((id) =>
+      document.getElementById(id),
+    );
+
+    /* ---------- parallaksi ---------- */
+    const pars = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-par]"),
+    );
+
+    let ticking = false;
+
+    const onScroll = () => {
+      const vh = window.innerHeight;
+      const h = document.documentElement;
+      const sc = window.scrollY;
+
+      pars.forEach((el) => {
+        const sp = parseFloat(el.dataset.par ?? "0");
+        const r = el.getBoundingClientRect();
+        const mid = r.top + r.height / 2 - vh / 2;
+        el.style.setProperty("translate", `0 ${(-mid * sp).toFixed(1)}px`);
+      });
+
+      if (bdGrid && bdRing && bdWave) {
+        const gx = -((sc * 0.02) % 240);
+        const gy = -((sc * 0.012) % 300);
+        bdGrid.style.transform = `translate(${gx.toFixed(1)}px, ${gy.toFixed(1)}px)`;
+        bdRing.style.transform = `translate(770px,110px) rotate(${(sc * 0.14).toFixed(1)}deg)`;
+        bdWave.style.transform = `translateX(${(-(sc * 0.05) % 660).toFixed(1)}px)`;
+        const drawT = (Math.sin(sc / 380) + 1) / 2;
+        bdPaths.forEach((p, i) => {
+          if (!p) return;
+          const off = 100 - ((drawT * 100 - i * 6 + 600) % 100);
+          p.style.strokeDashoffset = off.toFixed(1);
+        });
+      }
+
+      navAndProgress(sc, h);
+      ticking = false;
+    };
+
+    const navAndProgress = (sc: number, h: HTMLElement) => {
+      nav?.classList.toggle("scrolled", sc > 8);
+      if (prog) {
+        const max = h.scrollHeight - window.innerHeight;
+        prog.style.width = (max > 0 ? (sc / max) * 100 : 0) + "%";
+      }
+    };
+
+    const onScrollReduced = () => {
+      navAndProgress(window.scrollY, document.documentElement);
+      ticking = false;
+    };
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(reduce ? onScrollReduced : onScroll);
+          ticking = true;
+        }
+      },
+      { passive: true, signal },
+    );
+    if (!reduce) onScroll();
+    else onScrollReduced();
+
+    /* ---------- korttien tilt ---------- */
+    if (finePointer && !reduce) {
+      document.querySelectorAll<HTMLElement>(".tilt").forEach((c) => {
+        c.addEventListener(
+          "mousemove",
+          (e) => {
+            const r = c.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5;
+            const y = (e.clientY - r.top) / r.height - 0.5;
+            c.style.transform = `translateY(-6px) perspective(900px) rotateY(${x * 4.5}deg) rotateX(${-y * 4.5}deg)`;
+          },
+          { signal },
+        );
+        c.addEventListener("mouseleave", () => { c.style.transform = ""; }, { signal });
+      });
+    }
+
+    /* ---------- puhelinten hiiriparallaksi ---------- */
+    const stage = document.getElementById("stage");
+    if (stage && finePointer && !reduce) {
+      const phones = Array.from(stage.querySelectorAll<HTMLElement>(".phone"));
+      stage.addEventListener(
+        "mousemove",
+        (e) => {
+          const r = stage.getBoundingClientRect();
+          const cx = (e.clientX - r.left) / r.width - 0.5;
+          const cy = (e.clientY - r.top) / r.height - 0.5;
+          phones.forEach((p) => {
+            const d = Number(p.dataset.depth ?? 0);
+            const base = p.classList.contains("p2")
+              ? "rotate(-8deg) scale(.85) "
+              : p.classList.contains("p3")
+                ? "rotate(7deg) scale(.8) "
+                : "";
+            p.style.transform =
+              base +
+              `translate3d(${cx * d}px, ${cy * d}px, 0) rotateY(${cx * 7}deg) rotateX(${-cy * 6}deg)`;
+          });
+        },
+        { signal },
+      );
+      stage.addEventListener(
+        "mouseleave",
+        () => { phones.forEach((p) => { p.style.transform = ""; }); },
+        { signal },
+      );
+    }
+
+    /* ---------- magneettinen nappi ---------- */
+    if (finePointer && !reduce) {
+      document.querySelectorAll<HTMLElement>(".mag").forEach((b) => {
+        b.addEventListener(
+          "mousemove",
+          (e) => {
+            const r = b.getBoundingClientRect();
+            b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.2}px, ${(e.clientY - r.top - r.height / 2) * 0.28}px)`;
+          },
+          { signal },
+        );
+        b.addEventListener("mouseleave", () => { b.style.transform = ""; }, { signal });
+      });
+    }
+
+    /* ---------- reveal ---------- */
+    const io = new IntersectionObserver(
+      (es) => {
+        es.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("on");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+    document.querySelectorAll(".rv").forEach((el) => io.observe(el));
+
+    /* ---------- case-numeroiden rullaus ---------- */
+    const frames = new Set<number>();
+    const spin = (el: HTMLElement) => {
+      const target = (el.dataset.count ?? "").replace(/&nbsp;/g, " ");
+      const chars = [...target];
+      let t0: number | null = null;
+      const dur = 1100;
+      const tick = (ts: number) => {
+        if (!t0) t0 = ts;
+        const p = Math.min((ts - t0) / dur, 1);
+        el.textContent = chars
+          .map((c, i) => {
+            if (!/[0-9]/.test(c)) return c;
+            const settle = ((i + 1) / chars.length) * 0.8;
+            return p >= settle ? c : String(Math.floor(Math.random() * 10));
+          })
+          .join("");
+        if (p < 1) frames.add(requestAnimationFrame(tick));
+        else el.textContent = target;
+      };
+      frames.add(requestAnimationFrame(tick));
+    };
+
+    const io2 = new IntersectionObserver(
+      (es) => {
+        es.forEach((e) => {
+          if (e.isIntersecting) {
+            if (!reduce) spin(e.target as HTMLElement);
+            io2.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.5 },
+    );
+    document
+      .querySelectorAll<HTMLElement>("[data-count]")
+      .forEach((el) => io2.observe(el));
+
+    return () => {
+      ac.abort();
+      io.disconnect();
+      io2.disconnect();
+      frames.forEach((f) => cancelAnimationFrame(f));
+    };
+  }, []);
+
+  return null;
+}
