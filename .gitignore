@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raakavideot projektin juuressa (lahdemateriaali, ei versionhallintaan).
+# Ankkuroitu juureen, joten public/-kansion pakatut videot eivat osu tahan.
+/*.mov
+/*.MOV
+/*.mp4

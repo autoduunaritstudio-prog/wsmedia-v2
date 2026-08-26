@@ -1,3 +1,5 @@
+import WebsiteDemoVideo from "./WebsiteDemoVideo";
+
 export default function Services() {
   return (
     <section id="palvelut">
@@ -70,26 +72,15 @@ export default function Services() {
                 <span className="dot" />
                 <span className="dot" />
                 <span className="dot" />
-                <span className="url">asiakkaasi.fi</span>
+                <span className="url">laaksolahdensahko.fi</span>
               </div>
-              <div className="page">
+              <div className="page demo">
                 <div className="score" title="PageSpeed">
                   <i>
                     97<small>SPEED</small>
                   </i>
                 </div>
-                <div className="msite-kick" />
-                <div className="msite-h" />
-                <div className="msite-h short" />
-                <div className="msite-btnrow">
-                  <div className="msite-btn" />
-                  <div className="msite-btn o" />
-                </div>
-                <div className="msite-cards">
-                  <div className="msite-card" />
-                  <div className="msite-card" />
-                  <div className="msite-card" />
-                </div>
+                <WebsiteDemoVideo />
               </div>
             </div>
             <div className="float-tag ft-b">
