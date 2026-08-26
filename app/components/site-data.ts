@@ -114,3 +114,38 @@ export const SUBPAGE_FOOTER: FooterColumn[] = [
     ],
   },
 ];
+
+/** Verkkosivut-alasivun footer. */
+export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
+  {
+    title: "Palvelut",
+    links: [
+      { href: "/lyhytvideot", label: "Lyhytvideot" },
+      { href: "/verkkosivut", label: "Verkkosivut yritykselle" },
+      { href: "/verkkosivut#toteutustapa", label: "Räätälöidyt verkkosivut" },
+      { href: "/verkkosivut#hakukoneoptimointi", label: "Hakukoneoptimointi" },
+      { href: "/tapahtumat", label: "Tapahtumat" },
+    ],
+  },
+  {
+    title: "Verkkosivut",
+    links: [
+      { href: "/verkkosivut#hinnoittelu", label: "Verkkosivujen hinta" },
+      { href: "/verkkosivut#prosessi", label: "Prosessi" },
+      { href: "/verkkosivut#ukk", label: "Usein kysyttyä" },
+      { href: "/verkkosivut/espoo", label: "Verkkosivut Espoo" },
+      { href: "/verkkosivut/helsinki", label: "Verkkosivut Helsinki" },
+    ],
+  },
+  {
+    title: "Yritys",
+    links: [
+      { href: "/tyonaytteet", label: "Työnäytteet" },
+      { href: "/hinnoittelu", label: "Hinnoittelu" },
+      { href: "/blogi", label: "Blogi" },
+      { href: "/yhteystiedot", label: "Ota yhteyttä" },
+      { href: "/tietosuoja", label: "Tietosuojaseloste" },
+      { action: "consent", label: "Evästeasetukset" },
+    ],
+  },
+];

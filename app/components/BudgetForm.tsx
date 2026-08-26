@@ -3,8 +3,9 @@
 import { useState } from "react";
 import type { CSSProperties } from "react";
 
-const MIN = 500;
-const MAX = 15000;
+const DEFAULT_MIN = 500;
+const DEFAULT_MAX = 15000;
+const DEFAULT_INITIAL = 2000;
 
 /**
  * Tuhaterotin kiinteänä sitomattomana välilyöntinä. Intl.NumberFormat antaisi
@@ -16,14 +17,22 @@ const fmt = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 type Props = {
   budgetLabel?: string;
   messageLabel?: string;
+  /** Liukurin ala- ja ylaraja seka aloitusarvo. Oletukset sailyttavat
+   *  aiempien sivujen kayttaytymisen muuttumattomana. */
+  min?: number;
+  max?: number;
+  initial?: number;
 };
 
 export default function BudgetForm({
   budgetLabel = "Budjetti",
   messageLabel = "Mitä tarvitset? Videot, sivusto, tapahtuma vai kokonaisuus?",
+  min = DEFAULT_MIN,
+  max = DEFAULT_MAX,
+  initial = DEFAULT_INITIAL,
 }: Props) {
-  const [budget, setBudget] = useState(2000);
-  const pct = ((budget - MIN) / (MAX - MIN)) * 100;
+  const [budget, setBudget] = useState(initial);
+  const pct = ((budget - min) / (max - min)) * 100;
 
   return (
     <div className="card fcard rv" data-par="0.02">
@@ -32,8 +41,8 @@ export default function BudgetForm({
         <input
           type="range"
           id="bud"
-          min={MIN}
-          max={MAX}
+          min={min}
+          max={max}
           step={250}
           value={budget}
           onChange={(e) => setBudget(Number(e.target.value))}

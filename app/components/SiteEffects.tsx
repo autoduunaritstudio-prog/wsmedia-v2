@@ -150,6 +150,32 @@ export default function SiteEffects() {
       );
     }
 
+    /* ---------- heron selainnayttamon hiiriparallaksi ---------- */
+    // Verkkosivut-sivun vastine puhelinnayttamolle: koko selainikkuna
+    // kallistuu osoittimen mukaan. Muilla sivuilla elementteja ei ole,
+    // jolloin tama on no-op eika omaa kuuntelijaa lisata.
+    const bstage = document.querySelector<HTMLElement>(".bstage");
+    const bwrap = document.getElementById("bwrap");
+    if (bstage && bwrap && finePointer && !reduce) {
+      bstage.addEventListener(
+        "mousemove",
+        (e) => {
+          const r = bstage.getBoundingClientRect();
+          const cx = (e.clientX - r.left) / r.width - 0.5;
+          const cy = (e.clientY - r.top) / r.height - 0.5;
+          bwrap.style.transform =
+            `rotateY(${cx * 5}deg) rotateX(${-cy * 4}deg) ` +
+            `translate3d(${cx * 10}px, ${cy * 8}px, 0)`;
+        },
+        { signal },
+      );
+      bstage.addEventListener(
+        "mouseleave",
+        () => { bwrap.style.transform = ""; },
+        { signal },
+      );
+    }
+
     /* ---------- magneettinen nappi ---------- */
     if (finePointer && !reduce) {
       document.querySelectorAll<HTMLElement>(".mag").forEach((b) => {
