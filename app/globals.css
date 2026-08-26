@@ -395,6 +395,9 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   --fsnav-lh: 1.16;                 /* .fsnav-links a line-height */
   --fsnav-pitch: 1.42;              /* rivin pitch kerrannaisena fonttikoosta */
   --fsnav-gutter: 46px;             /* sarakkeen ja erotinviivan valinen rako */
+  /* Kuinka pitkalle Palvelut-yhdysviiva jatkuu paavalikon sarakkeen
+     puolelle gutterin lisaksi. Tama on ainoa nuppi viivan pituudelle. */
+  --fsnav-tie-extra: 70px;
   /* "Palvelut" on listan toinen rivi: sen pystykeskikohta listan
      ylareunasta = 1 x pitch + puoli rivikorkeutta = 2,00 x font-size. */
   --fsnav-palvelut-mid: calc(var(--text-nav-huge) * (var(--fsnav-pitch) + var(--fsnav-lh) / 2));
@@ -439,13 +442,14 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 
 /* Yhdysviiva "Palvelut"-sanasta pystyerottimeen: kytkee alasivut
    visuaalisesti Palvelut-kokonaisuuteen. right: 0 on sarakerajalla eli
-   tarkalleen pystyviivan kohdalla, ja leveys on rako sarakkeen tekstin ja
-   rajan valissa - molemmat samasta gutter-tokenista, joten viiva seuraa
-   sarakeleveyksia automaattisesti. */
+   tarkalleen pystyviivan kohdalla; leveys kattaa gutterin lisaksi
+   --fsnav-tie-extra verran sarakkeen omaa tekstialuetta, jotta viiva
+   lahtee lahempaa "Palvelut"-sanaa eika jaa irralliseksi. Vasen paa
+   liikkuu leveyden mukana, oikea pysyy erottimessa. */
 .fsnav-links::after {
   content: ""; position: absolute; right: 0;
   top: calc(var(--fsnav-palvelut-mid) - .5px);
-  width: var(--fsnav-gutter); height: 1px;
+  width: calc(var(--fsnav-gutter) + var(--fsnav-tie-extra)); height: 1px;
   background: var(--hair); pointer-events: none;
 }
 
