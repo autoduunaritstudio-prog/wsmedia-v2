@@ -69,8 +69,15 @@ export default function SiteEffects() {
       ticking = false;
     };
 
+    // Navi tiivistyy scrolled-tilassa 4px, joten tila vaihdetaan hystereesilla:
+    // paalle vasta 14px:n jalkeen, pois vasta alle 4px:n. Ilman sita tila
+    // varahtelisi kynnyksen tuntumassa ja jokainen vaihto siirtaisi sisaltoa.
+    let scrolled = false;
     const navAndProgress = (sc: number, h: HTMLElement) => {
-      nav?.classList.toggle("scrolled", sc > 8);
+      if (!scrolled && sc > 14) scrolled = true;
+      else if (scrolled && sc < 4) scrolled = false;
+      nav?.classList.toggle("scrolled", scrolled);
+
       if (prog) {
         const max = h.scrollHeight - window.innerHeight;
         prog.style.width = (max > 0 ? (sc / max) * 100 : 0) + "%";

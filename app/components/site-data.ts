@@ -1,9 +1,48 @@
 import type { NavLink } from "./Nav";
 import type { FooterColumn } from "./Footer";
 
+/**
+ * Navin Palvelut-pudotusvalikko. Ankkurit osoittavat etusivun Palvelut-osioon,
+ * joten valikko kuuluu vain etusivun naviin (HOME_NAV). Jos se lisataan
+ * alasivujen naviin, ankkurit on kirjoitettava muotoon /#palvelut.
+ */
+export type ServiceMenuItem = {
+  href: string;
+  label: string;
+  desc: string;
+  icon: "video" | "site" | "event" | "seo";
+};
+
+export const SERVICE_MENU: ServiceMenuItem[] = [
+  {
+    href: "/lyhytvideot",
+    label: "Lyhytvideot",
+    desc: "TikTok, Reels ja Shorts avaimet käteen",
+    icon: "video",
+  },
+  {
+    href: "#palvelut",
+    label: "Verkkosivut",
+    desc: "Nopeat, hakukoneoptimoidut sivustot",
+    icon: "site",
+  },
+  {
+    href: "#palvelut",
+    label: "Tapahtumat",
+    desc: "Suunnittelu, toteutus ja taltiointi",
+    icon: "event",
+  },
+  {
+    href: "#palvelut",
+    label: "SEO-optimointi",
+    desc: "Näkyvyys niissä hauissa jotka tuovat liidit",
+    icon: "seo",
+  },
+];
+
 /** Etusivun navigaatio: ankkurilinkit samalle sivulle. */
 export const HOME_NAV: NavLink[] = [
-  { href: "#palvelut", label: "Palvelut" },
+  { href: "#palvelut", label: "Palvelut", menu: SERVICE_MENU },
   { href: "#tyot", label: "Työnäytteet" },
   { href: "#prosessi", label: "Prosessi" },
   { href: "#paketit", label: "Hinnoittelu" },

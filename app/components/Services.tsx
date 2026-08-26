@@ -1,3 +1,4 @@
+import SmartLink from "./SmartLink";
 import WebsiteDemoVideo from "./WebsiteDemoVideo";
 
 export default function Services() {
@@ -54,9 +55,9 @@ export default function Services() {
               <li>Kuvaus sinun tiloissasi ammattikalustolla</li>
               <li>Tekstitykset, grafiikat ja alustakohtainen optimointi</li>
             </ul>
-            <a className="tlink" href="#">
+            <SmartLink className="tlink" href="/lyhytvideot">
               Lue lisää lyhytvideoista
-            </a>
+            </SmartLink>
           </div>
         </div>
 

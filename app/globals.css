@@ -62,26 +62,97 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 /* ---------- nav ---------- */
 nav {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(255,255,255,.72);
+  /* Taustakuvio on teknista viivaa, joka nakyy lapi liian ohuella peitolla.
+     Levossa .82, skrollattuna .93 + vahvempi blur. */
+  background: rgba(255,255,255,.82);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid transparent; transition: border-color .3s;
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s, background-color .3s, backdrop-filter .3s;
 }
-nav.scrolled { border-bottom-color: rgba(0,0,0,.08) }
+nav.scrolled {
+  border-bottom-color: rgba(0,0,0,.08);
+  background: rgba(255,255,255,.93);
+  backdrop-filter: saturate(180%) blur(26px);
+  -webkit-backdrop-filter: saturate(180%) blur(26px);
+}
 .navin {
   max-width: 1080px; margin: 0 auto; padding: 0 24px;
-  height: 52px; display: flex; align-items: center; justify-content: space-between;
+  height: 48px; display: flex; align-items: center; justify-content: space-between;
+  transition: height .28s cubic-bezier(.2,.6,.2,1);
 }
+/* Kevyt tiivistyminen skrollatessa. Tila vaihtuu kertaalleen hystereesilla,
+   joten 4px siirtyma ei toistu edestakaisin kynnyksen tuntumassa. */
+nav.scrolled .navin { height: 44px }
 .logo { font-size: 15px; font-weight: 700; letter-spacing: -0.02em }
-.navlinks { display: flex; gap: 26px; align-items: center }
-.navlinks a { font-size: 12.5px; color: var(--ink); text-decoration: none; opacity: .8; transition: opacity .2s }
-.navlinks a:hover { opacity: 1 }
+.navlinks { display: flex; gap: 34px; align-items: center }
+.navlinks > a, .navmenu-btn {
+  font-size: 12.5px; color: var(--ink); text-decoration: none;
+  opacity: .8; transition: opacity .2s;
+}
+.navlinks > a:hover, .navmenu-btn:hover { opacity: 1 }
 .navcta {
   font-size: 12.5px; color: #fff !important; background: var(--blue);
-  padding: 7px 15px; border-radius: 980px; opacity: 1 !important; transition: background .2s !important;
+  padding: 7px 16px; border-radius: 980px; opacity: 1 !important;
+  transition: background .2s !important;
 }
 .navcta:hover { background: var(--blue-d) }
-@media (max-width: 760px) { .navlinks a:not(.navcta) { display: none } }
+@media (max-width: 760px) {
+  .navlinks > a:not(.navcta), .navmenu { display: none }
+  .navlinks { gap: 0 }
+}
+
+/* ---------- Palvelut-pudotusvalikko ---------- */
+.navmenu { position: relative; display: flex; align-items: center }
+.navmenu-btn {
+  font-family: inherit; font-weight: inherit; letter-spacing: inherit;
+  background: none; border: none; padding: 0; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.navmenu-chev { transition: transform .2s cubic-bezier(.2,.6,.2,1) }
+.navmenu-btn[aria-expanded="true"] { opacity: 1 }
+.navmenu-btn[aria-expanded="true"] .navmenu-chev { transform: rotate(180deg) }
+
+.navmenu-pop {
+  position: absolute; top: 100%; left: 50%;
+  padding-top: 11px; width: 296px;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translateX(-50%) translateY(-6px);
+  transition: opacity .2s cubic-bezier(.2,.6,.2,1),
+              transform .2s cubic-bezier(.2,.6,.2,1),
+              visibility .2s;
+}
+.navmenu-pop[data-open] {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.navmenu-card {
+  background: rgba(255,255,255,.94);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border: 1px solid var(--hair); border-radius: 16px;
+  box-shadow: 0 26px 60px -22px rgba(29,29,31,.3);
+  padding: 7px;
+}
+.navmenu-item {
+  display: flex; gap: 11px; align-items: flex-start;
+  padding: 9px 10px; border-radius: 11px;
+  text-decoration: none; color: var(--ink); opacity: 1;
+  transition: background .18s;
+}
+.navmenu-item:hover { background: rgba(0,0,0,.04) }
+.navmenu-ico {
+  flex: none; display: flex; align-items: center; justify-content: center;
+  width: 20px; margin-top: 1px;
+  color: #b4b4bc; transition: color .18s;
+}
+.navmenu-item:hover .navmenu-ico { color: var(--blue) }
+.navmenu-txt b { display: block; font-size: 13px; font-weight: 600; letter-spacing: -0.012em }
+.navmenu-txt small { display: block; font-size: 11.5px; color: var(--grey); margin-top: 2px; line-height: 1.4 }
+
+@media (prefers-reduced-motion: reduce) {
+  .navin, .navmenu-pop, .navmenu-chev, .navmenu-item, .navmenu-ico { transition: none }
+}
 
 /* ---------- type ---------- */
 h1 { font-size: clamp(44px,7vw,80px); font-weight: 700; letter-spacing: -0.028em; line-height: 1.05 }
@@ -668,7 +739,7 @@ footer .base { padding-top: 18px }
 /* Nama ovat turvallisia globaalisti: etusivulla ei ole aria-currentia
    navissa eika linkkilogoa. */
 .logo { color: var(--ink); text-decoration: none }
-.navlinks a[aria-current="page"] { opacity: 1; color: var(--blue); font-weight: 600 }
+.navlinks > a[aria-current="page"] { opacity: 1; color: var(--blue); font-weight: 600 }
 
 /* ---------- typografia ---------- */
 .page-lyhytvideot h1 { font-size: clamp(38px,6vw,68px); letter-spacing: -0.028em; line-height: 1.06 }
