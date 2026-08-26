@@ -47,3 +47,11 @@ next-env.d.ts
 /*.mov
 /*.MOV
 /*.mp4
+
+# Projektin juureen pudotetut raakatiedostot (kuvat, videot). Ne ovat
+# tyoskentelymateriaalia eivatka kuulu repoon; public/ pysyy normaalina.
+/*.jpg
+/*.jpeg
+/*.png
+/*.mov
+/*.mp4
