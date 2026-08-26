@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Instrument_Sans } from "next/font/google";
 import "./globals.css";
 
+import Analytics from "./components/consent/Analytics";
+import CookieBanner from "./components/consent/CookieBanner";
+
 const instrument = Instrument_Sans({
   variable: "--font-instrument",
   subsets: ["latin"],
@@ -28,7 +31,11 @@ export default function RootLayout({
      * perisi Tailwindin oletusfonttipinon.
      */
     <html lang="fi" className={instrument.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <CookieBanner />
+        <Analytics />
+      </body>
     </html>
   );
 }

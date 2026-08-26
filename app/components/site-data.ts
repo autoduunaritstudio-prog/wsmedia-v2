@@ -29,6 +29,8 @@ export const HOME_FOOTER: FooterColumn[] = [
       { href: "#", label: "Hinnoittelu" },
       { href: "#", label: "Blogi" },
       { href: "#", label: "Ota yhteyttä" },
+      { href: "/tietosuoja", label: "Tietosuojaseloste" },
+      { action: "consent", label: "Evästeasetukset" },
     ],
   },
 ];
@@ -68,7 +70,8 @@ export const SUBPAGE_FOOTER: FooterColumn[] = [
     title: "Yritys",
     links: [
       { href: "/yhteystiedot", label: "Ota yhteyttä" },
-      { href: "/tietosuojaseloste", label: "Tietosuojaseloste" },
+      { href: "/tietosuoja", label: "Tietosuojaseloste" },
+      { action: "consent", label: "Evästeasetukset" },
     ],
   },
 ];
