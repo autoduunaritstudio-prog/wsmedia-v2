@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
-import { LogoMark } from "./Logo";
-import MenuIcon from "./MenuIcon";
+import { LogoFull, LogoMark } from "./Logo";
 import SmartLink from "./SmartLink";
 import SocialIcon from "./SocialIcon";
 import { CONTACT, SOCIAL, type NavLink } from "./site-data";
@@ -165,7 +164,7 @@ export default function FullscreenNav({
           {/* Iso haivytetty merkki taustalla. aria-hidden ja pointer-events:
               none, joten se ei vaikuta luettavuuteen eika osoittimeen. */}
           <span className="fsnav-watermark" aria-hidden="true">
-            <LogoMark />
+            <LogoFull />
           </span>
 
           <div className="fsnav-top">
@@ -208,7 +207,6 @@ export default function FullscreenNav({
                 hoverin takana Palvelut-rivilla, mika piilotti sen kosketuksella
                 ja hakukoneelta yhta lailla. */}
             <div className="fsnav-sub">
-              <p className="fsnav-subt">Palvelut</p>
               {services.map((item) => (
                 <SmartLink
                   href={resolve(item.href)}
@@ -216,19 +214,15 @@ export default function FullscreenNav({
                   key={item.label}
                   onClick={close}
                 >
-                  <span className="fsnav-subico">
-                    <MenuIcon name={item.icon} />
-                  </span>
-                  <span>
-                    <b>{item.label}</b>
-                    <small>{item.desc}</small>
-                  </span>
+                  <b>{item.label}</b>
+                  <small>{item.desc}</small>
                 </SmartLink>
               ))}
             </div>
 
             <div className="fsnav-side">
               <address className="fsnav-contact">
+                <span className="fsnav-rule" aria-hidden="true" />
                 <b>{CONTACT.company}</b>
                 {CONTACT.street}
                 <br />
@@ -260,22 +254,25 @@ export default function FullscreenNav({
                 {CONTACT.phone}
               </a>
 
-              <ul className="fsnav-social">
-                {SOCIAL.map((sm) => (
-                  <li key={sm.label}>
-                    <a
-                      href={sm.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${sm.label} (avautuu uuteen välilehteen)`}
-                    >
-                      <SocialIcon name={sm.icon} />
-                    </a>
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
+
+          {/* Somerivi on sisaltokaistan ulkopuolella oikeassa reunassa, joten
+              se ankkuroidaan .fsnav-iniin eika sarakkeeseen. */}
+          <ul className="fsnav-social">
+            {SOCIAL.map((sm) => (
+              <li key={sm.label}>
+                <a
+                  href={sm.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${sm.label} (avautuu uuteen välilehteen)`}
+                >
+                  <SocialIcon name={sm.icon} />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </>

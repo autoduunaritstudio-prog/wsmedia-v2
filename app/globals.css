@@ -314,6 +314,8 @@ nav.scrolled .navtoggle { width: 48px; height: 48px }
 .fsnav-in {
   position: relative; height: 100%; overflow-y: auto;
   max-width: 1440px; margin: 0 auto; padding: 0 28px;
+  /* Sisaltolohko on referenssin tapaan keskitetty kaista, ei reunasta
+     reunaan; somerivi ja sulkupainike ovat sen ulkopuolella reunoissa. */
   display: flex; flex-direction: column;
   transform: translateY(-10px);
   transition: transform .3s cubic-bezier(.2,.6,.2,1);
@@ -325,18 +327,19 @@ nav.scrolled .navtoggle { width: 48px; height: 48px }
   display: flex; align-items: center; justify-content: flex-end;
 }
 
-/* Iso haivytetty merkki taustalla. Osittain ruudun ulkopuolella oikealla,
-   koko overlayn korkeudelta. pointer-events: none, jotta se ei ota
-   klikkauksia taustan sulkemiselta. */
+/* Iso haivytetty lockup taustalla. Kokonaan nakyvissa, ei reunan yli
+   leikkautuvana: mitoitus min():lla niin ettei se ylita kumpaakaan
+   suuntaa. pointer-events: none, joten se ei ota klikkauksia taustan
+   sulkemiselta eika vaikuta luettavuuteen. */
 .fsnav-watermark {
-  position: absolute; right: -14%; top: 50%; transform: translateY(-50%);
-  width: 62%; color: var(--ink); opacity: .05;
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(70vw, 118vh); color: var(--ink); opacity: .035;
   pointer-events: none; z-index: 0; line-height: 0;
 }
 .fsnav-watermark svg { width: 100%; height: auto; display: block }
-@media (max-width: 860px) {
-  .fsnav-watermark { right: -26%; width: 92%; opacity: .04 }
-}
+@media (max-width: 860px) { .fsnav-watermark { width: min(92vw, 110vh); opacity: .03 } }
+
 .fsnav-close {
   background: none; border: 1px solid var(--hair); border-radius: 50%;
   width: 44px; height: 44px; cursor: pointer; color: var(--ink);
@@ -347,16 +350,55 @@ nav.scrolled .navtoggle { width: 48px; height: 48px }
 
 .fsnav-body {
   position: relative; z-index: 1;
-  flex: 1; display: grid;
-  grid-template-columns: minmax(0,1.15fr) minmax(0,1fr) minmax(0,.85fr);
-  gap: 56px; align-items: start; padding: 24px 0 56px;
+  flex: 1;
+  /* Referenssissa erotinviivat jakavat kaistan 302/393/302. Sita ei voi
+     kopioida sellaisenaan: pisin linkki "Yhteystiedot" on 440px, ja
+     referenssin suhde pakottaisi sen 327px:n raitaan eli fontin 47px:aan.
+     Siksi vasen sarake on hallitseva ja keski seka oikea lahella toisiaan,
+     kuten ohjeessa pyydettiin. minmax(0,...) pitaa suhteen kiintena, muuten
+     isot sanat venyttaisivat raitaa sisallon mukaan. */
+  display: grid;
+  grid-template-columns: minmax(0,1.35fr) minmax(0,1fr) minmax(0,.95fr);
+  align-items: stretch; gap: 0;
+  /* width: 100% on valttamaton: pelkka margin: 0 auto flex-lapsella saa
+     elementin kutistumaan sisallon kokoiseksi venymisen sijaan, jolloin
+     sarakkeet jaivat kapealla naytolla murto-osaan kaytettavissa olevasta
+     tilasta. */
+  width: 100%; max-width: 1160px; margin: 0 auto; padding: 8px 0 72px;
 }
+
+/* Pystyviivat syntyvat keskisarakkeen reunuksista, jolloin ne osuvat
+   tarkalleen sarakerajoille ja kulkevat koko sisallon korkeudelta. */
+.fsnav-links { padding-right: 46px }
+.fsnav-sub {
+  padding: 0 46px;
+  border-left: 1px solid var(--hair);
+  border-right: 1px solid var(--hair);
+}
+.fsnav-side { padding-left: 46px }
+
 @media (max-width: 1080px) {
-  .fsnav-body { grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: 40px }
-  .fsnav-side { grid-column: 1 / -1 }
+  /* Kapeammalla naytolla yhteystiedot siirtyvat omalle rivilleen, jolloin
+     lohko kasvaa korkeussuunnassa. Tiiviimpi alaosa pitaa valikon
+     mahdollisimman pitkaan yhdella ruudulla; .fsnav-in vierittaa silti
+     tarvittaessa, joten mikaan ei jaa saavuttamattomiin. */
+  .fsnav-body {
+    grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+    max-width: none; padding: 8px 0 40px;
+  }
+  .fsnav-side {
+    grid-column: 1 / -1; padding: 26px 0 0; margin-top: 26px;
+    border-top: 1px solid var(--hair);
+  }
+  .fsnav-sub { border-right: none; padding-right: 0 }
 }
 @media (max-width: 860px) {
-  .fsnav-body { grid-template-columns: 1fr; gap: 32px; padding: 16px 0 40px }
+  .fsnav-body { grid-template-columns: 1fr; padding: 8px 0 48px }
+  .fsnav-links { padding-right: 0 }
+  .fsnav-sub {
+    border-left: none; border-top: 1px solid var(--hair);
+    padding: 26px 0 0; margin-top: 26px;
+  }
   .fsnav-side { grid-column: auto }
 }
 
@@ -373,27 +415,32 @@ nav.scrolled .navtoggle { width: 48px; height: 48px }
 
 .fsnav-side { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding-top: 8px }
 
-/* Palvelut on oma sarakkeensa ja aina nakyvissa. */
-.fsnav-sub { padding-top: 8px }
-.fsnav-subt {
-  font-size: var(--text-caption-sm); font-weight: var(--weight-semibold);
-  letter-spacing: .12em; text-transform: uppercase; color: var(--grey);
-  padding-bottom: 10px; border-bottom: 1px solid var(--hair); margin-bottom: 6px;
-}
+/* Palvelut on oma sarakkeensa ja aina nakyvissa. Ei ikoneita eika
+   otsikkoa: lista alkaa suoraan sisallolla kuten referenssissa. */
 .fsnav-subitem {
-  display: flex; gap: 12px; align-items: flex-start;
-  padding: 11px 10px 11px 0; border-radius: 10px;
-  text-decoration: none; color: var(--ink); transition: color .18s;
+  display: block; padding: 9px 0; text-decoration: none; color: var(--ink);
+  transition: color .18s;
 }
+.fsnav-subitem:first-child { padding-top: 0 }
 .fsnav-subitem:hover { color: var(--blue) }
-.fsnav-subico { flex: none; width: 20px; margin-top: 2px; color: #b4b4bc; transition: color .18s }
-.fsnav-subitem:hover .fsnav-subico { color: var(--blue) }
-.fsnav-subitem b { display: block; font-size: var(--text-ui); font-weight: var(--weight-semibold) }
-.fsnav-subitem small { display: block; font-size: var(--text-caption-sm); color: var(--grey); margin-top: 2px }
+.fsnav-subitem b {
+  display: block; font-size: var(--text-title-xs); font-weight: var(--weight-regular);
+  letter-spacing: -0.014em; line-height: 1.3;
+}
+.fsnav-subitem small {
+  display: block; font-size: var(--text-ui-sm); color: var(--grey);
+  margin-top: 2px; line-height: 1.4;
+}
 
 .fsnav-contact {
   font-style: normal; font-size: var(--text-ui-sm); color: var(--grey);
-  line-height: 1.75; padding-top: 24px; border-top: 1px solid var(--hair);
+  line-height: 1.75;
+}
+/* Pieni aksenttiviiva yritysnimen ylla, kuten referenssin oranssi viiva -
+   omalla sinisella. */
+.fsnav-rule {
+  display: block; width: 68px; height: 3px; border-radius: 2px;
+  background: var(--blue); margin-bottom: 18px;
 }
 .fsnav-contact b { display: block; color: var(--ink); font-weight: var(--weight-semibold) }
 .fsnav-contact a { color: var(--blue); text-decoration: none }
@@ -415,7 +462,15 @@ nav.scrolled .navtoggle { width: 48px; height: 48px }
 .fsnav-callico { display: flex; color: var(--blue) }
 
 /* Somerivi sarakkeen alaosassa. */
-.fsnav-social { list-style: none; display: flex; gap: 10px; margin-top: auto; padding-top: 12px }
+/* Somerivi pystyssa aivan oikeassa reunassa, sisaltokaistan ulkopuolella
+   kuten referenssissa. */
+.fsnav-social {
+  list-style: none; display: flex; flex-direction: column; gap: 10px;
+  position: absolute; right: 0; bottom: 72px; z-index: 2;
+}
+@media (max-width: 1080px) {
+  .fsnav-social { position: static; flex-direction: row; margin-top: 28px }
+}
 .fsnav-social a {
   display: flex; align-items: center; justify-content: center;
   width: 38px; height: 38px; border-radius: 50%;
@@ -423,7 +478,7 @@ nav.scrolled .navtoggle { width: 48px; height: 48px }
   transition: border-color .2s, color .2s;
 }
 .fsnav-social a:hover { border-color: var(--blue); color: var(--blue) }
-@media (min-width: 861px) { .fsnav-side { height: 100% } }
+
 
 @media (prefers-reduced-motion: reduce) {
   .fsnav, .fsnav-in, .fsnav-sub { transition: none }
