@@ -133,27 +133,23 @@ export default function FullscreenNav({
             </span>
           )}
 
-          <div className="navright">
-            <SmartLink className="navcta" href={ctaHref}>
-              {ctaLabel}
-            </SmartLink>
-
-            <button
-              type="button"
-              className="navtoggle"
-              ref={btnRef}
-              aria-expanded={open}
-              aria-controls={panelId}
-              aria-label="Avaa valikko"
-              onClick={() => setOpen(true)}
-            >
-              <span className="navtoggle-bars" aria-hidden="true">
-                <i />
-                <i />
-                <i />
-              </span>
-            </button>
-          </div>
+          {/* Ylapalkissa on vain logo ja valikkonappi. Tarjouspyynto on
+              taysvalikossa yhteystietojen yhteydessa. */}
+          <button
+            type="button"
+            className="navtoggle"
+            ref={btnRef}
+            aria-expanded={open}
+            aria-controls={panelId}
+            aria-label="Avaa valikko"
+            onClick={() => setOpen(true)}
+          >
+            <span className="navtoggle-bars" aria-hidden="true">
+              <i />
+              <i />
+              <i />
+            </span>
+          </button>
         </div>
       </nav>
 
@@ -229,6 +225,13 @@ export default function FullscreenNav({
                 <br />
                 <small>Y-tunnus {CONTACT.businessId}</small>
               </address>
+
+              {/* ctaHref annetaan sivulta valmiiksi oikeana: palvelusivujen lomake on
+                  samalla sivulla (#tarjous), tietosuojasivu osoittaa etusivulle.
+                  Sita ei siis saa prefiksoida anchorBasella. */}
+              <SmartLink className="btn fsnav-cta" href={ctaHref} onClick={close}>
+                {ctaLabel}
+              </SmartLink>
             </div>
           </div>
         </div>

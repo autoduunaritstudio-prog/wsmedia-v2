@@ -270,8 +270,6 @@ nav.scrolled .logo svg { height: 27px }
 @media (max-width: 520px) { .logo svg { height: 26px } }
 /* Ylapalkki on minimaalinen: logo, valikkopainike ja CTA. Kaikki muu
    navigointi on taysvalikossa, joten palkki ei kasva sivumaaran myota. */
-.navright { display: flex; align-items: center; gap: 14px }
-
 /* Pyorea ikonipainike oikeassa reunassa. Tumma tayttö valkoisin viivoin:
    sininen olisi kilpaillut vieressa olevan CTA-pillerin kanssa, joten
    aksenttivari jaa yhdelle elementille kerrallaan. */
@@ -289,16 +287,6 @@ nav.scrolled .navtoggle { width: 40px; height: 40px }
 .navtoggle-bars i { display: block; height: 1.8px; border-radius: 2px; background: #fff }
 .navtoggle-bars i:nth-child(2) { width: 13px }
 
-.navcta {
-  font-size: var(--text-label-sm); color: #fff !important; background: var(--blue);
-  padding: 8px 17px; border-radius: 980px; opacity: 1 !important;
-  transition: background .2s !important; white-space: nowrap;
-}
-.navcta:hover { background: var(--blue-d) }
-@media (max-width: 520px) {
-  .navcta { display: none }
-  .navright { gap: 0 }
-}
 
 /* ==================================================================
    TAYSVALIKKO
@@ -400,6 +388,10 @@ nav.scrolled .navtoggle { width: 40px; height: 40px }
 .fsnav-contact a { color: var(--blue); text-decoration: none }
 .fsnav-contact a:hover { text-decoration: underline }
 .fsnav-contact small { font-size: var(--text-caption-sm) }
+
+/* Tarjouspyynto valikossa: ainoa sininen elementti overlayssa, joten se
+   erottuu selvasti isojen mustien linkkien joukosta. */
+.fsnav-cta { align-self: flex-start; font-size: var(--text-body); padding: 13px 26px }
 
 @media (prefers-reduced-motion: reduce) {
   .fsnav, .fsnav-in, .fsnav-sub { transition: none }
@@ -1800,8 +1792,6 @@ footer .base { padding-top: 18px }
 .page-hakukoneoptimointi footer { background:rgba(245,245,247,.85);backdrop-filter:blur(8px);border-top:1px solid var(--hair);padding:42px 0 46px;font-size: var(--text-caption);color:var(--grey) }
 .page-hakukoneoptimointi nav { position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72); backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px); border-bottom:1px solid transparent;transition:border-color .3s; }
 .page-hakukoneoptimointi .marq { border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(6px) }
-.page-hakukoneoptimointi .navin { max-width:1080px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between }
-.page-hakukoneoptimointi .navcta { font-size: var(--text-label-sm);color:#fff !important;background:var(--blue);padding:7px 15px;border-radius:980px;opacity:1 !important;transition:background .2s !important }
 .page-hakukoneoptimointi h1 { font-size: var(--text-h1-sm);font-weight: var(--weight-bold);letter-spacing:-0.028em;line-height:1.07 }
 .page-hakukoneoptimointi .sub { font-size: var(--text-lead);color:var(--grey);font-weight: var(--weight-regular);letter-spacing:-0.014em;line-height:1.45 }
 .page-hakukoneoptimointi .kick { font-size: var(--text-label-sm);font-weight: var(--weight-semibold);letter-spacing:.08em;text-transform:uppercase;color:var(--blue);display:block }
