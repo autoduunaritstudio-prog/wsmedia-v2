@@ -582,17 +582,47 @@ h2.big { font-size: var(--text-h2-hero) }
 /* ---------- puhelimet herossa ---------- */
 .stage { position: relative; max-width: 1180px; margin: 62px auto 0; perspective: 1300px; height: 500px }
 @media (max-width: 900px) { .stage { height: auto; perspective: none; margin-top: 48px } }
+/* ==================================================================
+   PUHELINKEHYS (jaettu)
+   Sama runko heron isoille .phone-mockupeille ja Palvelut-osion
+   pienille .mini-puhelimille: tumma runko, reunuksena inset-varjo,
+   notch ja erillinen ruutualue .scr. Kokoerot tulevat muuttujista,
+   joten kehys pysyy identtisena molemmissa.
+
+   .scr on olennainen: inset-varjo (reunus) piirtyy elementin taustan
+   paalle mutta LASTEN alle, joten suoraan runkoon sijoitettu sisalto
+   peittaisi reunuksen ja puhelin nayttaisi littealta suorakulmiolta.
+   Sisalto kuuluu siksi aina .scr:n sisaan.
+   ================================================================== */
+.phone, .mini {
+  position: absolute; aspect-ratio: 9/19;
+  border-radius: var(--ph-radius); background: #0f0f11;
+  box-shadow: var(--ph-drop), inset 0 0 0 var(--ph-bezel) #232327, var(--ph-rim);
+  overflow: hidden;
+}
+/* Notch/dynamic island. Sade on puolet korkeudesta, jolloin paat ovat
+   taysin pyoreat kummassakin koossa. */
+.phone::before, .mini::before {
+  content: ""; position: absolute; top: var(--ph-notch-top); left: 50%;
+  transform: translateX(-50%);
+  width: var(--ph-notch-w); height: var(--ph-notch-h);
+  border-radius: calc(var(--ph-notch-h) / 2); background: #000; z-index: 6;
+}
+/* Ruutualue: reunuksen levyinen sisennys, ja sade sen verran pienempi
+   ettei kulma leikkaudu kulmikkaaksi. */
+.phone .scr, .mini .scr {
+  position: absolute; inset: var(--ph-bezel);
+  border-radius: calc(var(--ph-radius) - var(--ph-bezel));
+  overflow: hidden; background: #0c0c0e;
+}
+
 .phone {
-  position: absolute; width: 224px; aspect-ratio: 9/19;
-  border-radius: 34px; background: #0f0f11;
-  box-shadow: 0 50px 100px -30px rgba(29,29,31,.35), inset 0 0 0 3px #232327;
-  overflow: hidden; transform-style: preserve-3d; will-change: transform;
+  --ph-radius: 34px; --ph-bezel: 3px;
+  --ph-drop: 0 50px 100px -30px rgba(29,29,31,.35);
+  --ph-rim: 0 0 0 0 transparent;
+  --ph-notch-w: 72px; --ph-notch-h: 20px; --ph-notch-top: 10px;
+  width: 224px; transform-style: preserve-3d; will-change: transform;
 }
-.phone::before {
-  content: ""; position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-  width: 72px; height: 20px; border-radius: 11px; background: #000; z-index: 6;
-}
-.phone .scr { position: absolute; inset: 3px; border-radius: 31px; overflow: hidden; background: #0c0c0e }
 .phone .vid {
   position: absolute; inset: -12%;
   background:
@@ -697,8 +727,14 @@ section { padding: var(--space-section) 0 }
 /* video-palvelun visuaali */
 .mini-phones { position: relative; height: 360px; perspective: 900px }
 .mini {
-  position: absolute; width: 170px; aspect-ratio: 9/19; border-radius: 26px; background: #0f0f11;
-  box-shadow: 0 34px 70px -24px rgba(29,29,31,.4), inset 0 0 0 2.5px #232327; overflow: hidden;
+  --ph-radius: 26px; --ph-bezel: 2.5px;
+  --ph-drop: 0 34px 70px -24px rgba(29,29,31,.4);
+  /* Hienovarainen reunavalo ylareunassa antaa rungolle metallisen
+     pyoreyden. Heron .phone jattaa taman pois (--ph-rim: transparent),
+     jotta sen ulkoasu ei muutu taman muutoksen yhteydessa. */
+  --ph-rim: inset 0 1px 0 rgba(255,255,255,.16);
+  --ph-notch-w: 55px; --ph-notch-h: 15px; --ph-notch-top: 8px;
+  width: 170px;
 }
 .mini .vid {
   position: absolute; inset: -12%;
@@ -707,17 +743,14 @@ section { padding: var(--space-section) 0 }
     radial-gradient(120% 100% at 50% 50%, #15161a 0%, #0c0c0e 80%);
   animation: vidmove 11s ease-in-out infinite alternate;
 }
-/* REELS-puhelimessa on oikea video CSS-gradientin sijalla. inset: 0, ei
-   .vid:n -12%: gradientti tarvitsi ylivuotoa liikkuakseen kehyksen alla,
-   videossa liike tulee silmukasta itsestaan. Pyoristetyt kulmat tulevat
-   .minin border-radiuksesta ja overflow: hiddenista, joten videolle ei
-   tarvita omaa radiusta. Video on 9:16 ja kehys 9:19, joten cover rajaa
-   sivuilta - kohde on kuvassa keskella, joten oletuskeskitys on oikein.
-   z-index 0 pitaa sen .tagin (2) ja .heartsin (3) alla. */
+/* Video tayttaa ruutualueen (.scr), ei koko runkoa: nain reunus ja notch
+   jaavat nakyviin. Pyoristetyt kulmat tulevat .scr:n radiuksesta ja
+   overflow: hiddenista. Video on 9:16 ja ruutu 9:19, joten cover rajaa
+   sivuilta - kohde on kuvassa keskella, joten oletuskeskitys on oikein. */
 .mini .reels-video {
   position: absolute; inset: 0; z-index: 0;
   width: 100%; height: 100%;
-  object-fit: cover; background: #0f0f11;
+  object-fit: cover; background: #0c0c0e;
 }
 .mini .tag {
   position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;
@@ -1094,21 +1127,6 @@ footer .base { padding-top: 18px }
 .ft-b { left: -18px; bottom: 24px; animation: cfl 7s ease-in-out -3s infinite alternate }
 @media (max-width: 880px) { .ft-a { right: 6px } .ft-b { left: 6px } }
 
-.hearts { position: absolute; inset: 0; pointer-events: none; z-index: 3 }
-.hearts s {
-  position: absolute; bottom: 16%; text-decoration: none; font-size: var(--text-body); color: var(--blue);
-  opacity: 0; animation: rise 4.5s ease-in infinite;
-}
-.hearts s:nth-child(1) { left: 34%; animation-delay: 0s }
-.hearts s:nth-child(2) { left: 44%; animation-delay: 1.3s; font-size: var(--text-caption) }
-.hearts s:nth-child(3) { left: 39%; animation-delay: 2.5s; font-size: var(--text-lead-sm) }
-.hearts s:nth-child(4) { left: 49%; animation-delay: 3.4s; font-size: var(--text-micro) }
-@keyframes rise {
-  0% { opacity: 0; transform: translateY(0) scale(.7) }
-  12% { opacity: .85 }
-  100% { opacity: 0; transform: translateY(-190px) translateX(14px) scale(1.15) }
-}
-
 .rv {
   opacity: 0; transform: translateY(26px);
   transition: opacity .8s cubic-bezier(.2,.6,.2,1), transform .8s cubic-bezier(.2,.6,.2,1);
@@ -1120,7 +1138,7 @@ footer .base { padding-top: 18px }
 @media (prefers-reduced-motion: reduce) {
   .li, .rv { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important }
   .phone, .phone *, .swap span, .marq .track, .mini .vid, .event .lights,
-  .chip-f, .float-tag, .hearts s { animation: none !important }
+  .chip-f, .float-tag { animation: none !important }
   [data-par] { translate: none !important }
 }
 

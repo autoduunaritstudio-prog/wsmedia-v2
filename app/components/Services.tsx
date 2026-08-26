@@ -21,25 +21,24 @@ export default function Services() {
             <span className="deco deco-ring" style={{ right: "6%", top: "-8px" }} />
             <span className="deco deco-dot" style={{ right: "2%", bottom: "30%" }} />
             <div className="mini-phones">
+              {/* Sisalto kuuluu .scr:n sisaan, ei suoraan runkoon: rungon
+                  reunus on inset-varjo, jonka lapset peittaisivat. */}
               <div className="mini">
-                <DemoVideo
-                  className="reels-video"
-                  webm="/reels-demo.webm"
-                  mp4="/reels-demo.mp4"
-                  poster="/reels-demo-poster.jpg"
-                  label="Esimerkki WS Median tuottamasta Reels-videosta"
-                />
-                <div className="tag">REELS</div>
-                <div className="hearts">
-                  <s>♥</s>
-                  <s>♥</s>
-                  <s>♥</s>
-                  <s>♥</s>
+                <div className="scr">
+                  <DemoVideo
+                    className="reels-video"
+                    mp4="/reels-demo.mp4"
+                    poster="/reels-demo-poster.jpg"
+                    label="Esimerkki WS Median tuottamasta Reels-videosta"
+                  />
+                  <div className="tag">REELS</div>
                 </div>
               </div>
               <div className="mini">
-                <div className="vid" style={{ animationDelay: "-5s" }} />
-                <div className="tag">TIKTOK</div>
+                <div className="scr">
+                  <div className="vid" style={{ animationDelay: "-5s" }} />
+                  <div className="tag">TIKTOK</div>
+                </div>
               </div>
               <div className="float-tag ft-a">
                 <i />

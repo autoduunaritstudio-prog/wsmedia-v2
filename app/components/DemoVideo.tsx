@@ -17,8 +17,12 @@ import { useEffect, useRef } from "react";
 type Props = {
   /** Videoelementin luokka; koko ja rajaus tulevat siita. */
   className: string;
-  /** Polku public/-kansiossa. webm tarjotaan ensin, mp4 varalle. */
-  webm: string;
+  /**
+   * Polut public/-kansiossa. webm tarjotaan ensin ja mp4 varalle, mutta
+   * webm on valinnainen: se kannattaa jattaa pois jos vp9 ei paase samaan
+   * laatuun samalla tiedostokoolla kuin h264 (mitattu lahdekohtaisesti).
+   */
+  webm?: string;
   mp4: string;
   poster: string;
   /**
@@ -66,7 +70,7 @@ export default function DemoVideo({ className, webm, mp4, poster, label }: Props
       poster={poster}
       aria-label={label}
     >
-      <source src={webm} type="video/webm" />
+      {webm ? <source src={webm} type="video/webm" /> : null}
       <source src={mp4} type="video/mp4" />
     </video>
   );
