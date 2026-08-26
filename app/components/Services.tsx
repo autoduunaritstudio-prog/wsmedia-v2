@@ -29,6 +29,7 @@ export default function Services() {
                     className="reels-video"
                     mp4="/reels-demo.mp4"
                     poster="/reels-demo-poster.jpg"
+                    preload="metadata"
                     label="Esimerkki WS Median tuottamasta Reels-videosta"
                   />
                   <div className="tag">REELS</div>
