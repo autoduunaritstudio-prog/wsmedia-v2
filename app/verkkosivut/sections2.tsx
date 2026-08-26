@@ -9,7 +9,7 @@ const i = (n: number) => ({ "--i": n }) as CSSProperties;
 
 /* ---------- Tulokset ---------- */
 const FIGS = [
-  ["95+/100", "PageSpeed-pisteet mobiilissa", "Mitataan Googlen työkalulla ennen julkaisua"],
+  ["90+/100", "PageSpeed-pisteet mobiilissa", "Mitataan Googlen työkalulla ennen julkaisua"],
   ["alle 1,5 s", "Sisällön latautuminen mobiilissa", "Testataan mobiiliyhteydellä, ei vain toimiston verkossa"],
   ["100 %", "Sivuista indeksoitavissa julkaisupäivänä", "Sivustokartta ja metatiedot tarkistetaan sivu kerrallaan"],
 ];

@@ -24,7 +24,7 @@ const PROBLEMS = [
 
 const BSTATS = [
   { n: "2–4", p: "viikkoa suunnittelusta julkaisuun" },
-  { n: "95+/100", p: "PageSpeed-tavoite mobiilissa" },
+  { n: "90+/100", p: "PageSpeed-tavoite mobiilissa" },
   { n: "24 h", p: "vastaus tarjouspyyntöön" },
   { n: "63 %", p: "kävijöistä saapuu mobiililaitteella" },
 ];
