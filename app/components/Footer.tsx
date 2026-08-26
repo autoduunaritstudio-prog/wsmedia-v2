@@ -1,44 +1,40 @@
-const SERVICES = [
-  "Lyhytvideot",
-  "TikTok-videot",
-  "Instagram Reels",
-  "YouTube Shorts",
-  "Verkkosivut",
-  "Tapahtumat",
-];
+import SmartLink from "./SmartLink";
 
-const COMPANY = ["Työnäytteet", "Prosessi", "Hinnoittelu", "Blogi", "Ota yhteyttä"];
+export type FooterColumn = {
+  title: string;
+  links: { href: string; label: string }[];
+};
 
-export default function Footer() {
+type Props = {
+  intro: string;
+  columns: FooterColumn[];
+  base: string;
+  /** Mockupit eroavat: etusivulla brandiotsikko on h4, alasivulla h2. */
+  brandHeading?: "h2" | "h4";
+};
+
+export default function Footer({ intro, columns, base, brandHeading = "h4" }: Props) {
+  const Brand = brandHeading;
   return (
     <footer>
       <div className="wrap">
         <div className="cols">
           <div style={{ maxWidth: "280px" }}>
-            <h4>WS Media</h4>
-            <p>
-              Lyhytvideot, verkkosivut ja tapahtumat. Espoo ja Helsinki. Yrityksille jotka haluavat
-              kasvaa.
-            </p>
+            <Brand>WS Media</Brand>
+            <p>{intro}</p>
           </div>
-          <div>
-            <h4>Palvelut</h4>
-            {SERVICES.map((s) => (
-              <a href="#" key={s}>
-                {s}
-              </a>
-            ))}
-          </div>
-          <div>
-            <h4>Yritys</h4>
-            {COMPANY.map((c) => (
-              <a href="#" key={c}>
-                {c}
-              </a>
-            ))}
-          </div>
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h4>{col.title}</h4>
+              {col.links.map((l) => (
+                <SmartLink href={l.href} key={l.label}>
+                  {l.label}
+                </SmartLink>
+              ))}
+            </div>
+          ))}
         </div>
-        <div className="base">© 2026 WS Media Oy · Espoo</div>
+        <div className="base">{base}</div>
       </div>
     </footer>
   );

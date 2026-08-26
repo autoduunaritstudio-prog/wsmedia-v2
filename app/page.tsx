@@ -13,17 +13,40 @@ import Pricing from "./components/Pricing";
 import Contact from "./components/Contact";
 import FinalCta from "./components/FinalCta";
 import Footer from "./components/Footer";
+import { HOME_FOOTER, HOME_NAV } from "./components/site-data";
+
+const MARQUEE = [
+  "Lyhytvideot",
+  "Verkkosivut",
+  "Tapahtumat",
+  "TikTok",
+  "Instagram Reels",
+  "YouTube Shorts",
+  "Espoo",
+  "Helsinki",
+];
+
+const STATS = [
+  { value: "00", label: "toteutettua projektia" },
+  { value: "0 000 000+", label: "katselukertaa yhteensä" },
+  { value: "00", label: "arkipäivää keskim. toimitusaika" },
+  { value: "4,9/5", label: "keskiarvosana asiakkailta" },
+];
 
 export default function Home() {
   return (
     <>
       <Backdrop />
       <div id="prog" />
-      <Nav />
+      <Nav links={HOME_NAV} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
       <Hero />
-      <Marquee />
+      <Marquee items={MARQUEE} />
       <Logos />
-      <StatBand />
+      <section style={{ padding: "70px 0 20px" }}>
+        <div className="wrap">
+          <StatBand stats={STATS} />
+        </div>
+      </section>
       <Services />
       <Work />
       <Results />
@@ -31,7 +54,11 @@ export default function Home() {
       <Pricing />
       <Contact />
       <FinalCta />
-      <Footer />
+      <Footer
+        intro="Lyhytvideot, verkkosivut ja tapahtumat. Espoo ja Helsinki. Yrityksille jotka haluavat kasvaa."
+        columns={HOME_FOOTER}
+        base="© 2026 WS Media Oy · Espoo"
+      />
       <SiteEffects />
     </>
   );

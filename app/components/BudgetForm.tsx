@@ -13,13 +13,21 @@ const MAX = 15000;
  */
 const fmt = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
-export default function BudgetForm() {
+type Props = {
+  budgetLabel?: string;
+  messageLabel?: string;
+};
+
+export default function BudgetForm({
+  budgetLabel = "Budjetti",
+  messageLabel = "Mitä tarvitset? Videot, sivusto, tapahtuma vai kokonaisuus?",
+}: Props) {
   const [budget, setBudget] = useState(2000);
   const pct = ((budget - MIN) / (MAX - MIN)) * 100;
 
   return (
     <div className="card fcard rv" data-par="0.02">
-      <label htmlFor="bud">Budjetti</label>
+      <label htmlFor="bud">{budgetLabel}</label>
       <div className="budget">
         <input
           type="range"
@@ -53,9 +61,7 @@ export default function BudgetForm() {
           <input type="text" id="pk" />
         </div>
       </div>
-      <label htmlFor="lisa">
-        Mitä tarvitset? Videot, sivusto, tapahtuma vai kokonaisuus?
-      </label>
+      <label htmlFor="lisa">{messageLabel}</label>
       <textarea id="lisa" rows={3} />
       <button className="btn" type="button">
         Lähetä tarjouspyyntö

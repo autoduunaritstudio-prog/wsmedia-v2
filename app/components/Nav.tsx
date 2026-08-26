@@ -1,16 +1,35 @@
-export default function Nav() {
+import SmartLink from "./SmartLink";
+
+export type NavLink = { href: string; label: string; current?: boolean };
+
+type Props = {
+  links: NavLink[];
+  ctaHref: string;
+  ctaLabel: string;
+  /** Kun annettu, logo on linkki. Etusivu jattaa taman pois, jolloin logo on span. */
+  logoHref?: string;
+};
+
+export default function Nav({ links, ctaHref, ctaLabel, logoHref }: Props) {
   return (
     <nav id="nav">
       <div className="navin">
-        <span className="logo">WS Media</span>
+        {logoHref ? (
+          <SmartLink className="logo" href={logoHref}>
+            WS Media
+          </SmartLink>
+        ) : (
+          <span className="logo">WS Media</span>
+        )}
         <div className="navlinks">
-          <a href="#palvelut">Palvelut</a>
-          <a href="#tyot">Työnäytteet</a>
-          <a href="#prosessi">Prosessi</a>
-          <a href="#paketit">Hinnoittelu</a>
-          <a className="navcta" href="#lomake">
-            Pyydä tarjous
-          </a>
+          {links.map((l) => (
+            <SmartLink key={l.href} href={l.href} aria-current={l.current ? "page" : undefined}>
+              {l.label}
+            </SmartLink>
+          ))}
+          <SmartLink className="navcta" href={ctaHref}>
+            {ctaLabel}
+          </SmartLink>
         </div>
       </div>
     </nav>
