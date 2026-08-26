@@ -1,5 +1,5 @@
 import SmartLink from "./SmartLink";
-import WebsiteDemoVideo from "./WebsiteDemoVideo";
+import DemoVideo from "./DemoVideo";
 
 export default function Services() {
   return (
@@ -22,7 +22,13 @@ export default function Services() {
             <span className="deco deco-dot" style={{ right: "2%", bottom: "30%" }} />
             <div className="mini-phones">
               <div className="mini">
-                <div className="vid" />
+                <DemoVideo
+                  className="reels-video"
+                  webm="/reels-demo.webm"
+                  mp4="/reels-demo.mp4"
+                  poster="/reels-demo-poster.jpg"
+                  label="Esimerkki WS Median tuottamasta Reels-videosta"
+                />
                 <div className="tag">REELS</div>
                 <div className="hearts">
                   <s>♥</s>
@@ -81,7 +87,13 @@ export default function Services() {
                     97<small>SPEED</small>
                   </i>
                 </div>
-                <WebsiteDemoVideo />
+                <DemoVideo
+                  className="demo-video"
+                  webm="/laaksolahti-demo.webm"
+                  mp4="/laaksolahti-demo.mp4"
+                  poster="/laaksolahti-poster.jpg"
+                  label="Kuvakaappaus Laaksolahden Sähkön uudesta verkkosivustosta, jonka WS Media on toteuttanut"
+                />
               </div>
             </div>
             <div className="float-tag ft-b">

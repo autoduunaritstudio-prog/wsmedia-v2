@@ -687,6 +687,18 @@ section { padding: var(--space-section) 0 }
     radial-gradient(120% 100% at 50% 50%, #15161a 0%, #0c0c0e 80%);
   animation: vidmove 11s ease-in-out infinite alternate;
 }
+/* REELS-puhelimessa on oikea video CSS-gradientin sijalla. inset: 0, ei
+   .vid:n -12%: gradientti tarvitsi ylivuotoa liikkuakseen kehyksen alla,
+   videossa liike tulee silmukasta itsestaan. Pyoristetyt kulmat tulevat
+   .minin border-radiuksesta ja overflow: hiddenista, joten videolle ei
+   tarvita omaa radiusta. Video on 9:16 ja kehys 9:19, joten cover rajaa
+   sivuilta - kohde on kuvassa keskella, joten oletuskeskitys on oikein.
+   z-index 0 pitaa sen .tagin (2) ja .heartsin (3) alla. */
+.mini .reels-video {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; background: #0f0f11;
+}
 .mini .tag {
   position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;
   font-size: 9px; font-weight: var(--weight-semibold); letter-spacing: .18em; color: rgba(255,255,255,.55); z-index: 2;
