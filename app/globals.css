@@ -30,7 +30,13 @@
 }
 
 /* ==================================================================
-   TYPOGRAFIA-ASTEIKKO  ·  yksi lahde totuudelle
+   DESIGN-TOKENIT  ·  yksi lahde totuudelle
+   ==================================================================
+   Tassa lohkossa on kaksi asteikkoa: typografia ja valistys. Uutta
+   sivua rakentaessa katso molemmat taalta, ala poimi pikseliarvoja
+   mockupista suoraan sivun omaan scopeen.
+
+   1) TYPOGRAFIA-ASTEIKKO
    ------------------------------------------------------------------
    Fonttipino maaritellaan @theme-lohkossa (--font-sans) ja bodyssa
    kerran; kaikki muu perii sen. Ala kirjoita font-family-saantoa
@@ -109,6 +115,76 @@
   --weight-bold: 700;
 }
 
+/* ------------------------------------------------------------------
+   2) VALISTYS- JA RYTMIASTEIKKO
+
+   Sama periaate kuin typografiassa: rakenteellinen rytmi tulee naista
+   tokeneista, ei mockupista kopioiduista pikseliluvuista. Uusi arvo
+   lisataan tahan listaan, ei sivun scopen sisaan.
+
+   MIHIN MITAKIN
+     Osion pystypadding ........... --space-section / -sub / -mobile
+     Hero ......................... --space-hero-top / -sub, --space-hero-bottom
+     Loppu-CTA .................... --space-final / -sub / -mobile
+     Tumma referenssikaista ....... --space-work / -sub
+     Osio-otsikon alavali ......... --space-shead-gap / -sub / -mobile
+     Korttiruudukon vali .......... --space-gap-grid
+     Tekstipalstojen vali ......... --space-gap-col / -sm
+     Muut layout-valit ............ --space-gap-xs / -sm / -md / -lg / -xl
+     Kortin sisapehmuste .......... --space-card-*
+
+   -sub on alasivujen hieman tiiviimpi rytmi, kuten typografiassa.
+
+   Poikkeus: komponenttien sisaiset pikkuvalit (selainpalkin pisteet,
+   marquee, evastebanneri, listaelementtien padding) pysyvat
+   literaaleina. Ne eivat ole sivun rytmia eika niita valita uudelleen
+   sivua rakentaessa.
+   ------------------------------------------------------------------ */
+:root {
+  /* Osioiden pystyrytmi */
+  --space-section: 120px;
+  --space-section-sub: 110px;
+  --space-section-mobile: 66px;
+  --space-hero-top: 100px;
+  --space-hero-top-sub: 56px;
+  --space-hero-bottom: 60px;
+  --space-final: 140px;
+  --space-final-sub: 130px;
+  --space-final-mobile: 80px;
+  --space-work: 100px;
+  --space-work-sub: 90px;
+
+  /* Osio-otsikon ja sisallon vali */
+  --space-shead-gap: 56px;
+  --space-shead-gap-sub: 52px;
+  --space-shead-gap-mobile: 32px;
+
+  /* Layout-valit */
+  --space-gap-xs: 8px;
+  --space-gap-sm: 14px;
+  --space-gap-grid: 16px;
+  --space-gap-md: 26px;
+  --space-gap-lg: 34px;
+  --space-gap-col-sm: 46px;
+  --space-gap-col: 48px;
+  --space-gap-xl: 60px;
+  --space-gap-footer: 64px;
+  --space-gap-footer-sub: 56px;
+
+  /* Korttien sisapehmusteet */
+  --space-card-case: 44px 30px;
+  --space-card-step: 40px 34px;
+  --space-card-step-sub: 34px 28px;
+  --space-card-plan: 40px 32px;
+  --space-card-plan-sub: 38px 30px;
+  --space-card-form: 46px 42px;
+  --space-card-form-sub: 44px 40px;
+  --space-card-form-mobile: 32px 22px;
+  --space-card-plat: 30px 26px 26px;
+  --space-card-plat-mobile: 22px 20px 20px;
+  --space-card-work-sub: 26px 24px;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box }
 
 /* Tailwindin preflight pakottaa lomakekontrolleille font: inherit ja
@@ -168,7 +244,7 @@ nav.scrolled {
    joten 4px siirtyma ei toistu edestakaisin kynnyksen tuntumassa. */
 nav.scrolled .navin { height: 44px }
 .logo { font-size: var(--text-body); font-weight: var(--weight-bold); letter-spacing: -0.02em }
-.navlinks { display: flex; gap: 34px; align-items: center }
+.navlinks { display: flex; gap: var(--space-gap-lg); align-items: center }
 .navlinks > a, .navmenu-btn {
   font-size: var(--text-label-sm); color: var(--ink); text-decoration: none;
   opacity: .8; transition: opacity .2s;
@@ -266,11 +342,11 @@ h2.big { font-size: var(--text-h2-hero) }
 .tlink::after { content: " \203A" }
 
 /* ============ HERO ============ */
-.hero { position: relative; text-align: center; padding: 100px 0 60px }
+.hero { position: relative; text-align: center; padding: var(--space-hero-top) 0 var(--space-hero-bottom) }
 .hero .kick { color: var(--grey); letter-spacing: .08em; margin-bottom: 18px }
 .hero h1 { max-width: 15ch; margin: 0 auto }
 .hero .sub { max-width: 46ch; margin: 22px auto 0 }
-.heroctas { margin-top: 34px; display: flex; gap: 26px; justify-content: center; align-items: center; flex-wrap: wrap }
+.heroctas { margin-top: 34px; display: flex; gap: var(--space-gap-md); justify-content: center; align-items: center; flex-wrap: wrap }
 
 .li { opacity: 0; transform: translateY(22px); animation: liin 1s cubic-bezier(.2,.6,.2,1) forwards }
 .li.d1 { animation-delay: .05s } .li.d2 { animation-delay: .18s } .li.d3 { animation-delay: .34s }
@@ -345,7 +421,7 @@ h2.big { font-size: var(--text-h2-hero) }
 @keyframes float2 { from { translate: 0 0; rotate: -8deg } to { translate: 0 -22px; rotate: -6deg } }
 @keyframes float3 { from { translate: 0 0; rotate: 7deg } to { translate: 0 -18px; rotate: 9deg } }
 @media (max-width: 900px) {
-  .stage { display: flex; gap: 14px; justify-content: center; padding: 0 24px }
+  .stage { display: flex; gap: var(--space-gap-sm); justify-content: center; padding: 0 24px }
   .phone { position: static; width: 31%; max-width: 180px; animation: none !important; transform: none !important }
   .p2, .p3 { display: none }
   .phone.p1 { width: min(62vw,230px) }
@@ -368,8 +444,8 @@ h2.big { font-size: var(--text-h2-hero) }
 .marq b { color: var(--blue); font-weight: var(--weight-bold) }
 
 /* ============ OSIOT ============ */
-section { padding: 120px 0 }
-.shead { margin-bottom: 56px; max-width: 600px }
+section { padding: var(--space-section) 0 }
+.shead { margin-bottom: var(--space-shead-gap); max-width: 600px }
 .shead h2 { margin-top: 12px }
 .shead .sub { margin-top: 14px; font-size: var(--text-lead-sm) }
 .shead.right { margin-left: auto; text-align: right }
@@ -385,11 +461,11 @@ section { padding: 120px 0 }
 .card:hover { transform: translateY(-6px); box-shadow: 0 34px 80px -28px rgba(29,29,31,.24) }
 
 /* ============ PALVELUT: 3 isoa paneelia ============ */
-.svc { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 110px }
+.svc { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-gap-xl); align-items: center; margin-bottom: 110px }
 .svc:last-child { margin-bottom: 0 }
 .svc.rev .svc-visual { order: 2 }
 @media (max-width: 880px) {
-  .svc { grid-template-columns: 1fr; gap: 34px; margin-bottom: 80px }
+  .svc { grid-template-columns: 1fr; gap: var(--space-gap-lg); margin-bottom: 80px }
   .svc.rev .svc-visual { order: 0 }
 }
 .svc-txt .kick { margin-bottom: 10px }
@@ -529,7 +605,7 @@ section { padding: 120px 0 }
 .work {
   background: var(--dark); color: #f5f5f7;
   border-radius: 28px; max-width: 1240px; margin: 0 auto;
-  padding: 100px 0; position: relative; overflow: hidden;
+  padding: var(--space-work) 0; position: relative; overflow: hidden;
 }
 @media (max-width: 1280px) { .work { margin: 0 16px } }
 .work::before {
@@ -540,7 +616,7 @@ section { padding: 120px 0 }
 }
 .work .wrap { position: relative }
 .work .sub { color: #a1a1a6 }
-.workgrid { display: grid; grid-template-columns: repeat(12,1fr); gap: 16px }
+.workgrid { display: grid; grid-template-columns: repeat(12,1fr); gap: var(--space-gap-grid) }
 .w-item {
   border-radius: 16px; overflow: hidden; position: relative;
   background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
@@ -592,9 +668,9 @@ section { padding: 120px 0 }
 .w-item:hover .go { opacity: 1; transform: none }
 
 /* ---------- cases / steps / plans / form ---------- */
-.cases { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px }
+.cases { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-gap-grid) }
 @media (max-width: 820px) { .cases { grid-template-columns: 1fr } }
-.case { padding: 44px 30px; text-align: center; border-radius: 20px }
+.case { padding: var(--space-card-case); text-align: center; border-radius: 20px }
 .case .num {
   font-size: var(--text-metric); font-weight: var(--weight-bold); letter-spacing: -0.028em;
   color: var(--blue); font-variant-numeric: tabular-nums;
@@ -607,14 +683,14 @@ section { padding: 120px 0 }
   padding: 4px 12px; letter-spacing: .04em;
 }
 
-.steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; counter-reset: s; position: relative }
+.steps { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-gap-grid); counter-reset: s; position: relative }
 .steps::before {
   content: ""; position: absolute; top: 60px; left: 8%; right: 8%; height: 1px;
   background: repeating-linear-gradient(90deg, var(--hair) 0 8px, transparent 8px 16px);
   z-index: -1;
 }
 @media (max-width: 820px) { .steps { grid-template-columns: 1fr } .steps::before { display: none } }
-.step { padding: 40px 34px; border-radius: 16px }
+.step { padding: var(--space-card-step); border-radius: 16px }
 .step::before {
   counter-increment: s; content: counter(s);
   display: flex; align-items: center; justify-content: center;
@@ -625,9 +701,9 @@ section { padding: 120px 0 }
 .step h3 { font-size: var(--text-lead-sm); font-weight: var(--weight-semibold); letter-spacing: -0.014em; margin-bottom: 8px }
 .step p { font-size: var(--text-body-sm); color: var(--grey) }
 
-.plans { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; align-items: stretch }
+.plans { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-gap-grid); align-items: stretch }
 @media (max-width: 820px) { .plans { grid-template-columns: 1fr } }
-.plan { padding: 40px 32px; display: flex; flex-direction: column; border-radius: 20px }
+.plan { padding: var(--space-card-plan); display: flex; flex-direction: column; border-radius: 20px }
 .plan.pop { background: var(--ink); color: #fff; border-color: var(--ink); border-radius: 26px }
 .plan .pt {
   font-size: var(--text-caption); font-weight: var(--weight-semibold); letter-spacing: .05em; text-transform: uppercase;
@@ -649,8 +725,8 @@ section { padding: 120px 0 }
 .plan.pop .btn:hover { background: #f0f0f2; box-shadow: none }
 .pricenote { text-align: center; font-size: var(--text-label-sm); color: var(--grey); margin-top: 26px }
 
-.fcard { max-width: 620px; margin: 0 auto; padding: 46px 42px; border-radius: 24px }
-@media (max-width: 640px) { .fcard { padding: 32px 22px } }
+.fcard { max-width: 620px; margin: 0 auto; padding: var(--space-card-form); border-radius: 24px }
+@media (max-width: 640px) { .fcard { padding: var(--space-card-form-mobile) } }
 .fcard label { display: block; font-size: var(--text-label-sm); font-weight: var(--weight-semibold); margin: 20px 0 8px }
 .fcard input[type=text], .fcard input[type=email], .fcard textarea {
   width: 100%; border: 1px solid var(--hair); border-radius: 10px;
@@ -677,7 +753,7 @@ section { padding: 120px 0 }
 .fcard .btn { width: 100%; margin-top: 26px; padding: 14px }
 .fnote { text-align: center; font-size: var(--text-label-sm); color: var(--grey); margin-top: 13px }
 
-.final { text-align: center; padding: 140px 0 }
+.final { text-align: center; padding: var(--space-final) 0 }
 .final h2 { margin: 0 auto; max-width: 18ch }
 .final .sub { max-width: 44ch; margin: 18px auto 0; font-size: var(--text-lead-sm) }
 .final .btn { margin-top: 32px }
@@ -687,7 +763,7 @@ footer {
   border-top: 1px solid var(--hair);
   padding: 42px 0 46px; font-size: var(--text-caption); color: var(--grey);
 }
-footer .cols { display: flex; gap: 64px; flex-wrap: wrap; padding-bottom: 26px; border-bottom: 1px solid var(--hair) }
+footer .cols { display: flex; gap: var(--space-gap-footer); flex-wrap: wrap; padding-bottom: 26px; border-bottom: 1px solid var(--hair) }
 footer h4 { font-size: var(--text-caption); color: var(--ink); font-weight: var(--weight-semibold); margin-bottom: 10px }
 footer a { display: block; color: var(--grey); text-decoration: none; padding: 4px 0 }
 footer a:hover { color: var(--ink) }
@@ -720,7 +796,7 @@ footer .base { padding-top: 18px }
   text-align: center; font-size: var(--text-caption-sm); font-weight: var(--weight-semibold); letter-spacing: .14em;
   text-transform: uppercase; color: var(--grey); margin-bottom: 22px;
 }
-.logos .row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap }
+.logos .row { display: flex; gap: var(--space-gap-sm); justify-content: center; flex-wrap: wrap }
 .logos .slot {
   width: 150px; height: 52px; border-radius: 12px;
   border: 1px dashed #d8d8de; color: #b6b6bc;
@@ -746,7 +822,7 @@ footer .base { padding-top: 18px }
 
 /* ============ LUKUKAISTA ============ */
 .statband {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 16px;
+  display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-gap-grid);
   border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair);
   padding: 44px 0;
 }
@@ -850,16 +926,16 @@ footer .base { padding-top: 18px }
 .page-lyhytvideot .lead a:hover { text-decoration: underline }
 
 /* ---------- osioiden rytmi ---------- */
-.page-lyhytvideot section { padding: 110px 0 }
-.page-lyhytvideot .shead { margin-bottom: 52px; max-width: 640px }
+.page-lyhytvideot section { padding: var(--space-section-sub) 0 }
+.page-lyhytvideot .shead { margin-bottom: var(--space-shead-gap-sub); max-width: 640px }
 @media (max-width: 760px) {
-  .page-lyhytvideot section { padding: 66px 0 !important }
-  .page-lyhytvideot .shead { margin-bottom: 32px }
-  .page-lyhytvideot .final { padding: 80px 0 !important }
+  .page-lyhytvideot section { padding: var(--space-section-mobile) 0 !important }
+  .page-lyhytvideot .shead { margin-bottom: var(--space-shead-gap-mobile) }
+  .page-lyhytvideot .final { padding: var(--space-final-mobile) 0 !important }
 }
 
 /* ---------- hero ---------- */
-.page-lyhytvideot .hero { padding: 56px 0 60px }
+.page-lyhytvideot .hero { padding: var(--space-hero-top-sub) 0 var(--space-hero-bottom) }
 .page-lyhytvideot .hero h1 { max-width: 24ch; margin: 0 auto; text-wrap: balance }
 .page-lyhytvideot .hero .sub { max-width: 52ch; margin: 22px auto 0 }
 .page-lyhytvideot .herotrust {
@@ -876,14 +952,14 @@ footer .base { padding-top: 18px }
 .page-lyhytvideot .stat .num { font-size: var(--text-stat-sub) }
 
 /* ---------- rivilista: kortiton, kevyt mobiilissa ---------- */
-.page-lyhytvideot .rows { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; border-top: 1px solid var(--hair) }
+.page-lyhytvideot .rows { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-gap-col); border-top: 1px solid var(--hair) }
 @media (max-width: 820px) { .page-lyhytvideot .rows { grid-template-columns: 1fr } }
 .page-lyhytvideot .rows > div { padding: 17px 0; border-bottom: 1px solid var(--hair) }
 .page-lyhytvideot .rows h3 { font-size: var(--text-body-lg); font-weight: var(--weight-semibold); margin-bottom: 5px; letter-spacing: -0.012em }
 .page-lyhytvideot .rows p { font-size: var(--text-ui); color: var(--grey); line-height: 1.55 }
 
 /* ---------- sisaltolista ---------- */
-.page-lyhytvideot .incl { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; border-top: 1px solid var(--hair) }
+.page-lyhytvideot .incl { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-gap-col); border-top: 1px solid var(--hair) }
 @media (max-width: 820px) { .page-lyhytvideot .incl { grid-template-columns: 1fr } }
 .page-lyhytvideot .incl div { padding: 14px 0 14px 26px; border-bottom: 1px solid var(--hair); position: relative }
 .page-lyhytvideot .incl div::before {
@@ -896,11 +972,11 @@ footer .base { padding-top: 18px }
 .page-lyhytvideot .incl a:hover { text-decoration: underline }
 
 /* ---------- alustaruudukko ---------- */
-.page-lyhytvideot .grid4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px }
+.page-lyhytvideot .grid4 { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-gap-grid) }
 @media (max-width: 960px) { .page-lyhytvideot .grid4 { grid-template-columns: repeat(2,1fr) } }
 @media (max-width: 560px) { .page-lyhytvideot .grid4 { grid-template-columns: 1fr; gap: 12px } }
 .page-lyhytvideot .plat {
-  padding: 30px 26px 26px; border-radius: 18px; display: flex; flex-direction: column;
+  padding: var(--space-card-plat); border-radius: 18px; display: flex; flex-direction: column;
   text-decoration: none; color: inherit;
 }
 .page-lyhytvideot .plat .pchip {
@@ -911,14 +987,14 @@ footer .base { padding-top: 18px }
 .page-lyhytvideot .plat p { font-size: var(--text-body-sm); color: var(--grey); flex: 1 }
 .page-lyhytvideot .plat .tlink { margin-top: 16px; font-size: var(--text-ui) }
 @media (max-width: 560px) {
-  .page-lyhytvideot .plat { padding: 22px 20px 20px }
+  .page-lyhytvideot .plat { padding: var(--space-card-plat-mobile) }
   .page-lyhytvideot .plat .pchip { margin-bottom: 12px }
   .page-lyhytvideot .plat h3 { font-size: var(--text-title-sm); margin-bottom: 6px }
   .page-lyhytvideot .plat .tlink { margin-top: 12px }
 }
 
 /* ---------- suppilo: brandi -> kysynta -> liidi ---------- */
-.page-lyhytvideot .flow { display: grid; grid-template-columns: repeat(3,1fr); gap: 0 46px; border-top: 1px solid var(--hair) }
+.page-lyhytvideot .flow { display: grid; grid-template-columns: repeat(3,1fr); gap: 0 var(--space-gap-col-sm); border-top: 1px solid var(--hair) }
 @media (max-width: 820px) { .page-lyhytvideot .flow { grid-template-columns: 1fr; gap: 0 } }
 .page-lyhytvideot .flow > div { padding: 26px 0 24px; position: relative }
 @media (max-width: 820px) { .page-lyhytvideot .flow > div + div { border-top: 1px solid var(--hair) } }
@@ -951,17 +1027,17 @@ footer .base { padding-top: 18px }
   .page-lyhytvideot .steps::before { display: none }
 }
 @media (max-width: 560px) { .page-lyhytvideot .steps { grid-template-columns: 1fr } }
-.page-lyhytvideot .step { padding: 34px 28px }
+.page-lyhytvideot .step { padding: var(--space-card-step-sub) }
 .page-lyhytvideot .step::before { width: 36px; height: 36px; font-size: var(--text-ui); margin-bottom: 18px }
 .page-lyhytvideot .step h3 { font-size: var(--text-title-xs) }
 .page-lyhytvideot .step p { font-size: var(--text-ui) }
 
 /* ---------- tumma referenssikaista ---------- */
-.page-lyhytvideot .work { padding: 90px 0 }
-.page-lyhytvideot .wgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px }
+.page-lyhytvideot .work { padding: var(--space-work-sub) 0 }
+.page-lyhytvideot .wgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-gap-grid) }
 @media (max-width: 820px) { .page-lyhytvideot .wgrid { grid-template-columns: 1fr } }
 .page-lyhytvideot .w-item {
-  min-height: 250px; padding: 26px 24px;
+  min-height: 250px; padding: var(--space-card-work-sub);
   display: flex; flex-direction: column; justify-content: flex-end;
 }
 .page-lyhytvideot .w-item .thumb {
@@ -976,13 +1052,13 @@ footer .base { padding-top: 18px }
 .page-lyhytvideot .w-item s { position: relative; z-index: 2; text-decoration: none; font-size: var(--text-label-sm); color: #a1a1a6; margin-top: 4px; display: block }
 
 /* ---------- paketit ---------- */
-.page-lyhytvideot .plan { padding: 38px 30px }
+.page-lyhytvideot .plan { padding: var(--space-card-plan-sub) }
 .page-lyhytvideot .plan ul { margin: 22px 0 26px }
 .page-lyhytvideot .plan .for { margin: 6px 0 20px }
 .page-lyhytvideot .pricenote { margin-top: 24px }
 
 /* ---------- kenelle ---------- */
-.page-lyhytvideot .fit { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; border-top: 1px solid var(--hair) }
+.page-lyhytvideot .fit { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-gap-col); border-top: 1px solid var(--hair) }
 @media (max-width: 820px) { .page-lyhytvideot .fit { grid-template-columns: 1fr } }
 .page-lyhytvideot .fitbox { padding: 24px 0 22px }
 .page-lyhytvideot .fitbox + .fitbox { border-top: 1px solid var(--hair) }
@@ -1060,11 +1136,11 @@ footer .base { padding-top: 18px }
 }
 
 /* ---------- lomake ja lopetus ---------- */
-.page-lyhytvideot .fcard { padding: 44px 40px }
-.page-lyhytvideot .final { padding: 130px 0 }
+.page-lyhytvideot .fcard { padding: var(--space-card-form-sub) }
+.page-lyhytvideot .final { padding: var(--space-final-sub) 0 }
 .page-lyhytvideot .final h2 { max-width: 20ch }
 .page-lyhytvideot .final .sub { max-width: 46ch }
-.page-lyhytvideot footer .cols { gap: 56px }
+.page-lyhytvideot footer .cols { gap: var(--space-gap-footer-sub) }
 .page-lyhytvideot footer h2, .page-lyhytvideot footer h4 {
   font-size: var(--text-caption); color: var(--ink); font-weight: var(--weight-semibold); margin-bottom: 10px; letter-spacing: 0;
 }
