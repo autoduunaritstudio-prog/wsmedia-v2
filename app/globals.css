@@ -372,6 +372,26 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   display: grid;
   grid-template-columns: minmax(0,1.35fr) minmax(0,1fr) minmax(0,.95fr);
   align-items: stretch; gap: 0;
+  /* Keskitys tehdaan RIVILLE, ei sarakkeiden sisalle. Nain paavalikon
+     blokki asettuu pystysuunnassa keskelle ja palvelusarake saa saman
+     ylareunan - jos kumpikin sarake keskittaisi oman sisaltonsa, lyhyempi
+     lista jaisi roikkumaan keskelle. Rivi ei voi vuotaa yli: .fsnav-body on
+     flex-lapsi jonka min-height on auto, joten se kasvaa aina vahintaan
+     sisallon korkuiseksi eika keskitettavaa vapaata tilaa jaa miinukselle. */
+  align-content: center;
+  /* Erotinviivat piirretaan taustasta eika .fsnav-subin reunuksista: rivi on
+     nyt sisallon korkuinen, joten reunusviiva loppuisi blokin mukana. Tausta
+     kattaa sarakkeiden koko korkeuden riippumatta rivin koosta. Prosentit
+     ovat sarakesuhteiden kumulatiiviset osuudet (1.35 ja 1.35+1 / 3.30);
+     jos grid-template-columns muuttuu, nama on paivitettava mukana. */
+  background-image:
+    linear-gradient(var(--hair), var(--hair)),
+    linear-gradient(var(--hair), var(--hair));
+  background-size: 1px 100%, 1px 100%;
+  background-position: 40.9091% 0, 71.2121% 0;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  background-clip: content-box;
   /* width: 100% on valttamaton: pelkka margin: 0 auto flex-lapsella saa
      elementin kutistumaan sisallon kokoiseksi venymisen sijaan, jolloin
      sarakkeet jaivat kapealla naytolla murto-osaan kaytettavissa olevasta
@@ -379,18 +399,13 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   width: 100%; max-width: 1160px; margin: 0 auto; padding: 8px 0 72px;
 }
 
-/* Pystyviivat syntyvat keskisarakkeen reunuksista, jolloin ne osuvat
-   tarkalleen sarakerajoille ja kulkevat koko sisallon korkeudelta. */
+/* Sarakkeiden sisapadding. Pystyviivat tulevat .fsnav-bodyn taustasta
+   (ks. yllä), joten sarakkeilla itsellaan ei ole reunuksia. */
 .fsnav-links { padding-right: 46px }
-/* Palvelulista on pystysuunnassa keskitetty paavalikkolistaan nahden:
-   sarake venyy gridissa taydelle korkeudelle (jolloin reunusviivat
-   kulkevat koko matkan), mutta sisalto istuu keskella. */
-.fsnav-sub {
-  padding: 0 46px;
-  border-left: 1px solid var(--hair);
-  border-right: 1px solid var(--hair);
-  display: flex; flex-direction: column; justify-content: center;
-}
+/* Palvelulista on ylatasattu: ensimmainen rivi alkaa samalta korkeudelta
+   kuin paavalikon "Etusivu". Ei omaa keskitysta - rivin keskitys hoituu
+   .fsnav-bodyn align-contentilla, ja sarake venyy rivin korkuiseksi. */
+.fsnav-sub { padding: 0 46px }
 .fsnav-side { padding-left: 46px }
 
 @media (max-width: 1080px) {
@@ -406,7 +421,11 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
     grid-column: 1 / -1; padding: 26px 0 0; margin-top: 26px;
     border-top: 1px solid var(--hair);
   }
-  .fsnav-sub { border-right: none; padding-right: 0 }
+  /* Taustaviivat pois: yhteystiedot ovat omalla taydella rivillaan, ja
+     taustaviiva jatkuisi sen lapi. Yksi erotin riittaa, ja reunuksena se
+     rajautuu oikein pelkkaan ensimmaiseen riviin. */
+  .fsnav-body { background-image: none }
+  .fsnav-sub { border-left: 1px solid var(--hair); padding-right: 0 }
 }
 @media (max-width: 860px) {
   .fsnav-body { grid-template-columns: 1fr; padding: 8px 0 48px }
@@ -418,14 +437,15 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   .fsnav-side { grid-column: auto }
 }
 
-/* Lista levittautuu koko sarakkeen korkeudelle. Jos sisalto on
-   korkeampi kuin tila, flex-container kasvaa sisallon mukaan eika
-   space-evenly jata mitaan reunojen ulkopuolelle; .fsnav-in vierittaa. */
-.fsnav-links { display: flex }
-.fsnav-links ul {
-  list-style: none; flex: 1;
-  display: flex; flex-direction: column; justify-content: space-evenly;
-}
+.fsnav-links ul { list-style: none }
+/* Riviväli on sidottu fonttikokoon, EI viewportin korkeuteen. Aiempi
+   space-evenly venytti kuusi rivia tayttamaan koko korkeuden, jolloin
+   riviväli kasvoi ikkunan mukana (1200px:n ikkunassa 160px). Referenssissa
+   pitch on n. 2,0 x versaalikorkeus; SF Pro Displayn versaalikorkeus on
+   0,70em, joten pitch = 1,42 x font-size. line-height 1,16 kattaa siita
+   osan, loput tulee marginaalista (1,42 - 1,16 = 0,26). em ei kay: li perii
+   perusfonttikoon, ei linkin --text-nav-huge -kokoa. */
+.fsnav-links li + li { margin-top: calc(var(--text-nav-huge) * 0.26) }
 .fsnav-links a {
   display: block; text-decoration: none; color: var(--ink);
   font-size: var(--text-nav-huge); font-weight: var(--weight-bold);
