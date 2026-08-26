@@ -1238,7 +1238,15 @@ footer .base { padding-top: 18px }
   .page-verkkosivut .swap span.out { display:none }
 }
 .page-verkkosivut .bstage { position:relative;max-width:1080px;margin:58px auto 0; perspective:1400px;padding:0 24px; }
-.page-verkkosivut .bwrap { position:relative;transform-style:preserve-3d;will-change:transform }
+/* transform-style on tarkoituksella flat, ei mockupin preserve-3d.
+   .bwrap kallistuu hiiren mukana (perspective tulee .bstagelta), mutta sen
+   lapsilla ei ole omia 3D-muunnoksia, joten preserve-3d ei tuo mitaan -
+   se vain siirtaa lapset 3D-kontekstiin, jossa selain syvyyslajittelee ne
+   z-indexin sijaan. Puhelin (z-index 4) ja selainikkuna ovat samassa
+   tasossa ja menevat paallekkain, joten lajittelu kaantyi kierron mukana ja
+   tyhja skeleton-kortti maalautui puhelimen paalle. Litistys palauttaa
+   normaalin z-index-jarjestyksen eika muuta geometriaa. */
+.page-verkkosivut .bwrap { position:relative;transform-style:flat;will-change:transform }
 .page-verkkosivut .bwin { border-radius:18px;overflow:hidden;background:#fff;text-align:left; border:1px solid var(--hair); box-shadow:0 60px 120px -40px rgba(29,29,31,.42), 0 8px 24px -12px rgba(29,29,31,.16); }
 .page-verkkosivut .bbar { display:flex;align-items:center;gap:8px; padding:12px 16px;background:#f5f5f7;border-bottom:1px solid var(--hair); }
 .page-verkkosivut .bdot { width:10px;height:10px;border-radius:50%;background:#d9d9de;flex:none }
