@@ -394,6 +394,7 @@ export function Tarjous() {
           <BudgetForm
             budgetLabel="Projektin budjetti"
             messageLabel="Millainen sivusto on mielessä? Uudet sivut, uudistus vai verkkokauppa?"
+            extraField={{ id: "nyk", label: "Nykyiset verkkosivut (jos on)", placeholder: "esimerkki.fi" }}
             min={500}
             max={20000}
             initial={3000}

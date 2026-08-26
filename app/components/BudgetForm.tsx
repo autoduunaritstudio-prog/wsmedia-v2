@@ -6,6 +6,7 @@ import type { CSSProperties } from "react";
 const DEFAULT_MIN = 500;
 const DEFAULT_MAX = 15000;
 const DEFAULT_INITIAL = 2000;
+const DEFAULT_STEP = 250;
 
 /**
  * Tuhaterotin kiinteänä sitomattomana välilyöntinä. Intl.NumberFormat antaisi
@@ -22,6 +23,17 @@ type Props = {
   min?: number;
   max?: number;
   initial?: number;
+  step?: number;
+  /** Yksikko liukurin arvon perassa, esim. "€" tai "€/kk". */
+  unit?: string;
+  submitLabel?: string;
+  note?: string;
+  /**
+   * Valinnainen lisakentta ennen viestikenttaa. Palvelusivut kysyvat tassa
+   * eri asiaa: verkkosivut nykyista osoitetta, hakukoneoptimointi omaa
+   * sivustoa.
+   */
+  extraField?: { id: string; label: string; placeholder?: string };
 };
 
 export default function BudgetForm({
@@ -30,6 +42,11 @@ export default function BudgetForm({
   min = DEFAULT_MIN,
   max = DEFAULT_MAX,
   initial = DEFAULT_INITIAL,
+  step = DEFAULT_STEP,
+  unit = "€",
+  submitLabel = "Lähetä tarjouspyyntö",
+  note = "Vastaamme 24 tunnin sisällä. Ei sitoumuksia.",
+  extraField,
 }: Props) {
   const [budget, setBudget] = useState(initial);
   const pct = ((budget - min) / (max - min)) * 100;
@@ -43,13 +60,13 @@ export default function BudgetForm({
           id="bud"
           min={min}
           max={max}
-          step={250}
+          step={step}
           value={budget}
           onChange={(e) => setBudget(Number(e.target.value))}
           style={{ "--p": `${pct}%` } as CSSProperties}
         />
         <output id="budout" htmlFor="bud">
-          {fmt(budget)} €
+          {fmt(budget)} {unit}
         </output>
       </div>
       <div className="row2">
@@ -70,12 +87,18 @@ export default function BudgetForm({
           <input type="text" id="pk" />
         </div>
       </div>
+      {extraField && (
+        <>
+          <label htmlFor={extraField.id}>{extraField.label}</label>
+          <input type="text" id={extraField.id} placeholder={extraField.placeholder} />
+        </>
+      )}
       <label htmlFor="lisa">{messageLabel}</label>
       <textarea id="lisa" rows={3} />
       <button className="btn" type="button">
-        Lähetä tarjouspyyntö
+        {submitLabel}
       </button>
-      <p className="fnote">Vastaamme 24 tunnin sisällä. Ei sitoumuksia.</p>
+      <p className="fnote">{note}</p>
     </div>
   );
 }

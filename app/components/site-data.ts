@@ -78,6 +78,7 @@ export const HOME_FOOTER: FooterColumn[] = [
 export const SUBPAGE_NAV: NavLink[] = [
   { href: "/lyhytvideot", label: "Lyhytvideot" },
   { href: "/verkkosivut", label: "Verkkosivut" },
+  { href: "/hakukoneoptimointi", label: "Hakukoneoptimointi" },
   { href: "/tapahtumat", label: "Tapahtumat" },
   { href: "/tyonaytteet", label: "Työnäytteet" },
   { href: "/hinnoittelu", label: "Hinnoittelu" },
@@ -135,6 +136,41 @@ export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
       { href: "/verkkosivut#ukk", label: "Usein kysyttyä" },
       { href: "/verkkosivut/espoo", label: "Verkkosivut Espoo" },
       { href: "/verkkosivut/helsinki", label: "Verkkosivut Helsinki" },
+    ],
+  },
+  {
+    title: "Yritys",
+    links: [
+      { href: "/tyonaytteet", label: "Työnäytteet" },
+      { href: "/hinnoittelu", label: "Hinnoittelu" },
+      { href: "/blogi", label: "Blogi" },
+      { href: "/yhteystiedot", label: "Ota yhteyttä" },
+      { href: "/tietosuoja", label: "Tietosuojaseloste" },
+      { action: "consent", label: "Evästeasetukset" },
+    ],
+  },
+];
+
+/** Hakukoneoptimointi-alasivun footer. */
+export const SEO_FOOTER: FooterColumn[] = [
+  {
+    title: "Palvelut",
+    links: [
+      { href: "/lyhytvideot", label: "Lyhytvideot" },
+      { href: "/verkkosivut", label: "Verkkosivut yritykselle" },
+      { href: "/hakukoneoptimointi", label: "Hakukoneoptimointi" },
+      { href: "/hakukoneoptimointi#paikallinen", label: "Paikallinen SEO" },
+      { href: "/tapahtumat", label: "Tapahtumat" },
+    ],
+  },
+  {
+    title: "Hakukoneoptimointi",
+    links: [
+      { href: "/hakukoneoptimointi#hinnoittelu", label: "Hakukoneoptimoinnin hinta" },
+      { href: "/hakukoneoptimointi#sisalto", label: "Palvelun sisältö" },
+      { href: "/hakukoneoptimointi#mittarit", label: "Mittarit ja raportointi" },
+      { href: "/hakukoneoptimointi#ukk", label: "Usein kysyttyä" },
+      { href: "/hakukoneoptimointi/espoo", label: "Hakukoneoptimointi Espoo" },
     ],
   },
   {
