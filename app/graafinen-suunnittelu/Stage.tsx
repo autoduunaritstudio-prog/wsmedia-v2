@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState, type CSSProperties } from "react";
 
 /**
@@ -40,6 +41,17 @@ export default function Stage() {
         </div>
 
         <div className="surf">
+          {/* Julkisivu taustana, ei enaa omana havainnekuvakorttinaan.
+              next/image hoitaa lazy-latauksen ja optimoinnin; osio on
+              taitteen alapuolella, joten kuvaa ei haeta heti. */}
+          <Image
+            className="surfbg"
+            src="/graafinen/facade-bg.webp"
+            alt=""
+            aria-hidden="true"
+            fill
+            sizes="(max-width: 1080px) 100vw, 1080px"
+          />
           <div className="surfcol">
 
             {/* ---------- KÄYNTIKORTTI ---------- */}
@@ -143,148 +155,25 @@ export default function Stage() {
           <div className="surfcol">
 
             {/* ---------- PAKETTIAUTO ---------- */}
-            <div className="scard">
+            {/* ---------- PAKETTIAUTO (valokuva) ----------
+                Korvaa aiemman SVG-havainnekuvan. .rv antaa saman
+                sisaantulon kuin muillakin lohkoilla, ja koska SiteEffectsin
+                reveal-havainnoija tekee unobserven ensimmaisen kerran
+                jalkeen, ajovaloefekti laukeaa kertaalleen eika toistu. */}
+            <div className="scard vanshot rv">
               <span className="tag">Pakettiauto</span>
-              <svg viewBox="0 0 580 236" role="img" aria-label="Teipattu pakettiauto yrityksen ilmeellä">
-                <defs>
-                  <linearGradient id="vb" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="#ffffff"/><stop offset=".55" stopColor="#f3f5f8"/><stop offset="1" stopColor="#e2e6ec"/>
-                  </linearGradient>
-                  <linearGradient id="vg" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="#4a5563"/><stop offset="1" stopColor="#8a95a4"/>
-                  </linearGradient>
-                  <filter id="vsh" x="-20%" y="-40%" width="140%" height="220%">
-                    <feGaussianBlur stdDeviation="7"/>
-                  </filter>
-                  <clipPath id="wrapclip">
-                    <path d="M244 83 L509 83 L509 176 L486 176 C486 150 470 141 448 141 C426 141 410 150 410 176 L244 176 Z"/>
-                  </clipPath>
-                </defs>
-
-                <ellipse cx="292" cy="216" rx="238" ry="10" fill="#1d1d1f" opacity=".16" filter="url(#vsh)"/>
-
-                {/* kori */}
-                <path fill="url(#vb)" stroke="#cfd5de" strokeWidth="1.5" d="M62 182 L60 148 C60 137 64 132 74 131 L102 127 L138 80 C140 77 144 75 149 75 L506 75 C513 78 517 82 517 89 L517 182 L486 182 C486 152 470 142 448 142 C426 142 410 152 410 182 L188 182 C188 152 172 142 150 142 C128 142 112 152 112 182 Z"/>
-                {/* kattoheijastus */}
-                <path d="M153 78 H504" stroke="#ffffff" strokeWidth="3" opacity=".9" strokeLinecap="round"/>
-                {/* helman varjo */}
-                <path d="M112 174 H517 V182 H112 Z" fill="#0d0d10" opacity=".05"/>
-
-                {/* teippaus */}
-                <g clipPath="url(#wrapclip)">
-                  <path className="bf" d="M244 83 L509 83 L509 176 L244 176 Z"/>
-                  <path className="bft" d="M352 78 L404 78 L330 182 L278 182 Z" opacity=".45"/>
-                  <path className="bfd" d="M404 78 L426 78 L352 182 L330 182 Z" opacity=".5"/>
-                  <g transform="translate(264,100)">
-                    <rect x="0" y="0" width="36" height="36" rx="10" fill="#ffffff" opacity=".97"/>
-                    <path className="bf" d="M10 27 L18 10 L26 27 Z"/>
-                  </g>
-                  <text x="312" y="122" fontSize="21" fontWeight="700" fill="#ffffff" letterSpacing=".6">YRITYKSESI OY</text>
-                  <text x="312" y="142" fontSize="11" fill="#ffffff" opacity=".88" letterSpacing=".3">yrityksesi.fi · 040 123 4567</text>
-                </g>
-
-                {/* ikkunat */}
-                <path fill="url(#vg)" d="M110 126 L141 85 L175 85 L175 126 Z"/>
-                <path fill="url(#vg)" d="M183 85 L232 85 L232 126 L183 126 Z"/>
-                <path d="M116 124 L142 89 L156 89 L130 124 Z" fill="#ffffff" opacity=".22"/>
-                <path d="M189 89 L206 89 L190 122 L183 122 Z" fill="#ffffff" opacity=".16"/>
-
-                {/* yksityiskohdat */}
-                <path d="M236 85 V176" stroke="#d3d8e0" strokeWidth="1.5"/>
-                <rect x="200" y="138" width="22" height="5" rx="2.5" fill="#b9c0ca"/>
-                <path d="M180 93 q-16 2 -18 12 q10 2 18 -2 z" fill="#c4cad4" stroke="#adb5c0" strokeWidth="1"/>
-                <rect x="58" y="156" width="20" height="24" rx="5" fill="#d3d8e0"/>
-                <rect x="62" y="134" width="26" height="13" rx="4" fill="#f7f9fb" stroke="#d3d8e0"/>
-                <rect x="65" y="137" width="19" height="7" rx="3" fill="#dfe6ef"/>
-
-                {/* renkaat */}
-                <g>
-                  <circle cx="150" cy="182" r="32" fill="#1c1c20"/>
-                  <circle cx="150" cy="182" r="18" fill="#c5c9d1"/>
-                  <circle cx="150" cy="182" r="14.5" fill="#e6e8ed"/>
-                  <circle cx="150" cy="182" r="5" fill="#a4aab4"/>
-                </g>
-                <g>
-                  <circle cx="448" cy="182" r="32" fill="#1c1c20"/>
-                  <circle cx="448" cy="182" r="18" fill="#c5c9d1"/>
-                  <circle cx="448" cy="182" r="14.5" fill="#e6e8ed"/>
-                  <circle cx="448" cy="182" r="5" fill="#a4aab4"/>
-                </g>
-              </svg>
-            </div>
-
-            {/* ---------- JULKISIVU ---------- */}
-            <div className="scard">
-              <span className="tag">Julkisivu ja ikkunat</span>
-              <svg viewBox="0 0 580 250" role="img" aria-label="Liiketilan julkisivu ja ikkunateippaus yrityksen ilmeellä">
-                <defs>
-                  <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="#cfdbe8"/><stop offset=".5" stopColor="#e2eaf2"/><stop offset="1" stopColor="#d3dde8"/>
-                  </linearGradient>
-                  <linearGradient id="wallg" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="#f1f3f6"/><stop offset="1" stopColor="#e4e7ec"/>
-                  </linearGradient>
-                  <filter id="glow" x="-40%" y="-80%" width="180%" height="300%">
-                    <feGaussianBlur stdDeviation="2.6" result="b"/>
-                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
-                  <clipPath id="gclip"><rect x="42" y="94" width="312" height="118" rx="2"/></clipPath>
-                </defs>
-
-                {/* seinä */}
-                <rect x="0" y="0" width="580" height="214" fill="url(#wallg)"/>
-                <path d="M0 40 H580 M0 78 H580" stroke="#dcdfe5" strokeWidth="1"/>
-
-                {/* julkisivukyltti */}
-                <rect x="0" y="14" width="580" height="56" fill="#fbfcfd"/>
-                <path d="M0 70 H580" stroke="#d7dae1" strokeWidth="1.5"/>
-                <g filter="url(#glow)">
-                  <g transform="translate(204,26)">
-                    <rect className="bf" x="0" y="0" width="30" height="30" rx="8"/>
-                    <path d="M8 22 L15 8 L22 22 Z" fill="#ffffff"/>
-                  </g>
-                  <text className="bf" x="244" y="47" fontSize="22" fontWeight="700" letterSpacing=".6">YRITYKSESI OY</text>
-                </g>
-
-                {/* näyteikkuna */}
-                <rect x="38" y="90" width="320" height="126" rx="3" fill="#b9c1cc"/>
-                <rect x="42" y="94" width="312" height="118" rx="2" fill="url(#glass)"/>
-                <g clipPath="url(#gclip)">
-                  <rect x="42" y="94" width="312" height="9" fill="#0d0d10" opacity=".13"/>
-                  <path d="M60 212 L150 94 L196 94 L106 212 Z" fill="#ffffff" opacity=".38"/>
-                  <path d="M214 212 L304 94 L326 94 L236 212 Z" fill="#ffffff" opacity=".22"/>
-                  {/* ikkunateippaus */}
-                  <rect x="42" y="150" width="312" height="38" fill="#ffffff" opacity=".78"/>
-                  <text className="bf" x="276" y="175" fontSize="13" fontWeight="700" textAnchor="middle" letterSpacing=".8">AVOINNA MA–PE 8–17</text>
-                  <g transform="translate(64,106)">
-                    <rect className="bf" x="0" y="0" width="30" height="30" rx="8"/>
-                    <path d="M8 22 L15 8 L22 22 Z" fill="#ffffff"/>
-                  </g>
-                  <text className="bf" x="104" y="128" fontSize="15" fontWeight="700" letterSpacing=".4">YRITYKSESI OY</text>
-                </g>
-                <path d="M198 94 V212" stroke="#b9c1cc" strokeWidth="5"/>
-
-                {/* ovi */}
-                <rect x="386" y="90" width="104" height="126" rx="3" fill="#b9c1cc"/>
-                <rect x="390" y="94" width="96" height="118" rx="2" fill="url(#glass)"/>
-                <rect x="390" y="94" width="96" height="8" fill="#0d0d10" opacity=".13"/>
-                <path d="M396 212 L452 94 L470 94 L414 212 Z" fill="#ffffff" opacity=".3"/>
-                <rect x="470" y="122" width="6" height="40" rx="3" fill="#8d95a1"/>
-                <rect className="bf" x="390" y="180" width="96" height="22" opacity=".92"/>
-                <text x="438" y="195" fontSize="9.5" fontWeight="700" fill="#ffffff" textAnchor="middle" letterSpacing=".7">TERVETULOA</text>
-
-                {/* pystyaccent */}
-                <g transform="translate(508,96)">
-                  <rect className="bf" x="0" y="0" width="46" height="46" rx="12"/>
-                  <path d="M12 34 L23 12 L34 34 Z" fill="#ffffff"/>
-                </g>
-
-                {/* jalkakäytävä */}
-                <rect x="0" y="206" width="580" height="8" fill="#d8dce3"/>
-                <rect x="0" y="214" width="580" height="36" fill="#dfe3e9"/>
-                <path d="M0 214 H580" stroke="#c9ced6" strokeWidth="1.5"/>
-                <ellipse cx="290" cy="220" rx="230" ry="5" fill="#1d1d1f" opacity=".1"/>
-              </svg>
+              <div className="vanwrap">
+                <Image
+                  src="/graafinen/van-wrap.webp"
+                  alt="Teipattu pakettiauto yrityksen ilmeellä"
+                  width={1195}
+                  height={896}
+                  sizes="(max-width: 900px) 90vw, 40vw"
+                />
+                {/* Ajovalojen hehku kuvan omissa suhteissa: 27 % leveydesta,
+                    55 % korkeudesta. */}
+                <span className="vanlight" aria-hidden="true" />
+              </div>
             </div>
           </div>
         </div>
