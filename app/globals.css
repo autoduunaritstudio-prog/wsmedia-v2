@@ -2806,7 +2806,7 @@ footer .base { padding-top: 18px }
    alle. */
 .metalbd {
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  overflow: hidden; opacity: var(--metalbd-opacity, .72);
+  overflow: hidden; opacity: var(--metalbd-opacity, .88);
 }
 
 /* Kaarilohkot. closest-side pitaa reunan pehmeana ilman blur-suodinta,
@@ -2843,9 +2843,9 @@ footer .base { padding-top: 18px }
 .metalbd-noise {
   position: absolute; inset: 0; width: 100%; height: 100%;
   /* Kohina nostettiin samassa suhteessa kuin kerroksen opacity
-     (.55 -> .72), jottei pinta muutu tasaiseksi tummennukseksi vaan
+     (.55 -> .72 -> .88), jottei pinta muutu tasaiseksi tummennukseksi vaan
      sailyttaa harjatun metallin rakeisuuden. */
-  opacity: .075; mix-blend-mode: multiply;
+  opacity: .092; mix-blend-mode: multiply;
 }
 
 @media (prefers-reduced-motion: reduce) {
