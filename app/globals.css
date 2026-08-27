@@ -2873,7 +2873,44 @@ footer .base { padding-top: 18px }
   padding: 28px 30px;
   margin: -28px -30px;
 }
+/* Sama levy osio-otsikolle. Kaytetaan koko .sheadille eika pelkalle
+   .subille: h2 ja alaotsikko ovat yksi typografinen lohko, ja pelkan
+   alaotsikon takana levy nayttaisi irralliselta suikaleelta otsikon
+   alla. --ink-h2 lapaisi jo ilman levyakin, se tulee mukana ilmaiseksi.
+   max-width nostetaan 600 -> 660px koska box-sizing on border-box:
+   ilman kompensaatiota 2 x 30px padding kaventaisi tekstipalstan
+   540px:aan ja rivit katkeaisivat eri kohdista kuin muualla. */
+.cover .shead {
+  max-width: calc(600px + 60px);
+  background: rgba(255,255,255,.95);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 28px 30px;
+  /* Alamarginaalista vahennetaan 28px, koska paddingista tulee jo saman
+     verran tyhjaa tekstin alle: ilman tata seuraava lohko siirtyisi
+     28px alemmas kuin muilla sivuilla. */
+  margin: -28px -30px calc(var(--space-shead-gap) - 28px);
+}
+
+/* Lukukaistan levy vedetaan koko .statbandin alle, ei jokaisen
+   selitetekstin alle erikseen: neljasta erillisesta pillerista tulisi
+   levoton rivi, ja koko kaistan alla oleva levy pelastaa samalla
+   .stat .num b:n --blue-luvut jotka olivat yhta lailla alle AA:n.
+   Pystypadding oli jo 44px, joten vain vaakapadding tarvitsee
+   negatiivisen marginaalin vastapainokseen. */
+.cover .statband {
+  background: rgba(255,255,255,.95);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 44px 30px;
+  margin: 0 -30px;
+}
+
 @media (max-width: 880px) {
+  .cover .shead { max-width: calc(600px + 48px); margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px }
+  .cover .statband { margin: 0 -24px; padding-left: 24px; padding-right: 24px }
   /* Yhden sarakkeen asettelussa negatiivinen marginaali vastaa .wrapin
      omaa 24px paddingia, jolloin levy ulottuu tasan reunaan asti eika
      tuota vaakaylivuotoa. */
