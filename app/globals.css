@@ -932,7 +932,23 @@ section { padding: var(--space-section) 0 }
    antaa videolle lahteen oma 9:16-kuvasuhde, mika on tasmalleen se mita
    contain tekee.
    Vain TikTok-puhelimessa: REELS-puhelimen rajaus on hyvaksytty. */
-.mini .phone-video-contain { object-fit: contain }
+.mini .phone-video-contain {
+  object-fit: contain;
+  /* Zoomaus kutistaa kaistat. Geometria (.scr 9:19, lahde 9:16):
+       scale     korkeudesta   kaistat/reuna   lahteesta pois
+       1.00          84,2 %          7,89 %            0,0 %
+       1.10          92,6 %          3,68 %            9,1 %
+       1.12          94,3 %          2,84 %           10,7 %  <- valittu
+       1.15          96,8 %          1,58 %           13,0 %
+       1.1875       100,0 %          0,00 %           15,8 %  <- KATTO = cover
+     1.1875 on matemaattinen ylaraja: siina video tayttaa korkeuden ja
+     lopputulos on tasmalleen sama kuin object-fit: cover. Sita suurempi
+     arvo rajaisi ENEMMAN kuin cover, jolloin contain menettaa
+     tarkoituksensa.
+     transform: scale keskittaa oletuksena, ja ylimenevan leveyden rajaa
+     .scr:n oma overflow: hidden pyoristettyine kulmineen. */
+  transform: scale(var(--phone-video-zoom, 1.12));
+}
 .mini .tag {
   position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;
   font-size: 9px; font-weight: var(--weight-semibold); letter-spacing: .18em; color: rgba(255,255,255,.55); z-index: 2;
