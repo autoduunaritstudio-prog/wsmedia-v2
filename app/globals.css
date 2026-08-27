@@ -927,9 +927,11 @@ section { padding: var(--space-section) 0 }
    jaavat nakyviin. Pyoristetyt kulmat tulevat .scr:n radiuksesta ja
    overflow: hiddenista. Video on 9:16 ja ruutu 9:19, joten cover rajaa
    sivuilta - kohde on kuvassa keskella, joten oletuskeskitys on oikein. */
+/* inset: -1px kuten .demo-videossa. Puhelimet ovat myos 3D-kaannettyja,
+   joten sama alipikselin rako on mahdollinen; .scr leikkaa ylivuodon
+   pyoristetyin kulmin. */
 .mini .phone-video {
-  position: absolute; inset: 0; z-index: 0;
-  width: 100%; height: 100%;
+  position: absolute; inset: -1px; z-index: 0;
   object-fit: cover; background: #0c0c0e;
 }
 
@@ -975,8 +977,14 @@ section { padding: var(--space-section) 0 }
    sama kiintea korkeus tassa pitaa selainkehyksen 314px:ssa joka leveydella.
    object-fit: cover hoitaa videon oman kuvasuhteen rajauksen. */
 .browser .page.demo { padding: 0; height: 260px }
+/* 1px ylivuoto joka suuntaan. Elementilla on tumma oma taustavari, ja
+   3D-kaannetyn esivanhemman rasterointi voi jattaa reunaan alipikselin
+   raon josta se pilkistaa mustana sahalaitana. Ylivuoto varmistaa etta
+   videokuva peittaa ruutualueen reunoihin asti; ylimenevan leikkaa
+   .page:n oma overflow: hidden. */
 .demo-video {
-  display: block; width: 100%; height: 100%;
+  display: block;
+  width: calc(100% + 2px); height: calc(100% + 2px); margin: -1px;
   object-fit: cover; background: var(--dark);
   /* Ylareunaan kiinnitys. Videoalue on leveampi kuvasuhteeltaan kuin video,
      joten cover jattaa pystysuuntaista ylivuotoa. Oletuskeskitys ottaisi
@@ -991,9 +999,12 @@ section { padding: var(--space-section) 0 }
    myohemmin - valiin jaisi musta hetki. Tama kerros peittaa koko lataus- ja
    bufferointivaiheen ja haipyy vasta kun video ilmoittaa 'playing'.
    z-index 1: videon (0) paalla mutta .minin .tagin (2) alla. */
+/* inset: -1px samasta syysta kuin .demo-videossa: poster on videon paalla
+   ja jakaa saman reunan, joten sen on peitettava yhta pitkalle.
+   Leveys ja korkeus tulevat inseteista, joten niita ei aseteta erikseen. */
 .demo-poster {
-  position: absolute; inset: 0; z-index: 1;
-  display: block; width: 100%; height: 100%;
+  position: absolute; inset: -1px; z-index: 1;
+  display: block;
   object-fit: cover; pointer-events: none;
   transition: opacity .18s ease;
 }
