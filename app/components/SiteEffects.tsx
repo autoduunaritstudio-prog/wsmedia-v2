@@ -372,7 +372,7 @@ export default function SiteEffects() {
           (es) => {
             es.forEach((e) => e.target.classList.toggle("lights-on", e.isIntersecting));
           },
-          { threshold: 0.35 },
+          { threshold: 0.2 },
         );
     if (lightsIo) {
       document.querySelectorAll("[data-lights]").forEach((el) => lightsIo.observe(el));

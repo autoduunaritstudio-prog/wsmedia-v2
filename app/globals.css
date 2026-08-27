@@ -2577,30 +2577,34 @@ footer .base { padding-top: 18px }
 }
 .gsurf-van.rv.on { opacity: 1; transform: none }
 
-/* AJOVALOT. Huom: auton valot PALAVAT jo valokuvassa, joten hehkun
-   lisaaminen niiden paalle ei nakynyt - screen-sekoitus jo kirkkaan
-   valkoisen paalla ei muuta mitaan. Efekti toimii siksi painvastoin:
-   peite HIMMENTAA valot kun paneeli ei ole nakyvissa, ja haipyy pois kun
-   se tulee ruudulle. Lopputulos on sama kuin pyydetty - valot syttyvat
-   nakyviin tullessa ja sammuvat poistuttaessa - mutta se on toteutettu
-   sita vasten mita kuvassa oikeasti on.
+/* AJOVALOT. Kaksi aiempaa yritysta epaonnistui eri syista, joten tassa
+   on tarkeaa mita kuvassa oikeasti on:
 
-   multiply tummentaa alla olevan valon; lapinakyva reuna jattaa taustan
-   koskematta, joten peite ei nay vaalealla pohjalla. 18 % leveys pitaa
-   sen auton keulan valoryhman kohdalla eika levia auton ulkopuolelle. */
+   - Auton omat valot palavat jo valokuvassa ja ovat kirkkaan valkoiset.
+     screen-sekoitus TASAN niiden paalla ei muuta mitaan (screen valkoisella
+     = valkoinen), joten ensimmainen versio oli nakymaton.
+   - Toinen versio kaansi logiikan: multiply-peite himmensi valot. Se
+     nakyi, mutta vaarin pain - muutos oli TUMMAN POISTUMINEN, ei valon
+     syttyminen, ja "pois"-tilassa keulassa oli musta laikku.
+
+   Ratkaisu: takaisin additiiviseen hehkuun, mutta ISOMPANA (34 % eika
+   26 %). Auton kori on hyvin tumma, joten hehku vuotaa valoryhman
+   ympärille korille ja NAKYY siella selvasti. Valkealla taustalla
+   screen ei muuta mitaan, joten hehku haipyy itsestaan auton reunoilla
+   eika levia paneelin pohjalle. */
 .gsurf-light {
-  position: absolute; left: 27%; top: 55%; width: 18%; aspect-ratio: 1;
+  position: absolute; left: 27%; top: 55%; width: 34%; aspect-ratio: 1;
   transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
-  mix-blend-mode: multiply; opacity: .9; transition: opacity .5s ease;
+  mix-blend-mode: screen; opacity: 0; transition: opacity .55s ease;
   background: radial-gradient(circle,
-    rgba(38,46,62,1) 0%, rgba(84,94,116,.7) 40%, rgba(255,255,255,0) 72%);
+    rgba(214,236,255,.95) 0%, rgba(122,190,255,.5) 32%, rgba(90,160,255,0) 70%);
 }
-/* Nakyvissa = peite pois = valot palavat. */
-.gsurf-van.lights-on .gsurf-light { opacity: 0 }
+/* Nakyvissa = valot palavat. */
+.gsurf-van.lights-on .gsurf-light { opacity: .95 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Yksinkertaisin vaihtoehto: peite pois pysyvasti, eli valot palavat
-     aina kuten valokuvassa. Ei siirtymia kumpaankaan suuntaan. */
+  /* Yksinkertaisin vaihtoehto: ei lisattya hehkua lainkaan, auto nakyy
+     sellaisena kuin se on valokuvassa. Ei siirtymia. */
   .gsurf-light { transition: none; opacity: 0 }
 }
 

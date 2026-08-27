@@ -15,8 +15,9 @@ import Image from "next/image";
  *    mukaan eika tee unobservea, joten valot syttyvat ja sammuvat aina
  *    kun auto tulee ruudulle tai poistuu siita.
  *
- *    Auton valot palavat jo valokuvassa, joten peite toimii toisin pain:
- *    se HIMMENTAA valot kun paneeli ei ole nakyvissa. Ks. .gsurf-light.
+ *    Hehku on additiivinen ja tarpeeksi iso vuotaakseen auton tummalle
+ *    korille - vain siella se nakyy, koska auton omat valot ovat kuvassa
+ *    jo kirkkaan valkoiset. Ks. .gsurf-light.
  */
 export default function GraphicsSurfaces() {
   return (
@@ -29,7 +30,7 @@ export default function GraphicsSurfaces() {
           height={896}
           sizes="(max-width: 880px) 82vw, 40vw"
         />
-        {/* Ajovalojen peite: 27 % leveydesta, 55 % korkeudesta auton
+        {/* Ajovalojen hehku: 27 % leveydesta, 55 % korkeudesta auton
             omissa suhteissa, eli kuvan valoryhman kohdalla. */}
         <span className="gsurf-light" aria-hidden="true" />
       </div>
