@@ -92,26 +92,26 @@
   --text-stat-sub: clamp(28px,3.4vw,42px);
 
   /* Leipateksti ja kayttoliittyma */
-  --text-lead: clamp(17px,2vw,21px);
+  --text-lead: clamp(18px,2vw,22px);
   --text-quote: clamp(20px,2.7vw,30px);   /* iso sitaatti */
   --text-metric-lg: clamp(34px,4.6vw,52px);   /* korostettu mittariluku */
   --text-stat-sm: clamp(25px,3vw,36px);   /* tiivis lukukaista */
-  --text-title-fluid: clamp(20px,2.4vw,25px);   /* juokseva korttiotsikko */
+  --text-title-fluid: clamp(21px,2.4vw,25px);   /* juokseva korttiotsikko */
   --text-price: 30px;
   --text-price-sm: 25px;    /* tiivis hintaluku */
   --text-title-2xl: 24px;   /* valilehtipaneelin otsikko */
-  --text-title-xl: 22px;    /* vertailukortin otsikko */
-  --text-title-lg: 20px;
-  --text-title: 19px;
-  --text-lead-sm: 18px;
-  --text-title-sm: 17.5px;
-  --text-title-xs: 17px;
-  --text-body-xl: 16px;
-  --text-body-lg: 15.5px;
-  --text-body: 15px;
-  --text-body-sm: 14.5px;
-  --text-ui: 14px;
-  --text-ui-sm: 13.5px;
+  --text-title-xl: 23px;    /* vertailukortin otsikko */
+  --text-title-lg: 22px;
+  --text-title: 21px;
+  --text-lead-sm: 20px;
+  --text-title-sm: 20.5px;
+  --text-title-xs: 20px;
+  --text-body-xl: 17.5px;
+  --text-body-lg: 17px;
+  --text-body: 16.5px;
+  --text-body-sm: 16.5px;
+  --text-ui: 16px;
+  --text-ui-sm: 16px;
   --text-label: 13px;
   --text-label-sm: 12.5px;
   --text-caption: 12px;
@@ -676,7 +676,7 @@ h2 { font-size: var(--text-h2); font-weight: var(--weight-bold); letter-spacing:
 h2.big { font-size: var(--text-h2-hero) }
 .sub {
   font-size: var(--text-lead); color: var(--grey);
-  font-weight: var(--weight-regular); letter-spacing: -0.014em; line-height: 1.45;
+  font-weight: var(--weight-regular); letter-spacing: -0.014em; line-height: 1.5;
 }
 .accent { color: var(--blue) }
 .kick {
@@ -1865,7 +1865,7 @@ footer .base { padding-top: 18px }
   .page-verkkosivut .grid3 { grid-template-columns:1fr }
 }
 .page-verkkosivut .plat ul { list-style:none;margin-top:14px }
-.page-verkkosivut .plat li { font-size: var(--text-ui-sm);color:var(--ink);padding:6px 0 6px 18px;position:relative;line-height:1.45 }
+.page-verkkosivut .plat li { font-size: var(--text-ui-sm);color:var(--ink);padding:6px 0 6px 18px;position:relative;line-height:1.5 }
 .page-verkkosivut .plat li::before { content:"—";position:absolute;left:0;color:var(--blue) }
 .page-verkkosivut .cmp { margin-top:40px;border:1px solid var(--hair);border-radius:20px;background:#fff; padding:32px 30px 28px;box-shadow:0 24px 60px -30px rgba(29,29,31,.18); }
 @media (max-width:640px) {
@@ -2158,7 +2158,7 @@ footer .base { padding-top: 18px }
 @media (max-width:560px) {
   .page-verkkosivut .prow ul { grid-template-columns:1fr }
 }
-.page-verkkosivut .prow li { font-size: var(--text-ui-sm);color:var(--grey);padding:6px 0 6px 21px;position:relative;line-height:1.45 }
+.page-verkkosivut .prow li { font-size: var(--text-ui-sm);color:var(--grey);padding:6px 0 6px 21px;position:relative;line-height:1.5 }
 .page-verkkosivut .prow li::before { content:"✓";position:absolute;left:0;top:7px;color:var(--blue);font-size: var(--text-micro);font-weight: var(--weight-bold) }
 .page-verkkosivut .prow .pp { text-align:right }
 @media (max-width:900px) {
