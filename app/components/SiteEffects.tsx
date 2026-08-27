@@ -44,10 +44,9 @@ export default function SiteEffects() {
     // palautuva. Samalla asetetaan --tilt, jota varjot lukevat CSS:ssa.
     const tilts = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt]"));
     const TILT_MAX = 19;    // asteina aaripaassa
-    // Pienempi arvo = tayskallistus saavutetaan lyhyemmalla scroll-matkalla,
-    // jolloin efekti ehtii nakya selvemmin ilman etta kulmaa tarvitsee
-    // kasvattaa jyrkemmaksi.
-    const TILT_RANGE = 0.5; // etaisyys keskelta (osuus vh:sta) johon tayskallistus osuu
+    // Etaisyys viewportin keskelta (osuus vh:sta) jossa kulma on nollassa.
+    // 0.5 = elementin keskikohta on ruudun ala- tai ylareunassa.
+    const TILT_RANGE = 0.5;
 
     /* ---------- parallaksi ---------- */
     const pars = Array.from(
@@ -134,7 +133,11 @@ export default function SiteEffects() {
         const r = el.getBoundingClientRect();
         // Keskikohtien etaisyys, normalisoitu viewportin korkeuteen.
         const d = (r.top + r.height / 2 - vh / 2) / vh;
-        const t = Math.min(Math.abs(d) / TILT_RANGE, 1);
+        // 1 = keskella (taysi kaanto), 0 = TILT_RANGEn paassa keskelta
+        // (tasainen). Elementti on siis "avautuneimmillaan" kun se on
+        // parhaiten katsottavissa ja suoristuu tullessaan nakyviin seka
+        // poistuessaan.
+        const t = Math.max(1 - Math.abs(d) / TILT_RANGE, 0);
         el.style.setProperty("--tilt", t.toFixed(3));
         // data-tilt: "x" | "y" | "-x" | "-y". Etumerkki valitsee kumpi
         // reuna tulee katsojaa kohti.
