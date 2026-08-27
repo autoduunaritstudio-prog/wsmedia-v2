@@ -26,7 +26,7 @@ export default function Services() {
               <div className="mini">
                 <div className="scr">
                   <DemoVideo
-                    className="reels-video"
+                    className="phone-video"
                     mp4="/reels-demo.mp4"
                     poster="/reels-demo-poster.jpg"
                     preload="metadata"
@@ -37,7 +37,13 @@ export default function Services() {
               </div>
               <div className="mini">
                 <div className="scr">
-                  <div className="vid" style={{ animationDelay: "-5s" }} />
+                  <DemoVideo
+                    className="phone-video"
+                    mp4="/tiktok-demo.mp4"
+                    poster="/tiktok-demo-poster.jpg"
+                    preload="metadata"
+                    label="Esimerkki WS Median tuottamasta TikTok-videosta"
+                  />
                   <div className="tag">TIKTOK</div>
                 </div>
               </div>

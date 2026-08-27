@@ -874,18 +874,11 @@ section { padding: var(--space-section) 0 }
   --ph-notch-w: 55px; --ph-notch-h: 15px; --ph-notch-top: 8px;
   width: 170px;
 }
-.mini .vid {
-  position: absolute; inset: -12%;
-  background:
-    radial-gradient(95% 75% at 28% 86%, rgba(0,113,227,.5), transparent 60%),
-    radial-gradient(120% 100% at 50% 50%, #15161a 0%, #0c0c0e 80%);
-  animation: vidmove 11s ease-in-out infinite alternate;
-}
 /* Video tayttaa ruutualueen (.scr), ei koko runkoa: nain reunus ja notch
    jaavat nakyviin. Pyoristetyt kulmat tulevat .scr:n radiuksesta ja
    overflow: hiddenista. Video on 9:16 ja ruutu 9:19, joten cover rajaa
    sivuilta - kohde on kuvassa keskella, joten oletuskeskitys on oikein. */
-.mini .reels-video {
+.mini .phone-video {
   position: absolute; inset: 0; z-index: 0;
   width: 100%; height: 100%;
   object-fit: cover; background: #0c0c0e;
@@ -1319,7 +1312,7 @@ footer .base { padding-top: 18px }
 
 @media (prefers-reduced-motion: reduce) {
   .li, .rv { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important }
-  .phone, .phone *, .swap span, .marq .track, .mini .vid, .event .lights,
+  .phone, .phone *, .swap span, .marq .track, .event .lights,
   .chip-f, .float-tag { animation: none !important }
   [data-par] { translate: none !important }
 }
