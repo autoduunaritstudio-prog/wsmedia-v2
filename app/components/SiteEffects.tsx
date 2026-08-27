@@ -26,6 +26,15 @@ export default function SiteEffects() {
     const nav = document.getElementById("nav");
     const prog = document.getElementById("prog");
 
+    /* ---------- metallitausta (etusivun kokeilu) ---------- */
+    // Pelkkia transformeja: kaarilohkot ja valovyot ovat GPU-kiihdytettyja
+    // kerroksia, joten koko sivun kokoinen tausta ei aiheuta
+    // uudelleenpiirtoa framea kohden. Kohinakerros on staattinen eika
+    // osallistu tahan lainkaan.
+    const mbA = document.querySelector<HTMLElement>(".metalbd-a");
+    const mbB = document.querySelector<HTMLElement>(".metalbd-b");
+    const mbSweep = document.querySelector<HTMLElement>(".metalbd-sweep");
+
     /* ---------- taustakuvio ---------- */
     const bdGrid = document.getElementById("bdGrid");
     const bdRing = document.getElementById("bdRing");
@@ -176,6 +185,22 @@ export default function SiteEffects() {
         const back = mockup ? ` rotateX(${(t * TILT_BACK_MAX).toFixed(2)}deg)` : "";
         el.style.setProperty("--tilt-rot", `${axis}(${main.toFixed(2)}deg)${back}`);
       });
+
+      if (mbA) {
+        mbA.style.transform =
+          `translate3d(${(sc * 0.03).toFixed(1)}px, ${(-sc * 0.05).toFixed(1)}px, 0)` +
+          ` rotate(${(sc * 0.012).toFixed(2)}deg)`;
+      }
+      if (mbB) {
+        mbB.style.transform =
+          `translate3d(${(-sc * 0.026).toFixed(1)}px, ${(sc * 0.042).toFixed(1)}px, 0)` +
+          ` rotate(${(-sc * 0.009).toFixed(2)}deg)`;
+      }
+      if (mbSweep) {
+        // Modulo pitaa vyot silmukassa: kuvio toistuu 420px valein, joten
+        // sama jakso siirtymassa nayttaa jatkuvalta valon pyyhkaisylta.
+        mbSweep.style.transform = `translate3d(0, ${(-(sc * 0.14) % 420).toFixed(1)}px, 0)`;
+      }
 
       if (bdGrid && bdRing && bdWave) {
         const gx = -((sc * 0.02) % 240);

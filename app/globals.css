@@ -2788,6 +2788,64 @@ footer .base { padding-top: 18px }
 }
 
 
+
+/* ==================================================================
+   METALLITAUSTA (.metalbd) — etusivun kokeellinen taustakuvio
+   Kaksi limittyvaa kaarilohkoa muodostavat diagonaalin S-jaon, paalla
+   diagonaaliset valovyot ja harjatun metallin kohina.
+
+   Sävyt ovat harmaan ja mustan skaalaa (#1a1a1c ... #6a6a70), mutta
+   matalalla alfalla: sivu on valkoinen ja tekstit tummia, joten kuvio
+   saa antaa pinnalle vain vivahteen. --metalbd-opacity on yksi nuppi
+   koko kerroksen voimakkuudelle.
+   ================================================================== */
+.metalbd {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  overflow: hidden; opacity: var(--metalbd-opacity, .55);
+}
+
+/* Kaarilohkot. closest-side pitaa reunan pehmeana ilman blur-suodinta,
+   joka olisi selvasti raskaampi taman kokoisella pinnalla. */
+.metalbd-blob { position: absolute; will-change: transform }
+.metalbd-a {
+  width: 150vmax; height: 110vmax; left: -35vmax; top: -42vmax;
+  background: radial-gradient(closest-side at 50% 50%,
+    rgba(26,26,28,.30) 0%, rgba(74,74,79,.20) 45%, rgba(106,106,112,0) 78%);
+}
+.metalbd-b {
+  width: 165vmax; height: 120vmax; right: -48vmax; bottom: -52vmax;
+  background: radial-gradient(closest-side at 50% 50%,
+    rgba(106,106,112,.26) 0%, rgba(74,74,79,.16) 48%, rgba(26,26,28,0) 80%);
+}
+
+/* Diagonaaliset valovyot: kapeat vaaleat raidat, jotka liukuvat scrollin
+   mukana ja saavat pinnan nayttamaan silta etta valo liikkuu sen yli.
+   Korkeus on ylimitoitettu, jotta modulo-siirtyma ei paljasta reunaa. */
+.metalbd-sweep {
+  position: absolute; left: -30vmax; right: -30vmax; top: -60vmax; bottom: -60vmax;
+  will-change: transform;
+  background: repeating-linear-gradient(
+    118deg,
+    rgba(255,255,255,0) 0px,
+    rgba(255,255,255,0) 190px,
+    rgba(255,255,255,.55) 250px,
+    rgba(160,160,168,.16) 300px,
+    rgba(255,255,255,0) 420px
+  );
+}
+
+/* Harjatun metallin kohina. Staattinen, joten se rasteroidaan kerran. */
+.metalbd-noise {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: .055; mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* SiteEffects ei aja scrub-laskentaa tassa tilassa, joten kuvio jaa
+     lahtoasentoonsa. will-change pois turhana. */
+  .metalbd-blob, .metalbd-sweep { will-change: auto }
+}
+
 /* ==================================================================
    TOIHIN MEILLE -SIVU (.page-toihin-meille)
    Rekrytointisivu, EI .page-palvelu-kerroksessa: se ei myy palvelua

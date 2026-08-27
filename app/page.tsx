@@ -1,4 +1,5 @@
-import Backdrop from "./components/Backdrop";
+// KOKEILU: vaihda takaisin Backdropiin palauttaaksesi vanhan taustakuvion.
+import MetalBackdrop from "./components/MetalBackdrop";
 import SiteEffects from "./components/SiteEffects";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
@@ -27,7 +28,7 @@ const STATS = [
 export default function Home() {
   return (
     <>
-      <Backdrop />
+      <MetalBackdrop />
       <div id="prog" />
       <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
       {/* Sticky hero + nouseva cover. Hero pysyy kiinnitettyna ruudun
