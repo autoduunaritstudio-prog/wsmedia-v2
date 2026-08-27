@@ -754,7 +754,10 @@ h2.big { font-size: var(--text-h2-hero) }
 .phone, .mini {
   position: absolute; aspect-ratio: 9/19;
   border-radius: var(--ph-radius); background: #0f0f11;
-  box-shadow: var(--ph-drop), inset 0 0 0 var(--ph-bezel) #232327, var(--ph-rim);
+  /* Reunusrenkaan savy nostettiin #232327 -> #2e2e34: kontrasti ruudun
+     #0c0c0e-taustaan kasvaa, jolloin kehys erottuu paksumpana ilman etta
+     sen leveytta tarvitsee kasvattaa yhta paljon. */
+  box-shadow: var(--ph-drop), inset 0 0 0 var(--ph-bezel) #2e2e34, var(--ph-rim);
   overflow: hidden;
 }
 /* Notch/dynamic island. Sade on puolet korkeudesta, jolloin paat ovat
@@ -774,7 +777,7 @@ h2.big { font-size: var(--text-h2-hero) }
 }
 
 .phone {
-  --ph-radius: 34px; --ph-bezel: 3px;
+  --ph-radius: 34px; --ph-bezel: 3.5px;   /* 3px -> 3.5px, +17% */
   --ph-drop: 0 50px 100px -30px rgba(29,29,31,.35);
   --ph-rim: 0 0 0 0 transparent;
   --ph-notch-w: 72px; --ph-notch-h: 20px; --ph-notch-top: 10px;
@@ -910,7 +913,7 @@ section { padding: var(--space-section) 0 }
 /* video-palvelun visuaali */
 .mini-phones { position: relative; height: 360px; perspective: 900px }
 .mini {
-  --ph-radius: 26px; --ph-bezel: 2.5px;
+  --ph-radius: 26px; --ph-bezel: 3px;     /* 2.5px -> 3px, +20% */
   /* --tilt tulee nyt puhelimelta itseltaan (data-tilt siirtyi sailiolta
      kummallekin .minille), joten varjo syvenee sen oman kaannon mukana. */
   --ph-drop:
@@ -919,7 +922,11 @@ section { padding: var(--space-section) 0 }
   /* Hienovarainen reunavalo ylareunassa antaa rungolle metallisen
      pyoreyden. Heron .phone jattaa taman pois (--ph-rim: transparent),
      jotta sen ulkoasu ei muutu taman muutoksen yhteydessa. */
-  --ph-rim: inset 0 1px 0 rgba(255,255,255,.16);
+  /* Kaksi viivaa yhden sijaan: kirkkaampi valo ylareunassa ja tumma
+     varjo alareunassa. Pari saa rungon nayttamaan pyoreana ja
+     paksumpana, mika on koko syvyysvaikutelman ydin - pelkka
+     leveyden kasvatus littaisi kehyksen tasaiseksi renkaaksi. */
+  --ph-rim: inset 0 1.5px 0 rgba(255,255,255,.26), inset 0 -1.5px 0 rgba(0,0,0,.55);
   --ph-notch-w: 55px; --ph-notch-h: 15px; --ph-notch-top: 8px;
   width: 170px;
 }
