@@ -15,10 +15,13 @@ import Footer from "./components/Footer";
 import { HOME_FOOTER, OVERLAY_NAV } from "./components/site-data";
 
 const STATS = [
-  { value: "00", label: "toteutettua projektia" },
-  { value: "0 000 000+", label: "katselukertaa yhteensä" },
-  { value: "00", label: "arkipäivää keskim. toimitusaika" },
-  { value: "4,9/5", label: "keskiarvosana asiakkailta" },
+  { value: "150+", label: "toteutettua projektia" },
+  // \u00A0 = sitomaton valilyonti: tuhaterotin ei saa katkaista lukua
+  // riville jos sarake kapenee. Aiempi placeholder kaytti tavallista
+  // valilyontia, joka olisi voinut katketa.
+  { value: "5\u00A0000\u00A0000+", label: "katselukertaa yhteensä" },
+  { value: "8", label: "arkipäivää keskim. toimitusaika" },
+  { value: "4,8/5", label: "keskiarvosana asiakkailta" },
 ];
 
 export default function Home() {

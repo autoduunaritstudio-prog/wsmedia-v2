@@ -1231,7 +1231,6 @@ footer .base { padding-top: 18px }
 /* ============ LUKUKAISTA ============ */
 .statband {
   display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-gap-grid);
-  border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair);
   padding: 44px 0;
 }
 @media (max-width: 760px) { .statband { grid-template-columns: repeat(2,1fr); gap: 28px 16px } }

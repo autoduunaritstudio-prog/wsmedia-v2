@@ -304,7 +304,14 @@ export default function SiteEffects() {
           }
         });
       },
-      { threshold: 0.5 },
+      // Laukaisu ennen kuin elementti on nakyvissa: POSITIIVINEN alamarginaali
+      // laajentaa juuren viewportin alapuolelle, jolloin rullaus alkaa 20%
+      // ruudun korkeudesta ennen kuin luku tulee nakyviin ja kayttaja ehtii
+      // nahda koko 1,1s animaation. (Negatiivinen arvo tekisi painvastoin eli
+      // viivyttaisi laukaisua.) threshold 0 riittaa, kun raja on jo siirretty.
+      // Sama havainnoija ajaa myos case-korttien numerot, joten ajoitus on
+      // yhtenainen koko sivustolla.
+      { threshold: 0, rootMargin: "0px 0px 20% 0px" },
     );
     document
       .querySelectorAll<HTMLElement>("[data-count]")
