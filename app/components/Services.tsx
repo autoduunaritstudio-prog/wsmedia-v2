@@ -129,7 +129,7 @@ export default function Services() {
         </div>
 
         {/* 3. Graafinen suunnittelu */}
-        <div className="svc rv">
+        <div className="svc rv svc-graafinen">
           <div className="svc-visual" data-par="0.02">
             <span className="deco deco-ring deco-ring-sm" style={{ right: "-3%", top: "-10px" }} />
             <span className="deco deco-dot" style={{ left: "-2%", bottom: "18%" }} />

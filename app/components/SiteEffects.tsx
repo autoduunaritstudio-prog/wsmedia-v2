@@ -362,6 +362,22 @@ export default function SiteEffects() {
     );
     document.querySelectorAll(".rv").forEach((el) => io.observe(el));
 
+    /* ---------- ajovalot (palautuva tila) ---------- */
+    // Eri havainnoija kuin .rv-paljastus: TAMA EI TEE UNOBSERVEA, vaan
+    // togglaa luokan nakyvyyden mukaan molempiin suuntiin. Sisaantulo on
+    // kertaluontoinen, valot eivat.
+    const lightsIo = reduce
+      ? null
+      : new IntersectionObserver(
+          (es) => {
+            es.forEach((e) => e.target.classList.toggle("lights-on", e.isIntersecting));
+          },
+          { threshold: 0.35 },
+        );
+    if (lightsIo) {
+      document.querySelectorAll("[data-lights]").forEach((el) => lightsIo.observe(el));
+    }
+
     /* ---------- numerorullaus (lukukaista + case-kortit) ---------- */
     // Luku kasitellaan YHTENA kokonaislukuna, ei merkki kerrallaan. Aiempi
     // merkkikohtainen odometri pyoritti jokaista numeroa omaan tahtiinsa,
@@ -421,6 +437,7 @@ export default function SiteEffects() {
       heroRo?.disconnect();
       io.disconnect();
       io2.disconnect();
+      lightsIo?.disconnect();
       frames.forEach((f) => cancelAnimationFrame(f));
     };
   }, []);

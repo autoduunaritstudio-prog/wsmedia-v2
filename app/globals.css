@@ -2550,51 +2550,46 @@ footer .base { padding-top: 18px }
 .ts-body .cc-reopen:hover { color: var(--blue-d) }
 
 
-/* Etusivun Graafinen suunnittelu -paneelin visuaali: pakettiauto
-   julkisivun edessa.
+/* Etusivun Graafinen suunnittelu -paneelin visuaali: pakettiauto.
+   Julkisivutaustaa ei ole - paneeli on samalla lapinakyvalla pohjalla kuin
+   muutkin kolme paneelia.
 
-   Kiintea kuvasuhde on olennainen: ilman sita sailio kasvaisi sisallon
-   mukaan ja taustakuva tayttaisi ylimaaraisen tilan, jolloin auto nayttaisi
-   leijuvan tyhjan pain. overflow: hidden + position: relative pitavat seka
-   taustan etta hehkun paneelin sisalla. */
-.gsurf {
-  position: relative; aspect-ratio: 4 / 3; overflow: hidden;
-  border-radius: 20px; display: grid; place-items: center;
-  box-shadow: 0 26px 64px -34px rgba(29,29,31,.4);
-}
-.gsurf-bg { object-fit: cover; z-index: 0 }
-/* Tummennus, jotta vaalea auto ja paneelin teksti erottuvat julkisivusta. */
-.gsurf::before {
-  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(rgba(13,13,16,.34), rgba(13,13,16,.58));
-}
-/* Auto on virtaava lohko, ei absoluuttinen: leveys on osuus sailiosta,
-   joten se ei voi ylittaa paneelin rajoja. */
-.gsurf-van { position: relative; z-index: 2; width: 82% }
+   overflow EI ole hidden: sisaantulossa auto alkaa tekstilohkon puolelta ja
+   ajaa sielta paikalleen, mika vaatii ylivuodon sarakkeen yli. Liike on
+   silti rajattu, koska siirtyma on kiintea osuus auton omasta leveydesta
+   ja lopputila on tasan sarakkeen sisalla. */
+.gsurf { position: relative; z-index: 1 }
+/* Teksti auton edelle: auto "tulee esiin" tekstin takaa eika tyonny sen yli. */
+.svc-graafinen .svc-txt { position: relative; z-index: 2 }
+
+.gsurf-van { position: relative; width: 92%; margin: 0 auto }
 .gsurf-van img { display: block; width: 100%; height: auto }
 
-/* Ajovalojen hehku. screen-sekoitus kirkastaa alla olevaa kuvaa sen sijaan
-   etta peittaisi sen. */
+/* SISAANTULO. Ohittaa .rv:n oletustilat suuremmalla spesifisyydella;
+   siirtymat (opacity + transform .8s) tulevat .rv:sta sellaisenaan.
+   Alkutila ei ole taysin lapinakyva: "tekstin takaa" tarkoittaa osittaista
+   peittoa, ei katoamista. */
+.gsurf-van.rv { opacity: .42; transform: translateX(38%) scale(.85) }
+.gsurf-van.rv.on { opacity: 1; transform: none }
+
+/* AJOVALOT. Palautuva tila, ei keyframe-valahdys: SiteEffectsin oma
+   havainnoija togglaa .lights-on -luokan nakyvyyden mukaan.
+   mix-blend-mode: screen kirkastaa auton omaa umpinaista valoaluetta ja
+   haipyy olemattomiin vaalean taustan paalla, joten hehku pysyy autossa. */
 .gsurf-light {
   position: absolute; left: 27%; top: 55%; width: 26%; aspect-ratio: 1;
   transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
-  mix-blend-mode: screen; opacity: 0;
+  mix-blend-mode: screen; opacity: 0; transition: opacity .5s ease;
   background: radial-gradient(circle,
     rgba(225,242,255,.95) 0%, rgba(150,205,255,.55) 34%, rgba(120,180,255,0) 70%);
 }
-/* .rv.on tulee SiteEffectsin reveal-havainnoijalta, joka tekee unobserven
-   ensimmaisen laukaisun jalkeen - valahdys tapahtuu siis kertaalleen.
-   0.38s viive ajoittaa sen heti paneelin sisaantulon jalkeen. */
-.gsurf.rv.on .gsurf-light {
-  animation: headlightFlash 1.1s cubic-bezier(.2,.6,.2,1) .38s forwards;
-}
-@keyframes headlightFlash { 0% { opacity: 0 } 40% { opacity: 1 } 100% { opacity: .15 } }
+.gsurf-van.lights-on .gsurf-light { opacity: .9 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Paneeli nakyy suoraan lopputilassa (.rv-saanto hoitaa sen), ja hehku
-     jaa kiinteaksi matalaksi valoksi ilman valahdysta. */
-  .gsurf.rv.on .gsurf-light { animation: none }
-  .gsurf-light { opacity: .12 }
+  /* Yksinkertaisin vaihtoehto: valot pois, ei siirtymia kumpaankaan
+     suuntaan. Auto nakyy lopputilassaan .rv-saannon kautta. */
+  .gsurf-light { transition: none }
+  .gsurf-van.lights-on .gsurf-light { opacity: 0 }
 }
 
 /* ==================================================================
