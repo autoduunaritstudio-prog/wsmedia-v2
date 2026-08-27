@@ -136,6 +136,7 @@
 
    MIHIN MITAKIN
      Osion pystypadding ........... --space-section / -sub / -mobile
+     Tiivis osiovali .............. --space-section-tight (logonauha -> osio)
      Hero ......................... --space-hero-top / -sub, --space-hero-bottom
      Etusivun sticky-hero ......... --space-hero-top-sticky (navin alta)
      Loppu-CTA .................... --space-final / -sub / -mobile
@@ -158,6 +159,10 @@
   --space-section: 120px;
   --space-section-sub: 110px;
   --space-section-mobile: 66px;
+  /* Tiivis osiovali. Logonauha ei ole oma osionsa vaan kaista, joka kuuluu
+     visuaalisesti seuraavaan osioon; taysi --space-section jattaisi niiden
+     valiin yhta ison raon kuin kahden itsenaisen osion valiin. */
+  --space-section-tight: 64px;
   --space-hero-top: 100px;
   --space-hero-top-sub: 56px;
   /* Etusivun sticky-hero. #nav on sticky NORMAALISSA VIRTAUKSESSA ja vie
@@ -1302,6 +1307,14 @@ footer .base { padding-top: 18px }
 
 /* ============ LOGOKAISTA ============ */
 .logos { padding: 54px 0 0 }
+/* Logonauhaa seuraava osio kiinni kaistaan: kaista on visuaalisesti osa
+   sita, ei erillinen osio. */
+.logos + section { padding-top: var(--space-section-tight) }
+/* Lukukaista Palvelut-osion jalkeen. Ylavali tulee kokonaan edellisen
+   osion alapaddingista (--space-section), joten oma ylapadding on 0 -
+   sama kuvio kuin #tyot-osiolla. Alapadding palauttaa normaalin
+   osiorytmin ennen tummaa referenssikaistaa. */
+.statband-sec { padding: 0 0 var(--space-section) }
 /* Asiakaslogonauha. Liike tulee SiteEffectsista scrollYn muutoksena, ei
    omasta animaatiosta: nauha siirtyy vain kun sivu liikkuu ja pysahtyy
    samalla hetkella. Reunojen mask haivyttaa logot sisaan ja ulos, jottei

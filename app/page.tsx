@@ -40,12 +40,12 @@ export default function Home() {
         <Hero />
         <div className="cover">
           <Logos />
-          <section style={{ padding: "70px 0 20px" }}>
+          <Services />
+          <section className="statband-sec">
             <div className="wrap">
               <StatBand stats={STATS} />
             </div>
           </section>
-          <Services />
         </div>
       </div>
       <Work />
