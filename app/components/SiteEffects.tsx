@@ -43,8 +43,11 @@ export default function SiteEffects() {
     // kanssa. Kaanto ei ole kertaalleen laukeava sisaantulo vaan taysin
     // palautuva. Samalla asetetaan --tilt, jota varjot lukevat CSS:ssa.
     const tilts = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt]"));
-    const TILT_MAX = 12;     // asteina aaripaassa
-    const TILT_RANGE = 0.62; // etaisyys keskelta (osuus vh:sta) johon tayskallistus osuu
+    const TILT_MAX = 19;    // asteina aaripaassa
+    // Pienempi arvo = tayskallistus saavutetaan lyhyemmalla scroll-matkalla,
+    // jolloin efekti ehtii nakya selvemmin ilman etta kulmaa tarvitsee
+    // kasvattaa jyrkemmaksi.
+    const TILT_RANGE = 0.5; // etaisyys keskelta (osuus vh:sta) johon tayskallistus osuu
 
     /* ---------- parallaksi ---------- */
     const pars = Array.from(

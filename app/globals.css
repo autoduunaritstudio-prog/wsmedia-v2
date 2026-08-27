@@ -865,8 +865,8 @@ section { padding: var(--space-section) 0 }
   /* --tilt periytyy .mini-phonesilta, joten puhelinten varjo syvenee
      samassa tahdissa kaannon kanssa. */
   --ph-drop:
-    0 calc(34px + var(--tilt, 0) * 22px) calc(70px + var(--tilt, 0) * 28px) -24px
-    rgba(29,29,31, calc(.4 + var(--tilt, 0) * .14));
+    0 calc(34px + var(--tilt, 0) * 28px) calc(70px + var(--tilt, 0) * 36px) -24px
+    rgba(29,29,31, calc(.4 + var(--tilt, 0) * .18));
   /* Hienovarainen reunavalo ylareunassa antaa rungolle metallisen
      pyoreyden. Heron .phone jattaa taman pois (--ph-rim: transparent),
      jotta sen ulkoasu ei muutu taman muutoksen yhteydessa. */
@@ -902,8 +902,8 @@ section { padding: var(--space-section) 0 }
   border-radius: 16px; overflow: hidden; background: #fff;
   border: 1px solid var(--hair);
   box-shadow:
-    0 calc(40px + var(--tilt, 0) * 26px) calc(90px + var(--tilt, 0) * 34px) -30px
-    rgba(29,29,31, calc(.3 + var(--tilt, 0) * .14));
+    0 calc(40px + var(--tilt, 0) * 34px) calc(90px + var(--tilt, 0) * 44px) -30px
+    rgba(29,29,31, calc(.3 + var(--tilt, 0) * .18));
 }
 .browser .bar {
   display: flex; align-items: center; gap: 8px;
@@ -972,8 +972,8 @@ section { padding: var(--space-section) 0 }
   position: relative; border-radius: 18px; overflow: hidden; background: var(--dark);
   aspect-ratio: 16/11; color: #fff;
   box-shadow:
-    0 calc(40px + var(--tilt, 0) * 26px) calc(90px + var(--tilt, 0) * 34px) -30px
-    rgba(13,13,16, calc(.5 + var(--tilt, 0) * .14));
+    0 calc(40px + var(--tilt, 0) * 34px) calc(90px + var(--tilt, 0) * 44px) -30px
+    rgba(13,13,16, calc(.5 + var(--tilt, 0) * .18));
 }
 .event .lights {
   position: absolute; inset: 0;
