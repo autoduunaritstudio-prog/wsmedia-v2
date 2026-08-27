@@ -249,6 +249,12 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
    kelluvat hieman alempana. Sama offset annetaan taysvalikon
    sulkupainikkeelle, jotta painike ei hyppaa valikkoa avatessa. */
 :root { --nav-top: 44px }
+/* Sivun reunasisennys. Kaytossa seka ylapalkissa etta taysvalikon
+   sisakontissa, jotta valikkopainike ja sen korvaava sulkupainike osuvat
+   samalle x-tasolle joka leveydella. Logonauha on taysleveyksinen (alkaa
+   x=0:sta), joten tama on se etaisyys jolla nav-elementit ovat sivun
+   reunasta - taysin sama x-taso vaatisi arvon 0 eli logon kiinni reunaan. */
+:root { --page-edge: 16px }
 @media (max-width: 520px) { :root { --nav-top: 24px } }
 /* HUOM valitsimesta: tama oli aiemmin paljas `nav`, jolloin se osui myos
    taysvalikon <nav class="fsnav-links">-elementtiin. Sarake sai siita
@@ -275,7 +281,10 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   mix-blend-mode: difference;
 }
 .navin {
-  max-width: 1440px; margin: 0 auto; padding: var(--nav-top) 28px 0;
+  /* max-width sailyy: sama 1440px kaista kuin .fsnav-inilla, jotta
+     valikkopainike ja taysvalikon sulkupainike pysyvat samalla x-tasolla
+     myos leveilla naytoilla. Vain sisennys pieneni 28px -> --page-edge. */
+  max-width: 1440px; margin: 0 auto; padding: var(--nav-top) var(--page-edge) 0;
   /* box-sizing on border-box, joten offset lisataan korkeuteen: sisalto-
      alue pysyy 72px:na ja logo/painike keskittyvat siihen kuten ennen. */
   height: calc(72px + var(--nav-top));
@@ -385,7 +394,7 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 
 .fsnav-in {
   position: relative; height: 100%; overflow-y: auto;
-  max-width: 1440px; margin: 0 auto; padding: 0 28px;
+  max-width: 1440px; margin: 0 auto; padding: 0 var(--page-edge);
   /* Sisaltolohko on referenssin tapaan keskitetty kaista, ei reunasta
      reunaan; somerivi ja sulkupainike ovat sen ulkopuolella reunoissa. */
   display: flex; flex-direction: column;
