@@ -80,7 +80,7 @@ export default function Services() {
             <span className="deco deco-plus" style={{ right: "-4%", bottom: "14%" }}>
               +
             </span>
-            <div className="browser" data-tilt="x">
+            <div className="browser" data-tilt="y">
               <div className="bar">
                 <span className="dot" />
                 <span className="dot" />
@@ -132,7 +132,7 @@ export default function Services() {
           <div className="svc-visual" data-par="0.02">
             <span className="deco deco-dot" style={{ left: "-2%", top: "10%" }} />
             <span className="deco deco-ring deco-ring-sm" style={{ right: "4%", bottom: "-10px" }} />
-            <div className="event" data-tilt="x">
+            <div className="event" data-tilt="-y">
               <div className="lights" />
               <div className="truss" />
               <span className="chip">[Tapahtuman nimi] · [pvm]</span>

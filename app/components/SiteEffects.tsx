@@ -125,11 +125,16 @@ export default function SiteEffects() {
         const d = (r.top + r.height / 2 - vh / 2) / vh;
         const t = Math.min(Math.abs(d) / TILT_RANGE, 1);
         el.style.setProperty("--tilt", t.toFixed(3));
-        // Positiivinen rotateX kallistaa ylareunan poispain katsojasta;
-        // transform-origin on alareunassa, joten elementti saranoi
-        // paikallaan eika liu'u.
-        const axis = el.dataset.tilt === "y" ? "rotateY" : "rotateX";
-        el.style.transform = `perspective(1200px) ${axis}(${(t * TILT_MAX).toFixed(2)}deg)`;
+        // data-tilt: "x" | "y" | "-x" | "-y". Etumerkki valitsee kumpi
+        // reuna tulee katsojaa kohti.
+        //   rotateX +  : ylareuna poispain (sarana alareunassa)
+        //   rotateY +  : VASEN reuna katsojaa kohti, oikea loittonee
+        //   rotateY -  : oikea reuna katsojaa kohti, vasen loittonee
+        const spec = el.dataset.tilt ?? "x";
+        const axis = spec.endsWith("y") ? "rotateY" : "rotateX";
+        const sign = spec.startsWith("-") ? -1 : 1;
+        el.style.transform =
+          `perspective(1200px) ${axis}(${(sign * t * TILT_MAX).toFixed(2)}deg)`;
       });
 
       if (bdGrid && bdRing && bdWave) {

@@ -850,7 +850,11 @@ section { padding: var(--space-section) 0 }
    tasmallisyyden skrollin kanssa.
    Ei myoskaan transform-style: preserve-3d - se rikkoisi z-index
    -jarjestyksen samassa tasossa olevien sisarusten kesken. */
+/* rotateX saranoi alareunasta, jolloin elementti nousee paikallaan.
+   rotateY:lle sarana kuuluu keskelle: alareunassa pystyakseli kulkisi
+   elementin alalaidan kautta ja kaanto heilauttaisi sita ylospain. */
 [data-tilt] { transform-origin: center bottom; will-change: transform }
+[data-tilt$="y"] { transform-origin: center }
 @media (prefers-reduced-motion: reduce) {
   /* SiteEffects ei aja kaantoa tassa tilassa, joten transformia ei aseteta
      lainkaan. --tilt jaa maarittelemattomaksi ja varjot kayttavat
