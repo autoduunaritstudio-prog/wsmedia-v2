@@ -6,6 +6,7 @@ import SiteEffects from "./components/SiteEffects";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Logos from "./components/Logos";
+import Intro from "./components/Intro";
 import StatBand from "./components/StatBand";
 import Services from "./components/Services";
 import Work from "./components/Work";
@@ -47,6 +48,7 @@ export default function Home() {
               loppuun. */}
           <MetalBackdrop />
           <Logos />
+          <Intro />
           <Services />
           <section className="statband-sec">
             <div className="wrap">

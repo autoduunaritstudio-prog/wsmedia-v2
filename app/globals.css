@@ -881,47 +881,54 @@ section { padding: var(--space-section) 0 }
 .shead.center { margin-left: auto; margin-right: auto; text-align: center }
 @media (max-width: 720px) { .shead.right { margin-left: 0; text-align: left } }
 
-/* ---------- Palvelut-avaus tiimikuvapaikalla (vain etusivu) ----------
-   Modifioiva luokka eika .shead-saannon muokkaus: .shead on jaettu
-   kaikkien kahdeksan sivun kesken, ja gridin lisaaminen siihen olisi
-   muuttanut myos alasivujen osio-otsikot kaksisarakkeisiksi.
+/* ---------- Etusivun Palvelut-avaus ilman kickeria ----------
+   .shead h2:n 12px margin-top on kickerin alavali. Etusivun avauksesta
+   kicker poistettiin, joten siella se jaisi tyhjaksi siirtymaksi otsikon
+   ylle. Rajaus .coveriin on PAKOLLINEN: sivustolla on 42 muuta .sheadia
+   joissa kicker on yha, ja globaali nollaus tiivistaisi ne kaikki. */
+.cover .shead h2 { margin-top: 0 }
 
-   Sarakesuhde 0,62fr / 1fr eika .svc:n 1fr 1fr: kuva on paikkamerkki
-   eika paasisaltoa, joten teksti saa enemman tilaa. Gap ja katkaisukohta
-   (880px) ovat samat kuin .svc:lla, jotta rytmi on yhtenainen.
+/* ---------- ESITTELYOSIO (etusivu, logonauhan jalkeen) ----------
+   Lyhyt teksti + tayslevea tiimikuvan paikkamerkki. Teksti kayttaa samoja
+   tokeneita kuin .shead (h2 + --text-lead-sm), mutta omat saannot koska
+   .shead on jaettu kaikkien kahdeksan sivun kesken.
 
-   h2:n margin-top nollataan: .shead h2:n 12px oli kickerin alavali, ja
-   kun kicker poistui se olisi jaanyt tyhjaksi siirtymaksi joka rikkoo
-   sarakkeiden pystykeskityksen. */
-.shead-team {
-  max-width: none;
-  display: grid;
-  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
-  gap: var(--space-gap-xl);
-  align-items: center;
-}
-.shead-team h2 { margin-top: 0 }
-.shead-txt { max-width: 600px }
+   Valistys: .logos + section antaa talle ylavalin (100px), alavali
+   nollataan ja Palvelut saa saman 100px:n .intro + sectionista. Ilman
+   .intro + sectionia Palvelut jaisi oletukselle 120px, koska sisarus-
+   valitsin .logos + section osuu nyt tahan lohkoon eika enaa siihen.
+   Tekstin ja kuvan vali on tiiviimpi (--space-shead-gap 56px), jotta ne
+   lukeutuvat yhdeksi kokonaisuudeksi eivatka kahdeksi osioksi. */
+.intro { padding-bottom: 0 }
+.intro + section { padding-top: var(--space-section-tight) }
+.introtxt { max-width: 600px }
+.introtxt .sub { margin-top: 14px; font-size: var(--text-lead-sm) }
 
-/* TODO: poista kun oikea tiimikuva korvaa paikkamerkin. */
-.teamph {
-  aspect-ratio: 4 / 5;
+/* TODO: korvaa oikealla tiimikuvalla kun saatavilla.
+   Kun kuva tulee: vaihda .teamphoto-wide <Image />:ksi (fill + wrapper
+   tai leveys/korkeus 1032x442), sailyta aspect-ratio 21/9 ja
+   border-radius 20px, ja poista .teamphoto-wide / .teamphoto-mark
+   talta. Katkoviivareunus on tarkoituksellinen: paikkamerkin pitaa
+   nayttaa tilapaiselta eika viimeistellylta mockupilta. */
+.teamphoto-wide {
+  margin-top: var(--space-shead-gap);
+  aspect-ratio: 21 / 9;
   border-radius: 20px;
   background: rgba(29,29,31,.05);
   border: 1px dashed rgba(29,29,31,.24);
   display: grid; place-items: center;
 }
-.teamph-mark {
+.teamphoto-mark {
   font-size: var(--text-label); font-weight: var(--weight-semibold);
-  letter-spacing: .08em; text-transform: uppercase; color: var(--grey);
+  /* --ink eika --grey: banneri on tayslevea ja ulottuu kuvion tummemmalle
+     oikealle puolelle, jolloin --grey jai mitattuna 4,51:1:een eli 0,01
+     yli AA:n. Se ei ole marginaali. --ink antaa 12,33:1, ja pieni
+     harvennettu versaali pysyy silti hillittyna. */
+  letter-spacing: .08em; text-transform: uppercase; color: var(--ink);
 }
-
-@media (max-width: 880px) {
-  /* Yhdessa sarakkeessa otsikko tulee ensin: taysleveana 4:5 paikkamerkki
-     tyontaisi koko avauksen ruudun alapuolelle. */
-  .shead-team { grid-template-columns: 1fr; gap: var(--space-gap-lg) }
-  .shead-txt { order: 1 }
-  .teamph { order: 2; max-width: 320px }
+@media (max-width: 720px) {
+  /* 21:9 olisi kapealla naytolla vain n. 140px korkea kaistale. */
+  .teamphoto-wide { aspect-ratio: 16 / 9; margin-top: var(--space-shead-gap-mobile) }
 }
 
 .card {
