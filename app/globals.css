@@ -254,7 +254,7 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
    samalle x-tasolle joka leveydella. Logonauha on taysleveyksinen (alkaa
    x=0:sta), joten tama on se etaisyys jolla nav-elementit ovat sivun
    reunasta - taysin sama x-taso vaatisi arvon 0 eli logon kiinni reunaan. */
-:root { --page-edge: 16px }
+:root { --page-edge: 4px }
 @media (max-width: 520px) { :root { --nav-top: 24px } }
 /* HUOM valitsimesta: tama oli aiemmin paljas `nav`, jolloin se osui myos
    taysvalikon <nav class="fsnav-links">-elementtiin. Sarake sai siita
