@@ -254,7 +254,7 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
    samalle x-tasolle joka leveydella. Logonauha on taysleveyksinen (alkaa
    x=0:sta), joten tama on se etaisyys jolla nav-elementit ovat sivun
    reunasta - taysin sama x-taso vaatisi arvon 0 eli logon kiinni reunaan. */
-:root { --page-edge: 4px }
+:root { --page-edge: 0px }
 @media (max-width: 520px) { :root { --nav-top: 24px } }
 /* HUOM valitsimesta: tama oli aiemmin paljas `nav`, jolloin se osui myos
    taysvalikon <nav class="fsnav-links">-elementtiin. Sarake sai siita
@@ -323,11 +323,22 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
    arvoksi rgb(115,177,240) eli sivuston siniseksi.
    Huom: tummalla taustalla (tyonaytekaista) sekoitus antaa toisen savyn -
    se on blendin luonne, ja sama koskee logoa ja painiketta itseaan. */
-.navtoggle:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(255,142,28,.55) }
+/* Rengas on 2.5px eika 3.5px: --page-edge on 0, joten elementti on kiinni
+   sivun reunassa ja renkaan uloin osa jaa reunan taakse. Kapeampi rengas
+   menettaa vahemman, ja se on yha selvasti nakyvissa kolmella sivulla -
+   vain reunanpuoleinen kaari leikkautuu. */
+.navtoggle:focus-visible { outline: none; box-shadow: 0 0 0 2.5px rgba(255,142,28,.55) }
 /* Hiiriklikkaus ei saa jattaa rengasta: :focus-visible hoitaa
    nappaimistofokuksen, ja tama estaa selaimen oman oletusrenkaan
    nakymisen klikkauksen jalkeen. */
 .navtoggle:focus:not(:focus-visible) { outline: none; box-shadow: none }
+
+/* Logo on linkki alasivuilla (logoHref), joten se on fokusoitava. Ilman
+   omaa saantoa siihen jai selaimen oletus-outline, joka nakyi difference-
+   blendin lapi samana oranssina joka painikkeesta korjattiin. Sama
+   kaanteinen vari ja sama 2.5px reunan takia. */
+#nav .logo:focus-visible { outline: none; box-shadow: 0 0 0 2.5px rgba(255,142,28,.55); border-radius: 4px }
+#nav .logo:focus:not(:focus-visible) { outline: none; box-shadow: none }
 #nav.scrolled .navtoggle { width: 48px; height: 48px }
 
 /* Logonauha vierii navin paalle, jolloin logot ja nav-elementit menisivat
