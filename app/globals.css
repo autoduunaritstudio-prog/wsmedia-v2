@@ -302,17 +302,17 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 /* Logo on nyt inline-SVG. Korkeus ohjaa kokoa ja width:auto sailyttaa
    kuvasuhteen viewBoxista; vari tulee color-arvosta currentColorin kautta. */
 #nav .logo { display: inline-flex; align-items: center; color: #fff }
-.logo svg { height: 38px; width: auto; display: block }
-#nav.scrolled .logo svg { height: 34px }
+.logo svg { height: 42px; width: auto; display: block }   /* 38 -> 42px, +10,5% */
+#nav.scrolled .logo svg { height: 38px }
 .logo svg, #nav.scrolled .logo svg { transition: height .28s cubic-bezier(.2,.6,.2,1) }
-@media (max-width: 520px) { .logo svg { height: 30px } }
+@media (max-width: 520px) { .logo svg { height: 33px } }
 /* Ylapalkki on minimaalinen: logo, valikkopainike ja CTA. Kaikki muu
    navigointi on taysvalikossa, joten palkki ei kasva sivumaaran myota. */
 /* Pyorea ikonipainike oikeassa reunassa. Tumma tayttö valkoisin viivoin:
    sininen olisi kilpaillut vieressa olevan CTA-pillerin kanssa, joten
    aksenttivari jaa yhdelle elementille kerrallaan. */
 .navtoggle {
-  flex: none; width: 54px; height: 54px; border-radius: 50%;
+  flex: none; width: 60px; height: 60px; border-radius: 50%;   /* 54 -> 60px, +11,1% */
   background: #fff; border: none; cursor: pointer; padding: 0;
   display: inline-flex; align-items: center; justify-content: center;
   transition: transform .2s cubic-bezier(.2,.6,.2,1), width .28s, height .28s;
@@ -344,7 +344,7 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
    kaanteinen vari ja sama 2.5px reunan takia. */
 #nav .logo:focus-visible { outline: none; box-shadow: 0 0 0 2.5px rgba(255,142,28,.55); border-radius: 4px }
 #nav .logo:focus:not(:focus-visible) { outline: none; box-shadow: none }
-#nav.scrolled .navtoggle { width: 48px; height: 48px }
+#nav.scrolled .navtoggle { width: 53px; height: 53px }
 
 /* Logonauha vierii navin paalle, jolloin logot ja nav-elementit menisivat
    paallekkain. SiteEffects togglaa .nav-awayn kun kaista on navin
@@ -369,8 +369,11 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
               opacity .2s cubic-bezier(.2,.6,.2,1),
               visibility .2s cubic-bezier(.2,.6,.2,1);
 }
-#nav.nav-away .logo { transform: translateX(-40px) }
-#nav.nav-away .navtoggle { transform: translateX(40px) }
+/* Pelkka opacity: elementit pysyvat paikallaan eivatka liu'u sivuille.
+   Aiempi translateX(40px) vei painikkeen 42,5px reunan yli (rengas mukaan
+   luettuna), mika nojasi viewportin leikkaukseen; nyt mitaan ylivuotoa ei
+   synny. visibility hoitaa yha tab-jarjestyksen ja on diskreettina
+   ominaisuutena synkassa haipymisen kanssa. */
 #nav.nav-away .logo, #nav.nav-away .navtoggle { opacity: 0; visibility: hidden }
 @media (prefers-reduced-motion: reduce) {
   /* Piilotus on toiminnallinen, ei koriste, joten se jaa voimaan kuten
@@ -378,11 +381,11 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   #nav .logo, #nav .navtoggle { transition: none }
 }
 
-.navtoggle-bars { display: flex; flex-direction: column; gap: 5px; width: 21px }
+.navtoggle-bars { display: flex; flex-direction: column; gap: 5.5px; width: 23.5px }
 /* Viivat mustina: ne ovat samassa sekoitusryhmassa kuin valkoinen ympyra,
    joten kaannon jalkeen kontrasti sailyy molempiin suuntiin. */
-.navtoggle-bars i { display: block; height: 1.8px; border-radius: 2px; background: #000 }
-.navtoggle-bars i:nth-child(2) { width: 15px }
+.navtoggle-bars i { display: block; height: 2px; border-radius: 2px; background: #000 }
+.navtoggle-bars i:nth-child(2) { width: 16.5px }
 
 /* ==================================================================
    TAYSVALIKKO
@@ -444,7 +447,7 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
    aidosti sinisena toisin kuin navissa. */
 .fsnav-close {
   background: none; border: 1px solid var(--hair); border-radius: 50%;
-  width: 58px; height: 58px; cursor: pointer; color: var(--ink);
+  width: 64px; height: 64px; cursor: pointer; color: var(--ink);   /* > .navtoggle 60px */
   display: flex; align-items: center; justify-content: center;
   transition: border-color .2s, color .2s;
 }
