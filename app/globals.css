@@ -2799,9 +2799,14 @@ footer .base { padding-top: 18px }
    saa antaa pinnalle vain vivahteen. --metalbd-opacity on yksi nuppi
    koko kerroksen voimakkuudelle.
    ================================================================== */
+/* absolute eika fixed: kuvio kuuluu coverin pintaan, ei viewportiin.
+   Nain se alkaa vasta heron jalkeen eika jatku sen taakse. .coverilla on
+   jo position: relative, joten inset osuu tasan coverin alueelle, ja
+   z-index 0 jattaa sen coverin taustan paalle mutta osioiden (z-index 1)
+   alle. */
 .metalbd {
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  overflow: hidden; opacity: var(--metalbd-opacity, .55);
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  overflow: hidden; opacity: var(--metalbd-opacity, .72);
 }
 
 /* Kaarilohkot. closest-side pitaa reunan pehmeana ilman blur-suodinta,
@@ -2837,7 +2842,10 @@ footer .base { padding-top: 18px }
 /* Harjatun metallin kohina. Staattinen, joten se rasteroidaan kerran. */
 .metalbd-noise {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  opacity: .055; mix-blend-mode: multiply;
+  /* Kohina nostettiin samassa suhteessa kuin kerroksen opacity
+     (.55 -> .72), jottei pinta muutu tasaiseksi tummennukseksi vaan
+     sailyttaa harjatun metallin rakeisuuden. */
+  opacity: .075; mix-blend-mode: multiply;
 }
 
 @media (prefers-reduced-motion: reduce) {

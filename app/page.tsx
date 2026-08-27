@@ -1,4 +1,6 @@
-// KOKEILU: vaihda takaisin Backdropiin palauttaaksesi vanhan taustakuvion.
+import Backdrop from "./components/Backdrop";
+// KOKEILU: poista tama rivi ja <MetalBackdrop /> coverin sisalta
+// palauttaaksesi coverin tavalliselle taustalle.
 import MetalBackdrop from "./components/MetalBackdrop";
 import SiteEffects from "./components/SiteEffects";
 import Nav from "./components/Nav";
@@ -28,7 +30,7 @@ const STATS = [
 export default function Home() {
   return (
     <>
-      <MetalBackdrop />
+      <Backdrop />
       <div id="prog" />
       <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
       {/* Sticky hero + nouseva cover. Hero pysyy kiinnitettyna ruudun
@@ -40,6 +42,10 @@ export default function Home() {
       <div className="stickyzone">
         <Hero />
         <div className="cover">
+          {/* Metallikuvio vain coverin alueella: hero jaa omalle
+              taustalleen, ja kuvio kulkee logonauhasta lukukaistan
+              loppuun. */}
+          <MetalBackdrop />
           <Logos />
           <Services />
           <section className="statband-sec">
