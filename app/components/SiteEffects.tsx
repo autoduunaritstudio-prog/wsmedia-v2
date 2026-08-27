@@ -43,7 +43,12 @@ export default function SiteEffects() {
     // kanssa. Kaanto ei ole kertaalleen laukeava sisaantulo vaan taysin
     // palautuva. Samalla asetetaan --tilt, jota varjot lukevat CSS:ssa.
     const tilts = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt]"));
-    const TILT_MAX = 19;    // asteina aaripaassa
+    const TILT_MAX = 19;         // puhelinparin sivuttaiskulma
+    // Selainmockup ja tapahtumakortti ovat isoja pintoja, joilla sama 19
+    // astetta nayttaa liialliselta. Niille oma, hillitympi sivuttaiskulma
+    // ja lisaksi kevyt taaksepain-kallistus syvyysvaikutelmaksi.
+    const TILT_MAX_MOCKUP = 13;  // .browser ja .event: rotateY
+    const TILT_BACK_MAX = 5;     // .browser ja .event: rotateX, ylareuna taakse
     // Etaisyys viewportin keskelta (osuus vh:sta) jossa kulma on nollassa.
     // 0.5 = elementin keskikohta on ruudun ala- tai ylareunassa.
     const TILT_RANGE = 0.5;
@@ -162,10 +167,14 @@ export default function SiteEffects() {
         const spec = el.dataset.tilt ?? "x";
         const axis = spec.endsWith("y") ? "rotateY" : "rotateX";
         const sign = spec.startsWith("-") ? -1 : 1;
-        el.style.setProperty(
-          "--tilt-rot",
-          `${axis}(${(sign * t * TILT_MAX).toFixed(2)}deg)`,
-        );
+        // data-tilt-profile="mockup" valitsee hillitymman kulman ja lisaa
+        // taaksepain-kallistuksen. Puhelimet jaavat oletusprofiiliin.
+        const mockup = el.dataset.tiltProfile === "mockup";
+        const main = sign * t * (mockup ? TILT_MAX_MOCKUP : TILT_MAX);
+        // Positiivinen rotateX vie ylareunan poispain katsojasta. Sama t,
+        // joten molemmat akselit ovat huipussaan yhta aikaa keskella.
+        const back = mockup ? ` rotateX(${(t * TILT_BACK_MAX).toFixed(2)}deg)` : "";
+        el.style.setProperty("--tilt-rot", `${axis}(${main.toFixed(2)}deg)${back}`);
       });
 
       if (bdGrid && bdRing && bdWave) {
