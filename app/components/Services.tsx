@@ -38,7 +38,7 @@ export default function Services() {
               <div className="mini">
                 <div className="scr">
                   <DemoVideo
-                    className="phone-video"
+                    className="phone-video phone-video-contain"
                     mp4="/tiktok-demo.mp4"
                     poster="/tiktok-demo-poster.jpg"
                     preload="metadata"

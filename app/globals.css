@@ -887,6 +887,18 @@ section { padding: var(--space-section) 0 }
   width: 100%; height: 100%;
   object-fit: cover; background: #0c0c0e;
 }
+/* Koko kuva nakyviin ilman rajausta. Lahde on 9:16 ja ruutualue 9:19,
+   joten cover leikkaa sivuilta n. 16%. contain sovittaa kuvan leveyden
+   mukaan, jolloin ylos ja alas jaa yhteensa 15,8% korkeudesta (16/19)
+   tummaa kaistaa - se sulautuu .scr:n omaan taustaan #0c0c0e eika erotu
+   erillisena laatikkona.
+   Huom: pelkka videon pienentaminen ei olisi auttanut. cover rajaa
+   kuvasuhde-eron, ei koon, perusteella: 9:19-laatikko leikkaisi saman
+   16% olipa se minkakokoinen tahansa. Ainoa tapa nayttaa koko ruutu on
+   antaa videolle lahteen oma 9:16-kuvasuhde, mika on tasmalleen se mita
+   contain tekee.
+   Vain TikTok-puhelimessa: REELS-puhelimen rajaus on hyvaksytty. */
+.mini .phone-video-contain { object-fit: contain }
 .mini .tag {
   position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;
   font-size: 9px; font-weight: var(--weight-semibold); letter-spacing: .18em; color: rgba(255,255,255,.55); z-index: 2;
