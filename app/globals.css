@@ -2854,6 +2854,35 @@ footer .base { padding-top: 18px }
   .metalbd-blob, .metalbd-sweep { will-change: auto }
 }
 
+
+/* Tekstipalstan levy metallikuvion paalla.
+   Kuvion tummin kohta on RGB(176,176,178), jota vasten --grey (2,35:1) ja
+   --blue (2,17:1) jaivat alle AA:n. Levyn alfa on LASKETTU eika arvattu:
+   sininen on sitova rajoite, koska se on puhtaalla valkoisellakin vain
+   4,70:1. Pienin alfa jolla molemmat yltavat 4,5:1:een on 0.942, joten
+   arvo on .95 - kaytannossa lahes umpinainen. Se on hinta siita etta
+   sininen tekstilinkki sailyy AA-tasolla.
+
+   Padding antaa tekstille ilmaa ja negatiivinen marginaali kumoaa sen,
+   joten teksti pysyy tasan siina missa se oli ennen levya.
+   backdrop-filter pehmentaa reunan alla nakyvan kuvion, jolloin levy ei
+   nayta irralliselta laatikolta. Sama tekniikka on kaytossa muualla
+   sivustolla (evastebanneri, alasivujen marquee). */
+.cover .svc-txt {
+  background: rgba(255,255,255,.95);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 28px 30px;
+  margin: -28px -30px;
+}
+@media (max-width: 880px) {
+  /* Yhden sarakkeen asettelussa negatiivinen marginaali vastaa .wrapin
+     omaa 24px paddingia, jolloin levy ulottuu tasan reunaan asti eika
+     tuota vaakaylivuotoa. */
+  .cover .svc-txt { margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px }
+}
+
 /* ==================================================================
    TOIHIN MEILLE -SIVU (.page-toihin-meille)
    Rekrytointisivu, EI .page-palvelu-kerroksessa: se ei myy palvelua
