@@ -2852,69 +2852,74 @@ footer .base { padding-top: 18px }
 }
 
 
-/* Tekstipalstan levy metallikuvion paalla.
-   Kuvion tummin kohta on RGB(176,176,178), jota vasten --grey (2,35:1) ja
-   --blue (2,17:1) jaivat alle AA:n. Levyn alfa on LASKETTU eika arvattu:
-   sininen on sitova rajoite, koska se on puhtaalla valkoisellakin vain
-   4,70:1. Pienin alfa jolla molemmat yltavat 4,5:1:een on 0.942, joten
-   arvo on .95 - kaytannossa lahes umpinainen. Se on hinta siita etta
-   sininen tekstilinkki sailyy AA-tasolla.
+/* ==================================================================
+   LASILEVYT METALLIKUVION PAALLA
+   Kuvion tummin kohta on RGB(161,161,163) (kaarilohkojen ytimet
+   paallekkain). Sita vasten --grey jai 1,96:1 ja --blue 1,82:1 eli
+   selvasti alle AA:n 4,5:1. Sininen on sitova rajoite: pienin alfa
+   jolla se yltaa 4,5:1:een on 0.947.
+   ================================================================== */
 
-   Padding antaa tekstille ilmaa ja negatiivinen marginaali kumoaa sen,
-   joten teksti pysyy tasan siina missa se oli ennen levya.
-   backdrop-filter pehmentaa reunan alla nakyvan kuvion, jolloin levy ei
-   nayta irralliselta laatikolta. Sama tekniikka on kaytossa muualla
-   sivustolla (evastebanneri, alasivujen marquee). */
-.cover .svc-txt {
+/* --- Lasilevyjen jaetut arvot ---
+   Alfa .95 EI ole tyylivalinta vaan sidottu: --blue #0071e3 tarvitsee
+   vahintaan alfan 0.947 yltaakseen 4.5:1:een kuvion tummimmassa
+   kohdassa. Lasivaikutelma tehdaan siksi kaikilla MUILLA keinoilla kuin
+   lapinakyvyydella: vahvempi sumennus, saturate joka nostaa taustan
+   varit kylkaammiksi lasin lapi, vaalea reunaviiva, kohotusvarjo ja
+   sisainen ylareunan kiiltoviiva.
+
+   Vaakamitta on 20px eika 30px. Syy on mitattu: .svc-gridin gap on
+   60px, ja visuaalisarakkeiden koristeet tyontyvat gapiin jopa 19,4px
+   (.deco-ring-sm left:-4%, verkkosivupaneeli). 30px:n marginaalilla
+   valiin jai 10,6px eli levy ja koriste kavivat kiinni toisissaan;
+   20px:lla vali on 20,6px kaikissa neljassa paneelissa. 20px alittaa
+   myos .wrapin oman 24px paddingin, joten levy ei enaa leikkaudu
+   ruudun reunaan yhden sarakkeen asettelussa - siksi erillisia
+   880px-ohituksia ei enaa tarvita.
+
+   1px reuna kasvattaa laatikkoa border-boxissa sisaanpain, joten
+   marginaaleihin lisataan 1px (-29/-21) jotta teksti pysyy tasan
+   entisella paikallaan. */
+.cover .svc-txt,
+.cover .shead,
+.cover .statband {
   background: rgba(255,255,255,.95);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255,255,255,.55);
   border-radius: 20px;
-  padding: 28px 30px;
-  margin: -28px -30px;
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.08),
+    inset 0 1px 0 rgba(255,255,255,.65);
 }
-/* Sama levy osio-otsikolle. Kaytetaan koko .sheadille eika pelkalle
-   .subille: h2 ja alaotsikko ovat yksi typografinen lohko, ja pelkan
-   alaotsikon takana levy nayttaisi irralliselta suikaleelta otsikon
-   alla. --ink-h2 lapaisi jo ilman levyakin, se tulee mukana ilmaiseksi.
-   max-width nostetaan 600 -> 660px koska box-sizing on border-box:
-   ilman kompensaatiota 2 x 30px padding kaventaisi tekstipalstan
-   540px:aan ja rivit katkeaisivat eri kohdista kuin muualla. */
+
+.cover .svc-txt {
+  padding: 28px 20px;
+  margin: -29px -21px;
+}
+
+/* Levy koko .sheadille eika pelkalle .subille: h2 ja alaotsikko ovat
+   yksi typografinen lohko, ja pelkan alaotsikon takana levy nayttaisi
+   irralliselta suikaleelta otsikon alla.
+   max-width kompensoi paddingin ja reunan (2 x 21px), muuten border-box
+   kaventaisi tekstipalstan ja rivit katkeaisivat eri kohdista.
+   Alamarginaalista vahennetaan 29px, koska paddingista ja reunasta
+   tulee jo saman verran tyhjaa tekstin alle. */
 .cover .shead {
-  max-width: calc(600px + 60px);
-  background: rgba(255,255,255,.95);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-radius: 20px;
-  padding: 28px 30px;
-  /* Alamarginaalista vahennetaan 28px, koska paddingista tulee jo saman
-     verran tyhjaa tekstin alle: ilman tata seuraava lohko siirtyisi
-     28px alemmas kuin muilla sivuilla. */
-  margin: -28px -30px calc(var(--space-shead-gap) - 28px);
+  max-width: calc(600px + 42px);
+  padding: 28px 20px;
+  margin: -29px -21px calc(var(--space-shead-gap) - 29px);
 }
 
 /* Lukukaistan levy vedetaan koko .statbandin alle, ei jokaisen
    selitetekstin alle erikseen: neljasta erillisesta pillerista tulisi
    levoton rivi, ja koko kaistan alla oleva levy pelastaa samalla
    .stat .num b:n --blue-luvut jotka olivat yhta lailla alle AA:n.
-   Pystypadding oli jo 44px, joten vain vaakapadding tarvitsee
-   negatiivisen marginaalin vastapainokseen. */
+   Pystypadding oli jo 44px, joten vain reunan 1px tarvitsee
+   vastapainon pystysuunnassa. */
 .cover .statband {
-  background: rgba(255,255,255,.95);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-radius: 20px;
-  padding: 44px 30px;
-  margin: 0 -30px;
-}
-
-@media (max-width: 880px) {
-  .cover .shead { max-width: calc(600px + 48px); margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px }
-  .cover .statband { margin: 0 -24px; padding-left: 24px; padding-right: 24px }
-  /* Yhden sarakkeen asettelussa negatiivinen marginaali vastaa .wrapin
-     omaa 24px paddingia, jolloin levy ulottuu tasan reunaan asti eika
-     tuota vaakaylivuotoa. */
-  .cover .svc-txt { margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px }
+  padding: 44px 20px;
+  margin: -1px -21px;
 }
 
 /* ==================================================================
