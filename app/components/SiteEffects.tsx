@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { easeOutCubic, formatCount, parseCount } from "./count-format";
+
 /**
  * Sivun skrolli- ja osoitinsidonnaiset efektit yhdessä paikassa.
  *
@@ -273,64 +275,35 @@ export default function SiteEffects() {
     document.querySelectorAll(".rv").forEach((el) => io.observe(el));
 
     /* ---------- numerorullaus (lukukaista + case-kortit) ---------- */
-    // Nupit yhdessa paikassa: milloin rullaus alkaa, kauanko se kestaa,
-    // kuinka monta kierrosta rulla pyorii ja miten merkkien asettuminen
-    // porrastuu. Sama havainnoija, kesto ja logiikka ohjaavat seka
-    // lukukaistaa etta case-kortteja, joten ajoitus pysyy yhtenaisena.
+    // Luku kasitellaan YHTENA kokonaislukuna, ei merkki kerrallaan. Aiempi
+    // merkkikohtainen odometri pyoritti jokaista numeroa omaan tahtiinsa,
+    // jolloin koko luku hyppi epaloogisesti: 150:tta kohti mentaessa se
+    // saattoi nayttaa valilla 300, 500 ja 254. Nyt arvo interpoloidaan
+    // 0:sta tavoitteeseen ja muotoilu lasketaan vasta lopuksi, joten luku
+    // kasvaa aina monotonisesti eika koskaan laske.
     const COUNT_ROOT_MARGIN = "0px 0px 5% 0px"; // laukaisu: 5% vh:sta ennen taitetta
     const COUNT_DURATION = 3400;                // rullauksen kesto, ms
-    const COUNT_TURNS = 4;                      // taytta kierrosta ennen asettumista
-    // Ensimmainen merkki asettuu aikaisintaan taalla, viimeinen tassa.
-    // Alaraja on olennainen kahdesta syysta: pelkka (i+1)/n antaisi
-    // kymmenmerkkiselle luvulle ensimmaiselle merkille vain 8% kestosta,
-    // jolloin se ei ehtisi pyoria lainkaan - ja liian lyhyt ikkuna saa
-    // easingin alkujyrkkyyden viemaan rullaa yli yhden numeron per frame,
-    // jolloin se hyppii. 0.5 + 4 kierrosta on suurin yhdistelma joka pysyy
-    // tasan yhdessa askeleessa 60fps:lla (todennettu simuloimalla).
-    const COUNT_SETTLE_MIN = 0.5;
-    const COUNT_SETTLE_MAX = 0.8;
-
-    // Nopea alku, pehmea pysahtyminen. Sama kayra kuin sivuston
-    // CSS-siirtymissa (cubic-bezier(.2,.6,.2,1)) on luonteeltaan.
-    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
     const frames = new Set<number>();
     const spin = (el: HTMLElement) => {
       const target = (el.dataset.count ?? "").replace(/&nbsp;/g, " ");
-      const chars = [...target];
-      let t0: number | null = null;
+      const fmt = parseCount(target);
+      if (!fmt) return;
 
+      let t0: number | null = null;
       const tick = (ts: number) => {
         if (!t0) t0 = ts;
         const p = Math.min((ts - t0) / COUNT_DURATION, 1);
-
-        el.textContent = chars
-          .map((c, i) => {
-            const d = c.charCodeAt(0) - 48;
-            // Muut kuin numerot (valilyonti, +, /, pilkku, %) pysyvat
-            // paikallaan koko ajan, jotta luvun muoto ei hypi.
-            if (d < 0 || d > 9) return c;
-
-            const settle =
-              COUNT_SETTLE_MIN +
-              ((i + 1) / chars.length) * (COUNT_SETTLE_MAX - COUNT_SETTLE_MIN);
-            // Jokaisella merkilla oma easing, joten jokainen rulla
-            // hidastuu erikseen omaan kohdalleen.
-            const q = easeOutCubic(Math.min(p / settle, 1));
-
-            // Odometri: naytetaan lopullinen numero miinus kutistuva
-            // siirtyma. Siirtyman pienentyessa yhdella luku kasvaa
-            // yhdella, eli rulla pyorii YLOSPAIN ja paatyy tasmalleen
-            // oikeaan arvoon kun siirtyma on nolla. Aiempi toteutus arpoi
-            // joka framessa uuden satunnaisluvun ja hyppasi lopulliseen
-            // arvoon kerralla - se ei ollut rullaus vaan kohinaa.
-            const offset = Math.round((1 - q) * COUNT_TURNS * 10) % 10;
-            return String((d - offset + 10) % 10);
-          })
-          .join("");
-
-        if (p < 1) frames.add(requestAnimationFrame(tick));
-        else el.textContent = target;
+        if (p < 1) {
+          // easeOutCubic on aidosti kasvava, joten Math.round tuottaa
+          // ei-laskevan jonon: arvo ei voi kaantya alaspain missaan kohtaa.
+          el.textContent = formatCount(Math.round(easeOutCubic(p) * fmt.value), fmt);
+          frames.add(requestAnimationFrame(tick));
+        } else {
+          // Viimeinen frame asetetaan lahdemerkkijonosta, jolloin
+          // lopputulos on varmasti tasmalleen alkuperainen.
+          el.textContent = target;
+        }
       };
 
       frames.add(requestAnimationFrame(tick));
