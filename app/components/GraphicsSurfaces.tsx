@@ -14,6 +14,9 @@ import Image from "next/image";
  *    IntersectionObserver SiteEffectsissa togglaa luokan nakyvyyden
  *    mukaan eika tee unobservea, joten valot syttyvat ja sammuvat aina
  *    kun auto tulee ruudulle tai poistuu siita.
+ *
+ *    Auton valot palavat jo valokuvassa, joten peite toimii toisin pain:
+ *    se HIMMENTAA valot kun paneeli ei ole nakyvissa. Ks. .gsurf-light.
  */
 export default function GraphicsSurfaces() {
   return (
@@ -26,8 +29,8 @@ export default function GraphicsSurfaces() {
           height={896}
           sizes="(max-width: 880px) 82vw, 40vw"
         />
-        {/* Ajovalot: 27 % leveydesta, 55 % korkeudesta auton omissa
-            suhteissa, joten kohta seuraa kuvaa kaikilla leveyksilla. */}
+        {/* Ajovalojen peite: 27 % leveydesta, 55 % korkeudesta auton
+            omissa suhteissa, eli kuvan valoryhman kohdalla. */}
         <span className="gsurf-light" aria-hidden="true" />
       </div>
     </div>

@@ -2565,31 +2565,43 @@ footer .base { padding-top: 18px }
 .gsurf-van { position: relative; width: 92%; margin: 0 auto }
 .gsurf-van img { display: block; width: 100%; height: auto }
 
-/* SISAANTULO. Ohittaa .rv:n oletustilat suuremmalla spesifisyydella;
-   siirtymat (opacity + transform .8s) tulevat .rv:sta sellaisenaan.
+/* SISAANTULO. Ohittaa .rv:n oletustilat suuremmalla spesifisyydella.
    Alkutila ei ole taysin lapinakyva: "tekstin takaa" tarkoittaa osittaista
-   peittoa, ei katoamista. */
-.gsurf-van.rv { opacity: .42; transform: translateX(38%) scale(.85) }
+   peittoa, ei katoamista.
+   Kesto on eriytetty .rv:n oletuksesta (0.8s) omaksi arvokseen, jotta
+   rauhallinen "ajaa esiin" -liike ei hidasta muita reveal-animaatioita. */
+.gsurf-van.rv {
+  opacity: .42; transform: translateX(38%) scale(.85);
+  transition: opacity 1.8s cubic-bezier(.2,.6,.2,1),
+              transform 1.8s cubic-bezier(.2,.6,.2,1);
+}
 .gsurf-van.rv.on { opacity: 1; transform: none }
 
-/* AJOVALOT. Palautuva tila, ei keyframe-valahdys: SiteEffectsin oma
-   havainnoija togglaa .lights-on -luokan nakyvyyden mukaan.
-   mix-blend-mode: screen kirkastaa auton omaa umpinaista valoaluetta ja
-   haipyy olemattomiin vaalean taustan paalla, joten hehku pysyy autossa. */
+/* AJOVALOT. Huom: auton valot PALAVAT jo valokuvassa, joten hehkun
+   lisaaminen niiden paalle ei nakynyt - screen-sekoitus jo kirkkaan
+   valkoisen paalla ei muuta mitaan. Efekti toimii siksi painvastoin:
+   peite HIMMENTAA valot kun paneeli ei ole nakyvissa, ja haipyy pois kun
+   se tulee ruudulle. Lopputulos on sama kuin pyydetty - valot syttyvat
+   nakyviin tullessa ja sammuvat poistuttaessa - mutta se on toteutettu
+   sita vasten mita kuvassa oikeasti on.
+
+   multiply tummentaa alla olevan valon; lapinakyva reuna jattaa taustan
+   koskematta, joten peite ei nay vaalealla pohjalla. 18 % leveys pitaa
+   sen auton keulan valoryhman kohdalla eika levia auton ulkopuolelle. */
 .gsurf-light {
-  position: absolute; left: 27%; top: 55%; width: 26%; aspect-ratio: 1;
+  position: absolute; left: 27%; top: 55%; width: 18%; aspect-ratio: 1;
   transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
-  mix-blend-mode: screen; opacity: 0; transition: opacity .5s ease;
+  mix-blend-mode: multiply; opacity: .9; transition: opacity .5s ease;
   background: radial-gradient(circle,
-    rgba(225,242,255,.95) 0%, rgba(150,205,255,.55) 34%, rgba(120,180,255,0) 70%);
+    rgba(38,46,62,1) 0%, rgba(84,94,116,.7) 40%, rgba(255,255,255,0) 72%);
 }
-.gsurf-van.lights-on .gsurf-light { opacity: .9 }
+/* Nakyvissa = peite pois = valot palavat. */
+.gsurf-van.lights-on .gsurf-light { opacity: 0 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Yksinkertaisin vaihtoehto: valot pois, ei siirtymia kumpaankaan
-     suuntaan. Auto nakyy lopputilassaan .rv-saannon kautta. */
-  .gsurf-light { transition: none }
-  .gsurf-van.lights-on .gsurf-light { opacity: 0 }
+  /* Yksinkertaisin vaihtoehto: peite pois pysyvasti, eli valot palavat
+     aina kuten valokuvassa. Ei siirtymia kumpaankaan suuntaan. */
+  .gsurf-light { transition: none; opacity: 0 }
 }
 
 /* ==================================================================
