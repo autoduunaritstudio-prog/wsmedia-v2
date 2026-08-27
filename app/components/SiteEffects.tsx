@@ -69,7 +69,11 @@ export default function SiteEffects() {
     // logot ja nav-elementit menevat paallekkain. Kaista piilottaa logon ja
     // valikkopainikkeen ohituksensa ajaksi.
     const stripBand = document.querySelector<HTMLElement>(".logostrip");
-    const NAV_HIDE_BUFFER = 24; // piiloutuminen alkaa hieman ennen kosketusta
+    // Puskuri molempiin suuntiin. 24px oli liian pieni: piiloutuminen ehti
+    // alkaa vasta kun logot olivat jo navin kohdalla. Tama on myos aika-
+    // puskuri, koska CSS-siirtyma kestaa 280ms - piiloutumisen on ehdittava
+    // valmiiksi ennen visuaalista kosketusta.
+    const NAV_HIDE_BUFFER = 120;
     let navAway = false;
     const LOGO_SPEED = 0.4;
     let copyW = 0;
