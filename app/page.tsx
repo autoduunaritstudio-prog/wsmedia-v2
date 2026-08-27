@@ -2,7 +2,6 @@ import Backdrop from "./components/Backdrop";
 import SiteEffects from "./components/SiteEffects";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
-import Marquee from "./components/Marquee";
 import Logos from "./components/Logos";
 import StatBand from "./components/StatBand";
 import Services from "./components/Services";
@@ -14,17 +13,6 @@ import Contact from "./components/Contact";
 import FinalCta from "./components/FinalCta";
 import Footer from "./components/Footer";
 import { HOME_FOOTER, OVERLAY_NAV } from "./components/site-data";
-
-const MARQUEE = [
-  "Lyhytvideot",
-  "Verkkosivut",
-  "Tapahtumat",
-  "TikTok",
-  "Instagram Reels",
-  "YouTube Shorts",
-  "Espoo",
-  "Helsinki",
-];
 
 const STATS = [
   { value: "00", label: "toteutettua projektia" },
@@ -40,7 +28,6 @@ export default function Home() {
       <div id="prog" />
       <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
       <Hero />
-      <Marquee items={MARQUEE} />
       <Logos />
       <section style={{ padding: "70px 0 20px" }}>
         <div className="wrap">

@@ -1130,15 +1130,41 @@ footer .base { padding-top: 18px }
   text-align: center; font-size: var(--text-caption-sm); font-weight: var(--weight-semibold); letter-spacing: .14em;
   text-transform: uppercase; color: var(--grey); margin-bottom: 22px;
 }
-.logos .row { display: flex; gap: var(--space-gap-sm); justify-content: center; flex-wrap: wrap }
-.logos .slot {
-  width: 150px; height: 52px; border-radius: 12px;
-  border: 1px dashed #d8d8de; color: #b6b6bc;
-  display: flex; align-items: center; justify-content: center;
-  font-size: var(--text-caption-sm); font-weight: var(--weight-semibold); letter-spacing: .04em;
-  transition: border-color .3s, color .3s;
+/* Asiakaslogonauha. Liike tulee SiteEffectsista scrollYn muutoksena, ei
+   omasta animaatiosta: nauha siirtyy vain kun sivu liikkuu ja pysahtyy
+   samalla hetkella. Reunojen mask haivyttaa logot sisaan ja ulos, jottei
+   silmukka katkea teravaan reunaan. */
+.logostrip {
+  --logostrip-gap: 72px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
-.logos .slot:hover { border-color: var(--blue); color: var(--blue) }
+.logostrip-track { display: flex; width: max-content; will-change: transform }
+.logostrip-copy {
+  display: flex; align-items: center;
+  gap: var(--logostrip-gap); padding-right: var(--logostrip-gap);
+}
+/* Kiintea korkeus kaikille, leveys kuvasuhteen mukaan. Logot ovat mustia
+   lapinakyvalla taustalla, joten haivytys tehdaan opacityllä. */
+.logostrip img {
+  display: block; height: 36px; width: auto;
+  opacity: .5; transition: opacity .25s;
+}
+.logostrip img:hover { opacity: 1 }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Ilman scroll-sidosta nauha jaisi vasempaan reunaan kiinni, joten
+     naytetaan yksi kopio keskitettyna staattisena rivina. */
+  .logostrip-track { width: 100%; justify-content: center; flex-wrap: wrap }
+  .logostrip-copy:not(:first-child) { display: none }
+  .logostrip-copy { padding-right: 0 }
+}
+
+@media (max-width: 640px) {
+  .logostrip { --logostrip-gap: 44px }
+  .logostrip img { height: 30px }
+}
 
 /* ============ SPARKLINE (case-kortit) ============ */
 /* display: inline kumoaa preflightin svg { display: block }. Mockupin

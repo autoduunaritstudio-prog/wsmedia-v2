@@ -53,5 +53,6 @@ next-env.d.ts
 /*.jpg
 /*.jpeg
 /*.png
+/*.zip
 /*.mov
 /*.mp4

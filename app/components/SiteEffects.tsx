@@ -37,6 +37,31 @@ export default function SiteEffects() {
       document.querySelectorAll<HTMLElement>("[data-par]"),
     );
 
+    /* ---------- asiakaslogonauha ---------- */
+    // Nauha on kiinni scrollYn MUUTOKSESSA: siirtyma kasvaa suoraan
+    // verrannollisena skrollin deltaan, joten alas skrollatessa rivi liikkuu
+    // vasemmalle ja ylos skrollatessa oikealle - ja pysahtyy samalla
+    // hetkella kuin skrollaus, ilman omaa ajastinta tai vaimennusta.
+    //
+    // Siirtyma kiedotaan yhden kopion levyisena. Kopiot ovat identtisia,
+    // joten -copyW nayttaa tasmalleen samat pikselit kuin 0: silmukka on
+    // saumaton kumpaankin suuntaan eika reunoihin jaa tyhjaa.
+    const strip = document.querySelector<HTMLElement>(".logostrip-track");
+    const LOGO_SPEED = 0.4;
+    let copyW = 0;
+    let stripOff = 0;
+    let lastSc = window.scrollY;
+    if (strip && !reduce) {
+      const measureStrip = () => {
+        const first = strip.firstElementChild as HTMLElement | null;
+        // .rv-paljastus siirtaa vain translateY:lla, joten leveys on oikea
+        // jo ennen kuin osio on tullut nakyviin.
+        copyW = first ? first.getBoundingClientRect().width : 0;
+      };
+      measureStrip();
+      window.addEventListener("resize", measureStrip, { passive: true, signal });
+    }
+
     let ticking = false;
 
     const onScroll = () => {
@@ -64,6 +89,13 @@ export default function SiteEffects() {
           p.style.strokeDashoffset = off.toFixed(1);
         });
       }
+
+      if (strip && copyW > 0) {
+        stripOff += (sc - lastSc) * LOGO_SPEED;
+        const x = -(((stripOff % copyW) + copyW) % copyW);
+        strip.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`;
+      }
+      lastSc = sc;
 
       navAndProgress(sc, h);
       ticking = false;
