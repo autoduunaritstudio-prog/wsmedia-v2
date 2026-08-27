@@ -2845,6 +2845,23 @@ footer .base { padding-top: 18px }
   );
 }
 
+/* Harjatun metallin kohina. Staattinen, joten se rasteroidaan kerran.
+
+   TAMA SAANTO ON PAKOLLINEN, EI KOSMEETTINEN. .metalbd-noise on <svg>
+   eli korvattu elementti: ilman position/inset/width/height se putoaa
+   normaaliin virtaan ja saa oletusmittansa 300x150px, jolloin coverin
+   vasempaan ylakulmaan ilmestyy teravareunainen harmaa suorakulmio -
+   ja koska myos opacity ja mix-blend-mode katoavat, kohina piirtyy
+   tayteen voimakkuuteen .092:n sijaan. Jos taman poistaa, vika ei nay
+   buildissa vaan vasta selaimessa. */
+.metalbd-noise {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  /* Kohina nostettiin samassa suhteessa kuin kerroksen opacity
+     (.55 -> .72 -> .88), jottei pinta muutu tasaiseksi tummennukseksi vaan
+     sailyttaa harjatun metallin rakeisuuden. */
+  opacity: .092; mix-blend-mode: multiply;
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* SiteEffects ei aja scrub-laskentaa tassa tilassa, joten kuvio jaa
      lahtoasentoonsa. will-change pois turhana. */
