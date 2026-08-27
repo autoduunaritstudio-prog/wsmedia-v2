@@ -44,9 +44,11 @@ export default function SmoothScroll() {
       // Sisaanrakennettu ankkurikasittely: kaikki saman sivun #-linkit
       // (19-30 per sivu) vierittyvat pehmennetysti ilman omaa kasittelijaa.
       anchors: true,
-      // Pienempi lerp = pidempi jalkiliuku. 0.09 on hitusen oletusta (0.1)
-      // pehmeampi ilman etta sivu tuntuu irtoavan syotteesta.
-      lerp: 0.09,
+      // Suurempi lerp = tiiviimpi seuraaminen. 0.09 (Lenisin oletusta 0.1
+      // pehmeampi) jatti sisallon liikaa jalkeen nopeassa skrollauksessa,
+      // mika nakyi venyvana "blurina" ennen kiinniottoa. 0.16 puolittaa
+      // asettumisajan n. 530ms -> 287ms mutta sailyttaa pehmennyksen.
+      lerp: 0.16,
     });
 
     return () => {
