@@ -27,14 +27,24 @@ export default function Home() {
       <Backdrop />
       <div id="prog" />
       <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
-      <Hero />
-      <Logos />
-      <section style={{ padding: "70px 0 20px" }}>
-        <div className="wrap">
-          <StatBand stats={STATS} />
+      {/* Sticky hero + nouseva cover. Hero pysyy kiinnitettyna ruudun
+          ylareunaan ja cover liukuu sen paalle natiivilla sticky-kaytoksella;
+          JS hoitaa vain tummennuksen voimakkuuden. Vyohyke paattyy coverin
+          loppuun, jolloin hero irtoaa - siihen mennessa se on jo kokonaan
+          peitossa. Cover ulottuu Palvelut-osion loppuun asti, koska sen on
+          oltava vahintaan heron korkuinen (ks. .cover globals.css:ssa). */}
+      <div className="stickyzone">
+        <Hero />
+        <div className="cover">
+          <Logos />
+          <section style={{ padding: "70px 0 20px" }}>
+            <div className="wrap">
+              <StatBand stats={STATS} />
+            </div>
+          </section>
+          <Services />
         </div>
-      </section>
-      <Services />
+      </div>
       <Work />
       <Results />
       <Process />

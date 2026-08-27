@@ -84,6 +84,12 @@ export default function Hero() {
           comments="204"
         />
       </div>
+
+      {/* Tummennus omana kerroksenaan heron sisalla: se ei ole sidottu
+          mihinkaan heron sisaltoon, joten myohemmin tuleva scrub-animaatio
+          voi muuttaa sisaltoa vapaasti taman alla. Voimakkuus tulee
+          --scrim-opacity-muuttujasta jonka SiteEffects paivittaa. */}
+      <div id="hero-scrim" aria-hidden="true" />
     </header>
   );
 }

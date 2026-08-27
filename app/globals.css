@@ -613,7 +613,41 @@ h2.big { font-size: var(--text-h2-hero) }
 .tlink::after { content: " \203A" }
 
 /* ============ HERO ============ */
+/* ---------- sticky hero + nouseva cover ---------- */
+/* Hero on sticky ja cover liukuu sen paalle. Liike on natiivia
+   sticky-kaytosta, JS hoitaa vain tummennuksen voimakkuuden.
+
+   --hero-sticky-top: hero on korkeampi kuin viewport (100px + sisalto +
+   500px puhelinnayttamo + 60px = yli 1000px), joten top: 0 pinnaisi sen jo
+   scrollY:n nollassa eika alaosa tulisi koskaan nakyviin. SiteEffects
+   mittaa heron ja asettaa negatiivisen topin (vh - heroH), jolloin hero
+   vierahtaa ensin kokonaan nakyviin ja pinnaa vasta kun sen alareuna on
+   ruudun alareunassa. Ilman JS:aa fallback on 0px eli tavallinen sticky. */
+.stickyzone { position: relative }
 .hero { position: relative; text-align: center; padding: var(--space-hero-top) 0 var(--space-hero-bottom) }
+/* Sticky vain etusivun herolle. .hero on jaettu luokka, jota kayttavat myos
+   /lyhytvideot ja /verkkosivut - ilman .stickyzone-rajausta myos niiden
+   herot olisivat pinnautuneet. */
+.stickyzone > .hero { position: sticky; top: var(--hero-sticky-top, 0px); z-index: 1 }
+/* Cover nousee heron paalle: korkeampi z-index ja lapinakymaton tausta.
+   Rajaus ulottuu Palvelut-osion loppuun, koska coverin on oltava vahintaan
+   heron korkuinen - lyhyempi cover paastaisi heron nakyviin omaan
+   ylapuolelleen sina hetkena kun sticky irtoaa. */
+.cover { position: relative; z-index: 2; background: var(--bg) }
+/* Erillinen kerros heron sisalla, sisallon paalla mutta coverin alla.
+   Lyhyt transition tasaa framejen valisen nykimisen jaamatta jalkeen. */
+#hero-scrim {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  background: rgba(13,13,16, var(--scrim-opacity, 0));
+  transition: background 80ms linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Molemmat osiot normaalissa virtauksessa, ei peittoa eika tummennusta.
+     SiteEffects ei aja scrim-laskentaa tassa tilassa, joten muuttuja jaa
+     nollaan ja kerros on nakymaton. */
+  .stickyzone > .hero { position: relative }
+  #hero-scrim { display: none }
+}
 .hero .kick { color: var(--grey); letter-spacing: .08em; margin-bottom: 18px }
 .hero h1 { max-width: 15ch; margin: 0 auto }
 .hero .sub { max-width: 46ch; margin: 22px auto 0 }

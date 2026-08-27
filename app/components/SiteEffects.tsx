@@ -62,6 +62,32 @@ export default function SiteEffects() {
       window.addEventListener("resize", measureStrip, { passive: true, signal });
     }
 
+    /* ---------- sticky hero + nouseva cover ---------- */
+    // Itse liike on natiivia sticky-kaytosta. Taalla lasketaan vain kaksi
+    // asiaa: heron sticky-top (jotta yli viewportin korkuinen hero ehtii
+    // nakyviin ennen pinnausta) ja tummennuksen voimakkuus.
+    const hero = document.querySelector<HTMLElement>(".stickyzone > .hero");
+    const cover = document.querySelector<HTMLElement>(".cover");
+    const SCRIM_MAX = 0.65;
+    let heroRo: ResizeObserver | null = null;
+
+    const measureHero = () => {
+      if (!hero) return;
+      // Negatiivinen top vain jos hero on viewportia korkeampi; muuten 0.
+      const top = Math.min(0, window.innerHeight - hero.offsetHeight);
+      hero.style.setProperty("--hero-sticky-top", `${Math.round(top)}px`);
+    };
+
+    if (hero && !reduce) {
+      measureHero();
+      // ResizeObserver kattaa sisallon muutokset (fontin lataus, tekstin
+      // rivittyminen), window-resize taas pelkan viewportin korkeuden
+      // muutoksen, joka ei muuta heron omaa kokoa.
+      heroRo = new ResizeObserver(measureHero);
+      heroRo.observe(hero);
+      window.addEventListener("resize", measureHero, { passive: true, signal });
+    }
+
     let ticking = false;
 
     const onScroll = () => {
@@ -88,6 +114,15 @@ export default function SiteEffects() {
           const off = 100 - ((drawT * 100 - i * 6 + 600) % 100);
           p.style.strokeDashoffset = off.toFixed(1);
         });
+      }
+
+      // Tummennus seuraa sita kuinka paljon cover on noussut nakyviin:
+      // coverTop = vh -> 0 (ei tummennusta), coverTop = 0 -> 1 (taysi).
+      // Arvo lasketaan joka framessa suoraan skrollista, joten se seuraa
+      // molempiin suuntiin 1:1 ilman omaa siirtymaa.
+      if (hero && cover) {
+        const p = Math.min(Math.max(1 - cover.getBoundingClientRect().top / vh, 0), 1);
+        hero.style.setProperty("--scrim-opacity", (p * SCRIM_MAX).toFixed(3));
       }
 
       if (strip && copyW > 0) {
@@ -277,6 +312,7 @@ export default function SiteEffects() {
 
     return () => {
       ac.abort();
+      heroRo?.disconnect();
       io.disconnect();
       io2.disconnect();
       frames.forEach((f) => cancelAnimationFrame(f));
