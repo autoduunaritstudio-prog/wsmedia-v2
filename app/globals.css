@@ -934,11 +934,19 @@ section { padding: var(--space-section) 0 }
    jaavat nakyviin. Pyoristetyt kulmat tulevat .scr:n radiuksesta ja
    overflow: hiddenista. Video on 9:16 ja ruutu 9:19, joten cover rajaa
    sivuilta - kohde on kuvassa keskella, joten oletuskeskitys on oikein. */
-/* inset: -1px kuten .demo-videossa. Puhelimet ovat myos 3D-kaannettyja,
-   joten sama alipikselin rako on mahdollinen; .scr leikkaa ylivuodon
-   pyoristetyin kulmin. */
+/* inset: -1px kuten .demo-videossa; .scr leikkaa ylivuodon pyoristetyin
+   kulmin.
+
+   width ja height ON PAKKO antaa eksplisiittisesti. Sijoitetulla
+   KORVATULLA elementilla (video, img) inset ei venyta laatikkoa niin kuin
+   tavallisella lohkolla: auto-mitat ratkeavat sisasyntyisesta koosta, ja
+   Tailwindin preflight (img,video { max-width:100%; height:auto }) skaalaa
+   sen videon omaan 9:16-kuvasuhteeseen. Ruutu on 9:19, joten alareunaan
+   jai 62px musta kaista. calc(100% + 2px) vastaa inset: -1px:aa: prosentti
+   lasketaan .scr:n laatikosta, ei inset-suorakulmiosta. */
 .mini .phone-video {
   position: absolute; inset: -1px; z-index: 0;
+  width: calc(100% + 2px); height: calc(100% + 2px);
   object-fit: cover; background: #0c0c0e;
 }
 
@@ -1007,11 +1015,13 @@ section { padding: var(--space-section) 0 }
    bufferointivaiheen ja haipyy vasta kun video ilmoittaa 'playing'.
    z-index 1: videon (0) paalla mutta .minin .tagin (2) alla. */
 /* inset: -1px samasta syysta kuin .demo-videossa: poster on videon paalla
-   ja jakaa saman reunan, joten sen on peitettava yhta pitkalle.
-   Leveys ja korkeus tulevat inseteista, joten niita ei aseteta erikseen. */
+   ja jakaa saman reunan, joten sen on peitettava yhta pitkalle. Mitat
+   annetaan eksplisiittisesti samasta syysta kuin .phone-videossa - img on
+   korvattu elementti, jolle inset ei maarittele kokoa. */
 .demo-poster {
   position: absolute; inset: -1px; z-index: 1;
   display: block;
+  width: calc(100% + 2px); height: calc(100% + 2px);
   object-fit: cover; pointer-events: none;
   transition: opacity .18s ease;
 }
