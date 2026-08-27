@@ -368,7 +368,6 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 .navtoggle-bars i { display: block; height: 1.8px; border-radius: 2px; background: #000 }
 .navtoggle-bars i:nth-child(2) { width: 15px }
 
-
 /* ==================================================================
    TAYSVALIKKO
    Vaalea overlay: sivuston identiteetti on valkoinen pinta, musta
@@ -520,7 +519,6 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   background: var(--hair); pointer-events: none;
 }
 
-
 @media (max-width: 1080px) {
   /* Kapeammalla naytolla yhteystiedot siirtyvat omalle rivilleen, jolloin
      lohko kasvaa korkeussuunnassa. Tiiviimpi alaosa pitaa valikon
@@ -641,7 +639,6 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   transition: border-color .2s, color .2s;
 }
 .fsnav-social a:hover { border-color: var(--blue); color: var(--blue) }
-
 
 @media (prefers-reduced-motion: reduce) {
   .fsnav, .fsnav-in, .fsnav-sub { transition: none }
@@ -935,37 +932,7 @@ section { padding: var(--space-section) 0 }
   width: 100%; height: 100%;
   object-fit: cover; background: #0c0c0e;
 }
-/* Koko kuva nakyviin ilman rajausta. Lahde on 9:16 ja ruutualue 9:19,
-   joten cover leikkaa sivuilta n. 16%. contain sovittaa kuvan leveyden
-   mukaan, jolloin ylos ja alas jaa yhteensa 15,8% korkeudesta (16/19)
-   tummaa kaistaa - se sulautuu .scr:n omaan taustaan #0c0c0e eika erotu
-   erillisena laatikkona.
-   Huom: pelkka videon pienentaminen ei olisi auttanut. cover rajaa
-   kuvasuhde-eron, ei koon, perusteella: 9:19-laatikko leikkaisi saman
-   16% olipa se minkakokoinen tahansa. Ainoa tapa nayttaa koko ruutu on
-   antaa videolle lahteen oma 9:16-kuvasuhde, mika on tasmalleen se mita
-   contain tekee.
-   Vain TikTok-puhelimessa: REELS-puhelimen rajaus on hyvaksytty. */
-.mini .phone-video-contain {
-  object-fit: contain;
-  /* Zoomaus kutistaa kaistat. Geometria (.scr 9:19, lahde 9:16):
-       scale     korkeudesta   kaistat/reuna   lahteesta pois
-       1.00          84,2 %          7,89 %            0,0 %
-       1.10          92,6 %          3,68 %            9,1 %
-       1.12          94,3 %          2,84 %           10,7 %
-       1.15          96,8 %          1,58 %           13,0 %
-       1.16          97,7 %          1,16 %           13,8 %
-       1.1875       100,0 %          0,00 %           15,8 %  <- KATTO = cover
-       1.19         100,2 %          0,00 %           16,0 %  <- valittu
-     1.1875 on se piste jossa video tayttaa korkeuden ja lopputulos vastaa
-     object-fit: coveria. 1.19 on hitusen sen yli tahallaan: se antaa
-     turvamarginaalin alipikselien pyoristykselle, jottei kaistaa jaa
-     nakyviin selaimen renderoinnissa. Hinta on 0,2 prosenttiyksikkoa
-     enemman rajausta kuin coverilla.
-     transform: scale keskittaa oletuksena, ja ylimenevan leveyden rajaa
-     .scr:n oma overflow: hidden pyoristettyine kulmineen. */
-  transform: scale(var(--phone-video-zoom, 1.19));
-}
+
 .mini .tag {
   position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;
   font-size: 9px; font-weight: var(--weight-semibold); letter-spacing: .18em; color: rgba(255,255,255,.55); z-index: 2;
