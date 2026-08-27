@@ -855,19 +855,26 @@ section { padding: var(--space-section) 0 }
    elementin alalaidan kautta ja kaanto heilauttaisi sita ylospain. */
 [data-tilt] { transform-origin: center bottom; will-change: transform }
 [data-tilt$="y"] { transform-origin: center }
+/* SiteEffects kirjoittaa --tilt-rotin, CSS rakentaa koko ketjun. Nain
+   elementin oma perusmuunnos (puhelinten rotate) sailyy - suora
+   style.transform yliajaisi sen. Ilman JS:aa fallback on 0 astetta. */
+.browser, .event { transform: perspective(1200px) var(--tilt-rot, rotateY(0deg)) }
 @media (prefers-reduced-motion: reduce) {
   /* SiteEffects ei aja kaantoa tassa tilassa, joten transformia ei aseteta
      lainkaan. --tilt jaa maarittelemattomaksi ja varjot kayttavat
      perusarvojaan. Tama on vain varmistus. */
-  [data-tilt] { transform: none !important; will-change: auto }
+  /* Ei transform: none - se veisi myos puhelinten oman perusrotaation,
+     joka on nyt samassa ketjussa. SiteEffects ei aja kaantoa tassa
+     tilassa, joten --tilt-rot jaa asettamatta ja fallback on 0 astetta. */
+  [data-tilt] { will-change: auto }
 }
 
 /* video-palvelun visuaali */
 .mini-phones { position: relative; height: 360px; perspective: 900px }
 .mini {
   --ph-radius: 26px; --ph-bezel: 2.5px;
-  /* --tilt periytyy .mini-phonesilta, joten puhelinten varjo syvenee
-     samassa tahdissa kaannon kanssa. */
+  /* --tilt tulee nyt puhelimelta itseltaan (data-tilt siirtyi sailiolta
+     kummallekin .minille), joten varjo syvenee sen oman kaannon mukana. */
   --ph-drop:
     0 calc(34px + var(--tilt, 0) * 28px) calc(70px + var(--tilt, 0) * 36px) -24px
     rgba(29,29,31, calc(.4 + var(--tilt, 0) * .18));
@@ -903,8 +910,12 @@ section { padding: var(--space-section) 0 }
   position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;
   font-size: 9px; font-weight: var(--weight-semibold); letter-spacing: .18em; color: rgba(255,255,255,.55); z-index: 2;
 }
-.mini:nth-child(1) { left: 8%; top: 20px; transform: rotate(-7deg) }
-.mini:nth-child(2) { right: 8%; top: 70px; transform: rotate(6deg) }
+/* Kumpikin puhelin kaantyy itsenaisesti ulospain, kuin kirja joka avautuu
+   keskelta. Perusrotaatio on muuttujassa, jotta se ja scroll-sidottu
+   rotateY mahtuvat samaan transform-ketjuun. */
+.mini { transform: rotate(var(--mini-rot, 0deg)) perspective(1200px) var(--tilt-rot, rotateY(0deg)) }
+.mini:nth-child(1) { left: 8%; top: 20px; --mini-rot: -7deg }
+.mini:nth-child(2) { right: 8%; top: 70px; --mini-rot: 6deg }
 
 /* verkkosivu-visuaali */
 .browser {

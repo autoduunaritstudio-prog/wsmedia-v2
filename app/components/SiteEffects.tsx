@@ -130,11 +130,19 @@ export default function SiteEffects() {
         //   rotateX +  : ylareuna poispain (sarana alareunassa)
         //   rotateY +  : VASEN reuna katsojaa kohti, oikea loittonee
         //   rotateY -  : oikea reuna katsojaa kohti, vasen loittonee
+        //
+        // Kirjoitetaan MUUTTUJAAN eika style.transformiin: puhelimilla on
+        // CSS:ssa oma perusrotaationsa (rotate(-7deg)/rotate(6deg)), jonka
+        // suora transform-asetus yliajaisi. CSS yhdistaa perusrotaation ja
+        // taman saman ketjun sisalla. Arvo on kokonainen rotate-funktio,
+        // joten akseli sailyy data-tiltissa eika valu CSS:aan.
         const spec = el.dataset.tilt ?? "x";
         const axis = spec.endsWith("y") ? "rotateY" : "rotateX";
         const sign = spec.startsWith("-") ? -1 : 1;
-        el.style.transform =
-          `perspective(1200px) ${axis}(${(sign * t * TILT_MAX).toFixed(2)}deg)`;
+        el.style.setProperty(
+          "--tilt-rot",
+          `${axis}(${(sign * t * TILT_MAX).toFixed(2)}deg)`,
+        );
       });
 
       if (bdGrid && bdRing && bdWave) {

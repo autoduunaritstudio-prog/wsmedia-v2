@@ -20,10 +20,10 @@ export default function Services() {
             <span className="deco deco-grid" style={{ left: "-30px", top: "-20px" }} />
             <span className="deco deco-ring" style={{ right: "6%", top: "-8px" }} />
             <span className="deco deco-dot" style={{ right: "2%", bottom: "30%" }} />
-            <div className="mini-phones" data-tilt="x">
+            <div className="mini-phones">
               {/* Sisalto kuuluu .scr:n sisaan, ei suoraan runkoon: rungon
                   reunus on inset-varjo, jonka lapset peittaisivat. */}
-              <div className="mini">
+              <div className="mini" data-tilt="y">
                 <div className="scr">
                   <DemoVideo
                     className="phone-video"
@@ -35,7 +35,7 @@ export default function Services() {
                   <div className="tag">REELS</div>
                 </div>
               </div>
-              <div className="mini">
+              <div className="mini" data-tilt="-y">
                 <div className="scr">
                   <DemoVideo
                     className="phone-video phone-video-contain"
@@ -80,7 +80,7 @@ export default function Services() {
             <span className="deco deco-plus" style={{ right: "-4%", bottom: "14%" }}>
               +
             </span>
-            <div className="browser" data-tilt="y">
+            <div className="browser" data-tilt="-y">
               <div className="bar">
                 <span className="dot" />
                 <span className="dot" />
@@ -132,7 +132,7 @@ export default function Services() {
           <div className="svc-visual" data-par="0.02">
             <span className="deco deco-dot" style={{ left: "-2%", top: "10%" }} />
             <span className="deco deco-ring deco-ring-sm" style={{ right: "4%", bottom: "-10px" }} />
-            <div className="event" data-tilt="-y">
+            <div className="event" data-tilt="y">
               <div className="lights" />
               <div className="truss" />
               <span className="chip">[Tapahtuman nimi] · [pvm]</span>
