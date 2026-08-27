@@ -881,6 +881,49 @@ section { padding: var(--space-section) 0 }
 .shead.center { margin-left: auto; margin-right: auto; text-align: center }
 @media (max-width: 720px) { .shead.right { margin-left: 0; text-align: left } }
 
+/* ---------- Palvelut-avaus tiimikuvapaikalla (vain etusivu) ----------
+   Modifioiva luokka eika .shead-saannon muokkaus: .shead on jaettu
+   kaikkien kahdeksan sivun kesken, ja gridin lisaaminen siihen olisi
+   muuttanut myos alasivujen osio-otsikot kaksisarakkeisiksi.
+
+   Sarakesuhde 0,62fr / 1fr eika .svc:n 1fr 1fr: kuva on paikkamerkki
+   eika paasisaltoa, joten teksti saa enemman tilaa. Gap ja katkaisukohta
+   (880px) ovat samat kuin .svc:lla, jotta rytmi on yhtenainen.
+
+   h2:n margin-top nollataan: .shead h2:n 12px oli kickerin alavali, ja
+   kun kicker poistui se olisi jaanyt tyhjaksi siirtymaksi joka rikkoo
+   sarakkeiden pystykeskityksen. */
+.shead-team {
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
+  gap: var(--space-gap-xl);
+  align-items: center;
+}
+.shead-team h2 { margin-top: 0 }
+.shead-txt { max-width: 600px }
+
+/* TODO: poista kun oikea tiimikuva korvaa paikkamerkin. */
+.teamph {
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  background: rgba(29,29,31,.05);
+  border: 1px dashed rgba(29,29,31,.24);
+  display: grid; place-items: center;
+}
+.teamph-mark {
+  font-size: var(--text-label); font-weight: var(--weight-semibold);
+  letter-spacing: .08em; text-transform: uppercase; color: var(--grey);
+}
+
+@media (max-width: 880px) {
+  /* Yhdessa sarakkeessa otsikko tulee ensin: taysleveana 4:5 paikkamerkki
+     tyontaisi koko avauksen ruudun alapuolelle. */
+  .shead-team { grid-template-columns: 1fr; gap: var(--space-gap-lg) }
+  .shead-txt { order: 1 }
+  .teamph { order: 2; max-width: 320px }
+}
+
 .card {
   background: #fff; border: 1px solid var(--hair);
   box-shadow: 0 24px 60px -24px rgba(29,29,31,.16);
@@ -2879,7 +2922,13 @@ footer .base { padding-top: 18px }
    Keskipisteen paikka tulee muuttujista, joita SiteEffects siirtaa. */
 .metalbd-glow {
   position: absolute; inset: 0;
-  background: radial-gradient(115% 78% at var(--mb-gx, 50%) var(--mb-gy, 42%),
+  /* --mb-gx on 56% eika 50%: kuvion tummat fasetit (C2 cx=1700,
+     C4 cx=1900) ovat oikealla, joten oikea puoli on vasenta tummempi.
+     Palvelut-avauksen teksti siirtyi oikeaan sarakkeeseen tiimikuva-
+     paikan tielta, ja 50%:lla sen --grey-kappale jai 4,45:1:een eli
+     alle AA:n. 56% nostaa sen 4,59-4,91:een ja parantaa samalla
+     .svc-korttien pahinta pistetta (RGB 217,0 -> 221,1). */
+  background: radial-gradient(115% 78% at var(--mb-gx, 56%) var(--mb-gy, 42%),
     rgba(10,10,12,0)    0%,
     rgba(10,10,12,.05) 26%,
     rgba(10,10,12,.15) 50%,

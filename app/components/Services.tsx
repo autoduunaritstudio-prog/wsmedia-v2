@@ -6,13 +6,23 @@ export default function Services() {
   return (
     <section id="palvelut">
       <div className="wrap">
-        <div className="shead rv" data-par="0.03">
-          <span className="kick">Palvelut</span>
-          <h2 className="big">Neljä tapaa erottua. Yksi tiimi.</h2>
-          <p className="sub">
-            Video tuo huomion, sivusto tekee kaupan, tapahtuma sinetöi suhteen. Rakennamme koko
-            polun.
-          </p>
+        <div className="shead shead-team rv" data-par="0.03">
+          {/* TODO: korvaa oikealla tiimikuvalla kun saatavilla.
+              Kun kuva tulee: vaihda .teamph-lohko <Image />:ksi, sailyta
+              aspect-ratio 4/5 ja border-radius 20px, ja poista .teamph /
+              .teamph-mark globals.css:sta. Katkoviivareunus on
+              tarkoituksellinen: paikkamerkin pitaa nayttaa tilapaiselta
+              eika viimeistellylta mockupilta. */}
+          <div className="teamph" aria-hidden="true">
+            <span className="teamph-mark">Tiimikuva tulossa</span>
+          </div>
+          <div className="shead-txt">
+            <h2 className="big">Neljä tapaa erottua. Yksi tiimi.</h2>
+            <p className="sub">
+              Video tuo huomion, sivusto tekee kaupan, tapahtuma sinetöi suhteen. Rakennamme koko
+              polun.
+            </p>
+          </div>
         </div>
 
         {/* 1. Lyhytvideot */}
