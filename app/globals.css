@@ -162,7 +162,7 @@
   /* Tiivis osiovali. Logonauha ei ole oma osionsa vaan kaista, joka kuuluu
      visuaalisesti seuraavaan osioon; taysi --space-section jattaisi niiden
      valiin yhta ison raon kuin kahden itsenaisen osion valiin. */
-  --space-section-tight: 64px;
+  --space-section-tight: 100px;
   --space-hero-top: 100px;
   --space-hero-top-sub: 56px;
   /* Etusivun sticky-hero. #nav on sticky NORMAALISSA VIRTAUKSESSA ja vie
