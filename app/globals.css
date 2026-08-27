@@ -2809,43 +2809,40 @@ footer .base { padding-top: 18px }
   overflow: hidden; opacity: var(--metalbd-opacity, .88);
 }
 
-/* Kaarilohkot. closest-side pitaa reunan pehmeana ilman blur-suodinta,
-   joka olisi selvasti raskaampi taman kokoisella pinnalla. */
+/* Kaarilohkot ovat PAAELEMENTTI: niiden pehmea S-jako on se muoto joka
+   pitaa erottua ensisilmayksella. Alfat nostettiin (.30 -> .44 ja
+   .26 -> .38) ja gradientin pysakit tiivistettiin, jolloin lohkon reuna
+   on tunnistettava kaari eika tasainen sumu. Koko pienennettiin
+   150/165vmax -> 105/115vmax, jotta kaari mahtuu nakymaan kokonaan eika
+   vain sen keskiosa taytä ruutua. */
 .metalbd-blob { position: absolute; will-change: transform }
 .metalbd-a {
-  width: 150vmax; height: 110vmax; left: -35vmax; top: -42vmax;
+  width: 105vmax; height: 82vmax; left: -22vmax; top: -30vmax;
   background: radial-gradient(closest-side at 50% 50%,
-    rgba(26,26,28,.30) 0%, rgba(74,74,79,.20) 45%, rgba(106,106,112,0) 78%);
+    rgba(26,26,28,.44) 0%, rgba(58,58,63,.34) 38%, rgba(96,96,102,.14) 64%,
+    rgba(106,106,112,0) 82%);
 }
 .metalbd-b {
-  width: 165vmax; height: 120vmax; right: -48vmax; bottom: -52vmax;
+  width: 115vmax; height: 90vmax; right: -30vmax; bottom: -34vmax;
   background: radial-gradient(closest-side at 50% 50%,
-    rgba(106,106,112,.26) 0%, rgba(74,74,79,.16) 48%, rgba(26,26,28,0) 80%);
+    rgba(112,112,118,.38) 0%, rgba(74,74,79,.28) 40%, rgba(40,40,44,.10) 66%,
+    rgba(26,26,28,0) 84%);
 }
 
-/* Diagonaaliset valovyot: kapeat vaaleat raidat, jotka liukuvat scrollin
-   mukana ja saavat pinnan nayttamaan silta etta valo liikkuu sen yli.
-   Korkeus on ylimitoitettu, jotta modulo-siirtyma ei paljasta reunaa. */
+/* Valovyot ovat LISATEKSTUURI, eivat oma kuvionsa. Aiemmin valkoinen
+   raita oli alfalla .55 eli lahes kaksinkertainen kaarilohkoihin nahden,
+   ja 420px jakso teki siita erillisen palkkikuvion. Nyt alfa on .10 ja
+   jakso 900px, jolloin se lukeutuu kiillokseksi lohkojen pinnalla. */
 .metalbd-sweep {
   position: absolute; left: -30vmax; right: -30vmax; top: -60vmax; bottom: -60vmax;
   will-change: transform;
   background: repeating-linear-gradient(
     118deg,
     rgba(255,255,255,0) 0px,
-    rgba(255,255,255,0) 190px,
-    rgba(255,255,255,.55) 250px,
-    rgba(160,160,168,.16) 300px,
-    rgba(255,255,255,0) 420px
+    rgba(255,255,255,.10) 300px,
+    rgba(150,150,158,.055) 520px,
+    rgba(255,255,255,0) 900px
   );
-}
-
-/* Harjatun metallin kohina. Staattinen, joten se rasteroidaan kerran. */
-.metalbd-noise {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  /* Kohina nostettiin samassa suhteessa kuin kerroksen opacity
-     (.55 -> .72 -> .88), jottei pinta muutu tasaiseksi tummennukseksi vaan
-     sailyttaa harjatun metallin rakeisuuden. */
-  opacity: .092; mix-blend-mode: multiply;
 }
 
 @media (prefers-reduced-motion: reduce) {

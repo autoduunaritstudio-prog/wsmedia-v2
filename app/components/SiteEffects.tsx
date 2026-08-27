@@ -31,6 +31,7 @@ export default function SiteEffects() {
     // kerroksia, joten koko sivun kokoinen tausta ei aiheuta
     // uudelleenpiirtoa framea kohden. Kohinakerros on staattinen eika
     // osallistu tahan lainkaan.
+    const mbLayer = document.querySelector<HTMLElement>(".metalbd");
     const mbA = document.querySelector<HTMLElement>(".metalbd-a");
     const mbB = document.querySelector<HTMLElement>(".metalbd-b");
     const mbSweep = document.querySelector<HTMLElement>(".metalbd-sweep");
@@ -186,20 +187,33 @@ export default function SiteEffects() {
         el.style.setProperty("--tilt-rot", `${axis}(${main.toFixed(2)}deg)${back}`);
       });
 
-      if (mbA) {
-        mbA.style.transform =
-          `translate3d(${(sc * 0.03).toFixed(1)}px, ${(-sc * 0.05).toFixed(1)}px, 0)` +
-          ` rotate(${(sc * 0.012).toFixed(2)}deg)`;
-      }
-      if (mbB) {
-        mbB.style.transform =
-          `translate3d(${(-sc * 0.026).toFixed(1)}px, ${(sc * 0.042).toFixed(1)}px, 0)` +
-          ` rotate(${(-sc * 0.009).toFixed(2)}deg)`;
-      }
-      if (mbSweep) {
-        // Modulo pitaa vyot silmukassa: kuvio toistuu 420px valein, joten
-        // sama jakso siirtymassa nayttaa jatkuvalta valon pyyhkaisylta.
-        mbSweep.style.transform = `translate3d(0, ${(-(sc * 0.14) % 420).toFixed(1)}px, 0)`;
+      if (mbLayer) {
+        // Ajuriksi coverin oma sijainti, ei raaka scrollY: arvo kulkee
+        // 0 -> coverin korkeus juuri sen matkan aikana kun kuvio on
+        // nakyvissa, joten liike osuu sinne missa se nahdaan.
+        const p = -mbLayer.getBoundingClientRect().top;
+
+        // Kertoimet ovat tarkoituksella ERI SUURUISIA JA ERI SUUNTIIN:
+        // A liikkuu pystysuunnassa nopeammin, B vaakasuunnassa. Nain
+        // lohkojen KESKINAINEN asema muuttuu koko matkan ajan eika koko
+        // kuvio vain siirry yhtena kappaleena.
+        if (mbA) {
+          mbA.style.transform =
+            `translate3d(${(p * 0.09).toFixed(1)}px, ${(-p * 0.16).toFixed(1)}px, 0)` +
+            ` rotate(${(p * 0.02).toFixed(2)}deg)`;
+        }
+        if (mbB) {
+          mbB.style.transform =
+            `translate3d(${(-p * 0.14).toFixed(1)}px, ${(p * 0.07).toFixed(1)}px, 0)` +
+            ` rotate(${(-p * 0.011).toFixed(2)}deg)`;
+        }
+        if (mbSweep) {
+          // 1917px eika raitajakso 900px: 118 asteen kulmassa pystysiirtyma
+          // vastaa kuvion jaksoa vasta kun se on jaettu cos(118°):lla.
+          // Aiempi 420px ei osunut jaksoon lainkaan, joten kuvio HYPPASI
+          // takaisin alkuun - juuri se nakyi toistona.
+          mbSweep.style.transform = `translate3d(0, ${(-(p * 0.3) % 1917).toFixed(1)}px, 0)`;
+        }
       }
 
       if (bdGrid && bdRing && bdWave) {
