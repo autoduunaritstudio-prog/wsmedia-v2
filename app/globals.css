@@ -321,6 +321,33 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 .navtoggle:focus:not(:focus-visible) { outline: none; box-shadow: none }
 #nav.scrolled .navtoggle { width: 48px; height: 48px }
 
+/* Logonauha vierii navin paalle, jolloin logot ja nav-elementit menisivat
+   paallekkain. SiteEffects togglaa .nav-awayn kun kaista on navin
+   korkeudella, ja elementit liukuvat sivuille pois.
+
+   Tila on binaarinen (paallekkain / ei), joten siirtyma tehdaan CSS
+   transitionilla eika scroll-sidottuna arvona - jalkimmainen nykisi
+   koska kyse ei ole jatkuvasta liu'usta.
+
+   visibility (ei pelkka opacity) poistaa elementit myos tab-jarjestyksesta
+   ja saavutettavuuspuusta piilossa ollessaan: nakymaton mutta fokusoitava
+   painike olisi pahempi kuin piilotettu. Diskreettina ominaisuutena se
+   vaihtuu vasta haipymisen jalkeen ja palaa heti alussa, joten
+   molemmat suunnat nayttavat oikealta. */
+#nav .logo, #nav .navtoggle {
+  transition: transform .28s cubic-bezier(.2,.6,.2,1),
+              opacity .28s cubic-bezier(.2,.6,.2,1),
+              visibility .28s cubic-bezier(.2,.6,.2,1);
+}
+#nav.nav-away .logo { transform: translateX(-40px) }
+#nav.nav-away .navtoggle { transform: translateX(40px) }
+#nav.nav-away .logo, #nav.nav-away .navtoggle { opacity: 0; visibility: hidden }
+@media (prefers-reduced-motion: reduce) {
+  /* Piilotus on toiminnallinen, ei koriste, joten se jaa voimaan kuten
+     navin muutkin tilat - vain siirtyma poistuu. */
+  #nav .logo, #nav .navtoggle { transition: none }
+}
+
 .navtoggle-bars { display: flex; flex-direction: column; gap: 5px; width: 21px }
 /* Viivat mustina: ne ovat samassa sekoitusryhmassa kuin valkoinen ympyra,
    joten kaannon jalkeen kontrasti sailyy molempiin suuntiin. */

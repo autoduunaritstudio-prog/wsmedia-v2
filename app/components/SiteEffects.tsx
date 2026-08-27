@@ -64,6 +64,13 @@ export default function SiteEffects() {
     // joten -copyW nayttaa tasmalleen samat pikselit kuin 0: silmukka on
     // saumaton kumpaankin suuntaan eika reunoihin jaa tyhjaa.
     const strip = document.querySelector<HTMLElement>(".logostrip-track");
+    /* ---------- nav pois logonauhan tielta ---------- */
+    // Logonauha vierii navin paalle (nav on z-index 50, cover 2), jolloin
+    // logot ja nav-elementit menevat paallekkain. Kaista piilottaa logon ja
+    // valikkopainikkeen ohituksensa ajaksi.
+    const stripBand = document.querySelector<HTMLElement>(".logostrip");
+    const NAV_HIDE_BUFFER = 24; // piiloutuminen alkaa hieman ennen kosketusta
+    let navAway = false;
     const LOGO_SPEED = 0.4;
     let copyW = 0;
     let stripOff = 0;
@@ -187,6 +194,20 @@ export default function SiteEffects() {
       if (!scrolled && sc > 14) scrolled = true;
       else if (scrolled && sc < 4) scrolled = false;
       nav?.classList.toggle("scrolled", scrolled);
+
+      if (nav && stripBand) {
+        const r = stripBand.getBoundingClientRect();
+        const navH = nav.getBoundingClientRect().height;
+        // Tila johdetaan joka framessa suoraan geometriasta, ei deltoista,
+        // joten se korjaa itsensa eika voi jaada jumiin nopeassakaan
+        // edestakaisessa skrollauksessa.
+        const overlap = r.top < navH + NAV_HIDE_BUFFER && r.bottom > -NAV_HIDE_BUFFER;
+        // DOMia kosketaan vain kun tila oikeasti vaihtuu, ei joka tickilla.
+        if (overlap !== navAway) {
+          navAway = overlap;
+          nav.classList.toggle("nav-away", overlap);
+        }
+      }
 
       if (prog) {
         const max = h.scrollHeight - window.innerHeight;
