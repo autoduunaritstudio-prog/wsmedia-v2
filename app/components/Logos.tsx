@@ -37,7 +37,6 @@ const COPIES = 6;
 export default function Logos() {
   return (
     <div className="logos rv">
-      <p className="t">Yrityksiä joiden kanssa työskentelemme</p>
       <div className="logostrip">
         <div className="logostrip-track">
           {Array.from({ length: COPIES }, (_, copy) => (

@@ -1126,10 +1126,6 @@ footer .base { padding-top: 18px }
 
 /* ============ LOGOKAISTA ============ */
 .logos { padding: 54px 0 0 }
-.logos .t {
-  text-align: center; font-size: var(--text-caption-sm); font-weight: var(--weight-semibold); letter-spacing: .14em;
-  text-transform: uppercase; color: var(--grey); margin-bottom: 22px;
-}
 /* Asiakaslogonauha. Liike tulee SiteEffectsista scrollYn muutoksena, ei
    omasta animaatiosta: nauha siirtyy vain kun sivu liikkuu ja pysahtyy
    samalla hetkella. Reunojen mask haivyttaa logot sisaan ja ulos, jottei
@@ -1145,13 +1141,18 @@ footer .base { padding-top: 18px }
   display: flex; align-items: center;
   gap: var(--logostrip-gap); padding-right: var(--logostrip-gap);
 }
-/* Kiintea korkeus kaikille, leveys kuvasuhteen mukaan. Logot ovat mustia
-   lapinakyvalla taustalla, joten haivytys tehdaan opacityllä. */
+/* Kiintea korkeus kaikille, leveys kuvasuhteen mukaan. Logot nakyvat
+   omassa mustassaan: ei suodattimia varin muuttamiseen eika hover-tilaa.
+   Varjo on drop-shadow eika box-shadow, koska lahteet ovat lapinakyvia
+   PNG-kuvia - box-shadow piirtyisi kuvan suorakulmion ympari.
+   drop-shadow ei tunne spread-parametria, joten sivuston korttivarjoista
+   (esim. 0 16px 40px -14px rgba(29,29,31,.3)) on pudotettu sumennus ja
+   alfa alaspain vastaamaan negatiivisen spreadin kiristysta, ja mitat on
+   suhteutettu 36px korkeaan elementtiin. */
 .logostrip img {
   display: block; height: 36px; width: auto;
-  opacity: .5; transition: opacity .25s;
+  filter: drop-shadow(0 3px 7px rgba(29,29,31,.26));
 }
-.logostrip img:hover { opacity: 1 }
 
 @media (prefers-reduced-motion: reduce) {
   /* Ilman scroll-sidosta nauha jaisi vasempaan reunaan kiinni, joten
