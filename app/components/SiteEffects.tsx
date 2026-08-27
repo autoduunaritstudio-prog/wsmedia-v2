@@ -272,13 +272,21 @@ export default function SiteEffects() {
     );
     document.querySelectorAll(".rv").forEach((el) => io.observe(el));
 
-    /* ---------- case-numeroiden rullaus ---------- */
+    /* ---------- numerorullaus (lukukaista + case-kortit) ---------- */
+    // Kaksi nuppia, molemmat tassa: milloin rullaus alkaa ja kauanko se
+    // kestaa. Ne saadetaan yhdessa - liian aikainen laukaisu yhdessa lyhyen
+    // keston kanssa tarkoittaa, etta luku on jo valmis kun se tulee
+    // nakyviin. Sama havainnoija ja kesto ohjaavat molempia paikkoja, joten
+    // ajoitus pysyy yhtenaisena.
+    const COUNT_ROOT_MARGIN = "0px 0px 5% 0px"; // laukaisu: 5% vh:sta ennen taitetta
+    const COUNT_DURATION = 2000;                // rullauksen kesto, ms
+
     const frames = new Set<number>();
     const spin = (el: HTMLElement) => {
       const target = (el.dataset.count ?? "").replace(/&nbsp;/g, " ");
       const chars = [...target];
       let t0: number | null = null;
-      const dur = 1100;
+      const dur = COUNT_DURATION;
       const tick = (ts: number) => {
         if (!t0) t0 = ts;
         const p = Math.min((ts - t0) / dur, 1);
@@ -304,14 +312,11 @@ export default function SiteEffects() {
           }
         });
       },
-      // Laukaisu ennen kuin elementti on nakyvissa: POSITIIVINEN alamarginaali
-      // laajentaa juuren viewportin alapuolelle, jolloin rullaus alkaa 20%
-      // ruudun korkeudesta ennen kuin luku tulee nakyviin ja kayttaja ehtii
-      // nahda koko 1,1s animaation. (Negatiivinen arvo tekisi painvastoin eli
-      // viivyttaisi laukaisua.) threshold 0 riittaa, kun raja on jo siirretty.
-      // Sama havainnoija ajaa myos case-korttien numerot, joten ajoitus on
-      // yhtenainen koko sivustolla.
-      { threshold: 0, rootMargin: "0px 0px 20% 0px" },
+      // POSITIIVINEN alamarginaali laajentaa juuren viewportin alapuolelle,
+      // eli suurempi arvo laukaisee aiemmin. 20% oli liikaa: rullaus ehti
+      // loppuun ennen kuin luku tuli nakyviin. threshold 0 riittaa, kun raja
+      // on jo siirretty marginaalilla.
+      { threshold: 0, rootMargin: COUNT_ROOT_MARGIN },
     );
     document
       .querySelectorAll<HTMLElement>("[data-count]")
