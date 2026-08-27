@@ -137,6 +137,7 @@
    MIHIN MITAKIN
      Osion pystypadding ........... --space-section / -sub / -mobile
      Hero ......................... --space-hero-top / -sub, --space-hero-bottom
+     Etusivun sticky-hero ......... --space-hero-top-sticky (navin alta)
      Loppu-CTA .................... --space-final / -sub / -mobile
      Tumma referenssikaista ....... --space-work / -sub
      Osio-otsikon alavali ......... --space-shead-gap / -sub / -mobile
@@ -159,6 +160,13 @@
   --space-section-mobile: 66px;
   --space-hero-top: 100px;
   --space-hero-top-sub: 56px;
+  /* Etusivun sticky-hero. #nav on sticky NORMAALISSA VIRTAUKSESSA ja vie
+     72px + --nav-top = 116px, joten heron oma 100px ylapadding kasvatti
+     sisallon alkukohdan 216px:aan. Sticky-top ei vaikuta alkutilaan:
+     scrollY:n nollassa heron luonnollinen sijainti ei riko negatiivista
+     rajaa, joten offsetia ei sovelleta lainkaan. Tama arvo on siis ainoa
+     nuppi alkutilan valille - navin alareunasta sisaltoon. */
+  --space-hero-top-sticky: 24px;
   --space-hero-bottom: 60px;
   --space-final: 140px;
   --space-final-sub: 130px;
@@ -627,8 +635,13 @@ h2.big { font-size: var(--text-h2-hero) }
 .hero { position: relative; text-align: center; padding: var(--space-hero-top) 0 var(--space-hero-bottom) }
 /* Sticky vain etusivun herolle. .hero on jaettu luokka, jota kayttavat myos
    /lyhytvideot ja /verkkosivut - ilman .stickyzone-rajausta myos niiden
-   herot olisivat pinnautuneet. */
-.stickyzone > .hero { position: sticky; top: var(--hero-sticky-top, 0px); z-index: 1 }
+   herot olisivat pinnautuneet. Sama rajaus pitaa ylapaddingin etusivulla:
+   navin 116px riittaa yksin ilmavuudeksi, joten heron oma 100px korvataan
+   pienemmalla arvolla ja sivu avautuu suoraan tiiviiseen asetteluun. */
+.stickyzone > .hero {
+  position: sticky; top: var(--hero-sticky-top, 0px); z-index: 1;
+  padding-top: var(--space-hero-top-sticky);
+}
 /* Cover nousee heron paalle: korkeampi z-index ja lapinakymaton tausta.
    Rajaus ulottuu Palvelut-osion loppuun, koska coverin on oltava vahintaan
    heron korkuinen - lyhyempi cover paastaisi heron nakyviin omaan
