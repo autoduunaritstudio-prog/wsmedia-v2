@@ -68,11 +68,20 @@ export default function SiteEffects() {
     // logot ja nav-elementit menevat paallekkain. Kaista piilottaa logon ja
     // valikkopainikkeen ohituksensa ajaksi.
     const stripBand = document.querySelector<HTMLElement>(".logostrip");
-    // Puskuri molempiin suuntiin. 24px oli liian pieni: piiloutuminen ehti
-    // alkaa vasta kun logot olivat jo navin kohdalla. Tama on myos aika-
-    // puskuri, koska CSS-siirtyma kestaa 280ms - piiloutumisen on ehdittava
-    // valmiiksi ennen visuaalista kosketusta.
-    const NAV_HIDE_BUFFER = 120;
+    // Suunnat saadetaan erikseen: piiloutuminen halutaan hyvissa ajoin
+    // ennen kosketusta, palautuminen heti kun kaista on ohi.
+    //
+    // NAV_HIDE_BUFFER_IN: kuinka monta pikselia ENNEN kosketusta piiloutuminen
+    // alkaa. Isompi = aikaisemmin piiloon. Tama on myos aikapuskuri, koska
+    // CSS-siirtyma kestaa 200ms ja sen on ehdittava valmiiksi.
+    //
+    // NAV_SHOW_BUFFER_OUT: kuinka monta pikselia ENNEN kaistan taydellista
+    // ohitusta palautuminen alkaa. Isompi = aikaisemmin esiin. 24px vastaa
+    // pieninta --nav-top -arvoa: navin NAKYVAT elementit alkavat vasta sen
+    // verran alempaa, joten kaista on jo ohittanut ne vaikka se koskettaisi
+    // viela navin laatikon ylareunaa. Negatiivinen arvo viivyttaisi.
+    const NAV_HIDE_BUFFER_IN = 120;
+    const NAV_SHOW_BUFFER_OUT = 24;
     let navAway = false;
     const LOGO_SPEED = 0.4;
     let copyW = 0;
@@ -208,7 +217,8 @@ export default function SiteEffects() {
         // Tila johdetaan joka framessa suoraan geometriasta, ei deltoista,
         // joten se korjaa itsensa eika voi jaada jumiin nopeassakaan
         // edestakaisessa skrollauksessa.
-        const overlap = r.top < navH + NAV_HIDE_BUFFER && r.bottom > -NAV_HIDE_BUFFER;
+        const overlap =
+          r.top < navH + NAV_HIDE_BUFFER_IN && r.bottom > NAV_SHOW_BUFFER_OUT;
         // DOMia kosketaan vain kun tila oikeasti vaihtuu, ei joka tickilla.
         if (overlap !== navAway) {
           navAway = overlap;
