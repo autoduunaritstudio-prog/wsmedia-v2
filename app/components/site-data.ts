@@ -11,6 +11,7 @@ export const ROUTES = {
   lyhytvideot: "/lyhytvideot",
   verkkosivut: "/verkkosivut",
   seo: "/hakukoneoptimointi",
+  graafinen: "/graafinen-suunnittelu",
   tietosuoja: "/tietosuoja",
   /** Sivua ei viela ole -> etusivun Palvelut-osio. */
   tapahtumat: "/#palvelut",
@@ -52,6 +53,12 @@ export const SERVICE_MENU: ServiceMenuItem[] = [
     href: ROUTES.verkkosivut,
     label: "Verkkosivut",
     desc: "Nopeat, hakukoneoptimoidut sivustot",
+    icon: "site",
+  },
+  {
+    href: ROUTES.graafinen,
+    label: "Graafinen suunnittelu",
+    desc: "Yritysilme, painotuotteet ja teippaukset",
     icon: "site",
   },
   {

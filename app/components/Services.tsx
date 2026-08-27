@@ -1,3 +1,4 @@
+import GraphicsSurfaces from "./GraphicsSurfaces";
 import SmartLink from "./SmartLink";
 import DemoVideo from "./DemoVideo";
 
@@ -127,12 +128,37 @@ export default function Services() {
           </div>
         </div>
 
-        {/* 3. Tapahtumat */}
+        {/* 3. Graafinen suunnittelu */}
         <div className="svc rv">
+          <div className="svc-visual" data-par="0.02">
+            <span className="deco deco-ring deco-ring-sm" style={{ right: "-3%", top: "-10px" }} />
+            <span className="deco deco-dot" style={{ left: "-2%", bottom: "18%" }} />
+            <GraphicsSurfaces />
+          </div>
+          <div className="svc-txt" data-par="0.035">
+            <span className="kick">Graafinen suunnittelu</span>
+            <h3>Yksi ilme, joka toimii käyntikortista pakettiauton kylkeen.</h3>
+            <p>
+              Logo, värit ja graafinen ohjeisto — ja sama ilme viety painotuotteisiin,
+              teippauksiin ja kyltteihin asennettuna. Yksi tarjous, yksi lasku.
+            </p>
+            <ul>
+              <li>Saat alkuperäistiedostot ja täydet oikeudet</li>
+              <li>Suunnittelu, materiaalit ja asennus samalta tiimiltä</li>
+              <li>Hinta-arvion näet itse laskurilla ennen tarjousta</li>
+            </ul>
+            <SmartLink className="tlink" href="/graafinen-suunnittelu">
+              Lue lisää graafisesta suunnittelusta
+            </SmartLink>
+          </div>
+        </div>
+
+        {/* 4. Tapahtumat */}
+        <div className="svc rev rv">
           <div className="svc-visual" data-par="0.02">
             <span className="deco deco-dot" style={{ left: "-2%", top: "10%" }} />
             <span className="deco deco-ring deco-ring-sm" style={{ right: "4%", bottom: "-10px" }} />
-            <div className="event" data-tilt="y" data-tilt-profile="mockup">
+            <div className="event" data-tilt="-y" data-tilt-profile="mockup">
               <div className="lights" />
               <div className="truss" />
               <span className="chip">[Tapahtuman nimi] · [pvm]</span>

@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     ON-PAGE SEO · pääavainsana: "graafinen suunnittelu yritykselle"
+     tuki: yritysilme, graafinen ohjeisto, logosuunnittelu,
+     mainosteippaus, ajoneuvoteippaus, julkisivuteippaus, painotuotteet
+     ============================================================ -->
+<title>Graafinen suunnittelu yritykselle | Yritysilme ja teippaukset | WS Media</title>
+<meta name="description" content="Graafinen suunnittelu yritykselle avaimet käteen: logo, yritysilme ja ohjeisto sekä teippaukset ja painotuotteet asennettuna. Yksi tarjous, yksi lasku.">
+<link rel="canonical" href="https://wsmedia.fi/graafinen-suunnittelu">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="author" content="WS Media Oy">
+<meta name="geo.region" content="FI-18">
+<meta name="geo.placename" content="Espoo">
+<meta name="theme-color" content="#0071e3">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fi_FI">
+<meta property="og:site_name" content="WS Media">
+<meta property="og:url" content="https://wsmedia.fi/graafinen-suunnittelu">
+<meta property="og:title" content="Graafinen suunnittelu yritykselle | Yritysilme ja teippaukset | WS Media">
+<meta property="og:description" content="Logo, yritysilme ja graafinen ohjeisto — sekä käyntikortit, teippaukset ja kyltit valmiiksi asennettuna. Yksi tarjous, yksi lasku.">
+<meta property="og:image" content="https://wsmedia.fi/og/graafinen-suunnittelu-yritykselle.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Graafinen suunnittelu yritykselle | WS Media">
+<meta name="twitter:description" content="Yritysilme suunnittelusta valmiiseen pintaan. Yksi tarjous, yksi lasku.">
+<meta name="twitter:image" content="https://wsmedia.fi/og/graafinen-suunnittelu-yritykselle.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#ffffff; --ink:#1d1d1f; --grey:#6e6e73; --hair:#e8e8ed;
+    --blue:#0071e3; --blue-d:#0062c4; --blue-tint:#f0f6ff; --dark:#0d0d10;
+    --brand:#0071e3; /* asiakkaan ilmeen väri havainnekuvissa — vaihtuu animaatiossa */
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Instrument Sans','Helvetica Neue',sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;
+    letter-spacing:-0.011em;overflow-x:hidden;
+  }
+  ::selection{background:rgba(0,113,227,.15)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .wrap-n{max-width:820px;margin:0 auto;padding:0 24px}
+  #prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:100;background:var(--blue)}
+
+  .backdrop{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  .backdrop svg{position:absolute;inset:0;width:100%;height:100%}
+  #bdGrid,#bdRing,#bdWave{will-change:transform}
+  .backdrop::after{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(70% 60% at 50% 42%,rgba(255,255,255,.92) 30%,rgba(255,255,255,.55) 65%,rgba(255,255,255,.15) 100%),
+      linear-gradient(to bottom,rgba(255,255,255,.6),transparent 20%,transparent 80%,rgba(255,255,255,.7));
+  }
+  header,section,footer,nav,.marq{position:relative;z-index:1}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;background:rgba(255,255,255,.75);
+    backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid transparent;transition:border-color .3s;
+  }
+  nav.scrolled{border-bottom-color:rgba(0,0,0,.08)}
+  .navin{max-width:1080px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-size:15px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);text-decoration:none}
+  .navlinks{display:flex;gap:20px;align-items:center}
+  .navlinks a{font-size:12.5px;color:var(--ink);text-decoration:none;opacity:.8;transition:opacity .2s;white-space:nowrap}
+  .navlinks a:hover{opacity:1}
+  .navlinks a[aria-current="page"]{opacity:1;color:var(--blue);font-weight:600}
+  .navcta{font-size:12.5px;color:#fff !important;background:var(--blue);padding:7px 15px;border-radius:980px;opacity:1 !important}
+  .navcta:hover{background:var(--blue-d)}
+  @media(max-width:960px){.navlinks a:not(.navcta){display:none}}
+
+  h1{font-size:clamp(36px,5.4vw,62px);font-weight:700;letter-spacing:-0.03em;line-height:1.05}
+  h2{font-size:clamp(28px,4.2vw,44px);font-weight:700;letter-spacing:-0.024em;line-height:1.09}
+  h3{letter-spacing:-0.018em}
+  .sub{font-size:clamp(17px,2vw,21px);color:var(--grey);font-weight:400;letter-spacing:-0.014em;line-height:1.45}
+  .accent{color:var(--blue)}
+  .kick{font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);display:block}
+  .lead{font-size:17px;color:var(--grey);max-width:64ch;margin-top:16px}
+  .lead strong{color:var(--ink);font-weight:600}
+  .lead a{color:var(--blue);text-decoration:none}
+  .lead a:hover{text-decoration:underline}
+
+  .btn{
+    display:inline-block;background:var(--blue);color:#fff;font-size:15px;font-weight:500;
+    text-decoration:none;padding:12px 24px;border-radius:980px;border:none;cursor:pointer;
+    transition:background .2s, transform .25s, box-shadow .25s;will-change:transform;
+  }
+  .btn:hover{background:var(--blue-d);box-shadow:0 8px 24px rgba(0,113,227,.28)}
+  .btn.alt{background:transparent;color:var(--blue);border:1px solid var(--hair)}
+  .btn.alt:hover{background:rgba(0,0,0,.03);box-shadow:none}
+  .tlink{font-size:15px;color:var(--blue);text-decoration:none;font-weight:500}
+  .tlink:hover{text-decoration:underline}
+  .tlink::after{content:" ›"}
+
+  .crumbs{padding:14px 0 0;font-size:12.5px;color:var(--grey)}
+  .crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .crumbs a{color:var(--grey);text-decoration:none}
+  .crumbs a:hover{color:var(--ink)}
+  .crumbs li+li::before{content:"›";margin-right:6px;color:#c2c2c8}
+  .crumbs [aria-current]{color:var(--ink)}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;text-align:center;padding:54px 0 64px}
+  .hero .kick{color:var(--grey);letter-spacing:.08em;margin-bottom:18px}
+  .hero h1{max-width:20ch;margin:0 auto;text-wrap:balance}
+  .hero .sub{max-width:58ch;margin:22px auto 0}
+  .heroctas{margin-top:34px;display:flex;gap:26px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .herotrust{margin-top:22px;font-size:12.5px;color:var(--grey);display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+  .herotrust span{display:inline-flex;align-items:center;gap:6px}
+  .herotrust i{width:5px;height:5px;border-radius:50%;background:var(--blue);font-style:normal}
+  .li{opacity:0;transform:translateY(22px);animation:liin 1s cubic-bezier(.2,.6,.2,1) forwards}
+  .li.d1{animation-delay:.05s}.li.d2{animation-delay:.18s}.li.d3{animation-delay:.34s}.li.d4{animation-delay:.5s}.li.d5{animation-delay:.68s}
+  @keyframes liin{to{opacity:1;transform:none}}
+
+  /* ============ PINTANÄYTTÄMÖ: yksi ilme, kaikki pinnat ============ */
+  .stage{max-width:1000px;margin:56px auto 0;padding:0 24px}
+  .pal{display:flex;gap:9px;justify-content:center;margin-bottom:26px;align-items:center}
+  .pal span{
+    width:26px;height:26px;border-radius:8px;border:1px solid rgba(0,0,0,.07);
+    transition:transform .45s cubic-bezier(.2,.6,.2,1),background .8s;
+  }
+  .pal span:nth-child(1){background:var(--brand)}
+  .pal span:nth-child(2){background:color-mix(in srgb,var(--brand) 55%,#ffffff)}
+  .pal span:nth-child(3){background:color-mix(in srgb,var(--brand) 22%,#ffffff)}
+  .pal span:nth-child(4){background:var(--ink)}
+  .pal span:nth-child(5){background:#f2f2f5}
+  .pal b{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);margin-right:6px}
+
+  .surf{display:grid;grid-template-columns:1.05fr 1.5fr;gap:16px}
+  @media(max-width:900px){.surf{grid-template-columns:1fr}}
+  .surfcol{display:grid;gap:16px;align-content:start}
+  .scard{
+    border:1px solid var(--hair);border-radius:20px;background:#fff;padding:18px;position:relative;overflow:hidden;
+    box-shadow:0 26px 64px -34px rgba(29,29,31,.3);
+  }
+  .scard .tag{
+    position:absolute;top:15px;left:18px;z-index:3;font-size:9.5px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--grey);
+  }
+  .scard svg{display:block;width:100%;height:auto;margin-top:20px}
+  .scard svg text{font-family:inherit}
+
+  /* ilmeen väri: kaikki brändipinnat vaihtuvat yhtä aikaa */
+  .bf{fill:var(--brand);transition:fill .8s}
+  .bft{fill:color-mix(in srgb,var(--brand) 55%,#ffffff);transition:fill .8s}
+  .bfd{fill:color-mix(in srgb,var(--brand) 82%,#000000);transition:fill .8s}
+  .bs{stroke:var(--brand);transition:stroke .8s}
+  .stagenote{text-align:center;font-size:13px;color:var(--grey);margin-top:22px}
+
+  /* ---------- marquee ---------- */
+  .marq{margin-top:70px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(6px)}
+  .marq .track{display:flex;width:max-content;animation:marq 32s linear infinite}
+  .marq:hover .track{animation-play-state:paused}
+  @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .marq span{display:flex;align-items:center;gap:26px;padding:16px 26px 16px 0;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--grey);white-space:nowrap}
+  .marq b{color:var(--blue);font-weight:700}
+
+  /* ============ OSIOT ============ */
+  section{padding:110px 0}
+  @media(max-width:760px){section{padding:66px 0 !important}.shead{margin-bottom:32px}}
+  .shead{margin-bottom:52px;max-width:660px}
+  .shead h2{margin-top:12px}
+  .shead .sub{margin-top:14px;font-size:18px}
+  .shead.center{margin-left:auto;margin-right:auto;text-align:center}
+  .hsplit{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:56px;align-items:end;margin-bottom:54px}
+  @media(max-width:820px){.hsplit{grid-template-columns:1fr;gap:14px;align-items:start;margin-bottom:32px}}
+  .hsplit .sub{font-size:17px;padding-bottom:6px}
+  .hsplit h2{margin-top:12px}
+  .pricenote{text-align:center;font-size:12.5px;color:var(--grey);margin-top:24px;max-width:76ch;margin-left:auto;margin-right:auto;line-height:1.6}
+
+  /* ============ ASEMOINTI: kolme korttia, keskimmäinen siltana ============ */
+  .bridge{display:grid;grid-template-columns:1fr 1.18fr 1fr;gap:0;align-items:center}
+  @media(max-width:900px){.bridge{grid-template-columns:1fr;gap:14px}}
+  .bcard{border:1px solid var(--hair);border-radius:20px;background:#fff;padding:30px 26px}
+  .bcard.side{background:#fafafc}
+  @media(min-width:901px){
+    .bcard.side:first-child{border-radius:20px 0 0 20px;border-right:none}
+    .bcard.side:last-child{border-radius:0 20px 20px 0;border-left:none}
+    .bcard.mid{
+      z-index:2;transform:scale(1.06);border-color:var(--ink);background:var(--dark);color:#f5f5f7;
+      border-radius:22px;padding:36px 30px;box-shadow:0 40px 90px -40px rgba(13,13,16,.6);
+    }
+  }
+  @media(max-width:900px){.bcard.mid{background:var(--dark);color:#f5f5f7;border-color:var(--dark)}}
+  .bcard .bt{font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--grey);margin-bottom:12px}
+  .bcard.mid .bt{color:#6fb1ff}
+  .bcard h3{font-size:18px;font-weight:600;margin-bottom:10px;line-height:1.25}
+  .bcard.mid h3{font-size:20px}
+  .bcard p{font-size:14px;color:var(--grey);line-height:1.6}
+  .bcard.mid p{color:#a1a1a6}
+  .bcard ul{list-style:none;margin-top:16px}
+  .bcard li{font-size:13.5px;padding:8px 0 8px 20px;position:relative;color:var(--grey);line-height:1.5;border-top:1px solid var(--hair)}
+  .bcard.mid li{border-top-color:rgba(255,255,255,.12);color:#d6d6da}
+  .bcard li::before{content:"–";position:absolute;left:0;color:#c2c2c8}
+  .bcard.mid li::before{content:"✓";color:#6fb1ff;font-size:11px;font-weight:700;top:9px}
+  .bridgenote{margin-top:34px;font-size:15.5px;color:var(--grey);line-height:1.65;max-width:74ch}
+  .bridgenote strong{color:var(--ink);font-weight:600}
+
+  /* ============ BENTO: palveluruudukko ============ */
+  .bento{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:900px){.bento{grid-template-columns:1fr}}
+  .bt-item{
+    border:1px solid var(--hair);border-radius:20px;background:#fff;padding:28px 26px;
+    display:flex;flex-direction:column;position:relative;overflow:hidden;
+    transition:transform .4s cubic-bezier(.2,.6,.2,1),box-shadow .4s,border-color .3s;
+  }
+  .bt-item:hover{transform:translateY(-5px);box-shadow:0 30px 70px -34px rgba(29,29,31,.28);border-color:#d8dce4}
+  .bt-item.wide{grid-column:span 2}
+  @media(max-width:900px){.bt-item.wide{grid-column:span 1}}
+  .bt-item .ic{
+    width:38px;height:38px;border-radius:11px;background:var(--blue-tint);color:var(--blue);
+    display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:18px;
+  }
+  .bt-item h3{font-size:19px;font-weight:600;margin-bottom:9px}
+  .bt-item > p{font-size:14.5px;color:var(--grey);line-height:1.6;flex:1}
+  .bt-item ul{list-style:none;margin-top:16px;border-top:1px solid var(--hair)}
+  .bt-item li{font-size:13.5px;color:var(--grey);padding:8px 0;border-bottom:1px solid var(--hair);line-height:1.45}
+  .bt-item li:last-child{border-bottom:none}
+  .bt-item .px{
+    margin-top:16px;font-size:12.5px;font-weight:600;color:var(--blue);
+    border-top:1px solid var(--hair);padding-top:14px;
+  }
+
+  /* ============ VAAKA-AIKAJANA ============ */
+  .hline{position:relative}
+  .hline::before{
+    content:"";position:absolute;left:0;right:0;top:50%;height:1px;
+    background:repeating-linear-gradient(90deg,var(--hair) 0 7px,transparent 7px 14px);
+  }
+  .hsteps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:stretch;position:relative}
+  .hstep{display:grid;grid-template-rows:1fr 46px 1fr}
+  .hstep .dot{
+    grid-row:2;justify-self:center;align-self:center;
+    width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--hair);
+    display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:var(--blue);
+    box-shadow:0 0 0 6px #fff;z-index:2;
+  }
+  .hstep .hbox{grid-row:3;align-self:start}
+  .hstep:nth-child(even) .hbox{grid-row:1;align-self:end}
+  .hbox{border:1px solid var(--hair);border-radius:16px;background:#fff;padding:20px 20px 18px;box-shadow:0 18px 46px -30px rgba(29,29,31,.24)}
+  .hbox h3{font-size:15.5px;font-weight:600;margin-bottom:7px;line-height:1.3}
+  .hbox p{font-size:13.5px;color:var(--grey);line-height:1.55}
+  .hbox .who{
+    display:inline-block;margin-top:11px;font-size:10.5px;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--blue);
+  }
+  .hbox .who.sub{color:var(--grey)}
+  @media(max-width:980px){
+    .hline::before{left:19px;right:auto;top:0;bottom:0;width:1px;height:auto;background:repeating-linear-gradient(180deg,var(--hair) 0 7px,transparent 7px 14px)}
+    .hsteps{grid-template-columns:1fr;gap:0}
+    .hstep{display:block;padding-left:52px;margin-bottom:20px;position:relative}
+    .hstep .dot{position:absolute;left:19px;top:14px;transform:translateX(-50%)}
+  }
+
+  /* ============ KONFIGURAATTORI ============ */
+  .conf{border:1px solid #dbe9ff;background:var(--blue-tint);border-radius:24px;padding:34px 34px 30px}
+  @media(max-width:600px){.conf{padding:24px 20px 22px}}
+  .conf .ct{font-size:18px;font-weight:600;letter-spacing:-.018em;margin-bottom:6px}
+  .conf .cs{font-size:13.5px;color:var(--grey);margin-bottom:24px;line-height:1.55;max-width:60ch}
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+  @media(max-width:760px){.cgrid{grid-template-columns:1fr}}
+  .copt{
+    display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid #dbe9ff;border-radius:13px;
+    padding:13px 15px;cursor:pointer;transition:border-color .2s,box-shadow .2s;
+  }
+  .copt:hover{border-color:#b9d6ff}
+  .copt input{margin:2px 0 0;width:17px;height:17px;accent-color:var(--blue);cursor:pointer;flex:none}
+  .copt b{display:block;font-size:14px;font-weight:600;line-height:1.35}
+  .copt s{display:block;text-decoration:none;font-size:12px;color:var(--grey);margin-top:3px;line-height:1.4}
+  .copt.on{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,227,.12)}
+  .cres{
+    margin-top:24px;padding-top:22px;border-top:1px solid #dbe9ff;
+    display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center;
+  }
+  @media(max-width:700px){.cres{grid-template-columns:1fr;gap:16px}}
+  .cres .amt{font-size:clamp(26px,3.4vw,34px);font-weight:700;letter-spacing:-.028em;font-variant-numeric:tabular-nums}
+  .cres .amt small{font-size:14px;font-weight:400;color:var(--grey);letter-spacing:0}
+  .cres .lbl{font-size:12.5px;color:var(--grey);margin-top:6px;line-height:1.5;max-width:52ch}
+
+  /* ============ TIEDOSTOLUETTELO ============ */
+  .files{display:grid;grid-template-columns:1fr 1fr;gap:0 48px;border-top:1px solid var(--hair)}
+  @media(max-width:820px){.files{grid-template-columns:1fr}}
+  .frow{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--hair)}
+  .frow em{
+    font-style:normal;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:10.5px;font-weight:700;letter-spacing:.02em;color:var(--blue);background:var(--blue-tint);
+    border-radius:6px;padding:5px 8px;min-width:52px;text-align:center;flex:none;
+  }
+  .frow b{display:block;font-size:14.5px;font-weight:600}
+  .frow s{display:block;text-decoration:none;font-size:12.5px;color:var(--grey);margin-top:2px}
+
+  /* ---------- taulukko ---------- */
+  .tblwrap{overflow-x:auto;margin:30px 0 0;border:1px solid var(--hair);border-radius:18px}
+  table{border-collapse:collapse;width:100%;min-width:540px;font-size:14px}
+  thead th{text-align:left;padding:15px 18px;background:#fafafc;border-bottom:1px solid var(--hair);font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap}
+  tbody td{padding:14px 18px;border-bottom:1px solid var(--hair);color:#48484e;vertical-align:top;line-height:1.5}
+  tbody tr:last-child td{border-bottom:none}
+  tbody td:first-child{color:var(--ink);font-weight:500}
+
+  /* ---------- kaksi paneelia ---------- */
+  .twopanel{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.twopanel{grid-template-columns:1fr}}
+  .pan{border-radius:24px;padding:38px 34px;border:1px solid var(--hair);background:#fff}
+  @media(max-width:560px){.pan{padding:28px 24px}}
+  .pan.dark{background:var(--dark);color:#f5f5f7;border-color:var(--dark)}
+  .pan h3{font-size:12.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:18px}
+  .pan.dark h3{color:#6fb1ff}
+  .pan ul{list-style:none}
+  .pan li{font-size:14.5px;padding:11px 0 11px 26px;position:relative;line-height:1.5;border-bottom:1px solid var(--hair)}
+  .pan li:last-child{border-bottom:none}
+  .pan.dark li{border-color:rgba(255,255,255,.1);color:#d6d6da}
+  .pan li::before{position:absolute;left:0;top:11px;font-weight:700;font-size:13px}
+  .pan.yes li::before{content:"+";color:var(--blue)}
+  .pan.dark li::before{content:"–";color:#6e6e73}
+
+  /* ---------- FAQ / prose / blogi / lomake ---------- */
+  .faqgroup{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);margin:36px 0 0;padding-bottom:8px;border-bottom:1px solid var(--hair)}
+  .faqgroup:first-child{margin-top:0}
+  .faq{max-width:820px;margin:0 auto}
+  .faq details{border-bottom:1px solid var(--hair)}
+  .faq summary{list-style:none;cursor:pointer;padding:16px 40px 16px 0;position:relative;font-size:15.5px;font-weight:600;letter-spacing:-0.014em;line-height:1.35}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"";position:absolute;right:8px;top:50%;width:9px;height:9px;border-right:1.8px solid var(--grey);border-bottom:1.8px solid var(--grey);transform:translateY(-70%) rotate(45deg);transition:transform .25s}
+  .faq details[open] summary::after{transform:translateY(-30%) rotate(225deg)}
+  .faq summary:hover{color:var(--blue)}
+  .faq .a{padding:0 36px 20px 0;font-size:14.5px;color:var(--grey);line-height:1.6}
+  .faq .a a{color:var(--blue);text-decoration:none}
+  .prose{max-width:68ch;margin:0 auto}
+  .prose h3{font-size:17.5px;font-weight:600;margin:30px 0 10px}
+  .prose h3:first-child{margin-top:0}
+  .prose p{font-size:15.5px;color:var(--grey);line-height:1.7;margin-bottom:14px}
+  .prose strong{color:var(--ink);font-weight:600}
+  .prose a{color:var(--blue);text-decoration:none}
+  .prose a:hover{text-decoration:underline}
+  .postrows{border-top:1px solid var(--hair)}
+  .postrows a{display:grid;grid-template-columns:150px 1fr auto;gap:20px;align-items:baseline;padding:17px 0;border-bottom:1px solid var(--hair);text-decoration:none;color:inherit;transition:color .2s}
+  .postrows a:hover{color:var(--blue)}
+  .postrows span{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--grey)}
+  .postrows b{font-size:15.5px;font-weight:600;letter-spacing:-0.012em}
+  .postrows i{font-style:normal;color:var(--blue);font-size:15px}
+  @media(max-width:640px){.postrows a{grid-template-columns:1fr;gap:5px;padding:15px 0}.postrows i{display:none}}
+  .cities{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+  .cities a{font-size:13px;color:var(--ink);text-decoration:none;border:1px solid var(--hair);border-radius:980px;padding:8px 15px;transition:border-color .2s,color .2s,background .2s;background:#fff}
+  .cities a:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-tint)}
+  .card{background:#fff;border:1px solid var(--hair);box-shadow:0 24px 60px -24px rgba(29,29,31,.16)}
+  .fcard{max-width:620px;margin:0 auto;padding:44px 40px;border-radius:24px}
+  @media(max-width:640px){.fcard{padding:32px 22px}}
+  .fcard label{display:block;font-size:12.5px;font-weight:600;margin:20px 0 8px}
+  .fcard input[type=text],.fcard input[type=email],.fcard textarea{width:100%;border:1px solid var(--hair);border-radius:10px;padding:13px 15px;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;transition:border-color .2s, box-shadow .2s}
+  .fcard input:focus,.fcard textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(0,113,227,.16)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}}
+  .fcard .btn{width:100%;margin-top:26px;padding:14px}
+  .fnote{text-align:center;font-size:12.5px;color:var(--grey);margin-top:13px}
+
+  .closer{
+    background:var(--dark);color:#f5f5f7;border-radius:28px;max-width:1240px;margin:0 auto;
+    padding:76px 60px;position:relative;overflow:hidden;
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:44px;align-items:center;
+  }
+  @media(max-width:1280px){.closer{margin:0 16px}}
+  @media(max-width:820px){.closer{grid-template-columns:1fr;padding:48px 30px;gap:28px}}
+  .closer::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(44% 60% at 88% 6%,rgba(0,113,227,.3),transparent 68%),radial-gradient(40% 55% at 4% 100%,rgba(100,168,255,.14),transparent 70%)}
+  .closer > *{position:relative}
+  .closer h2{color:#f5f5f7;max-width:17ch}
+  .closer p{color:#a1a1a6;font-size:17px;margin-top:16px;max-width:46ch;line-height:1.55}
+  .closer .btn{background:#fff;color:var(--ink);white-space:nowrap}
+  .closer .btn:hover{background:#f0f0f2;box-shadow:none}
+  .closer .cnote{font-size:12.5px;color:#8a8a90;margin-top:14px;text-align:center}
+  @media(max-width:820px){.closer .cnote{text-align:left}}
+
+  footer{background:rgba(245,245,247,.85);backdrop-filter:blur(8px);border-top:1px solid var(--hair);padding:42px 0 46px;font-size:12px;color:var(--grey)}
+  footer .cols{display:flex;gap:56px;flex-wrap:wrap;padding-bottom:26px;border-bottom:1px solid var(--hair)}
+  footer h4{font-size:12px;color:var(--ink);font-weight:600;margin-bottom:10px}
+  footer a{display:block;color:var(--grey);text-decoration:none;padding:4px 0}
+  footer a:hover{color:var(--ink)}
+  footer .base{padding-top:18px}
+
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+  .rv.on{opacity:1;transform:none}
+  .stagger > *{transition-delay:calc(var(--i,0) * 90ms)}
+  [data-par]{will-change:translate}
+
+  @media(prefers-reduced-motion:reduce){
+    .li,.rv{opacity:1 !important;transform:none !important;animation:none !important;transition:none !important}
+    .marq .track{animation:none !important}
+    .pal span,.bf,.bft,.bfd,.bs{transition:none !important}
+    [data-par]{translate:none !important}
+  }
+</style>
+<noscript><style>.rv,.li{opacity:1 !important;transform:none !important;animation:none !important}</style></noscript>
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+    <g id="bdGrid" stroke="#e4e4e9" stroke-width="1">
+      <line x1="0" y1="150" x2="1440" y2="150"/><line x1="0" y1="450" x2="1440" y2="450"/>
+      <line x1="0" y1="750" x2="1440" y2="750"/><line x1="240" y1="0" x2="240" y2="900"/>
+      <line x1="720" y1="0" x2="720" y2="900"/><line x1="1200" y1="0" x2="1200" y2="900"/>
+    </g>
+    <g stroke="#c7c7ce" stroke-width="1.3">
+      <path d="M 90 90 L 90 340 L 340 340"/><path d="M 90 90 L 340 90"/>
+      <circle cx="90" cy="90" r="3" fill="#c7c7ce" stroke="none"/>
+      <circle cx="340" cy="340" r="3" fill="#c7c7ce" stroke="none"/>
+      <path d="M 140 210 L 260 210" stroke-dasharray="3 5"/>
+    </g>
+    <g id="bdRing" transform="translate(770,110)">
+      <circle cx="0" cy="0" r="46" stroke="#d6d6dc" stroke-width="1.2" stroke-dasharray="5 9"/>
+      <circle cx="0" cy="-46" r="3" fill="#bcbcc4"/>
+    </g>
+    <path id="bdWave" d="M 0 500 C 260 470, 520 540, 780 500 S 1200 460, 1440 505" stroke="#dedee3" stroke-width="1"/>
+  </svg>
+</div>
+
+<div id="prog"></div>
+
+<nav id="nav">
+  <div class="navin">
+    <a class="logo" href="/">WS Media</a>
+    <div class="navlinks">
+      <a href="/lyhytvideot">Lyhytvideot</a>
+      <a href="/verkkosivut">Verkkosivut</a>
+      <a href="/hakukoneoptimointi">Hakukoneoptimointi</a>
+      <a href="/graafinen-suunnittelu" aria-current="page">Graafinen suunnittelu</a>
+      <a href="/blogi">Blogi</a>
+      <a class="navcta" href="#tarjous">Pyydä tarjous</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap crumbs">
+  <nav aria-label="Murupolku">
+    <ol>
+      <li><a href="/">Etusivu</a></li>
+      <li><a href="/palvelut">Palvelut</a></li>
+      <li aria-current="page">Graafinen suunnittelu</li>
+    </ol>
+  </nav>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <p class="kick li d1">Graafinen suunnittelu yritykselle</p>
+    <h1 class="li d2" data-par="0.05">Yksi ilme. <span class="accent">Kaikki pinnat.</span></h1>
+    <p class="sub li d3" data-par="0.035">Suunnittelemme logon, värit ja koko yritysilmeen — ja viemme sen käyntikortista pakettiauton kylkeen asti. Sinä et etsi painotaloa etkä teippaajaa: saat yhden tarjouksen, yhden yhteyshenkilön ja yhden laskun.</p>
+    <div class="heroctas li d4" data-par="0.025">
+      <a class="btn mag" href="#tarjous">Pyydä tarjous</a>
+      <a class="tlink" href="#hinta">Laske arvio hinnasta</a>
+    </div>
+    <p class="herotrust li d4">
+      <span><i></i>Avaimet käteen: suunnittelu, materiaalit ja asennus</span>
+      <span><i></i>Saat alkuperäistiedostot ja täydet oikeudet</span>
+      <span><i></i>Koko Suomi</span>
+    </p>
+  </div>
+
+  <!-- PINTANÄYTTÄMÖ: sama ilme neljällä pinnalla, väri vaihtuu yhtä aikaa kaikkialla -->
+  <div class="stage li d5" data-par="-0.025" aria-label="Havainnekuva: sama yritysilme käyntikortissa, pakettiautossa, julkisivussa ja roll-upissa">
+    <div class="pal" aria-hidden="true">
+      <b>Ilme</b>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="surf">
+      <div class="surfcol">
+
+        <!-- ---------- KÄYNTIKORTTI ---------- -->
+        <div class="scard">
+          <span class="tag">Käyntikortti</span>
+          <svg viewBox="0 0 420 252" role="img" aria-label="Käyntikortti yrityksen ilmeellä">
+            <defs>
+              <linearGradient id="cw" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f6f6fa"/>
+              </linearGradient>
+              <filter id="csh" x="-25%" y="-25%" width="150%" height="170%">
+                <feDropShadow dx="0" dy="9" stdDeviation="11" flood-color="#1d1d1f" flood-opacity=".2"/>
+              </filter>
+            </defs>
+
+            <!-- takakortti, brändipuoli -->
+            <g transform="rotate(-8 175 110)" filter="url(#csh)">
+              <rect class="bf" x="50" y="34" width="248" height="150" rx="11"/>
+              <g transform="translate(157,92)">
+                <rect x="0" y="0" width="34" height="34" rx="9" fill="#ffffff" opacity=".96"/>
+                <path class="bf" d="M9 25 L17 9 L25 25 Z"/>
+              </g>
+              <rect x="134" y="141" width="80" height="5" rx="2.5" fill="#ffffff" opacity=".5"/>
+            </g>
+
+            <!-- etukortti -->
+            <g transform="rotate(4 235 146)" filter="url(#csh)">
+              <rect x="112" y="72" width="248" height="150" rx="11" fill="url(#cw)" stroke="#e6e6ec"/>
+              <path class="bf" d="M112 205 H360 V211 A11 11 0 0 1 349 222 H123 A11 11 0 0 1 112 211 Z"/>
+              <g transform="translate(136,96)">
+                <rect class="bf" x="0" y="0" width="30" height="30" rx="8"/>
+                <path d="M8 22 L15 8 L22 22 Z" fill="#ffffff"/>
+              </g>
+              <text x="176" y="112" font-size="15" font-weight="700" fill="#1d1d1f" letter-spacing="-.3">Yrityksesi Oy</text>
+              <text x="176" y="126" font-size="8" font-weight="600" fill="#9a9aa1" letter-spacing="1.6">RAKENNUS JA SANEERAUS</text>
+              <line x1="136" y1="146" x2="336" y2="146" stroke="#ececf1" stroke-width="1"/>
+              <text x="136" y="168" font-size="11.5" font-weight="600" fill="#1d1d1f">Matti Meikäläinen</text>
+              <text x="136" y="183" font-size="9.5" fill="#8a8a90">Toimitusjohtaja</text>
+              <text x="336" y="168" font-size="9.5" fill="#6e6e73" text-anchor="end">040 123 4567</text>
+              <text x="336" y="183" font-size="9.5" fill="#6e6e73" text-anchor="end">matti@yrityksesi.fi</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- ---------- ROLL-UP ---------- -->
+        <div class="scard">
+          <span class="tag">Roll-up</span>
+          <svg viewBox="0 0 300 300" role="img" aria-label="Roll-up-banneri yrityksen ilmeellä">
+            <defs>
+              <linearGradient id="rw" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f4f5f8"/>
+              </linearGradient>
+              <linearGradient id="rbase" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#e6e9ee"/><stop offset="1" stop-color="#c3c8d1"/>
+              </linearGradient>
+              <filter id="rsh" x="-40%" y="-15%" width="180%" height="140%">
+                <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#1d1d1f" flood-opacity=".18"/>
+              </filter>
+              <filter id="gsh" x="-60%" y="-300%" width="220%" height="700%">
+                <feGaussianBlur stdDeviation="6"/>
+              </filter>
+            </defs>
+
+            <ellipse cx="150" cy="276" rx="96" ry="9" fill="#1d1d1f" opacity=".16" filter="url(#gsh)"/>
+
+            <!-- tukitanko -->
+            <rect x="147" y="34" width="6" height="230" fill="#cfd4dc"/>
+
+            <g filter="url(#rsh)">
+              <!-- yläkisko -->
+              <rect x="70" y="28" width="160" height="8" rx="4" fill="#c3c8d1"/>
+              <rect x="70" y="33" width="160" height="3" rx="1.5" fill="#a9b0ba" opacity=".7"/>
+              <!-- kangas -->
+              <rect x="76" y="34" width="148" height="228" rx="3" fill="url(#rw)" stroke="#e4e6ec"/>
+              <!-- brändialue, aaltoileva alareuna -->
+              <path class="bf" d="M76 34 H224 V138 C190 156 110 156 76 138 Z"/>
+              <path class="bft" d="M76 122 C110 140 190 140 224 122 V138 C190 156 110 156 76 138 Z" opacity=".55"/>
+              <!-- tunnus -->
+              <g transform="translate(130,58)">
+                <rect x="0" y="0" width="40" height="40" rx="11" fill="#ffffff" opacity=".96"/>
+                <path class="bf" d="M11 30 L20 11 L29 30 Z"/>
+              </g>
+              <text x="150" y="120" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing=".4">YRITYKSESI OY</text>
+              <!-- leipäteksti -->
+              <text x="150" y="182" font-size="12.5" font-weight="700" fill="#1d1d1f" text-anchor="middle" letter-spacing="-.2">Palvelemme koko Suomessa</text>
+              <text x="150" y="200" font-size="9" fill="#8a8a90" text-anchor="middle" letter-spacing=".3">Suunnittelu · Tuotanto · Asennus</text>
+              <line x1="112" y1="212" x2="188" y2="212" stroke="#e8eaef" stroke-width="1"/>
+              <rect class="bf" x="104" y="224" width="92" height="21" rx="10.5"/>
+              <text x="150" y="238" font-size="9.5" font-weight="600" fill="#ffffff" text-anchor="middle">yrityksesi.fi</text>
+            </g>
+
+            <!-- jalusta -->
+            <rect x="60" y="260" width="180" height="15" rx="6" fill="url(#rbase)" stroke="#b9bfc9"/>
+            <rect x="60" y="266" width="180" height="9" rx="4" fill="#aeb5c0" opacity=".45"/>
+            <ellipse cx="78" cy="277" rx="12" ry="4" fill="#b9bfc9"/>
+            <ellipse cx="222" cy="277" rx="12" ry="4" fill="#b9bfc9"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="surfcol">
+
+        <!-- ---------- PAKETTIAUTO ---------- -->
+        <div class="scard">
+          <span class="tag">Pakettiauto</span>
+          <svg viewBox="0 0 580 236" role="img" aria-label="Teipattu pakettiauto yrityksen ilmeellä">
+            <defs>
+              <linearGradient id="vb" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#f3f5f8"/><stop offset="1" stop-color="#e2e6ec"/>
+              </linearGradient>
+              <linearGradient id="vg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#4a5563"/><stop offset="1" stop-color="#8a95a4"/>
+              </linearGradient>
+              <filter id="vsh" x="-20%" y="-40%" width="140%" height="220%">
+                <feGaussianBlur stdDeviation="7"/>
+              </filter>
+              <clipPath id="wrapclip">
+                <path d="M244 83 L509 83 L509 176 L486 176 C486 150 470 141 448 141 C426 141 410 150 410 176 L244 176 Z"/>
+              </clipPath>
+            </defs>
+
+            <ellipse cx="292" cy="216" rx="238" ry="10" fill="#1d1d1f" opacity=".16" filter="url(#vsh)"/>
+
+            <!-- kori -->
+            <path fill="url(#vb)" stroke="#cfd5de" stroke-width="1.5" d="M62 182 L60 148 C60 137 64 132 74 131 L102 127 L138 80 C140 77 144 75 149 75 L506 75 C513 78 517 82 517 89 L517 182 L486 182 C486 152 470 142 448 142 C426 142 410 152 410 182 L188 182 C188 152 172 142 150 142 C128 142 112 152 112 182 Z"/>
+            <!-- kattoheijastus -->
+            <path d="M153 78 H504" stroke="#ffffff" stroke-width="3" opacity=".9" stroke-linecap="round"/>
+            <!-- helman varjo -->
+            <path d="M112 174 H517 V182 H112 Z" fill="#0d0d10" opacity=".05"/>
+
+            <!-- teippaus -->
+            <g clip-path="url(#wrapclip)">
+              <path class="bf" d="M244 83 L509 83 L509 176 L244 176 Z"/>
+              <path class="bft" d="M352 78 L404 78 L330 182 L278 182 Z" opacity=".45"/>
+              <path class="bfd" d="M404 78 L426 78 L352 182 L330 182 Z" opacity=".5"/>
+              <g transform="translate(264,100)">
+                <rect x="0" y="0" width="36" height="36" rx="10" fill="#ffffff" opacity=".97"/>
+                <path class="bf" d="M10 27 L18 10 L26 27 Z"/>
+              </g>
+              <text x="312" y="122" font-size="21" font-weight="700" fill="#ffffff" letter-spacing=".6">YRITYKSESI OY</text>
+              <text x="312" y="142" font-size="11" fill="#ffffff" opacity=".88" letter-spacing=".3">yrityksesi.fi · 040 123 4567</text>
+            </g>
+
+            <!-- ikkunat -->
+            <path fill="url(#vg)" d="M110 126 L141 85 L175 85 L175 126 Z"/>
+            <path fill="url(#vg)" d="M183 85 L232 85 L232 126 L183 126 Z"/>
+            <path d="M116 124 L142 89 L156 89 L130 124 Z" fill="#ffffff" opacity=".22"/>
+            <path d="M189 89 L206 89 L190 122 L183 122 Z" fill="#ffffff" opacity=".16"/>
+
+            <!-- yksityiskohdat -->
+            <path d="M236 85 V176" stroke="#d3d8e0" stroke-width="1.5"/>
+            <rect x="200" y="138" width="22" height="5" rx="2.5" fill="#b9c0ca"/>
+            <path d="M180 93 q-16 2 -18 12 q10 2 18 -2 z" fill="#c4cad4" stroke="#adb5c0" stroke-width="1"/>
+            <rect x="58" y="156" width="20" height="24" rx="5" fill="#d3d8e0"/>
+            <rect x="62" y="134" width="26" height="13" rx="4" fill="#f7f9fb" stroke="#d3d8e0"/>
+            <rect x="65" y="137" width="19" height="7" rx="3" fill="#dfe6ef"/>
+
+            <!-- renkaat -->
+            <g>
+              <circle cx="150" cy="182" r="32" fill="#1c1c20"/>
+              <circle cx="150" cy="182" r="18" fill="#c5c9d1"/>
+              <circle cx="150" cy="182" r="14.5" fill="#e6e8ed"/>
+              <circle cx="150" cy="182" r="5" fill="#a4aab4"/>
+            </g>
+            <g>
+              <circle cx="448" cy="182" r="32" fill="#1c1c20"/>
+              <circle cx="448" cy="182" r="18" fill="#c5c9d1"/>
+              <circle cx="448" cy="182" r="14.5" fill="#e6e8ed"/>
+              <circle cx="448" cy="182" r="5" fill="#a4aab4"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- ---------- JULKISIVU ---------- -->
+        <div class="scard">
+          <span class="tag">Julkisivu ja ikkunat</span>
+          <svg viewBox="0 0 580 250" role="img" aria-label="Liiketilan julkisivu ja ikkunateippaus yrityksen ilmeellä">
+            <defs>
+              <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#cfdbe8"/><stop offset=".5" stop-color="#e2eaf2"/><stop offset="1" stop-color="#d3dde8"/>
+              </linearGradient>
+              <linearGradient id="wallg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#f1f3f6"/><stop offset="1" stop-color="#e4e7ec"/>
+              </linearGradient>
+              <filter id="glow" x="-40%" y="-80%" width="180%" height="300%">
+                <feGaussianBlur stdDeviation="2.6" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <clipPath id="gclip"><rect x="42" y="94" width="312" height="118" rx="2"/></clipPath>
+            </defs>
+
+            <!-- seinä -->
+            <rect x="0" y="0" width="580" height="214" fill="url(#wallg)"/>
+            <path d="M0 40 H580 M0 78 H580" stroke="#dcdfe5" stroke-width="1"/>
+
+            <!-- julkisivukyltti -->
+            <rect x="0" y="14" width="580" height="56" fill="#fbfcfd"/>
+            <path d="M0 70 H580" stroke="#d7dae1" stroke-width="1.5"/>
+            <g filter="url(#glow)">
+              <g transform="translate(204,26)">
+                <rect class="bf" x="0" y="0" width="30" height="30" rx="8"/>
+                <path d="M8 22 L15 8 L22 22 Z" fill="#ffffff"/>
+              </g>
+              <text class="bf" x="244" y="47" font-size="22" font-weight="700" letter-spacing=".6">YRITYKSESI OY</text>
+            </g>
+
+            <!-- näyteikkuna -->
+            <rect x="38" y="90" width="320" height="126" rx="3" fill="#b9c1cc"/>
+            <rect x="42" y="94" width="312" height="118" rx="2" fill="url(#glass)"/>
+            <g clip-path="url(#gclip)">
+              <rect x="42" y="94" width="312" height="9" fill="#0d0d10" opacity=".13"/>
+              <path d="M60 212 L150 94 L196 94 L106 212 Z" fill="#ffffff" opacity=".38"/>
+              <path d="M214 212 L304 94 L326 94 L236 212 Z" fill="#ffffff" opacity=".22"/>
+              <!-- ikkunateippaus -->
+              <rect x="42" y="150" width="312" height="38" fill="#ffffff" opacity=".78"/>
+              <text class="bf" x="276" y="175" font-size="13" font-weight="700" text-anchor="middle" letter-spacing=".8">AVOINNA MA–PE 8–17</text>
+              <g transform="translate(64,106)">
+                <rect class="bf" x="0" y="0" width="30" height="30" rx="8"/>
+                <path d="M8 22 L15 8 L22 22 Z" fill="#ffffff"/>
+              </g>
+              <text class="bf" x="104" y="128" font-size="15" font-weight="700" letter-spacing=".4">YRITYKSESI OY</text>
+            </g>
+            <path d="M198 94 V212" stroke="#b9c1cc" stroke-width="5"/>
+
+            <!-- ovi -->
+            <rect x="386" y="90" width="104" height="126" rx="3" fill="#b9c1cc"/>
+            <rect x="390" y="94" width="96" height="118" rx="2" fill="url(#glass)"/>
+            <rect x="390" y="94" width="96" height="8" fill="#0d0d10" opacity=".13"/>
+            <path d="M396 212 L452 94 L470 94 L414 212 Z" fill="#ffffff" opacity=".3"/>
+            <rect x="470" y="122" width="6" height="40" rx="3" fill="#8d95a1"/>
+            <rect class="bf" x="390" y="180" width="96" height="22" opacity=".92"/>
+            <text x="438" y="195" font-size="9.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing=".7">TERVETULOA</text>
+
+            <!-- pystyaccent -->
+            <g transform="translate(508,96)">
+              <rect class="bf" x="0" y="0" width="46" height="46" rx="12"/>
+              <path d="M12 34 L23 12 L34 34 Z" fill="#ffffff"/>
+            </g>
+
+            <!-- jalkakäytävä -->
+            <rect x="0" y="206" width="580" height="8" fill="#d8dce3"/>
+            <rect x="0" y="214" width="580" height="36" fill="#dfe3e9"/>
+            <path d="M0 214 H580" stroke="#c9ced6" stroke-width="1.5"/>
+            <ellipse cx="290" cy="220" rx="230" ry="5" fill="#1d1d1f" opacity=".1"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p class="stagenote">Sama tunnus, samat värit, sama typografia — riippumatta siitä mihin pintaan se päätyy.</p>
+  </div>
+</header>
+
+<div class="marq" aria-hidden="true">
+  <div class="track">
+    <span>Graafinen suunnittelu <b>·</b> Yritysilme <b>·</b> Logosuunnittelu <b>·</b> Graafinen ohjeisto <b>·</b> Mainosteippaus <b>·</b> Ajoneuvoteippaus <b>·</b> Julkisivuteippaus <b>·</b> Käyntikortit <b>·</b> Roll-upit <b>·</b> Valomainokset <b>·</b>&nbsp;</span>
+    <span>Graafinen suunnittelu <b>·</b> Yritysilme <b>·</b> Logosuunnittelu <b>·</b> Graafinen ohjeisto <b>·</b> Mainosteippaus <b>·</b> Ajoneuvoteippaus <b>·</b> Julkisivuteippaus <b>·</b> Käyntikortit <b>·</b> Roll-upit <b>·</b> Valomainokset <b>·</b>&nbsp;</span>
+  </div>
+</div>
+
+<!-- ============ ASEMOINTI ============ -->
+<section id="miksi" style="padding-top:96px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Miksi meiltä</span>
+        <h2>Teippaamo osaa asentaa. Mainostoimisto osaa suunnitella.</h2>
+      </div>
+      <p class="sub">Kumpikin tekee oman osuutensa hyvin. Ongelma on se väli, johon asiakas jää: kuka piirtää, kuka tulostaa, kuka asentaa — ja kuka vastaa siitä että lopputulos vastaa suunnitelmaa.</p>
+    </div>
+
+    <div class="bridge stagger">
+      <div class="bcard side rv" style="--i:0">
+        <p class="bt">Teippaamo tai painotalo</p>
+        <h3>Tuottaa ja asentaa</h3>
+        <p>Osaa materiaalit, kalvot ja asennuksen. Suunnittelu on sivutuote.</p>
+        <ul>
+          <li>Suunnittelu usein vain yksinkertaisiin töihin</li>
+          <li>Valmiit vektoroidut tiedostot oletetaan olevan olemassa</li>
+          <li>Ilme ei jatku verkkoon eikä somekanaviin</li>
+        </ul>
+      </div>
+
+      <div class="bcard mid rv" style="--i:1">
+        <p class="bt">WS Media</p>
+        <h3>Suunnittelemme ilmeen ja hoidamme tuotannon</h3>
+        <p>Teemme graafisen suunnittelun ja viemme sen tuotantoon: kilpailutamme materiaalitoimittajan ja asentajan, aikataulutamme työn ja tarkistamme jäljen.</p>
+        <ul>
+          <li>Yksi tarjous, yksi yhteyshenkilö, yksi lasku</li>
+          <li>Sama ilme verkossa, somessa ja auton kyljessä</li>
+          <li>Saat alkuperäistiedostot ja täydet käyttöoikeudet</li>
+          <li>Vastaamme kokonaisuudesta, myös alihankkijan työstä</li>
+        </ul>
+      </div>
+
+      <div class="bcard side rv" style="--i:2">
+        <p class="bt">Mainostoimisto</p>
+        <h3>Suunnittelee</h3>
+        <p>Osaa ilmeen ja ohjeiston. Tuotanto ja asennus jäävät sinun järjestettäväksesi.</p>
+        <ul>
+          <li>Painovalmis tiedosto on lopputuote</li>
+          <li>Toimittajien kilpailutus jää asiakkaalle</li>
+          <li>Aikataulujen sovittelu jää asiakkaalle</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="bridgenote rv">Emme teippaa emmekä paina itse — siihen käytämme alan tekijöitä, jotka tekevät sitä työkseen joka päivä. <strong>Me valitsemme heidät, annamme heille oikeat tiedostot ja vastaamme siitä että lopputulos vastaa suunnitelmaa.</strong> Käytännössä se tarkoittaa yhtä asiaa: sinun ei tarvitse toimia projektipäällikkönä omassa markkinoinnissasi.</p>
+  </div>
+</section>
+
+<!-- ============ PALVELUT ============ -->
+<section id="palvelut" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead rv" data-par="0.03">
+      <span class="kick">Palvelut</span>
+      <h2>Mitä graafinen suunnittelu meillä sisältää?</h2>
+      <p class="sub">Ilme rakennetaan kerran ja käytetään joka pinnalla. Voit ostaa koko kokonaisuuden tai yksittäisen palan siitä.</p>
+    </div>
+
+    <div class="bento stagger">
+      <div class="bt-item wide rv" style="--i:0">
+        <span class="ic">◆</span>
+        <h3>Yritysilme ja logo</h3>
+        <p>Se pohja, jonka päälle kaikki muu rakennetaan: tunnus, väripaletti ja typografia sekä graafinen ohjeisto, joka pitää ilmeen samana riippumatta siitä kuka materiaalia tekee.</p>
+        <ul>
+          <li>Logosuunnittelu ja logopaketti eri tiedostomuodoissa</li>
+          <li>Väripaletti CMYK-, RGB- ja HEX-arvoineen</li>
+          <li>Typografia otsikoille ja leipätekstille</li>
+          <li>Graafinen ohjeisto PDF-muodossa</li>
+        </ul>
+        <p class="px">Logo alk. 690 € · ilme ohjeistoineen alk. 1 490 €</p>
+      </div>
+
+      <div class="bt-item rv" style="--i:1">
+        <span class="ic">▬</span>
+        <h3>Ajoneuvoteippaukset</h3>
+        <p>Logoteippauksesta koko kaluston brändäykseen — suunnittelu, materiaalit ja asennus samassa paketissa.</p>
+        <ul>
+          <li>Logoteippaus, osateippaus ja yliteippaus</li>
+          <li>Pakettiautot, henkilöautot ja raskas kalusto</li>
+          <li>Koko kaluston yhtenäinen ilme</li>
+          <li>Asennus lämpimissä sisätiloissa</li>
+        </ul>
+        <p class="px">Avaimet käteen alk. 590 €</p>
+      </div>
+
+      <div class="bt-item rv" style="--i:2">
+        <span class="ic">◧</span>
+        <h3>Julkisivu, kyltit ja ikkunat</h3>
+        <p>Toimitilan pinnat viestinviejiksi. Ensivaikutelma syntyy ennen kuin asiakas astuu ovesta sisään.</p>
+        <ul>
+          <li>Julkisivu- ja ikkunateippaukset</li>
+          <li>Valomainokset ja valokyltit</li>
+          <li>Opasteet ja lattiateippaukset</li>
+          <li>Lupa-asiat selvitettynä</li>
+        </ul>
+        <p class="px">Avaimet käteen alk. 890 €</p>
+      </div>
+
+      <div class="bt-item wide rv" style="--i:3">
+        <span class="ic">▤</span>
+        <h3>Painotuotteet</h3>
+        <p>Käyntikortit, flyerit, esitteet ja roll-upit suunnittelusta painoon. Saat painovalmiit aineistot myös itsellesi, jos haluat teettää lisäpainoksen myöhemmin muualla.</p>
+        <ul>
+          <li>Käyntikortit ja kirjelomakkeet</li>
+          <li>Flyerit, esitteet ja oppaat</li>
+          <li>Roll-upit ja messumateriaalit</li>
+          <li>Painovalmiit aineistot oikeilla väriarvoilla</li>
+        </ul>
+        <p class="px">Suunnittelu alk. 190 € · painatus sisällytettynä</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROSESSI: vaaka-aikajana ============ -->
+<section id="prosessi" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Prosessi</span>
+      <h2>Näin projekti etenee</h2>
+      <p class="sub">Sinun osuutesi on kaksi hyväksyntää. Kaikki muu kulkee meidän kauttamme, myös alihankkijoiden kanssa asiointi.</p>
+    </div>
+
+    <div class="hline rv">
+      <div class="hsteps">
+        <div class="hstep">
+          <span class="dot">1</span>
+          <div class="hbox">
+            <h3>Kartoitus</h3>
+            <p>Käymme läpi mitä pintoja ilmeen pitää kattaa: montako ajoneuvoa, mitkä toimipisteet ja mitä painotuotteita tarvitaan.</p>
+            <span class="who">WS Media</span>
+          </div>
+        </div>
+        <div class="hstep">
+          <span class="dot">2</span>
+          <div class="hbox">
+            <h3>Suunnittelu</h3>
+            <p>Kaksi tai kolme ehdotusta, joista valitset suunnan. Valittuun tehdään yhdestä kahteen muutoskierrosta.</p>
+            <span class="who">WS Media</span>
+          </div>
+        </div>
+        <div class="hstep">
+          <span class="dot">3</span>
+          <div class="hbox">
+            <h3>Tuotantovalmius</h3>
+            <p>Teemme paino- ja asennusvalmiit tiedostot: vektorimuodot, oikeat väriarvot ja mitat jokaiselle pinnalle erikseen.</p>
+            <span class="who">WS Media</span>
+          </div>
+        </div>
+        <div class="hstep">
+          <span class="dot">4</span>
+          <div class="hbox">
+            <h3>Tuotanto ja asennus</h3>
+            <p>Kilpailutamme materiaalitoimittajan ja asentajan, sovimme aikataulun ja valvomme laadun paikan päällä.</p>
+            <span class="who sub">Alihankinta · meidän vastuullamme</span>
+          </div>
+        </div>
+        <div class="hstep">
+          <span class="dot">5</span>
+          <div class="hbox">
+            <h3>Luovutus</h3>
+            <p>Tarkistamme jäljen, luovutamme alkuperäistiedostot ja graafisen ohjeiston. Ilme on käytettävissäsi ilman rajoituksia.</p>
+            <span class="who">WS Media</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HINTA-ARVIO ============ -->
+<section id="hinta" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Hinta</span>
+      <h2>Paljonko graafinen suunnittelu maksaa?</h2>
+      <p class="sub">Hinta riippuu siitä, montako pintaa ilmeen pitää kattaa. Valitse mitä tarvitset, niin näet suuruusluokan heti. Lopullinen hinta tarkentuu maksuttomassa kartoituksessa.</p>
+    </div>
+
+    <div class="conf rv" id="conf">
+      <p class="ct">Kokoa oma kokonaisuutesi</p>
+      <p class="cs">Hinnat ovat avaimet käteen -hintoja: ne sisältävät suunnittelun, materiaalit, tuotannon ja asennuksen.</p>
+
+      <div class="cgrid">
+        <label class="copt on"><input type="checkbox" data-min="690" data-max="1900" checked><span><b>Logo ja tunnus</b><s>Logopaketti eri tiedostomuodoissa</s></span></label>
+        <label class="copt on"><input type="checkbox" data-min="800" data-max="2400" checked><span><b>Väripaletti, typografia ja graafinen ohjeisto</b><s>Ilmeen pelisäännöt yhteen PDF-tiedostoon</s></span></label>
+        <label class="copt"><input type="checkbox" data-min="190" data-max="490"><span><b>Käyntikortit</b><s>Suunnittelu ja painatus</s></span></label>
+        <label class="copt"><input type="checkbox" data-min="280" data-max="1200"><span><b>Flyer tai esite</b><s>Nelisivuinen, haitari tai kolmitaitteinen</s></span></label>
+        <label class="copt"><input type="checkbox" data-min="290" data-max="690"><span><b>Roll-up</b><s>Suunnittelu, tulostus ja teline</s></span></label>
+        <label class="copt"><input type="checkbox" data-min="590" data-max="900"><span><b>Ajoneuvo: logoteippaus</b><s>Logot ja yhteystiedot, per ajoneuvo</s></span></label>
+        <label class="copt"><input type="checkbox" data-min="1190" data-max="2200"><span><b>Ajoneuvo: osateippaus</b><s>Kyljet ja takaosa, per ajoneuvo</s></span></label>
+        <label class="copt"><input type="checkbox" data-min="3400" data-max="5200"><span><b>Ajoneuvo: yliteippaus</b><s>Koko auto värinvaihtokalvolla, per ajoneuvo</s></span></label>
+        <label class="copt"><input type="checkbox" data-min="890" data-max="3500"><span><b>Ikkuna- tai julkisivuteippaus</b><s>Toimitilan pinnat, laajuuden mukaan</s></span></label>
+        <label class="copt"><input type="checkbox" data-min="900" data-max="5500"><span><b>Valomainos tai kyltti</b><s>Valokirjaimet, kotelo tai opaste</s></span></label>
+      </div>
+
+      <div class="cres">
+        <div>
+          <div class="amt" id="camt">1 490 – 4 300 <small>€</small></div>
+          <p class="lbl" id="clbl">Arvio valituille kohteille. Hintaan lisätään arvonlisävero 25,5 %.</p>
+        </div>
+        <a class="btn" href="#tarjous">Pyydä tarkka tarjous</a>
+      </div>
+    </div>
+
+    <p class="pricenote rv">Arvio perustuu tyypillisiin toteutuksiin. Suurin yksittäinen hintaan vaikuttava tekijä on ajoneuvojen ja pintojen määrä: usean auton kalustossa yksikköhinta laskee selvästi, koska suunnittelu tehdään kerran ja monistetaan. Kartoitus ja tarjous ovat maksuttomia eivätkä sido mihinkään.</p>
+  </div>
+</section>
+
+<!-- ============ TIEDOSTOT JA OIKEUDET ============ -->
+<section id="tiedostot" style="padding-top:20px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Aineistot</span>
+        <h2>Ilme on sinun — myös tiedostoina</h2>
+      </div>
+      <p class="sub">Tämä on se kohta, joka jää alalla useimmiten sopimatta. Meillä se sanotaan ääneen: kaikki aineistot ja täydet käyttöoikeudet siirtyvät sinulle.</p>
+    </div>
+
+    <div class="files rv">
+      <div class="frow"><em>AI · EPS</em><div><b>Muokattavat alkuperäistiedostot</b><s>Avautuvat suunnitteluohjelmissa, käytetään painossa ja teippauksessa</s></div></div>
+      <div class="frow"><em>SVG</em><div><b>Vektorilogo verkkoon</b><s>Skaalautuu terävänä jokaiseen kokoon</s></div></div>
+      <div class="frow"><em>PDF</em><div><b>Painovalmis aineisto</b><s>Leikkuuvarat ja oikeat väriprofiilit valmiina</s></div></div>
+      <div class="frow"><em>PNG</em><div><b>Läpinäkyvä tunnus</b><s>Somekäyttöön, esityksiin ja verkkosivuille</s></div></div>
+      <div class="frow"><em>CMYK<br>RGB · HEX</em><div><b>Väriarvot kirjattuna</b><s>Sama väri painossa, näytöllä ja teippikalvossa</s></div></div>
+      <div class="frow"><em>OTF · TTF</em><div><b>Fontit ja lisenssitiedot</b><s>Tieto siitä mitä saa käyttää ja missä</s></div></div>
+      <div class="frow"><em>PDF</em><div><b>Graafinen ohjeisto</b><s>Logon käyttö, suojaetäisyydet ja väärinkäyttöesimerkit</s></div></div>
+      <div class="frow"><em>Mitat</em><div><b>Asennusvalmiit mitoitukset</b><s>Jokaiselle ajoneuvolle ja pinnalle erikseen</s></div></div>
+    </div>
+
+    <p class="lead rv" style="margin-top:26px"><strong>Käyttöoikeuksista sovitaan kirjallisesti ennen työn aloittamista.</strong> Jos teetät myöhemmin lisäpainoksen tai toisen auton teippauksen jossain muualla, tiedostot toimivat sellaisenaan — et ole sidottu meihin. Emme pidä aineistoja panttina, koska se ei ole yhteistyön arvoinen tapa pitää asiakas.</p>
+  </div>
+</section>
+
+<!-- ============ MATERIAALIT ============ -->
+<section id="materiaalit" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead rv" data-par="0.03">
+      <span class="kick">Materiaalit</span>
+      <h2>Mitä pintaan oikeasti tulee</h2>
+      <p class="sub">Halpa ja kallis tarjous eroavat yleensä juuri tässä. Kerromme aina tarjouksessa mitä materiaalia käytetään ja mikä sen odotettu kestoikä on.</p>
+    </div>
+
+    <div class="tblwrap rv">
+      <table>
+        <thead><tr><th>Kohde</th><th>Materiaali</th><th>Odotettu kestoikä</th><th>Huomioitavaa</th></tr></thead>
+        <tbody>
+          <tr><td>Ajoneuvoteippaus</td><td>Ammattitason tarrakalvo</td><td>3–7 vuotta</td><td>Asennus lämpimässä sisätilassa, pinta esikäsitellään</td></tr>
+          <tr><td>Yliteippaus</td><td>Värinvaihtokalvo laminoituna</td><td>5–7 vuotta</td><td>Alkuperäinen maalipinta säilyy kalvon alla</td></tr>
+          <tr><td>Ikkuna- ja julkisivuteippaus</td><td>Ikkunakalvo tai tarrateippi</td><td>3–5 vuotta</td><td>Suojaa myös UV-säteilyltä ja vähentää häikäisyä</td></tr>
+          <tr><td>Valomainos</td><td>LED-tekniikka, alumiini ja akryyli</td><td>LED 50 000–100 000 h</td><td>Toimitusaika tyypillisesti 3–5 viikkoa, lupa-asiat selvitetään</td></tr>
+          <tr><td>Painotuotteet</td><td>Paperilaatu käyttökohteen mukaan</td><td>—</td><td>Painovalmis aineisto oikeilla väriprofiileilla</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="lead rv">Lyhytikäinen kampanjateippi on halvempi mutta kestää kuukausia, ei vuosia. Kun kalusto on tarkoitus pitää samannäköisenä viisi vuotta, materiaalin valinta ratkaisee enemmän kuin muutaman satasen ero tarjouksessa.</p>
+  </div>
+</section>
+
+<!-- ============ KENELLE ============ -->
+<section id="kenelle" style="padding-top:20px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Kenelle</span>
+        <h2>Kenelle tämä sopii — ja kenelle ei</h2>
+      </div>
+      <p class="sub">Sanomme sen kartoituksessa suoraan, jos tilanteesi on oikean palstan kaltainen.</p>
+    </div>
+    <div class="twopanel stagger">
+      <div class="pan yes rv" style="--i:0">
+        <h3>Sopii sinulle, jos</h3>
+        <ul>
+          <li>Ilmettä tarvitaan useaan paikkaan: autoon, toimitilaan ja painotuotteisiin</li>
+          <li>Yrityksellä on kalustoa, jonka pitäisi näyttää samalta ensimmäisestä autosta viimeiseen</li>
+          <li>Nykyinen logo on epäselvä, vanhentunut tai olemassa vain kuvatiedostona</li>
+          <li>Et halua kilpailuttaa kolmea toimittajaa ja sovitella niiden aikatauluja</li>
+          <li>Haluat että verkkosivut, some ja fyysiset pinnat näyttävät samalta yritykseltä</li>
+        </ul>
+      </div>
+      <div class="pan dark rv" style="--i:1">
+        <h3>Ei kannata, jos</h3>
+        <ul>
+          <li>Tarvitset vain yhden auton logoteippauksen ja sinulla on jo vektoroitu logo — silloin teippaamo on nopeampi ja edullisempi</li>
+          <li>Etsit halvinta mahdollista hintaa etkä välitä kestoiästä</li>
+          <li>Yrityksen nimi tai toimiala on vielä auki</li>
+          <li>Haluat vain painovalmiin tiedoston ja hoidat tuotannon itse — teemme sitäkin, mutta silloin et hyödy kokonaisuudesta</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOIMINTA-ALUE ============ -->
+<section id="alueet" style="padding-top:20px">
+  <div class="wrap-n">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Toiminta-alue</span>
+      <h2>Suunnittelu etänä, asennus lähellä sinua</h2>
+      <p class="sub">Suunnittelu ja hyväksynnät hoituvat verkossa mistä päin Suomea tahansa. Asennus tehdään sinun paikkakunnallasi: valitsemme asentajan sieltä, missä ajoneuvot ja toimitilat ovat.</p>
+    </div>
+    <p class="lead rv" style="text-align:center;margin:0 auto">Kotipaikkamme on <strong>Espoo</strong>, mutta teippaus ja asennus eivät edellytä sitä että olisimme samassa kaupungissa. Painotuotteet toimitetaan suoraan osoitteeseesi.</p>
+    <div class="cities rv" style="justify-content:center">
+      <a href="/graafinen-suunnittelu/espoo">Graafinen suunnittelu Espoo</a>
+      <a href="/graafinen-suunnittelu/helsinki">Helsinki</a>
+      <a href="/graafinen-suunnittelu/vantaa">Vantaa</a>
+      <a href="/graafinen-suunnittelu/tampere">Tampere</a>
+      <a href="/graafinen-suunnittelu/turku">Turku</a>
+      <a href="/graafinen-suunnittelu/oulu">Oulu</a>
+      <a href="/graafinen-suunnittelu/lahti">Lahti</a>
+      <a href="/graafinen-suunnittelu/kuopio">Kuopio</a>
+      <a href="/graafinen-suunnittelu/pori">Pori</a>
+      <a href="/graafinen-suunnittelu/joensuu">Joensuu</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="ukk" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Usein kysyttyä</span>
+      <h2>Usein kysytyt kysymykset graafisesta suunnittelusta</h2>
+    </div>
+    <div class="faq rv">
+
+      <p class="faqgroup">Hinta ja laajuus</p>
+      <details>
+        <summary>Paljonko graafinen suunnittelu maksaa?</summary>
+        <div class="a">Hinta muodostuu käytännössä työtunneista: Suomessa kokeneen graafisen suunnittelijan tuntihinta on tyypillisesti 70–120 euroa. Meillä logo alkaa 690 eurosta ja yritysilme graafisine ohjeistoineen 1 490 eurosta. Painotuotteen suunnittelu alkaa 190 eurosta ja teippaukset avaimet käteen 590 eurosta. Kaikkiin hintoihin lisätään arvonlisävero 25,5 %.</div>
+      </details>
+      <details>
+        <summary>Mikä on graafisen suunnittelijan tuntihinta Suomessa?</summary>
+        <div class="a">Freelancerin tuntihinta asettuu tyypillisesti 50–90 euroon ja mainostoimiston 90–120 euroon. Me emme laskuta tuntityönä vaan annamme kiinteän hinnan, jotta tiedät kustannuksen etukäteen emmekä me hyödy siitä että työ venyy.</div>
+      </details>
+      <details>
+        <summary>Paljonko logosuunnittelu maksaa?</summary>
+        <div class="a">Markkinoilla yksinkertainen tekstilogo on halvimmillaan alle kahdensadan euron ja kokonainen visuaalinen identiteetti nousee useaan tuhanteen. Meillä logo alkaa 690 eurosta. Ero halvimpaan syntyy siitä, että teemme useamman ehdotuksen, muutoskierrokset ja logopaketin kaikkiin käyttötarkoituksiin — myös teippaukseen ja painoon, joissa kuvatiedosto ei kelpaa.</div>
+      </details>
+      <details>
+        <summary>Mitä auton mainosteippaus maksaa?</summary>
+        <div class="a">Hinta riippuu laajuudesta. Markkinoilla pelkkä logoteippaus asettuu 200–500 euroon, osateippaus 400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 590 eurosta ja sisältää suunnittelun, materiaalit ja asennuksen — ei pelkkää asennusta valmiilla tiedostolla.</div>
+      </details>
+      <details>
+        <summary>Sisältyykö teippauksen hintaan suunnittelu?</summary>
+        <div class="a">Meillä sisältyy aina. Alalla on tavallista, että teippaamo tekee yksinkertaisen sommittelun veloituksetta mutta laskuttaa erikseen näyttävämmästä suunnittelusta ja olettaa saavansa asiakkaalta valmiin vektoroidun logon. Me lähdemme siitä, että suunnittelu on työn ydin eikä lisäpalvelu.</div>
+      </details>
+
+      <p class="faqgroup">Toteutus</p>
+      <details>
+        <summary>Teettekö teippaukset ja painotuotteet itse?</summary>
+        <div class="a">Emme. Teippaus, painatus ja asennus tulevat alihankintana tekijöiltä, jotka tekevät sitä työkseen joka päivä. Me suunnittelemme, valitsemme toimittajat, toimitamme heille oikeat tiedostot ja vastaamme lopputuloksesta sinulle. Saat yhden tarjouksen ja yhden laskun, emmekä siirrä vastuuta eteenpäin jos jokin menee pieleen.</div>
+      </details>
+      <details>
+        <summary>Kuinka monta muutoskierrosta hintaan sisältyy?</summary>
+        <div class="a">Yhdestä kahteen kierrosta sisältyy jokaiseen suunnittelutyöhön. Useampaa tarvitaan käytännössä harvoin, koska esitämme ensin kaksi tai kolme selvästi erilaista suuntaa sen sijaan että viilaisimme yhtä ehdotusta eteenpäin.</div>
+      </details>
+      <details>
+        <summary>Mitä graafinen ohjeisto sisältää?</summary>
+        <div class="a">Graafinen ohjeisto kokoaa ilmeen pelisäännöt yhteen PDF-tiedostoon: logon eri versiot ja suojaetäisyydet, minimikoot, väriarvot CMYK-, RGB- ja HEX-muodossa, typografian otsikoille ja leipätekstille sekä esimerkit siitä miten logoa ei saa käyttää. Sen ansiosta ilme pysyy samana, vaikka materiaalia tekisi joku muu.</div>
+      </details>
+      <details>
+        <summary>Kuka omistaa valmiit aineistot?</summary>
+        <div class="a">Sinä. Saat muokattavat alkuperäistiedostot ja täydet käyttöoikeudet, ja niistä sovitaan kirjallisesti ennen työn aloittamista. Emme pidä aineistoja itsellämme emmekä sido sinua meihin sillä perusteella, että tiedostot ovat vain meidän koneellamme.</div>
+      </details>
+      <details>
+        <summary>Tarvitseeko minulla olla valmis logo?</summary>
+        <div class="a">Ei tarvitse. Suunnittelemme logon tarvittaessa alusta. Jos logo on olemassa vain kuvatiedostona, vektoroimme sen ensin — ilman vektorimuotoa logoa ei saa tulostettua teippikalvolle tai suurikokoiseen kylttiin terävänä.</div>
+      </details>
+      <details>
+        <summary>Kuinka kauan projekti kestää?</summary>
+        <div class="a">Yritysilme valmistuu tyypillisesti kolmesta neljään viikkoon hyväksyntöjen nopeudesta riippuen. Ajoneuvoteippauksen asennus vie yhdestä kolmeen päivää. Valomainoksissa toimitusaika on pidempi, tyypillisesti kolmesta viiteen viikkoa, koska tuote valmistetaan mittatilaustyönä.</div>
+      </details>
+
+      <p class="faqgroup">Kesto ja jatko</p>
+      <details>
+        <summary>Kuinka kauan auton teipit kestävät?</summary>
+        <div class="a">Ammattitason kalvolla teipattu auto pysyy siistinä tyypillisesti kolmesta seitsemään vuotta. Lyhytikäinen kampanjateippi kestää kuukausia. Kestoikään vaikuttavat materiaalin laatu, asennusolosuhteet ja se, säilytetäänkö auto ulkona vai hallissa.</div>
+      </details>
+      <details>
+        <summary>Voiko yhden auton teipata nyt ja loput myöhemmin?</summary>
+        <div class="a">Voi, ja se on yleisin tapa edetä. Suunnittelu tehdään kerran, ja samat tiedostot toimivat myöhemmin lisättäville ajoneuvoille. Silloin maksat seuraavista autoista vain tuotannon ja asennuksen, et suunnittelua uudestaan.</div>
+      </details>
+      <details>
+        <summary>Tarvitseeko valomainos luvan?</summary>
+        <div class="a">Usein tarvitsee. Kiinteään rakenteeseen asennettava valomainos vaatii tyypillisesti toimenpideluvan kunnalta, ja käytännöt vaihtelevat kunnittain sekä sen mukaan onko rakennus suojeltu. Selvitämme lupa-asiat osana projektia ennen kuin mitään tilataan.</div>
+      </details>
+      <details>
+        <summary>Teettekö myös verkkosivut ja videot?</summary>
+        <div class="a">Kyllä. WS Media tekee graafisen suunnittelun lisäksi <a href="/verkkosivut">verkkosivut</a>, <a href="/hakukoneoptimointi">hakukoneoptimoinnin</a> ja <a href="/lyhytvideot">lyhytvideot</a>. Kun sama tiimi tekee sekä digitaalisen että fyysisen ilmeen, yritys näyttää samalta verkossa, somessa ja kadulla — eikä samaa työtä tehdä kahteen kertaan.</div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ JUOKSEVA TEKSTI ============ -->
+<section id="kaytannossa" style="padding-top:20px">
+  <div class="wrap-n">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Taustaa</span>
+      <h2>Graafinen suunnittelu käytännössä</h2>
+    </div>
+    <div class="prose rv">
+      <h3>Miksi yhtenäinen ilme kannattaa</h3>
+      <p>Yrityksen ilme ei ole logo vaan se kokonaisuus, jonka asiakas kohtaa: verkkosivu, käyntikortti, pakettiauton kylki, toimitilan ikkuna ja somekanavan profiilikuva. Kun ne näyttävät samalta, jokainen kohtaaminen vahvistaa edellistä. Kun ne näyttävät eriltä, jokainen kohtaaminen alkaa alusta.</p>
+      <p>Käytännön ero on tunnistettavuudessa. Sama auto ohittaa saman ihmisen samalla työmatkalla kymmeniä kertoja kuukaudessa, mutta vain jos hän tunnistaa sen samaksi yritykseksi joka näkyi hakutuloksissa. <strong>Yhtenäisyys on halvin tapa moninkertaistaa jo tehdyn markkinoinnin vaikutus.</strong></p>
+
+      <h3>Mistä graafisen suunnittelun hinta muodostuu</h3>
+      <p>Hinta on työtunteja. Suomessa kokeneen suunnittelijan tuntihinta asettuu tyypillisesti 70–120 euroon, joten hinta kertoo suoraan sen, kuinka paljon työtä kohteeseen käytetään. Suurimmat yksittäiset tekijät ovat <strong>laajuus</strong> eli montako pintaa ja versiota tarvitaan, <strong>muutoskierrosten määrä</strong> ja <strong>käyttöoikeuksien laajuus</strong>.</p>
+      <p>Teippausten ja painotuotteiden kohdalla mukaan tulee vielä materiaali ja työ. Siksi kahden tarjouksen vertailu pelkän loppusumman perusteella on harhaanjohtavaa: halvempi tarjous voi sisältää lyhytikäisen kalvon, ulkoasennuksen ja oletuksen siitä että toimitat itse painovalmiin tiedoston.</p>
+
+      <h3>Ajoneuvo on mediatila, joka on jo maksettu</h3>
+      <p>Pakettiauto ajaa joka tapauksessa. Teippaus muuttaa sen mainospinnaksi, joka näkyy joka ajokilometrillä ilman erillistä mediabudjettia — eikä sitä voi kytkeä pois päältä. Kustannus jakautuu koko kalvon elinkaarelle, joka on ammattitason materiaalilla kolmesta seitsemään vuotta.</p>
+      <p>Tämä on myös syy siihen, miksi materiaalivalinnasta kannattaa kysyä. Kolme vuotta kestävä ja seitsemän vuotta kestävä teippaus maksavat asennettuna lähes saman verran, mutta jälkimmäinen jakaa kustannuksen kaksinkertaiselle ajalle.</p>
+
+      <h3>Suunnittelun ja tuotannon ero</h3>
+      <p>Suunnittelu ratkaisee miltä lopputulos näyttää. Tuotanto ratkaisee kuinka kauan se kestää. Nämä ovat eri ammatteja, ja siksi ne kannattaa ostaa eri tekijöiltä — mutta niiden yhteensovittaminen ei kuulu asiakkaalle.</p>
+      <p>Me suunnittelemme ja hoidamme tuotannon alihankintana. Käytännössä se tarkoittaa, että sinä hyväksyt luonnoksen ja saat valmiin lopputuloksen. Kaikki siltä väliltä — tiedostomuodot, mitat, materiaalivalinta, aikataulut ja laadun tarkistus — on meidän työtämme. Sama logiikka toimii myös <a href="/verkkosivut">verkkosivuissa</a> ja <a href="/lyhytvideot">lyhytvideoissa</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLOGI ============ -->
+<section id="blogi" style="padding-top:20px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Blogi</span>
+        <h2>Lue lisää ilmeestä ja teippauksista</h2>
+      </div>
+      <p class="sub">Ne kysymykset, jotka tulevat vastaan ennen tarjouspyyntöä.</p>
+    </div>
+    <div class="postrows rv">
+      <a href="/blogi/autoteippauksen-hinta"><span>Hintaopas</span><b>Autoteippauksen hinta 2026 — mitä ajoneuvoteippaus oikeasti maksaa</b><i>→</i></a>
+      <a href="/blogi/graafinen-ohjeisto"><span>Yritysilme</span><b>Mitä graafinen ohjeisto sisältää ja miksi sitä tarvitaan</b><i>→</i></a>
+      <a href="/blogi/logon-vektorointi"><span>Aineistot</span><b>Logo vektoriksi: miksi kuvatiedosto ei riitä painoon eikä teippiin</b><i>→</i></a>
+      <a href="/blogi/yritysilmeen-uudistus"><span>Opas</span><b>Yritysilmeen uudistus — mistä aloittaa ja mitä se maksaa</b><i>→</i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LOMAKE ============ -->
+<section id="tarjous" style="padding-top:20px">
+  <div class="wrap-n">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Tarjous</span>
+      <h2>Kerro mitä pintoja ilmeen pitää kattaa</h2>
+      <p class="sub">Saat kiinteähintaisen tarjouksen, joka sisältää suunnittelun, materiaalit ja asennuksen. Kartoitus on maksuton eikä sido mihinkään.</p>
+    </div>
+    <div class="card fcard rv" data-par="0.02">
+      <div class="row2">
+        <div>
+          <label for="nimi">Nimi</label>
+          <input type="text" id="nimi" autocomplete="name">
+        </div>
+        <div>
+          <label for="yritys">Yritys</label>
+          <input type="text" id="yritys" autocomplete="organization">
+        </div>
+        <div>
+          <label for="mail">Sähköposti</label>
+          <input type="email" id="mail" autocomplete="email">
+        </div>
+        <div>
+          <label for="puh">Puhelinnumero</label>
+          <input type="text" id="puh" autocomplete="tel">
+        </div>
+      </div>
+      <label for="pk">Paikkakunta, jossa asennus tehdään</label>
+      <input type="text" id="pk">
+      <label for="lisa">Mitä tarvitset? Kerro esimerkiksi montako ajoneuvoa, onko logo olemassa ja mihin mennessä työn pitäisi olla valmis.</label>
+      <textarea id="lisa" rows="4"></textarea>
+      <button class="btn" type="button">Lähetä tarjouspyyntö</button>
+      <p class="fnote">Vastaamme 24 tunnin sisällä. Ei sitoumuksia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LOPPU-CTA ============ -->
+<section style="padding-top:20px">
+  <div class="closer rv">
+    <div>
+      <h2>Sama yritys <span style="color:#6fb1ff">joka pinnalla.</span></h2>
+      <p>Varaa maksuton kartoitus. Käymme läpi mitä pintoja ilmeen pitäisi kattaa ja missä järjestyksessä ne kannattaa tehdä.</p>
+    </div>
+    <div>
+      <a class="btn mag" href="#tarjous">Varaa maksuton kartoitus</a>
+      <p class="cnote">Ei sitoumuksia</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div style="max-width:280px">
+        <h4>WS Media</h4>
+        <p>Lyhytvideot, verkkosivut, hakukoneoptimointi ja graafinen suunnittelu. Espoo ja Helsinki, koko Suomi.</p>
+      </div>
+      <div>
+        <h4>Palvelut</h4>
+        <a href="/lyhytvideot">Lyhytvideot</a>
+        <a href="/verkkosivut">Verkkosivut yritykselle</a>
+        <a href="/hakukoneoptimointi">Hakukoneoptimointi</a>
+        <a href="/graafinen-suunnittelu">Graafinen suunnittelu</a>
+        <a href="/tapahtumat">Tapahtumat</a>
+      </div>
+      <div>
+        <h4>Graafinen suunnittelu</h4>
+        <a href="/graafinen-suunnittelu#palvelut">Yritysilme ja logo</a>
+        <a href="/graafinen-suunnittelu#palvelut">Ajoneuvoteippaukset</a>
+        <a href="/graafinen-suunnittelu#palvelut">Julkisivu ja kyltit</a>
+        <a href="/graafinen-suunnittelu#hinta">Hinta-arvio</a>
+        <a href="/graafinen-suunnittelu#ukk">Usein kysyttyä</a>
+      </div>
+      <div>
+        <h4>Yritys</h4>
+        <a href="/tyonaytteet">Työnäytteet</a>
+        <a href="/hinnoittelu">Hinnoittelu</a>
+        <a href="/blogi">Blogi</a>
+        <a href="/yhteystiedot">Ota yhteyttä</a>
+      </div>
+    </div>
+    <div class="base">© 2026 WS Media Oy · Espoo · Y-tunnus 3615084-4</div>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://wsmedia.fi/#organisaatio",
+      "name": "WS Media Oy",
+      "alternateName": "WS Media",
+      "url": "https://wsmedia.fi/",
+      "description": "WS Media on espoolainen graafiseen suunnitteluun, verkkosivuihin, hakukoneoptimointiin ja lyhytvideotuotantoon erikoistunut toimisto.",
+      "vatID": "FI36150844",
+      "taxID": "3615084-4",
+      "address": {"@type":"PostalAddress","addressLocality":"Espoo","addressRegion":"Uusimaa","addressCountry":"FI"},
+      "areaServed": [
+        {"@type":"Country","name":"Suomi"},
+        {"@type":"City","name":"Espoo"},
+        {"@type":"City","name":"Helsinki"},
+        {"@type":"City","name":"Vantaa"}
+      ],
+      "knowsAbout": [
+        "graafinen suunnittelu",
+        "yritysilme",
+        "logosuunnittelu",
+        "graafinen ohjeisto",
+        "mainosteippaus",
+        "ajoneuvoteippaus",
+        "julkisivuteippaus",
+        "ikkunateippaus",
+        "valomainokset",
+        "painotuotteet",
+        "käyntikortit",
+        "roll-upit"
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://wsmedia.fi/graafinen-suunnittelu#sivu",
+      "url": "https://wsmedia.fi/graafinen-suunnittelu",
+      "name": "Graafinen suunnittelu yritykselle | Yritysilme ja teippaukset | WS Media",
+      "description": "Graafinen suunnittelu yritykselle avaimet käteen: logo, yritysilme ja graafinen ohjeisto sekä käyntikortit, teippaukset ja kyltit valmiiksi asennettuna.",
+      "inLanguage": "fi-FI",
+      "isPartOf": {"@id": "https://wsmedia.fi/#organisaatio"},
+      "primaryImageOfPage": "https://wsmedia.fi/og/graafinen-suunnittelu-yritykselle.jpg"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://wsmedia.fi/graafinen-suunnittelu#murupolku",
+      "itemListElement": [
+        {"@type":"ListItem","position":1,"name":"Etusivu","item":"https://wsmedia.fi/"},
+        {"@type":"ListItem","position":2,"name":"Palvelut","item":"https://wsmedia.fi/palvelut"},
+        {"@type":"ListItem","position":3,"name":"Graafinen suunnittelu","item":"https://wsmedia.fi/graafinen-suunnittelu"}
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://wsmedia.fi/graafinen-suunnittelu#palvelu",
+      "name": "Graafinen suunnittelu yritykselle",
+      "serviceType": "Graafinen suunnittelu ja yritysilme",
+      "url": "https://wsmedia.fi/graafinen-suunnittelu",
+      "description": "Avaimet käteen -graafinen suunnittelu yrityksille: logosuunnittelu, yritysilme ja graafinen ohjeisto sekä ajoneuvoteippaukset, julkisivu- ja ikkunateippaukset, valomainokset ja painotuotteet. Suunnittelu tehdään talon sisällä, tuotanto ja asennus hankitaan alihankintana WS Median vastuulla — asiakas saa yhden tarjouksen ja yhden laskun.",
+      "provider": {"@id": "https://wsmedia.fi/#organisaatio"},
+      "areaServed": {"@type":"Country","name":"Suomi"},
+      "audience": {"@type":"BusinessAudience","name":"Pk-yritykset"},
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Graafisen suunnittelun palvelut",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "Logo ja tunnus",
+            "description": "Logosuunnittelu ja logopaketti eri tiedostomuodoissa, mukana muutoskierrokset.",
+            "priceCurrency": "EUR",
+            "price": "690",
+            "priceSpecification": {"@type":"UnitPriceSpecification","priceCurrency":"EUR","price":"690","valueAddedTaxIncluded": false}
+          },
+          {
+            "@type": "Offer",
+            "name": "Yritysilme ja graafinen ohjeisto",
+            "description": "Logo, väripaletti CMYK-, RGB- ja HEX-arvoineen, typografia sekä graafinen ohjeisto PDF-muodossa.",
+            "priceCurrency": "EUR",
+            "price": "1490",
+            "priceSpecification": {"@type":"UnitPriceSpecification","priceCurrency":"EUR","price":"1490","valueAddedTaxIncluded": false}
+          },
+          {
+            "@type": "Offer",
+            "name": "Ajoneuvoteippaus avaimet käteen",
+            "description": "Suunnittelu, materiaalit ja asennus. Logoteippaus, osateippaus tai yliteippaus henkilö- ja pakettiautoihin sekä raskaaseen kalustoon.",
+            "priceCurrency": "EUR",
+            "price": "590",
+            "priceSpecification": {"@type":"UnitPriceSpecification","priceCurrency":"EUR","price":"590","valueAddedTaxIncluded": false}
+          },
+          {
+            "@type": "Offer",
+            "name": "Julkisivu-, ikkuna- ja kylttiratkaisut",
+            "description": "Julkisivu- ja ikkunateippaukset, valomainokset, opasteet ja lattiateippaukset asennettuna, lupa-asiat selvitettynä.",
+            "priceCurrency": "EUR",
+            "price": "890",
+            "priceSpecification": {"@type":"UnitPriceSpecification","priceCurrency":"EUR","price":"890","valueAddedTaxIncluded": false}
+          },
+          {
+            "@type": "Offer",
+            "name": "Painotuotteet",
+            "description": "Käyntikortit, flyerit, esitteet ja roll-upit suunnittelusta painoon, painovalmiit aineistot mukaan.",
+            "priceCurrency": "EUR",
+            "price": "190",
+            "priceSpecification": {"@type":"UnitPriceSpecification","priceCurrency":"EUR","price":"190","valueAddedTaxIncluded": false}
+          }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://wsmedia.fi/graafinen-suunnittelu#ukk",
+      "mainEntity": [
+        {"@type":"Question","name":"Paljonko graafinen suunnittelu maksaa?","acceptedAnswer":{"@type":"Answer","text":"Hinta muodostuu käytännössä työtunneista: Suomessa kokeneen graafisen suunnittelijan tuntihinta on tyypillisesti 70–120 euroa. Meillä logo alkaa 690 eurosta ja yritysilme graafisine ohjeistoineen 1 490 eurosta. Painotuotteen suunnittelu alkaa 190 eurosta ja teippaukset avaimet käteen 590 eurosta. Kaikkiin hintoihin lisätään arvonlisävero 25,5 %."}},
+        {"@type":"Question","name":"Mikä on graafisen suunnittelijan tuntihinta Suomessa?","acceptedAnswer":{"@type":"Answer","text":"Freelancerin tuntihinta asettuu tyypillisesti 50–90 euroon ja mainostoimiston 90–120 euroon. Me emme laskuta tuntityönä vaan annamme kiinteän hinnan, jotta tiedät kustannuksen etukäteen emmekä me hyödy siitä että työ venyy."}},
+        {"@type":"Question","name":"Paljonko logosuunnittelu maksaa?","acceptedAnswer":{"@type":"Answer","text":"Markkinoilla yksinkertainen tekstilogo on halvimmillaan alle kahdensadan euron ja kokonainen visuaalinen identiteetti nousee useaan tuhanteen. Meillä logo alkaa 690 eurosta. Ero halvimpaan syntyy siitä, että teemme useamman ehdotuksen, muutoskierrokset ja logopaketin kaikkiin käyttötarkoituksiin — myös teippaukseen ja painoon, joissa kuvatiedosto ei kelpaa."}},
+        {"@type":"Question","name":"Mitä auton mainosteippaus maksaa?","acceptedAnswer":{"@type":"Answer","text":"Hinta riippuu laajuudesta. Markkinoilla pelkkä logoteippaus asettuu 200–500 euroon, osateippaus 400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 590 eurosta ja sisältää suunnittelun, materiaalit ja asennuksen — ei pelkkää asennusta valmiilla tiedostolla."}},
+        {"@type":"Question","name":"Sisältyykö teippauksen hintaan suunnittelu?","acceptedAnswer":{"@type":"Answer","text":"Meillä sisältyy aina. Alalla on tavallista, että teippaamo tekee yksinkertaisen sommittelun veloituksetta mutta laskuttaa erikseen näyttävämmästä suunnittelusta ja olettaa saavansa asiakkaalta valmiin vektoroidun logon. Me lähdemme siitä, että suunnittelu on työn ydin eikä lisäpalvelu."}},
+        {"@type":"Question","name":"Teettekö teippaukset ja painotuotteet itse?","acceptedAnswer":{"@type":"Answer","text":"Emme. Teippaus, painatus ja asennus tulevat alihankintana tekijöiltä, jotka tekevät sitä työkseen joka päivä. Me suunnittelemme, valitsemme toimittajat, toimitamme heille oikeat tiedostot ja vastaamme lopputuloksesta sinulle. Saat yhden tarjouksen ja yhden laskun, emmekä siirrä vastuuta eteenpäin jos jokin menee pieleen."}},
+        {"@type":"Question","name":"Kuinka monta muutoskierrosta hintaan sisältyy?","acceptedAnswer":{"@type":"Answer","text":"Yhdestä kahteen kierrosta sisältyy jokaiseen suunnittelutyöhön. Useampaa tarvitaan käytännössä harvoin, koska esitämme ensin kaksi tai kolme selvästi erilaista suuntaa sen sijaan että viilaisimme yhtä ehdotusta eteenpäin."}},
+        {"@type":"Question","name":"Mitä graafinen ohjeisto sisältää?","acceptedAnswer":{"@type":"Answer","text":"Graafinen ohjeisto kokoaa ilmeen pelisäännöt yhteen PDF-tiedostoon: logon eri versiot ja suojaetäisyydet, minimikoot, väriarvot CMYK-, RGB- ja HEX-muodossa, typografian otsikoille ja leipätekstille sekä esimerkit siitä miten logoa ei saa käyttää. Sen ansiosta ilme pysyy samana, vaikka materiaalia tekisi joku muu."}},
+        {"@type":"Question","name":"Kuka omistaa valmiit aineistot?","acceptedAnswer":{"@type":"Answer","text":"Sinä. Saat muokattavat alkuperäistiedostot ja täydet käyttöoikeudet, ja niistä sovitaan kirjallisesti ennen työn aloittamista. Emme pidä aineistoja itsellämme emmekä sido sinua meihin sillä perusteella, että tiedostot ovat vain meidän koneellamme."}},
+        {"@type":"Question","name":"Tarvitseeko minulla olla valmis logo?","acceptedAnswer":{"@type":"Answer","text":"Ei tarvitse. Suunnittelemme logon tarvittaessa alusta. Jos logo on olemassa vain kuvatiedostona, vektoroimme sen ensin — ilman vektorimuotoa logoa ei saa tulostettua teippikalvolle tai suurikokoiseen kylttiin terävänä."}},
+        {"@type":"Question","name":"Kuinka kauan projekti kestää?","acceptedAnswer":{"@type":"Answer","text":"Yritysilme valmistuu tyypillisesti kolmesta neljään viikkoon hyväksyntöjen nopeudesta riippuen. Ajoneuvoteippauksen asennus vie yhdestä kolmeen päivää. Valomainoksissa toimitusaika on pidempi, tyypillisesti kolmesta viiteen viikkoa, koska tuote valmistetaan mittatilaustyönä."}},
+        {"@type":"Question","name":"Kuinka kauan auton teipit kestävät?","acceptedAnswer":{"@type":"Answer","text":"Ammattitason kalvolla teipattu auto pysyy siistinä tyypillisesti kolmesta seitsemään vuotta. Lyhytikäinen kampanjateippi kestää kuukausia. Kestoikään vaikuttavat materiaalin laatu, asennusolosuhteet ja se, säilytetäänkö auto ulkona vai hallissa."}},
+        {"@type":"Question","name":"Voiko yhden auton teipata nyt ja loput myöhemmin?","acceptedAnswer":{"@type":"Answer","text":"Voi, ja se on yleisin tapa edetä. Suunnittelu tehdään kerran, ja samat tiedostot toimivat myöhemmin lisättäville ajoneuvoille. Silloin maksat seuraavista autoista vain tuotannon ja asennuksen, et suunnittelua uudestaan."}},
+        {"@type":"Question","name":"Tarvitseeko valomainos luvan?","acceptedAnswer":{"@type":"Answer","text":"Usein tarvitsee. Kiinteään rakenteeseen asennettava valomainos vaatii tyypillisesti toimenpideluvan kunnalta, ja käytännöt vaihtelevat kunnittain sekä sen mukaan onko rakennus suojeltu. Selvitämme lupa-asiat osana projektia ennen kuin mitään tilataan."}},
+        {"@type":"Question","name":"Teettekö myös verkkosivut ja videot?","acceptedAnswer":{"@type":"Answer","text":"Kyllä. WS Media tekee graafisen suunnittelun lisäksi verkkosivut, hakukoneoptimoinnin ja lyhytvideot. Kun sama tiimi tekee sekä digitaalisen että fyysisen ilmeen, yritys näyttää samalta verkossa, somessa ja kadulla — eikä samaa työtä tehdä kahteen kertaan."}}
+      ]
+    }
+  ]
+}
+</script>
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(pointer: fine)').matches;
+  const nav = document.getElementById('nav'), prog = document.getElementById('prog');
+
+  /* ---------- parallaksi, taustakuvio, lukupalkki ---------- */
+  const bdGrid = document.getElementById('bdGrid');
+  const bdRing = document.getElementById('bdRing');
+  const bdWave = document.getElementById('bdWave');
+  const pars = [...document.querySelectorAll('[data-par]')];
+  let ticking = false;
+  const onScroll = ()=>{
+    const vh = innerHeight, h = document.documentElement, sc = scrollY;
+    pars.forEach(el=>{
+      const sp = parseFloat(el.dataset.par);
+      const r = el.getBoundingClientRect();
+      const mid = r.top + r.height/2 - vh/2;
+      el.style.translate = `0 ${(-mid * sp).toFixed(1)}px`;
+    });
+    if (bdGrid && !reduce){
+      bdGrid.style.transform = `translate(${(-((sc*0.02)%240)).toFixed(1)}px, ${(-((sc*0.012)%300)).toFixed(1)}px)`;
+      bdRing.style.transform = `translate(770px,110px) rotate(${(sc*0.14).toFixed(1)}deg)`;
+      bdWave.style.transform = `translateX(${(-(sc*0.05)%660).toFixed(1)}px)`;
+    }
+    nav.classList.toggle('scrolled', sc > 8);
+    const max = h.scrollHeight - innerHeight;
+    prog.style.width = (max > 0 ? (sc / max * 100) : 0) + '%';
+    ticking = false;
+  };
+  addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(reduce ? ()=>{ nav.classList.toggle('scrolled', scrollY>8); ticking=false; } : onScroll); ticking = true; }
+  }, {passive:true});
+  onScroll();
+
+  /* ---------- reveal ---------- */
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+  /* ---------- magneettinen nappi ---------- */
+  if (finePointer && !reduce){
+    document.querySelectorAll('.mag').forEach(b=>{
+      b.addEventListener('mousemove', e=>{
+        const r = b.getBoundingClientRect();
+        b.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.2}px, ${(e.clientY-r.top-r.height/2)*.28}px)`;
+      });
+      b.addEventListener('mouseleave', ()=>{ b.style.transform=''; });
+    });
+  }
+
+  /* ---------- pintanäyttämö: ilmeen väri vaihtuu yhtä aikaa kaikilla pinnoilla ---------- */
+  if (!reduce){
+    const BRANDS = ['#0071e3','#1f8a70','#6d4aff','#c4553a'];
+    let bi = 0;
+    setInterval(()=>{
+      bi = (bi + 1) % BRANDS.length;
+      document.documentElement.style.setProperty('--brand', BRANDS[bi]);
+    }, 4200);
+  }
+
+  /* ---------- hintakonfiguraattori ---------- */
+  const conf = document.getElementById('conf');
+  if (conf){
+    const boxes = [...conf.querySelectorAll('input[type=checkbox]')];
+    const amt = document.getElementById('camt');
+    const lbl = document.getElementById('clbl');
+    const fmt = n => n.toLocaleString('fi-FI');
+    const upd = ()=>{
+      let lo = 0, hi = 0, n = 0;
+      boxes.forEach(b=>{
+        b.closest('.copt').classList.toggle('on', b.checked);
+        if (b.checked){ lo += +b.dataset.min; hi += +b.dataset.max; n++; }
+      });
+      if (!n){
+        amt.innerHTML = '&mdash;';
+        lbl.textContent = 'Valitse vähintään yksi kohde, niin näet arvion.';
+        return;
+      }
+      amt.innerHTML = fmt(lo) + ' &ndash; ' + fmt(hi) + ' <small>€</small>';
+      lbl.textContent = n === 1
+        ? 'Arvio yhdelle valitulle kohteelle. Hintaan lisätään arvonlisävero 25,5 %.'
+        : 'Arvio ' + n + ' valitulle kohteelle. Hintaan lisätään arvonlisävero 25,5 %.';
+    };
+    boxes.forEach(b=>b.addEventListener('change', upd));
+    upd();
+  }
+</script>
+</body>
+</html>
