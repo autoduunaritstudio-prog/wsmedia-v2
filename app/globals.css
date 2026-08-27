@@ -825,11 +825,30 @@ section { padding: var(--space-section) 0 }
 .svc-txt .tlink { display: inline-block; margin-top: 18px }
 .svc-visual { position: relative }
 
+/* Palvelut-visuaalien 3D-kaanto. Kulman laskee SiteEffects joka framessa
+   suoraan elementin sijainnista viewportissa; tassa maaritellaan vain
+   sarana ja se, etta varjo reagoi samaan --tilt-arvoon (0 = suorassa,
+   1 = tayskallistus). EI transitionia: se viivastyttaisi arvoa ja veisi
+   tasmallisyyden skrollin kanssa.
+   Ei myoskaan transform-style: preserve-3d - se rikkoisi z-index
+   -jarjestyksen samassa tasossa olevien sisarusten kesken. */
+[data-tilt] { transform-origin: center bottom; will-change: transform }
+@media (prefers-reduced-motion: reduce) {
+  /* SiteEffects ei aja kaantoa tassa tilassa, joten transformia ei aseteta
+     lainkaan. --tilt jaa maarittelemattomaksi ja varjot kayttavat
+     perusarvojaan. Tama on vain varmistus. */
+  [data-tilt] { transform: none !important; will-change: auto }
+}
+
 /* video-palvelun visuaali */
 .mini-phones { position: relative; height: 360px; perspective: 900px }
 .mini {
   --ph-radius: 26px; --ph-bezel: 2.5px;
-  --ph-drop: 0 34px 70px -24px rgba(29,29,31,.4);
+  /* --tilt periytyy .mini-phonesilta, joten puhelinten varjo syvenee
+     samassa tahdissa kaannon kanssa. */
+  --ph-drop:
+    0 calc(34px + var(--tilt, 0) * 22px) calc(70px + var(--tilt, 0) * 28px) -24px
+    rgba(29,29,31, calc(.4 + var(--tilt, 0) * .14));
   /* Hienovarainen reunavalo ylareunassa antaa rungolle metallisen
      pyoreyden. Heron .phone jattaa taman pois (--ph-rim: transparent),
      jotta sen ulkoasu ei muutu taman muutoksen yhteydessa. */
@@ -863,7 +882,10 @@ section { padding: var(--space-section) 0 }
 /* verkkosivu-visuaali */
 .browser {
   border-radius: 16px; overflow: hidden; background: #fff;
-  border: 1px solid var(--hair); box-shadow: 0 40px 90px -30px rgba(29,29,31,.3);
+  border: 1px solid var(--hair);
+  box-shadow:
+    0 calc(40px + var(--tilt, 0) * 26px) calc(90px + var(--tilt, 0) * 34px) -30px
+    rgba(29,29,31, calc(.3 + var(--tilt, 0) * .14));
 }
 .browser .bar {
   display: flex; align-items: center; gap: 8px;
@@ -930,7 +952,10 @@ section { padding: var(--space-section) 0 }
 /* tapahtuma-visuaali */
 .event {
   position: relative; border-radius: 18px; overflow: hidden; background: var(--dark);
-  aspect-ratio: 16/11; box-shadow: 0 40px 90px -30px rgba(13,13,16,.5); color: #fff;
+  aspect-ratio: 16/11; color: #fff;
+  box-shadow:
+    0 calc(40px + var(--tilt, 0) * 26px) calc(90px + var(--tilt, 0) * 34px) -30px
+    rgba(13,13,16, calc(.5 + var(--tilt, 0) * .14));
 }
 .event .lights {
   position: absolute; inset: 0;

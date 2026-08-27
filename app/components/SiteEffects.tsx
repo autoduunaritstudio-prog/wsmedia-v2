@@ -34,6 +34,18 @@ export default function SiteEffects() {
       document.getElementById(id),
     );
 
+    /* ---------- Palvelut-visuaalien 3D-kaanto ---------- */
+    // Elementti on kallistettuna kun se on kaukana viewportin keskelta
+    // (tulossa alhaalta TAI poistumassa ylhaalta) ja suorassa kun se on
+    // keskella. Arvo lasketaan joka framessa suoraan sijainnista, joten
+    // liike seuraa skrollia 1:1 molempiin suuntiin ilman CSS-transitionia -
+    // transition viivastyttaisi arvoa ja veisi tasmallisyyden skrollin
+    // kanssa. Kaanto ei ole kertaalleen laukeava sisaantulo vaan taysin
+    // palautuva. Samalla asetetaan --tilt, jota varjot lukevat CSS:ssa.
+    const tilts = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt]"));
+    const TILT_MAX = 12;     // asteina aaripaassa
+    const TILT_RANGE = 0.62; // etaisyys keskelta (osuus vh:sta) johon tayskallistus osuu
+
     /* ---------- parallaksi ---------- */
     const pars = Array.from(
       document.querySelectorAll<HTMLElement>("[data-par]"),
@@ -102,6 +114,19 @@ export default function SiteEffects() {
         const r = el.getBoundingClientRect();
         const mid = r.top + r.height / 2 - vh / 2;
         el.style.setProperty("translate", `0 ${(-mid * sp).toFixed(1)}px`);
+      });
+
+      tilts.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        // Keskikohtien etaisyys, normalisoitu viewportin korkeuteen.
+        const d = (r.top + r.height / 2 - vh / 2) / vh;
+        const t = Math.min(Math.abs(d) / TILT_RANGE, 1);
+        el.style.setProperty("--tilt", t.toFixed(3));
+        // Positiivinen rotateX kallistaa ylareunan poispain katsojasta;
+        // transform-origin on alareunassa, joten elementti saranoi
+        // paikallaan eika liu'u.
+        const axis = el.dataset.tilt === "y" ? "rotateY" : "rotateX";
+        el.style.transform = `perspective(1200px) ${axis}(${(t * TILT_MAX).toFixed(2)}deg)`;
       });
 
       if (bdGrid && bdRing && bdWave) {
