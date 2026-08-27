@@ -366,13 +366,25 @@ export default function SiteEffects() {
     // Eri havainnoija kuin .rv-paljastus: TAMA EI TEE UNOBSERVEA, vaan
     // togglaa luokan nakyvyyden mukaan molempiin suuntiin. Sisaantulo on
     // kertaluontoinen, valot eivat.
+    //
+    // Ehto on intersectionRatio, EI isIntersecting. isIntersecting on tosi
+    // aina kun leikkausta on yhtaan (ratio > 0) riippumatta thresholdista -
+    // threshold ohjaa vain sita milloin callback laukeaa. Sen kanssa valot
+    // sammuivat vasta kun elementti oli kokonaan ruudun ulkopuolella, eika
+    // sammumista ehtinyt nahda. Ratio-vertailu sammuttaa ne kun 55 % on
+    // viela nakyvissa, ja sytyttaa symmetrisesti samassa kohdassa.
+    const LIGHTS_RATIO = 0.55;
     const lightsIo = reduce
       ? null
       : new IntersectionObserver(
           (es) => {
-            es.forEach((e) => e.target.classList.toggle("lights-on", e.isIntersecting));
+            es.forEach((e) =>
+              e.target.classList.toggle("lights-on", e.intersectionRatio >= LIGHTS_RATIO),
+            );
           },
-          { threshold: 0.2 },
+          // Useita kynnyksia, jotta tila lasketaan uudelleen riittavan
+          // usein eika yksikaan ylitys jaa valiin nopeassa skrollauksessa.
+          { threshold: [0, 0.25, LIGHTS_RATIO, 0.8, 1] },
         );
     if (lightsIo) {
       document.querySelectorAll("[data-lights]").forEach((el) => lightsIo.observe(el));
