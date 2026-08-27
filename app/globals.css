@@ -881,23 +881,6 @@ section { padding: var(--space-section) 0 }
 .shead.center { margin-left: auto; margin-right: auto; text-align: center }
 @media (max-width: 720px) { .shead.right { margin-left: 0; text-align: left } }
 
-/* ---------- MEISTA-lohko (etusivu, logonauhan jalkeen) ----------
-   Sama visuaalinen kieli kuin .shead:lla - kicker, h2 ja lead-kappale
-   vasemmalle tasattuna, ei korttia vaan suoraan metallikuvion paalla.
-   Omat saannot eika .shead:n uudelleenkaytto, koska .shead on osion
-   otsikko ja tama on itsenainen sisaltolohko.
-
-   Valistys: .logos + section antaa talle ylavalin (100px). Alavali
-   nollataan ja Palvelut-osio saa saman 100px:n .about + sectionista,
-   jolloin rytmi logonauha -> Meista -> Palvelut on tasavalinen. Ilman
-   .about + sectionia Palvelut jaisi kokonaan ilman ylavalia, koska
-   .logos + section osuu nyt tahan lohkoon eika enaa siihen. */
-.about { padding-bottom: 0 }
-.about + section { padding-top: var(--space-section-tight) }
-.ablock { max-width: 600px }
-.ablock h2 { margin-top: 12px }
-.ablock .sub { margin-top: 14px; font-size: var(--text-lead-sm) }
-
 .card {
   background: #fff; border: 1px solid var(--hair);
   box-shadow: 0 24px 60px -24px rgba(29,29,31,.16);
