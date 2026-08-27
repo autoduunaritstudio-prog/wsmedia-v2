@@ -306,7 +306,19 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 /* Hover on pelkka skaalaus: difference-tilassa tummempi tayttö nayttaisi
    vaalealla taustalla vaaleammalta, eli painike haipyisi hoverilla. */
 .navtoggle:hover { transform: scale(1.05) }
-.navtoggle:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,113,227,.55) }
+/* Fokusrengas on kirjoitettava KAANTEISENA varina. #nav on
+   mix-blend-mode: difference, joten se kaantaa myos renkaan: sivuston
+   sininen rgb(0,113,227) renderoityisi vaalealla taustalla arvoksi
+   rgb(255,193,130) eli oranssiksi - juuri se oranssi reunus jonka
+   kayttaja nakee. Kaanteinen lahde rgb(255,142,28) renderoityy vastaavasti
+   arvoksi rgb(115,177,240) eli sivuston siniseksi.
+   Huom: tummalla taustalla (tyonaytekaista) sekoitus antaa toisen savyn -
+   se on blendin luonne, ja sama koskee logoa ja painiketta itseaan. */
+.navtoggle:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(255,142,28,.55) }
+/* Hiiriklikkaus ei saa jattaa rengasta: :focus-visible hoitaa
+   nappaimistofokuksen, ja tama estaa selaimen oman oletusrenkaan
+   nakymisen klikkauksen jalkeen. */
+.navtoggle:focus:not(:focus-visible) { outline: none; box-shadow: none }
 #nav.scrolled .navtoggle { width: 48px; height: 48px }
 
 .navtoggle-bars { display: flex; flex-direction: column; gap: 5px; width: 21px }
@@ -370,13 +382,19 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 .fsnav-watermark svg { width: 100%; height: auto; display: block }
 @media (max-width: 860px) { .fsnav-watermark { width: min(92vw, 110vh); opacity: .03 } }
 
+/* Overlayn ainoa interaktiivinen elementti oikeassa ylakulmassa, joten se
+   on kookkaampi kuin ylapalkin valikkopainike (54px, skrollattuna 48px).
+   .fsnav:lla ei ole blendia, joten tassa sininen rengas renderoityy
+   aidosti sinisena toisin kuin navissa. */
 .fsnav-close {
   background: none; border: 1px solid var(--hair); border-radius: 50%;
-  width: 44px; height: 44px; cursor: pointer; color: var(--ink);
+  width: 58px; height: 58px; cursor: pointer; color: var(--ink);
   display: flex; align-items: center; justify-content: center;
   transition: border-color .2s, color .2s;
 }
 .fsnav-close:hover { border-color: var(--blue); color: var(--blue) }
+.fsnav-close:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,113,227,.35) }
+.fsnav-close:focus:not(:focus-visible) { outline: none; box-shadow: none }
 
 .fsnav-body {
   position: relative; z-index: 1;
