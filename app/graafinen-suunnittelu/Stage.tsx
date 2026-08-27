@@ -14,7 +14,7 @@ import { useEffect, useState, type CSSProperties } from "react";
  * SiteEffectsin rAF-silmukkaan eika Lenisiin.
  */
 
-const COLORS = ["#0071e3", "#1f8a70", "#6d4aff", "#c4553a"];
+const COLORS = ["#0064cc", "#1f8a70", "#6d4aff", "#c4553a"];
 const PERIOD = 4200;
 
 export default function Stage() {
@@ -78,8 +78,8 @@ export default function Stage() {
                   <line x1="136" y1="146" x2="336" y2="146" stroke="#ececf1" strokeWidth="1"/>
                   <text x="136" y="168" fontSize="11.5" fontWeight="600" fill="#1d1d1f">Matti Meikäläinen</text>
                   <text x="136" y="183" fontSize="9.5" fill="#8a8a90">Toimitusjohtaja</text>
-                  <text x="336" y="168" fontSize="9.5" fill="#6e6e73" textAnchor="end">040 123 4567</text>
-                  <text x="336" y="183" fontSize="9.5" fill="#6e6e73" textAnchor="end">matti@yrityksesi.fi</text>
+                  <text x="336" y="168" fontSize="9.5" fill="#616166" textAnchor="end">040 123 4567</text>
+                  <text x="336" y="183" fontSize="9.5" fill="#616166" textAnchor="end">matti@yrityksesi.fi</text>
                 </g>
               </svg>
             </div>

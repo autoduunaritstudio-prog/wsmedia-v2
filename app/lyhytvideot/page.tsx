@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport = { themeColor: "#0071e3" };
+export const viewport = { themeColor: "#0064cc" };
 
 const MARQUEE = [
   "Lyhytvideotuotanto",

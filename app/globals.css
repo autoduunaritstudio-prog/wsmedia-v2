@@ -5,9 +5,9 @@
 @theme {
   --color-bg: #ffffff;
   --color-ink: #1d1d1f;
-  --color-grey: #6e6e73;
+  --color-grey: #616166;
   --color-hair: #e8e8ed;
-  --color-blue: #0071e3;
+  --color-blue: #0064cc;
   --color-blue-d: #0062c4;
   --color-blue-tint: #f0f6ff;
   --color-dark: #0d0d10;
@@ -933,7 +933,16 @@ section { padding: var(--space-section) 0 }
 }
 
 /* video-palvelun visuaali */
-.mini-phones { position: relative; height: 360px; perspective: 900px }
+/* Korkeus 460px eika 360px. .mini-lapset ovat absoluuttisia, joten ne
+   eivat kasvata sailiota: n2 on top: 70px ja 170 x 358,9px (aspect-ratio
+   9/19), sen rotate(6deg) nostaa puolikorkeuden 187,3px:aan ja
+   scroll-tiltin rotateY(20deg) + perspective(1200px) viela 1,0248-
+   kertaiseksi, jolloin alareuna on 441,2px. 360px:n sailiosta valui siis
+   81,2px ulos alaspain. Seuraava paneeli on 110px paassa ja sen kortin
+   ylamarginaali on -29px, joten ilmaa jai 110 - 81,2 - 29 = -0,2px eli
+   Verkkosivut-kortti kosketti puhelinta. 460px pitaa puhelimen 18,8px
+   sailion sisapuolella ja nostaa valin 99,8px:aan. */
+.mini-phones { position: relative; height: 460px; perspective: 900px }
 .mini {
   --ph-radius: 26px; --ph-bezel: 3px;     /* 2.5px -> 3px, +20% */
   /* --tilt tulee nyt puhelimelta itseltaan (data-tilt siirtyi sailiolta
@@ -2620,7 +2629,7 @@ footer .base { padding-top: 18px }
    --brand on pintanayttamon vaihtuva brandivari. ColorCycle-komponentti
    paivittaa sen; ilman JS:aa se jaa lahtoarvoonsa.
    ================================================================== */
-.page-graafinen-suunnittelu { --brand: #0071e3 }
+.page-graafinen-suunnittelu { --brand: #0064cc }
 .page-graafinen-suunnittelu .pal {display:flex;gap:9px;justify-content:center;margin-bottom:26px;align-items:center}
 .page-graafinen-suunnittelu .pal span {width:26px;height:26px;border-radius:8px;border:1px solid rgba(0,0,0,.07); transition:transform .45s cubic-bezier(.2,.6,.2,1),background .8s;}
 .page-graafinen-suunnittelu .pal span:nth-child(1) {background:var(--brand)}
@@ -2908,12 +2917,14 @@ footer .base { padding-top: 18px }
    ================================================================== */
 
 /* --- Lasilevyjen jaetut arvot ---
-   Alfa .95 EI ole tyylivalinta vaan sidottu: --blue #0071e3 tarvitsee
-   vahintaan alfan 0.947 yltaakseen 4.5:1:een kuvion tummimmassa
-   kohdassa. Lasivaikutelma tehdaan siksi kaikilla MUILLA keinoilla kuin
-   lapinakyvyydella: vahvempi sumennus, saturate joka nostaa taustan
-   varit kylkaammiksi lasin lapi, vaalea reunaviiva, kohotusvarjo ja
-   sisainen ylareunan kiiltoviiva.
+   Alfa .72 on LASKETTU, ei valittu silmalla. Kun --blue tummeni
+   #0071e3 -> #0064cc, sen kontrastimarginaali kasvoi ja levyn ei enaa
+   tarvitse olla lahes umpinainen. Binaarihaku (60 iteraatiota, saturate
+   mukana) kuvion tummimmassa kohdassa RGB(172,8): --ink lapaisee ilman
+   levya, --grey vaatii alfan 0.577 ja --blue 0.680. Sitova on siis
+   sininen; valittu .72 jattaa sille 0,14 marginaalia (4,64:1).
+   Kuviosta nakyy nyt lapi 28% aiemman 5%:n sijaan eli 5,6-kertaisesti -
+   lasi on vihdoin oikeasti lapinakyvaa eika pelkka reuna/varjo-illuusio.
 
    Vaakamitta on 20px eika 30px. Syy on mitattu: .svc-gridin gap on
    60px, ja visuaalisarakkeiden koristeet tyontyvat gapiin jopa 19,4px
@@ -2921,16 +2932,18 @@ footer .base { padding-top: 18px }
    valiin jai 10,6px eli levy ja koriste kavivat kiinni toisissaan;
    20px:lla vali on 20,6px kaikissa neljassa paneelissa. 20px alittaa
    myos .wrapin oman 24px paddingin, joten levy ei enaa leikkaudu
-   ruudun reunaan yhden sarakkeen asettelussa - siksi erillisia
-   880px-ohituksia ei enaa tarvita.
+   ruudun reunaan yhden sarakkeen asettelussa.
 
    1px reuna kasvattaa laatikkoa border-boxissa sisaanpain, joten
    marginaaleihin lisataan 1px (-29/-21) jotta teksti pysyy tasan
-   entisella paikallaan. */
+   entisella paikallaan.
+
+   .shead EI ole enaa mukana: uusilla vareilla se lapaisee AA:n suoraan
+   kuvion paalla (grey 5,45-5,70:1, blue 5,03-5,26:1 koko ruudun
+   korkeudella), joten levy oli siina turha. */
 .cover .svc-txt,
-.cover .shead,
 .cover .statband {
-  background: rgba(255,255,255,.95);
+  background: rgba(255,255,255,.72);
   -webkit-backdrop-filter: blur(18px) saturate(170%);
   backdrop-filter: blur(18px) saturate(170%);
   border: 1px solid rgba(255,255,255,.55);
@@ -2943,19 +2956,6 @@ footer .base { padding-top: 18px }
 .cover .svc-txt {
   padding: 28px 20px;
   margin: -29px -21px;
-}
-
-/* Levy koko .sheadille eika pelkalle .subille: h2 ja alaotsikko ovat
-   yksi typografinen lohko, ja pelkan alaotsikon takana levy nayttaisi
-   irralliselta suikaleelta otsikon alla.
-   max-width kompensoi paddingin ja reunan (2 x 21px), muuten border-box
-   kaventaisi tekstipalstan ja rivit katkeaisivat eri kohdista.
-   Alamarginaalista vahennetaan 29px, koska paddingista ja reunasta
-   tulee jo saman verran tyhjaa tekstin alle. */
-.cover .shead {
-  max-width: calc(600px + 42px);
-  padding: 28px 20px;
-  margin: -29px -21px calc(var(--space-shead-gap) - 29px);
 }
 
 /* Lukukaistan levy vedetaan koko .statbandin alle, ei jokaisen

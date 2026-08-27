@@ -8,7 +8,7 @@ export default function Services() {
       <div className="wrap">
         <div className="shead rv" data-par="0.03">
           <span className="kick">Palvelut</span>
-          <h2 className="big">Kolme tapaa erottua. Yksi tiimi.</h2>
+          <h2 className="big">Neljä tapaa erottua. Yksi tiimi.</h2>
           <p className="sub">
             Video tuo huomion, sivusto tekee kaupan, tapahtuma sinetöi suhteen. Rakennamme koko
             polun.

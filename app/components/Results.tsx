@@ -47,8 +47,8 @@ export default function Results() {
         <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}>
           <defs>
             <linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#0071e3" stopOpacity=".18" />
-              <stop offset="100%" stopColor="#0071e3" stopOpacity="0" />
+              <stop offset="0%" stopColor="#0064cc" stopOpacity=".18" />
+              <stop offset="100%" stopColor="#0064cc" stopOpacity="0" />
             </linearGradient>
           </defs>
         </svg>
