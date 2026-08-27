@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     ON-PAGE SEO · pääavainsana: "töihin WS Medialle" / "avoin hakemus"
+     tuki: freelancer video, videokuvaaja freelancer, editoija,
+     graafinen suunnittelija freelance, hakukoneoptimoija,
+     mainostoimisto rekrytointi, avoin työhakemus, alihankkija
+     ============================================================ -->
+<title>Töihin WS Medialle | Avoin haku freelancereille ja tekijöille</title>
+<meta name="description" content="Haemme jatkuvasti freelancereita ja osaajia: videokuvaajat, editoijat, kehittäjät, hakukoneoptimoijat, graafiset suunnittelijat ja asentajat. Toimeksianto tai työsuhde, koko Suomi.">
+<link rel="canonical" href="https://wsmedia.fi/toihin-meille">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="author" content="WS Media Oy">
+<meta name="geo.region" content="FI-18">
+<meta name="geo.placename" content="Espoo">
+<meta name="theme-color" content="#0071e3">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fi_FI">
+<meta property="og:site_name" content="WS Media">
+<meta property="og:url" content="https://wsmedia.fi/toihin-meille">
+<meta property="og:title" content="Töihin WS Medialle | Avoin haku freelancereille ja tekijöille">
+<meta property="og:description" content="Jatkuva avoin haku: video, verkko, graafinen suunnittelu ja tuotanto. Freelancerina laskutuksella tai työsuhteessa. Vastaamme viikon sisällä.">
+<meta property="og:image" content="https://wsmedia.fi/og/toihin-meille.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Töihin WS Medialle | Avoin haku">
+<meta name="twitter:description" content="Freelancerit ja taitavat ammattilaiset tervetulleita. Toimeksianto tai työsuhde.">
+<meta name="twitter:image" content="https://wsmedia.fi/og/toihin-meille.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+  :root{
+    --bg:#ffffff; --ink:#1d1d1f; --grey:#6e6e73; --hair:#e8e8ed;
+    --blue:#0071e3; --blue-d:#0062c4; --blue-tint:#f0f6ff; --dark:#0d0d10;
+    --brand:#0071e3; /* asiakkaan ilmeen väri havainnekuvissa — vaihtuu animaatiossa */
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Instrument Sans','Helvetica Neue',sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;
+    letter-spacing:-0.011em;overflow-x:hidden;
+  }
+  ::selection{background:rgba(0,113,227,.15)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .wrap-n{max-width:820px;margin:0 auto;padding:0 24px}
+  #prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:100;background:var(--blue)}
+
+  .backdrop{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  .backdrop svg{position:absolute;inset:0;width:100%;height:100%}
+  #bdGrid,#bdRing,#bdWave{will-change:transform}
+  .backdrop::after{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(70% 60% at 50% 42%,rgba(255,255,255,.92) 30%,rgba(255,255,255,.55) 65%,rgba(255,255,255,.15) 100%),
+      linear-gradient(to bottom,rgba(255,255,255,.6),transparent 20%,transparent 80%,rgba(255,255,255,.7));
+  }
+  header,section,footer,nav,.marq{position:relative;z-index:1}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;background:rgba(255,255,255,.75);
+    backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid transparent;transition:border-color .3s;
+  }
+  nav.scrolled{border-bottom-color:rgba(0,0,0,.08)}
+  .navin{max-width:1080px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-size:15px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);text-decoration:none}
+  .navlinks{display:flex;gap:20px;align-items:center}
+  .navlinks a{font-size:12.5px;color:var(--ink);text-decoration:none;opacity:.8;transition:opacity .2s;white-space:nowrap}
+  .navlinks a:hover{opacity:1}
+  .navlinks a[aria-current="page"]{opacity:1;color:var(--blue);font-weight:600}
+  .navcta{font-size:12.5px;color:#fff !important;background:var(--blue);padding:7px 15px;border-radius:980px;opacity:1 !important}
+  .navcta:hover{background:var(--blue-d)}
+  @media(max-width:960px){.navlinks a:not(.navcta){display:none}}
+
+  h1{font-size:clamp(36px,5.4vw,62px);font-weight:700;letter-spacing:-0.03em;line-height:1.05}
+  h2{font-size:clamp(28px,4.2vw,44px);font-weight:700;letter-spacing:-0.024em;line-height:1.09}
+  h3{letter-spacing:-0.018em}
+  .sub{font-size:clamp(17px,2vw,21px);color:var(--grey);font-weight:400;letter-spacing:-0.014em;line-height:1.45}
+  .accent{color:var(--blue)}
+  .kick{font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);display:block}
+  .lead{font-size:17px;color:var(--grey);max-width:64ch;margin-top:16px}
+  .lead strong{color:var(--ink);font-weight:600}
+  .lead a{color:var(--blue);text-decoration:none}
+  .lead a:hover{text-decoration:underline}
+
+  .btn{
+    display:inline-block;background:var(--blue);color:#fff;font-size:15px;font-weight:500;
+    text-decoration:none;padding:12px 24px;border-radius:980px;border:none;cursor:pointer;
+    transition:background .2s, transform .25s, box-shadow .25s;will-change:transform;
+  }
+  .btn:hover{background:var(--blue-d);box-shadow:0 8px 24px rgba(0,113,227,.28)}
+  .btn.alt{background:transparent;color:var(--blue);border:1px solid var(--hair)}
+  .btn.alt:hover{background:rgba(0,0,0,.03);box-shadow:none}
+  .tlink{font-size:15px;color:var(--blue);text-decoration:none;font-weight:500}
+  .tlink:hover{text-decoration:underline}
+  .tlink::after{content:" ›"}
+
+  .crumbs{padding:14px 0 0;font-size:12.5px;color:var(--grey)}
+  .crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .crumbs a{color:var(--grey);text-decoration:none}
+  .crumbs a:hover{color:var(--ink)}
+  .crumbs li+li::before{content:"›";margin-right:6px;color:#c2c2c8}
+  .crumbs [aria-current]{color:var(--ink)}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;text-align:center;padding:54px 0 64px}
+  .hero .kick{color:var(--grey);letter-spacing:.08em;margin-bottom:18px}
+  .hero h1{max-width:20ch;margin:0 auto;text-wrap:balance}
+  .hero .sub{max-width:58ch;margin:22px auto 0}
+  .heroctas{margin-top:34px;display:flex;gap:26px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .herotrust{margin-top:22px;font-size:12.5px;color:var(--grey);display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+  .herotrust span{display:inline-flex;align-items:center;gap:6px}
+  .herotrust i{width:5px;height:5px;border-radius:50%;background:var(--blue);font-style:normal}
+  .li{opacity:0;transform:translateY(22px);animation:liin 1s cubic-bezier(.2,.6,.2,1) forwards}
+  .li.d1{animation-delay:.05s}.li.d2{animation-delay:.18s}.li.d3{animation-delay:.34s}.li.d4{animation-delay:.5s}.li.d5{animation-delay:.68s}
+  @keyframes liin{to{opacity:1;transform:none}}
+
+  /* ---------- marquee ---------- */
+  .marq{margin-top:70px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);overflow:hidden;background:rgba(255,255,255,.6);backdrop-filter:blur(6px)}
+  .marq .track{display:flex;width:max-content;animation:marq 32s linear infinite}
+  .marq:hover .track{animation-play-state:paused}
+  @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .marq span{display:flex;align-items:center;gap:26px;padding:16px 26px 16px 0;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--grey);white-space:nowrap}
+  .marq b{color:var(--blue);font-weight:700}
+
+  /* ============ OSIOT ============ */
+  section{padding:110px 0}
+  @media(max-width:760px){section{padding:66px 0 !important}.shead{margin-bottom:32px}}
+  .shead{margin-bottom:52px;max-width:660px}
+  .shead h2{margin-top:12px}
+  .shead .sub{margin-top:14px;font-size:18px}
+  .shead.center{margin-left:auto;margin-right:auto;text-align:center}
+  .hsplit{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:56px;align-items:end;margin-bottom:54px}
+  @media(max-width:820px){.hsplit{grid-template-columns:1fr;gap:14px;align-items:start;margin-bottom:32px}}
+  .hsplit .sub{font-size:17px;padding-bottom:6px}
+  .hsplit h2{margin-top:12px}
+  .pricenote{text-align:center;font-size:12.5px;color:var(--grey);margin-top:24px;max-width:76ch;margin-left:auto;margin-right:auto;line-height:1.6}
+
+  /* ---------- kaksi paneelia ---------- */
+  .twopanel{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.twopanel{grid-template-columns:1fr}}
+  .pan{border-radius:24px;padding:38px 34px;border:1px solid var(--hair);background:#fff}
+  @media(max-width:560px){.pan{padding:28px 24px}}
+  .pan.dark{background:var(--dark);color:#f5f5f7;border-color:var(--dark)}
+  .pan h3{font-size:12.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:18px}
+  .pan.dark h3{color:#6fb1ff}
+  .pan ul{list-style:none}
+  .pan li{font-size:14.5px;padding:11px 0 11px 26px;position:relative;line-height:1.5;border-bottom:1px solid var(--hair)}
+  .pan li:last-child{border-bottom:none}
+  .pan.dark li{border-color:rgba(255,255,255,.1);color:#d6d6da}
+  .pan li::before{position:absolute;left:0;top:11px;font-weight:700;font-size:13px}
+  .pan.yes li::before{content:"+";color:var(--blue)}
+  .pan.dark li::before{content:"–";color:#6e6e73}
+
+  /* ---------- FAQ / prose / blogi / lomake ---------- */
+  .faqgroup{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);margin:36px 0 0;padding-bottom:8px;border-bottom:1px solid var(--hair)}
+  .faqgroup:first-child{margin-top:0}
+  .faq{max-width:820px;margin:0 auto}
+  .faq details{border-bottom:1px solid var(--hair)}
+  .faq summary{list-style:none;cursor:pointer;padding:16px 40px 16px 0;position:relative;font-size:15.5px;font-weight:600;letter-spacing:-0.014em;line-height:1.35}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"";position:absolute;right:8px;top:50%;width:9px;height:9px;border-right:1.8px solid var(--grey);border-bottom:1.8px solid var(--grey);transform:translateY(-70%) rotate(45deg);transition:transform .25s}
+  .faq details[open] summary::after{transform:translateY(-30%) rotate(225deg)}
+  .faq summary:hover{color:var(--blue)}
+  .faq .a{padding:0 36px 20px 0;font-size:14.5px;color:var(--grey);line-height:1.6}
+  .faq .a a{color:var(--blue);text-decoration:none}
+  .prose{max-width:68ch;margin:0 auto}
+  .prose h3{font-size:17.5px;font-weight:600;margin:30px 0 10px}
+  .prose h3:first-child{margin-top:0}
+  .prose p{font-size:15.5px;color:var(--grey);line-height:1.7;margin-bottom:14px}
+  .prose strong{color:var(--ink);font-weight:600}
+  .prose a{color:var(--blue);text-decoration:none}
+  .prose a:hover{text-decoration:underline}
+  .postrows{border-top:1px solid var(--hair)}
+  .postrows a{display:grid;grid-template-columns:150px 1fr auto;gap:20px;align-items:baseline;padding:17px 0;border-bottom:1px solid var(--hair);text-decoration:none;color:inherit;transition:color .2s}
+  .postrows a:hover{color:var(--blue)}
+  .postrows span{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--grey)}
+  .postrows b{font-size:15.5px;font-weight:600;letter-spacing:-0.012em}
+  .postrows i{font-style:normal;color:var(--blue);font-size:15px}
+  @media(max-width:640px){.postrows a{grid-template-columns:1fr;gap:5px;padding:15px 0}.postrows i{display:none}}
+  .cities{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+  .cities a{font-size:13px;color:var(--ink);text-decoration:none;border:1px solid var(--hair);border-radius:980px;padding:8px 15px;transition:border-color .2s,color .2s,background .2s;background:#fff}
+  .cities a:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-tint)}
+  .card{background:#fff;border:1px solid var(--hair);box-shadow:0 24px 60px -24px rgba(29,29,31,.16)}
+  .fcard{max-width:620px;margin:0 auto;padding:44px 40px;border-radius:24px}
+  @media(max-width:640px){.fcard{padding:32px 22px}}
+  .fcard label{display:block;font-size:12.5px;font-weight:600;margin:20px 0 8px}
+  .fcard input[type=text],.fcard input[type=email],.fcard textarea{width:100%;border:1px solid var(--hair);border-radius:10px;padding:13px 15px;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;transition:border-color .2s, box-shadow .2s}
+  .fcard input:focus,.fcard textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(0,113,227,.16)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}}
+  .fcard .btn{width:100%;margin-top:26px;padding:14px}
+  .fnote{text-align:center;font-size:12.5px;color:var(--grey);margin-top:13px}
+
+  .closer{
+    background:var(--dark);color:#f5f5f7;border-radius:28px;max-width:1240px;margin:0 auto;
+    padding:76px 60px;position:relative;overflow:hidden;
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:44px;align-items:center;
+  }
+  @media(max-width:1280px){.closer{margin:0 16px}}
+  @media(max-width:820px){.closer{grid-template-columns:1fr;padding:48px 30px;gap:28px}}
+  .closer::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(44% 60% at 88% 6%,rgba(0,113,227,.3),transparent 68%),radial-gradient(40% 55% at 4% 100%,rgba(100,168,255,.14),transparent 70%)}
+  .closer > *{position:relative}
+  .closer h2{color:#f5f5f7;max-width:17ch}
+  .closer p{color:#a1a1a6;font-size:17px;margin-top:16px;max-width:46ch;line-height:1.55}
+  .closer .btn{background:#fff;color:var(--ink);white-space:nowrap}
+  .closer .btn:hover{background:#f0f0f2;box-shadow:none}
+  .closer .cnote{font-size:12.5px;color:#8a8a90;margin-top:14px;text-align:center}
+  @media(max-width:820px){.closer .cnote{text-align:left}}
+
+  footer{background:rgba(245,245,247,.85);backdrop-filter:blur(8px);border-top:1px solid var(--hair);padding:42px 0 46px;font-size:12px;color:var(--grey)}
+  footer .cols{display:flex;gap:56px;flex-wrap:wrap;padding-bottom:26px;border-bottom:1px solid var(--hair)}
+  footer h4{font-size:12px;color:var(--ink);font-weight:600;margin-bottom:10px}
+  footer a{display:block;color:var(--grey);text-decoration:none;padding:4px 0}
+  footer a:hover{color:var(--ink)}
+  footer .base{padding-top:18px}
+
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+  .rv.on{opacity:1;transform:none}
+  .stagger > *{transition-delay:calc(var(--i,0) * 90ms)}
+  [data-par]{will-change:translate}
+
+  @media(prefers-reduced-motion:reduce){
+    .li,.rv{opacity:1 !important;transform:none !important;animation:none !important;transition:none !important}
+    .marq .track{animation:none !important}
+    .pal span,.bf,.bft,.bfd,.bs{transition:none !important}
+    [data-par]{translate:none !important}
+  }
+
+  /* ============ HERON ROOLIRYPÄS ============ */
+  .cluster{max-width:900px;margin:52px auto 0;padding:0 24px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .rchip{
+    display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--hair);
+    border-radius:980px;padding:10px 17px;font-size:13.5px;font-weight:600;color:var(--ink);
+    box-shadow:0 16px 40px -26px rgba(29,29,31,.35);animation:cfl 7s ease-in-out infinite alternate;
+  }
+  .rchip em{font-style:normal;width:22px;height:22px;border-radius:7px;background:var(--blue-tint);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px}
+  .rchip:nth-child(2){animation-delay:-1s}.rchip:nth-child(3){animation-delay:-2s}
+  .rchip:nth-child(4){animation-delay:-3s}.rchip:nth-child(5){animation-delay:-4s}
+  .rchip:nth-child(6){animation-delay:-5s}.rchip:nth-child(7){animation-delay:-2.5s}
+  .rchip:nth-child(8){animation-delay:-4.5s}
+  @keyframes cfl{from{translate:0 0}to{translate:0 -8px}}
+
+  /* ============ NUMEROITU ISO LISTA ============ */
+  .why{border-top:1px solid var(--hair)}
+  .why > div{
+    display:grid;grid-template-columns:86px minmax(0,1fr);gap:26px;align-items:start;
+    padding:30px 0;border-bottom:1px solid var(--hair);
+  }
+  @media(max-width:700px){.why > div{grid-template-columns:1fr;gap:8px;padding:24px 0}}
+  .why .n{
+    font-size:clamp(34px,4.4vw,52px);font-weight:700;letter-spacing:-.04em;line-height:.9;
+    color:var(--hair);font-variant-numeric:tabular-nums;
+  }
+  .why h3{font-size:19px;font-weight:600;margin-bottom:9px;letter-spacing:-.018em}
+  .why p{font-size:15.5px;color:var(--grey);line-height:1.65;max-width:62ch}
+
+  /* ============ ROOLIKORTIT ============ */
+  .roles{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  @media(max-width:820px){.roles{grid-template-columns:1fr}}
+  .role{
+    border:1px solid var(--hair);border-radius:20px;background:#fff;padding:30px 28px 26px;
+    display:flex;flex-direction:column;transition:transform .4s cubic-bezier(.2,.6,.2,1),box-shadow .4s,border-color .3s;
+  }
+  .role:hover{transform:translateY(-5px);box-shadow:0 30px 70px -34px rgba(29,29,31,.26);border-color:#d8dce4}
+  .role .rk{font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+  .role h3{font-size:20px;font-weight:600;margin-bottom:10px;letter-spacing:-.02em}
+  .role > p{font-size:14.5px;color:var(--grey);line-height:1.6}
+  .role ul{list-style:none;margin-top:18px;border-top:1px solid var(--hair)}
+  .role li{font-size:14px;color:#48484e;padding:9px 0 9px 22px;position:relative;border-bottom:1px solid var(--hair);line-height:1.5}
+  .role li:last-child{border-bottom:none}
+  .role li::before{content:"";position:absolute;left:4px;top:17px;width:5px;height:5px;border-radius:50%;background:var(--blue)}
+  .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+  .tags span{
+    font-size:11.5px;font-weight:500;color:var(--grey);background:#f5f6f9;
+    border-radius:7px;padding:5px 10px;
+  }
+
+  /* ============ KAKSI POLKUA (vaihdin) ============ */
+  .switch{display:inline-flex;background:#f2f3f6;border-radius:980px;padding:4px;gap:4px;margin-bottom:28px}
+  .switch button{
+    font-family:inherit;font-size:14px;font-weight:600;letter-spacing:-.012em;cursor:pointer;
+    background:transparent;border:none;border-radius:980px;padding:10px 22px;color:var(--grey);
+    transition:background .25s,color .25s,box-shadow .25s;
+  }
+  .switch button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(29,29,31,.1)}
+  .path{display:none}
+  .path.on{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;animation:pin .45s cubic-bezier(.2,.6,.2,1)}
+  @media(max-width:820px){.path.on{grid-template-columns:1fr}}
+  @keyframes pin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .pbox{border:1px solid var(--hair);border-radius:20px;padding:28px 26px;background:#fff}
+  .pbox.hl{background:var(--blue-tint);border-color:#dbe9ff}
+  .pbox h3{font-size:12.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
+  .pbox ul{list-style:none}
+  .pbox li{font-size:14.5px;padding:11px 0 11px 24px;position:relative;line-height:1.55;border-bottom:1px solid var(--hair);color:#38383d}
+  .pbox.hl li{border-bottom-color:#dbe9ff}
+  .pbox li:last-child{border-bottom:none}
+  .pbox li::before{content:"✓";position:absolute;left:0;top:12px;color:var(--blue);font-size:12px;font-weight:700}
+  .pbox li strong{color:var(--ink);font-weight:600}
+
+  /* ============ HAKUPROSESSI ============ */
+  .steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:s3}
+  @media(max-width:760px){.steps3{grid-template-columns:1fr}}
+  .s3{border:1px solid var(--hair);border-radius:18px;padding:28px 26px;background:#fff;position:relative}
+  .s3::before{
+    counter-increment:s3;content:counter(s3);
+    display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;
+    background:var(--ink);color:#fff;font-size:13px;font-weight:700;margin-bottom:16px;
+  }
+  .s3 h3{font-size:17px;font-weight:600;margin-bottom:8px}
+  .s3 p{font-size:14px;color:var(--grey);line-height:1.6}
+  .s3 .t{display:inline-block;margin-top:12px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--blue)}
+
+  /* ============ HAKULOMAKE ============ */
+  .rolepick{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin-top:10px}
+  @media(max-width:560px){.rolepick{grid-template-columns:1fr}}
+  .fcard .rp{
+    display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--hair);
+    border-radius:12px;padding:12px 14px;margin:0;cursor:pointer;font-size:14px;font-weight:500;
+    line-height:1.3;transition:border-color .2s,box-shadow .2s;
+  }
+  .fcard .rp:hover{border-color:#c9d6e8}
+  .fcard .rp input{width:17px;height:17px;accent-color:var(--blue);cursor:pointer;flex:none;margin:0}
+  .fcard .rp.on{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,227,.12)}
+  .hint{font-size:12.5px;color:var(--grey);margin-top:8px;line-height:1.5}
+</style>
+<noscript><style>.rv,.li{opacity:1 !important;transform:none !important;animation:none !important}.path{display:grid !important}</style></noscript>
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+    <g id="bdGrid" stroke="#e4e4e9" stroke-width="1">
+      <line x1="0" y1="150" x2="1440" y2="150"/><line x1="0" y1="450" x2="1440" y2="450"/>
+      <line x1="0" y1="750" x2="1440" y2="750"/><line x1="240" y1="0" x2="240" y2="900"/>
+      <line x1="720" y1="0" x2="720" y2="900"/><line x1="1200" y1="0" x2="1200" y2="900"/>
+    </g>
+    <g stroke="#c7c7ce" stroke-width="1.3">
+      <path d="M 90 90 L 90 340 L 340 340"/><path d="M 90 90 L 340 90"/>
+      <circle cx="90" cy="90" r="3" fill="#c7c7ce" stroke="none"/>
+      <circle cx="340" cy="340" r="3" fill="#c7c7ce" stroke="none"/>
+      <path d="M 140 210 L 260 210" stroke-dasharray="3 5"/>
+    </g>
+    <g id="bdRing" transform="translate(770,110)">
+      <circle cx="0" cy="0" r="46" stroke="#d6d6dc" stroke-width="1.2" stroke-dasharray="5 9"/>
+      <circle cx="0" cy="-46" r="3" fill="#bcbcc4"/>
+    </g>
+    <path id="bdWave" d="M 0 500 C 260 470, 520 540, 780 500 S 1200 460, 1440 505" stroke="#dedee3" stroke-width="1"/>
+  </svg>
+</div>
+
+<div id="prog"></div>
+
+<nav id="nav">
+  <div class="navin">
+    <a class="logo" href="/">WS Media</a>
+    <div class="navlinks">
+      <a href="/lyhytvideot">Lyhytvideot</a>
+      <a href="/verkkosivut">Verkkosivut</a>
+      <a href="/hakukoneoptimointi">Hakukoneoptimointi</a>
+      <a href="/graafinen-suunnittelu">Graafinen suunnittelu</a>
+      <a href="/toihin-meille" aria-current="page">Töihin meille</a>
+      <a class="navcta" href="#hakemus">Jätä hakemus</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap crumbs">
+  <nav aria-label="Murupolku">
+    <ol>
+      <li><a href="/">Etusivu</a></li>
+      <li aria-current="page">Töihin meille</li>
+    </ol>
+  </nav>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <p class="kick li d1">Avoin haku</p>
+    <h1 class="li d2" data-par="0.05">Töihin <span class="accent">WS Medialle</span></h1>
+    <p class="sub li d3" data-par="0.035">Teemme lyhytvideoita, verkkosivuja, hakukoneoptimointia ja yritysilmeitä — usein samalle asiakkaalle samaan aikaan. Siksi etsimme jatkuvasti tekijöitä, jotka osaavat oman kapean alansa erittäin hyvin. Töitä voi tehdä freelancerina laskutuksella tai työsuhteessa.</p>
+    <div class="heroctas li d4" data-par="0.025">
+      <a class="btn mag" href="#hakemus">Jätä avoin hakemus</a>
+      <a class="tlink" href="#roolit">Katso keitä etsimme</a>
+    </div>
+    <p class="herotrust li d4">
+      <span><i></i>Toimeksianto tai työsuhde</span>
+      <span><i></i>Etätyö, koko Suomi</span>
+      <span><i></i>Vastaamme viikon sisällä</span>
+    </p>
+  </div>
+
+  <div class="cluster li d5" data-par="-0.02" aria-label="Rooleja joihin haemme tekijöitä">
+    <span class="rchip"><em>▶</em>Videokuvaaja</span>
+    <span class="rchip"><em>✂</em>Editoija</span>
+    <span class="rchip"><em>✦</em>Motion designer</span>
+    <span class="rchip"><em>&lt;/&gt;</em>Next.js-kehittäjä</span>
+    <span class="rchip"><em>W</em>WordPress-kehittäjä</span>
+    <span class="rchip"><em>↑</em>Hakukoneoptimoija</span>
+    <span class="rchip"><em>◆</em>Graafinen suunnittelija</span>
+    <span class="rchip"><em>▬</em>Teippausasentaja</span>
+  </div>
+</header>
+
+<div class="marq" aria-hidden="true">
+  <div class="track">
+    <span>Videokuvaaja <b>·</b> Editoija <b>·</b> Motion designer <b>·</b> Next.js-kehittäjä <b>·</b> WordPress-kehittäjä <b>·</b> Hakukoneoptimoija <b>·</b> Sisällöntuottaja <b>·</b> Graafinen suunnittelija <b>·</b> Teippausasentaja <b>·</b> Painotalo <b>·</b>&nbsp;</span>
+    <span>Videokuvaaja <b>·</b> Editoija <b>·</b> Motion designer <b>·</b> Next.js-kehittäjä <b>·</b> WordPress-kehittäjä <b>·</b> Hakukoneoptimoija <b>·</b> Sisällöntuottaja <b>·</b> Graafinen suunnittelija <b>·</b> Teippausasentaja <b>·</b> Painotalo <b>·</b>&nbsp;</span>
+  </div>
+</div>
+
+<!-- ============ MIKSI MEILLE ============ -->
+<section id="miksi" style="padding-top:96px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Miksi meille</span>
+        <h2>Neljä syytä, miksi tekijät jäävät meille pidemmäksi aikaa</h2>
+      </div>
+      <p class="sub">Emme ole suurin emmekä tunnetuin. Nämä neljä asiaa saamme kuitenkin kuntoon, ja ne ovat käytännössä ne, joita freelancerit alalta kaipaavat.</p>
+    </div>
+
+    <div class="why rv">
+      <div>
+        <span class="n">01</span>
+        <div>
+          <h3>Työ ei lopu yhteen kanavaan</h3>
+          <p>Sama asiakas tarvitsee usein videot, verkkosivuston, hakukoneoptimoinnin ja teippaukset. Kun yksi projekti päättyy, seuraava alkaa yleensä samasta talosta — sinun ei tarvitse etsiä uutta toimeksiantoa joka kuukausi.</p>
+        </div>
+      </div>
+      <div>
+        <span class="n">02</span>
+        <div>
+          <h3>Teet sitä mitä osaat parhaiten</h3>
+          <p>Emme odota, että sama ihminen kuvaa, koodaa ja piirtää. Etsimme kapean alan osaajia ja kokoamme tiimin projektin mukaan. Jos olet erinomainen editoija, sinun ei tarvitse opetella hakukoneoptimointia.</p>
+        </div>
+      </div>
+      <div>
+        <span class="n">03</span>
+        <div>
+          <h3>Briefit ovat valmiiksi mietittyjä</h3>
+          <p>Saat käyttöösi tavoitteen, aikataulun, tekniset vaatimukset ja tarvittavan aineiston. Emme lähetä toimeksiantoa, jonka sisältö selviää vasta kolmannessa puhelussa.</p>
+        </div>
+      </div>
+      <div>
+        <span class="n">04</span>
+        <div>
+          <h3>Maksamme ajallaan</h3>
+          <p>Laskun maksuaika on 14 päivää eikä sitä venytetä. Sovittu hinta on se hinta, joka maksetaan — myös silloin kun projekti venyy asiakkaan takia.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KEITÄ ETSIMME ============ -->
+<section id="roolit" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead rv" data-par="0.03">
+      <span class="kick">Keitä etsimme</span>
+      <h2>Neljä osaamisaluetta</h2>
+      <p class="sub">Haemme näihin jatkuvasti. Jos oma osaamisesi osuu johonkin näistä edes osittain, kannattaa jättää hakemus.</p>
+    </div>
+
+    <div class="roles stagger">
+      <div class="role rv" style="--i:0">
+        <p class="rk">Video</p>
+        <h3>Kuvaajat, editoijat ja motion designerit</h3>
+        <p>Lyhytvideotuotanto on suurin yksittäinen palvelumme. Kuvaamme asiakkaiden tiloissa ja tuotamme jatkuvia videosarjoja kuukaudesta toiseen.</p>
+        <ul>
+          <li>Lyhytvideoiden kuvaus asiakkaan tiloissa</li>
+          <li>Editointi, tekstitys ja alustakohtaiset versiot</li>
+          <li>Motion graphics ja animoidut grafiikat</li>
+          <li>Tapahtuma- ja yritysvideokuvaus</li>
+        </ul>
+        <div class="tags">
+          <span>Premiere Pro</span><span>After Effects</span><span>DaVinci Resolve</span>
+          <span>9:16</span><span>Tekstitys</span><span>Värimäärittely</span>
+        </div>
+      </div>
+
+      <div class="role rv" style="--i:1">
+        <p class="rk">Verkko ja näkyvyys</p>
+        <h3>Kehittäjät, hakukoneoptimoijat ja sisällöntuottajat</h3>
+        <p>Rakennamme verkkosivustoja käsin koodattuna ja WordPressillä, ja teemme niille jatkuvaa hakukoneoptimointia ja sisältöä.</p>
+        <ul>
+          <li>Next.js- ja React-toteutukset</li>
+          <li>WordPress-teemat, lisäosat ja ylläpito</li>
+          <li>Tekninen hakukoneoptimointi ja auditoinnit</li>
+          <li>Hakukoneoptimoitu sisällöntuotanto suomeksi</li>
+        </ul>
+        <div class="tags">
+          <span>Next.js</span><span>React</span><span>WordPress</span>
+          <span>Search Console</span><span>Core Web Vitals</span><span>Schema.org</span>
+        </div>
+      </div>
+
+      <div class="role rv" style="--i:2">
+        <p class="rk">Graafinen suunnittelu</p>
+        <h3>Graafiset suunnittelijat</h3>
+        <p>Suunnittelemme yritysilmeitä ja viemme ne kaikille pinnoille: painotuotteisiin, ajoneuvoteippauksiin ja julkisivuihin.</p>
+        <ul>
+          <li>Logot, yritysilmeet ja graafiset ohjeistot</li>
+          <li>Painovalmiit aineistot ja taitto</li>
+          <li>Ajoneuvo- ja julkisivuteippausten suunnittelu</li>
+          <li>Some- ja mainosmateriaalien pohjat</li>
+        </ul>
+        <div class="tags">
+          <span>Illustrator</span><span>InDesign</span><span>Figma</span>
+          <span>CMYK</span><span>Vektorointi</span><span>Painoaineistot</span>
+        </div>
+      </div>
+
+      <div class="role rv" style="--i:3">
+        <p class="rk">Tuotanto ja kumppanit</p>
+        <h3>Asentajat, painotalot ja materiaalitoimittajat</h3>
+        <p>Emme teippaa emmekä paina itse, vaan käytämme alihankintaverkostoa. Etsimme luotettavia kumppaneita eri paikkakunnilta.</p>
+        <ul>
+          <li>Ajoneuvo- ja julkisivuteippausten asennus</li>
+          <li>Digipainot ja suurkuvatulostus</li>
+          <li>Valomainosten valmistus ja asennus</li>
+          <li>Tapahtumatekniikka ja rakenteet</li>
+        </ul>
+        <div class="tags">
+          <span>Koko Suomi</span><span>Tarrakalvot</span><span>Suurkuva</span>
+          <span>Valomainokset</span><span>Asennus</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LOPPU-CTA ============ -->
+<section style="padding-top:20px">
+  <div class="closer rv">
+    <div>
+      <h2>Näytä mitä olet <span style="color:#6fb1ff">tehnyt.</span></h2>
+      <p>Yksi linkki työnäytteisiin riittää. Luemme jokaisen hakemuksen ja vastaamme viikon sisällä.</p>
+    </div>
+    <div>
+      <a class="btn mag" href="#hakemus">Jätä avoin hakemus</a>
+      <p class="cnote">Vastaus viikon sisällä</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TYÖMALLI ============ -->
+<section id="tyomalli" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead rv" data-par="0.03">
+      <span class="kick">Työmalli</span>
+      <h2>Freelancerina vai työsuhteessa?</h2>
+      <p class="sub">Molemmat käyvät. Suurin osa tekijöistämme laskuttaa toimeksiannoista, mutta hyvälle tekijälle voi järjestyä myös vakituinen paikka.</p>
+    </div>
+
+    <div class="rv">
+      <div class="switch" role="tablist" aria-label="Työmallin valinta">
+        <button role="tab" id="sw1" aria-controls="pa1" aria-selected="true">Freelancerina</button>
+        <button role="tab" id="sw2" aria-controls="pa2" aria-selected="false">Työsuhteessa</button>
+      </div>
+
+      <div class="path on" id="pa1" role="tabpanel" aria-labelledby="sw1">
+        <div class="pbox hl">
+          <h3>Sinä</h3>
+          <ul>
+            <li>Laskutat tehdystä työstä — <strong>kevytyrittäjyys käy</strong>, y-tunnusta ei tarvita</li>
+            <li>Sovimme hinnan aina ennen toimeksiannon aloittamista</li>
+            <li>Valitset itse mitkä keikat otat vastaan</li>
+            <li>Työskentelet omilla välineilläsi ja omassa aikataulussasi</li>
+            <li>Maksuaika laskulle on 14 päivää</li>
+          </ul>
+        </div>
+        <div class="pbox">
+          <h3>Me</h3>
+          <ul>
+            <li>Toimitamme valmiiksi mietityn briefin ja tarvittavan aineiston</li>
+            <li>Annamme suoran yhteyshenkilön, ei ketjutettua viestintää</li>
+            <li>Tarjoamme jatkuvia toimeksiantoja, emme yksittäisiä keikkoja</li>
+            <li>Kerromme palautteen siitä, miten työ meni asiakkaalla</li>
+            <li>Emme kilpailuta samaa työtä viidellä tekijällä</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="path" id="pa2" role="tabpanel" aria-labelledby="sw2">
+        <div class="pbox hl">
+          <h3>Sinä</h3>
+          <ul>
+            <li>Kuukausipalkka ja työterveyshuolto</li>
+            <li>Työvälineet ja ohjelmistolisenssit talon puolesta</li>
+            <li>Etätyö tai toimisto Espoossa — sinä valitset</li>
+            <li>Selkeä rooli, ei kaikkea kaikille</li>
+          </ul>
+        </div>
+        <div class="pbox">
+          <h3>Me</h3>
+          <ul>
+            <li>Vakituinen paikka kasvavassa yrityksessä</li>
+            <li>Mahdollisuus vaikuttaa siihen, mitä ja miten tehdään</li>
+            <li>Koulutus ja aika oman osaamisen kehittämiseen</li>
+            <li>Ei mikromanagerointia — vastaat omasta työstäsi</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="pricenote rv" style="text-align:left;margin-left:0">Aloitamme lähes aina toimeksiannoilla, koska se on molemmille pienin riski. Työsuhteesta keskustellaan siinä vaiheessa, kun yhteistyötä on takana muutama projekti.</p>
+  </div>
+</section>
+
+<!-- ============ HAKUPROSESSI ============ -->
+<section id="prosessi" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Näin haku etenee</span>
+      <h2>Kolme vaihetta, ei kahdeksan</h2>
+      <p class="sub">Emme järjestä persoonallisuustestejä emmekä neljää haastattelukierrosta. Työnäyte kertoo enemmän.</p>
+    </div>
+
+    <div class="steps3 stagger rv">
+      <div class="s3" style="--i:0">
+        <h3>Lähetä hakemus</h3>
+        <p>Täytä lomake ja liitä linkki työnäytteisiin. Ansioluetteloa ei tarvita — portfolio, showreel tai GitHub riittää.</p>
+        <span class="t">5 minuuttia</span>
+      </div>
+      <div class="s3" style="--i:1">
+        <h3>Lyhyt puhelu</h3>
+        <p>Käymme läpi mitä osaat, mitä haluat tehdä ja millä hinnalla. Kerromme rehellisesti, onko meillä sinulle töitä juuri nyt.</p>
+        <span class="t">Noin 30 minuuttia</span>
+      </div>
+      <div class="s3" style="--i:2">
+        <h3>Ensimmäinen toimeksianto</h3>
+        <p>Aloitamme pienellä ja selkeärajaisella työllä. Jos se sujuu molemmin puolin, jatkoa tulee ilman erillistä hakuprosessia.</p>
+        <span class="t">Sovitusti</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ODOTUKSET ============ -->
+<section id="odotukset" style="padding-top:20px">
+  <div class="wrap">
+    <div class="hsplit rv">
+      <div>
+        <span class="kick">Rehellisesti</span>
+        <h2>Mitä odotamme — ja mitä emme vaadi</h2>
+      </div>
+      <p class="sub">Nämä kannattaa lukea ennen hakemista. Ne säästävät molempien aikaa.</p>
+    </div>
+    <div class="twopanel stagger">
+      <div class="pan yes rv" style="--i:0">
+        <h3>Odotamme</h3>
+        <ul>
+          <li>Että osaat oman alasi hyvin — yksi asia erittäin hyvin on parempi kuin viisi keskinkertaisesti</li>
+          <li>Että vastaat viesteihin arkipäivän sisällä</li>
+          <li>Että kerrot ajoissa, jos aikataulu ei pidä</li>
+          <li>Että työnäytteet ovat sinun omaa työtäsi</li>
+          <li>Suomen kielen taitoa, koska asiakastyö tehdään suomeksi</li>
+        </ul>
+      </div>
+      <div class="pan dark rv" style="--i:1">
+        <h3>Emme vaadi</h3>
+        <ul>
+          <li>Tutkintoa. Portfolio ratkaisee, ei paperi.</li>
+          <li>Kokopäiväistä sitoutumista — yksikin keikka kuukaudessa käy</li>
+          <li>Että asut pääkaupunkiseudulla. Työ tehdään etänä, kuvaukset ja asennukset paikan päällä.</li>
+          <li>Että osaat kaikkea. Emme etsi yleismiehiä.</li>
+          <li>Valmista y-tunnusta — kevytyrittäjyys riittää</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEO-TEKSTI ============ -->
+<section id="tyonkuva" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Mitä työ käytännössä on</span>
+      <h2>Freelancerina mainosalan toimeksiannoissa</h2>
+    </div>
+    <div class="prose rv">
+      <p>WS Media on espoolainen mainostoimisto, jonka asiakkaat ovat pääosin pieniä ja keskisuuria yrityksiä: rakennus- ja LVI-alan yrityksiä, terveys- ja hyvinvointipalveluita, erikoisliikkeitä ja ammattipalveluita. Suurin osa asiakkuuksista on jatkuvia kuukausisopimuksia, ei kertaluonteisia kampanjoita. Käytännössä se tarkoittaa, että toimeksiantoja tulee samalta asiakkaalta uudelleen kuukaudesta toiseen.</p>
+
+      <h3>Videotuotanto</h3>
+      <p>Suurin osa toimeksiannoista liittyy <a href="/lyhytvideot">lyhytvideoihin</a>: kuvauspäivä asiakkaan tiloissa, ja siitä editoidaan useita videoita eri kanaviin pystymuodossa. Haemme sekä kuvaajia että editoijia — samaa ihmistä ei tarvita molempiin. Motion designerille on työtä animoiduissa grafiikoissa ja tekstityksissä.</p>
+
+      <h3>Verkkosivut ja hakukoneoptimointi</h3>
+      <p>Rakennamme <a href="/verkkosivut">verkkosivuja yrityksille</a> sekä käsin koodattuna että WordPressillä, ja teemme niille jatkuvaa <a href="/hakukoneoptimointi">hakukoneoptimointia</a>. Kehittäjälle työ on selkeärajaista: valmis suunnitelma, tekninen määrittely ja tavoitteet sivun latausnopeudelle. Hakukoneoptimoijalle työ on avainsanatutkimusta, teknisiä auditointeja ja sisällön suunnittelua suomenkielisille hakusanoille.</p>
+
+      <h3>Graafinen suunnittelu ja tuotanto</h3>
+      <p>Suunnittelemme asiakkaille koko <a href="/graafinen-suunnittelu">yritysilmeen</a> ja viemme sen kaikille pinnoille — käyntikorteista ja flyereista ajoneuvoteippauksiin ja julkisivuihin. Emme teippaa emmekä paina itse, joten tarvitsemme rinnallemme asentajia, digipainoja ja materiaalitoimittajia eri paikkakunnilta. Jos yrityksesi tekee suurkuvatulostusta, tarrakalvoasennuksia tai valomainoksia, kannattaa ottaa yhteyttä myös kumppanina.</p>
+
+      <h3>Mistä päin Suomea</h3>
+      <p>Suunnittelu, editointi, koodaus ja sisällöntuotanto tehdään etänä, joten asuinpaikkakunta ei ratkaise. Kuvaukset painottuvat pääkaupunkiseudulle — Espooseen, Helsinkiin ja Vantaalle — mutta teemme työtä koko Suomessa, ja asennuskumppaneita etsimme jokaiselta paikkakunnalta, jossa asiakkaitamme on.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="ukk" style="padding-top:20px">
+  <div class="wrap">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Usein kysyttyä</span>
+      <h2>Usein kysytyt kysymykset</h2>
+    </div>
+    <div class="faq rv">
+      <details>
+        <summary>Onko teillä juuri nyt avoimia työpaikkoja?</summary>
+        <div class="a">Meillä on jatkuva avoin haku. Emme ilmoita erikseen määräaikaisia hakuja, vaan otamme yhteyttä silloin kun sopiva toimeksianto tulee vastaan. Siksi hakemus kannattaa jättää, vaikka juuri nyt ei olisi mitään auki.</div>
+      </details>
+      <details>
+        <summary>Voinko hakea, vaikka olen vasta aloittelija?</summary>
+        <div class="a">Voit. Emme katso työvuosia vaan työnäytteitä. Jos portfoliosta näkee, että osaat asian, kokemuksen pituudella ei ole väliä. Aloitamme silloin pienemmällä toimeksiannolla.</div>
+      </details>
+      <details>
+        <summary>Tarvitseeko minulla olla y-tunnus?</summary>
+        <div class="a">Ei tarvitse. Kevytyrittäjyyspalvelun kautta laskuttaminen käy täysin. Jos et ole vielä laskuttanut kenellekään, neuvomme miten se hoituu.</div>
+      </details>
+      <details>
+        <summary>Missä työ tehdään?</summary>
+        <div class="a">Suunnittelu, editointi, koodaus ja sisällöntuotanto tehdään etänä, joten paikkakunnalla ei ole väliä. Kuvaukset tehdään asiakkaan tiloissa ja teippausten asennukset siellä missä ajoneuvot ja toimitilat ovat.</div>
+      </details>
+      <details>
+        <summary>Kuinka paljon töitä voin odottaa?</summary>
+        <div class="a">Se riippuu osaamisalueesta ja siitä, kuinka paljon otat vastaan. Emme lupaa tiettyä määrää etukäteen. Videopuolella toimeksiantoja on eniten, koska useimmat asiakkuudet ovat jatkuvia kuukausisopimuksia.</div>
+      </details>
+      <details>
+        <summary>Miten hinnoittelu toimii freelancerina?</summary>
+        <div class="a">Kerrot oman tuntihintasi tai projektihintasi, ja sovimme hinnan ennen jokaisen toimeksiannon aloittamista. Emme tingi jälkikäteen emmekä pyydä tekemään lisätyötä samalla hinnalla.</div>
+      </details>
+      <details>
+        <summary>Milloin lasku maksetaan?</summary>
+        <div class="a">Maksuaika on 14 päivää laskun päiväyksestä. Jos toimeksianto on pitkä, sovimme osalaskutuksesta etukäteen.</div>
+      </details>
+      <details>
+        <summary>Millaisia työnäytteitä odotatte?</summary>
+        <div class="a">Sellaisia, jotka olet itse tehnyt. Yksi hyvin tehty työ kertoo enemmän kuin kymmenen keskinkertaista. Kerro myös lyhyesti, mikä osuus työstä oli sinun, jos se on tehty tiimissä.</div>
+      </details>
+      <details>
+        <summary>Voinko tehdä töitä oman päivätyöni ohella?</summary>
+        <div class="a">Voit, ja moni tekeekin. Toimeksiannot sovitaan aina erikseen, joten voit ottaa vastaan sen verran kuin kalenteriisi mahtuu.</div>
+      </details>
+      <details>
+        <summary>Milloin kuulen hakemuksestani?</summary>
+        <div class="a">Vastaamme viikon sisällä — myös silloin kun vastaus on ei. Jos sopivaa toimeksiantoa ei ole heti, säilytämme hakemuksen ja otamme yhteyttä myöhemmin.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HAKEMUS ============ -->
+<section id="hakemus" style="padding-top:20px">
+  <div class="wrap-n">
+    <div class="shead center rv" data-par="0.03">
+      <span class="kick">Avoin hakemus</span>
+      <h2>Kerro mitä osaat</h2>
+      <p class="sub">Hakemus vie viisi minuuttia. Luemme jokaisen ja vastaamme viikon sisällä myös silloin, kun vastaus on ei.</p>
+    </div>
+    <div class="card fcard rv" data-par="0.02">
+      <div class="row2">
+        <div>
+          <label for="nimi">Nimi</label>
+          <input type="text" id="nimi" autocomplete="name">
+        </div>
+        <div>
+          <label for="mail">Sähköposti</label>
+          <input type="email" id="mail" autocomplete="email">
+        </div>
+        <div>
+          <label for="puh">Puhelinnumero</label>
+          <input type="text" id="puh" autocomplete="tel">
+        </div>
+        <div>
+          <label for="pk">Paikkakunta</label>
+          <input type="text" id="pk">
+        </div>
+      </div>
+
+      <label id="roolilab">Mitä osaat? Valitse yksi tai useampi</label>
+      <div class="rolepick" role="group" aria-labelledby="roolilab">
+        <label class="rp"><input type="checkbox" value="Videokuvaus">Videokuvaus</label>
+        <label class="rp"><input type="checkbox" value="Editointi">Editointi</label>
+        <label class="rp"><input type="checkbox" value="Motion graphics">Motion graphics</label>
+        <label class="rp"><input type="checkbox" value="Verkkokehitys">Verkkokehitys</label>
+        <label class="rp"><input type="checkbox" value="Hakukoneoptimointi">Hakukoneoptimointi</label>
+        <label class="rp"><input type="checkbox" value="Sisällöntuotanto">Sisällöntuotanto</label>
+        <label class="rp"><input type="checkbox" value="Graafinen suunnittelu">Graafinen suunnittelu</label>
+        <label class="rp"><input type="checkbox" value="Teippaus tai asennus">Teippaus tai asennus</label>
+      </div>
+
+      <label for="port">Linkki työnäytteisiin</label>
+      <input type="text" id="port" placeholder="Portfolio, showreel, GitHub tai Instagram">
+      <p class="hint">Ansioluetteloa ei tarvita. Yksi linkki riittää.</p>
+
+      <div class="row2">
+        <div>
+          <label for="malli">Toimeksianto vai työsuhde?</label>
+          <input type="text" id="malli" placeholder="Kumpi kiinnostaa">
+        </div>
+        <div>
+          <label for="hinta">Tuntihinta tai palkkatoive</label>
+          <input type="text" id="hinta" placeholder="€/h tai €/kk">
+        </div>
+      </div>
+
+      <label for="lisa">Kerro lyhyesti mitä olet tehnyt ja mitä haluaisit tehdä</label>
+      <textarea id="lisa" rows="4"></textarea>
+
+      <button class="btn" type="button">Lähetä hakemus</button>
+      <p class="fnote">Vastaamme viikon sisällä. Käsittelemme hakemukset luottamuksellisesti.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div style="max-width:280px">
+        <h4>WS Media</h4>
+        <p>Lyhytvideot, verkkosivut, hakukoneoptimointi ja graafinen suunnittelu. Espoo ja Helsinki, koko Suomi.</p>
+      </div>
+      <div>
+        <h4>Palvelut</h4>
+        <a href="/lyhytvideot">Lyhytvideot</a>
+        <a href="/verkkosivut">Verkkosivut yritykselle</a>
+        <a href="/hakukoneoptimointi">Hakukoneoptimointi</a>
+        <a href="/graafinen-suunnittelu">Graafinen suunnittelu</a>
+      </div>
+      <div>
+        <h4>Töihin meille</h4>
+        <a href="/toihin-meille#roolit">Keitä etsimme</a>
+        <a href="/toihin-meille#tyomalli">Freelancerina tai työsuhteessa</a>
+        <a href="/toihin-meille#prosessi">Näin haku etenee</a>
+        <a href="/toihin-meille#hakemus">Jätä hakemus</a>
+      </div>
+      <div>
+        <h4>Yritys</h4>
+        <a href="/tyonaytteet">Työnäytteet</a>
+        <a href="/hinnoittelu">Hinnoittelu</a>
+        <a href="/blogi">Blogi</a>
+        <a href="/yhteystiedot">Ota yhteyttä</a>
+      </div>
+    </div>
+    <div class="base">© 2026 WS Media Oy · Espoo · Y-tunnus 3615084-4</div>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["ProfessionalService", "Organization"],
+      "@id": "https://wsmedia.fi/#organisaatio",
+      "name": "WS Media Oy",
+      "url": "https://wsmedia.fi/",
+      "description": "WS Media Oy tuottaa lyhytvideoita, verkkosivuja, hakukoneoptimointia ja graafista suunnittelua suomalaisille yrityksille.",
+      "vatID": "FI36150844",
+      "taxID": "3615084-4",
+      "areaServed": { "@type": "Country", "name": "Suomi" },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Espoo",
+        "addressRegion": "Uusimaa",
+        "addressCountry": "FI"
+      },
+      "knowsLanguage": ["fi", "en"],
+      "sameAs": []
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://wsmedia.fi/#sivusto",
+      "url": "https://wsmedia.fi/",
+      "name": "WS Media",
+      "inLanguage": "fi-FI",
+      "publisher": { "@id": "https://wsmedia.fi/#organisaatio" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://wsmedia.fi/toihin-meille#sivu",
+      "url": "https://wsmedia.fi/toihin-meille",
+      "name": "Töihin WS Medialle | Avoin haku freelancereille ja tekijöille",
+      "description": "Jatkuva avoin haku: videokuvaajat, editoijat, kehittäjät, hakukoneoptimoijat, graafiset suunnittelijat sekä asentajat ja painotalot. Toimeksianto tai työsuhde.",
+      "inLanguage": "fi-FI",
+      "isPartOf": { "@id": "https://wsmedia.fi/#sivusto" },
+      "about": { "@id": "https://wsmedia.fi/#organisaatio" },
+      "breadcrumb": { "@id": "https://wsmedia.fi/toihin-meille#murupolku" },
+      "significantLink": [
+        "https://wsmedia.fi/lyhytvideot",
+        "https://wsmedia.fi/verkkosivut",
+        "https://wsmedia.fi/hakukoneoptimointi",
+        "https://wsmedia.fi/graafinen-suunnittelu"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://wsmedia.fi/toihin-meille#murupolku",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Etusivu", "item": "https://wsmedia.fi/" },
+        { "@type": "ListItem", "position": 2, "name": "Töihin meille", "item": "https://wsmedia.fi/toihin-meille" }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://wsmedia.fi/toihin-meille#osaamisalueet",
+      "name": "Osaamisalueet, joihin WS Media hakee tekijöitä",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Kuvaajat, editoijat ja motion designerit" },
+        { "@type": "ListItem", "position": 2, "name": "Kehittäjät, hakukoneoptimoijat ja sisällöntuottajat" },
+        { "@type": "ListItem", "position": 3, "name": "Graafiset suunnittelijat" },
+        { "@type": "ListItem", "position": 4, "name": "Asentajat, painotalot ja materiaalitoimittajat" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://wsmedia.fi/toihin-meille#ukk",
+      "isPartOf": { "@id": "https://wsmedia.fi/toihin-meille#sivu" },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Onko teillä juuri nyt avoimia työpaikkoja?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Meillä on jatkuva avoin haku. Emme ilmoita erikseen määräaikaisia hakuja, vaan otamme yhteyttä silloin kun sopiva toimeksianto tulee vastaan. Siksi hakemus kannattaa jättää, vaikka juuri nyt ei olisi mitään auki." }
+        },
+        {
+          "@type": "Question",
+          "name": "Voinko hakea, vaikka olen vasta aloittelija?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Voit. Emme katso työvuosia vaan työnäytteitä. Jos portfoliosta näkee, että osaat asian, kokemuksen pituudella ei ole väliä. Aloitamme silloin pienemmällä toimeksiannolla." }
+        },
+        {
+          "@type": "Question",
+          "name": "Tarvitseeko minulla olla y-tunnus?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Ei tarvitse. Kevytyrittäjyyspalvelun kautta laskuttaminen käy täysin. Jos et ole vielä laskuttanut kenellekään, neuvomme miten se hoituu." }
+        },
+        {
+          "@type": "Question",
+          "name": "Missä työ tehdään?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Suunnittelu, editointi, koodaus ja sisällöntuotanto tehdään etänä, joten paikkakunnalla ei ole väliä. Kuvaukset tehdään asiakkaan tiloissa ja teippausten asennukset siellä missä ajoneuvot ja toimitilat ovat." }
+        },
+        {
+          "@type": "Question",
+          "name": "Kuinka paljon töitä voin odottaa?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Se riippuu osaamisalueesta ja siitä, kuinka paljon otat vastaan. Emme lupaa tiettyä määrää etukäteen. Videopuolella toimeksiantoja on eniten, koska useimmat asiakkuudet ovat jatkuvia kuukausisopimuksia." }
+        },
+        {
+          "@type": "Question",
+          "name": "Miten hinnoittelu toimii freelancerina?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Kerrot oman tuntihintasi tai projektihintasi, ja sovimme hinnan ennen jokaisen toimeksiannon aloittamista. Emme tingi jälkikäteen emmekä pyydä tekemään lisätyötä samalla hinnalla." }
+        },
+        {
+          "@type": "Question",
+          "name": "Milloin lasku maksetaan?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Maksuaika on 14 päivää laskun päiväyksestä. Jos toimeksianto on pitkä, sovimme osalaskutuksesta etukäteen." }
+        },
+        {
+          "@type": "Question",
+          "name": "Millaisia työnäytteitä odotatte?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sellaisia, jotka olet itse tehnyt. Yksi hyvin tehty työ kertoo enemmän kuin kymmenen keskinkertaista. Kerro myös lyhyesti, mikä osuus työstä oli sinun, jos se on tehty tiimissä." }
+        },
+        {
+          "@type": "Question",
+          "name": "Voinko tehdä töitä oman päivätyöni ohella?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Voit, ja moni tekeekin. Toimeksiannot sovitaan aina erikseen, joten voit ottaa vastaan sen verran kuin kalenteriisi mahtuu." }
+        },
+        {
+          "@type": "Question",
+          "name": "Milloin kuulen hakemuksestani?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Vastaamme viikon sisällä — myös silloin kun vastaus on ei. Jos sopivaa toimeksiantoa ei ole heti, säilytämme hakemuksen ja otamme yhteyttä myöhemmin." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(pointer: fine)').matches;
+  const nav = document.getElementById('nav'), prog = document.getElementById('prog');
+
+  /* ---------- parallaksi, taustakuvio, lukupalkki ---------- */
+  const bdGrid = document.getElementById('bdGrid');
+  const bdRing = document.getElementById('bdRing');
+  const bdWave = document.getElementById('bdWave');
+  const pars = [...document.querySelectorAll('[data-par]')];
+  let ticking = false;
+  const onScroll = ()=>{
+    const vh = innerHeight, h = document.documentElement, sc = scrollY;
+    pars.forEach(el=>{
+      const sp = parseFloat(el.dataset.par);
+      const r = el.getBoundingClientRect();
+      const mid = r.top + r.height/2 - vh/2;
+      el.style.translate = `0 ${(-mid * sp).toFixed(1)}px`;
+    });
+    if (bdGrid && !reduce){
+      bdGrid.style.transform = `translate(${(-((sc*0.02)%240)).toFixed(1)}px, ${(-((sc*0.012)%300)).toFixed(1)}px)`;
+      bdRing.style.transform = `translate(770px,110px) rotate(${(sc*0.14).toFixed(1)}deg)`;
+      bdWave.style.transform = `translateX(${(-(sc*0.05)%660).toFixed(1)}px)`;
+    }
+    nav.classList.toggle('scrolled', sc > 8);
+    const max = h.scrollHeight - innerHeight;
+    prog.style.width = (max > 0 ? (sc / max * 100) : 0) + '%';
+    ticking = false;
+  };
+  addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(reduce ? ()=>{ nav.classList.toggle('scrolled', scrollY>8); ticking=false; } : onScroll); ticking = true; }
+  }, {passive:true});
+  onScroll();
+
+  /* ---------- reveal ---------- */
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+  /* ---------- magneettinen nappi ---------- */
+  if (finePointer && !reduce){
+    document.querySelectorAll('.mag').forEach(b=>{
+      b.addEventListener('mousemove', e=>{
+        const r = b.getBoundingClientRect();
+        b.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.2}px, ${(e.clientY-r.top-r.height/2)*.28}px)`;
+      });
+      b.addEventListener('mouseleave', ()=>{ b.style.transform=''; });
+    });
+  }
+
+  /* ---------- työmallin vaihdin ---------- */
+  const swt = document.querySelector('.switch');
+  if (swt){
+    const tabs = [...swt.querySelectorAll('button')];
+    const show = i =>{
+      tabs.forEach((t,n)=>{
+        const on = n === i;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        document.getElementById(t.getAttribute('aria-controls')).classList.toggle('on', on);
+      });
+    };
+    tabs.forEach((t,i)=>{
+      t.addEventListener('click', ()=>show(i));
+      t.addEventListener('keydown', e=>{
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft'){
+          e.preventDefault();
+          const n = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+          tabs[n].focus(); show(n);
+        }
+      });
+    });
+  }
+
+  /* ---------- roolivalinnat lomakkeessa ---------- */
+  document.querySelectorAll('.rp input[type=checkbox]').forEach(cb=>{
+    const upd = ()=> cb.closest('.rp').classList.toggle('on', cb.checked);
+    cb.addEventListener('change', upd); upd();
+  });
+</script>
+
+</body>
+</html>

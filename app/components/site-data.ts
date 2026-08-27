@@ -12,6 +12,7 @@ export const ROUTES = {
   verkkosivut: "/verkkosivut",
   seo: "/hakukoneoptimointi",
   graafinen: "/graafinen-suunnittelu",
+  toihin: "/toihin-meille",
   tietosuoja: "/tietosuoja",
   /** Sivua ei viela ole -> etusivun Palvelut-osio. */
   tapahtumat: "/#palvelut",
@@ -89,6 +90,7 @@ export const OVERLAY_NAV: NavLink[] = [
   { href: "#tyot", label: "Työnäytteet" },
   { href: "#prosessi", label: "Prosessi" },
   { href: "#paketit", label: "Hinnoittelu" },
+  { href: ROUTES.toihin, label: "Töihin meille" },
   // Yhteystiedot-sivua ei ole; ankkuri etusivun lomakkeeseen.
   { href: "#lomake", label: "Yhteystiedot" },
 ];
@@ -134,6 +136,15 @@ export const HOME_FOOTER: FooterColumn[] = [
     ],
   },
   {
+    title: "Töihin meille",
+    links: [
+      { href: "/toihin-meille#roolit", label: "Keitä etsimme" },
+      { href: "/toihin-meille#tyomalli", label: "Freelancerina tai työsuhteessa" },
+      { href: "/toihin-meille#prosessi", label: "Näin haku etenee" },
+      { href: ROUTES.toihin, label: "Jätä hakemus" },
+    ],
+  },
+  {
     title: "Yritys",
     links: [
       { href: "#tyot", label: "Työnäytteet" },
@@ -164,6 +175,15 @@ export const SUBPAGE_FOOTER: FooterColumn[] = [
       { href: "/lyhytvideot#prosessi", label: "Prosessi" },
       { href: "/lyhytvideot#hinnoittelu", label: "Lyhytvideon hinta" },
       { href: "/lyhytvideot#ukk", label: "Usein kysyttyä" },
+    ],
+  },
+  {
+    title: "Töihin meille",
+    links: [
+      { href: "/toihin-meille#roolit", label: "Keitä etsimme" },
+      { href: "/toihin-meille#tyomalli", label: "Freelancerina tai työsuhteessa" },
+      { href: "/toihin-meille#prosessi", label: "Näin haku etenee" },
+      { href: ROUTES.toihin, label: "Jätä hakemus" },
     ],
   },
   {
@@ -201,6 +221,15 @@ export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
     ],
   },
   {
+    title: "Töihin meille",
+    links: [
+      { href: "/toihin-meille#roolit", label: "Keitä etsimme" },
+      { href: "/toihin-meille#tyomalli", label: "Freelancerina tai työsuhteessa" },
+      { href: "/toihin-meille#prosessi", label: "Näin haku etenee" },
+      { href: ROUTES.toihin, label: "Jätä hakemus" },
+    ],
+  },
+  {
     title: "Yritys",
     links: [
       { href: ROUTES.tyonaytteet, label: "Työnäytteet" },
@@ -231,6 +260,15 @@ export const SEO_FOOTER: FooterColumn[] = [
       { href: "/hakukoneoptimointi#sisalto", label: "Palvelun sisältö" },
       { href: "/hakukoneoptimointi#mittarit", label: "Mittarit ja raportointi" },
       { href: "/hakukoneoptimointi#ukk", label: "Usein kysyttyä" },
+    ],
+  },
+  {
+    title: "Töihin meille",
+    links: [
+      { href: "/toihin-meille#roolit", label: "Keitä etsimme" },
+      { href: "/toihin-meille#tyomalli", label: "Freelancerina tai työsuhteessa" },
+      { href: "/toihin-meille#prosessi", label: "Näin haku etenee" },
+      { href: ROUTES.toihin, label: "Jätä hakemus" },
     ],
   },
   {
