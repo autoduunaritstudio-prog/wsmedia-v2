@@ -2862,6 +2862,36 @@ footer .base { padding-top: 18px }
   opacity: .092; mix-blend-mode: multiply;
 }
 
+/* ---------- FACETS-VERSIO (metalbd-v2) ----------
+   Kirkas alue on AUKKO eika maalattu vaalea lappi: gradientin ensimmainen
+   pysakki on alfa 0, jolloin sivun oma valkoinen nakyy lapi sellaisenaan.
+   Siksi kontrasti kirkkaan kohdan paalla on tasan sama kuin puhtaalla
+   valkoisella - se on koko uudistuksen pointti.
+   Keskipisteen paikka tulee muuttujista, joita SiteEffects siirtaa. */
+.metalbd-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(115% 78% at var(--mb-gx, 50%) var(--mb-gy, 42%),
+    rgba(10,10,12,0)    0%,
+    rgba(10,10,12,.05) 26%,
+    rgba(10,10,12,.15) 50%,
+    rgba(10,10,12,.28) 74%,
+    rgba(10,10,12,.40) 100%);
+}
+
+/* SVG on korvattu elementti: mitat on annettava eksplisiittisesti, muuten
+   se putoaa virtaan ja saa oletusmittansa 300x150px (ks. .metalbd-noise).
+   Laatikko on 130% ja siirretty -15%, jotta parallaksitransform ei paljasta
+   reunaa. preserveAspectRatio="slice" pitaa kaaret oikean muotoisina. */
+.metalbd-facets {
+  position: absolute;
+  left: -15%; top: -15%; width: 130%; height: 130%;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metalbd-facets { will-change: auto }
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* SiteEffects ei aja scrub-laskentaa tassa tilassa, joten kuvio jaa
      lahtoasentoonsa. will-change pois turhana. */

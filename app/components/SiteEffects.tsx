@@ -35,6 +35,7 @@ export default function SiteEffects() {
     const mbA = document.querySelector<HTMLElement>(".metalbd-a");
     const mbB = document.querySelector<HTMLElement>(".metalbd-b");
     const mbSweep = document.querySelector<HTMLElement>(".metalbd-sweep");
+    const mbFacets = document.querySelector<HTMLElement>(".metalbd-facets");
 
     /* ---------- taustakuvio ---------- */
     const bdGrid = document.getElementById("bdGrid");
@@ -191,7 +192,27 @@ export default function SiteEffects() {
         // Ajuriksi coverin oma sijainti, ei raaka scrollY: arvo kulkee
         // 0 -> coverin korkeus juuri sen matkan aikana kun kuvio on
         // nakyvissa, joten liike osuu sinne missa se nahdaan.
-        const p = -mbLayer.getBoundingClientRect().top;
+        const mbRect = mbLayer.getBoundingClientRect();
+        const p = -mbRect.top;
+
+        // KIRKKAAN ALUEEN SEURANTA. Tama on rakenteellinen luettavuus-
+        // korjaus eika koriste: kuvion vaalein kohta pidetaan aina siina
+        // kohdassa kuviota joka sattuu nakymakeskukseen, joten se teksti
+        // jota kayttaja juuri lukee on aina kuvion kirkkaimman kohdan
+        // paalla. Ilman tata kirkas alue olisi kiinteassa kohdassa ja
+        // sen ulkopuolelle jaava teksti tarvitsisi taas oman levynsa.
+        if (mbFacets) {
+          const gy = ((p + vh / 2) / Math.max(mbRect.height, 1)) * 100;
+          mbLayer.style.setProperty(
+            "--mb-gy",
+            `${Math.min(Math.max(gy, 0), 100).toFixed(1)}%`,
+          );
+          // Fasetit liikkuvat hitaammin kuin kirkas kohta, jolloin niiden
+          // ja valon keskinainen asema muuttuu eika kuvio nayta yhtenaiselta
+          // kappaleelta joka vain liukuu ohi.
+          mbFacets.style.transform =
+            `translate3d(${(p * 0.028).toFixed(1)}px, ${(-p * 0.062).toFixed(1)}px, 0)`;
+        }
 
         // Kertoimet ovat tarkoituksella ERI SUURUISIA JA ERI SUUNTIIN:
         // A liikkuu pystysuunnassa nopeammin, B vaakasuunnassa. Nain
