@@ -6,7 +6,7 @@ import Image from "next/image";
  * vasemmalle ja ylos skrollatessa oikealle. Ks. ".logostrip-track"
  * SiteEffects.tsx:ssa.
  *
- * Leveys/korkeus annetaan naytettavina mittoina (42px korkea, leveys
+ * Leveys/korkeus annetaan naytettavina mittoina (48px korkea, leveys
  * kuvasuhteen mukaan; arvot on laskettu lahdekuvien todellisista
  * pikselimitoista, ei skaalattu vanhoista), jolloin next/image generoi juuri oikean kokoiset
  * variantit 1x/2x-naytoille eika lahdekuvan taytta kokoa ladata koskaan.
@@ -15,24 +15,24 @@ import Image from "next/image";
 
 type ClientLogo = { src: string; alt: string; w: number; h: number };
 
-const H = 42;
+const H = 48;
 
 const LOGOS: ClientLogo[] = [
-  { src: "/logos/porsche-club-finland.png", alt: "Porsche Club Finland", w: 139, h: H },
-  { src: "/logos/tesla-owners-finland-color.png", alt: "Tesla Owners Finland", w: 43, h: H },
-  { src: "/logos/colormaster.png", alt: "Colormaster", w: 99, h: H },
-  { src: "/logos/ydr-autohuolto.png", alt: "YDR Autohuolto", w: 139, h: H },
+  { src: "/logos/porsche-club-finland.png", alt: "Porsche Club Finland", w: 159, h: H },
+  { src: "/logos/tesla-owners-finland-color.png", alt: "Tesla Owners Finland", w: 50, h: H },
+  { src: "/logos/colormaster.png", alt: "Colormaster", w: 113, h: H },
+  { src: "/logos/ydr-autohuolto.png", alt: "YDR Autohuolto", w: 159, h: H },
   // TARKISTA: tiedosto tuli nimella ls-monogram.png ilman yritysnimea.
   // LS-monogrammi + sivustolla jo oleva asiakas viittaavat Laaksolahden
   // Sahkoon, mutta tata ei ole vahvistettu.
-  { src: "/logos/ls-monogram-color.png", alt: "Laaksolahden Sähkö", w: 42, h: H },
+  { src: "/logos/ls-monogram-color.png", alt: "Laaksolahden Sähkö", w: 48, h: H },
 ];
 
 /**
  * Siirtyma kiedotaan yhden kopion levyisena, joten loppujen viiden on
- * peitettava viewport kummassakin suunnassa. Yksi kopio on koon noston
- * jalkeen n. 880px (462px logoja + 5 x 84px vali), joten viisi riittaa
- * n. 4400px leveyteen asti.
+ * peitettava viewport kummassakin suunnassa. Yksi kopio on n. 1009px
+ * (529px logoja + 5 x 96px vali), joten viisi riittaa n. 5000px
+ * leveyteen asti.
  */
 const COPIES = 6;
 
