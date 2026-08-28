@@ -38,9 +38,9 @@
  * .metalbd-noise on yha olemassa blobs-versiota varten.
  */
 
-type Props = { variant?: "facets" | "blobs"; tone?: "light" | "dark" };
+type Props = { variant?: "facets" | "blobs"; tone?: "light" | "dark"; inSection?: boolean };
 
-export default function MetalBackdrop({ variant = "facets", tone = "light" }: Props) {
+export default function MetalBackdrop({ variant = "facets", tone = "light", inSection = false }: Props) {
   if (variant === "blobs") {
     return (
       <div className="metalbd" aria-hidden="true">
@@ -60,7 +60,9 @@ export default function MetalBackdrop({ variant = "facets", tone = "light" }: Pr
 
   return (
     <div
-      className={`metalbd metalbd-v2${tone === "dark" ? " metalbd-dark" : ""}`}
+      className={`metalbd metalbd-v2${tone === "dark" ? " metalbd-dark" : ""}${
+        inSection ? " metalbd-inset" : ""
+      }`}
       aria-hidden="true"
     >
       {/* Sticky-pane on koko ratkaisun ydin. .metalbd venyy nyt coverin

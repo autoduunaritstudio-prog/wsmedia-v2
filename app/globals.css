@@ -1441,14 +1441,20 @@ footer .base { padding-top: 18px }
   position: sticky; top: var(--refs-sticky-top, 0px); z-index: 2;
   min-height: 100vh; display: flex; align-items: center;
   color: #f5f5f7;
-  padding: var(--space-section) 0;
-  /* LIITOSKOHTA. Tausta ei ole enaa tasainen --dark vaan liukuu 220px
-     matkalla vaaleammasta #24242a:sta siihen. Se on TAYSIN PEITTAVA koko
-     matkan - cover-mekanismi vaatii sen - joten pehmennys tapahtuu
-     sävyssä eikä läpinäkyvyydessä. Ilman tata ylareuna oli mitattuna
-     RGB 166 vs 13 eli 153 yksikon hyppy siina hetkessa kun raja on
-     ruudun puolivalissa. */
-  background: linear-gradient(to bottom, #24242a 0, var(--dark) 220px);
+  /* LIITOSKOHTA, 220px -> 520px. Aiempi matka oli 24 % 900px nakymasta
+     eli liian lyhyt erottuakseen liu'uksi; 520px on 58 %. Lisaksi
+     ALKUVARI oli vaarin: #24242a (RGB 36) oli lahes yhta tumma kuin
+     --dark, joten hyppy sailyi. Nyt gradientti alkaa RGB 220:sta, joka
+     on mitattu optimi - se on lahella sita savya joka paneelilla on
+     rajan kohdalla, jolloin pahin jaannoshyppy on 25 yksikkoa aiemman
+     227:n sijaan. Tayte on peittava koko matkan, koska cover-mekanismi
+     vaatii sen.
+
+     Siirtyma on ylapaddingissa eika sisallon takana: sisalto keskittyy
+     paddingin alapuoliseen content-boxiin, joten se istuu kokonaan
+     tasaisella --darkilla eika liu'un paalla. */
+  padding: calc(var(--space-section) + 520px) 0 var(--space-section);
+  background: linear-gradient(to bottom, #dcdce0 0, var(--dark) 520px);
 }
 /* Sisalto kuviokerroksen ylle: .metalbd on absoluuttinen z-index 0, ja
    sijoittamaton sisalto piirtyisi sen ALLE. Sama porrastus kuin
@@ -3048,6 +3054,19 @@ footer .base { padding-top: 18px }
   will-change: transform;
 }
 
+/* ---------- OSION SISAINEN KERROS + RISTIHAIVYTYS ----------
+   Maskit peittavat tasan saman 520px matkan kuin taustan gradientti,
+   joten varin ja kuvion siirtymat tapahtuvat samassa kohdassa. */
+.metalbd-inset { height: 100% }
+.metalbd-inset:not(.metalbd-dark) {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, transparent 520px);
+  mask-image: linear-gradient(to bottom, #000 0, transparent 520px);
+}
+.metalbd-inset.metalbd-dark {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 520px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 520px);
+}
+
 /* ---------- TUMMA VARIANTTI (.metalbd-dark) ----------
    Sama geometria, sama liike, kaannetty kontrasti. Sijoitetaan tumman
    osion sisaan, jolloin materiaali jatkuu vaalean ja tumman alueen yli
@@ -3058,30 +3077,30 @@ footer .base { padding-top: 18px }
    etenemasta, joten ne ovat aina samassa vaiheessa. */
 .metalbd-dark {
   height: 100%;
-  opacity: var(--metalbd-dark-opacity, .9);
+  opacity: var(--metalbd-dark-opacity, .85);
 }
 /* Kirkas kohta on nyt vaalea laikku tummalla, ei aukko vaalealla:
    sommittelu sailyy (kirkas keskusta, tummat reunat) vaikka
    kontrastisuunta kaantyy. */
 .metalbd-dark .metalbd-glow {
   background: radial-gradient(220% 190% at var(--mb-gx, 56%) var(--mb-gy, 42%),
-    rgba(255,255,255,.105) 0%,
-    rgba(255,255,255,.080) 26%,
-    rgba(255,255,255,.045) 50%,
+    rgba(255,255,255,.106) 0%,
+    rgba(255,255,255,.081) 26%,
+    rgba(255,255,255,.046) 50%,
     rgba(255,255,255,.016) 74%,
     rgba(255,255,255,0)    100%);
 }
 /* Rajaviivat vaaleanharmaita eivat valkoisia: valkoinen hiusviiva
    nousisi liian kirkkaaksi lahes mustalla pohjalla ja rikkoisi tumman
    osion oman ilmeen. */
-.metalbd-dark .mbf { stroke: rgba(255,255,255,.17) }
+.metalbd-dark .mbf { stroke: rgba(255,255,255,.146) }
 /* Taytot kaannettyina. CSS-ominaisuus voittaa SVG:n fill-attribuutin,
    joten vaalean version arvot jaavat vain vaalealle variantille. */
-.metalbd-dark .mbc-1 { fill: rgba(255,255,255,.050) }
-.metalbd-dark .mbc-2 { fill: rgba(255,255,255,.062) }
-.metalbd-dark .mbc-3 { fill: rgba(0,0,0,.34) }
-.metalbd-dark .mbc-4 { fill: rgba(0,0,0,.26) }
-.metalbd-dark .mbc-5 { fill: rgba(0,0,0,.30) }
+.metalbd-dark .mbc-1 { fill: rgba(255,255,255,.051) }
+.metalbd-dark .mbc-2 { fill: rgba(255,255,255,.063) }
+.metalbd-dark .mbc-3 { fill: rgba(0,0,0,.263) }
+.metalbd-dark .mbc-4 { fill: rgba(0,0,0,.201) }
+.metalbd-dark .mbc-5 { fill: rgba(0,0,0,.232) }
 
 /* Kaariryhmat kiertyvat viewBoxin keskipisteen ympari. transform-box:
    view-box on PAKOLLINEN: ilman sita transform-origin laskettaisiin
