@@ -1545,7 +1545,16 @@ footer .base { padding-top: 18px }
    kiinnittyy, joten sama elementti kelpaa molempiin rooleihin. */
 .refs {
   position: sticky; top: var(--refs-sticky-top, 0px); z-index: 2;
-  min-height: 100vh; display: flex; align-items: center;
+  /* +--refs-extra pin-vaiheeseen. H3 kasvaa, ja koska .aftercover alkaa
+     nousta tasan kun .refs pinnautuu, lisays menee suoraan siihen
+     matkaan jonka Referenssit on yksin nakyvissa ennen peittoa.
+
+     Lisays on BÄ MOLEMMISSA: pelkka min-height ei purisi 700px:n
+     nakymassa (sisalto 807px > 110vh = 770px) ja pelkka padding ei
+     purisi 900/1200px:ssa (min-height dominoi). Yhdessa ne antavat
+     +8,7 % ... +10,0 % kaikilla kolmella korkeudella. */
+  min-height: calc(100vh + var(--refs-extra, 10vh));
+  display: flex; align-items: center;
   /* --refs-lead PERUUTETTU. Simulaatio osoitti ettei mekanismi voi
      toimia: .refsticky pinnautuu kun scrollY = Z, ja .refs tulee
      nakyviin kun scrollY = Z + H1 - lead - vh. Koska H1 = max(vh, 538)
@@ -1560,7 +1569,7 @@ footer .base { padding-top: 18px }
      Sita ei voi poistaa lyhentamatta pin-vaihetta. Ainoa nuppi on
      .refstickyn min-height alla, ja se saataa molempia yhdessa. */
   background: var(--dark); color: #f5f5f7;
-  padding: var(--space-section) 0;
+  padding: var(--space-section) 0 calc(var(--space-section) + var(--refs-extra, 10vh));
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
      0 kun ylareuna on nakyman alalaidassa, 1 kun osiota on nakyvissa 35 %
      nakymasta. Varasyotto 1 pitaa osion nakyvissa jos JS ei ehdi ajaa
