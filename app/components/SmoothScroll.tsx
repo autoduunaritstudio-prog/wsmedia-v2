@@ -44,20 +44,30 @@ export default function SmoothScroll() {
       // Sisaanrakennettu ankkurikasittely: kaikki saman sivun #-linkit
       // (19-30 per sivu) vierittyvat pehmennetysti ilman omaa kasittelijaa.
       anchors: true,
-      // Suurempi lerp = tiiviimpi seuraaminen = VAHEMMAN pehmennysta.
-      // Asettumisaika (5% jaljella, 60fps): t = ln(0.05)/ln(1-lerp) / 60.
-      //   0.09 -> 529ms  alkuperainen, jatti sisallon liikaa jalkeen
-      //   0.16 -> 286ms  yha selvasti havaittava viive
-      //   0.38 -> 104ms  nykyinen: n. 6 framea, juuri ja juuri aistittava
-      // Tata pienempi arvo alkaisi tuntua taas viiveelta, suurempi
-      // (0.5 -> 72ms) katoaa kaytannossa natiiviin.
+      // Suurempi lerp = VAHEMMAN pehmennysta. 1 on kaytannossa minimi:
+      // Lenis ei kayta lerpia suoraan sekoituskertoimena vaan syottaa sen
+      // dampiin (lenis.mjs:86):
+      //     value = damp(value, to, lerp * 60, dt)
+      //     damp(x, y, lambda, dt) = lerp(x, y, 1 - exp(-lambda * dt))
+      // Kehyskohtainen kerroin on siis 1 - exp(-lerp) eika lerp, ja
+      // jaljella oleva matka ajan funktiona on exp(-lerp * 60 * t).
+      // Asettumisaika 5 %:iin on siten kehysnopeudesta riippumaton:
+      //     t = ln(20) / (lerp * 60) = 49,93 / lerp millisekuntia
+      // Tama KORJAA aiemman tassa olleen mallin, joka oletti kertoimeksi
+      // suoraan lerpin ja antoi siksi n. 24 % liian lyhyita aikoja.
+      //   0.09 -> 555 ms   0.16 -> 312 ms   0.38 -> 131 ms
+      //   0.95 ->  53 ms   1.00 ->  50 ms  (n. 3 kehysta 60 Hz:lla)
+      // 50 ms on Lenisin pohja rullapehmennykselle: alle sen paastaisiin
+      // vain lerpilla > 1, mika on dokumentoidun 0..1-alueen ulkopuolella.
       //
-      // HUOM: anchors: true kayttaa Lenisin sisaista scrollTo:ta, joka
-      // ilman omaa duration/easing-arvoa noudattaa TATA SAMAA lerpia.
-      // Ankkurihypyt siis nopeutuivat samassa suhteessa. Jos ne halutaan
-      // pitaa loivempina, ne on irrotettava omalla durationilla - sita
-      // ei ole nyt asetettu missaan.
-      lerp: 0.38,
+      // 1 on turvallinen: advance() testaa lerpin vain totuusarvona
+      // (else if (this.lerp)), eika Lenis kayta sita jakajana. Kirjasto
+      // asettaa itse lerp = 1 immediate-scrollToon ja inertiattomaan
+      // syncTouchiin, joten arvo on kirjaston omassa kaytossa.
+      //
+      // Instanssi jaa aktiiviseksi, joten anchors: true ja
+      // FullscreenNavin stop()/start() toimivat muuttumattomina.
+      lerp: 1,
     });
 
     return () => {
