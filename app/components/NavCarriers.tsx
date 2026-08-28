@@ -237,6 +237,24 @@ export default function NavCarriers() {
           });
         }
 
+        // --- kontaktivarjot ---
+        // Ei omaa laskentaa: molemmat lukevat saman x:n ja saman gaitin
+        // kuin hahmo ja kannettu elementti.
+        //
+        // "Hengitys" askeleen mukana: bob on 0 kun lantio on alimmillaan
+        // (jalka kantaa) ja -BOB kun se on ylimmillaan (askeleen keskella).
+        // Varjo on siis tiivein ja tummin kosketuksessa ja levein ja
+        // haalein ilmassa - sama fysikaalinen suhde kuin oikealla varjolla.
+        const lift = -bob / BOB;
+        const sh = P(`c${i}sh`);
+        if (sh) {
+          sh.setAttribute("cx", hip.x.toFixed(1));
+          sh.setAttribute("cy", (ground + 1).toFixed(1));
+          sh.setAttribute("rx", (15 + 4 * lift).toFixed(1));
+          sh.setAttribute("ry", (3.6 - 0.5 * lift).toFixed(1));
+          sh.style.opacity = (1 - 0.3 * lift).toFixed(2);
+        }
+
         const hd = P(`c${i}h`);
         if (hd) {
           hd.setAttribute("cx", headP.x.toFixed(1));
@@ -263,10 +281,20 @@ export default function NavCarriers() {
         // voi jaada valitilaan kun scroll kaantyy.
         const hx = (hands[0].x + hands[1].x) / 2;
         const hy = (hands[0].y + hands[1].y) / 2;
-        a.el.style.transform =
-          hold > 0.001
-            ? `translate(${((hx - a.home.x) * hold).toFixed(1)}px, ${((hy - a.home.y) * hold).toFixed(1)}px)`
-            : "";
+        const dx = (hx - a.home.x) * hold;
+        const dy = (hy - a.home.y) * hold;
+        a.el.style.transform = hold > 0.001 ? `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)` : "";
+
+        // Kannetun elementin oma varjo: seuraa samaa siirtymaa, haipyy
+        // holdin mukana eli katoaa kun elementti on asetettu takaisin.
+        const esh = P(`c${i}esh`);
+        if (esh) {
+          esh.setAttribute("cx", (a.home.x + dx).toFixed(1));
+          esh.setAttribute("cy", (ground + 1).toFixed(1));
+          esh.setAttribute("rx", "11");
+          esh.setAttribute("ry", "2.8");
+          esh.style.opacity = (hold * 0.85).toFixed(2);
+        }
         // Sama haivytys kannettavaan elementtiin, mutta VAIN kun se on
         // kasissa - muuten logo sumenisi jokaisella nopealla scrollilla.
         a.el.style.filter = hold > 0.001 && blurPx ? `blur(${blurPx.toFixed(2)}px)` : "";
@@ -290,8 +318,26 @@ export default function NavCarriers() {
 
   return (
     <svg className="carriers" ref={svgRef} aria-hidden="true">
+      <defs>
+        {/* Pehmea reuna gradientilla eika blur-suodattimella: halvempi
+            rasteroida ja pysyy terävänä millä tahansa zoomilla.
+
+            VALKOINEN, ei musta. #nav on mix-blend-mode: difference, jossa
+            tulos on |tausta - lahde|: musta antaisi valkoisella taustalla
+            255 eli olisi taysin nakymaton. Valkoinen alfalla .14 antaa
+            219 (hienovarainen tummennus) ja tummalla osiolla 45 (vaalea
+            laikku) - tasan sama kaytos kuin logolla ja hahmon viivalla. */}
+        <radialGradient id="carrierShadow">
+          <stop offset="0%" stopColor="#fff" stopOpacity="0.16" />
+          <stop offset="55%" stopColor="#fff" stopOpacity="0.09" />
+          <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+        </radialGradient>
+      </defs>
       {[0, 1].map((i) => (
         <g data-p={`c${i}`} key={i} opacity="0">
+          {/* Varjot ensin, jotta ne jaavat hahmon alle. */}
+          <ellipse data-p={`c${i}sh`} fill="url(#carrierShadow)" stroke="none" />
+          <ellipse data-p={`c${i}esh`} fill="url(#carrierShadow)" stroke="none" />
           <circle data-p={`c${i}h`} r={L.head} />
           <path data-p={`c${i}s`} />
           <path data-p={`c${i}l0`} />
