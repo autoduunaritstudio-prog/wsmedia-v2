@@ -3,44 +3,42 @@
 import { useEffect, useRef } from "react";
 
 /**
- * KOKEILU: kaksi tikku-ukkoa jotka kantavat logon ja valikkopainikkeen pois
- * kun nav piiloutuu logonauhan kohdalla, ja tuovat ne takaisin.
- *
- * POISTO YHDELLA RIVILLA: poista <NavCarriers /> FullscreenNav.tsx:sta.
+ * KOKEILU v2: kaksi tikku-ukkoa kantavat logon ja valikkopainikkeen pois ja
+ * takaisin. POISTO YHDELLA RIVILLA: <NavCarriers /> pois FullscreenNavista.
  *
  * ---------------------------------------------------------------------
- * MIKSI EI FYSIIKKAMOOTTORIA (Matter.js + PD-saadetyt nivelet)
+ * KOKO SEKVENSSI ON PUHDAS FUNKTIO SCROLL-POSITIOSTA. Ei tilakonetta, ei
+ * setTimeoutia, ei "kesken olevaa" sekvenssia jota pitaisi perua. Sama
+ * periaate kuin sivuston muilla scroll-efekteilla (hero-scrim,
+ * --mb-gy, coverien scrim): arvo johdetaan joka framessa geometriasta.
  *
- * Kahden jalan kavelyn ohjaaminen pelkilla nivelmomenteilla on avoin
- * saatoteoreettinen ongelma - se on syy siihen etta pelit eivat tee
- * kavelya niin. Unreal ja Unity ajavat lokomotion animaatiosta tai
- * proseduraalisesti ja kayttavat fysiikkaa vasta toissijaisena kerroksena
- * (ragdoll, secondary motion). Ragdoll + PD-saadin kaatuisi tassa kahteen
- * asiaan: se romahtaa herkasti, ja saapuminen TASAN logon kohdalle olisi
- * epadeterministista - juuri se mita tassa eniten tarvitaan.
+ *   ph = clamp((navH + 120 + RUN - strip.top)    / RUN, 0, 1)   piilotus
+ *   ps = clamp((24 - strip.bottom)               / RUN, 0, 1)   paluu
+ *   u  = clamp(ph - ps, 0, 1)      0 = kotona, 1 = kannettu pois
  *
- * Tama kayttaa siksi samaa tekniikkaa kuin pelit oikeasti kayttavat:
- *   - lantio liikkuu vakionopeudella ja pomppii askelrytmissa
- *   - jalkaterien kohteet KIINNITTYVAT maahan tukivaiheen ajaksi
- *     (foot planting) ja kaartavat eteen heilahdusvaiheessa
- *   - polvet ja kyynarpaat ratkaistaan KAANTEISKINEMATIIKALLA
- *   - kadet heiluvat vastavaiheessa jalkoihin
+ * Bufferit 120 / 24 ovat TASAN samat kuin nav-hide-logiikalla, ja mitta
+ * tulee samasta .logostrip-rectista - vain jatkuvana arvona pisteen sijaan.
  *
- * Askelpituus johdetaan nopeudesta: stepLen = v * cycle / 2. Silloin
- * tukijalan maailmanopeus on tasan nolla eli jalka ei luista - se on se
- * yksityiskohta josta "painovoiman alainen" vaikutelma syntyy. Ja koska
- * lantion x on suoraan ohjattu, hahmo saapuu aina tasan kohteeseen.
+ * Kolme seurausta:
+ *  - Nopea scroll = nopea liike automaattisesti. Askelvaihe johdetaan
+ *    KULJETUSTA MATKASTA (gait = matka / 2*STEP), ei kellosta, joten
+ *    jalkojen kiinnitys maahan patee millä tahansa nopeudella.
+ *  - Suunnanvaihto ei voi sekoittaa mitaan: kaikki on funktio u:sta, ja
+ *    u vain kulkee takaisin samaa rataa.
+ *  - Elementit eivat tarvitse opacity-piilotusta lainkaan. Ne ovat
+ *    kasien mukana; kun hahmo on poissa ruudulta, elementti on myos.
+ *    Siksi "ilmestyy takaisin ja jaa jumiin" -tila ei ole enaa olemassa.
+ *
+ * Paluumatka on lahdon tarkka peilikuva: hahmo palaa samalta reunalta
+ * jolta se lahti, kantaen, asettaa elementin ja poistuu samaa reittia.
+ * Se on suora seuraus siita etta liike on yksi funktio - ja lukeutuu
+ * luontevasti, kuten samasta ovesta palaava ihminen.
  * ---------------------------------------------------------------------
- *
- * KYTKENTA: MutationObserver seuraa #navin .nav-away-luokkaa eli tasan sita
- * tilaa jonka nav-hide jo johtaa .logostripin rectista. Ei omaa
- * scroll-laskentaa. Sekvenssi on keskeytettava: jos tila vaihtuu kesken
- * kaiken, liike kaantyy nykyisesta asennosta eika hyppaa.
  */
 
 type Vec = { x: number; y: number };
 
-/** Kaksiluinen kaanteiskinematiikka: juuresta kohteeseen, palauttaa nivelen. */
+/** Kaksiluinen kaanteiskinematiikka: palauttaa nivelen sijainnin. */
 function ik(root: Vec, target: Vec, a: number, b: number, flip: number): Vec {
   const dx = target.x - root.x;
   const dy = target.y - root.y;
@@ -51,15 +49,25 @@ function ik(root: Vec, target: Vec, a: number, b: number, flip: number): Vec {
   return { x: root.x + Math.cos(ang) * a, y: root.y + Math.sin(ang) * a };
 }
 
-/** Mitat pikseleina. Kokonaiskorkeus n. 74px. */
-const L = { thigh: 18, shin: 18, torso: 22, neck: 6, head: 5.5, upperArm: 15, foreArm: 15 };
-const SPEED = 260;        // px/s
-const CYCLE = 0.62;       // s, yksi kokonainen askelpari
-const STEP = (SPEED * CYCLE) / 2;
-const LIFT = 9;           // heilahdusvaiheen nostokorkeus
-const BOB = 3.5;          // lantion pystypomppu
+const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
+const rot = (p: Vec, o: Vec, a: number): Vec => {
+  const c = Math.cos(a);
+  const s = Math.sin(a);
+  const dx = p.x - o.x;
+  const dy = p.y - o.y;
+  return { x: o.x + dx * c - dy * s, y: o.y + dx * s + dy * c };
+};
 
-type Phase = "off" | "in" | "grab" | "out";
+const L = { thigh: 18, shin: 18, torso: 22, neck: 6, head: 5.5, upperArm: 15, foreArm: 15 };
+const STEP = 42;      // askelpituus px; gait johdetaan matkasta, ei ajasta
+const LIFT = 9;
+const BOB = 3.5;
+const RUN = 380;      // scroll-matka jolla koko sekvenssi tapahtuu
+const HIDE_BUF = 120; // sama kuin NAV_HIDE_BUFFER_IN
+const SHOW_BUF = 24;  // sama kuin NAV_SHOW_BUFFER_OUT
+const A = 0.4;        // u: kavely sisaan paattyy
+const B = 0.55;       // u: tartunta paattyy, kanto alkaa
+const LEAN_MAX = 0.28; // rad, n. 16 astetta
 
 export default function NavCarriers() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -73,27 +81,13 @@ export default function NavCarriers() {
 
     const logo = nav.querySelector<HTMLElement>(".logo");
     const toggle = nav.querySelector<HTMLElement>(".navtoggle");
-    if (!logo || !toggle) return;
+    const strip = document.querySelector<HTMLElement>(".logostrip");
+    if (!logo || !toggle || !strip) return;
 
-    // Ottaa opacity-piilotuksen pois kaytosta: talta osin elementit pysyvat
-    // taydessa opasiteetissa ja vain niiden SIJAINTI muuttuu.
     nav.classList.add("carriers-on");
 
-    const parts = Array.from(svg.querySelectorAll<SVGElement>("[data-p]"));
-    const get = (n: string) => parts.filter((p) => p.dataset.p === n);
-
-    type Actor = {
-      el: HTMLElement;
-      home: Vec;      // elementin keskipiste levossa
-      from: number;   // reunan x josta kavellaan sisaan
-      dir: number;    // 1 = kavelee oikealle
-      x: number;      // lantion x
-      phase: Phase;
-      t: number;      // vaiheen sisainen aika
-      gait: number;   // askelkellon vaihe 0..1
-      plant: [number, number];
-    };
-
+    const P = (n: string) => svg.querySelector<SVGElement>(`[data-p="${n}"]`);
+    type Actor = { el: HTMLElement; home: Vec; edge: number; sign: number; face: number; prevX: number };
     const actors: Actor[] = [];
     let ground = 0;
 
@@ -105,208 +99,143 @@ export default function NavCarriers() {
         [logo, lr, -1],
         [toggle, tr, 1],
       ];
-      conf.forEach(([el, r, side], i) => {
-        const home = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-        const from = side < 0 ? -80 : window.innerWidth + 80;
-        if (actors[i]) {
-          actors[i].home = home;
-          actors[i].from = from;
-        } else {
-          actors.push({
-            el, home, from,
-            dir: -side, x: from, phase: "off", t: 0, gait: 0,
-            plant: [from, from],
-          });
-        }
+      conf.forEach(([el, r, sign], i) => {
+        // Elementin KOTI luetaan ilman voimassa olevaa transformia.
+        const prev = el.style.transform;
+        el.style.transform = "";
+        const h = el.getBoundingClientRect();
+        el.style.transform = prev;
+        const home = { x: h.left + h.width / 2, y: h.top + h.height / 2 };
+        const edge = sign < 0 ? -90 : window.innerWidth + 90;
+        if (actors[i]) Object.assign(actors[i], { home, edge });
+        else actors.push({ el, home, edge, sign, face: -sign, prevX: edge });
       });
     };
     measure();
     window.addEventListener("resize", measure, { passive: true });
 
-    // Kohde johon lantio pysahtyy: hieman elementin sivulla, jotta kadet
-    // yltavat sen keskelle.
-    const stopX = (a: Actor) => a.home.x - a.dir * 26;
-
-    let running = false;
     let raf = 0;
-    let last = 0;
-    let away = nav.classList.contains("nav-away");
 
-    const draw = () => {
+    const frame = () => {
+      raf = requestAnimationFrame(frame);
+      const r = strip.getBoundingClientRect();
+      const navH = nav.getBoundingClientRect().height;
+      const ph = clamp((navH + HIDE_BUF + RUN - r.top) / RUN, 0, 1);
+      const ps = clamp((SHOW_BUF - r.bottom) / RUN, 0, 1);
+      const u = clamp(ph - ps, 0, 1);
+
       for (let i = 0; i < actors.length; i++) {
         const a = actors[i];
-        const hidden = a.phase === "off";
-        const grp = get(`c${i}`)[0];
-        if (grp) grp.style.opacity = hidden ? "0" : "1";
-        if (hidden) {
-          a.el.style.transform = "";
-          continue;
+        const grp = P(`c${i}`);
+        // Hahmo on nakyvissa vain kun jotain tapahtuu.
+        const visible = u > 0.001 && u < 0.999;
+        if (grp) grp.style.opacity = visible ? "1" : "0";
+
+        // --- polku: reuna -> pysahdys -> reuna, x puhtaana funktiona u:sta.
+        // Pysahdys on 26px elementista SILLE PUOLELLE josta hahmo tulee,
+        // jolloin kadet yltavat sen keskelle ilman etta vartalo peittaa sita.
+        const stopX = a.home.x + a.sign * 26;
+        const D1 = Math.abs(stopX - a.edge);
+        const D3 = D1;
+        let x: number;
+        let dist: number;
+        if (u < A) {
+          const t = u / A;
+          x = a.edge + (stopX - a.edge) * t;
+          dist = D1 * t;
+        } else if (u < B) {
+          x = stopX;
+          dist = D1;
+        } else {
+          const t = (u - B) / (1 - B);
+          x = stopX + (a.edge - stopX) * t;
+          dist = D1 + D3 * t;
         }
+        // Askelvaihe MATKASTA, ei ajasta: sama jalkojen kiinnitys millä
+        // tahansa scroll-nopeudella.
+        const gait = ((dist / (2 * STEP)) % 1 + 1) % 1;
+        // Nopeus suoraan x:n muutoksesta - ei johdettuja etumerkkeja.
+        const vx = x - a.prevX;
+        a.prevX = x;
+        if (Math.abs(vx) > 0.4) a.face = Math.sign(vx);
+        // Kallistus on suoraan nopeuden funktio: ei tilaa, kaantyy itsestaan.
+        const lean = clamp(vx * 0.09, -LEAN_MAX, LEAN_MAX);
 
-        // --- lantio ---
-        const bob = -BOB * (0.5 - 0.5 * Math.cos(4 * Math.PI * a.gait));
-        const hip: Vec = { x: a.x, y: ground - L.thigh - L.shin + bob };
-        const shoulder: Vec = { x: a.x + a.dir * 1.5, y: hip.y - L.torso };
-        const head: Vec = { x: shoulder.x + a.dir * 2, y: shoulder.y - L.neck - L.head };
+        const bob = -BOB * (0.5 - 0.5 * Math.cos(4 * Math.PI * gait));
+        const hip: Vec = { x, y: ground - L.thigh - L.shin + bob };
+        const shoulder = rot({ x: hip.x, y: hip.y - L.torso }, hip, lean);
+        const headP = rot({ x: hip.x, y: hip.y - L.torso - L.neck - L.head }, hip, lean);
 
-        // --- jalat: tukivaiheessa jalka pysyy maassa, heilahduksessa kaartaa ---
+        const walking = u < A || u > B;
         const feet: Vec[] = [];
         for (let f = 0; f < 2; f++) {
-          const p = (a.gait + f * 0.5) % 1;
-          const moving = a.phase === "in" || a.phase === "out";
-          if (!moving) {
-            feet.push({ x: a.x + (f === 0 ? -6 : 7) * a.dir, y: ground });
+          const p = (gait + f * 0.5) % 1;
+          if (!walking) {
+            feet.push({ x: hip.x + (f === 0 ? -6 : 7) * a.face, y: ground });
           } else if (p < 0.5) {
-            // tukivaihe: kohde liikkuu taaksepain lantioon nahden tasan
-            // nopeudella v, joten maailmassa jalka seisoo paikallaan
-            const u = p / 0.5;
-            feet.push({ x: a.x + a.dir * STEP * (0.5 - u), y: ground });
+            feet.push({ x: hip.x + a.face * STEP * (0.5 - p / 0.5), y: ground });
           } else {
-            const u = (p - 0.5) / 0.5;
-            feet.push({
-              x: a.x + a.dir * STEP * (-0.5 + u),
-              y: ground - Math.sin(u * Math.PI) * LIFT,
-            });
+            const t = (p - 0.5) / 0.5;
+            feet.push({ x: hip.x + a.face * STEP * (t - 0.5), y: ground - Math.sin(t * Math.PI) * LIFT });
           }
         }
 
-        // --- kadet: kavellessa vastavaiheessa, kantaessa eteen ---
+        // Kantoote: nousee tartunnan aikana, pysyy sen jalkeen.
+        const hold = clamp((u - A) / (B - A), 0, 1);
         const hands: Vec[] = [];
-        const carrying = a.phase === "out" || (a.phase === "grab" && a.t > 0.25);
         for (let h = 0; h < 2; h++) {
-          if (carrying) {
-            hands.push({ x: shoulder.x + a.dir * 20, y: shoulder.y + 6 });
-          } else if (a.phase === "grab") {
-            const u = Math.min(a.t / 0.25, 1);
-            hands.push({
-              x: shoulder.x + a.dir * (10 + 12 * u),
-              y: shoulder.y + 14 - 8 * u,
-            });
-          } else {
-            const p = (a.gait + h * 0.5) % 1;
-            hands.push({
-              x: shoulder.x - a.dir * Math.cos(p * 2 * Math.PI) * 9,
-              y: shoulder.y + L.upperArm + L.foreArm - 6,
-            });
-          }
+          const swing = (gait + h * 0.5) % 1;
+          const rest: Vec = {
+            x: shoulder.x - a.face * Math.cos(swing * 2 * Math.PI) * 9,
+            y: shoulder.y + L.upperArm + L.foreArm - 6,
+          };
+          const carry: Vec = { x: shoulder.x + a.face * 20, y: shoulder.y + 6 };
+          hands.push({
+            x: rest.x + (carry.x - rest.x) * hold,
+            y: rest.y + (carry.y - rest.y) * hold,
+          });
         }
 
-        // --- ratkaise nivelet ja kirjoita geometria ---
-        const [hd] = get(`c${i}h`);
+        const hd = P(`c${i}h`);
         if (hd) {
-          hd.setAttribute("cx", head.x.toFixed(1));
-          hd.setAttribute("cy", head.y.toFixed(1));
+          hd.setAttribute("cx", headP.x.toFixed(1));
+          hd.setAttribute("cy", headP.y.toFixed(1));
         }
-        const [sp] = get(`c${i}s`);
-        if (sp) sp.setAttribute("d", `M${hip.x} ${hip.y} L${shoulder.x} ${shoulder.y}`);
+        const sp = P(`c${i}s`);
+        if (sp) sp.setAttribute("d", `M${hip.x.toFixed(1)} ${hip.y.toFixed(1)} L${shoulder.x.toFixed(1)} ${shoulder.y.toFixed(1)}`);
         for (let f = 0; f < 2; f++) {
-          const knee = ik(hip, feet[f], L.thigh, L.shin, a.dir > 0 ? 1 : -1);
-          const [seg] = get(`c${i}l${f}`);
-          if (seg) {
-            seg.setAttribute(
-              "d",
-              `M${hip.x.toFixed(1)} ${hip.y.toFixed(1)} L${knee.x.toFixed(1)} ${knee.y.toFixed(1)} L${feet[f].x.toFixed(1)} ${feet[f].y.toFixed(1)}`,
-            );
-          }
+          const k = ik(hip, feet[f], L.thigh, L.shin, a.face > 0 ? 1 : -1);
+          const s = P(`c${i}l${f}`);
+          if (s) s.setAttribute("d", `M${hip.x.toFixed(1)} ${hip.y.toFixed(1)} L${k.x.toFixed(1)} ${k.y.toFixed(1)} L${feet[f].x.toFixed(1)} ${feet[f].y.toFixed(1)}`);
         }
         for (let h = 0; h < 2; h++) {
-          const elbow = ik(shoulder, hands[h], L.upperArm, L.foreArm, a.dir > 0 ? -1 : 1);
-          const [seg] = get(`c${i}a${h}`);
-          if (seg) {
-            seg.setAttribute(
-              "d",
-              `M${shoulder.x.toFixed(1)} ${shoulder.y.toFixed(1)} L${elbow.x.toFixed(1)} ${elbow.y.toFixed(1)} L${hands[h].x.toFixed(1)} ${hands[h].y.toFixed(1)}`,
-            );
-          }
+          const e = ik(shoulder, hands[h], L.upperArm, L.foreArm, a.face > 0 ? -1 : 1);
+          const s = P(`c${i}a${h}`);
+          if (s) s.setAttribute("d", `M${shoulder.x.toFixed(1)} ${shoulder.y.toFixed(1)} L${e.x.toFixed(1)} ${e.y.toFixed(1)} L${hands[h].x.toFixed(1)} ${hands[h].y.toFixed(1)}`);
         }
 
-        // --- kannettava elementti seuraa kasia ---
-        if (carrying) {
-          const hx = (hands[0].x + hands[1].x) / 2;
-          const hy = (hands[0].y + hands[1].y) / 2;
-          a.el.style.transform = `translate(${(hx - a.home.x).toFixed(1)}px, ${(hy - a.home.y).toFixed(1)}px)`;
-        } else if (a.phase === "grab") {
-          a.el.style.transform = "";
-        }
+        // Elementti kulkee kasien mukana. Puhdas funktio u:sta, joten se ei
+        // voi jaada valitilaan kun scroll kaantyy.
+        const hx = (hands[0].x + hands[1].x) / 2;
+        const hy = (hands[0].y + hands[1].y) / 2;
+        a.el.style.transform =
+          hold > 0.001
+            ? `translate(${((hx - a.home.x) * hold).toFixed(1)}px, ${((hy - a.home.y) * hold).toFixed(1)}px)`
+            : "";
+        // Tab-jarjestys: piiloon vasta kun elementti on oikeasti pois ruudulta.
+        a.el.style.visibility = u > 0.985 ? "hidden" : "";
       }
     };
-
-    const step = (now: number) => {
-      const dt = Math.min((now - last) / 1000, 0.05);
-      last = now;
-      let active = false;
-
-      for (const a of actors) {
-        const target = away ? stopX(a) : stopX(a);
-        if (a.phase === "in") {
-          active = true;
-          a.gait = (a.gait + dt / CYCLE) % 1;
-          const rem = (target - a.x) * a.dir;
-          if (rem <= SPEED * dt) {
-            a.x = target;
-            a.phase = "grab";
-            a.t = 0;
-          } else {
-            a.x += a.dir * SPEED * dt;
-          }
-        } else if (a.phase === "grab") {
-          active = true;
-          a.t += dt;
-          if (a.t > 0.45) {
-            a.phase = "out";
-            a.t = 0;
-            a.dir = -a.dir;
-          }
-        } else if (a.phase === "out") {
-          active = true;
-          a.gait = (a.gait + dt / CYCLE) % 1;
-          a.x += a.dir * SPEED * dt;
-          if (a.x < -110 || a.x > window.innerWidth + 110) {
-            a.phase = "off";
-            // Vietaessa elementti jaa piiloon, tuotaessa se palaa kotiin.
-            a.el.style.transform = away ? "translate(0, -220px)" : "";
-          }
-        }
-      }
-
-      draw();
-      if (active) {
-        raf = requestAnimationFrame(step);
-      } else {
-        running = false;
-      }
-    };
-
-    const start = () => {
-      for (const a of actors) {
-        a.x = a.from;
-        a.dir = a.from < 0 ? 1 : -1;
-        a.phase = "in";
-        a.t = 0;
-        a.el.style.transform = away ? "" : "translate(0, -220px)";
-      }
-      if (!running) {
-        running = true;
-        last = performance.now();
-        raf = requestAnimationFrame(step);
-      }
-    };
-
-    const obs = new MutationObserver(() => {
-      const next = nav.classList.contains("nav-away");
-      if (next === away) return;
-      away = next;
-      start();
-    });
-    obs.observe(nav, { attributes: true, attributeFilter: ["class"] });
+    raf = requestAnimationFrame(frame);
 
     return () => {
-      obs.disconnect();
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", measure);
       nav.classList.remove("carriers-on");
-      logo.style.transform = "";
-      toggle.style.transform = "";
+      for (const a of actors) {
+        a.el.style.transform = "";
+        a.el.style.visibility = "";
+      }
     };
   }, []);
 
