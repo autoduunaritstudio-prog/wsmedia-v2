@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import { LogoFull, LogoMark } from "./Logo";
+import NavCarrier from "./NavCarrier";
 import SmartLink from "./SmartLink";
 import { getLenis } from "./SmoothScroll";
 import SocialIcon from "./SocialIcon";
@@ -125,6 +126,8 @@ export default function FullscreenNav({
     <>
       <nav id="nav" aria-label="Ylävalikko">
         <div className="navin">
+          {/* KOKEILU, poistettavissa talta yhdelta rivilta. Ks. NavCarrier.tsx. */}
+          <NavCarrier />
           {/* Logo on aria-hidden ja nimi tulee .vh-tekstista, jotta
               saavutettava nimi ja hakukoneteksti sailyvat. */}
           {logoHref ? (

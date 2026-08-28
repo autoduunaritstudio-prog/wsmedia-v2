@@ -378,6 +378,71 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
    synny. visibility hoitaa yha tab-jarjestyksen ja on diskreettina
    ominaisuutena synkassa haipymisen kanssa. */
 #nav.nav-away .logo, #nav.nav-away .navtoggle { opacity: 0; visibility: hidden }
+
+/* ---------- KOKEILU: NavCarrier (tikku-ukko) ----------
+   Poistettavissa: tama lohko + <NavCarrier /> FullscreenNav.tsx:sta. Mikaan
+   muu saanto ei viittaa naihin luokkiin.
+
+   Ei omaa scroll-laskentaa: sekvenssi soi .nav-away-luokan vaihtuessa,
+   samasta tilasta jonka nav-hide jo johtaa .logostripin rectista.
+   Suunta valitaan luokan olemassaolosta - paalla carry-out (vie pois),
+   poissa carry-in (tuo takaisin).
+
+   AJOITUS on sidottu logon omaan haipymiseen: se kestaa 200ms, ja hahmo
+   on keskella 22 % kohdalla 900ms sekvenssia eli 198ms:n kohdalla. Ele
+   osuu siis samaan hetkeen kun logo katoaa. */
+.carrier {
+  position: absolute; left: 50%; top: var(--nav-top); z-index: 2;
+  width: 40px; height: 46px; margin-left: -20px;
+  /* KAANTEINEN VARI, kuten #nav .logo { color: #fff }. #nav on
+     mix-blend-mode: difference, joten renderoity savy on |tausta - lahde|:
+     --ink (29) olisi antanut valkoisella 226 eli lahes nakymattoman
+     vaalean harmaan. #fff antaa 0 = musta, ja tummalla osiolla 242 =
+     vaalea - sama kaytos kuin logolla ja painikkeella. */
+  color: #fff; opacity: 0; pointer-events: none;
+}
+#nav.nav-away .carrier { animation: carry-out .9s cubic-bezier(.3,.7,.3,1) forwards }
+/* data-carrier asetetaan vasta ensimmaisessa tilanvaihdossa, koska
+   :not(.nav-away) on myos sivun lahtotila - ilman lippua paluuanimaatio
+   soisi kerran heti latauksessa. */
+#nav[data-carrier]:not(.nav-away) .carrier { animation: carry-in .9s cubic-bezier(.3,.7,.3,1) forwards }
+
+/* Kadet nousevat "poimimis"-hetkella ja laskeutuvat kun hahmo lahtee.
+   Oma animaationsa jotta paa ja jalat pysyvat paikallaan. */
+#nav.nav-away .carrier-arms { animation: carry-lift .9s cubic-bezier(.3,.7,.3,1) forwards }
+#nav[data-carrier]:not(.nav-away) .carrier-arms { animation: carry-lift .9s cubic-bezier(.3,.7,.3,1) forwards }
+.carrier-arms { transform-box: fill-box; transform-origin: 50% 0 }
+
+@keyframes carry-out {
+  0%   { opacity: 0; transform: translateX(90px) }
+  22%  { opacity: 1; transform: translateX(0) }
+  40%  { opacity: 1; transform: translateX(0) rotate(-9deg) }
+  58%  { opacity: 1; transform: translateX(0) rotate(0deg) }
+  100% { opacity: 0; transform: translateX(-130px) }
+}
+@keyframes carry-in {
+  0%   { opacity: 0; transform: translateX(-90px) }
+  22%  { opacity: 1; transform: translateX(0) }
+  40%  { opacity: 1; transform: translateX(0) rotate(9deg) }
+  58%  { opacity: 1; transform: translateX(0) rotate(0deg) }
+  100% { opacity: 0; transform: translateX(130px) }
+}
+@keyframes carry-lift {
+  0%, 22% { transform: rotate(0deg) }
+  40%     { transform: rotate(-24deg) }
+  58%     { transform: rotate(0deg) }
+}
+
+@media (max-width: 720px) {
+  /* Kapealla naytolla logon ja painikkeen vali on liian pieni: hahmo
+     menisi niiden paalle. */
+  .carrier { display: none }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Nav-piilotus on toiminnallinen ja jaa voimaan; hahmo on pelkkaa
+     koristetta, joten se jaa kokonaan pois. */
+  .carrier { display: none }
+}
 @media (prefers-reduced-motion: reduce) {
   /* Piilotus on toiminnallinen, ei koriste, joten se jaa voimaan kuten
      navin muutkin tilat - vain siirtyma poistuu. */
