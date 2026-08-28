@@ -31,13 +31,16 @@ export default function SiteEffects() {
     // kerroksia, joten koko sivun kokoinen tausta ei aiheuta
     // uudelleenpiirtoa framea kohden. Kohinakerros on staattinen eika
     // osallistu tahan lainkaan.
-    const mbLayer = document.querySelector<HTMLElement>(".metalbd");
+    // Paakerros ohjaa etenemaa; kaikkia kerroksia (myos tummaa varianttia)
+    // ajetaan SAMASTA arvosta, jolloin ne ovat aina samassa vaiheessa eika
+    // vaalean ja tumman alueen valiin synny hyppaysta kuviossa.
+    const mbLayer = document.querySelector<HTMLElement>(".metalbd-v2:not(.metalbd-dark)");
+    const mbLayers = Array.from(document.querySelectorAll<HTMLElement>(".metalbd-v2"));
     const mbA = document.querySelector<HTMLElement>(".metalbd-a");
     const mbB = document.querySelector<HTMLElement>(".metalbd-b");
     const mbSweep = document.querySelector<HTMLElement>(".metalbd-sweep");
-    const mbFacets = document.querySelector<HTMLElement>(".metalbd-facets");
-    const mbfA = document.querySelector<SVGGElement>(".mbf-a");
-    const mbfB = document.querySelector<SVGGElement>(".mbf-b");
+    const mbFacetsAll = Array.from(document.querySelectorAll<HTMLElement>(".metalbd-facets"));
+    const mbfAll = Array.from(document.querySelectorAll<SVGGElement>(".mbf-a, .mbf-b"));
 
     /* ---------- taustakuvio ---------- */
     const bdGrid = document.getElementById("bdGrid");
@@ -271,7 +274,7 @@ export default function SiteEffects() {
         // jota kayttaja juuri lukee on aina kuvion kirkkaimman kohdan
         // paalla. Ilman tata kirkas alue olisi kiinteassa kohdassa ja
         // sen ulkopuolelle jaava teksti tarvitsisi taas oman levynsa.
-        if (mbFacets) {
+        if (mbFacetsAll.length) {
           // Valon rata ei ole tasainen liuku vaan poikkeaa siita sinilla.
           // Sticky-pane pitaa valon joka tapauksessa nakymassa, joten rata
           // saa vaihdella ilman etta luettavuus karsii.
@@ -280,19 +283,21 @@ export default function SiteEffects() {
           // ovat yhteismitattomia, joten pari ei palaa samaan asentoon
           // kertaakaan matkan aikana - juuri se poistaa toistuvuuden.
           const gx = 56 + Math.sin(mbProg * Math.PI * 1.7) * 6;
-          mbLayer.style.setProperty("--mb-gy", `${gy.toFixed(1)}%`);
-          mbLayer.style.setProperty("--mb-gx", `${gx.toFixed(1)}%`);
+          for (const el of mbLayers) {
+            el.style.setProperty("--mb-gy", `${gy.toFixed(1)}%`);
+            el.style.setProperty("--mb-gx", `${gx.toFixed(1)}%`);
+          }
           // 120/200 -> 300/200px. Vara on 432/270px, joten tama mahtuu.
-          mbFacets.style.transform =
-            `translate3d(${(mbProg * 300).toFixed(1)}px, ${(-mbProg * 200).toFixed(1)}px, 0)`;
+          const tf = `translate3d(${(mbProg * 300).toFixed(1)}px, ${(-mbProg * 200).toFixed(1)}px, 0)`;
+          for (const el of mbFacetsAll) el.style.transform = tf;
           // Ryhmat kiertyvat VASTAKKAISIIN suuntiin ja eri vauhtia, jolloin
           // niiden leikkauspisteet vaeltavat ja fasettien rajat piirtyvat
           // sivun eri kohdissa eri tavalla. Kierto on SVG:n sisalla, joten
           // se ei voi paljastaa fasettikerroksen reunaa.
-          if (mbfA) mbfA.style.transform = `rotate(${(mbProg * 4.5).toFixed(2)}deg)`;
-          if (mbfB) {
-            mbfB.style.transform =
-              `rotate(${(-2.2 - Math.sin(mbProg * Math.PI * 1.3) * 2.4).toFixed(2)}deg)`;
+          const ra = `rotate(${(mbProg * 4.5).toFixed(2)}deg)`;
+          const rb = `rotate(${(-2.2 - Math.sin(mbProg * Math.PI * 1.3) * 2.4).toFixed(2)}deg)`;
+          for (const g of mbfAll) {
+            g.style.transform = g.classList.contains("mbf-a") ? ra : rb;
           }
         }
 
@@ -342,7 +347,10 @@ export default function SiteEffects() {
       // lasketaan joka framessa suoraan geometriasta, joten se seuraa
       // molempiin suuntiin ilman omaa siirtymaa.
       if (refSticky && refCover) {
-        const rp = Math.min(Math.max(1 - refCover.getBoundingClientRect().top / vh, 0), 1);
+        // Jaettuna 0,6:lla: tummennus on taydessa voimassa jo kun cover peittaa
+        // 60 % nakymasta. Aiemmin maksimi osui vasta 100 %:iin, jolloin
+        // paneeli oli jo piilossa eika tummennus ehtinyt kaventaa rajaa.
+        const rp = Math.min(Math.max((1 - refCover.getBoundingClientRect().top / vh) / 0.6, 0), 1);
         refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3));
       }
 

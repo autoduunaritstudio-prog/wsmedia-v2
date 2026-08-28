@@ -38,9 +38,9 @@
  * .metalbd-noise on yha olemassa blobs-versiota varten.
  */
 
-type Props = { variant?: "facets" | "blobs" };
+type Props = { variant?: "facets" | "blobs"; tone?: "light" | "dark" };
 
-export default function MetalBackdrop({ variant = "facets" }: Props) {
+export default function MetalBackdrop({ variant = "facets", tone = "light" }: Props) {
   if (variant === "blobs") {
     return (
       <div className="metalbd" aria-hidden="true">
@@ -59,7 +59,10 @@ export default function MetalBackdrop({ variant = "facets" }: Props) {
   }
 
   return (
-    <div className="metalbd metalbd-v2" aria-hidden="true">
+    <div
+      className={`metalbd metalbd-v2${tone === "dark" ? " metalbd-dark" : ""}`}
+      aria-hidden="true"
+    >
       {/* Sticky-pane on koko ratkaisun ydin. .metalbd venyy nyt coverin
           alusta footeriin asti (n. 6400px), ja jos kuviokerrokset olisivat
           sen kokoisia, preserveAspectRatio="slice" skaalaisi viewBoxin
@@ -89,9 +92,9 @@ export default function MetalBackdrop({ variant = "facets" }: Props) {
             strokeWidth="1"
             vectorEffect="non-scaling-stroke"
           >
-            <circle cx="-200" cy="-500" r="1300" fill="rgba(255,255,255,.055)" />
-            <circle cx="600" cy="2600" r="1750" fill="rgba(255,255,255,.07)" />
-            <circle cx="-500" cy="1400" r="900" fill="rgba(10,10,12,.10)" />
+            <circle className="mbc-1" cx="-200" cy="-500" r="1300" fill="rgba(255,255,255,.055)" />
+            <circle className="mbc-2" cx="600" cy="2600" r="1750" fill="rgba(255,255,255,.07)" />
+            <circle className="mbc-3" cx="-500" cy="1400" r="900" fill="rgba(10,10,12,.10)" />
           </g>
           <g
             className="mbf mbf-b"
@@ -100,8 +103,8 @@ export default function MetalBackdrop({ variant = "facets" }: Props) {
             strokeWidth="1"
             vectorEffect="non-scaling-stroke"
           >
-            <circle cx="1700" cy="-300" r="1350" fill="rgba(10,10,12,.075)" />
-            <circle cx="1900" cy="1500" r="1250" fill="rgba(10,10,12,.085)" />
+            <circle className="mbc-4" cx="1700" cy="-300" r="1350" fill="rgba(10,10,12,.075)" />
+            <circle className="mbc-5" cx="1900" cy="1500" r="1250" fill="rgba(10,10,12,.085)" />
           </g>
         </svg>
       </div>
