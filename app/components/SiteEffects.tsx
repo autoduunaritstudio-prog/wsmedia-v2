@@ -413,11 +413,6 @@ export default function SiteEffects() {
         if (overlap !== navAway) {
           navAway = overlap;
           nav.classList.toggle("nav-away", overlap);
-          // Kokeiluhahmon (NavCarrier) paluuanimaatio kytkeytyy .nav-awayn
-          // PUUTTUMISEEN, mika on myos sivun lahtotila. Ilman tata lippua se
-          // soisi kerran heti latauksessa. Asetetaan vasta ensimmaisessa
-          // tilanvaihdossa; ei omaa laskentaa, vain sama tila.
-          nav.dataset.carrier = "1";
         }
       }
 
