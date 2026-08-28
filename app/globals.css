@@ -1409,7 +1409,16 @@ footer .base { padding-top: 18px }
 .refzone { position: relative; z-index: 3; margin-top: 110px }
 #palvelut { padding-bottom: 0 }
 
-.refsticky { position: sticky; top: var(--ref-sticky-top, 0px); z-index: 1 }
+/* Taysikokoinen kuten .refs: paneeli tayttaa nakyman heti pinnautuessaan,
+   jolloin cover alkaa nousta sen paalle valittomasti eika ensin nahda
+   normaalikokoista korttia. Keskitys samalla tavalla kuin .refsissa.
+   Koskee VAIN tata paneelia - Palvelut-osion kolme muuta ovat #palvelutin
+   sisalla eivatka saa tata saantoa. */
+.refsticky {
+  position: sticky; top: var(--ref-sticky-top, 0px); z-index: 1;
+  min-height: 100vh; display: flex; align-items: center;
+}
+.refsticky > .wrap { width: 100% }
 /* Tummennus pinnatun paneelin paalla, kuten #hero-scrim heron sisalla.
    Lyhyt transition tasaa framejen valisen nykimisen jaamatta jalkeen. */
 .refscrim {

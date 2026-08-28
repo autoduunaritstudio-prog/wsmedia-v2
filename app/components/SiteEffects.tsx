@@ -173,7 +173,12 @@ export default function SiteEffects() {
         // Referenssit ei voi paljastua .aftercoverin ylapuolelle silla
         // hetkella kun se irtoaa, riippumatta ikkunan koosta tai siita
         // kuinka paljon sisaltoa lukukaistan jalkeen on.
-        afterCover?.style.setProperty("--aftercover-min", `${Math.round(h)}px`);
+        // +2px turvamarginaali: C = H on matemaattisesti tasan riittava
+        // (paljastuva kaistale on korkeudeltaan H - C), mutta offsetHeight
+        // pyoristaa kokonaislukuun ja todellinen korkeus voi olla
+        // murtoluku. Kahden pikselin ylimaara sulkee pois kaiken
+        // pyoristyksesta syntyvan raon eika nay missaan.
+        afterCover?.style.setProperty("--aftercover-min", `${Math.ceil(h) + 2}px`);
       }
     };
 
