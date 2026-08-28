@@ -155,6 +155,11 @@ export default function SiteEffects() {
     const refCover = document.querySelector<HTMLElement>(".refs");
     const afterCover = document.querySelector<HTMLElement>(".aftercover");
     const REF_SCRIM_MAX = 0.65;
+    // Coverin sisaantulohaivytys. Kerroin ON SUORAAN se nakyvyysosuus
+    // jolla opacity saavuttaa 1:n: kun ylareuna on kohdassa vh - f*vh,
+    // osiota on nakyvissa f*vh eli f osuus nakymasta. 0.35 osuu pyydetyn
+    // 30-40 %:n haarukan keskelle.
+    const COVER_FADE_SPAN = 0.35;
     let refRo: ResizeObserver | null = null;
 
     const measureRef = () => {
@@ -352,6 +357,16 @@ export default function SiteEffects() {
         // paneeli oli jo piilossa eika tummennus ehtinyt kaventaa rajaa.
         const rp = Math.min(Math.max((1 - refCover.getBoundingClientRect().top / vh) / 0.6, 0), 1);
         refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3));
+      }
+
+      // Coverit materialisoituvat sisaan: koko elementin opacity seuraa
+      // sita kuinka suuri osa nakymasta on jo sen peitossa. Arvo johdetaan
+      // joka framessa rectista eika deltoista, joten se palautuu
+      // ylospain skrollattaessa samaa rataa eika voi jaada jumiin.
+      for (const el of [refCover, afterCover]) {
+        if (!el) continue;
+        const v = (vh - el.getBoundingClientRect().top) / (vh * COVER_FADE_SPAN);
+        el.style.setProperty("--cover-fade", Math.min(Math.max(v, 0), 1).toFixed(3));
       }
 
       // Kolmas pari: Referenssien tummennus etenee kun .aftercover nousee

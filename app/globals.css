@@ -1520,14 +1520,13 @@ footer .base { padding-top: 18px }
   min-height: 100vh; display: flex; align-items: center;
   background: var(--dark); color: #f5f5f7;
   padding: var(--space-section) 0;
-  /* JOHTOREUNAN PEHMENNYS. Ilman tata koko cover ilmestyi taydella
-     opacityla heti kun sen ylareuna tuli nakyviin: mitattuna hyppy
-     scrimatusta paneelista (RGB 92) coverin omaan pohjaan (13) on 79
-     yksikkoa yhdella rivilla. 80px maski muuttaa sen liu'uksi.
-     Sisalto ei osu kaistalle: padding-top on 120px. */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 80px);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 80px);
+  /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
+     0 kun ylareuna on nakyman alalaidassa, 1 kun osiota on nakyvissa 35 %
+     nakymasta. Varasyotto 1 pitaa osion nakyvissa jos JS ei ehdi ajaa
+     ensimmaista framea tai jos prefers-reduced-motion pysayttaa scrubin. */
+  opacity: var(--cover-fade, 1);
 }
+
 /* Sisalto kuviokerroksen ylle: .metalbd on absoluuttinen z-index 0, ja
    sijoittamaton sisalto piirtyisi sen ALLE. Sama porrastus kuin
    .coverissa, jossa lasikortit nousevat kuvion ylle omalla
@@ -1550,18 +1549,17 @@ footer .base { padding-top: 18px }
   position: relative; z-index: 3;
   background: var(--bg);
   min-height: var(--aftercover-min, 100vh);
-  /* Sama pehmennys. Tama on kolmesta coverista se jolla hyppy oli
-     suurin: --dark (13) ei tummene scrimista kaytannossa lainkaan, joten
-     ero coverin valkoiseen pohjaan on 242 yksikkoa.
-
-     padding-top: 80px on PAKOLLINEN maskin parina. .statband-sec:n
-     ylapadding on 0 ja .statbandin oma 44px, joten lukukaistan numerot
-     olisivat osuneet keskelle haivytyskaistaa ja piirtyneet
-     puolilapinakyvina. Padding tyontaa ne kaistan alapuolelle. */
+  /* Jaa maskin ajalta, mutta perustelu on nyt eri: kaista antaa
+     lukukaistan numeroille ilmaa siina kohdassa jossa tumma osio vaihtuu
+     vaaleaan - ilman sita ne alkaisivat 44px:n paasta rajasta. */
   padding-top: 80px;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 80px);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 80px);
+  /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
+     0 kun ylareuna on nakyman alalaidassa, 1 kun osiota on nakyvissa 35 %
+     nakymasta. Varasyotto 1 pitaa osion nakyvissa jos JS ei ehdi ajaa
+     ensimmaista framea tai jos prefers-reduced-motion pysayttaa scrubin. */
+  opacity: var(--cover-fade, 1);
 }
+
 .refs h2 { color: #f5f5f7 }
 /* Vaaleampi kuin muualla kaytetty #6fb1ff. Tumma kuviokerros nostaa
    pohjan vaaleimmillaan RGB 87:aan, jossa #6fb1ff jaisi 3,26:1:een.
