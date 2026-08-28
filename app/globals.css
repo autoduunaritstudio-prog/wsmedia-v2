@@ -888,49 +888,6 @@ section { padding: var(--space-section) 0 }
    joissa kicker on yha, ja globaali nollaus tiivistaisi ne kaikki. */
 .cover .shead h2 { margin-top: 0 }
 
-/* ---------- ESITTELYOSIO (etusivu, logonauhan jalkeen) ----------
-   Lyhyt teksti + tayslevea tiimikuvan paikkamerkki. Teksti kayttaa samoja
-   tokeneita kuin .shead (h2 + --text-lead-sm), mutta omat saannot koska
-   .shead on jaettu kaikkien kahdeksan sivun kesken.
-
-   Valistys: .logos + section antaa talle ylavalin (100px), alavali
-   nollataan ja Palvelut saa saman 100px:n .intro + sectionista. Ilman
-   .intro + sectionia Palvelut jaisi oletukselle 120px, koska sisarus-
-   valitsin .logos + section osuu nyt tahan lohkoon eika enaa siihen.
-   Tekstin ja kuvan vali on tiiviimpi (--space-shead-gap 56px), jotta ne
-   lukeutuvat yhdeksi kokonaisuudeksi eivatka kahdeksi osioksi. */
-.intro { padding-bottom: 0 }
-.intro + section { padding-top: var(--space-section-tight) }
-.introtxt { max-width: 600px }
-.introtxt .sub { margin-top: 14px; font-size: var(--text-lead-sm) }
-
-/* TODO: korvaa oikealla tiimikuvalla kun saatavilla.
-   Kun kuva tulee: vaihda .teamphoto-wide <Image />:ksi (fill + wrapper
-   tai leveys/korkeus 1032x442), sailyta aspect-ratio 21/9 ja
-   border-radius 20px, ja poista .teamphoto-wide / .teamphoto-mark
-   talta. Katkoviivareunus on tarkoituksellinen: paikkamerkin pitaa
-   nayttaa tilapaiselta eika viimeistellylta mockupilta. */
-.teamphoto-wide {
-  margin-top: var(--space-shead-gap);
-  aspect-ratio: 21 / 9;
-  border-radius: 20px;
-  background: rgba(29,29,31,.05);
-  border: 1px dashed rgba(29,29,31,.24);
-  display: grid; place-items: center;
-}
-.teamphoto-mark {
-  font-size: var(--text-label); font-weight: var(--weight-semibold);
-  /* --ink eika --grey: banneri on tayslevea ja ulottuu kuvion tummemmalle
-     oikealle puolelle, jolloin --grey jai mitattuna 4,51:1:een eli 0,01
-     yli AA:n. Se ei ole marginaali. --ink antaa 12,33:1, ja pieni
-     harvennettu versaali pysyy silti hillittyna. */
-  letter-spacing: .08em; text-transform: uppercase; color: var(--ink);
-}
-@media (max-width: 720px) {
-  /* 21:9 olisi kapealla naytolla vain n. 140px korkea kaistale. */
-  .teamphoto-wide { aspect-ratio: 16 / 9; margin-top: var(--space-shead-gap-mobile) }
-}
-
 .card {
   background: #fff; border: 1px solid var(--hair);
   box-shadow: 0 24px 60px -24px rgba(29,29,31,.16);
