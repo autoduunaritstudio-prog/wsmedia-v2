@@ -1334,7 +1334,9 @@ footer .base { padding-top: 18px }
    samalla hetkella. Reunojen mask haivyttaa logot sisaan ja ulos, jottei
    silmukka katkea teravaan reunaan. */
 .logostrip {
-  --logostrip-gap: 72px;
+  /* Vali kasvatettiin samassa suhteessa kuin logot (36 -> 42px), jolloin
+     vali/korkeus-suhde pysyy 2,0:ssa eika nauha tiivisty. */
+  --logostrip-gap: 84px;
   overflow: hidden;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
@@ -1351,7 +1353,7 @@ footer .base { padding-top: 18px }
    96,8% kuva-alasta ja on sisalta 73% umpinainen), jolloin varjosta tulee
    valttamatta laatikko. Sama arvo nayttaa siis eri logoilla eri asialta,
    joten kaista toimii paremmin kokonaan ilman varjoja. */
-.logostrip img { display: block; height: 36px; width: auto }
+.logostrip img { display: block; height: 42px; width: auto }
 
 @media (prefers-reduced-motion: reduce) {
   /* Ilman scroll-sidosta nauha jaisi vasempaan reunaan kiinni, joten
@@ -1362,8 +1364,8 @@ footer .base { padding-top: 18px }
 }
 
 @media (max-width: 640px) {
-  .logostrip { --logostrip-gap: 44px }
-  .logostrip img { height: 30px }
+  .logostrip { --logostrip-gap: 50px }
+  .logostrip img { height: 34px }
 }
 
 /* ============ SPARKLINE (case-kortit) ============ */
