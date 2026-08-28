@@ -94,7 +94,7 @@ export default function NavCarriers() {
     nav.classList.add("carriers-on");
 
     const P = (n: string) => svg.querySelector<SVGElement>(`[data-p="${n}"]`);
-    type Actor = { el: HTMLElement; home: Vec; edge: number; sign: number; face: number; prevX: number };
+    type Actor = { el: HTMLElement; home: Vec; edge: number; sign: number; face: number; prevX: number; prevDist: number | null; gaitAcc: number };
     const actors: Actor[] = [];
     let ground = 0;
 
@@ -115,7 +115,7 @@ export default function NavCarriers() {
         const home = { x: h.left + h.width / 2, y: h.top + h.height / 2 };
         const edge = sign < 0 ? -90 : window.innerWidth + 90;
         if (actors[i]) Object.assign(actors[i], { home, edge });
-        else actors.push({ el, home, edge, sign, face: -sign, prevX: edge });
+        else actors.push({ el, home, edge, sign, face: -sign, prevX: edge, prevDist: null, gaitAcc: 0 });
       });
     };
     measure();
@@ -175,9 +175,26 @@ export default function NavCarriers() {
           x = stopX + (a.edge - stopX) * t;
           dist = D1 + D3 * t;
         }
-        // Askelvaihe MATKASTA, ei ajasta: sama jalkojen kiinnitys millä
-        // tahansa scroll-nopeudella.
-        const gait = ((dist / (2 * STEP)) % 1 + 1) % 1;
+        // Askelvaihe KULJETUSTA MATKASTA, ei ajasta - ja nimenomaan matkan
+        // ITSEISARVOISESTA muutoksesta, ei dist-arvosta suoraan.
+        //
+        // Aiemmin tassa oli gait = dist / (2*STEP). dist on funktio u:sta,
+        // joten kun u laskee (paluumatka), askelkello pyori TAAKSEPAIN ja
+        // heilahtava jalka kaarsi edesta taakse - moonwalk. Tukijalka pysyi
+        // silti maassa (lantio -face*STEP, jalka suht. +face*STEP, summa 0),
+        // minka takia vika nakyi vain heilahdusjalassa eika koko hahmo
+        // luistanut. Se selittaa myos miksi kuvio toistui identtisena
+        // molempiin scrollisuuntiin: vaiheet 1-2 ovat aina u:n NOUSUA ja
+        // vaiheet 3-4 aina u:n LASKUA, riippumatta siita kumpaan suuntaan
+        // kayttaja skrollaa.
+        //
+        // Kertyma on pelkka esitystiedon apumuuttuja: sijainti ja kanto ovat
+        // yha puhtaita funktioita u:sta, joten tama ei palauta sita
+        // tilaluokkaa jonka v2 poisti.
+        if (a.prevDist === null) a.prevDist = dist;
+        a.gaitAcc += Math.abs(dist - a.prevDist);
+        a.prevDist = dist;
+        const gait = ((a.gaitAcc / (2 * STEP)) % 1 + 1) % 1;
         // Nopeus suoraan x:n muutoksesta - ei johdettuja etumerkkeja.
         const vx = x - a.prevX;
         a.prevX = x;
