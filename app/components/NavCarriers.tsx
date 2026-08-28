@@ -68,6 +68,13 @@ const SHOW_BUF = 24;  // sama kuin NAV_SHOW_BUFFER_OUT
 const A = 0.4;        // u: kavely sisaan paattyy
 const B = 0.55;       // u: tartunta paattyy, kanto alkaa
 const LEAN_MAX = 0.28; // rad, n. 16 astetta
+/* Liikehaivytys. Nopeus tulee samasta rAF-silmukasta ja samasta
+   .logostrip-rectista kuin hahmojen sijainti - ei erillista mekanismia.
+   K on mitoitettu niin etta reipas veto (n. 2000 px/s) osuu kattoon ja
+   tavallinen selailu (n. 400 px/s) jaa 0,6px:aan eli tuskin nakyvaksi. */
+const BLUR_K = 0.0015;
+const BLUR_MAX = 3;
+const BLUR_DECAY = 0.75; // per frame; palautuu teravaksi n. 8 framessa
 
 export default function NavCarriers() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -115,10 +122,24 @@ export default function NavCarriers() {
     window.addEventListener("resize", measure, { passive: true });
 
     let raf = 0;
+    let prevTop: number | null = null;
+    let prevT = 0;
+    let blur = 0;
 
-    const frame = () => {
+    const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       const r = strip.getBoundingClientRect();
+
+      // Scroll-nopeus rectin muutoksesta: nauha liikkuu sivun mukana, joten
+      // |dTop|/dt ON scroll-nopeus. Ei omaa scroll-kuuntelijaa.
+      const dt = prevT ? Math.min((now - prevT) / 1000, 0.05) : 0;
+      const vScroll = prevTop !== null && dt > 0 ? Math.abs(r.top - prevTop) / dt : 0;
+      prevTop = r.top;
+      prevT = now;
+      // Nousee heti, laskee vaimennetusti - blur ei jaa roikkumaan kun
+      // scroll pysahtyy, mutta ei myoskaan valky yksittaisista frameista.
+      blur = Math.max(Math.min(vScroll * BLUR_K, BLUR_MAX), blur * BLUR_DECAY);
+      const blurPx = blur < 0.05 ? 0 : blur;
       const navH = nav.getBoundingClientRect().height;
       const ph = clamp((navH + HIDE_BUF + RUN - r.top) / RUN, 0, 1);
       const ps = clamp((SHOW_BUF - r.bottom) / RUN, 0, 1);
@@ -129,7 +150,10 @@ export default function NavCarriers() {
         const grp = P(`c${i}`);
         // Hahmo on nakyvissa vain kun jotain tapahtuu.
         const visible = u > 0.001 && u < 0.999;
-        if (grp) grp.style.opacity = visible ? "1" : "0";
+        if (grp) {
+          grp.style.opacity = visible ? "1" : "0";
+          grp.style.filter = blurPx ? `blur(${blurPx.toFixed(2)}px)` : "";
+        }
 
         // --- polku: reuna -> pysahdys -> reuna, x puhtaana funktiona u:sta.
         // Pysahdys on 26px elementista SILLE PUOLELLE josta hahmo tulee,
@@ -204,12 +228,16 @@ export default function NavCarriers() {
         const sp = P(`c${i}s`);
         if (sp) sp.setAttribute("d", `M${hip.x.toFixed(1)} ${hip.y.toFixed(1)} L${shoulder.x.toFixed(1)} ${shoulder.y.toFixed(1)}`);
         for (let f = 0; f < 2; f++) {
-          const k = ik(hip, feet[f], L.thigh, L.shin, a.face > 0 ? 1 : -1);
+          // flip on KAANTEINEN face:iin nahden: ruutukoordinaateissa (y alas)
+          // flip=-1 vie nivelen +x-suuntaan. Kavellessa oikealle (face=+1)
+          // polven on taivuttava ETEEN eli +x, joten flip = -face.
+          const k = ik(hip, feet[f], L.thigh, L.shin, a.face > 0 ? -1 : 1);
           const s = P(`c${i}l${f}`);
           if (s) s.setAttribute("d", `M${hip.x.toFixed(1)} ${hip.y.toFixed(1)} L${k.x.toFixed(1)} ${k.y.toFixed(1)} L${feet[f].x.toFixed(1)} ${feet[f].y.toFixed(1)}`);
         }
         for (let h = 0; h < 2; h++) {
-          const e = ik(shoulder, hands[h], L.upperArm, L.foreArm, a.face > 0 ? -1 : 1);
+          // Kyynarpaa taipuu TAAKSE eli face:n vastasuuntaan.
+          const e = ik(shoulder, hands[h], L.upperArm, L.foreArm, a.face > 0 ? 1 : -1);
           const s = P(`c${i}a${h}`);
           if (s) s.setAttribute("d", `M${shoulder.x.toFixed(1)} ${shoulder.y.toFixed(1)} L${e.x.toFixed(1)} ${e.y.toFixed(1)} L${hands[h].x.toFixed(1)} ${hands[h].y.toFixed(1)}`);
         }
@@ -222,6 +250,9 @@ export default function NavCarriers() {
           hold > 0.001
             ? `translate(${((hx - a.home.x) * hold).toFixed(1)}px, ${((hy - a.home.y) * hold).toFixed(1)}px)`
             : "";
+        // Sama haivytys kannettavaan elementtiin, mutta VAIN kun se on
+        // kasissa - muuten logo sumenisi jokaisella nopealla scrollilla.
+        a.el.style.filter = hold > 0.001 && blurPx ? `blur(${blurPx.toFixed(2)}px)` : "";
         // Tab-jarjestys: piiloon vasta kun elementti on oikeasti pois ruudulta.
         a.el.style.visibility = u > 0.985 ? "hidden" : "";
       }
@@ -235,6 +266,7 @@ export default function NavCarriers() {
       for (const a of actors) {
         a.el.style.transform = "";
         a.el.style.visibility = "";
+        a.el.style.filter = "";
       }
     };
   }, []);
