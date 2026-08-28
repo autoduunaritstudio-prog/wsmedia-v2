@@ -1552,9 +1552,17 @@ footer .base { padding-top: 18px }
      aloittaa coverin nousun sen verran aikaisemmin, jolloin tyhja kaista
      jaa peittoon sen sijaan etta se pitaisi ensin skrollata lapi.
 
-     --refs-lead on tama kokeilun nuppi: yksi luku saataa aloituskohtaa.
-     10vh = 90px 900px nakymassa. */
-  margin-top: calc(-1 * var(--refs-lead, 10vh));
+     --refs-lead on tama kokeilun nuppi. KATTO on kuitenkin pakollinen:
+     paneelin sisalto paattyy 538px:n kohdalla (110px padding + 428px
+     sisalto), joten turvallinen lead on korkeintaan korkeus - 538px. Se
+     on 40,2vh 900px nakymassa mutta vain 23,1vh 700px:n nakymassa - yksi
+     kiintea vh-arvo ei siis voi olla turvallinen kaikilla korkeuksilla.
+     Paljas 30vh olisi syonyt 700px:n naytolla sisaltoa 48px.
+
+     clamp hoitaa taman: 100vh - 600px on korkeus miinus sisalto ja 62px
+     turvamarginaali, ja alaraja 0 estaa marginaalin kaantymisen
+     positiiviseksi hyvin matalilla ikkunoilla. */
+  margin-top: calc(-1 * clamp(0px, var(--refs-lead, 30vh), 100vh - 600px));
   background: var(--dark); color: #f5f5f7;
   padding: var(--space-section) 0;
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
