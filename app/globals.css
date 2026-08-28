@@ -729,7 +729,23 @@ h2.big { font-size: var(--text-h2-hero) }
    Lyhyt transition tasaa framejen valisen nykimisen jaamatta jalkeen. */
 #hero-scrim {
   position: absolute; inset: 0; z-index: 5; pointer-events: none;
-  background: rgba(13,13,16, var(--scrim-opacity, 0));
+  /* KORJAUS: tasainen rgba-tayte teki scrimista teravarajaisen
+     suorakulmion, jonka korkeus oli tasan isantaelementin korkeus. Nyt
+     tayte on gradientti jonka ylin ja alin 120px liukuvat lapinakyvaan,
+     jolloin tummennuksella ei ole nakyvaa reunaa. Vaakareunat eivat
+     tarvitse haivytysta: lohko on taysleveä, joten ne ovat ruudun
+     ulkopuolella. mask-image olisi toinen tapa, mutta gradienttitayte
+     riittaa tassa eika vaadi toista ominaisuutta muuttujan rinnalle. */
+  /* Heron oma reuna oli kaytannossa aina ruudun ulkopuolella (hero on
+     viewporttia korkeampi), joten vika ei nakynyt taalla - haivytys
+     lisataan silti, jottei se paljastu jos hero joskus lyhenee. */
+  background: linear-gradient(
+    to bottom,
+    rgba(13,13,16,0) 0,
+    rgba(13,13,16, var(--scrim-opacity, 0)) 120px,
+    rgba(13,13,16, var(--scrim-opacity, 0)) calc(100% - 120px),
+    rgba(13,13,16,0) 100%
+  );
   transition: background 80ms linear;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1390,7 +1406,7 @@ footer .base { padding-top: 18px }
    .refs 2). Taalla ei myoskaan kayteta overflow-rajausta: se tekisi
    .metalbd:n esivanhemmasta vieritettavan sailion ja katkaisisi
    metallikuvion oman sticky-paneen. */
-.refzone { position: relative; margin-top: 110px }
+.refzone { position: relative; z-index: 3; margin-top: 110px }
 #palvelut { padding-bottom: 0 }
 
 .refsticky { position: sticky; top: var(--ref-sticky-top, 0px); z-index: 1 }
@@ -1398,14 +1414,47 @@ footer .base { padding-top: 18px }
    Lyhyt transition tasaa framejen valisen nykimisen jaamatta jalkeen. */
 .refscrim {
   position: absolute; inset: 0; z-index: 5; pointer-events: none;
-  background: rgba(13,13,16, var(--ref-scrim, 0));
+  background: linear-gradient(
+    to bottom,
+    rgba(13,13,16,0) 0,
+    rgba(13,13,16, var(--ref-scrim, 0)) 120px,
+    rgba(13,13,16, var(--ref-scrim, 0)) calc(100% - 120px),
+    rgba(13,13,16,0) 100%
+  );
   transition: background 80ms linear;
 }
 
+/* Referenssit on SEKA parin 2 cover ETTA parin 3 pinnattava: se liukuu
+   ensin Tapahtumat-paneelin paalle, pinnautuu sitten itse, ja .aftercover
+   nousee sen paalle. Sticky-elementti liikkuu normaalisti kunnes se
+   kiinnittyy, joten sama elementti kelpaa molempiin rooleihin. */
 .refs {
-  position: relative; z-index: 2;
+  position: sticky; top: var(--refs-sticky-top, 0px); z-index: 2;
+  min-height: 100vh; display: flex; align-items: center;
   background: var(--dark); color: #f5f5f7;
   padding: var(--space-section) 0;
+}
+.refsscrim {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(13,13,16,0) 0,
+    rgba(13,13,16, var(--refs-scrim, 0)) 120px,
+    rgba(13,13,16, var(--refs-scrim, 0)) calc(100% - 120px),
+    rgba(13,13,16,0) 100%
+  );
+  transition: background 80ms linear;
+}
+/* Ruudukko saa oman, .wrapia leveamman raamin: 100vh:n korkuisessa
+   osiossa 1080px jattaisi 9:16-kortit turhan kapeiksi. */
+.refs > .wrap { max-width: 1320px; width: 100% }
+
+/* Referenssien cover. Korkeus >= Referenssit-osion korkeus tulee
+   JS-mittauksesta; 100vh on vain varasyotto ennen ensimmaista mittausta. */
+.aftercover {
+  position: relative; z-index: 3;
+  background: var(--bg);
+  min-height: var(--aftercover-min, 100vh);
 }
 .refs h2 { color: #f5f5f7 }
 .refs .kick { color: #6fb1ff }
@@ -1435,8 +1484,8 @@ footer .base { padding-top: 18px }
   /* Sama kaytos kuin herolla: molemmat osiot normaalissa virtauksessa,
      ei peittoa eika tummennusta. SiteEffects ei aja scrub-laskentaa
      tassa tilassa, joten muuttuja jaa nollaan. */
-  .refsticky { position: relative }
-  .refscrim { display: none }
+  .refsticky, .refs { position: relative }
+  .refscrim, .refsscrim { display: none }
 }
 
 /* ============ DEKO-ELEMENTIT ============ */

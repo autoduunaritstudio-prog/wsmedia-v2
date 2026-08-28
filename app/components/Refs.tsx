@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useCallback } from "react";
+import { useCallback, type ReactNode } from "react";
 
 /**
  * REFERENSSIT: toinen sticky+cover-pari samalla sivulla.
@@ -37,7 +37,7 @@ const CARDS = [
   { title: "[Asiakas 5]", meta: "Tapahtumat · [pvm]" },
 ];
 
-export default function Refs() {
+export default function Refs({ children }: { children: ReactNode }) {
   // Hover-kaynnistys, EI IntersectionObserveria: ruudukossa on viisi
   // korttia yhta aikaa nakyvissa, ja automaattitoisto kaynnistaisi ne
   // kaikki. play() palauttaa promisen joka hylkaytyy kun srcia ei viela
@@ -121,6 +121,7 @@ export default function Refs() {
           parhaiten tummalla, ja sivustolla on jo sama tumma kaista-idiomi
           (/lyhytvideot .work). */}
       <section className="refs" id="referenssit">
+        <div className="refsscrim" aria-hidden="true" />
         <div className="wrap">
           <div className="shead center rv" data-par="0.03">
             <span className="kick">Referenssit</span>
@@ -153,6 +154,15 @@ export default function Refs() {
           </div>
         </div>
       </section>
+
+      {/* Kolmas pari: Referenssit on itse pinnattava ja tama on sen cover.
+          Tausta on lapinakymaton (--bg), koska cover-mekanismi vaatii sen -
+          metallikuvio jaa siis piiloon taman lohkon kohdalla ja palaa
+          nakyviin heti sen jalkeen, kun sisalto muuttuu taas
+          lapinakyvaksi. Korkeus pakotetaan JS:sta vahintaan Referenssit-
+          osion korkuiseksi, jolloin ehto C >= H on rakenteellisesti
+          taattu eika riipu sisallon maarasta tai ikkunan korkeudesta. */}
+      <div className="aftercover">{children}</div>
     </div>
   );
 }

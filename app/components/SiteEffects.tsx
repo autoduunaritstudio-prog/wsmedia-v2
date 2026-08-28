@@ -150,19 +150,38 @@ export default function SiteEffects() {
     // viewportia korkeampi, muuten 0.
     const refSticky = document.querySelector<HTMLElement>(".refsticky");
     const refCover = document.querySelector<HTMLElement>(".refs");
+    const afterCover = document.querySelector<HTMLElement>(".aftercover");
     const REF_SCRIM_MAX = 0.65;
     let refRo: ResizeObserver | null = null;
 
     const measureRef = () => {
-      if (!refSticky) return;
-      const top = Math.min(0, window.innerHeight - refSticky.offsetHeight);
-      refSticky.style.setProperty("--ref-sticky-top", `${Math.round(top)}px`);
+      if (refSticky) {
+        const top = Math.min(0, window.innerHeight - refSticky.offsetHeight);
+        refSticky.style.setProperty("--ref-sticky-top", `${Math.round(top)}px`);
+      }
+      if (refCover) {
+        // Sama kaava kolmannelle parille. Referenssit on min-height: 100vh,
+        // joten top on yleensa 0; kaava kattaa senkin tapauksen etta sisalto
+        // kasvattaa osion viewporttia korkeammaksi matalalla ikkunalla.
+        const h = refCover.offsetHeight;
+        refCover.style.setProperty(
+          "--refs-sticky-top",
+          `${Math.round(Math.min(0, window.innerHeight - h))}px`,
+        );
+        // EHTO C >= H PAKOTETAAN TASSA, ei jateta sisallon varaan: coverin
+        // vahimmaiskorkeudeksi asetetaan pinnattavan oma korkeus. Nain
+        // Referenssit ei voi paljastua .aftercoverin ylapuolelle silla
+        // hetkella kun se irtoaa, riippumatta ikkunan koosta tai siita
+        // kuinka paljon sisaltoa lukukaistan jalkeen on.
+        afterCover?.style.setProperty("--aftercover-min", `${Math.round(h)}px`);
+      }
     };
 
-    if (refSticky && !reduce) {
+    if ((refSticky || refCover) && !reduce) {
       measureRef();
       refRo = new ResizeObserver(measureRef);
-      refRo.observe(refSticky);
+      if (refSticky) refRo.observe(refSticky);
+      if (refCover) refRo.observe(refCover);
       window.addEventListener("resize", measureRef, { passive: true, signal });
     }
 
@@ -320,6 +339,13 @@ export default function SiteEffects() {
       if (refSticky && refCover) {
         const rp = Math.min(Math.max(1 - refCover.getBoundingClientRect().top / vh, 0), 1);
         refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3));
+      }
+
+      // Kolmas pari: Referenssien tummennus etenee kun .aftercover nousee
+      // sen paalle. Sama geometriasta johdettu kaava kuin kahdella muulla.
+      if (refCover && afterCover) {
+        const ap = Math.min(Math.max(1 - afterCover.getBoundingClientRect().top / vh, 0), 1);
+        refCover.style.setProperty("--refs-scrim", (ap * REF_SCRIM_MAX).toFixed(3));
       }
 
       if (hero && cover) {

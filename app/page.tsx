@@ -54,19 +54,25 @@ export default function Home() {
           <MetalBackdrop />
           <Logos />
           <Services />
-          <Refs />
-          <section className="statband-sec">
-            <div className="wrap">
-              <StatBand stats={STATS} />
-            </div>
-          </section>
         </div>
       </div>
-      {/* Metallikuvio ulottuu coverista footeriin asti. .cover on
-          z-index 2, joten sen sisalla oleva kuviokerros peittaisi nama
-          osiot ilman omaa korkeampaa tasoa. */}
-      <div className="belowcover">
+      {/* Toinen ja kolmas sticky+cover-pari. .refzone on .coverin ULKOPUOLELLA
+          ja omalla tasollaan, koska Referenssit tarvitsee coverikseen kaiken
+          sen jalkeisen sisallon - sticky-elementti ja sen cover on oltava
+          saman kaareen lapsia. Lukukaista ja Tulokset menevat .aftercoveriin
+          eli Referenssien coveriksi. */}
+      <Refs>
+        <section className="statband-sec">
+          <div className="wrap">
+            <StatBand stats={STATS} />
+          </div>
+        </section>
         <Results />
+      </Refs>
+      {/* Naiden alta metallikuvio nakyy taas: .aftercover oli viimeinen
+          lapinakymaton lohko. z-index 3 nostaa nama .coverin sisalla olevan
+          kuviokerroksen ylapuolelle. */}
+      <div className="belowcover">
         <Process />
         <HomeFaq />
         <Contact />
