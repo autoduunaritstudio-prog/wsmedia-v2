@@ -10,11 +10,12 @@ import StatBand from "./components/StatBand";
 import Services from "./components/Services";
 import Results from "./components/Results";
 import Process from "./components/Process";
-import Pricing from "./components/Pricing";
+import HomeFaq from "./components/HomeFaq";
 import Contact from "./components/Contact";
 import FinalCta from "./components/FinalCta";
 import Footer from "./components/Footer";
 import { HOME_FOOTER, OVERLAY_NAV } from "./components/site-data";
+import { buildHomeFaqJsonLd } from "./faq-data";
 
 const STATS = [
   { value: "150+", label: "toteutettua projektia" },
@@ -29,6 +30,12 @@ const STATS = [
 export default function Home() {
   return (
     <>
+      {/* FAQPage samasta lahteesta kuin nakyva UKK-osio (app/faq-data.tsx),
+          jolloin merkinta ja sisalto eivat paase erkanemaan. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildHomeFaqJsonLd()) }}
+      />
       <div id="prog" />
       <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
       {/* Sticky hero + nouseva cover. Hero pysyy kiinnitettyna ruudun
@@ -59,7 +66,7 @@ export default function Home() {
       <div className="belowcover">
         <Results />
         <Process />
-        <Pricing />
+        <HomeFaq />
         <Contact />
         <FinalCta />
       </div>

@@ -18,7 +18,6 @@ export const ROUTES = {
   tapahtumat: "/#palvelut",
   palvelut: "/#palvelut",
   prosessi: "/#prosessi",
-  hinnoittelu: "/#paketit",
   yhteys: "/#lomake",
 } as const;
 
@@ -87,7 +86,7 @@ export const OVERLAY_NAV: NavLink[] = [
   { href: "/", label: "Etusivu" },
   { href: "#palvelut", label: "Palvelut", menu: SERVICE_MENU },
   { href: "#prosessi", label: "Prosessi" },
-  { href: "#paketit", label: "Hinnoittelu" },
+  { href: "#ukk", label: "Usein kysyttyä" },
   { href: ROUTES.toihin, label: "Töihin meille" },
   // Yhteystiedot-sivua ei ole; ankkuri etusivun lomakkeeseen.
   { href: "#lomake", label: "Yhteystiedot" },
@@ -146,7 +145,7 @@ export const HOME_FOOTER: FooterColumn[] = [
     title: "Yritys",
     links: [
       { href: "#prosessi", label: "Prosessi" },
-      { href: "#paketit", label: "Hinnoittelu" },
+      { href: "#ukk", label: "Usein kysyttyä" },
       { href: "#lomake", label: "Ota yhteyttä" },
       { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },
@@ -186,7 +185,7 @@ export const SUBPAGE_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
-      { href: ROUTES.hinnoittelu, label: "Hinnoittelu" },
+      { href: "/#ukk", label: "Usein kysyttyä" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
       { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },
@@ -228,7 +227,7 @@ export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
-      { href: ROUTES.hinnoittelu, label: "Hinnoittelu" },
+      { href: "/#ukk", label: "Usein kysyttyä" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
       { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },
@@ -269,7 +268,7 @@ export const SEO_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
-      { href: ROUTES.hinnoittelu, label: "Hinnoittelu" },
+      { href: "/#ukk", label: "Usein kysyttyä" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
       { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },

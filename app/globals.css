@@ -1549,28 +1549,28 @@ footer .base { padding-top: 18px }
   transition: border-color .2s, color .2s, background .2s; background: #fff;
 }
 .page-palvelu .cities a:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-tint) }
-.page-palvelu .faq { max-width: 820px; margin: 0 auto }
-.page-palvelu .faq details { border-bottom: 1px solid var(--hair) }
-.page-palvelu .faq summary {
+.faq { max-width: 820px; margin: 0 auto }
+.faq details { border-bottom: 1px solid var(--hair) }
+.faq summary {
   list-style: none; cursor: pointer; padding: 16px 40px 16px 0; position: relative;
   font-size: var(--text-body-lg); font-weight: var(--weight-semibold); letter-spacing: -0.014em; line-height: 1.35;
 }
-.page-palvelu .faq summary::-webkit-details-marker { display: none }
-.page-palvelu .faq summary::after {
+.faq summary::-webkit-details-marker { display: none }
+.faq summary::after {
   content: ""; position: absolute; right: 8px; top: 50%;
   width: 9px; height: 9px; border-right: 1.8px solid var(--grey); border-bottom: 1.8px solid var(--grey);
   transform: translateY(-70%) rotate(45deg); transition: transform .25s;
 }
-.page-palvelu .faq details[open] summary::after { transform: translateY(-30%) rotate(225deg) }
-.page-palvelu .faq summary:hover { color: var(--blue) }
-.page-palvelu .faq .a { padding: 0 36px 20px 0; font-size: var(--text-body-sm); color: var(--grey); line-height: 1.6 }
-.page-palvelu .faq .a a { color: var(--blue); text-decoration: none }
-.page-palvelu .faq .a a:hover { text-decoration: underline }
-.page-palvelu .faqgroup {
+.faq details[open] summary::after { transform: translateY(-30%) rotate(225deg) }
+.faq summary:hover { color: var(--blue) }
+.faq .a { padding: 0 36px 20px 0; font-size: var(--text-body-sm); color: var(--grey); line-height: 1.6 }
+.faq .a a { color: var(--blue); text-decoration: none }
+.faq .a a:hover { text-decoration: underline }
+.faqgroup {
   font-size: var(--text-caption-sm); font-weight: var(--weight-semibold); letter-spacing: .1em; text-transform: uppercase;
   color: var(--grey); margin: 36px 0 0; padding-bottom: 8px; border-bottom: 1px solid var(--hair);
 }
-.page-palvelu .faqgroup:first-child { margin-top: 0 }
+.faqgroup:first-child { margin-top: 0 }
 .page-palvelu .prose { max-width: 68ch; margin: 0 auto }
 .page-palvelu .prose h3 { font-size: var(--text-title-sm); font-weight: var(--weight-semibold); margin: 30px 0 10px }
 .page-palvelu .prose h3:first-child { margin-top: 0 }

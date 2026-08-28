@@ -81,9 +81,9 @@ export function Hinnoittelu() {
         </div>
         <p className="pricenote rv">
           Yksittäiset lyhytvideot ja kampanjatuotannot hinnoitellaan projekteina alkaen [HINTA] €.
-          Katso koko{" "}
-          <SmartLink href="/#paketit" className="tlink" style={{ fontSize: "12.5px" }}>
-            hinnoittelu
+          Katso myös{" "}
+          <SmartLink href="/#ukk" className="tlink" style={{ fontSize: "12.5px" }}>
+            usein kysytyt hintakysymykset
           </SmartLink>
         </p>
       </div>
