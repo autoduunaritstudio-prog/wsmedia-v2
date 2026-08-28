@@ -1398,6 +1398,60 @@ footer .base { padding-top: 18px }
 .stat .num b { color: var(--blue); font-weight: var(--weight-bold) }
 .stat p { font-size: var(--text-label-sm); color: var(--grey); font-weight: var(--weight-medium); margin-top: 6px }
 
+/* ============ ILMAINEN KARTOITUS + KALENTERIMOCKUP ============
+   Tavallinen sisaltoosio Palvelut-osion ja .refzonen valissa. Ei omaa
+   sijoittelua eika z-indexia: se kayttaytyy kuten palvelupaneelit, joten
+   se ei voi vaikuttaa neljaan sticky-tasoon.
+
+   Ylavali 110px vastaa paneelien valista rytmia (#palvelut padding-bottom
+   on 0). Alavali jatetaan nollaan, koska .refsticky tuo oman 110px
+   ylapaddinginsa. */
+.kart { padding: 110px 0 0 }
+
+/* Kalenterimockup. Kehys noudattaa selainmockupin arvoja (radius 16px,
+   valkoinen pohja, --hair-reunus, pehmea varjo joka syvenee kaannon
+   mukana), jotta mockupit lukeutuvat samaksi perheeksi. */
+.cal {
+  border-radius: 16px; background: #fff; border: 1px solid var(--hair);
+  padding: 20px 20px 22px;
+  transform: perspective(1200px) var(--tilt-rot, rotateY(0deg));
+  box-shadow:
+    0 calc(40px + var(--tilt, 0) * 34px) calc(90px + var(--tilt, 0) * 44px) -30px
+    rgba(29,29,31, calc(.3 + var(--tilt, 0) * .18));
+}
+.cal-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px }
+.cal-head b { font-size: var(--text-title-xs); font-weight: var(--weight-semibold); letter-spacing: -0.014em }
+.cal-len {
+  font-size: var(--text-caption); font-weight: var(--weight-semibold);
+  letter-spacing: .06em; text-transform: uppercase; color: var(--grey);
+}
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px }
+.cal-wd {
+  font-size: var(--text-caption-sm); font-weight: var(--weight-semibold);
+  color: var(--grey); text-align: center; padding-bottom: 4px;
+}
+/* Paiva on nelio: aspect-ratio pitaa ruudukon tasaisena riippumatta
+   sarakkeen leveydesta, joten mockup ei vaany kapealla naytolla. */
+.cal-day {
+  aspect-ratio: 1; display: grid; place-items: center;
+  font-size: var(--text-caption); color: var(--grey);
+  border-radius: 8px;
+}
+.cal-day.free { background: var(--color-blue-tint); color: var(--blue); font-weight: var(--weight-medium) }
+.cal-day.sel { background: var(--blue); color: #fff; font-weight: var(--weight-semibold) }
+.cal-slots { display: flex; gap: 8px; margin-top: 18px }
+.cal-slot {
+  flex: 1; text-align: center; padding: 9px 0; border-radius: 10px;
+  border: 1px solid var(--hair); font-size: var(--text-ui-sm); color: var(--ink);
+}
+.cal-slot.on { border-color: var(--blue); background: var(--color-blue-tint); color: var(--blue); font-weight: var(--weight-semibold) }
+
+@media (max-width: 880px) {
+  /* Yhdessa sarakkeessa mockup ei saa venya taysleveaksi: kalenteri
+     nayttaisi lomakkeelta eika kortilta. */
+  .cal { max-width: 420px; margin: 0 auto }
+}
+
 /* ============ REFERENSSIT (toinen sticky + cover) ============
    Sama mekanismi kuin hero + cover, mutta pinnattavana on vain Tapahtumat-
    paneeli. Ehto "cover >= pinnattava" tayttyy: paneeli n. 500px, viiden

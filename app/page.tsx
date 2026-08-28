@@ -8,6 +8,7 @@ import Hero from "./components/Hero";
 import Logos from "./components/Logos";
 import StatBand from "./components/StatBand";
 import Services from "./components/Services";
+import Booking from "./components/Booking";
 import Refs from "./components/Refs";
 import Results from "./components/Results";
 import Process from "./components/Process";
@@ -54,6 +55,7 @@ export default function Home() {
           <MetalBackdrop />
           <Logos />
           <Services />
+          <Booking />
         </div>
       </div>
       {/* Toinen ja kolmas sticky+cover-pari. .refzone on .coverin ULKOPUOLELLA
