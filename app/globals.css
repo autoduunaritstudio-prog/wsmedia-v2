@@ -1429,13 +1429,17 @@ footer .base { padding-top: 18px }
    Lyhyt transition tasaa framejen valisen nykimisen jaamatta jalkeen. */
 .refscrim {
   position: absolute; inset: 0; z-index: 5; pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(13,13,16,0) 0,
-    rgba(13,13,16, var(--ref-scrim, 0)) 120px,
-    rgba(13,13,16, var(--ref-scrim, 0)) calc(100% - 120px),
-    rgba(13,13,16,0) 100%
-  );
+  /* TASAINEN TAYTE, EI REUNAHAIVYTYSTA. Gradienttimalli periytyi
+     #hero-scrimilta, jolle se sopii: hero on viewporttia korkeampi, joten
+     sen reunakaistat ovat aina ruudun ulkopuolella. Tama paneeli on tasan
+     100vh, jolloin molemmat 120px kaistat ovat aina nakyvissa - ylin
+     jai kokonaan tummentamatta ja alin haipyi takaisin vaaleaksi juuri
+     siina kohdassa jossa se kohtaa seuraavan osion KIINTEAN tumman
+     taustan. Mitattuna alareunan ero oli 240 vs 13 eli 227 yksikkoa;
+     tasaisella tayteella se on 92 vs 13 eli 79. Reunapehmennysta ei
+     tarvita kumpaankaan suuntaan: ylareunan hoitaa .metalbd-darkin oma
+     130px maski ja alareuna sulautuu seuraavaan tummaan osioon. */
+  background: rgba(13,13,16, var(--ref-scrim, 0));
   transition: background 80ms linear;
 }
 
@@ -1456,13 +1460,9 @@ footer .base { padding-top: 18px }
 .refs > .wrap { position: relative; z-index: 1 }
 .refsscrim {
   position: absolute; inset: 0; z-index: 5; pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(13,13,16,0) 0,
-    rgba(13,13,16, var(--refs-scrim, 0)) 120px,
-    rgba(13,13,16, var(--refs-scrim, 0)) calc(100% - 120px),
-    rgba(13,13,16,0) 100%
-  );
+  /* Tasainen tayte samasta syysta kuin .refscrimilla: osio on tasan
+     100vh, joten reunahaivytykset olisivat aina nakyvissa. */
+  background: rgba(13,13,16, var(--refs-scrim, 0));
   transition: background 80ms linear;
 }
 /* Ruudukko saa oman, .wrapia leveamman raamin: 100vh:n korkuisessa
