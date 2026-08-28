@@ -154,11 +154,7 @@ export default function SiteEffects() {
     const refSticky = document.querySelector<HTMLElement>(".refsticky");
     const refCover = document.querySelector<HTMLElement>(".refs");
     const afterCover = document.querySelector<HTMLElement>(".aftercover");
-    // 0.65 -> 0.20. Voimakas tummennus teki paneelista .refsin ylareunaa
-    // TUMMEMMAN, jolloin raja nakyi vaikka .refs alkaa vaaleana. Mitattu
-    // optimipari on alkuvari RGB 220 ja maksimi 0.20: pahin jaannoshyppy
-    // on silloin 25 yksikkoa (0.65:lla se oli 148).
-    const REF_SCRIM_MAX = 0.2;
+    const REF_SCRIM_MAX = 0.65;
     let refRo: ResizeObserver | null = null;
 
     const measureRef = () => {

@@ -123,13 +123,10 @@ export default function Refs({ children }: { children: ReactNode }) {
           parhaiten tummalla, ja sivustolla on jo sama tumma kaista-idiomi
           (/lyhytvideot .work). */}
       <section className="refs" id="referenssit">
-        {/* RISTIHAIVYTYS. Molemmat variantit renderoidaan paallekkain ja
-            ne haipyvat toistensa lapi 520px matkalla osion ylareunassa:
-            vaalea 1 -> 0, tumma 0 -> 1. Geometria ja liike ovat identtiset
-            (SiteEffects ajaa kaikkia kerroksia samasta etenemasta), joten
-            kaaret osuvat pikselilleen kohdakkain ja materiaali sulautuu
-            sen sijaan etta yksi varipohja vaihtuisi toiseksi. */}
-        <MetalBackdrop inSection />
+        {/* Kiintea tumma kuviokerros osion taustaksi. Sama circle-geometria
+            (mbc-1..5) kuin vaaleassa versiossa ja sama SiteEffectsin ajama
+            liike, vain varit kaannettyina. Ylareunassa kevyt maskihaivytys,
+            ks. .metalbd-dark globals.css:ssa. */}
         <MetalBackdrop tone="dark" inSection />
         <div className="refsscrim" aria-hidden="true" />
         <div className="wrap">

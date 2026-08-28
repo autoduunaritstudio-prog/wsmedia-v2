@@ -1406,7 +1406,12 @@ footer .base { padding-top: 18px }
    .refs 2). Taalla ei myoskaan kayteta overflow-rajausta: se tekisi
    .metalbd:n esivanhemmasta vieritettavan sailion ja katkaisisi
    metallikuvion oman sticky-paneen. */
-.refzone { position: relative; z-index: 3; margin-top: 110px }
+/* margin-top oli 110px, mutta .refstickyn pystykeskitys 100vh laatikossa
+   lisasi sisallon ylle viela 236px tyhjaa - nakyva vali oli siis 346px kun
+   muiden paneelien vali on 110px. Vali siirrettiin .refstickyn omaksi
+   ylapaddingiksi ja keskitys vaihdettiin ylareunaan, jolloin virrassa vali
+   on tasan 110px ja pinnattuna paneeli tayttaa yha nakyman. */
+.refzone { position: relative; z-index: 3 }
 #palvelut { padding-bottom: 0 }
 
 /* Taysikokoinen kuten .refs: paneeli tayttaa nakyman heti pinnautuessaan,
@@ -1416,7 +1421,8 @@ footer .base { padding-top: 18px }
    sisalla eivatka saa tata saantoa. */
 .refsticky {
   position: sticky; top: var(--ref-sticky-top, 0px); z-index: 1;
-  min-height: 100vh; display: flex; align-items: center;
+  min-height: 100vh; display: flex; align-items: flex-start;
+  padding-top: 110px;
 }
 .refsticky > .wrap { width: 100% }
 /* Tummennus pinnatun paneelin paalla, kuten #hero-scrim heron sisalla.
@@ -1440,21 +1446,8 @@ footer .base { padding-top: 18px }
 .refs {
   position: sticky; top: var(--refs-sticky-top, 0px); z-index: 2;
   min-height: 100vh; display: flex; align-items: center;
-  color: #f5f5f7;
-  /* LIITOSKOHTA, 220px -> 520px. Aiempi matka oli 24 % 900px nakymasta
-     eli liian lyhyt erottuakseen liu'uksi; 520px on 58 %. Lisaksi
-     ALKUVARI oli vaarin: #24242a (RGB 36) oli lahes yhta tumma kuin
-     --dark, joten hyppy sailyi. Nyt gradientti alkaa RGB 220:sta, joka
-     on mitattu optimi - se on lahella sita savya joka paneelilla on
-     rajan kohdalla, jolloin pahin jaannoshyppy on 25 yksikkoa aiemman
-     227:n sijaan. Tayte on peittava koko matkan, koska cover-mekanismi
-     vaatii sen.
-
-     Siirtyma on ylapaddingissa eika sisallon takana: sisalto keskittyy
-     paddingin alapuoliseen content-boxiin, joten se istuu kokonaan
-     tasaisella --darkilla eika liu'un paalla. */
-  padding: calc(var(--space-section) + 520px) 0 var(--space-section);
-  background: linear-gradient(to bottom, #dcdce0 0, var(--dark) 520px);
+  background: var(--dark); color: #f5f5f7;
+  padding: var(--space-section) 0;
 }
 /* Sisalto kuviokerroksen ylle: .metalbd on absoluuttinen z-index 0, ja
    sijoittamaton sisalto piirtyisi sen ALLE. Sama porrastus kuin
@@ -3054,17 +3047,16 @@ footer .base { padding-top: 18px }
   will-change: transform;
 }
 
-/* ---------- OSION SISAINEN KERROS + RISTIHAIVYTYS ----------
-   Maskit peittavat tasan saman 520px matkan kuin taustan gradientti,
-   joten varin ja kuvion siirtymat tapahtuvat samassa kohdassa. */
+/* ---------- OSION SISAINEN KUVIOKERROS ---------- */
 .metalbd-inset { height: 100% }
-.metalbd-inset:not(.metalbd-dark) {
-  -webkit-mask-image: linear-gradient(to bottom, #000 0, transparent 520px);
-  mask-image: linear-gradient(to bottom, #000 0, transparent 520px);
-}
+/* KEVYT YLAHAIVYTYS. Vain tumman kerroksen oma opacity nousee 0 -> 1
+   ensimmaisen 130px:n aikana, jolloin kuvio nayttaa jatkuvan varia
+   vaihtaen lyhyella matkalla. Ei vie tilaa asettelusta eika korvaa
+   scrimia: scrim on oma kerroksensa (.refsscrim, z-index 5) ja toimii
+   taman paalla normaalisti. */
 .metalbd-inset.metalbd-dark {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 520px);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 520px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 130px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 130px);
 }
 
 /* ---------- TUMMA VARIANTTI (.metalbd-dark) ----------
