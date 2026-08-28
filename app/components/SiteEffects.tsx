@@ -123,6 +123,26 @@ export default function SiteEffects() {
     const SCRIM_MAX = 0.65;
     let heroRo: ResizeObserver | null = null;
 
+    // Kuviokerroksen korkeus: coverin ylareunasta footerin ylareunaan.
+    // Rect-arvot ovat nakymasuhteisia, mutta niiden EROTUS on dokumentti-
+    // etaisyys, joten mittaus on oikea skrollin sijainnista riippumatta.
+    // Footeri jaa tarkoituksella kuvion ulkopuolelle: se on oma
+    // visuaalinen vyohykkeensa eika sisaltoa.
+    const measureMetal = () => {
+      const layer = document.querySelector<HTMLElement>(".metalbd-v2");
+      const foot = document.querySelector("footer");
+      if (!layer || !foot) return;
+      const h = foot.getBoundingClientRect().top - layer.getBoundingClientRect().top;
+      layer.style.setProperty("--metalbd-h", `${Math.round(h)}px`);
+    };
+    measureMetal();
+    // Sivun korkeus muuttuu fonttien latauksen ja kuvien mitoituksen myota,
+    // joten kertamittaus ei riita. Observoidaan bodya: se kattaa kaikki
+    // sisallon korkeusmuutokset, ja resize kattaa viewportin muutokset.
+    const metalRo = new ResizeObserver(measureMetal);
+    metalRo.observe(document.body);
+    window.addEventListener("resize", measureMetal, { passive: true, signal });
+
     const measureHero = () => {
       if (!hero) return;
       // Negatiivinen top vain jos hero on viewportia korkeampi; muuten 0.
@@ -194,6 +214,9 @@ export default function SiteEffects() {
         // nakyvissa, joten liike osuu sinne missa se nahdaan.
         const mbRect = mbLayer.getBoundingClientRect();
         const p = -mbRect.top;
+        // Eteneminen koko kuvioalueella, ei coverin korkeudella: kerros
+        // ulottuu nyt footeriin asti ja liikkeen on jakauduttava sille.
+        const mbProg = Math.min(Math.max(p / Math.max(mbRect.height - vh, 1), 0), 1);
 
         // KIRKKAAN ALUEEN SEURANTA. Tama on rakenteellinen luettavuus-
         // korjaus eika koriste: kuvion vaalein kohta pidetaan aina siina
@@ -202,16 +225,16 @@ export default function SiteEffects() {
         // paalla. Ilman tata kirkas alue olisi kiinteassa kohdassa ja
         // sen ulkopuolelle jaava teksti tarvitsisi taas oman levynsa.
         if (mbFacets) {
-          const gy = ((p + vh / 2) / Math.max(mbRect.height, 1)) * 100;
-          mbLayer.style.setProperty(
-            "--mb-gy",
-            `${Math.min(Math.max(gy, 0), 100).toFixed(1)}%`,
-          );
-          // Fasetit liikkuvat hitaammin kuin kirkas kohta, jolloin niiden
-          // ja valon keskinainen asema muuttuu eika kuvio nayta yhtenaiselta
-          // kappaleelta joka vain liukuu ohi.
+          // Sticky-pane pitaa kirkkaan alueen jo valmiiksi nakymassa, joten
+          // --mb-gy ei enaa jaljittele sita vaan ajelehtii hitaasti
+          // 34% -> 50% koko matkan aikana. Kuvio elaa, mutta valo pysyy
+          // aina luettavan tekstin kohdalla ilman erillista seurantaa.
+          mbLayer.style.setProperty("--mb-gy", `${(34 + mbProg * 16).toFixed(1)}%`);
+          // Siirtyma on rajattu etenemiseen eika raakoihin pikseleihin:
+          // pane on nakymankokoinen, joten rajaton siirtyma paljastaisi
+          // fasettikerroksen reunan pitkalla sivulla.
           mbFacets.style.transform =
-            `translate3d(${(p * 0.028).toFixed(1)}px, ${(-p * 0.062).toFixed(1)}px, 0)`;
+            `translate3d(${(mbProg * 120).toFixed(1)}px, ${(-mbProg * 200).toFixed(1)}px, 0)`;
         }
 
         // Kertoimet ovat tarkoituksella ERI SUURUISIA JA ERI SUUNTIIN:
@@ -505,6 +528,7 @@ export default function SiteEffects() {
       .forEach((el) => io2.observe(el));
 
     return () => {
+      metalRo.disconnect();
       ac.abort();
       heroRo?.disconnect();
       io.disconnect();

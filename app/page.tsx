@@ -8,7 +8,6 @@ import Hero from "./components/Hero";
 import Logos from "./components/Logos";
 import StatBand from "./components/StatBand";
 import Services from "./components/Services";
-import Work from "./components/Work";
 import Results from "./components/Results";
 import Process from "./components/Process";
 import Pricing from "./components/Pricing";
@@ -55,12 +54,16 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <Work />
-      <Results />
-      <Process />
-      <Pricing />
-      <Contact />
-      <FinalCta />
+      {/* Metallikuvio ulottuu coverista footeriin asti. .cover on
+          z-index 2, joten sen sisalla oleva kuviokerros peittaisi nama
+          osiot ilman omaa korkeampaa tasoa. */}
+      <div className="belowcover">
+        <Results />
+        <Process />
+        <Pricing />
+        <Contact />
+        <FinalCta />
+      </div>
       <Footer
         intro="Lyhytvideot, verkkosivut ja tapahtumat. Espoo ja Helsinki. Yrityksille jotka haluavat kasvaa."
         columns={HOME_FOOTER}

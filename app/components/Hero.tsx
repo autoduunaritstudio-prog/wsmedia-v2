@@ -26,8 +26,8 @@ export default function Hero() {
           <a className="btn mag" href="#lomake">
             Pyydä tarjous
           </a>
-          <a className="tlink" href="#tyot">
-            Katso työnäytteet
+          <a className="tlink" href="#tulokset">
+            Katso tuloksia
           </a>
         </div>
       </div>

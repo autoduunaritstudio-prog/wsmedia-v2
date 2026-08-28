@@ -60,24 +60,31 @@ export default function MetalBackdrop({ variant = "facets" }: Props) {
 
   return (
     <div className="metalbd metalbd-v2" aria-hidden="true">
-      <div className="metalbd-glow" />
-      <svg
-        className="metalbd-facets"
-        viewBox="0 0 1200 1600"
-        preserveAspectRatio="xMidYMid slice"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Sateet ovat viewBoxia isompia, joten viewBoxin sisalle jaa vain
-            kaaren loiva osa - ei koskaan tunnistettavaa ympyraa. Keskipisteet
-            ovat reunojen ulkopuolella samasta syysta. */}
-        <g fill="none" stroke="rgba(255,255,255,.62)" strokeWidth="1" vectorEffect="non-scaling-stroke">
-          <circle cx="-200" cy="-500" r="1300" fill="rgba(255,255,255,.055)" />
-          <circle cx="1700" cy="-300" r="1350" fill="rgba(10,10,12,.075)" />
-          <circle cx="600" cy="2600" r="1750" fill="rgba(255,255,255,.07)" />
-          <circle cx="1900" cy="1500" r="1250" fill="rgba(10,10,12,.085)" />
-          <circle cx="-500" cy="1400" r="900" fill="rgba(10,10,12,.10)" />
-        </g>
-      </svg>
+      {/* Sticky-pane on koko ratkaisun ydin. .metalbd venyy nyt coverin
+          alusta footeriin asti (n. 6400px), ja jos kuviokerrokset olisivat
+          sen kokoisia, preserveAspectRatio="slice" skaalaisi viewBoxin
+          n. 5,2-kertaiseksi: kaaret muuttuisivat lahes suoriksi viivoiksi
+          ja MYOS coverin alue nayttaisi toiselta kuin nyt. Nakymankokoinen
+          sticky-pane pitaa mittakaavan vakiona koko matkalla (skaala 1,92
+          vs. aiempi 1,95) ilman etta kuviota tarvitsee toistaa - eika
+          saumaa synny, koska kerroksia on yha vain yksi. */}
+      <div className="metalbd-pane">
+        <div className="metalbd-glow" />
+        <svg
+          className="metalbd-facets"
+          viewBox="0 0 1200 1600"
+          preserveAspectRatio="xMidYMid slice"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill="none" stroke="rgba(255,255,255,.62)" strokeWidth="1" vectorEffect="non-scaling-stroke">
+            <circle cx="-200" cy="-500" r="1300" fill="rgba(255,255,255,.055)" />
+            <circle cx="1700" cy="-300" r="1350" fill="rgba(10,10,12,.075)" />
+            <circle cx="600" cy="2600" r="1750" fill="rgba(255,255,255,.07)" />
+            <circle cx="1900" cy="1500" r="1250" fill="rgba(10,10,12,.085)" />
+            <circle cx="-500" cy="1400" r="900" fill="rgba(10,10,12,.10)" />
+          </g>
+        </svg>
+      </div>
     </div>
   );
 }

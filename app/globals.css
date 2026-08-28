@@ -1136,7 +1136,8 @@ section { padding: var(--space-section) 0 }
 .event .cap b { font-size: var(--text-label); font-weight: var(--weight-semibold); display: block }
 .event .cap s { text-decoration: none; font-size: var(--text-micro); opacity: .65 }
 
-/* ============ TYÖNÄYTTEET (tumma kaista) ============ */
+/* ============ TUMMA REFERENSSIKAISTA ============
+   Etusivulta poistettu; kayttajana on enaa /lyhytvideot. */
 .work {
   background: var(--dark); color: #f5f5f7;
   border-radius: 28px; max-width: 1240px; margin: 0 auto;
@@ -1151,7 +1152,6 @@ section { padding: var(--space-section) 0 }
 }
 .work .wrap { position: relative }
 .work .sub { color: #a1a1a6 }
-.workgrid { display: grid; grid-template-columns: repeat(12,1fr); gap: var(--space-gap-grid) }
 .w-item {
   border-radius: 16px; overflow: hidden; position: relative;
   background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
@@ -1166,30 +1166,6 @@ section { padding: var(--space-section) 0 }
   position: absolute; top: 14px; right: 14px; z-index: 2;
   font-size: 9.5px; font-weight: var(--weight-semibold); letter-spacing: .14em; text-transform: uppercase;
   color: #c7c7cc; border: 1px solid rgba(255,255,255,.22); border-radius: 980px; padding: 4px 10px;
-}
-.w-site { grid-column: span 7 }
-.w-video { grid-column: span 5 }
-.w-event { grid-column: span 5 }
-.w-site2 { grid-column: span 7 }
-@media (max-width: 820px) { .w-site, .w-video, .w-event, .w-site2 { grid-column: span 12 } }
-.w-item .thumb { position: absolute; inset: 0 }
-.w-site .thumb, .w-site2 .thumb {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.09) 0 34px, transparent 34px),
-    radial-gradient(70% 90% at 80% 100%, rgba(0,113,227,.25), transparent 65%),
-    #17171b;
-}
-.w-site .thumb::after, .w-site2 .thumb::after {
-  content: ""; position: absolute; left: 24px; top: 56px; right: 38%; height: 14px; border-radius: 5px;
-  background: rgba(255,255,255,.16);
-  box-shadow: 0 26px 0 -4px rgba(255,255,255,.08), 0 52px 0 -4px rgba(255,255,255,.08);
-}
-.w-video .thumb { background: radial-gradient(95% 75% at 28% 86%, rgba(0,113,227,.4), transparent 60%), #141418 }
-.w-event .thumb {
-  background:
-    radial-gradient(50% 70% at 25% 0%, rgba(0,113,227,.35), transparent 65%),
-    radial-gradient(50% 70% at 75% 0%, rgba(100,168,255,.25), transparent 65%),
-    #101014;
 }
 .w-item .go {
   position: absolute; top: 14px; left: 14px; z-index: 2;
@@ -1334,8 +1310,8 @@ footer .base { padding-top: 18px }
 .logos + section { padding-top: var(--space-section-tight) }
 /* Lukukaista Palvelut-osion jalkeen. Ylavali tulee kokonaan edellisen
    osion alapaddingista (--space-section), joten oma ylapadding on 0 -
-   sama kuvio kuin #tyot-osiolla. Alapadding palauttaa normaalin
-   osiorytmin ennen tummaa referenssikaistaa. */
+   sama kuvio kuin Palvelut-osiolla. Alapadding palauttaa normaalin
+   osiorytmin. */
 .statband-sec { padding: 0 0 var(--space-section) }
 /* Asiakaslogonauha. Liike tulee SiteEffectsista scrollYn muutoksena, ei
    omasta animaatiosta: nauha siirtyy vain kun sivu liikkuu ja pysahtyy
@@ -2821,9 +2797,29 @@ footer .base { padding-top: 18px }
    z-index 0 jattaa sen coverin taustan paalle mutta osioiden (z-index 1)
    alle. */
 .metalbd {
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  overflow: hidden; opacity: var(--metalbd-opacity, .88);
+  /* Korkeus tulee muuttujasta, ei inset: 0:sta: kerros ei enaa lopu
+     coverin pohjaan vaan jatkuu footeriin asti. SiteEffects mittaa arvon.
+     overflow: hidden EI saa olla tassa v2:ssa - se tekisi kerroksesta
+     vieritettavan sailion, jolloin sisalla oleva sticky-pane jumittuisi
+     sen ylareunaan eika seuraisi nakymaa. Pane leikkaa itse omat
+     ylivuotonsa. */
+  position: absolute; top: 0; left: 0; right: 0;
+  height: var(--metalbd-h, 100%);
+  z-index: 0; pointer-events: none;
+  /* .88 -> .45. Kuvio ei ole enaa vain coverissa lasikorttien alla vaan
+     koko sivulla suojaamattoman leipatekstin takana. .45 on mitattu
+     vahvin arvo jolla --blue ja --grey lapaisevat AA:n kuvion pahimmassa
+     kohdassa ILMAN korttia (pahin RGB 234,0: blue 4,72:1, grey 5,12:1,
+     ink 13,99:1). .60 antaisi jo 3,82:1 eli hylkyy. */
+  opacity: var(--metalbd-opacity, .45);
 }
+.metalbd:not(.metalbd-v2) { overflow: hidden }
+.metalbd-pane { position: sticky; top: 0; height: 100vh; overflow: hidden }
+
+/* Coverin jalkeiset osiot kuvion paalle. .cover on z-index 2 ja luo
+   pinoamiskontekstin, joten sen sisalla oleva kuviokerros piirtyisi
+   naiden staattisten sisarusten paalle ilman omaa korkeampaa tasoa. */
+.belowcover { position: relative; z-index: 3 }
 
 /* Kaarilohkot ovat PAAELEMENTTI: niiden pehmea S-jako on se muoto joka
    pitaa erottua ensisilmayksella. Alfat nostettiin (.30 -> .44 ja
@@ -2892,7 +2888,10 @@ footer .base { padding-top: 18px }
      paikan tielta, ja 50%:lla sen --grey-kappale jai 4,45:1:een eli
      alle AA:n. 56% nostaa sen 4,59-4,91:een ja parantaa samalla
      .svc-korttien pahinta pistetta (RGB 217,0 -> 221,1). */
-  background: radial-gradient(115% 78% at var(--mb-gx, 56%) var(--mb-gy, 42%),
+  /* Sateet 220%/190% paneen mitoista. Pane on nakymankokoinen, joten
+     aiemmat coverin mittaan sovitetut sateet olisivat tehneet liu'usta
+     nakymassa liian jyrkan: ruudun reunat menivat RGB 196:een. */
+  background: radial-gradient(220% 190% at var(--mb-gx, 56%) var(--mb-gy, 42%),
     rgba(10,10,12,0)    0%,
     rgba(10,10,12,.05) 26%,
     rgba(10,10,12,.15) 50%,
@@ -2906,7 +2905,10 @@ footer .base { padding-top: 18px }
    reunaa. preserveAspectRatio="slice" pitaa kaaret oikean muotoisina. */
 .metalbd-facets {
   position: absolute;
-  left: -15%; top: -15%; width: 130%; height: 130%;
+  /* 160% eika 130%: paneen ylivuoto on nyt myos parallaksin liikevara.
+     30% kumpaankin suuntaan = 270px pystyssa ja 432px vaakaan, joten
+     SiteEffectsin rajattu siirtyma (200 / 120px) ei paljasta reunaa. */
+  left: -30%; top: -30%; width: 160%; height: 160%;
   will-change: transform;
 }
 

@@ -17,7 +17,6 @@ export const ROUTES = {
   /** Sivua ei viela ole -> etusivun Palvelut-osio. */
   tapahtumat: "/#palvelut",
   palvelut: "/#palvelut",
-  tyonaytteet: "/#tyot",
   prosessi: "/#prosessi",
   hinnoittelu: "/#paketit",
   yhteys: "/#lomake",
@@ -87,7 +86,6 @@ export const SERVICE_MENU: ServiceMenuItem[] = [
 export const OVERLAY_NAV: NavLink[] = [
   { href: "/", label: "Etusivu" },
   { href: "#palvelut", label: "Palvelut", menu: SERVICE_MENU },
-  { href: "#tyot", label: "Työnäytteet" },
   { href: "#prosessi", label: "Prosessi" },
   { href: "#paketit", label: "Hinnoittelu" },
   { href: ROUTES.toihin, label: "Töihin meille" },
@@ -117,7 +115,7 @@ export const SOCIAL: SocialLink[] = [
 
 /**
  * Etusivun footer. Ankkurit ovat tarkoituksella ilman /-etuliitetta: footer
- * on vain etusivulla, joten #tyot vierittaa samalla sivulla sen sijaan etta
+ * on vain etusivulla, joten #prosessi vierittaa samalla sivulla sen sijaan etta
  * kaynnistaisi reittinavigaation.
  */
 export const HOME_FOOTER: FooterColumn[] = [
@@ -147,7 +145,6 @@ export const HOME_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
-      { href: "#tyot", label: "Työnäytteet" },
       { href: "#prosessi", label: "Prosessi" },
       { href: "#paketit", label: "Hinnoittelu" },
       { href: "#lomake", label: "Ota yhteyttä" },
@@ -189,7 +186,6 @@ export const SUBPAGE_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
-      { href: ROUTES.tyonaytteet, label: "Työnäytteet" },
       { href: ROUTES.hinnoittelu, label: "Hinnoittelu" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
       { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
@@ -232,7 +228,6 @@ export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
-      { href: ROUTES.tyonaytteet, label: "Työnäytteet" },
       { href: ROUTES.hinnoittelu, label: "Hinnoittelu" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
       { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
@@ -274,7 +269,6 @@ export const SEO_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
-      { href: ROUTES.tyonaytteet, label: "Työnäytteet" },
       { href: ROUTES.hinnoittelu, label: "Hinnoittelu" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
       { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
