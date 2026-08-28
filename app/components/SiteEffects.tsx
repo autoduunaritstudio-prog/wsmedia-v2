@@ -36,6 +36,8 @@ export default function SiteEffects() {
     const mbB = document.querySelector<HTMLElement>(".metalbd-b");
     const mbSweep = document.querySelector<HTMLElement>(".metalbd-sweep");
     const mbFacets = document.querySelector<HTMLElement>(".metalbd-facets");
+    const mbfA = document.querySelector<SVGGElement>(".mbf-a");
+    const mbfB = document.querySelector<SVGGElement>(".mbf-b");
 
     /* ---------- taustakuvio ---------- */
     const bdGrid = document.getElementById("bdGrid");
@@ -225,16 +227,28 @@ export default function SiteEffects() {
         // paalla. Ilman tata kirkas alue olisi kiinteassa kohdassa ja
         // sen ulkopuolelle jaava teksti tarvitsisi taas oman levynsa.
         if (mbFacets) {
-          // Sticky-pane pitaa kirkkaan alueen jo valmiiksi nakymassa, joten
-          // --mb-gy ei enaa jaljittele sita vaan ajelehtii hitaasti
-          // 34% -> 50% koko matkan aikana. Kuvio elaa, mutta valo pysyy
-          // aina luettavan tekstin kohdalla ilman erillista seurantaa.
-          mbLayer.style.setProperty("--mb-gy", `${(34 + mbProg * 16).toFixed(1)}%`);
-          // Siirtyma on rajattu etenemiseen eika raakoihin pikseleihin:
-          // pane on nakymankokoinen, joten rajaton siirtyma paljastaisi
-          // fasettikerroksen reunan pitkalla sivulla.
+          // Valon rata ei ole tasainen liuku vaan poikkeaa siita sinilla.
+          // Sticky-pane pitaa valon joka tapauksessa nakymassa, joten rata
+          // saa vaihdella ilman etta luettavuus karsii.
+          const gy = 34 + mbProg * 16 + Math.sin(mbProg * Math.PI * 2.5) * 5;
+          // Vaakasuunnalla on OMA, hitaampi jaksonsa. Jaksot 2,5 ja 1,7
+          // ovat yhteismitattomia, joten pari ei palaa samaan asentoon
+          // kertaakaan matkan aikana - juuri se poistaa toistuvuuden.
+          const gx = 56 + Math.sin(mbProg * Math.PI * 1.7) * 6;
+          mbLayer.style.setProperty("--mb-gy", `${gy.toFixed(1)}%`);
+          mbLayer.style.setProperty("--mb-gx", `${gx.toFixed(1)}%`);
+          // 120/200 -> 300/200px. Vara on 432/270px, joten tama mahtuu.
           mbFacets.style.transform =
-            `translate3d(${(mbProg * 120).toFixed(1)}px, ${(-mbProg * 200).toFixed(1)}px, 0)`;
+            `translate3d(${(mbProg * 300).toFixed(1)}px, ${(-mbProg * 200).toFixed(1)}px, 0)`;
+          // Ryhmat kiertyvat VASTAKKAISIIN suuntiin ja eri vauhtia, jolloin
+          // niiden leikkauspisteet vaeltavat ja fasettien rajat piirtyvat
+          // sivun eri kohdissa eri tavalla. Kierto on SVG:n sisalla, joten
+          // se ei voi paljastaa fasettikerroksen reunaa.
+          if (mbfA) mbfA.style.transform = `rotate(${(mbProg * 4.5).toFixed(2)}deg)`;
+          if (mbfB) {
+            mbfB.style.transform =
+              `rotate(${(-2.2 - Math.sin(mbProg * Math.PI * 1.3) * 2.4).toFixed(2)}deg)`;
+          }
         }
 
         // Kertoimet ovat tarkoituksella ERI SUURUISIA JA ERI SUUNTIIN:
