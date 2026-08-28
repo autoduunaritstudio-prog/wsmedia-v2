@@ -8,6 +8,7 @@ import Hero from "./components/Hero";
 import Logos from "./components/Logos";
 import StatBand from "./components/StatBand";
 import Services from "./components/Services";
+import Refs from "./components/Refs";
 import Results from "./components/Results";
 import Process from "./components/Process";
 import HomeFaq from "./components/HomeFaq";
@@ -53,6 +54,7 @@ export default function Home() {
           <MetalBackdrop />
           <Logos />
           <Services />
+          <Refs />
           <section className="statband-sec">
             <div className="wrap">
               <StatBand stats={STATS} />

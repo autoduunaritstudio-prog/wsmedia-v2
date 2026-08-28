@@ -152,48 +152,6 @@ export default function Services() {
           </div>
         </div>
 
-        {/* 4. Tapahtumat */}
-        <div className="svc rev rv">
-          <div className="svc-visual" data-par="0.02">
-            <span className="deco deco-dot" style={{ left: "-2%", top: "10%" }} />
-            <span className="deco deco-ring deco-ring-sm" style={{ right: "4%", bottom: "-10px" }} />
-            <div className="event" data-tilt="-y" data-tilt-profile="mockup">
-              <div className="lights" />
-              <div className="truss" />
-              <span className="chip">[Tapahtuman nimi] · [pvm]</span>
-              <div className="play" />
-              <div className="crowd" />
-              <div className="cap">
-                <b>Aftermovie</b>
-                <s>Täytetään tapahtumareferenssillä</s>
-              </div>
-            </div>
-            <div className="float-tag ft-a">
-              <i />
-              Kävijät
-              <br />
-              {"[X] henkeä"}
-            </div>
-          </div>
-          <div className="svc-txt" data-par="0.035">
-            <span className="kick">Tapahtumat</span>
-            <h3>Tapahtumat, joista puhutaan vielä viikkoja.</h3>
-            <p>
-              Suunnittelusta toteutukseen ja taltiointiin. Tapahtuma tuottaa samalla sisältöä someen
-              ja sivuillesi, yksi ilta ruokkii koko vuoden markkinointia.
-            </p>
-            <ul>
-              <li>[Tapahtumapalvelun sisältö 1, täytetään]</li>
-              <li>[Tapahtumapalvelun sisältö 2, täytetään]</li>
-              <li>Aftermovie ja some-nostot samasta tuotannosta</li>
-            </ul>
-            {/* Tapahtumat-sivua ei ole viela; ankkuri pitaa kayttajan
-                paikallaan sen sijaan etta tyhja "#" hyppaisi sivun ylalaitaan. */}
-            <a className="tlink" href="#palvelut">
-              Lue lisää tapahtumista
-            </a>
-          </div>
-        </div>
       </div>
     </section>
   );

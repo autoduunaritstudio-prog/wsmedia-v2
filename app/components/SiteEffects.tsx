@@ -145,6 +145,27 @@ export default function SiteEffects() {
     metalRo.observe(document.body);
     window.addEventListener("resize", measureMetal, { passive: true, signal });
 
+    /* ---------- toinen sticky + cover: Tapahtumat + Referenssit ---------- */
+    // Sama kaava kuin herolla: negatiivinen top vain jos pinnattava on
+    // viewportia korkeampi, muuten 0.
+    const refSticky = document.querySelector<HTMLElement>(".refsticky");
+    const refCover = document.querySelector<HTMLElement>(".refs");
+    const REF_SCRIM_MAX = 0.65;
+    let refRo: ResizeObserver | null = null;
+
+    const measureRef = () => {
+      if (!refSticky) return;
+      const top = Math.min(0, window.innerHeight - refSticky.offsetHeight);
+      refSticky.style.setProperty("--ref-sticky-top", `${Math.round(top)}px`);
+    };
+
+    if (refSticky && !reduce) {
+      measureRef();
+      refRo = new ResizeObserver(measureRef);
+      refRo.observe(refSticky);
+      window.addEventListener("resize", measureRef, { passive: true, signal });
+    }
+
     const measureHero = () => {
       if (!hero) return;
       // Negatiivinen top vain jos hero on viewportia korkeampi; muuten 0.
@@ -292,6 +313,15 @@ export default function SiteEffects() {
       // coverTop = vh -> 0 (ei tummennusta), coverTop = 0 -> 1 (taysi).
       // Arvo lasketaan joka framessa suoraan skrollista, joten se seuraa
       // molempiin suuntiin 1:1 ilman omaa siirtymaa.
+      // Referenssit-coverin tummennus, sama kaava kuin herolla: coverin
+      // ylareuna vh -> 0 vastaa tummennusta 0 -> REF_SCRIM_MAX. Arvo
+      // lasketaan joka framessa suoraan geometriasta, joten se seuraa
+      // molempiin suuntiin ilman omaa siirtymaa.
+      if (refSticky && refCover) {
+        const rp = Math.min(Math.max(1 - refCover.getBoundingClientRect().top / vh, 0), 1);
+        refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3));
+      }
+
       if (hero && cover) {
         const p = Math.min(Math.max(1 - cover.getBoundingClientRect().top / vh, 0), 1);
         hero.style.setProperty("--scrim-opacity", (p * SCRIM_MAX).toFixed(3));
@@ -543,6 +573,7 @@ export default function SiteEffects() {
 
     return () => {
       metalRo.disconnect();
+      refRo?.disconnect();
       ac.abort();
       heroRo?.disconnect();
       io.disconnect();
