@@ -55,7 +55,6 @@ export default function Home() {
           <MetalBackdrop />
           <Logos />
           <Services />
-          <Booking />
         </div>
       </div>
       {/* Toinen ja kolmas sticky+cover-pari. .refzone on .coverin ULKOPUOLELLA
@@ -69,6 +68,7 @@ export default function Home() {
             <StatBand stats={STATS} />
           </div>
         </section>
+        <Booking />
         <Results />
       </Refs>
       {/* Naiden alta metallikuvio nakyy taas: .aftercover oli viimeinen

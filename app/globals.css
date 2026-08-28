@@ -1399,14 +1399,24 @@ footer .base { padding-top: 18px }
 .stat p { font-size: var(--text-label-sm); color: var(--grey); font-weight: var(--weight-medium); margin-top: 6px }
 
 /* ============ ILMAINEN KARTOITUS + KALENTERIMOCKUP ============
-   Tavallinen sisaltoosio Palvelut-osion ja .refzonen valissa. Ei omaa
-   sijoittelua eika z-indexia: se kayttaytyy kuten palvelupaneelit, joten
-   se ei voi vaikuttaa neljaan sticky-tasoon.
+   Tavallinen sisaltoosio .aftercoverin sisalla, lukukaistan ja Tulokset-
+   osion valissa. Ei omaa sijoittelua eika z-indexia, joten se ei voi
+   vaikuttaa neljaan sticky-tasoon.
 
-   Ylavali 110px vastaa paneelien valista rytmia (#palvelut padding-bottom
-   on 0). Alavali jatetaan nollaan, koska .refsticky tuo oman 110px
-   ylapaddinginsa. */
-.kart { padding: 110px 0 0 }
+   Omat paddingit nollataan: edellinen lohko (.statband-sec) tuo
+   alapaddingikseen 120px ja seuraava (#tulokset) ylapaddingikseen 110px,
+   joten osio asettuu valmiiseen rytmiin. Section-oletus 120px molemmin
+   puolin olisi kasvattanut valit 240/230px:aan.
+
+   HUOM: taalla EI ole lasikorttia. .cover .svc-txt lakkasi tasmaamasta
+   kun osio siirtyi .coverin ulkopuolelle, ja se on oikein: levy on
+   olemassa vain nostamassa tekstia vaihtelevan metallikuvion palta, ja
+   .aftercoverin tausta on tasainen lapinakymaton var(--bg). Valkoinen
+   kortti valkoisella olisi ollut koriste ilman tehtavaa - ja poikkeava
+   naapureistaan (#tulokset, #prosessi) jotka ovat samalla tasaisella
+   pohjalla ilman korttia. Levyn padding ja negatiivinen marginaali
+   kumosivat toisensa, joten tekstin sijainti ei muutu. */
+.kart { padding: 0 }
 
 /* Kalenterimockup. Kehys noudattaa selainmockupin arvoja (radius 16px,
    valkoinen pohja, --hair-reunus, pehmea varjo joka syvenee kaannon
