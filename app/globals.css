@@ -1546,23 +1546,19 @@ footer .base { padding-top: 18px }
 .refs {
   position: sticky; top: var(--refs-sticky-top, 0px); z-index: 2;
   min-height: 100vh; display: flex; align-items: center;
-  /* NOUSU AIKAISEMMAKSI. .refsticky on min-height: 100vh mutta sen sisalto
-     tarvitsee vain 538px, ja align-items: flex-start valuttaa loput sen
-     ALLE tyhjana - 900px nakymassa 362px. Negatiivinen ylamarginaali
-     aloittaa coverin nousun sen verran aikaisemmin, jolloin tyhja kaista
-     jaa peittoon sen sijaan etta se pitaisi ensin skrollata lapi.
+  /* --refs-lead PERUUTETTU. Simulaatio osoitti ettei mekanismi voi
+     toimia: .refsticky pinnautuu kun scrollY = Z, ja .refs tulee
+     nakyviin kun scrollY = Z + H1 - lead - vh. Koska H1 = max(vh, 538)
+     = vh kaikilla yli 538px:n nakymilla, ehto "refs ei ennen pinia"
+     supistuu muotoon lead <= 0 - eli mika tahansa positiivinen arvo
+     siirtaa coverin nakyviin TASAN lead-pikselia ENNEN pinnautumista.
+     30vh siirsi sen 270px liian aikaisin 900px nakymassa.
 
-     --refs-lead on tama kokeilun nuppi. KATTO on kuitenkin pakollinen:
-     paneelin sisalto paattyy 538px:n kohdalla (110px padding + 428px
-     sisalto), joten turvallinen lead on korkeintaan korkeus - 538px. Se
-     on 40,2vh 900px nakymassa mutta vain 23,1vh 700px:n nakymassa - yksi
-     kiintea vh-arvo ei siis voi olla turvallinen kaikilla korkeuksilla.
-     Paljas 30vh olisi syonyt 700px:n naytolla sisaltoa 48px.
-
-     clamp hoitaa taman: 100vh - 600px on korkeus miinus sisalto ja 62px
-     turvamarginaali, ja alaraja 0 estaa marginaalin kaantymisen
-     positiiviseksi hyvin matalilla ikkunoilla. */
-  margin-top: calc(-1 * clamp(0px, var(--refs-lead, 30vh), 100vh - 600px));
+     Syvempi syy: tyhja hanta JA pin-vaihe ovat sama asia. Pinnattuna
+     sisalto on 110..538 ja cover nousee alhaalta, joten se 362px joka
+     nayttaa tyhjalta ON se matka jonka ajan paneeli on yksin nakyvissa.
+     Sita ei voi poistaa lyhentamatta pin-vaihetta. Ainoa nuppi on
+     .refstickyn min-height alla, ja se saataa molempia yhdessa. */
   background: var(--dark); color: #f5f5f7;
   padding: var(--space-section) 0;
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
