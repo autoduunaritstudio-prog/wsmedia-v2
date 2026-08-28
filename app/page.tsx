@@ -1,6 +1,6 @@
-import Backdrop from "./components/Backdrop";
-// KOKEILU: poista tama rivi ja <MetalBackdrop /> coverin sisalta
-// palauttaaksesi coverin tavalliselle taustalle.
+// Etusivun ainoa taustakerros. Vanha <Backdrop /> (ohuet viivat, pisteet,
+// kulmamerkit) poistettiin taalta kun metallikuvio alkoi kattaa coverista
+// footeriin; alasivut kayttavat sita yha variant="simple":lla.
 import MetalBackdrop from "./components/MetalBackdrop";
 import SiteEffects from "./components/SiteEffects";
 import Nav from "./components/Nav";
@@ -29,7 +29,6 @@ const STATS = [
 export default function Home() {
   return (
     <>
-      <Backdrop />
       <div id="prog" />
       <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
       {/* Sticky hero + nouseva cover. Hero pysyy kiinnitettyna ruudun

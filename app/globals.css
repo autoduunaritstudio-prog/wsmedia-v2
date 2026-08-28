@@ -2907,13 +2907,21 @@ footer .base { padding-top: 18px }
   position: absolute;
   /* 160% eika 130%: paneen ylivuoto on nyt myos parallaksin liikevara.
      30% kumpaankin suuntaan = 270px pystyssa ja 432px vaakaan, joten
-     SiteEffectsin rajattu siirtyma (200 / 120px) ei paljasta reunaa. */
+     SiteEffectsin rajattu siirtyma (300 / 200px) seka ryhmien kierto
+     mahtuvat siihen; varmistettu laskennallisesti (paneen kulmat
+     pysyvat fasettilaatikon sisalla koko liikeradalla). */
   left: -30%; top: -30%; width: 160%; height: 160%;
   will-change: transform;
 }
 
+/* Kaariryhmat kiertyvat viewBoxin keskipisteen ympari. transform-box:
+   view-box on PAKOLLINEN: ilman sita transform-origin laskettaisiin
+   ryhman omasta tiiviista rajauslaatikosta, joka on ryhmilla eri, ja
+   ne kiertyisivat eri pisteiden ympari. */
+.mbf { transform-box: view-box; transform-origin: 600px 800px; will-change: transform }
+
 @media (prefers-reduced-motion: reduce) {
-  .metalbd-facets { will-change: auto }
+  .metalbd-facets, .mbf { will-change: auto }
 }
 
 @media (prefers-reduced-motion: reduce) {

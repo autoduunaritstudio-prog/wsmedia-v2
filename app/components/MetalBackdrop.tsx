@@ -76,12 +76,32 @@ export default function MetalBackdrop({ variant = "facets" }: Props) {
           preserveAspectRatio="xMidYMid slice"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g fill="none" stroke="rgba(255,255,255,.62)" strokeWidth="1" vectorEffect="non-scaling-stroke">
+          {/* Kaaret on jaettu KAHTEEN RYHMAAN joita SiteEffects kiertaa eri
+              suuntiin ja eri vaiheessa. Tama on syy siihen etta kuvio
+              muuttaa muotoaan matkan varrella: leikkauspisteet siirtyvat
+              ryhmien valilla, jolloin fasettien rajat piirtyvat joka
+              kohdassa eri tavalla. Pelkka yhteinen siirtyma vain liu'uttaa
+              samaa muotoa ohi, mika oli koko yksitoikkoisuuden syy. */}
+          <g
+            className="mbf mbf-a"
+            fill="none"
+            stroke="rgba(255,255,255,.62)"
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          >
             <circle cx="-200" cy="-500" r="1300" fill="rgba(255,255,255,.055)" />
-            <circle cx="1700" cy="-300" r="1350" fill="rgba(10,10,12,.075)" />
             <circle cx="600" cy="2600" r="1750" fill="rgba(255,255,255,.07)" />
-            <circle cx="1900" cy="1500" r="1250" fill="rgba(10,10,12,.085)" />
             <circle cx="-500" cy="1400" r="900" fill="rgba(10,10,12,.10)" />
+          </g>
+          <g
+            className="mbf mbf-b"
+            fill="none"
+            stroke="rgba(255,255,255,.62)"
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          >
+            <circle cx="1700" cy="-300" r="1350" fill="rgba(10,10,12,.075)" />
+            <circle cx="1900" cy="1500" r="1250" fill="rgba(10,10,12,.085)" />
           </g>
         </svg>
       </div>
