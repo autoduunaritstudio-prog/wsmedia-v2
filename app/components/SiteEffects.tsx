@@ -164,7 +164,25 @@ export default function SiteEffects() {
 
     const measureRef = () => {
       if (refSticky) {
-        const top = Math.min(0, window.innerHeight - refSticky.offsetHeight);
+        const vh = window.innerHeight;
+        // Paneeli on min-height: 100vh, mutta sen SISALTO on paljon
+        // matalampi (n. 428px) ja align-items: flex-start valuttaa loput
+        // sisallon alle tyhjana. Vanha kaava min(0, vh - offsetHeight)
+        // pinnasi elementin ylareunan nakyman ylareunaan, jolloin tuo tyhja
+        // jai nakyviin - 900px nakymassa 362px.
+        //
+        // Nyt pinnataan POSITIIVISELLA topilla niin etta sisallon ALLE jaa
+        // saman verran kuin sen ylle eli ylapaddingin verran. Elementti
+        // jatkuu nakyman alapuolelle, mutta se osa ei nay.
+        //
+        // Sisaltokorkeus ja padding mitataan ajossa, ei kovakoodata: molemmat
+        // muuttuvat fontin latauksen ja tekstin rivittymisen myota, ja tama
+        // ajetaan samassa ResizeObserverissa.
+        const wrap = refSticky.querySelector<HTMLElement>(".wrap");
+        const pad = parseFloat(getComputedStyle(refSticky).paddingTop) || 0;
+        const content = wrap ? wrap.offsetHeight : 0;
+        const need = pad + content + pad;
+        const top = content > 0 && vh >= need ? vh - need : Math.min(0, vh - refSticky.offsetHeight);
         refSticky.style.setProperty("--ref-sticky-top", `${Math.round(top)}px`);
       }
       if (refCover) {
