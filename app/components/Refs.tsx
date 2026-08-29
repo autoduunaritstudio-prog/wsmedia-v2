@@ -79,8 +79,9 @@ const VW = 503;
 const VH = 894;
 
 /**
- * Vain yksi video kerrallaan. Moduulitasolla, koska rajoitus koskee
- * kortteja keskenaan eika yhta korttia.
+ * Vain yksi video kerrallaan - VAIN KOSKETUSPOLULLA. Tyopoydalla kaikki
+ * viisi soivat rinnakkain nakyvyyden mukaan, joten tama vartija ei saa
+ * pysayttaa niita.
  */
 let playingEl: HTMLVideoElement | null = null;
 
@@ -112,9 +113,17 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
     const a = art.current;
     if (!media || !v || !a) return;
 
+    const hover = window.matchMedia("(hover: hover)").matches;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Automaattitoisto vain osoitinlaitteella JA vain jos kayttaja ei ole
+    // pyytanyt vahemman liiketta. Reduced motion -tilassa poster jaa
+    // nakyviin eika mitaan kaynnisteta.
+    const auto = hover && !reduce;
+
     const onPlaying = () => {
       setPlaying(true);
-      stopOthers(v);
+      // Yhden-kerrallaan-vartija kuuluu vain kosketuspolulle.
+      if (!auto) stopOthers(v);
     };
     const onPause = () => {
       setPlaying(false);
@@ -123,16 +132,23 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
     v.addEventListener("playing", onPlaying);
     v.addEventListener("pause", onPause);
 
-    // Ilman tata kosketuksella kaynnistetty video jaisi soimaan taustalle
-    // kun kortti vieritetaan pois nakyvista.
+    // Tyopoydalla nakyvyys ohjaa toiston molempiin suuntiin. rootMargin
+    // aloittaa haun 200px ennen kuin kortti on nakyvissa, joten
+    // preload="none" ei nay viiveena - haku alkaa vasta play():sta.
+    //
+    // Kosketuspolulla sama tarkkailija vain PYSAYTTAA: ilman sita
+    // napautettu video jaisi soimaan taustalle kun kortti vieritetaan
+    // pois nakyvista.
     const io = new IntersectionObserver(
       ([e]) => {
-        if (!e.isIntersecting && !v.paused) {
+        if (e.isIntersecting) {
+          if (auto) v.play().catch(() => {});
+        } else if (!v.paused) {
           v.pause();
           v.currentTime = 0;
         }
       },
-      { threshold: 0 },
+      auto ? { threshold: 0.25, rootMargin: "200px 0px" } : { threshold: 0 },
     );
     io.observe(a);
 
@@ -163,17 +179,15 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
     else stop();
   };
 
-  // Vain OSOITINKASITTELIJAT ovat eriytetyt. Nappaimistotuki koskee
-  // MOLEMPIA polkuja: (hover: hover) on tosi myos poydalla jota kaytetaan
-  // nappaimistolla, joten pelkka kosketuspolun tuki jattaisi sellaisen
-  // kayttajan kokonaan ilman paasya kortteihin.
+  // Tyopoydalla EI OLE osoitinkasittelijoita lainkaan: toisto seuraa
+  // nakyvyytta, joten hoveroinnilla ei ole roolia. Kosketuspolku sen sijaan
+  // kayttaa CLICKIA eika pointerdownia: click ei laukea jos sormi liikkui
+  // vierityksen verran, pointerdown laukeaa - ruudukossa selailu
+  // kaynnistaisi videoita vahingossa.
   //
-  // Tama ei palauta alkuperaista bugia jossa napautus jai soimaan: selain
-  // emuloi napautuksella mouseenterin mutta EI keydownia.
-  //
-  // Kosketuspolku kayttaa CLICKIA eika pointerdownia: click ei laukea jos
-  // sormi liikkui vierityksen verran, pointerdown laukeaa - ruudukossa
-  // selailu kaynnistaisi videoita vahingossa.
+  // Nappaimistotuki koskee MOLEMPIA polkuja: (hover: hover) on tosi myos
+  // poydalla jota kaytetaan nappaimistolla, ja siella kortin on oltava
+  // kaynnistettavissa myos kasin - automaattitoisto ei korvaa sita.
   //
   // Tyyppi on HTMLAttributes eika Record<string, unknown>: jalkimmainen
   // ohittaisi JSX:n prop-tarkistuksen, jolloin kirjoitusvirhe attribuutin
@@ -189,12 +203,7 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
         toggle();
       }
     };
-    if (touch) {
-      bind.onClick = toggle;
-    } else {
-      bind.onMouseEnter = play;
-      bind.onMouseLeave = stop;
-    }
+    if (touch) bind.onClick = toggle;
   }
 
   return (
