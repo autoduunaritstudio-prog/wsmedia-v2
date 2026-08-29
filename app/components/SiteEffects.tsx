@@ -167,6 +167,9 @@ export default function SiteEffects() {
         const top = Math.min(0, window.innerHeight - refSticky.offsetHeight);
         refSticky.style.setProperty("--ref-sticky-top", `${Math.round(top)}px`);
       }
+      // .refs on aina lapinakymaton; varmistetaan ettei aiemmin
+      // kirjoitettu arvo jaa elamaan.
+      refCover?.style.removeProperty("--cover-fade");
       if (refCover) {
         // Sama kaava kolmannelle parille. Referenssit on min-height: 100vh,
         // joten top on yleensa 0; kaava kattaa senkin tapauksen etta sisalto
@@ -352,10 +355,20 @@ export default function SiteEffects() {
       // lasketaan joka framessa suoraan geometriasta, joten se seuraa
       // molempiin suuntiin ilman omaa siirtymaa.
       if (refSticky && refCover) {
-        // Jaettuna 0,6:lla: tummennus on taydessa voimassa jo kun cover peittaa
-        // 60 % nakymasta. Aiemmin maksimi osui vasta 100 %:iin, jolloin
-        // paneeli oli jo piilossa eika tummennus ehtinyt kaventaa rajaa.
-        const rp = Math.min(Math.max((1 - refCover.getBoundingClientRect().top / vh) / 0.6, 0), 1);
+        // SAMA H1-ANKKURI KUIN FADESSA. vh-ankkuri antoi pin-hetkella
+        // nollasta poikkeavan arvon (0,080 / 0,303 / 0,544 kolmella
+        // nakymakorkeudella), koska paneeli on viewporttia matalampi ja
+        // .refs on jo osittain nakyvissa. Paneelin omaan korkeuteen
+        // ankkuroituna refs.top === H1 pin-hetkella, joten rp === 0 tasan.
+        //
+        // Jakaja 0,6: tummennus on taydessa voimassa kun cover on peittanyt
+        // 60 % paneelista, ei vasta lopussa jolloin paneeli olisi jo
+        // piilossa.
+        const H1 = refSticky.offsetHeight;
+        const rp = Math.min(
+          Math.max((H1 - refCover.getBoundingClientRect().top) / (0.6 * H1), 0),
+          1,
+        );
         refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3));
       }
 
@@ -363,23 +376,14 @@ export default function SiteEffects() {
       // sita kuinka suuri osa nakymasta on jo sen peitossa. Arvo johdetaan
       // joka framessa rectista eika deltoista, joten se palautuu
       // ylospain skrollattaessa samaa rataa eika voi jaada jumiin.
-      // ANKKURI ON ERI NAILLA KAHDELLA.
-      //
-      // .aftercover nousee .refsin paalle, ja .refs on nakymankorkuinen,
-      // joten sen ylareuna on nakyman alareunassa tasan pin-hetkella ->
-      // ankkuri vh kelpaa.
-      //
-      // .refs sen sijaan nousee .refstickyn paalle, joka on nyt SISALLON
-      // mittainen eika nakymankorkuinen. Silloin .refs on osittain
-      // nakyvissa jo ennen pinnautumista, ja ankkuri vh antaisi
-      // nollasta poikkeavan arvon juuri siina hetkessa. Ankkuroidaan
-      // siksi paneelin omaan korkeuteen: pin-hetkella refsRect.top === H1,
-      // joten osoittaja on tasan nolla.
-      for (const el of [refCover, afterCover]) {
-        if (!el) continue;
-        const anchor = el === refCover && refSticky ? refSticky.offsetHeight : vh;
-        const v = (anchor - el.getBoundingClientRect().top) / (vh * COVER_FADE_SPAN);
-        el.style.setProperty("--cover-fade", Math.min(Math.max(v, 0), 1).toFixed(3));
+      // VAIN .aftercover haivyy sisaan. .refs oli aiemmin mukana, mutta
+      // paneeli on nyt viewporttia matalampi, joten .refs on nakyvissa heti
+      // pinnautuessa - lapinakyvyys nakyi valkoisena aukkona paneelin alla.
+      // Sen opacity jaa CSS:n varasyottoon 1; measureRef poistaa muuttujan
+      // kertaalleen, jottei aiempi arvo jaa elamaan.
+      if (afterCover) {
+        const v = (vh - afterCover.getBoundingClientRect().top) / (vh * COVER_FADE_SPAN);
+        afterCover.style.setProperty("--cover-fade", Math.min(Math.max(v, 0), 1).toFixed(3));
       }
 
       // Kolmas pari: Referenssien tummennus etenee kun .aftercover nousee
