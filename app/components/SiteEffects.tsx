@@ -164,25 +164,7 @@ export default function SiteEffects() {
 
     const measureRef = () => {
       if (refSticky) {
-        const vh = window.innerHeight;
-        // Paneeli on min-height: 100vh, mutta sen SISALTO on paljon
-        // matalampi (n. 428px) ja align-items: flex-start valuttaa loput
-        // sisallon alle tyhjana. Vanha kaava min(0, vh - offsetHeight)
-        // pinnasi elementin ylareunan nakyman ylareunaan, jolloin tuo tyhja
-        // jai nakyviin - 900px nakymassa 362px.
-        //
-        // Nyt pinnataan POSITIIVISELLA topilla niin etta sisallon ALLE jaa
-        // saman verran kuin sen ylle eli ylapaddingin verran. Elementti
-        // jatkuu nakyman alapuolelle, mutta se osa ei nay.
-        //
-        // Sisaltokorkeus ja padding mitataan ajossa, ei kovakoodata: molemmat
-        // muuttuvat fontin latauksen ja tekstin rivittymisen myota, ja tama
-        // ajetaan samassa ResizeObserverissa.
-        const wrap = refSticky.querySelector<HTMLElement>(".wrap");
-        const pad = parseFloat(getComputedStyle(refSticky).paddingTop) || 0;
-        const content = wrap ? wrap.offsetHeight : 0;
-        const need = pad + content + pad;
-        const top = content > 0 && vh >= need ? vh - need : Math.min(0, vh - refSticky.offsetHeight);
+        const top = Math.min(0, window.innerHeight - refSticky.offsetHeight);
         refSticky.style.setProperty("--ref-sticky-top", `${Math.round(top)}px`);
       }
       if (refCover) {
@@ -381,9 +363,22 @@ export default function SiteEffects() {
       // sita kuinka suuri osa nakymasta on jo sen peitossa. Arvo johdetaan
       // joka framessa rectista eika deltoista, joten se palautuu
       // ylospain skrollattaessa samaa rataa eika voi jaada jumiin.
+      // ANKKURI ON ERI NAILLA KAHDELLA.
+      //
+      // .aftercover nousee .refsin paalle, ja .refs on nakymankorkuinen,
+      // joten sen ylareuna on nakyman alareunassa tasan pin-hetkella ->
+      // ankkuri vh kelpaa.
+      //
+      // .refs sen sijaan nousee .refstickyn paalle, joka on nyt SISALLON
+      // mittainen eika nakymankorkuinen. Silloin .refs on osittain
+      // nakyvissa jo ennen pinnautumista, ja ankkuri vh antaisi
+      // nollasta poikkeavan arvon juuri siina hetkessa. Ankkuroidaan
+      // siksi paneelin omaan korkeuteen: pin-hetkella refsRect.top === H1,
+      // joten osoittaja on tasan nolla.
       for (const el of [refCover, afterCover]) {
         if (!el) continue;
-        const v = (vh - el.getBoundingClientRect().top) / (vh * COVER_FADE_SPAN);
+        const anchor = el === refCover && refSticky ? refSticky.offsetHeight : vh;
+        const v = (anchor - el.getBoundingClientRect().top) / (vh * COVER_FADE_SPAN);
         el.style.setProperty("--cover-fade", Math.min(Math.max(v, 0), 1).toFixed(3));
       }
 

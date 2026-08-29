@@ -1510,15 +1510,22 @@ footer .base { padding-top: 18px }
 .refzone { position: relative; z-index: 3 }
 #palvelut { padding-bottom: 0 }
 
-/* Taysikokoinen kuten .refs: paneeli tayttaa nakyman heti pinnautuessaan,
-   jolloin cover alkaa nousta sen paalle valittomasti eika ensin nahda
-   normaalikokoista korttia. Keskitys samalla tavalla kuin .refsissa.
+/* Paneeli on SISALLON mittainen, ei nakymankorkuinen. Aiempi
+   min-height: 100vh jatti sisallon alle tyhjaa - 900px nakymassa 362px -
+   koska sisalto on vain n. 428px ja align-items: flex-start valutti loput
+   sen alle. Nyt korkeus on sisalto + 220px, jolloin ylla ja alla on
+   yhta paljon ilmaa eika tyhjaa jaa lainkaan.
+
+   Seuraus: paneeli on nakymaa matalampi, joten .refs on osittain
+   nakyvissa jo ennen pinnautumista. Siksi sen --cover-fade ankkuroidaan
+   SiteEffectsissa paneelin korkeuteen eika nakyman korkeuteen.
+
    Koskee VAIN tata paneelia - Palvelut-osion kolme muuta ovat #palvelutin
    sisalla eivatka saa tata saantoa. */
 .refsticky {
   position: sticky; top: var(--ref-sticky-top, 0px); z-index: 1;
-  min-height: 100vh; display: flex; align-items: flex-start;
-  padding-top: 110px;
+  display: flex; align-items: flex-start;
+  padding: 110px 0;
 }
 .refsticky > .wrap { width: 100% }
 /* Tummennus pinnatun paneelin paalla, kuten #hero-scrim heron sisalla.
