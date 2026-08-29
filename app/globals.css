@@ -1640,18 +1640,40 @@ footer .base { padding-top: 18px }
    Z-akselilla eika jo kaannetylla, jolloin kortit asettuvat samalle
    kaarelle eivatka eri sateille. */
 .refcard { transform-origin: 50% 50% }
-.refcard:nth-child(1) { transform: translateZ(66px) rotateY(14deg) }
-.refcard:nth-child(2) { transform: translateZ(17px) rotateY(7deg) }
-.refcard:nth-child(3) { transform: none }
-.refcard:nth-child(4) { transform: translateZ(17px) rotateY(-7deg) }
-.refcard:nth-child(5) { transform: translateZ(66px) rotateY(-14deg) }
+
+/* SPESIFISYYS. .rv.on { transform: none } on (0,2,0) ja myohempi kuin
+   nama saannot, joten pelkka .refcard:nth-child(N) - myos (0,2,0) - havisi
+   sille ja kaari nollautui heti kun kortti paljastui. Skooppaus .refgridin
+   alle nostaa nama tasoon (0,3,0), jolloin ne voittavat.
+
+   Samasta syysta .rv:n sisaantuloliuku on YHDISTETTAVA tahan samaan
+   transform-arvoon: kaksi saantoa ei voi kirjoittaa samaa ominaisuutta
+   yhta aikaa. Ennen .on-luokkaa kortti on 26px alempana kuten muutkin
+   .rv-elementit, ja .on poistaa vain sen siirron - kaari jaa. */
+.refgrid .refcard:nth-child(1) { transform: translateY(26px) translateZ(66px) rotateY(14deg) }
+.refgrid .refcard:nth-child(2) { transform: translateY(26px) translateZ(17px) rotateY(7deg) }
+.refgrid .refcard:nth-child(3) { transform: translateY(26px) }
+.refgrid .refcard:nth-child(4) { transform: translateY(26px) translateZ(17px) rotateY(-7deg) }
+.refgrid .refcard:nth-child(5) { transform: translateY(26px) translateZ(66px) rotateY(-14deg) }
+
+.refgrid .refcard.on:nth-child(1) { transform: translateZ(66px) rotateY(14deg) }
+.refgrid .refcard.on:nth-child(2) { transform: translateZ(17px) rotateY(7deg) }
+.refgrid .refcard.on:nth-child(3) { transform: none }
+.refgrid .refcard.on:nth-child(4) { transform: translateZ(17px) rotateY(-7deg) }
+.refgrid .refcard.on:nth-child(5) { transform: translateZ(66px) rotateY(-14deg) }
 
 @media (max-width: 980px) {
   /* Kolmella sarakkeella kaari menisi rikki: nth-child(1..5) osuisi eri
-     riveille, jolloin sama kierto toistuisi rivin sisalla vaarin pain. */
+     riveille, jolloin sama kierto toistuisi rivin sisalla vaarin pain.
+     Nollaukset on nostettava samaan (0,3,0) spesifisyyteen, muuten ne
+     havisivat ylla oleville skoopatuille saannoille. */
   .refgrid { grid-template-columns: repeat(3, 1fr); perspective: none; transform-style: flat }
-  .refcard:nth-child(1), .refcard:nth-child(2),
-  .refcard:nth-child(4), .refcard:nth-child(5) { transform: none }
+  .refgrid .refcard:nth-child(1), .refgrid .refcard:nth-child(2),
+  .refgrid .refcard:nth-child(3), .refgrid .refcard:nth-child(4),
+  .refgrid .refcard:nth-child(5) { transform: translateY(26px) }
+  .refgrid .refcard.on:nth-child(1), .refgrid .refcard.on:nth-child(2),
+  .refgrid .refcard.on:nth-child(3), .refgrid .refcard.on:nth-child(4),
+  .refgrid .refcard.on:nth-child(5) { transform: none }
 }
 @media (max-width: 620px) { .refgrid { grid-template-columns: repeat(2, 1fr) } }
 
