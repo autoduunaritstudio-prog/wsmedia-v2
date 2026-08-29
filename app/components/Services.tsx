@@ -1,4 +1,3 @@
-import GraphicsSurfaces from "./GraphicsSurfaces";
 import SmartLink from "./SmartLink";
 import DemoVideo from "./DemoVideo";
 
@@ -123,31 +122,6 @@ export default function Services() {
             </ul>
             <SmartLink className="tlink" href="/verkkosivut">
               Lue lisää verkkosivuista
-            </SmartLink>
-          </div>
-        </div>
-
-        {/* 3. Graafinen suunnittelu */}
-        <div className="svc rv svc-graafinen">
-          <div className="svc-visual" data-par="0.02">
-            <span className="deco deco-ring deco-ring-sm" style={{ right: "-3%", top: "-10px" }} />
-            <span className="deco deco-dot" style={{ left: "-2%", bottom: "18%" }} />
-            <GraphicsSurfaces />
-          </div>
-          <div className="svc-txt" data-par="0.035">
-            <span className="kick">Graafinen suunnittelu</span>
-            <h3>Yksi ilme, joka toimii käyntikortista pakettiauton kylkeen.</h3>
-            <p>
-              Logo, värit ja graafinen ohjeisto — ja sama ilme viety painotuotteisiin,
-              teippauksiin ja kyltteihin asennettuna. Yksi tarjous, yksi lasku.
-            </p>
-            <ul>
-              <li>Saat alkuperäistiedostot ja täydet oikeudet</li>
-              <li>Suunnittelu, materiaalit ja asennus samalta tiimiltä</li>
-              <li>Hinta-arvion näet itse laskurilla ennen tarjousta</li>
-            </ul>
-            <SmartLink className="tlink" href="/graafinen-suunnittelu">
-              Lue lisää graafisesta suunnittelusta
             </SmartLink>
           </div>
         </div>

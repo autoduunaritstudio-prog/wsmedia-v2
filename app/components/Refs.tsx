@@ -3,12 +3,19 @@
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
+import GraphicsSurfaces from "./GraphicsSurfaces";
 import MetalBackdrop from "./MetalBackdrop";
+import SmartLink from "./SmartLink";
 
 /**
  * REFERENSSIT: toinen sticky+cover-pari samalla sivulla.
  *
- * MIKSI VAIN TAPAHTUMAT-PANEELI PINNAUTUU, EI KOKO PALVELUT-RUUDUKKO:
+ * PINNATTAVANA ON KAKSI PANEELIA: Graafinen suunnittelu ja Tapahtumat.
+ * Molemmat on irrotettu Services.tsx:sta, jolloin #palvelut jaa kolmen
+ * paneelin osioksi (Lyhytvideot, Verkkosivut, Graafinen -> ei, kolmas on
+ * nyt taalla; #palvelutissa on Lyhytvideot ja Verkkosivut).
+ *
+ * MIKSI EI KOKO PALVELUT-RUUDUKKO:
  * hero+coverista opittu ehto on ettei cover saa olla pinnattavaa sisaltoa
  * matalampi - muuten pinnattu sisalto paljastuu coverin YLAPUOLELLE siina
  * hetkessa kun se irtoaa. Koko Palvelut-ruudukko on n. 3000px korkea,
@@ -265,6 +272,31 @@ export default function Refs({ children }: { children: ReactNode }) {
           (z-index 5), kuten #hero-scrim heron sisalla. */}
       <section className="refsticky" aria-label="Tapahtumat">
         <div className="wrap">
+            {/* 3. Graafinen suunnittelu */}
+            <div className="svc rv svc-graafinen">
+            <div className="svc-visual" data-par="0.02">
+              <span className="deco deco-ring deco-ring-sm" style={{ right: "-3%", top: "-10px" }} />
+              <span className="deco deco-dot" style={{ left: "-2%", bottom: "18%" }} />
+              <GraphicsSurfaces />
+            </div>
+            <div className="svc-txt" data-par="0.035">
+              <span className="kick">Graafinen suunnittelu</span>
+              <h3>Yksi ilme, joka toimii käyntikortista pakettiauton kylkeen.</h3>
+              <p>
+                Logo, värit ja graafinen ohjeisto — ja sama ilme viety painotuotteisiin,
+                teippauksiin ja kyltteihin asennettuna. Yksi tarjous, yksi lasku.
+              </p>
+              <ul>
+                <li>Saat alkuperäistiedostot ja täydet oikeudet</li>
+                <li>Suunnittelu, materiaalit ja asennus samalta tiimiltä</li>
+                <li>Hinta-arvion näet itse laskurilla ennen tarjousta</li>
+              </ul>
+              <SmartLink className="tlink" href="/graafinen-suunnittelu">
+                Lue lisää graafisesta suunnittelusta
+              </SmartLink>
+            </div>
+          </div>
+
             {/* 4. Tapahtumat */}
             <div className="svc rev rv">
               <div className="svc-visual" data-par="0.02">

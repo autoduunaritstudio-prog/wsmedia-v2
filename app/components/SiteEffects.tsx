@@ -364,9 +364,15 @@ export default function SiteEffects() {
         // Jakaja 0,6: tummennus on taydessa voimassa kun cover on peittanyt
         // 60 % paneelista, ei vasta lopussa jolloin paneeli olisi jo
         // piilossa.
-        const H1 = refSticky.offsetHeight;
+        // ANKKURI A = min(H1, vh). Paneeleita on nyt kaksi, joten .refsticky
+        // voi olla nakymaa KORKEAMPI. Silloin se pinnautuu negatiivisella
+        // topilla ja sen alareuna - eli .refsin ylareuna - on pin-hetkella
+        // nakyman ALAREUNASSA, ei H1:n kohdalla. Pelkka offsetHeight olisi
+        // siis oikein vain kun paneelipari mahtuu nakymaan; A kattaa
+        // molemmat tapaukset, ja refs.top === A tasan pin-hetkella.
+        const A = Math.min(refSticky.offsetHeight, vh);
         const rp = Math.min(
-          Math.max((H1 - refCover.getBoundingClientRect().top) / (0.6 * H1), 0),
+          Math.max((A - refCover.getBoundingClientRect().top) / (0.6 * A), 0),
           1,
         );
         refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3));
