@@ -56,3 +56,6 @@ next-env.d.ts
 /*.zip
 /*.mov
 /*.mp4
+
+# Sisaiset siirtodokumentit, ei versionhallintaan
+Siirtodokumentit/

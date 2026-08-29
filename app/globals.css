@@ -1569,7 +1569,12 @@ footer .base { padding-top: 18px }
      Sita ei voi poistaa lyhentamatta pin-vaihetta. Ainoa nuppi on
      .refstickyn min-height alla, ja se saataa molempia yhdessa. */
   background: var(--dark); color: #f5f5f7;
-  padding: var(--space-section) 0 calc(var(--space-section) + var(--refs-extra, 10vh));
+  /* --refs-extra on YLApaddingissa, ei alapaddingissa. Summa on sama, joten
+     H3 ei muutu - mutta keskitys korjaantuu. align-items: center keskittaa
+     sisallon CONTENT-BOXIIN, ja --refs-sticky-top on -0,1vh, joten
+     alapaddingissa lisays jatti sisallon 0,1vh nakyman keskikohdan
+     ylapuolelle (900px: 90px). Ylapaddingissa se kumoaa sticky-topin. */
+  padding: calc(var(--space-section) + var(--refs-extra, 10vh)) 0 var(--space-section);
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
      0 kun ylareuna on nakyman alalaidassa, 1 kun osiota on nakyvissa 35 %
      nakymasta. Varasyotto 1 pitaa osion nakyvissa jos JS ei ehdi ajaa
