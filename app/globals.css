@@ -1590,7 +1590,9 @@ footer .base { padding-top: 18px }
 }
 
 /* Sisalto kuviokerroksen ylle: .metalbd on absoluuttinen z-index 0, ja
-   sijoittamaton sisalto piirtyisi sen ALLE. */
+   sijoittamaton sisalto piirtyisi sen ALLE. Sama porrastus kuin
+   .coverissa, jossa lasikortit nousevat kuvion ylle omalla
+   pinoamiskontekstillaan. */
 .refs > .wrap { position: relative; z-index: 1 }
 .refsscrim {
   position: absolute; inset: 0; z-index: 5; pointer-events: none;
@@ -1640,40 +1642,18 @@ footer .base { padding-top: 18px }
    Z-akselilla eika jo kaannetylla, jolloin kortit asettuvat samalle
    kaarelle eivatka eri sateille. */
 .refcard { transform-origin: 50% 50% }
-
-/* SPESIFISYYS. .rv.on { transform: none } on (0,2,0) ja myohempi kuin
-   nama saannot, joten pelkka .refcard:nth-child(N) - myos (0,2,0) - havisi
-   sille ja kaari nollautui heti kun kortti paljastui. Skooppaus .refgridin
-   alle nostaa nama tasoon (0,3,0), jolloin ne voittavat.
-
-   Samasta syysta .rv:n sisaantuloliuku on YHDISTETTAVA tahan samaan
-   transform-arvoon: kaksi saantoa ei voi kirjoittaa samaa ominaisuutta
-   yhta aikaa. Ennen .on-luokkaa kortti on 26px alempana kuten muutkin
-   .rv-elementit, ja .on poistaa vain sen siirron - kaari jaa. */
-.refgrid .refcard:nth-child(1) { transform: translateY(26px) translateZ(66px) rotateY(14deg) }
-.refgrid .refcard:nth-child(2) { transform: translateY(26px) translateZ(17px) rotateY(7deg) }
-.refgrid .refcard:nth-child(3) { transform: translateY(26px) }
-.refgrid .refcard:nth-child(4) { transform: translateY(26px) translateZ(17px) rotateY(-7deg) }
-.refgrid .refcard:nth-child(5) { transform: translateY(26px) translateZ(66px) rotateY(-14deg) }
-
-.refgrid .refcard.on:nth-child(1) { transform: translateZ(66px) rotateY(14deg) }
-.refgrid .refcard.on:nth-child(2) { transform: translateZ(17px) rotateY(7deg) }
-.refgrid .refcard.on:nth-child(3) { transform: none }
-.refgrid .refcard.on:nth-child(4) { transform: translateZ(17px) rotateY(-7deg) }
-.refgrid .refcard.on:nth-child(5) { transform: translateZ(66px) rotateY(-14deg) }
+.refcard:nth-child(1) { transform: translateZ(66px) rotateY(14deg) }
+.refcard:nth-child(2) { transform: translateZ(17px) rotateY(7deg) }
+.refcard:nth-child(3) { transform: none }
+.refcard:nth-child(4) { transform: translateZ(17px) rotateY(-7deg) }
+.refcard:nth-child(5) { transform: translateZ(66px) rotateY(-14deg) }
 
 @media (max-width: 980px) {
   /* Kolmella sarakkeella kaari menisi rikki: nth-child(1..5) osuisi eri
-     riveille, jolloin sama kierto toistuisi rivin sisalla vaarin pain.
-     Nollaukset on nostettava samaan (0,3,0) spesifisyyteen, muuten ne
-     havisivat ylla oleville skoopatuille saannoille. */
+     riveille, jolloin sama kierto toistuisi rivin sisalla vaarin pain. */
   .refgrid { grid-template-columns: repeat(3, 1fr); perspective: none; transform-style: flat }
-  .refgrid .refcard:nth-child(1), .refgrid .refcard:nth-child(2),
-  .refgrid .refcard:nth-child(3), .refgrid .refcard:nth-child(4),
-  .refgrid .refcard:nth-child(5) { transform: translateY(26px) }
-  .refgrid .refcard.on:nth-child(1), .refgrid .refcard.on:nth-child(2),
-  .refgrid .refcard.on:nth-child(3), .refgrid .refcard.on:nth-child(4),
-  .refgrid .refcard.on:nth-child(5) { transform: none }
+  .refcard:nth-child(1), .refcard:nth-child(2),
+  .refcard:nth-child(4), .refcard:nth-child(5) { transform: none }
 }
 @media (max-width: 620px) { .refgrid { grid-template-columns: repeat(2, 1fr) } }
 
@@ -1685,6 +1665,13 @@ footer .base { padding-top: 18px }
   border: 1px dashed rgba(255,255,255,.28);
   display: grid; place-items: center;
 }
+/* backface-visibility: hidden pakottaa oman rasterointikerroksen, jolloin
+   pyoristetty overflow: hidden leikkaa myos 3D-muunnetun kortin sisallon.
+   Ilman sita WebKit rasteroi lapsen erikseen ja video/poster vuotaa
+   pyoristyksen yli. En pystynyt testaamaan Safarissa, joten lisattiin
+   ennakolta: haittaa ei ole, koska kortti ei kaanny 90 asteen yli eika
+   takapinta tule koskaan nakyviin. */
+.refcard-vid, .refcard-poster { backface-visibility: hidden }
 .refcard-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
 /* Poster omana kerroksenaan videon paalla; haipyy 'playing'-tapahtumassa ja
    palaa 'pause'-tapahtumassa. Sama kuvio ja sama siirtyma kuin
