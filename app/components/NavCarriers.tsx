@@ -110,13 +110,17 @@ const BLUR_DECAY = 0.75; // per frame; palautuu teravaksi n. 8 framessa
    se on jo 1,0 kun .aftercover peittaa nakyman ylareunan. */
 const RET_LO = 0.95;
 const RET_W = 0.15;
-/* Referenssien keskijakso: apRaw kulkee midLo:sta nollaan sina aikana kun
-   dim = 1 ja .aftercover ei ole viela nakyvissa. midLo mitataan ajossa
-   (ks. measure) - se riippuu .refsin korkeudesta ja nakyman korkeudesta.
-   Vaiheet ovat murto-osia siita mitatusta jaksosta, eivat kiinteita
-   pikseleita. */
-const LAMP_A = 0.2;   // a) lamppujen tuonti: ensimmainen 20 %
-const LAMP_C = 0.2;   // c) lamppujen vienti: viimeinen 20 %
+/* Lamppujakso. Ankkurit mitataan ajossa (ks. measure):
+     S_start = hetki jolloin .refsin ylareuna on tasan nakyman ylareunassa
+               eli cover on peittanyt edellisen osion KOKONAAN
+     S_end   = 0,15 * vh ennen kuin .aftercover tulee nakyviin
+   Vaiheet ovat murto-osia mitatusta spanista, mutta a ja c eivat mene
+   alle LAMP_MIN:n - lyhyempi kavely nayttaa juoksulta. Jos alaraja
+   sitoo, vaihe b kapenee vastaavasti. */
+const LAMP_A = 0.35;  // a) lamppujen tuonti
+const LAMP_C = 0.30;  // c) lamppujen vienti
+const LAMP_MIN = 300; // px, alaraja vaiheille a ja c
+const HOLD_HI = -0.15;  // S_end apRaw:na: 0,15 * vh ennen .aftercoveria
 const BEAM_RAMP = 0.15; // keilan nousu/lasku vaiheen b sisalla
 const BEAM_HALF_O = 0.30; // rad, ulkokeilan puolikulma (n. 17 astetta)
 const BEAM_HALF_I = 0.15; // rad, sisakeila
@@ -167,7 +171,12 @@ export default function NavCarriers() {
     type Actor = { el: HTMLElement | null; lamp: boolean; home: Vec; edge: number; sign: number; face: number; prevX: number; prevDist: number | null; gaitAcc: number };
     const actors: Actor[] = [];
     let ground = 0;
-    let midLo = 0;
+    // Lamppujakso apRaw-koordinaatistossa. holdLo vastaa S_startia,
+    // HOLD_HI S_endia; spanPx on niiden vali pikseleina.
+    let holdLo = 0;
+    let spanPx = 0;
+    let fracA = LAMP_A;
+    let fracC = LAMP_C;
 
     const measure = () => {
       const lr = logo.getBoundingClientRect();
@@ -175,15 +184,17 @@ export default function NavCarriers() {
       ground = Math.max(lr.bottom, tr.bottom);
       const vh = window.innerHeight;
       const vw = window.innerWidth;
-      // Keskijakson alaraja: apRaw sina hetkena kun --refs-dim saavuttaa
-      // ykkosen. dim = 1 kun .refsin ylareuna on 0,4 * A, joten
-      //   apRaw = (vh - H3 - 0,4 * A) / vh,  A = min(H1, vh).
-      // Sama H3 ja sama A kuin SiteEffectsilla, luettuna samoista
-      // elementeista - ei toista totuutta.
-      midLo =
-        refCover && refPanel
-          ? (vh - refCover.offsetHeight - 0.4 * Math.min(refPanel.offsetHeight, vh)) / vh
-          : 0;
+      // S_start apRaw:na. refs.top = 0 tarkoittaa etta .refs on siirtynyt
+      // tasan oman staattisen ylareunansa verran, jolloin
+      //   aftercover.top = H3  ->  apRaw = (vh - H3) / vh.
+      // Sama H3 kuin SiteEffectsilla, luettuna samasta elementista.
+      holdLo = refCover ? (vh - refCover.offsetHeight) / vh : 0;
+      spanPx = (HOLD_HI - holdLo) * vh;
+      // Alaraja murto-osiksi. Jos a ja c eivat mahdu, koko lamppujakso
+      // jaa pois - mieluummin ei mitaan kuin kaksi juoksuaskelta.
+      fracA = spanPx > 0 ? Math.max(LAMP_A, LAMP_MIN / spanPx) : 1;
+      fracC = spanPx > 0 ? Math.max(LAMP_C, LAMP_MIN / spanPx) : 1;
+      if (fracA + fracC >= 1) spanPx = 0;
       const conf: [HTMLElement, DOMRect, number][] = [
         [logo, lr, -1],
         [toggle, tr, 1],
@@ -272,22 +283,25 @@ export default function NavCarriers() {
       const u2 = clamp(dim - clamp((apRaw - RET_LO) / RET_W, 0, 1), 0, 1);
       const uNav = Math.max(u1, u2);
 
-      // --- keskijakso: lamput ---
-      // q kulkee nollasta ykkoseen sen jakson yli jossa Referenssit on
-      // kokonaan esilla: apRaw = midLo (dim saavuttaa 1) -> apRaw = 0
-      // (.aftercover tulee nakyviin). Vaiheet ovat murto-osia q:sta, joten
-      // ne skaalautuvat itsestaan nakyman korkeuden mukana.
-      const q = midLo < -0.01 ? clamp((apRaw - midLo) / -midLo, 0, 1) : 0;
-      // a) tuonti 0..0,2   b) valaisu 0,2..0,8   c) vienti 0,8..1
+      // --- lamppujakso ---
+      // KOVA EHTO: kun .refsin ylareuna on viela nakyman sisalla, edellista
+      // osiota nakyy ja lamppuja ei ole olemassa. Portti on rectista eika
+      // apRaw:sta, jotta se on tasan nolla eika osapikselin verran auki -
+      // molemmat ovat funktioita scrollista, joten tama ei ole tilaa.
+      const refsTop = refCover ? refCover.getBoundingClientRect().top : 1;
+      const covered = refsTop <= 0;
+      // t kulkee nollasta ykkoseen valilla S_start -> S_end.
+      const t =
+        covered && spanPx > 0 ? clamp((apRaw - holdLo) / (HOLD_HI - holdLo), 0, 1) : 0;
       const uLamp = clamp(
-        clamp(q / LAMP_A, 0, 1) - clamp((q - (1 - LAMP_C)) / LAMP_C, 0, 1),
+        clamp(t / fracA, 0, 1) - clamp((t - (1 - fracC)) / fracC, 0, 1),
         0,
         1,
       );
       // Keilan kirkkaus vaiheen b sisalla: 0 -> taysi -> 0. Kolmiofunktio
       // eika kello, joten ylospain scrollaus kayttaa saman radan takaperin.
-      const qb = clamp((q - LAMP_A) / (1 - LAMP_A - LAMP_C), 0, 1);
-      const beamOn = clamp(Math.min(qb, 1 - qb) / BEAM_RAMP, 0, 1);
+      const qb = covered ? clamp((t - fracA) / (1 - fracA - fracC), 0, 1) : 0;
+      const beamOn = covered ? clamp(Math.min(qb, 1 - qb) / BEAM_RAMP, 0, 1) : 0;
       const uAny = Math.max(uNav, uLamp);
 
       // Nav kutistuu (.scrolled) heti ensimmaisilla pikseleilla, joten
@@ -310,9 +324,7 @@ export default function NavCarriers() {
       //   .aftercover = --color-bg, peittaa lopuksi saman kaistan
       // Nain vari on LASKETTU eika arvattu, ja se seuraa scrollia 1:1.
       const band = Math.max(ground, 1);
-      const fRefs = refCover
-        ? clamp((band - refCover.getBoundingClientRect().top) / band, 0, 1)
-        : 0;
+      const fRefs = refCover ? clamp((band - refsTop) / band, 0, 1) : 0;
       const fAfter = clamp((band - (1 - apRaw) * window.innerHeight) / band, 0, 1);
       const sPanel = varNum(refPanel, "--ref-scrim");
       let back = BG - (BG - DK) * sPanel;
