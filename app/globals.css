@@ -1560,7 +1560,11 @@ footer .base { padding-top: 18px }
      nakymassa (sisalto 807px > 110vh = 770px) ja pelkka padding ei
      purisi 900/1200px:ssa (min-height dominoi). Yhdessa ne antavat
      +8,7 % ... +10,0 % kaikilla kolmella korkeudella. */
-  min-height: calc(100vh + var(--refs-extra, 10vh));
+  /* --refs-pause on mukana MYOS min-heightissa. Ilman sita tauko ei
+     pidenna osiota vaan sulautuu siihen: min-height dominoi, ja lisatty
+     padding vain kutistaa content-boxia. Mitattuna 900px nakymassa kasvu
+     olisi ollut 123px (0,14vh) ja 1300px:ssa TASAN NOLLA. */
+  min-height: calc(100vh + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 12vh));
   display: flex; align-items: center;
   /* --refs-lead PERUUTETTU. Simulaatio osoitti ettei mekanismi voi
      toimia: .refsticky pinnautuu kun scrollY = Z, ja .refs tulee
@@ -1581,7 +1585,19 @@ footer .base { padding-top: 18px }
      sisallon CONTENT-BOXIIN, ja --refs-sticky-top on -0,1vh, joten
      alapaddingissa lisays jatti sisallon 0,1vh nakyman keskikohdan
      ylapuolelle (900px: 90px). Ylapaddingissa se kumoaa sticky-topin. */
-  padding: calc(var(--space-section) + var(--refs-extra, 10vh)) 0 var(--space-section);
+  /* Tauko on kokonaan YLApaddingissa, ei jaettuna molempiin.
+     Pystykeskitys vaatii etta padTop - padBottom kumoaa negatiivisen
+     --refs-sticky-topin, joka on -(extra + 2 * pause) kun min-height
+     dominoi. Erotuksen on siis oltava extra + 2 * pause; jaettuna
+     molempiin se olisi jaanyt extraksi ja keskitys olisi rikkoutunut
+     (mitattuna 900px: tyhjaa 105px ylla ja 228px alla).
+
+     Tauko EI saa olla marginaali .refsin ylla: se tuottaisi juuri sen
+     vaalean kaistan .refstickyn ja .refsin valiin. Nain tumma tausta on
+     paikallaan ensimmaisesta pikselista. */
+  padding: calc(var(--space-section) + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 12vh))
+           0
+           var(--space-section);
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
      0 kun ylareuna on nakyman alalaidassa, 1 kun osiota on nakyvissa 35 %
      nakymasta. Varasyotto 1 pitaa osion nakyvissa jos JS ei ehdi ajaa
@@ -1615,8 +1631,8 @@ footer .base { padding-top: 18px }
   background: radial-gradient(ellipse 95% 60% at 50% 62%,
     rgba(0,0,0,0) 0%,
     rgba(0,0,0,0) 34%,
-    rgba(0,0,0,.28) 62%,
-    rgba(0,0,0,.5) 100%);
+    rgba(0,0,0,.36) 62%,
+    rgba(0,0,0,.62) 100%);
 }
 .refsscrim {
   position: absolute; inset: 0; z-index: 5; pointer-events: none;
