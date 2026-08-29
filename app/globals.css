@@ -1628,8 +1628,33 @@ footer .base { padding-top: 18px }
    #b4dbff antaa 5,03:1. Sama syy .refcard-meta spanin muutokselle. */
 .refs .kick { color: #b4dbff }
 
-.refgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-gap-grid) }
-@media (max-width: 980px) { .refgrid { grid-template-columns: repeat(3, 1fr) } }
+/* Ruudukko kaarelle. perspective luo pinoamiskontekstin ja containing
+   blockin, mutta VAIN taman elementin sisalle: .refsin ja .refstickyn
+   sticky-pinnautuminen ei muutu, koska ne ovat esivanhempia. Myoskaan
+   --ref-sticky-top, --refs-sticky-top ja --aftercover-min eivat muutu:
+   ne johdetaan offsetHeightista, joka on asettelumitta eika reagoi
+   transformeihin. */
+.refgrid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-gap-grid);
+  perspective: 2000px; perspective-origin: 50% 50%; transform-style: preserve-3d;
+}
+/* translateZ ENSIN, rotateY sen jalkeen: nain siirto tapahtuu vanhemman
+   Z-akselilla eika jo kaannetylla, jolloin kortit asettuvat samalle
+   kaarelle eivatka eri sateille. */
+.refcard { transform-origin: 50% 50% }
+.refcard:nth-child(1) { transform: translateZ(66px) rotateY(14deg) }
+.refcard:nth-child(2) { transform: translateZ(17px) rotateY(7deg) }
+.refcard:nth-child(3) { transform: none }
+.refcard:nth-child(4) { transform: translateZ(17px) rotateY(-7deg) }
+.refcard:nth-child(5) { transform: translateZ(66px) rotateY(-14deg) }
+
+@media (max-width: 980px) {
+  /* Kolmella sarakkeella kaari menisi rikki: nth-child(1..5) osuisi eri
+     riveille, jolloin sama kierto toistuisi rivin sisalla vaarin pain. */
+  .refgrid { grid-template-columns: repeat(3, 1fr); perspective: none; transform-style: flat }
+  .refcard:nth-child(1), .refcard:nth-child(2),
+  .refcard:nth-child(4), .refcard:nth-child(5) { transform: none }
+}
 @media (max-width: 620px) { .refgrid { grid-template-columns: repeat(2, 1fr) } }
 
 /* 9:16 pystyvideokortti. Katkoviivareunus kertoo etta sisalto on viela
@@ -1640,6 +1665,13 @@ footer .base { padding-top: 18px }
   border: 1px dashed rgba(255,255,255,.28);
   display: grid; place-items: center;
 }
+/* backface-visibility: hidden pakottaa oman rasterointikerroksen, jolloin
+   pyoristetty overflow: hidden leikkaa myos 3D-muunnetun kortin sisallon.
+   Ilman sita WebKit rasteroi lapsen erikseen ja video/poster vuotaa
+   pyoristyksen yli. En pystynyt testaamaan Safarissa, joten lisattiin
+   ennakolta: haittaa ei ole, koska kortti ei kaanny 90 asteen yli eika
+   takapinta tule koskaan nakyviin. */
+.refcard-vid, .refcard-poster { backface-visibility: hidden }
 .refcard-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
 /* Poster omana kerroksenaan videon paalla; haipyy 'playing'-tapahtumassa ja
    palaa 'pause'-tapahtumassa. Sama kuvio ja sama siirtyma kuin
