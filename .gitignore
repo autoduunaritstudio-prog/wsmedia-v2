@@ -59,3 +59,8 @@ next-env.d.ts
 
 # Sisaiset siirtodokumentit, ei versionhallintaan
 Siirtodokumentit/
+
+# Pakkaamattomat referenssivideoiden lahdetiedostot (31,6 MB). Ylla oleva
+# /*.mp4 on ankkuroitu juureen eika osu alikansioon, joten tama tarvitaan
+# erikseen. Julkaistavat versiot pakataan public/referenssit/-kansioon.
+Referenssi videot/

@@ -138,24 +138,34 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
     else stop();
   };
 
-  // KAKSI ERILLISTA POLKUA, ei koskaan molempia samaan elementtiin.
+  // Vain OSOITINKASITTELIJAT ovat eriytetyt. Nappaimistotuki koskee
+  // MOLEMPIA polkuja: (hover: hover) on tosi myos poydalla jota kaytetaan
+  // nappaimistolla, joten pelkka kosketuspolun tuki jattaisi sellaisen
+  // kayttajan kokonaan ilman paasya kortteihin.
+  //
+  // Tama ei palauta alkuperaista bugia jossa napautus jai soimaan: selain
+  // emuloi napautuksella mouseenterin mutta EI keydownia.
   //
   // Kosketuspolku kayttaa CLICKIA eika pointerdownia: click ei laukea jos
   // sormi liikkui vierityksen verran, pointerdown laukeaa - ruudukossa
   // selailu kaynnistaisi videoita vahingossa.
-  const bind: Record<string, unknown> = {};
+  //
+  // Tyyppi on HTMLAttributes eika Record<string, unknown>: jalkimmainen
+  // ohittaisi JSX:n prop-tarkistuksen, jolloin kirjoitusvirhe attribuutin
+  // nimessa menisi lapi hiljaa.
+  const bind: React.HTMLAttributes<HTMLElement> = {};
   if (media) {
+    bind.role = "button";
+    bind.tabIndex = 0;
+    bind["aria-label"] = `Toista video: ${c.title}`;
+    bind.onKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggle();
+      }
+    };
     if (touch) {
       bind.onClick = toggle;
-      bind.role = "button";
-      bind.tabIndex = 0;
-      bind["aria-label"] = `Toista video: ${c.title}`;
-      bind.onKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          toggle();
-        }
-      };
     } else {
       bind.onMouseEnter = play;
       bind.onMouseLeave = stop;
