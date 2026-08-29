@@ -120,25 +120,19 @@ const RET_W = 0.45;
 /* Lamppujakso. Ankkurit mitataan ajossa (ks. measure):
      S_start = hetki jolloin .refsin ylareuna on tasan nakyman ylareunassa
                eli cover on peittanyt edellisen osion KOKONAAN
-     S_end   = 0,15 * vh ennen kuin .aftercover tulee nakyviin
-   Vaiheet ovat murto-osia mitatusta spanista. Aiempi 300px:n alaraja
-   vaiheille a ja c on poistettu: se oli olemassa vain jotta kavely ei
-   nayttaisi juoksulta, ja sama asia hoidetaan nyt suoraan lahteesta eli
-   kavelymatkaa lyhentamalla (LAMP_WALK_K). Lyhentyneella spanilla
-   alaraja olisi sitä paitsi ollut mahdoton: 2 * 300 > span. */
-const LAMP_A = 0.35;  // a) lamppujen tuonti
+     S_end   = hetki jolloin .aftercoverin ylareuna osuu korttirivin
+               YLAREUNAAN eli cover on peittanyt koko rivin
+   Vaiheet ovat murto-osia mitatusta spanista. */
+const LAMP_A = 0.20;  // a) lamppujen tuonti
 const LAMP_C = 0.30;  // c) lamppujen vienti
-/* Lampunkantajan pysahdyspaikka ja kavelymatka. Vanha matka oli
-   LAMP_X * vw + LAMP_EDGE eli reunan ulkopuolelta pysahdyspaikkaan.
-   Span lyheni tekijalla 0,376 (vh 700 ja 900) ja 0,504 (vh 1300), ja
-   vaiheiden pituussuhde vanhaan on suurimmillaan 2,737 (vh 900,
-   vaihe c). Kertoimella 0,36 uusi nopeus on siis korkeintaan
-   0,36 * 2,737 = 0,985 kertaa vanha kaikilla korkeuksilla - ja koska
-   matka skaalautuu vw:n mukana kuten ennenkin, tama patee joka
-   leveydella eika vain yhdella. */
-const LAMP_X = 0.17;
+/* Lampunkantajan aloituspiste on ruudun ULKOPUOLELLA, samat 90px kuin
+   logonkantajalla. Hahmon puolikas leveys on n. 26px (jalat taydessa
+   askeleessa +-21, kadet +20, paa r 5,5), joten 90px vie sen kokonaan
+   reunan taakse eika se voi ilmestya tyhjasta.
+   Kavelymatka JOHDETAAN talta: matka = |pysahdyspaikka - aloituspiste|.
+   Aiempi kiintea kerroin jatti aloituspisteen nakyman SISAPUOLELLE
+   leveyksilla >= 1028px, mika nakyi juuri poppina. */
 const LAMP_EDGE = 90;
-const LAMP_WALK_K = 0.66;
 /* S_end MITATAAN, ei arvata: ankkuri on korttirivin YLAREUNA, eli lamput
    ovat poissa vasta kun cover on peittanyt koko rivin. Sen sijainti
    riippuu seka nakyman korkeudesta etta sisallon nostosta, joten kiintea
@@ -241,17 +235,14 @@ export default function NavCarriers() {
         if (actors[i]) Object.assign(actors[i], { home, edge });
         else actors.push({ el, lamp: false, home, edge, sign, face: -sign, prevX: edge, prevDist: null, gaitAcc: 0 });
       });
-      // Lampunkantajat 2 ja 3. Pysahdyspaikka on videoseinan molemmin
-      // puolin, jotta keilat tulevat vinosti ylhaalta eivatka suoraan
-      // edesta - suoraan edesta kartio peittaisi juuri sen mita se valaisee.
-      // Kavelymatka lyhenee samassa suhteessa kuin span, jotta nopeus ei
-      // nouse. Hahmo aloittaa siksi nakyman SISAPUOLELTA eika reunan
-      // takaa - matka reunalta olisi lyhyella spanilla juoksu.
-      const walk = LAMP_WALK_K * (LAMP_X * vw + LAMP_EDGE);
+      // Lampunkantajat 2 ja 3. Pysahdyspaikka on TASAN se x jossa logo ja
+      // valikkopainike ovat - samat mitatut keskikohdat joita logonkantajat
+      // kayttavat kotinaan, ei kiintea osuus vw:sta. Ne seisovat siis
+      // juuri siina mista elementit vietiin, leveydesta riippumatta.
       [-1, 1].forEach((sign, k) => {
         const i = 2 + k;
-        const home = { x: sign < 0 ? vw * LAMP_X : vw * (1 - LAMP_X), y: ground - 40 };
-        const edge = home.x + sign * walk;
+        const home = { x: actors[k]?.home.x ?? (sign < 0 ? 0 : vw), y: ground - 40 };
+        const edge = sign < 0 ? -LAMP_EDGE : vw + LAMP_EDGE;
         if (actors[i]) Object.assign(actors[i], { home, edge });
         else actors.push({ el: null, lamp: true, home, edge, sign, face: -sign, prevX: edge, prevDist: null, gaitAcc: 0 });
       });
