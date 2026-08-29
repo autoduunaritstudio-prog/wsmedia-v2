@@ -14,7 +14,35 @@ import { useEffect, useRef } from "react";
  *
  *   ph = clamp((navH + 120 + RUN - strip.top)    / RUN, 0, 1)   piilotus
  *   ps = clamp((24 - strip.bottom)               / RUN, 0, 1)   paluu
- *   u  = clamp(ph - ps, 0, 1)      0 = kotona, 1 = kannettu pois
+ *   u1 = clamp(ph - ps, 0, 1)      0 = kotona, 1 = kannettu pois
+ *
+ * KAKSI VYOHYKETTA. Toinen laukeaa Referenssit-osiossa ja kayttaa TASAN
+ * samaa mekaniikkaa - vain etenema tulee toisesta lahteesta:
+ *
+ *   u2 = clamp(dim - clamp((ap - 0,85) / 0,15, 0, 1), 0, 1)
+ *   u  = max(u1, u2)
+ *
+ * dim = --refs-dim ja ap = --refs-ap, molemmat SiteEffectsin jo laskemia
+ * (dim = raaka rp, ankkuri A = min(.refsticky-korkeus, vh); ap = 1 -
+ * .aftercover.top / vh). Tassa ei lasketa niita uudelleen: kaksi silmukkaa
+ * jotka mittaavat saman rectin eri vaiheessa framea antaisivat kaksi eri
+ * totuutta samasta hetkesta.
+ *
+ * max() eika summa tai tilamuuttuja: kumpikin osatermi on jatkuva funktio
+ * scrollista, joten maksimi on sita myos. Vyohykkeet eivat leikkaa (ks.
+ * VYOHYKKEIDEN RAJAT alla), joten max = se termi joka on kaynnissa; jos ne
+ * joskus leikkaisivat, tulos ei silti hyppaisi.
+ *
+ * VYOHYKKEIDEN RAJAT scrollY:na. S = .logostripin ylareuna dokumentissa,
+ * Hs sen korkeus, R = .refsin staattinen ylareuna, F = .aftercoverin:
+ *
+ *   vyohyke 1: [S - navH - 500,  S + Hs + 356]
+ *   vyohyke 2: [R - A,           R - 0,4A]  (vienti)
+ *              [F - 0,15vh,      F]         (palautus, u2 = 1 valissa)
+ *
+ * Erillisyys vaatii S + Hs + 356 < R - A. Valissa on koko Palvelut-osio ja
+ * .refsticky, yhteensa yli 2200px; suurin A on min(H1, vh) = 1093, joten
+ * ehdon vasen puoli jaa yli 750px paahan oikeasta pienimmalla marginaalilla.
  *
  * Bufferit 120 / 24 ovat TASAN samat kuin nav-hide-logiikalla, ja mitta
  * tulee samasta .logostrip-rectista - vain jatkuvana arvona pisteen sijaan.
@@ -75,6 +103,11 @@ const LEAN_MAX = 0.28; // rad, n. 16 astetta
 const BLUR_K = 0.0015;
 const BLUR_MAX = 3;
 const BLUR_DECAY = 0.75; // per frame; palautuu teravaksi n. 8 framessa
+const RET_LO = 0.85;  // ap jolla Referenssit-vyohykkeen palautus alkaa
+/* Taustan aariarvot navipalkin takana: --color-bg ja --color-dark.
+   Kaytetaan blendin lapi nakyvan varin laskentaan, ks. paintFor(). */
+const BG = 255;
+const DK = 13;
 
 export default function NavCarriers() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -90,6 +123,17 @@ export default function NavCarriers() {
     const toggle = nav.querySelector<HTMLElement>(".navtoggle");
     const strip = document.querySelector<HTMLElement>(".logostrip");
     if (!logo || !toggle || !strip) return;
+    // Toisen vyohykkeen lahteet. Puuttuvat alasivuilla - silloin u2 jaa
+    // nollaan eika mikaan muu kayttaydy toisin.
+    const refCover = document.querySelector<HTMLElement>(".refs");
+    const refPanel = document.querySelector<HTMLElement>(".refsticky");
+    // Inline-tyylista, ei getComputedStylesta: SiteEffects kirjoittaa arvot
+    // juuri sinne, ja luku on pelkka merkkijono - ei tyylien uudelleenlaskentaa.
+    const varNum = (el: HTMLElement | null, name: string) => {
+      if (!el) return 0;
+      const v = parseFloat(el.style.getPropertyValue(name));
+      return Number.isFinite(v) ? v : 0;
+    };
 
     nav.classList.add("carriers-on");
 
@@ -121,10 +165,15 @@ export default function NavCarriers() {
     measure();
     window.addEventListener("resize", measure, { passive: true });
 
+    const stops = Array.from(svg.querySelectorAll<SVGStopElement>("#carrierShadow stop"));
+
     let raf = 0;
     let prevTop: number | null = null;
     let prevT = 0;
     let blur = 0;
+    let prevBack = -1;
+    let backCss = `rgb(${BG},${BG},${BG})`;
+    let idle = true;
 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
@@ -143,7 +192,56 @@ export default function NavCarriers() {
       const navH = nav.getBoundingClientRect().height;
       const ph = clamp((navH + HIDE_BUF + RUN - r.top) / RUN, 0, 1);
       const ps = clamp((SHOW_BUF - r.bottom) / RUN, 0, 1);
-      const u = clamp(ph - ps, 0, 1);
+      const u1 = clamp(ph - ps, 0, 1);
+
+      // --- vyohyke 2: Referenssit ---
+      // Vienti seuraa --refs-dimia sellaisenaan: se on 0,000 tasan sina
+      // hetkena kun .refs saavuttaa .refstickyn alareunan, joten kantajat
+      // eivat voi lahtea liikkeelle ennen kuin cover oikeasti alkaa peittaa.
+      const dim = varNum(refCover, "--refs-dim");
+      const ap = varNum(refCover, "--refs-ap");
+      const u2 = clamp(dim - clamp((ap - RET_LO) / (1 - RET_LO), 0, 1), 0, 1);
+      const u = Math.max(u1, u2);
+
+      // Nav kutistuu (.scrolled) heti ensimmaisilla pikseleilla, joten
+      // latauksen aikainen mittaus on molemmissa vyohykkeissa vanhentunut.
+      // Mitataan uudelleen kun vyohyke alkaa - transform on silloin viela
+      // nolla, joten koti ja maataso luetaan puhtaana.
+      if (u > 0.001) {
+        if (idle) {
+          idle = false;
+          measure();
+        }
+      } else if (!idle) idle = true;
+
+      // --- blendin lapi nakyva vari ---
+      // #nav on mix-blend-mode: difference, joten renderoity savy on
+      // |tausta - lahde|. Taustan harmaa navipalkin kaistalla [0, ground]
+      // ladotaan samoista arvoista jotka ohjaavat itse osioita:
+      //   paneeli   = --color-bg, jonka paalla .refscrim alfalla --ref-scrim
+      //   .refs     = --color-dark, peittaa kaistan ylhaalta alas
+      //   .aftercover = --color-bg, peittaa lopuksi saman kaistan
+      // Nain vari on LASKETTU eika arvattu, ja se seuraa scrollia 1:1.
+      const band = Math.max(ground, 1);
+      const fRefs = refCover
+        ? clamp((band - refCover.getBoundingClientRect().top) / band, 0, 1)
+        : 0;
+      const fAfter = clamp((band - (1 - ap) * window.innerHeight) / band, 0, 1);
+      const sPanel = varNum(refPanel, "--ref-scrim");
+      let back = BG - (BG - DK) * sPanel;
+      back += (DK - back) * fRefs;
+      back += (BG - back) * fAfter;
+      const bi = Math.round(back);
+      if (bi !== prevBack) {
+        prevBack = bi;
+        backCss = `rgb(${bi},${bi},${bi})`;
+        // Varjon lahdevari = taustan vari. Difference antaa silloin |B-B| = 0
+        // eli tasan kertova varjostus (1-alfa)*B: valkoisella 255 -> 214
+        // (sama kuin ennen), tummalla 13 -> 10,9 eli olematon - juuri niin
+        // kuin kontaktivarjo kayttaytyy mustalla lattialla. Aiempi kiintea
+        // #fff olisi antanut tummalla 13 -> 49,6 eli VAALEAN laikun.
+        for (const st of stops) st.setAttribute("stop-color", backCss);
+      }
 
       for (let i = 0; i < actors.length; i++) {
         const a = actors[i];
@@ -153,6 +251,21 @@ export default function NavCarriers() {
         if (grp) {
           grp.style.opacity = visible ? "1" : "0";
           grp.style.filter = blurPx ? `blur(${blurPx.toFixed(2)}px)` : "";
+        }
+        // Reunus taustan varilla. Viivan oma lahdevari on #fff, joka
+        // renderoityy arvoksi 255-B: se on vahva vaalealla (0 = musta) ja
+        // tummalla (242 = lahes valkoinen), mutta katoaa kun tausta on
+        // keskiharmaa - juuri silloin kun .refscrim on puolivalissa, ja
+        // |255-2B| menee nollan lapi B:n arvolla 128. Reunus on lahdevari
+        // B, joka renderoityy nollaksi eli MUSTAKSI riippumatta taustasta,
+        // joten ainakin toinen niista erottuu aina: max(B, |255-2B|) >= 85
+        // kaikilla B. Reunus on omassa ryhmassaan, jotta se ei kehysta
+        // kontaktivarjoja.
+        const fig = P(`c${i}f`);
+        if (fig) {
+          fig.style.filter = visible
+            ? `drop-shadow(0 0 2px ${backCss}) drop-shadow(0 0 1px ${backCss})`
+            : "";
         }
 
         // --- polku: reuna -> pysahdys -> reuna, x puhtaana funktiona u:sta.
@@ -322,11 +435,14 @@ export default function NavCarriers() {
         {/* Pehmea reuna gradientilla eika blur-suodattimella: halvempi
             rasteroida ja pysyy terävänä millä tahansa zoomilla.
 
-            VALKOINEN, ei musta. #nav on mix-blend-mode: difference, jossa
-            tulos on |tausta - lahde|: musta antaisi valkoisella taustalla
-            255 eli olisi taysin nakymaton. Valkoinen alfalla .14 antaa
-            219 (hienovarainen tummennus) ja tummalla osiolla 45 (vaalea
-            laikku) - tasan sama kaytos kuin logolla ja hahmon viivalla. */}
+            stop-color KIRJOITETAAN joka framessa taustan variksi (ks.
+            paintFor-lohko silmukassa). #nav on mix-blend-mode: difference,
+            jossa tulos on |tausta - lahde|, joten lahde = tausta antaa
+            nollan ja varjosta tulee tasan kertova - oikea kaikilla
+            taustoilla. Musta lahde olisi valkoisella taustalla taysin
+            nakymaton, kiintea valkoinen taas kaantyisi tummalla osiolla
+            VAALEAKSI laikuksi. Attribuutti alla on vain alkuarvo ennen
+            ensimmaista framea. */}
         <radialGradient id="carrierShadow">
           <stop offset="0%" stopColor="#fff" stopOpacity="0.16" />
           <stop offset="55%" stopColor="#fff" stopOpacity="0.09" />
@@ -335,15 +451,19 @@ export default function NavCarriers() {
       </defs>
       {[0, 1].map((i) => (
         <g data-p={`c${i}`} key={i} opacity="0">
-          {/* Varjot ensin, jotta ne jaavat hahmon alle. */}
+          {/* Varjot ensin, jotta ne jaavat hahmon alle. Ne ovat ryhman
+              ULKOPUOLELLA, koska hahmon reunussuodatin ei saa kehystaa
+              niita - varjo on jo valmiiksi pehmea reunainen. */}
           <ellipse data-p={`c${i}sh`} fill="url(#carrierShadow)" stroke="none" />
           <ellipse data-p={`c${i}esh`} fill="url(#carrierShadow)" stroke="none" />
-          <circle data-p={`c${i}h`} r={L.head} />
-          <path data-p={`c${i}s`} />
-          <path data-p={`c${i}l0`} />
-          <path data-p={`c${i}l1`} />
-          <path data-p={`c${i}a0`} />
-          <path data-p={`c${i}a1`} />
+          <g data-p={`c${i}f`}>
+            <circle data-p={`c${i}h`} r={L.head} />
+            <path data-p={`c${i}s`} />
+            <path data-p={`c${i}l0`} />
+            <path data-p={`c${i}l1`} />
+            <path data-p={`c${i}a0`} />
+            <path data-p={`c${i}a1`} />
+          </g>
         </g>
       ))}
     </svg>

@@ -402,6 +402,12 @@ export default function SiteEffects() {
       if (refCover && afterCover) {
         const ap = Math.min(Math.max(1 - afterCover.getBoundingClientRect().top / vh, 0), 1);
         refCover.style.setProperty("--refs-scrim", (ap * REF_SCRIM_MAX).toFixed(3));
+        // Sama etenema myos raakana. NavCarriers ajaa palautuksensa valilla
+        // ap 0,85..1,0 eika saa lukea samaa geometriaa uudelleen omassa
+        // rAF-silmukassaan - kaksi rectia samasta elementista samalla
+        // framella olisi kaksi eri totuutta, jos silmukat eivat ole samassa
+        // vaiheessa. Tama on vain jo lasketun arvon julkaisu, ei uusi laskenta.
+        refCover.style.setProperty("--refs-ap", ap.toFixed(3));
       }
 
       if (hero && cover) {
