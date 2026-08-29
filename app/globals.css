@@ -1575,13 +1575,7 @@ footer .base { padding-top: 18px }
      pidenna osiota vaan sulautuu siihen: min-height dominoi, ja lisatty
      padding vain kutistaa content-boxia. Mitattuna 900px nakymassa kasvu
      olisi ollut 123px (0,14vh) ja 1300px:ssa TASAN NOLLA. */
-  /* --refs-hold on PIKSELEISSA eika vh:na, ja siksi se menee
-     min-heightiin ja ylapaddingiin kertoimella 1 eika 2 kuten
-     --refs-pause. Silloin tyhjaa ylla = 0,5*vh - 283,5 riippumatta
-     holdista, eli pystykeskitys sailyy tasmalleen ennallaan.
-     Se on lamppujaksolle varattu matka: sen ilman ei kantajille jaisi
-     pin-vaiheessa kuin 171-247px, mika ei riita kahteen kavelyyn. */
-  min-height: calc(100vh + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 12vh) + var(--refs-hold, 800px));
+  min-height: calc(100vh + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 5.3vh));
   display: flex; align-items: center;
   /* --refs-lead PERUUTETTU. Simulaatio osoitti ettei mekanismi voi
      toimia: .refsticky pinnautuu kun scrollY = Z, ja .refs tulee
@@ -1612,7 +1606,7 @@ footer .base { padding-top: 18px }
      Tauko EI saa olla marginaali .refsin ylla: se tuottaisi juuri sen
      vaalean kaistan .refstickyn ja .refsin valiin. Nain tumma tausta on
      paikallaan ensimmaisesta pikselista. */
-  padding: calc(var(--space-section) + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 12vh) + var(--refs-hold, 800px))
+  padding: calc(var(--space-section) + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 5.3vh))
            0
            var(--space-section);
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:

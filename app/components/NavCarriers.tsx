@@ -114,13 +114,28 @@ const RET_W = 0.15;
      S_start = hetki jolloin .refsin ylareuna on tasan nakyman ylareunassa
                eli cover on peittanyt edellisen osion KOKONAAN
      S_end   = 0,15 * vh ennen kuin .aftercover tulee nakyviin
-   Vaiheet ovat murto-osia mitatusta spanista, mutta a ja c eivat mene
-   alle LAMP_MIN:n - lyhyempi kavely nayttaa juoksulta. Jos alaraja
-   sitoo, vaihe b kapenee vastaavasti. */
+   Vaiheet ovat murto-osia mitatusta spanista. Aiempi 300px:n alaraja
+   vaiheille a ja c on poistettu: se oli olemassa vain jotta kavely ei
+   nayttaisi juoksulta, ja sama asia hoidetaan nyt suoraan lahteesta eli
+   kavelymatkaa lyhentamalla (LAMP_WALK_K). Lyhentyneella spanilla
+   alaraja olisi sitä paitsi ollut mahdoton: 2 * 300 > span. */
 const LAMP_A = 0.35;  // a) lamppujen tuonti
 const LAMP_C = 0.30;  // c) lamppujen vienti
-const LAMP_MIN = 300; // px, alaraja vaiheille a ja c
-const HOLD_HI = -0.15;  // S_end apRaw:na: 0,15 * vh ennen .aftercoveria
+/* Lampunkantajan pysahdyspaikka ja kavelymatka. Vanha matka oli
+   LAMP_X * vw + LAMP_EDGE eli reunan ulkopuolelta pysahdyspaikkaan.
+   Span lyheni tekijalla 0,376 (vh 700 ja 900) ja 0,504 (vh 1300), ja
+   vaiheiden pituussuhde vanhaan on suurimmillaan 2,737 (vh 900,
+   vaihe c). Kertoimella 0,36 uusi nopeus on siis korkeintaan
+   0,36 * 2,737 = 0,985 kertaa vanha kaikilla korkeuksilla - ja koska
+   matka skaalautuu vw:n mukana kuten ennenkin, tama patee joka
+   leveydella eika vain yhdella. */
+const LAMP_X = 0.17;
+const LAMP_EDGE = 90;
+const LAMP_WALK_K = 0.36;
+/* S_end apRaw:na. Positiivinen: lamput ovat poissa vasta kun
+   .aftercover on jo noussut 0,20 * vh nakymaan. Peitto kestaa taydet
+   vh, joten videot ovat siina kohtaa yha kokonaan nakyvissa. */
+const HOLD_HI = 0.2;
 const BEAM_RAMP = 0.15; // keilan nousu/lasku vaiheen b sisalla
 const BEAM_HALF_O = 0.30; // rad, ulkokeilan puolikulma (n. 17 astetta)
 const BEAM_HALF_I = 0.15; // rad, sisakeila
@@ -175,8 +190,6 @@ export default function NavCarriers() {
     // HOLD_HI S_endia; spanPx on niiden vali pikseleina.
     let holdLo = 0;
     let spanPx = 0;
-    let fracA = LAMP_A;
-    let fracC = LAMP_C;
 
     const measure = () => {
       const lr = logo.getBoundingClientRect();
@@ -190,11 +203,6 @@ export default function NavCarriers() {
       // Sama H3 kuin SiteEffectsilla, luettuna samasta elementista.
       holdLo = refCover ? (vh - refCover.offsetHeight) / vh : 0;
       spanPx = (HOLD_HI - holdLo) * vh;
-      // Alaraja murto-osiksi. Jos a ja c eivat mahdu, koko lamppujakso
-      // jaa pois - mieluummin ei mitaan kuin kaksi juoksuaskelta.
-      fracA = spanPx > 0 ? Math.max(LAMP_A, LAMP_MIN / spanPx) : 1;
-      fracC = spanPx > 0 ? Math.max(LAMP_C, LAMP_MIN / spanPx) : 1;
-      if (fracA + fracC >= 1) spanPx = 0;
       const conf: [HTMLElement, DOMRect, number][] = [
         [logo, lr, -1],
         [toggle, tr, 1],
@@ -213,10 +221,14 @@ export default function NavCarriers() {
       // Lampunkantajat 2 ja 3. Pysahdyspaikka on videoseinan molemmin
       // puolin, jotta keilat tulevat vinosti ylhaalta eivatka suoraan
       // edesta - suoraan edesta kartio peittaisi juuri sen mita se valaisee.
+      // Kavelymatka lyhenee samassa suhteessa kuin span, jotta nopeus ei
+      // nouse. Hahmo aloittaa siksi nakyman SISAPUOLELTA eika reunan
+      // takaa - matka reunalta olisi lyhyella spanilla juoksu.
+      const walk = LAMP_WALK_K * (LAMP_X * vw + LAMP_EDGE);
       [-1, 1].forEach((sign, k) => {
         const i = 2 + k;
-        const home = { x: sign < 0 ? vw * 0.17 : vw * 0.83, y: ground - 40 };
-        const edge = sign < 0 ? -90 : vw + 90;
+        const home = { x: sign < 0 ? vw * LAMP_X : vw * (1 - LAMP_X), y: ground - 40 };
+        const edge = home.x + sign * walk;
         if (actors[i]) Object.assign(actors[i], { home, edge });
         else actors.push({ el: null, lamp: true, home, edge, sign, face: -sign, prevX: edge, prevDist: null, gaitAcc: 0 });
       });
@@ -294,13 +306,13 @@ export default function NavCarriers() {
       const t =
         covered && spanPx > 0 ? clamp((apRaw - holdLo) / (HOLD_HI - holdLo), 0, 1) : 0;
       const uLamp = clamp(
-        clamp(t / fracA, 0, 1) - clamp((t - (1 - fracC)) / fracC, 0, 1),
+        clamp(t / LAMP_A, 0, 1) - clamp((t - (1 - LAMP_C)) / LAMP_C, 0, 1),
         0,
         1,
       );
       // Keilan kirkkaus vaiheen b sisalla: 0 -> taysi -> 0. Kolmiofunktio
       // eika kello, joten ylospain scrollaus kayttaa saman radan takaperin.
-      const qb = covered ? clamp((t - fracA) / (1 - fracA - fracC), 0, 1) : 0;
+      const qb = covered ? clamp((t - LAMP_A) / (1 - LAMP_A - LAMP_C), 0, 1) : 0;
       const beamOn = covered ? clamp(Math.min(qb, 1 - qb) / BEAM_RAMP, 0, 1) : 0;
       const uAny = Math.max(uNav, uLamp);
 
