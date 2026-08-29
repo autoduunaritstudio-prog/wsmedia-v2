@@ -33,20 +33,45 @@ import MetalBackdrop from "./MetalBackdrop";
 /**
  * Kortin media on VALINNAINEN. Kun src ja poster puuttuvat, kortti
  * renderoi paikkamerkin muuttumattomana eika ole interaktiivinen -
- * ei ole mitaan toistettavaa, joten role="button" olisi valhe.
+ * ei ole mitaan toistettavaa, joten role="button" olisi valhe. Tama
+ * haara jaa koodiin, vaikka kaikilla nykyisilla korteilla on media.
  *
- * TODO: taytetaan oikeilla referensseilla kun videot ovat saatavilla.
- * Pakkaa samalla menetelmalla kuin sivuston muut videot: lyhyt luuppi,
- * h264, ei aaniraitaa.
+ * Mediat public/referenssit/-kansiossa: 608 x 1080, natiivi fps, 10,000 s,
+ * h264 crf 30, ei aaniraitaa, +faststart. Posterit WebP.
  */
 type RefItem = { title: string; meta: string; src?: string; poster?: string };
 
 const CARDS: RefItem[] = [
-  { title: "[Asiakas 1]", meta: "Lyhytvideot · [tulos]" },
-  { title: "[Asiakas 2]", meta: "Tapahtumat · [pvm]" },
-  { title: "[Asiakas 3]", meta: "Lyhytvideot · [tulos]" },
-  { title: "[Asiakas 4]", meta: "Verkkosivut · [toimiala]" },
-  { title: "[Asiakas 5]", meta: "Tapahtumat · [pvm]" },
+  {
+    title: "ColorMaster",
+    meta: "Lyhytvideot · autojen maalaus",
+    src: "/referenssit/colormaster.mp4",
+    poster: "/referenssit/colormaster.webp",
+  },
+  {
+    title: "YDR Autohuolto",
+    meta: "Lyhytvideot · autohuolto",
+    src: "/referenssit/ydr-autohuolto.mp4",
+    poster: "/referenssit/ydr-autohuolto.webp",
+  },
+  {
+    title: "White Star",
+    meta: "Lyhytvideot · auton muodonmuutos",
+    src: "/referenssit/white-star.mp4",
+    poster: "/referenssit/white-star.webp",
+  },
+  {
+    title: "VauhtiVeikot",
+    meta: "Lyhytvideot · autotarvikkeet",
+    src: "/referenssit/vauhtiveikot.mp4",
+    poster: "/referenssit/vauhtiveikot.webp",
+  },
+  {
+    title: "Laaksolahden Sähkö",
+    meta: "Lyhytvideot · ilmalämpöpumput",
+    src: "/referenssit/ilmalampopumput.mp4",
+    poster: "/referenssit/ilmalampopumput.webp",
+  },
 ];
 
 /** Korttien luontaiset mitat, 9:16. */
