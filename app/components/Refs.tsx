@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useCallback, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import MetalBackdrop from "./MetalBackdrop";
 
@@ -30,8 +30,18 @@ import MetalBackdrop from "./MetalBackdrop";
  * metallikuvion paneen kiinnityksen.
  */
 
-/** TODO: taytetaan oikeilla referensseilla kun videot ovat saatavilla. */
-const CARDS = [
+/**
+ * Kortin media on VALINNAINEN. Kun src ja poster puuttuvat, kortti
+ * renderoi paikkamerkin muuttumattomana eika ole interaktiivinen -
+ * ei ole mitaan toistettavaa, joten role="button" olisi valhe.
+ *
+ * TODO: taytetaan oikeilla referensseilla kun videot ovat saatavilla.
+ * Pakkaa samalla menetelmalla kuin sivuston muut videot: lyhyt luuppi,
+ * h264, ei aaniraitaa.
+ */
+type RefItem = { title: string; meta: string; src?: string; poster?: string };
+
+const CARDS: RefItem[] = [
   { title: "[Asiakas 1]", meta: "Lyhytvideot · [tulos]" },
   { title: "[Asiakas 2]", meta: "Tapahtumat · [pvm]" },
   { title: "[Asiakas 3]", meta: "Lyhytvideot · [tulos]" },
@@ -39,32 +49,170 @@ const CARDS = [
   { title: "[Asiakas 5]", meta: "Tapahtumat · [pvm]" },
 ];
 
-export default function Refs({ children }: { children: ReactNode }) {
-  // Hover-kaynnistys, EI IntersectionObserveria: ruudukossa on viisi
-  // korttia yhta aikaa nakyvissa, ja automaattitoisto kaynnistaisi ne
-  // kaikki. play() palauttaa promisen joka hylkaytyy kun srcia ei viela
-  // ole - se nielaistaan, jottei konsoliin tule virhetta ennen kuin
-  // oikeat videot lisataan.
-  //
-  // KOSKETUSLAITTEET: kortit jaavat staattisiksi. Selain emuloi napautuksella
-  // mouseenterin mutta ei mouseleavea, joten ilman tata vartijaa napautettu
-  // video jaisi soimaan kunnes kayttaja napauttaa muualle - ja viisi korttia
-  // vierekkain tarkoittaisi etta selailu kaynnistaisi niita vahingossa.
-  // Tap-to-play hylattiin myos siksi, etta napautus kilpailisi vierityksen
-  // kanssa ruudukossa. Kosketuksella nakyy siis poster-kuva, mika on myos
-  // kevyin vaihtoehto mobiilidatalle.
-  const onEnter = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    if (!window.matchMedia("(hover: hover)").matches) return;
-    const v = e.currentTarget.querySelector("video");
-    v?.play().catch(() => {});
-  }, []);
-  const onLeave = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    const v = e.currentTarget.querySelector("video");
+/** Korttien luontaiset mitat, 9:16. */
+const VW = 503;
+const VH = 894;
+
+/**
+ * Vain yksi video kerrallaan. Moduulitasolla, koska rajoitus koskee
+ * kortteja keskenaan eika yhta korttia.
+ */
+let playingEl: HTMLVideoElement | null = null;
+
+function stopOthers(el: HTMLVideoElement) {
+  if (playingEl && playingEl !== el) {
+    playingEl.pause();
+    playingEl.currentTime = 0;
+  }
+  playingEl = el;
+}
+
+function RefCard({ c, i }: { c: RefItem; i: number }) {
+  const vid = useRef<HTMLVideoElement>(null);
+  const art = useRef<HTMLElement>(null);
+  const [playing, setPlaying] = useState(false);
+  // Alkuarvo false, jotta palvelimen ja ensimmaisen asiakasrenderin
+  // merkinta tasmaa; efekti nostaa kosketuspolun vasta kiinnityksen
+  // jalkeen.
+  const [touch, setTouch] = useState(false);
+  const media = Boolean(c.src);
+
+  useEffect(() => {
+    if (!media) return;
+    setTouch(!window.matchMedia("(hover: hover)").matches);
+  }, [media]);
+
+  useEffect(() => {
+    const v = vid.current;
+    const a = art.current;
+    if (!media || !v || !a) return;
+
+    const onPlaying = () => {
+      setPlaying(true);
+      stopOthers(v);
+    };
+    const onPause = () => {
+      setPlaying(false);
+      if (playingEl === v) playingEl = null;
+    };
+    v.addEventListener("playing", onPlaying);
+    v.addEventListener("pause", onPause);
+
+    // Ilman tata kosketuksella kaynnistetty video jaisi soimaan taustalle
+    // kun kortti vieritetaan pois nakyvista.
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting && !v.paused) {
+          v.pause();
+          v.currentTime = 0;
+        }
+      },
+      { threshold: 0 },
+    );
+    io.observe(a);
+
+    return () => {
+      v.removeEventListener("playing", onPlaying);
+      v.removeEventListener("pause", onPause);
+      io.disconnect();
+      if (playingEl === v) playingEl = null;
+    };
+  }, [media]);
+
+  const play = () => {
+    const v = vid.current;
+    if (!v) return;
+    stopOthers(v);
+    v.play().catch(() => {});
+  };
+  const stop = () => {
+    const v = vid.current;
     if (!v) return;
     v.pause();
     v.currentTime = 0;
-  }, []);
+  };
+  const toggle = () => {
+    const v = vid.current;
+    if (!v) return;
+    if (v.paused) play();
+    else stop();
+  };
 
+  // KAKSI ERILLISTA POLKUA, ei koskaan molempia samaan elementtiin.
+  //
+  // Kosketuspolku kayttaa CLICKIA eika pointerdownia: click ei laukea jos
+  // sormi liikkui vierityksen verran, pointerdown laukeaa - ruudukossa
+  // selailu kaynnistaisi videoita vahingossa.
+  const bind: Record<string, unknown> = {};
+  if (media) {
+    if (touch) {
+      bind.onClick = toggle;
+      bind.role = "button";
+      bind.tabIndex = 0;
+      bind["aria-label"] = `Toista video: ${c.title}`;
+      bind.onKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      };
+    } else {
+      bind.onMouseEnter = play;
+      bind.onMouseLeave = stop;
+    }
+  }
+
+  return (
+    <article
+      ref={art as React.RefObject<HTMLElement>}
+      className="refcard rv"
+      style={{ "--i": i } as CSSProperties}
+      {...bind}
+    >
+      {/* Lahde on <source>-lapsena eika src-attribuuttina: src-attribuutin
+          kanssa selain ohittaa source-lapset kokonaan. */}
+      <video
+        ref={vid}
+        className="refcard-vid"
+        width={VW}
+        height={VH}
+        muted
+        loop
+        playsInline
+        preload="none"
+      >
+        {c.src ? <source src={c.src} type="video/mp4" /> : null}
+      </video>
+      {c.poster ? (
+        /* POSTER OMANA KERROKSENAAN, ei poster-attribuuttina: attribuutti
+           ladataan aina myos preload="none":n kanssa eika ole laiska, joten
+           viisi posteria tulisi ensimmaiseen latausaaltoon. Sama kuvio kuin
+           .demo-posterilla. width/height ovat pakolliset: korvattu elementti
+           ei peri kokoa inset-arvoista, ja Tailwindin preflight height:auto
+           ohjaisi muuten - tama ansa on osunut talla sivustolla kahdesti.
+           eslint-disable-next-line @next/next/no-img-element */
+        <img
+          className={`refcard-poster${playing ? " is-hidden" : ""}`}
+          src={c.poster}
+          width={VW}
+          height={VH}
+          loading="lazy"
+          decoding="async"
+          alt=""
+          aria-hidden="true"
+        />
+      ) : (
+        <span className="refcard-mark">Video tulossa</span>
+      )}
+      <div className="refcard-meta">
+        <b>{c.title}</b>
+        <span>{c.meta}</span>
+      </div>
+    </article>
+  );
+}
+
+export default function Refs({ children }: { children: ReactNode }) {
   return (
     <div className="refzone">
       {/* Pinnautuva osa. Scrim on paneelin sisalla ja sen paalla
@@ -136,27 +284,7 @@ export default function Refs({ children }: { children: ReactNode }) {
           </div>
           <div className="refgrid stagger">
             {CARDS.map((c, i) => (
-              <article
-                className="refcard rv"
-                style={{ "--i": i } as CSSProperties}
-                key={c.title}
-                onMouseEnter={onEnter}
-                onMouseLeave={onLeave}
-              >
-                {/* TODO: lisaa oikea video tahan kun se on saatavilla:
-                    <video ... poster="/referenssit/ref-N.jpg">
-                      <source src="/referenssit/ref-N.mp4" type="video/mp4" />
-                    </video>
-                    Pakkaa samalla menetelmalla kuin sivuston muut videot
-                    (lyhyt luuppi, h264, ei aanta). Poista samalla
-                    .refcard-mark -paikkamerkki talta kortilta. */}
-                <video className="refcard-vid" muted loop playsInline preload="none" />
-                <span className="refcard-mark">Video tulossa</span>
-                <div className="refcard-meta">
-                  <b>{c.title}</b>
-                  <span>{c.meta}</span>
-                </div>
-              </article>
+              <RefCard c={c} i={i} key={c.title} />
             ))}
           </div>
         </div>
