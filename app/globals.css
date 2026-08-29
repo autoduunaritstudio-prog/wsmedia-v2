@@ -1575,7 +1575,7 @@ footer .base { padding-top: 18px }
      pidenna osiota vaan sulautuu siihen: min-height dominoi, ja lisatty
      padding vain kutistaa content-boxia. Mitattuna 900px nakymassa kasvu
      olisi ollut 123px (0,14vh) ja 1300px:ssa TASAN NOLLA. */
-  min-height: calc(100vh + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 5.3vh));
+  min-height: calc(100vh + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh));
   display: flex; align-items: center;
   /* --refs-lead PERUUTETTU. Simulaatio osoitti ettei mekanismi voi
      toimia: .refsticky pinnautuu kun scrollY = Z, ja .refs tulee
@@ -1606,9 +1606,16 @@ footer .base { padding-top: 18px }
      Tauko EI saa olla marginaali .refsin ylla: se tuottaisi juuri sen
      vaalean kaistan .refstickyn ja .refsin valiin. Nain tumma tausta on
      paikallaan ensimmaisesta pikselista. */
-  padding: calc(var(--space-section) + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 5.3vh))
+  /* --refs-lift VAHENNETAAN ylapaddingista ja LISATAAN alapaddingiin.
+     Summa pysyy samana, joten H3, --aftercover-min ja --refs-sticky-top
+     eivat muutu lainkaan - vain sisalto nousee tasan liftin verran.
+     Sisalto ei siis ole enaa pystykeskitetty. Se on tietoinen
+     vaihtokauppa: korttirivin alareuna nousee saman verran, ja juuri se
+     maaraa kuinka myohaan lamput ehtivat pois ennen kuin .aftercover
+     alkaa peittaa videoita. */
+  padding: calc(var(--space-section) + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh) - var(--refs-lift, 120px))
            0
-           var(--space-section);
+           calc(var(--space-section) + var(--refs-lift, 120px));
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
      0 kun ylareuna on nakyman alalaidassa, 1 kun osiota on nakyvissa 35 %
      nakymasta. Varasyotto 1 pitaa osion nakyvissa jos JS ei ehdi ajaa

@@ -138,11 +138,14 @@ const LAMP_C = 0.30;  // c) lamppujen vienti
    leveydella eika vain yhdella. */
 const LAMP_X = 0.17;
 const LAMP_EDGE = 90;
-const LAMP_WALK_K = 0.36;
-/* S_end apRaw:na. Positiivinen: lamput ovat poissa vasta kun
-   .aftercover on jo noussut 0,20 * vh nakymaan. Peitto kestaa taydet
-   vh, joten videot ovat siina kohtaa yha kokonaan nakyvissa. */
-const HOLD_HI = 0.2;
+const LAMP_WALK_K = 0.46;
+/* S_end MITATAAN, ei arvata. Kiintea apRaw-luku oli vaarin: korttirivin
+   alareuna on 0,5 * vh + 283,5 - lift nakyman ylareunasta, joten se hetki
+   jolloin .aftercover saavuttaa sen riippuu seka nakyman korkeudesta etta
+   sisallon sijainnista. LAMP_SAFE on turvamarginaali pikseleina; se kattaa
+   myos sen etta uloimmat kortit tyontyvat perspektiivin takia noin 6px
+   ruudukon laatikon alapuolelle. */
+const LAMP_SAFE = 20;
 const BEAM_RAMP = 0.15; // keilan nousu/lasku vaiheen b sisalla
 const BEAM_HALF_O = 0.30; // rad, ulkokeilan puolikulma (n. 17 astetta)
 const BEAM_HALF_I = 0.15; // rad, sisakeila
@@ -176,6 +179,10 @@ export default function NavCarriers() {
     // nollaan eika mikaan muu kayttaydy toisin.
     const refCover = document.querySelector<HTMLElement>(".refs");
     const refPanel = document.querySelector<HTMLElement>(".refsticky");
+    // Nama on maariteltava ENNEN measurea: measure lukee ruudukon sijainnin
+    // S_endia varten ja sita kutsutaan heti alustuksessa.
+    const refGrid = document.querySelector<HTMLElement>(".refgrid");
+    const refCards = Array.from(document.querySelectorAll<HTMLElement>(".refcard"));
     // Inline-tyylista, ei getComputedStylesta: SiteEffects kirjoittaa arvot
     // juuri sinne, ja luku on pelkka merkkijono - ei tyylien uudelleenlaskentaa.
     const varNum = (el: HTMLElement | null, name: string) => {
@@ -194,8 +201,9 @@ export default function NavCarriers() {
     const actors: Actor[] = [];
     let ground = 0;
     // Lamppujakso apRaw-koordinaatistossa. holdLo vastaa S_startia,
-    // HOLD_HI S_endia; spanPx on niiden vali pikseleina.
+    // holdHi S_endia; spanPx on niiden vali pikseleina.
     let holdLo = 0;
+    let holdHi = 0;
     let spanPx = 0;
 
     const measure = () => {
@@ -209,7 +217,19 @@ export default function NavCarriers() {
       //   aftercover.top = H3  ->  apRaw = (vh - H3) / vh.
       // Sama H3 kuin SiteEffectsilla, luettuna samasta elementista.
       holdLo = refCover ? (vh - refCover.offsetHeight) / vh : 0;
-      spanPx = (HOLD_HI - holdLo) * vh;
+      // S_end: se apRaw jolla .aftercoverin ylareuna osuu korttirivin
+      // alareunaan, miinus turvamarginaali. Ruudukon sijainti luetaan
+      // .refsin ylareunaan NAHDEN, jolloin arvo ei riipu siita millaisella
+      // scrollilla mittaus sattuu tapahtumaan; pinnattuna .refsin ylareuna
+      // on tasan vh - H3, joten korttirivin alareuna nakymassa on
+      //   (vh - H3) + gridRel.
+      if (refCover && refGrid) {
+        const rr = refCover.getBoundingClientRect();
+        const gg = refGrid.getBoundingClientRect();
+        const cardBottom = vh - refCover.offsetHeight + (gg.bottom - rr.top);
+        holdHi = 1 - (cardBottom + LAMP_SAFE) / vh;
+      } else holdHi = 0;
+      spanPx = (holdHi - holdLo) * vh;
       const conf: [HTMLElement, DOMRect, number][] = [
         [logo, lr, -1],
         [toggle, tr, 1],
@@ -244,8 +264,6 @@ export default function NavCarriers() {
     window.addEventListener("resize", measure, { passive: true });
 
     const stops = Array.from(svg.querySelectorAll<SVGStopElement>("#carrierShadow stop"));
-    const refGrid = document.querySelector<HTMLElement>(".refgrid");
-    const refCards = Array.from(document.querySelectorAll<HTMLElement>(".refcard"));
     setBeamHost(document.body);
 
     // Keilakerros syntyy portaalilla vasta seuraavassa renderissa, joten
@@ -311,7 +329,7 @@ export default function NavCarriers() {
       const covered = refsTop <= 0;
       // t kulkee nollasta ykkoseen valilla S_start -> S_end.
       const t =
-        covered && spanPx > 0 ? clamp((apRaw - holdLo) / (HOLD_HI - holdLo), 0, 1) : 0;
+        covered && spanPx > 0 ? clamp((apRaw - holdLo) / (holdHi - holdLo), 0, 1) : 0;
       const uLamp = clamp(
         clamp(t / LAMP_A, 0, 1) - clamp((t - (1 - LAMP_C)) / LAMP_C, 0, 1),
         0,
