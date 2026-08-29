@@ -36,8 +36,10 @@ import MetalBackdrop from "./MetalBackdrop";
  * ei ole mitaan toistettavaa, joten role="button" olisi valhe. Tama
  * haara jaa koodiin, vaikka kaikilla nykyisilla korteilla on media.
  *
- * Mediat public/referenssit/-kansiossa: 608 x 1080, natiivi fps, 10,000 s,
- * h264 crf 30, ei aaniraitaa, +faststart. Posterit WebP.
+ * Mediat public/referenssit/-kansiossa:
+ *   videot   540 x 960, natiivi fps (25 tai 30), 10,000 s, h264 crf 34,
+ *            ei aaniraitaa, +faststart
+ *   posterit WebP 608 x 1080, laatutavoite SSIM >= 0,975
  */
 type RefItem = { title: string; meta: string; src?: string; poster?: string };
 
