@@ -109,7 +109,14 @@ const BLUR_DECAY = 0.75; // per frame; palautuu teravaksi n. 8 framessa
    0,10 * vh pikselia myohemmaksi. Rajattu ap ei olisi tahan kelvannut:
    se on jo 1,0 kun .aftercover peittaa nakyman ylareunan. */
 const RET_LO = 0.95;
-const RET_W = 0.15;
+/* 0,15 -> 0,45. Kolminkertainen ikkuna samasta alkupisteesta. Kavelymatka
+   jaa ennalleen: se on JAETTU logonauhavyohykkeen kanssa (sama a.edge,
+   sama a.home), joten sen kasvattaminen nopeuttaisi myos lahtoa. Eika
+   sille ole tarvetta - kolminkertaistaminen yksin vie paluun nopeuden
+   arvoon 0,57-0,73 px/scrollpx, kun lahdon nopeus on 0,61-0,68. Paluu
+   siis kavelee nyt tasan samaa vauhtia kuin lahto; pidempi matka tekisi
+   siita lahtoa NOPEAMMAN. */
+const RET_W = 0.45;
 /* Lamppujakso. Ankkurit mitataan ajossa (ks. measure):
      S_start = hetki jolloin .refsin ylareuna on tasan nakyman ylareunassa
                eli cover on peittanyt edellisen osion KOKONAAN
