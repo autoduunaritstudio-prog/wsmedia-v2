@@ -1589,11 +1589,34 @@ footer .base { padding-top: 18px }
   opacity: var(--cover-fade, 1);
 }
 
-/* Sisalto kuviokerroksen ylle: .metalbd on absoluuttinen z-index 0, ja
-   sijoittamaton sisalto piirtyisi sen ALLE. Sama porrastus kuin
-   .coverissa, jossa lasikortit nousevat kuvion ylle omalla
-   pinoamiskontekstillaan. */
-.refs > .wrap { position: relative; z-index: 1 }
+/* Sisalto kuviokerroksen ja vinjetin ylle. Porrastus .refsin sisalla:
+   .metalbd-dark (0) < ::before vinjetti (1) < .wrap sisalto (2)
+   < .refsscrim (5). */
+.refs > .wrap { position: relative; z-index: 2 }
+
+/* VINJETTI. Syventaa reunat ja jattaa keskustan - videoseinan - kirkkaaksi.
+   Pseudoelementti eika oma DOM-solmu, koska tama on puhdasta koristetta.
+   EI overflow: hiddenia .refsiin: se katkaisisi metallikuvion sticky-paneen
+   kiinnityksen, ja kerros mahtuu joka tapauksessa osion omaan laatikkoon. */
+.refs::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse 120% 90% at 50% 45%,
+    transparent 42%, rgba(0,0,0,.55) 100%);
+}
+
+/* VALOALLAS korttirivin alle. Sijoitetaan .wrapiin eika .refgridiin:
+   .refgrid on grid-sailio, joten sen pseudoelementti muuttuisi
+   ruudukkosoluksi, ja preserve-3d vetaisi sen mukaan 3D-kontekstiin.
+   top: 100% asettaa sen tasan ruudukon alareunaan, ja gradientin origo
+   0% on silloin korttien alareunassa - valo valuu siita alaspain.
+   z-index -1 pitaa sen .wrapin oman sisallon alla.
+   Ei filter: bluria: gradientti riittaa eika maksa mitaan per frame. */
+.refs > .wrap::after {
+  content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 220px;
+  z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse 70% 100% at 50% 0%,
+    rgba(150,190,255,.10), transparent 70%);
+}
 .refsscrim {
   position: absolute; inset: 0; z-index: 5; pointer-events: none;
   /* Tasainen tayte samasta syysta kuin .refscrimilla: osio on tasan
@@ -1659,6 +1682,12 @@ footer .base { padding-top: 18px }
 
 /* 9:16 pystyvideokortti. Katkoviivareunus kertoo etta sisalto on viela
    tulossa - sama merkintatapa kuin muissa taman projektin paikkamerkeissa. */
+/* RUUDUN OMA VALO. Hehku vain kun video toistuu; luokka johdetaan samasta
+   playing-tilasta joka jo piilottaa posterin, ei uutta tilaa.
+   box-shadow eika filter: se ei maksa uudelleenmaalausta joka framessa,
+   ja viisi videota toistuu rinnakkain. */
+.refcard { transition: box-shadow 400ms ease }
+.refcard.is-playing { box-shadow: 0 0 90px -20px rgba(150,190,255,.42) }
 .refcard {
   position: relative; aspect-ratio: 9 / 16; border-radius: 20px;
   overflow: hidden; background: rgba(255,255,255,.05);

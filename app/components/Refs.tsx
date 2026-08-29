@@ -218,7 +218,7 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
   return (
     <article
       ref={art as React.RefObject<HTMLElement>}
-      className="refcard rv"
+      className={`refcard rv${playing ? " is-playing" : ""}`}
       style={{ "--i": i } as CSSProperties}
       {...bind}
     >
