@@ -1589,11 +1589,35 @@ footer .base { padding-top: 18px }
   opacity: var(--cover-fade, 1);
 }
 
-/* Sisalto kuviokerroksen ylle: .metalbd on absoluuttinen z-index 0, ja
-   sijoittamaton sisalto piirtyisi sen ALLE. Sama porrastus kuin
-   .coverissa, jossa lasikortit nousevat kuvion ylle omalla
-   pinoamiskontekstillaan. */
-.refs > .wrap { position: relative; z-index: 1 }
+/* Sisalto kuviokerroksen ja tummennuksen ylle. Porrastus .refsin sisalla:
+     .metalbd-dark (0) < .refs::before (1) < .wrap sisalto (2) < .refsscrim (5)
+   Kortit ja otsikko ovat .wrapin sisalla, joten ne EIVAT tummene - vain
+   niiden takana oleva tausta. */
+.refs > .wrap { position: relative; z-index: 2 }
+
+/* Taustan tummennus kun .aftercover nousee .refsin paalle. Etenema tulee
+   --refs-dimista, jonka SiteEffects kirjoittaa samasta rp-arvosta kuin
+   --ref-scrimin; voimakkuuden maaraa tama gradientti.
+
+   Reuna on pitka ja sulava eika 10-20px feather: lapinakyva ulottuu 34
+   prosenttiin ellipsin sateesta ja tummenee sielta reunaan asti, joten
+   siirtymamatka on kaksi kolmasosaa sateesta. Ei filter: bluria - se
+   maksaisi joka framessa, ja viisi videota toistuu rinnakkain.
+
+   Keskipiste 50% 62% osuu korttirivin kohdalle: .refsin sisalto on
+   pystykeskitetty, ja shead + ruudukko -jaossa korttien keskiviiva on
+   noin 62 % osion korkeudesta. Tama on se yksi luku jota saadetaan jos
+   osuma on pielessa. */
+.refs::before {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  pointer-events: none;
+  opacity: var(--refs-dim, 0);
+  background: radial-gradient(ellipse 95% 60% at 50% 62%,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0) 34%,
+    rgba(0,0,0,.28) 62%,
+    rgba(0,0,0,.5) 100%);
+}
 .refsscrim {
   position: absolute; inset: 0; z-index: 5; pointer-events: none;
   /* Tasainen tayte samasta syysta kuin .refscrimilla: osio on tasan

@@ -376,6 +376,11 @@ export default function SiteEffects() {
           1,
         );
         refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3));
+        // Sama etenema myos .refsille omana muuttujanaan. RAAKA rp (0..1),
+        // ei rp * REF_SCRIM_MAX: overlayn oma gradientti maaraa
+        // voimakkuuden, ja muuttuja saataa vain sen etenemaa. Ei uutta
+        // laskentaa - rp on jo tassa ja se on 0,000 tasan pin-hetkella.
+        refCover.style.setProperty("--refs-dim", rp.toFixed(3));
       }
 
       // Coverit materialisoituvat sisaan: koko elementin opacity seuraa
