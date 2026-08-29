@@ -396,6 +396,17 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 }
 .carriers circle { fill: none }
 
+/* Valokeilojen kerros. EI navin sisalla ja EI blend-moodia: #nav on
+   mix-blend-mode: difference, jossa vaalea keila renderoityisi tummana.
+   z-index 49 on tasan navin (50) alla mutta .refzonen (3) ylapuolella,
+   joten keila piirtyy tumman osion paalle mutta hahmojen alle.
+   Leveys ja korkeus ovat pakolliset: SVG on korvattu elementti, joka ei
+   ota mittojaan insetista vaan preflightin height: auto -saannosta. */
+.navbeams {
+  position: fixed; inset: 0; width: 100vw; height: 100vh;
+  z-index: 49; pointer-events: none;
+}
+
 /* Kun hahmot ovat kaytossa, opacity-piilotus otetaan pois: elementit
    pysyvat taydessa opasiteetissa ja vain niiden sijainti muuttuu hahmojen
    mukana. Ilman .carriers-on -rajausta alla oleva saanto haivyttaisi ne

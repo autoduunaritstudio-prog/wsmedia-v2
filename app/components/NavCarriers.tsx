@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 /**
  * KOKEILU v2: kaksi tikku-ukkoa kantavat logon ja valikkopainikkeen pois ja
@@ -103,7 +104,24 @@ const LEAN_MAX = 0.28; // rad, n. 16 astetta
 const BLUR_K = 0.0015;
 const BLUR_MAX = 3;
 const BLUR_DECAY = 0.75; // per frame; palautuu teravaksi n. 8 framessa
-const RET_LO = 0.85;  // ap jolla Referenssit-vyohykkeen palautus alkaa
+/* Palautusikkuna RAAKANA apRaw:na. Leveys 0,15 on sama kuin ennen, joten
+   kavelynopeus ei muutu; alaraja 0,85 -> 0,95 siirtaa koko ikkunan tasan
+   0,10 * vh pikselia myohemmaksi. Rajattu ap ei olisi tahan kelvannut:
+   se on jo 1,0 kun .aftercover peittaa nakyman ylareunan. */
+const RET_LO = 0.95;
+const RET_W = 0.15;
+/* Referenssien keskijakso: apRaw kulkee midLo:sta nollaan sina aikana kun
+   dim = 1 ja .aftercover ei ole viela nakyvissa. midLo mitataan ajossa
+   (ks. measure) - se riippuu .refsin korkeudesta ja nakyman korkeudesta.
+   Vaiheet ovat murto-osia siita mitatusta jaksosta, eivat kiinteita
+   pikseleita. */
+const LAMP_A = 0.2;   // a) lamppujen tuonti: ensimmainen 20 %
+const LAMP_C = 0.2;   // c) lamppujen vienti: viimeinen 20 %
+const BEAM_RAMP = 0.15; // keilan nousu/lasku vaiheen b sisalla
+const BEAM_HALF_O = 0.30; // rad, ulkokeilan puolikulma (n. 17 astetta)
+const BEAM_HALF_I = 0.15; // rad, sisakeila
+const LAMP_LEN = 15;      // lampun rungon pituus kadesta paahan
+const MASK_PAD = 4;       // px, videokorttien maskin varmuusmarginaali
 /* Taustan aariarvot navipalkin takana: --color-bg ja --color-dark.
    Kaytetaan blendin lapi nakyvan varin laskentaan, ks. paintFor(). */
 const BG = 255;
@@ -111,6 +129,11 @@ const DK = 13;
 
 export default function NavCarriers() {
   const svgRef = useRef<SVGSVGElement>(null);
+  const beamRef = useRef<SVGSVGElement>(null);
+  // Keilakerros on navin ULKOPUOLELLA, joten se ei voi olla taman
+  // komponentin normaalissa puussa: portaali vie sen bodyyn vasta kun
+  // efekti on paattanyt etta hahmot ylipaataan kaynnistyvat.
+  const [beamHost, setBeamHost] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     const nav = document.querySelector<HTMLElement>("#nav");
@@ -138,14 +161,29 @@ export default function NavCarriers() {
     nav.classList.add("carriers-on");
 
     const P = (n: string) => svg.querySelector<SVGElement>(`[data-p="${n}"]`);
-    type Actor = { el: HTMLElement; home: Vec; edge: number; sign: number; face: number; prevX: number; prevDist: number | null; gaitAcc: number };
+    // el = null: lampunkantaja ei siirra mitaan DOM-elementtia, vaan
+    // kannettava on SVG-lamppu. Kaikki muu - polku, foot-planting,
+    // tartunta, askelkello - on tasan sama.
+    type Actor = { el: HTMLElement | null; lamp: boolean; home: Vec; edge: number; sign: number; face: number; prevX: number; prevDist: number | null; gaitAcc: number };
     const actors: Actor[] = [];
     let ground = 0;
+    let midLo = 0;
 
     const measure = () => {
       const lr = logo.getBoundingClientRect();
       const tr = toggle.getBoundingClientRect();
       ground = Math.max(lr.bottom, tr.bottom);
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      // Keskijakson alaraja: apRaw sina hetkena kun --refs-dim saavuttaa
+      // ykkosen. dim = 1 kun .refsin ylareuna on 0,4 * A, joten
+      //   apRaw = (vh - H3 - 0,4 * A) / vh,  A = min(H1, vh).
+      // Sama H3 ja sama A kuin SiteEffectsilla, luettuna samoista
+      // elementeista - ei toista totuutta.
+      midLo =
+        refCover && refPanel
+          ? (vh - refCover.offsetHeight - 0.4 * Math.min(refPanel.offsetHeight, vh)) / vh
+          : 0;
       const conf: [HTMLElement, DOMRect, number][] = [
         [logo, lr, -1],
         [toggle, tr, 1],
@@ -159,13 +197,44 @@ export default function NavCarriers() {
         const home = { x: h.left + h.width / 2, y: h.top + h.height / 2 };
         const edge = sign < 0 ? -90 : window.innerWidth + 90;
         if (actors[i]) Object.assign(actors[i], { home, edge });
-        else actors.push({ el, home, edge, sign, face: -sign, prevX: edge, prevDist: null, gaitAcc: 0 });
+        else actors.push({ el, lamp: false, home, edge, sign, face: -sign, prevX: edge, prevDist: null, gaitAcc: 0 });
+      });
+      // Lampunkantajat 2 ja 3. Pysahdyspaikka on videoseinan molemmin
+      // puolin, jotta keilat tulevat vinosti ylhaalta eivatka suoraan
+      // edesta - suoraan edesta kartio peittaisi juuri sen mita se valaisee.
+      [-1, 1].forEach((sign, k) => {
+        const i = 2 + k;
+        const home = { x: sign < 0 ? vw * 0.17 : vw * 0.83, y: ground - 40 };
+        const edge = sign < 0 ? -90 : vw + 90;
+        if (actors[i]) Object.assign(actors[i], { home, edge });
+        else actors.push({ el: null, lamp: true, home, edge, sign, face: -sign, prevX: edge, prevDist: null, gaitAcc: 0 });
       });
     };
     measure();
     window.addEventListener("resize", measure, { passive: true });
 
     const stops = Array.from(svg.querySelectorAll<SVGStopElement>("#carrierShadow stop"));
+    const refGrid = document.querySelector<HTMLElement>(".refgrid");
+    const refCards = Array.from(document.querySelectorAll<HTMLElement>(".refcard"));
+    setBeamHost(document.body);
+
+    // Keilakerros syntyy portaalilla vasta seuraavassa renderissa, joten
+    // se haetaan laiskasti eika mountissa.
+    type BeamEls = { grp: SVGElement; cone: SVGElement[][]; grad: SVGElement[]; mask: SVGElement[] };
+    let beamEls: BeamEls | null = null;
+    const getBeam = (): BeamEls | null => {
+      if (beamEls) return beamEls;
+      const b = beamRef.current;
+      if (!b) return null;
+      const q = (n: string) => b.querySelector<SVGElement>(`[data-b="${n}"]`);
+      const grp = q("grp");
+      if (!grp) return null;
+      const cone = [0, 1].map((k) => [q(`o${k}`), q(`i${k}`)].filter(Boolean) as SVGElement[]);
+      const grad = [0, 1].map((k) => q(`g${k}`)).filter(Boolean) as SVGElement[];
+      const mask = [0, 1, 2, 3, 4].map((n) => q(`m${n}`)).filter(Boolean) as SVGElement[];
+      beamEls = { grp, cone, grad, mask };
+      return beamEls;
+    };
 
     let raf = 0;
     let prevTop: number | null = null;
@@ -199,15 +268,33 @@ export default function NavCarriers() {
       // hetkena kun .refs saavuttaa .refstickyn alareunan, joten kantajat
       // eivat voi lahtea liikkeelle ennen kuin cover oikeasti alkaa peittaa.
       const dim = varNum(refCover, "--refs-dim");
-      const ap = varNum(refCover, "--refs-ap");
-      const u2 = clamp(dim - clamp((ap - RET_LO) / (1 - RET_LO), 0, 1), 0, 1);
-      const u = Math.max(u1, u2);
+      const apRaw = varNum(refCover, "--refs-ap");
+      const u2 = clamp(dim - clamp((apRaw - RET_LO) / RET_W, 0, 1), 0, 1);
+      const uNav = Math.max(u1, u2);
+
+      // --- keskijakso: lamput ---
+      // q kulkee nollasta ykkoseen sen jakson yli jossa Referenssit on
+      // kokonaan esilla: apRaw = midLo (dim saavuttaa 1) -> apRaw = 0
+      // (.aftercover tulee nakyviin). Vaiheet ovat murto-osia q:sta, joten
+      // ne skaalautuvat itsestaan nakyman korkeuden mukana.
+      const q = midLo < -0.01 ? clamp((apRaw - midLo) / -midLo, 0, 1) : 0;
+      // a) tuonti 0..0,2   b) valaisu 0,2..0,8   c) vienti 0,8..1
+      const uLamp = clamp(
+        clamp(q / LAMP_A, 0, 1) - clamp((q - (1 - LAMP_C)) / LAMP_C, 0, 1),
+        0,
+        1,
+      );
+      // Keilan kirkkaus vaiheen b sisalla: 0 -> taysi -> 0. Kolmiofunktio
+      // eika kello, joten ylospain scrollaus kayttaa saman radan takaperin.
+      const qb = clamp((q - LAMP_A) / (1 - LAMP_A - LAMP_C), 0, 1);
+      const beamOn = clamp(Math.min(qb, 1 - qb) / BEAM_RAMP, 0, 1);
+      const uAny = Math.max(uNav, uLamp);
 
       // Nav kutistuu (.scrolled) heti ensimmaisilla pikseleilla, joten
       // latauksen aikainen mittaus on molemmissa vyohykkeissa vanhentunut.
       // Mitataan uudelleen kun vyohyke alkaa - transform on silloin viela
       // nolla, joten koti ja maataso luetaan puhtaana.
-      if (u > 0.001) {
+      if (uAny > 0.001) {
         if (idle) {
           idle = false;
           measure();
@@ -226,7 +313,7 @@ export default function NavCarriers() {
       const fRefs = refCover
         ? clamp((band - refCover.getBoundingClientRect().top) / band, 0, 1)
         : 0;
-      const fAfter = clamp((band - (1 - ap) * window.innerHeight) / band, 0, 1);
+      const fAfter = clamp((band - (1 - apRaw) * window.innerHeight) / band, 0, 1);
       const sPanel = varNum(refPanel, "--ref-scrim");
       let back = BG - (BG - DK) * sPanel;
       back += (DK - back) * fRefs;
@@ -243,11 +330,21 @@ export default function NavCarriers() {
         for (const st of stops) st.setAttribute("stop-color", backCss);
       }
 
+      // Videoseinan sijainti luetaan vain kun lamput ovat esilla.
+      const gr = uLamp > 0.001 && refGrid ? refGrid.getBoundingClientRect() : null;
+      const target = gr
+        ? { x: gr.left + gr.width / 2, y: gr.top + gr.height * 0.42 }
+        : { x: window.innerWidth / 2, y: window.innerHeight * 0.6 };
+      const beamSrc: { ax: number; ay: number; ang: number; len: number }[] = [];
+
       for (let i = 0; i < actors.length; i++) {
         const a = actors[i];
+        const u = a.lamp ? uLamp : uNav;
         const grp = P(`c${i}`);
-        // Hahmo on nakyvissa vain kun jotain tapahtuu.
-        const visible = u > 0.001 && u < 0.999;
+        // Hahmo on nakyvissa vain kun jotain tapahtuu. Logonkantajalla
+        // u = 1 tarkoittaa "kannettu pois ruudulta", lampunkantajalla se on
+        // paikallaan seisominen ja valaiseminen - siksi ylaraja vain sille.
+        const visible = a.lamp ? u > 0.001 : u > 0.001 && u < 0.999;
         if (grp) {
           grp.style.opacity = visible ? "1" : "0";
           grp.style.filter = blurPx ? `blur(${blurPx.toFixed(2)}px)` : "";
@@ -271,12 +368,21 @@ export default function NavCarriers() {
         // --- polku: reuna -> pysahdys -> reuna, x puhtaana funktiona u:sta.
         // Pysahdys on 26px elementista SILLE PUOLELLE josta hahmo tulee,
         // jolloin kadet yltavat sen keskelle ilman etta vartalo peittaa sita.
-        const stopX = a.home.x + a.sign * 26;
+        // Lampunkantajalla ei ole tartuttavaa elementtia, joten se
+        // pysahtyy tasan kotipisteeseensa; logonkantaja 26px sivuun.
+        const stopX = a.lamp ? a.home.x : a.home.x + a.sign * 26;
         const D1 = Math.abs(stopX - a.edge);
         const D3 = D1;
         let x: number;
         let dist: number;
-        if (u < A) {
+        if (a.lamp) {
+          // Sama rata, mutta u kayttaytyy jo itse kolmiona (0 -> 1 -> 0),
+          // joten reuna -> pysahdys -> reuna syntyy suoraan siita. dist on
+          // yha monotoninen matka, ja gaitAcc lukee vain sen itseisarvoista
+          // muutosta - askelkello ei siis pyori taaksepain paluullakaan.
+          x = a.edge + (stopX - a.edge) * u;
+          dist = D1 * u;
+        } else if (u < A) {
           const t = u / A;
           x = a.edge + (stopX - a.edge) * t;
           dist = D1 * t;
@@ -320,7 +426,7 @@ export default function NavCarriers() {
         const shoulder = rot({ x: hip.x, y: hip.y - L.torso }, hip, lean);
         const headP = rot({ x: hip.x, y: hip.y - L.torso - L.neck - L.head }, hip, lean);
 
-        const walking = u < A || u > B;
+        const walking = a.lamp ? u > 0.001 && u < 0.999 : u < A || u > B;
         const feet: Vec[] = [];
         for (let f = 0; f < 2; f++) {
           const p = (gait + f * 0.5) % 1;
@@ -334,8 +440,9 @@ export default function NavCarriers() {
           }
         }
 
-        // Kantoote: nousee tartunnan aikana, pysyy sen jalkeen.
-        const hold = clamp((u - A) / (B - A), 0, 1);
+        // Kantoote: nousee tartunnan aikana, pysyy sen jalkeen. Lamppu on
+        // kasissa jo tullessa, joten sille ote on taysi koko ajan.
+        const hold = a.lamp ? 1 : clamp((u - A) / (B - A), 0, 1);
         const hands: Vec[] = [];
         for (let h = 0; h < 2; h++) {
           const swing = (gait + h * 0.5) % 1;
@@ -396,13 +503,48 @@ export default function NavCarriers() {
         const hy = (hands[0].y + hands[1].y) / 2;
         const dx = (hx - a.home.x) * hold;
         const dy = (hy - a.home.y) * hold;
-        a.el.style.transform = hold > 0.001 ? `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)` : "";
+        if (a.el) a.el.style.transform = hold > 0.001 ? `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)` : "";
+
+        // Lamppu: runko kadesta kohti videoseinaa. Sama kannettava-logiikka
+        // kuin logolla, vain esine on SVG eika DOM-elementti.
+        if (a.lamp) {
+          const tx = target.x - hx;
+          const ty = target.y - hy;
+          const tl = Math.hypot(tx, ty) || 1;
+          const ux = tx / tl;
+          const uy = ty / tl;
+          const nx = -uy;
+          const ny = ux;
+          const w0 = 4.2;
+          const w1 = 6.4;
+          const ex = hx + ux * LAMP_LEN;
+          const ey = hy + uy * LAMP_LEN;
+          const lp = P(`c${i}lamp`);
+          if (lp) {
+            lp.setAttribute(
+              "d",
+              `M${(hx + nx * w0).toFixed(1)} ${(hy + ny * w0).toFixed(1)}` +
+                `L${(hx - nx * w0).toFixed(1)} ${(hy - ny * w0).toFixed(1)}` +
+                `L${(ex - nx * w1).toFixed(1)} ${(ey - ny * w1).toFixed(1)}` +
+                `L${(ex + nx * w1).toFixed(1)} ${(ey + ny * w1).toFixed(1)}Z`,
+            );
+          }
+          // Kartion karki hieman lampun paan ULKOPUOLELLA: nain hahmo itse
+          // ei jaa kirkkaimman kohdan sisaan, jolloin difference-blendattu
+          // viiva pysyy laskettuna.
+          beamSrc[i - 2] = {
+            ax: hx + ux * (LAMP_LEN + 6),
+            ay: hy + uy * (LAMP_LEN + 6),
+            ang: Math.atan2(uy, ux),
+            len: tl + (gr ? gr.height * 0.6 : 200),
+          };
+        }
 
         // Kannetun elementin oma varjo: seuraa samaa siirtymaa, haipyy
         // holdin mukana eli katoaa kun elementti on asetettu takaisin.
         const esh = P(`c${i}esh`);
         if (esh) {
-          esh.setAttribute("cx", (a.home.x + dx).toFixed(1));
+          esh.setAttribute("cx", (a.lamp ? hx : a.home.x + dx).toFixed(1));
           esh.setAttribute("cy", (ground + 1).toFixed(1));
           esh.setAttribute("rx", "11");
           esh.setAttribute("ry", "2.8");
@@ -410,9 +552,56 @@ export default function NavCarriers() {
         }
         // Sama haivytys kannettavaan elementtiin, mutta VAIN kun se on
         // kasissa - muuten logo sumenisi jokaisella nopealla scrollilla.
-        a.el.style.filter = hold > 0.001 && blurPx ? `blur(${blurPx.toFixed(2)}px)` : "";
-        // Tab-jarjestys: piiloon vasta kun elementti on oikeasti pois ruudulta.
-        a.el.style.visibility = u > 0.985 ? "hidden" : "";
+        if (a.el) {
+          a.el.style.filter = hold > 0.001 && blurPx ? `blur(${blurPx.toFixed(2)}px)` : "";
+          // Tab-jarjestys: piiloon vasta kun elementti on oikeasti pois ruudulta.
+          a.el.style.visibility = u > 0.985 ? "hidden" : "";
+        }
+      }
+
+      // --- keilat omalla kerroksellaan ---
+      const be = getBeam();
+      if (be) {
+        be.grp.style.opacity = beamOn.toFixed(3);
+        if (beamOn > 0.001) {
+          for (let k = 0; k < be.cone.length; k++) {
+            const src = beamSrc[k];
+            if (!src) continue;
+            const g = be.grad[k];
+            if (g) {
+              g.setAttribute("cx", src.ax.toFixed(1));
+              g.setAttribute("cy", src.ay.toFixed(1));
+              g.setAttribute("r", src.len.toFixed(1));
+            }
+            const half = [BEAM_HALF_O, BEAM_HALF_I];
+            for (let c = 0; c < be.cone[k].length; c++) {
+              const a1 = src.ang - half[c];
+              const a2 = src.ang + half[c];
+              be.cone[k][c].setAttribute(
+                "d",
+                `M${src.ax.toFixed(1)} ${src.ay.toFixed(1)}` +
+                  `L${(src.ax + Math.cos(a1) * src.len).toFixed(1)} ${(src.ay + Math.sin(a1) * src.len).toFixed(1)}` +
+                  `L${(src.ax + Math.cos(a2) * src.len).toFixed(1)} ${(src.ay + Math.sin(a2) * src.len).toFixed(1)}Z`,
+              );
+            }
+          }
+          // Videokortit LEIKATAAN keilasta maskilla. Kortteihin itseensa ei
+          // kosketa millaan tavalla: niiden opacity, filter ja tausta
+          // pysyvat sellaisina kuin CSS ne maarittelee, ja keila piirtyy
+          // vain niiden ohi ja valiin. Marginaali kattaa osapikselit.
+          for (let n = 0; n < be.mask.length; n++) {
+            const cr = refCards[n]?.getBoundingClientRect();
+            const m = be.mask[n];
+            if (!cr) {
+              m.setAttribute("width", "0");
+              continue;
+            }
+            m.setAttribute("x", (cr.left - MASK_PAD).toFixed(1));
+            m.setAttribute("y", (cr.top - MASK_PAD).toFixed(1));
+            m.setAttribute("width", (cr.width + MASK_PAD * 2).toFixed(1));
+            m.setAttribute("height", (cr.height + MASK_PAD * 2).toFixed(1));
+          }
+        }
       }
     };
     raf = requestAnimationFrame(frame);
@@ -421,7 +610,9 @@ export default function NavCarriers() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", measure);
       nav.classList.remove("carriers-on");
+      setBeamHost(null);
       for (const a of actors) {
+        if (!a.el) continue;
         a.el.style.transform = "";
         a.el.style.visibility = "";
         a.el.style.filter = "";
@@ -429,7 +620,7 @@ export default function NavCarriers() {
     };
   }, []);
 
-  return (
+  const carriers = (
     <svg className="carriers" ref={svgRef} aria-hidden="true">
       <defs>
         {/* Pehmea reuna gradientilla eika blur-suodattimella: halvempi
@@ -449,7 +640,7 @@ export default function NavCarriers() {
           <stop offset="100%" stopColor="#fff" stopOpacity="0" />
         </radialGradient>
       </defs>
-      {[0, 1].map((i) => (
+      {[0, 1, 2, 3].map((i) => (
         <g data-p={`c${i}`} key={i} opacity="0">
           {/* Varjot ensin, jotta ne jaavat hahmon alle. Ne ovat ryhman
               ULKOPUOLELLA, koska hahmon reunussuodatin ei saa kehystaa
@@ -463,9 +654,52 @@ export default function NavCarriers() {
             <path data-p={`c${i}l1`} />
             <path data-p={`c${i}a0`} />
             <path data-p={`c${i}a1`} />
+            {i > 1 && <path data-p={`c${i}lamp`} />}
           </g>
         </g>
       ))}
     </svg>
+  );
+
+  return (
+    <>
+      {carriers}
+      {beamHost &&
+        createPortal(
+          /* Valokeilat EIVAT ole navin sisalla: #nav on mix-blend-mode:
+             difference, jossa vaalea keila kaantyisi tummaksi tahraksi.
+             Tama kerros on navin alla omana fixed-tasonaan ilman blendia.
+             Pehmea reuna tulee radialGradientista - ei filter: bluria. */
+          <svg className="navbeams" ref={beamRef} aria-hidden="true">
+            <defs>
+              {[0, 1].map((k) => (
+                <radialGradient key={k} id={`beamG${k}`} data-b={`g${k}`} gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#fff4d6" stopOpacity="0.30" />
+                  <stop offset="45%" stopColor="#fff4d6" stopOpacity="0.13" />
+                  <stop offset="100%" stopColor="#fff4d6" stopOpacity="0" />
+                </radialGradient>
+              ))}
+              {/* Videokortit leikataan pois keilasta. Nain kortin oma
+                  opacity ja filter pysyvat koskemattomina - keila ei
+                  tummenna eika kirkasta niita, vaan kulkee ohi ja valista. */}
+              <mask id="beamMask" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+                <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                {[0, 1, 2, 3, 4].map((n) => (
+                  <rect key={n} data-b={`m${n}`} width="0" height="0" fill="#000" />
+                ))}
+              </mask>
+            </defs>
+            <g data-b="grp" opacity="0" mask="url(#beamMask)">
+              {[0, 1].map((k) => (
+                <g key={k}>
+                  <path data-b={`o${k}`} fill={`url(#beamG${k})`} opacity="0.55" />
+                  <path data-b={`i${k}`} fill={`url(#beamG${k})`} />
+                </g>
+              ))}
+            </g>
+          </svg>,
+          beamHost,
+        )}
+    </>
   );
 }

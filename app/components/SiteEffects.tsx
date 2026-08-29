@@ -400,14 +400,16 @@ export default function SiteEffects() {
       // Kolmas pari: Referenssien tummennus etenee kun .aftercover nousee
       // sen paalle. Sama geometriasta johdettu kaava kuin kahdella muulla.
       if (refCover && afterCover) {
-        const ap = Math.min(Math.max(1 - afterCover.getBoundingClientRect().top / vh, 0), 1);
+        const apRaw = 1 - afterCover.getBoundingClientRect().top / vh;
+        const ap = Math.min(Math.max(apRaw, 0), 1);
         refCover.style.setProperty("--refs-scrim", (ap * REF_SCRIM_MAX).toFixed(3));
-        // Sama etenema myos raakana. NavCarriers ajaa palautuksensa valilla
-        // ap 0,85..1,0 eika saa lukea samaa geometriaa uudelleen omassa
-        // rAF-silmukassaan - kaksi rectia samasta elementista samalla
-        // framella olisi kaksi eri totuutta, jos silmukat eivat ole samassa
-        // vaiheessa. Tama on vain jo lasketun arvon julkaisu, ei uusi laskenta.
-        refCover.style.setProperty("--refs-ap", ap.toFixed(3));
+        // RAJAAMATON etenema NavCarriersille. Rajattu ap kyllastyy ykkoseen
+        // heti kun .aftercover peittaa nakyman ylareunan, joten silla ei voi
+        // ajoittaa mitaan sen jalkeen - ikkunan siirtaminen myohemmaksi
+        // vaatii arvon joka jatkaa yli ykkosen. Negatiivisena se kertoo
+        // kuinka kaukana .aftercover viela on, mika on Referenssien
+        // keskijakson ainoa mitta. Ei uusi laskenta - sama rect, sama rivi.
+        refCover.style.setProperty("--refs-ap", apRaw.toFixed(3));
       }
 
       if (hero && cover) {
