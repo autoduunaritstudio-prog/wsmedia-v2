@@ -1606,6 +1606,13 @@ footer .base { padding-top: 18px }
      Tauko EI saa olla marginaali .refsin ylla: se tuottaisi juuri sen
      vaalean kaistan .refstickyn ja .refsin valiin. Nain tumma tausta on
      paikallaan ensimmaisesta pikselista. */
+  /* Nosto rajataan siihen mita tyhjaa sisallon YLLA oikeasti on, jotta
+     otsikko ei leikkaudu matalilla nakymilla. Kaksi rajaa, koska H3:lla
+     on kaksi haaraa: alle 807px:n nakymissa sisalto maaraa korkeuden ja
+     tyhjaa on 100vh - 687px, sita korkeammilla min-height maaraa ja
+     tyhjaa on 50vh - 283,5px. Isoilla nakymilla kumpikin ylittaa 120px,
+     jolloin nosto on taysi. */
+  --refs-lift: min(120px, 100vh - 687px, 50vh - 283.5px);
   /* --refs-lift VAHENNETAAN ylapaddingista ja LISATAAN alapaddingiin.
      Summa pysyy samana, joten H3, --aftercover-min ja --refs-sticky-top
      eivat muutu lainkaan - vain sisalto nousee tasan liftin verran.

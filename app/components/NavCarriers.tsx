@@ -138,14 +138,11 @@ const LAMP_C = 0.30;  // c) lamppujen vienti
    leveydella eika vain yhdella. */
 const LAMP_X = 0.17;
 const LAMP_EDGE = 90;
-const LAMP_WALK_K = 0.46;
-/* S_end MITATAAN, ei arvata. Kiintea apRaw-luku oli vaarin: korttirivin
-   alareuna on 0,5 * vh + 283,5 - lift nakyman ylareunasta, joten se hetki
-   jolloin .aftercover saavuttaa sen riippuu seka nakyman korkeudesta etta
-   sisallon sijainnista. LAMP_SAFE on turvamarginaali pikseleina; se kattaa
-   myos sen etta uloimmat kortit tyontyvat perspektiivin takia noin 6px
-   ruudukon laatikon alapuolelle. */
-const LAMP_SAFE = 20;
+const LAMP_WALK_K = 0.66;
+/* S_end MITATAAN, ei arvata: ankkuri on korttirivin YLAREUNA, eli lamput
+   ovat poissa vasta kun cover on peittanyt koko rivin. Sen sijainti
+   riippuu seka nakyman korkeudesta etta sisallon nostosta, joten kiintea
+   apRaw-luku ei voi olla oikein millaan yhdella arvolla. */
 const BEAM_RAMP = 0.15; // keilan nousu/lasku vaiheen b sisalla
 const BEAM_HALF_O = 0.30; // rad, ulkokeilan puolikulma (n. 17 astetta)
 const BEAM_HALF_I = 0.15; // rad, sisakeila
@@ -218,16 +215,15 @@ export default function NavCarriers() {
       // Sama H3 kuin SiteEffectsilla, luettuna samasta elementista.
       holdLo = refCover ? (vh - refCover.offsetHeight) / vh : 0;
       // S_end: se apRaw jolla .aftercoverin ylareuna osuu korttirivin
-      // alareunaan, miinus turvamarginaali. Ruudukon sijainti luetaan
-      // .refsin ylareunaan NAHDEN, jolloin arvo ei riipu siita millaisella
-      // scrollilla mittaus sattuu tapahtumaan; pinnattuna .refsin ylareuna
-      // on tasan vh - H3, joten korttirivin alareuna nakymassa on
-      //   (vh - H3) + gridRel.
+      // YLAREUNAAN. Ruudukon sijainti luetaan .refsin ylareunaan NAHDEN,
+      // jolloin arvo ei riipu siita millaisella scrollilla mittaus sattuu
+      // tapahtumaan; pinnattuna .refsin ylareuna on tasan vh - H3, joten
+      // korttirivin ylareuna nakymassa on (vh - H3) + gridRel.
       if (refCover && refGrid) {
         const rr = refCover.getBoundingClientRect();
         const gg = refGrid.getBoundingClientRect();
-        const cardBottom = vh - refCover.offsetHeight + (gg.bottom - rr.top);
-        holdHi = 1 - (cardBottom + LAMP_SAFE) / vh;
+        const cardTop = vh - refCover.offsetHeight + (gg.top - rr.top);
+        holdHi = 1 - cardTop / vh;
       } else holdHi = 0;
       spanPx = (holdHi - holdLo) * vh;
       const conf: [HTMLElement, DOMRect, number][] = [
