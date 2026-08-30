@@ -3617,9 +3617,14 @@ footer .base { padding-top: 18px }
    porrastus - muuten ensimmainen ruutu alkaa paljastaa sivua ennen kuin
    viimeinen on ehtinyt peittaa omansa. */
 :root {
+  /* --vt-total on ainoa kasin asetettu kesto ja samalla se jota vasten
+     700ms:n katto mitataan. Ruudun kesto johdetaan siita vahentamalla
+     suurin porrastus, joten luvut eivat voi paasta eroon toisistaan:
+     porrastus + kesto = kokonaiskesto identtisesti, ei sattumalta. */
   --vt-total: 698ms;
-  --vt-tile: 490ms;
   --vt-step: 26ms;
+  --vt-stagger: calc(8 * var(--vt-step));                /* (6-1) + (4-1) = 208ms */
+  --vt-tile: calc(var(--vt-total) - var(--vt-stagger));  /* 490ms */
 }
 
 /* PAKOLLINEN: pseudoelementtien overlay kaappaa oletuksena
@@ -3658,18 +3663,43 @@ footer .base { padding-top: 18px }
   grid-template-rows: repeat(4, 1fr);
   view-transition-name: pagegrid;
 }
-::view-transition-group(pagegrid) { z-index: 10; animation: none }
+::view-transition-group(pagegrid) {
+  z-index: 10;
+  /* TYHJA PITOANIMAATIO, ei animation: none. Selain purkaa
+     ::view-transition -puun heti kun KAIKKI sen pseudoelementtien
+     animaatiot ovat paattyneet - ja ruudut ovat siina puussa. Ilman omaa
+     kestoa tama ryhma ei pida puuta hengissa lainkaan, jolloin puun
+     elinika jaisi .page- ja root-ryhmien varaan. Jos ne paattyvat
+     aiemmin, tai jos .page-luokkaa ei jostain syysta sovelleta, puu
+     purettaisiin kesken ruutujen animaation eika mitaan nakyisi.
+     Kesto on tasan --vt-total, sama josta ruutujen ajoitus johdetaan. */
+  animation: vt-hold var(--vt-total) linear both;
+}
 ::view-transition-old(pagegrid) { display: none }
 ::view-transition-new(pagegrid) { animation: none }
+@keyframes vt-hold { from, to { opacity: 1 } }
 
 /* Levossa ruudut ovat olemattomia: ensilataus ei animoi mitaan eika
-   overlay peita klikkauksia. */
+   overlay peita klikkauksia.
+
+   VARI ON --dark EIKA --bg. Sivujen tausta on --bg (#ffffff), joten
+   vaalea ruudukko vaalean sivun paalla oli nakymaton vaikka animaatio
+   pyori oikein. Tumma ruutu lukee heti vaaleaa vasten; tummalla osiolla
+   (.refs) se erottuu yha reunoista ja liikkeesta. */
 .pagegrid > i {
-  background: var(--bg);
+  background: var(--dark);
   transform: scale(0);
   opacity: 0;
 }
-:root:active-view-transition .pagegrid > i {
+/* Kaksi laukaisinta, YKSI deklaraatio. :root:active-view-transition on
+   natiivi reitti; .vt-run on SmoothScroll-komponentin asettama varareitti
+   selaimille joissa siirtyma ei kaynnisty lainkaan - silloin pseudopuuta
+   ei ole, navigointi on valiton ja ruudukko animoituu suoraan elavassa
+   DOMissa. Molemmat valitsimet jakavat saman lohkon, joten laskettu
+   animation-arvo on identtinen eika animaatio kaynnisty uudelleen jos
+   molemmat osuvat. */
+:root:active-view-transition .pagegrid > i,
+:root.vt-run .pagegrid > i {
   animation: vt-tile var(--vt-tile) cubic-bezier(.4, 0, .2, 1)
              calc((var(--i) + var(--j)) * var(--vt-step)) both;
 }
