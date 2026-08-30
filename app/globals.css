@@ -1533,7 +1533,14 @@ footer .base { padding-top: 18px }
    Ei tarvitse omaa z-indexia: positioimattomana se piirtyy ennen
    positioituja sisaruksiaan (.refs 2, .aftercover 3) ja on lisaksi
    tyhja, joten sen lapi ei voi nakya mitaan. */
-.refgap { height: 35vh }
+/* Korkeus riittaa siihen ettei coverin ylareuna nay lamppujen aikana.
+   Cover tulee nakyman alalaitaan kun scrollY - R = H3 - vh + gap, ja
+   vaihe c paattyy kun scrollY - R = span = H3 - cardTop. Ehto on siis
+     gap >= vh - cardTop,
+   mika on 0,6817vh / 0,7008vh / 0,6390vh korkeuksilla 700 / 900 / 1300.
+   Sitova on 900px:n 0,7008 - 70vh jaisi siita 0,7px vajaaksi, joten
+   71vh. Marginaali on silloin +19,8 / +8,3 / +92,3 px. */
+.refgap { height: 71vh }
 #palvelut { padding-bottom: 0 }
 
 /* Paneeli on SISALLON mittainen, ei nakymankorkuinen. Aiempi
