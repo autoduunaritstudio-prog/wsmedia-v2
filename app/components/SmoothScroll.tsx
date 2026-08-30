@@ -52,23 +52,9 @@ export default function SmoothScroll() {
       first.current = false;
       return;
     }
-    // Ruudukon varalaukaisin. Kesto luetaan samasta --vt-totalista josta
-    // CSS johtaa kaiken muunkin, jotta luvut eivat paase eroon toisistaan.
-    const root = document.documentElement;
-    const raw = getComputedStyle(root).getPropertyValue("--vt-total").trim();
-    const ms = parseFloat(raw);
-    const total = Number.isFinite(ms) ? (raw.endsWith("ms") ? ms : ms * 1000) : 700;
-    root.classList.add("vt-run");
-    const timer = window.setTimeout(() => root.classList.remove("vt-run"), total);
-
-    if (!window.location.hash) {
-      window.scrollTo(0, 0);
-      lenis?.scrollTo(0, { immediate: true, force: true });
-    }
-    return () => {
-      window.clearTimeout(timer);
-      root.classList.remove("vt-run");
-    };
+    if (window.location.hash) return;
+    window.scrollTo(0, 0);
+    lenis?.scrollTo(0, { immediate: true, force: true });
   }, [pathname]);
 
   useEffect(() => {
