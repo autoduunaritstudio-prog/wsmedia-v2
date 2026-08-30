@@ -841,9 +841,11 @@ h2.big { font-size: var(--text-h2-hero) }
 .stickyzone > .hero .sub { color: #e3e3e8 }
 .stickyzone > .hero .tlink { color: #b4dbff }
 
-/* Scrollimatka scrubille. 280vh antaa 26 / 34 / 49 px ruutua kohti
-   korkeuksilla 700 / 900 / 1300 (76 ruutua, 75 valia). Alle 980px:n
-   sarjassa on 51 ruutua, joten 100vh riittaa: 14 / 18 px ruutua kohti.
+/* Scrollimatka scrubille. 224vh (= 280 / 1,25) antaa 20,9 / 26,9 /
+   38,8 px ruutua kohti korkeuksilla 700 / 900 / 1300 (76 ruutua, 75
+   valia) eli 2,99vh per ruutu. Alle 980px:n sarjassa on 51 ruutua ja
+   spacer 100vh: 14 / 18 px ruutua kohti eli 2,0vh per ruutu, siis jo
+   tiheampi kuin tyopoydalla - siksi mobiilia ei nopeuteta tassa.
 
    KORKEUS EI VAIKUTA LOPETUSHETKEEN. Merkitaan heron dokumenttisijainti
    T:lla, korkeus H:lla ja spacerin korkeus S:lla. Cover alkaa nousta kun
@@ -853,7 +855,7 @@ h2.big { font-size: var(--text-h2-hero) }
    siis T + H = vh, ei mikaan S:n arvo: spacerin korkeus voi olla mita
    tahansa. Aiemmin T oli 116 (navin varaama tila) ja p osui ykkoseen
    116px liian aikaisin; nyt T = 0 ja H = 100svh = vh, joten ero on 0. */
-.hero-spacer { height: 280vh }
+.hero-spacer { height: 224vh }
 @media (max-width: 979px) { .hero-spacer { height: 100vh } }
 /* Cover nousee heron paalle: korkeampi z-index ja lapinakymaton tausta.
    Rajaus ulottuu Palvelut-osion loppuun, koska coverin on oltava vahintaan
