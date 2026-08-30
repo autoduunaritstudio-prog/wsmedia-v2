@@ -375,6 +375,10 @@ export default function Refs({ children }: { children: ReactNode }) {
           lapinakyvaksi. Korkeus pakotetaan JS:sta vahintaan Referenssit-
           osion korkuiseksi, jolloin ehto C >= H on rakenteellisesti
           taattu eika riipu sisallon maarasta tai ikkunan korkeudesta. */}
+      {/* Tyhjaa scrollimatkaa ennen kuin .aftercover alkaa peittaa
+          Referenssit. Pelkkaa dokumenttikorkeutta: .refs on pinnattuna
+          nakyman korkuinen, joten vali jaa kokonaan sen taakse. */}
+      <div className="refgap" aria-hidden="true" />
       <div className="aftercover">{children}</div>
     </div>
   );

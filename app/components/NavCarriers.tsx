@@ -176,21 +176,6 @@ export default function NavCarriers() {
     const refCards = Array.from(document.querySelectorAll<HTMLElement>(".refcard"));
     // Inline-tyylista, ei getComputedStylesta: SiteEffects kirjoittaa arvot
     // juuri sinne, ja luku on pelkka merkkijono - ei tyylien uudelleenlaskentaa.
-    /**
-     * CSS-pituus pikseleina. Muuttuja on rekisteroimaton, joten
-     * getComputedStyle palauttaa kirjoitetun tokenin ("35vh") eika
-     * laskettua arvoa - yksikko on siksi purettava itse. vh ja px
-     * riittavat; muu palauttaa nollan, jolloin kaytos on sama kuin
-     * ennen hantaa.
-     */
-    const cssPx = (el: HTMLElement, name: string, vh: number) => {
-      const raw = getComputedStyle(el).getPropertyValue(name).trim();
-      const n = parseFloat(raw);
-      if (!Number.isFinite(n)) return 0;
-      if (raw.endsWith("vh")) return (n / 100) * vh;
-      return raw.endsWith("px") ? n : 0;
-    };
-
     const varNum = (el: HTMLElement | null, name: string) => {
       if (!el) return 0;
       const v = parseFloat(el.style.getPropertyValue(name));
@@ -218,10 +203,18 @@ export default function NavCarriers() {
       ground = Math.max(lr.bottom, tr.bottom);
       const vh = window.innerHeight;
       const vw = window.innerWidth;
-      // S_start apRaw:na. refs.top = 0 tarkoittaa etta .refs on siirtynyt
-      // tasan oman staattisen ylareunansa verran, jolloin
-      //   aftercover.top = H3  ->  apRaw = (vh - H3) / vh.
-      // Sama H3 kuin SiteEffectsilla, luettuna samasta elementista.
+      // Ikkunan alku. Kaava on (vh - H3) / vh, mutta se on syyta lukea
+      // LOPUSTA kasin: holdHi - (H3 - cardTop) / vh antaa saman arvon.
+      // Jakso siis PAATTYY kun cover saavuttaa korttirivin ja kestaa
+      // tasan H3 - cardTop pikselia.
+      //
+      // Ero on merkitseva .refgapin takia. Ilman valia apRaw = (vh - H3)
+      // / vh osui tasan hetkeen refs.top = 0; valin kanssa .aftercover on
+      // 35vh alempana dokumentissa, joten sama apRaw osuu 35vh myohemmin.
+      // Jakson PITUUS ei muutu, koska molemmat paat siirtyvat yhta
+      // paljon - vali jaa siis kokonaan lamppujen eteen, ei niiden
+      // sisaan. Kova ehto (refs.top <= 0) patee yha, ja se on nyt
+      // tosiaan portti eika pelkka yhtapitava kirjaus.
       holdLo = refCover ? (vh - refCover.offsetHeight) / vh : 0;
       // S_end: se apRaw jolla .aftercoverin ylareuna osuu korttirivin
       // YLAREUNAAN. Ruudukon sijainti luetaan .refsin ylareunaan NAHDEN,
@@ -232,15 +225,7 @@ export default function NavCarriers() {
         const rr = refCover.getBoundingClientRect();
         const gg = refGrid.getBoundingClientRect();
         const cardTop = vh - refCover.offsetHeight + (gg.top - rr.top);
-        // --refs-tail on tyhjaa scrollia jonka kuuluu tulla VASTA lamppujen
-        // jalkeen. Ilman tata vahennysta jakso venyisi tasan hannan verran:
-        // H3 kasvoi T:lla mutta korttirivin sijainti nakymassa ei, joten
-        // span = H3 - cardTop olisi kasvanut T:lla ja vaiheet a/b/c sen
-        // mukana. Ankkuroimalla T pikselia korttirivin ylapuolelle jakso
-        // paattyy samalla scrollY:lla kuin ennen ja hanta jaa kokonaan
-        // sen jalkeen.
-        const tail = cssPx(refCover, "--refs-tail", vh);
-        holdHi = 1 - (cardTop + tail) / vh;
+        holdHi = 1 - cardTop / vh;
       } else holdHi = 0;
       spanPx = (holdHi - holdLo) * vh;
       const conf: [HTMLElement, DOMRect, number][] = [

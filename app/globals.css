@@ -1519,6 +1519,21 @@ footer .base { padding-top: 18px }
    ylapaddingiksi ja keskitys vaihdettiin ylareunaan, jolloin virrassa vali
    on tasan 110px ja pinnattuna paneeli tayttaa yha nakyman. */
 .refzone { position: relative; z-index: 3 }
+/* Tyhjaa dokumenttikorkeutta .refsin ja .aftercoverin VALISSA. Ei muuta
+   .refsia mitenkaan: H3, --refs-sticky-top, --aftercover-min ja sisallon
+   sijainti pysyvat ennallaan, ja .aftercover vain saapuu 35vh myohemmin.
+
+   Vali ei nay. .refs on pinnattuna tasan nakyman korkuinen - ylareuna
+   vh - H3, alareuna vh - ja pinnaus jatkuu koko valin ajan, koska
+   sticky-elementti irtoaa vasta kun sen SISALTAVA LOHKO (.refzone)
+   loppuu; .aftercover on satoja pikseleita korkeampi kuin vali, joten
+   tilaa on runsaasti yli. Vali jaa siis kokonaan pinnatun .refsin
+   taakse.
+
+   Ei tarvitse omaa z-indexia: positioimattomana se piirtyy ennen
+   positioituja sisaruksiaan (.refs 2, .aftercover 3) ja on lisaksi
+   tyhja, joten sen lapi ei voi nakya mitaan. */
+.refgap { height: 35vh }
 #palvelut { padding-bottom: 0 }
 
 /* Paneeli on SISALLON mittainen, ei nakymankorkuinen. Aiempi
@@ -1575,23 +1590,7 @@ footer .base { padding-top: 18px }
      pidenna osiota vaan sulautuu siihen: min-height dominoi, ja lisatty
      padding vain kutistaa content-boxia. Mitattuna 900px nakymassa kasvu
      olisi ollut 123px (0,14vh) ja 1300px:ssa TASAN NOLLA. */
-  /* --refs-tail: tyhjaa scrollimatkaa ennen kuin .aftercover saapuu.
-     JAKO ON PAKOTETTU, ei valittu. Merkitaan lisays min-heightiin m:lla
-     ja paddingeihin t (ylos) ja b (alas). Kaksi ehtoa:
-
-       1) H3 kasvaa T:lla MOLEMMISSA haaroissa. min-height-haara vaatii
-          m = T; sisaltohaara (H3 = padT + sisalto + padB) vaatii
-          t + b = T.
-       2) Pinnattuna sisallon ylareuna on
-            vh - CONTENT/2 - H3/2 + (padT - padB)/2,
-          joten H3:n kasvu T laskee sita T/2 ja se on kumottava:
-          (t - b)/2 = T/2  eli  t - b = T.
-
-     Yhtaloparista t + b = T ja t - b = T seuraa t = T ja b = 0. Lisays
-     menee siis min-heightiin ja YLApaddingiin, kumpaankin kertoimella 1,
-     eika alapaddingiin lainkaan. Alapaddingiin lisaaminen olisi
-     nostanut pinnattua sisaltoa, mika oli kielletty. */
-  min-height: calc(100vh + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh) + var(--refs-tail, 35vh));
+  min-height: calc(100vh + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh));
   display: flex; align-items: center;
   /* --refs-lead PERUUTETTU. Simulaatio osoitti ettei mekanismi voi
      toimia: .refsticky pinnautuu kun scrollY = Z, ja .refs tulee
@@ -1629,7 +1628,6 @@ footer .base { padding-top: 18px }
      tyhjaa on 50vh - 283,5px. Isoilla nakymilla kumpikin ylittaa 120px,
      jolloin nosto on taysi. */
   --refs-lift: min(120px, 100vh - 687px, 50vh - 283.5px);
-  --refs-tail: 35vh;
   /* --refs-lift VAHENNETAAN ylapaddingista ja LISATAAN alapaddingiin.
      Summa pysyy samana, joten H3, --aftercover-min ja --refs-sticky-top
      eivat muutu lainkaan - vain sisalto nousee tasan liftin verran.
@@ -1637,7 +1635,7 @@ footer .base { padding-top: 18px }
      vaihtokauppa: korttirivin alareuna nousee saman verran, ja juuri se
      maaraa kuinka myohaan lamput ehtivat pois ennen kuin .aftercover
      alkaa peittaa videoita. */
-  padding: calc(var(--space-section) + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh) + var(--refs-tail, 35vh) - var(--refs-lift, 120px))
+  padding: calc(var(--space-section) + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh) - var(--refs-lift, 120px))
            0
            calc(var(--space-section) + var(--refs-lift, 120px));
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
