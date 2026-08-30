@@ -758,40 +758,61 @@ h2.big { font-size: var(--text-h2-hero) }
 .stickyzone > .hero {
   position: sticky; top: var(--hero-sticky-top, 0px); z-index: 1;
   padding-top: var(--space-hero-top-sticky);
-  /* TASAN 100vh, ei enempaa eika vahempaa. Kaksi seurausta:
-     1) --hero-sticky-top = min(0, vh - heroH) = 0, joten hero pinnautuu
-        heti eika liu'u ensin - sisalto ei siis siirry latauksen ja
-        pinnauksen valilla.
-     2) cover.top = heroH - scrollY = vh - scrollY, joten scrimin etenema
-        p = 1 - cover.top / vh on tasan scrollY / vh. Scrub saa siis koko
-        heron elinkaaren, vh pikselia, eika mitaan tarvitse lisata.
-     Aiemmin korkeuden maarasi .stage (500px + paddingit), jolloin hero
-     oli nakymaa korkeampi ja liukui ennen pinnautumista. */
+  /* Koko nakyman kokoinen medialaatikko. svh eika vh: mobiilissa vh on
+     osoiterivin kanssa suurempi kuin nakyva alue, jolloin heron alareuna
+     jaisi palkin alle. Fallback vh:hon on ensin, jotta vanhempi selain
+     saa edes jotain.
+     --hero-sticky-top on tassa aina 0: SiteEffects laskee sen kaavalla
+     min(0, vh - heroH), ja svh <= vh. Muuttuja jaa silti paikalleen
+     turvaverkoksi, jos sisalto joskus ylittaa nakyman korkeuden. */
   min-height: 100vh;
+  min-height: 100svh;
   display: flex; align-items: center;
+  /* Rajaa cover-rajatun canvasin ylimenevan osan. .hero on itse sticky,
+     eika oma overflow riko sitä - vain ESIVANHEMMAN overflow rikkoisi. */
+  overflow: hidden;
+  color: #f5f5f7;
 }
-.stickyzone > .hero > .wrap { width: 100% }
+.hero-media { position: absolute; inset: 0; z-index: 0 }
+.hero-media canvas { display: block; width: 100%; height: 100% }
 
-/* Kaksipalstainen hero: tekstit vasemmalle, ruutuscrub oikealle. Rajaus
-   on .herogridissa eika .herossa, koska .hero on jaettu luokka jota
-   kayttavat myos /lyhytvideot ja /verkkosivut. */
-.herogrid { display: grid; gap: var(--space-gap-xl); align-items: center }
-.herotext { text-align: left }
-.herotext h1, .herotext .sub { margin-left: 0; margin-right: 0 }
-.herotext .heroctas { justify-content: flex-start }
-.heroscrub {
-  position: relative; width: 100%; aspect-ratio: 16 / 9;
-  border-radius: 20px; overflow: hidden;
-  /* Paikkamerkki ennen ensimmaista ruutua. Ruudun 001 keskiarvovari on
-     rgb(117,121,123), joten vaalea pinta on lahempana lopputulosta kuin
-     laskeva musta - eika canvasille anneta alpha: false -kontekstia,
-     joka tekisi siita mustan ennen ensimmaista piirtoa. */
-  background: #f5f5f7;
+/* ALFA ON MITATTU, EI ARVATTU. Ruuduista 001, 038 ja 076 purettiin
+   pikselit ja haettiin kirkkain pikseli silta alueelta jossa teksti
+   oikeasti on. Alue laskettiin cover-rajauksen lapi kolmelle nakyman
+   korkeudelle (700/900/1300 leveydella 1440); niiden yhdiste on ruudun
+   x 29,2-70,8 %, y 29,6-70,4 %.
+
+     ruutu   kirkkain pikseli        L      pienin alfa (kick/h1/sub)
+       001   (183, 190, 191)    0,5066      0,541 / 0,433 / 0,495
+       038   (249, 255, 255)    0,9888      0,665 / 0,586 / 0,632
+       076   (238, 255, 255)    0,9692      0,662 / 0,582 / 0,628
+
+   Sitova on kick ruudun 038 paalla: 0,665. Pienin sadasosan askel joka
+   ylittaa sen on 0,68, jolloin pienin kontrasti on 4,75:1. Tumma teksti
+   ei ollut vaihtoehto: tumma scrim vain laskee taustan kirkkautta,
+   joten se huonontaisi tumman tekstin kontrastia. */
+.hero-scrim { position: absolute; inset: 0; z-index: 1; background: rgba(13,13,16,.68) }
+
+.stickyzone > .hero > .wrap { position: relative; z-index: 2; width: 100% }
+.stickyzone > .hero .kick { color: #b4dbff }
+.stickyzone > .hero h1 { color: #f5f5f7 }
+.stickyzone > .hero .sub { color: #e3e3e8 }
+.stickyzone > .hero .tlink { color: #b4dbff }
+
+/* Ulosnaivytys .bg:hen: kun scrub loppuu, hero on jo coverin varinen ja
+   siirtyma seuraavaan osioon ei tokkaa. Ei ristiriidassa #hero-scrimin
+   kanssa: se saa arvon vasta kun coverin ylareuna nousee nakyman
+   alareunan ylapuolelle, mika tapahtuu vasta kun p on jo 1. */
+.hero-out {
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  background: var(--bg); opacity: var(--hero-out, 0);
 }
-.heroscrub canvas { display: block; width: 100%; height: 100% }
-@media (min-width: 980px) {
-  .herogrid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) }
-}
+
+/* Scrollimatka scrubille. 280vh antaa 26 / 34 / 49 px ruutua kohti
+   korkeuksilla 700 / 900 / 1300 (76 ruutua, 75 valia). Alle 980px:n
+   sarjassa on 51 ruutua, joten 100vh riittaa: 14 / 18 px ruutua kohti. */
+.hero-spacer { height: 280vh }
+@media (max-width: 979px) { .hero-spacer { height: 100vh } }
 /* Cover nousee heron paalle: korkeampi z-index ja lapinakymaton tausta.
    Rajaus ulottuu Palvelut-osion loppuun, koska coverin on oltava vahintaan
    heron korkuinen - lyhyempi cover paastaisi heron nakyviin omaan

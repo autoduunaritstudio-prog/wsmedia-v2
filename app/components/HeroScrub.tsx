@@ -3,29 +3,32 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Hero-scrub: valmis ruutusarja piirretaan canvasille scrollin mukana.
+ * Hero-scrub: valmis ruutusarja piirretaan koko heron tayttavalle
+ * canvasille scrollin mukana.
  *
- * ETENEMA EI OLE UUSI MITTARI. SiteEffects laskee jo heron pin-vaiheen
- * etenemaa scrimia varten:
- *     p = clamp(1 - cover.top / vh, 0, 1)
- * eli 0 kun coverin ylareuna on nakyman alareunassa ja 1 kun cover
- * peittaa heron kokonaan. Koska .stickyzone > .hero on tasan 100vh, sen
- * sticky-top on 0 ja cover.top = heroH - scrollY = vh - scrollY, joten
- * p = scrollY / vh. SiteEffects julkaisee saman p:n muuttujassa
- * --hero-p, ja ruudun indeksi on
- *     i = round(p * (N - 1)).
- * Kaksi rAF-silmukkaa ei siis lue samaa rectia eri vaiheessa framea.
+ * ETENEMA TULEE SPACERISTA, ei heron korkeudesta:
+ *     p = clamp(scrollY / spacer.offsetHeight, 0, 1)
+ *     i = round(p * (N - 1))
+ * Hero on pinnattuna (top 0) ja spacer sen alla tuottaa scrollimatkan;
+ * kun spacer on kulutettu, .coverin ylareuna on tasan nakyman
+ * alareunassa ja seuraava vaihe alkaa. Kaava on scrollY:sta eika
+ * rectista, joten se ei voi olla eri vaiheessa kuin SiteEffectsin
+ * mittaukset - scrollY on yksi globaali luku framea kohti.
+ *
+ * COVER-RAJAUS LASKETAAN CANVASIN SISALLA, ei CSS:n object-fitilla:
+ *     s = max(cw / iw, ch / ih)
+ *     drawImage(img, (cw - iw*s)/2, (ch - ih*s)/2, iw*s, ih*s)
+ * object-fit ei koske canvasin PIIRTOPINTAAN vaan vain elementin
+ * bittikartan sovitukseen, joten se olisi venyttanyt jo piirretyn kuvan.
  *
  * MUISTI. drawImage HTMLImageElementeista, ei createImageBitmapista:
  * 76 x 1280 x 720 x 4 tavua olisi 280 Mt purettuna ja pysyisi muistissa
- * kunnes bitmapit vapautetaan kasin. Selain hallitsee HTMLImageElementin
- * purkumuistin itse ja voi vapauttaa sen tarvittaessa.
+ * kunnes bitmapit vapautetaan kasin.
  *
- * LATAUSJARJESTYS. Ruutu 001 haetaan heti (21,5 kt) ja piirretaan; loput
- * vasta load-tapahtuman jalkeen, yksi kerrallaan requestIdleCallbackissa.
- * Scrub ei odota: jos pyydettya ruutua ei ole viela ladattu, piirretaan
- * lahin ladattu. Koska lataus etenee jarjestyksessa, ladatut ovat aina
- * yhtenainen etuliite 0..ready-1, joten lahin on min(i, ready-1).
+ * LATAUSJARJESTYS. Ruutu 001 heti (21,0 kt) ja piirretaan; loput vasta
+ * load-tapahtuman jalkeen yksi kerrallaan requestIdleCallbackissa.
+ * Scrub ei odota: lataus etenee jarjestyksessa, joten ladatut ovat aina
+ * yhtenainen etuliite 0..ready-1 ja lahin ladattu on min(i, ready-1).
  */
 
 const SETS = {
@@ -34,6 +37,10 @@ const SETS = {
 };
 const WIDE = "(min-width: 980px)";
 const DPR_MAX = 2;
+/* Ulosnaivytys alkaa kun p lahestyy ykkosta. 0,12 * spacer on 336 px
+   1300px:n nakymalla ja 235 px 700px:n - riittava matka jotta siirtyma
+   ei ole tokkiva, mutta niin lyhyt ettei scrub ehdi haipya kesken. */
+const OUT_FROM = 0.88;
 
 const frameSrc = (dir: string, i: number) => `${dir}${String(i + 1).padStart(3, "0")}.webp`;
 
@@ -45,6 +52,7 @@ export default function HeroScrub() {
     const ctx = cv?.getContext("2d");
     if (!cv || !ctx) return;
     const hero = cv.closest<HTMLElement>(".hero");
+    const spacer = document.querySelector<HTMLElement>(".hero-spacer");
     // Sarja valitaan kerran mountissa eika resizessa: vaihto kesken
     // istunnon heittaisi jo ladatut ruudut pois ja hakisi 76 uutta.
     const set = window.matchMedia(WIDE).matches ? SETS.d : SETS.m;
@@ -58,7 +66,7 @@ export default function HeroScrub() {
 
     // Canvas mitoitetaan NAKYVAAN kokoon, dpr-katto 2. Kolmen ja neljan
     // dpr:n naytoilla 3x-puskuri maksaisi yli kaksinkertaisen taytto-
-    // kaistan ilman etta 1280px levea lahde tarjoaa yhtaan lisadetaljia.
+    // kaistan ilman etta 1280px levea lahde tarjoaa lisadetaljia.
     const size = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, DPR_MAX);
       const w = Math.round(cv.clientWidth * dpr);
@@ -74,7 +82,10 @@ export default function HeroScrub() {
       const img = imgs[i];
       if (!img || i === shown) return;
       shown = i;
-      ctx.drawImage(img, 0, 0, cv.width, cv.height);
+      const s = Math.max(cv.width / img.naturalWidth, cv.height / img.naturalHeight);
+      const dw = img.naturalWidth * s;
+      const dh = img.naturalHeight * s;
+      ctx.drawImage(img, (cv.width - dw) / 2, (cv.height - dh) / 2, dw, dh);
     };
 
     const load = (i: number) =>
@@ -96,7 +107,7 @@ export default function HeroScrub() {
     window.addEventListener("resize", onResize, { passive: true });
 
     // Reduced motion: ei scrubia eika sarjan latausta, vain viimeinen
-    // ruutu eli valmis poytanakyma.
+    // ruutu paikallaan.
     if (reduce) {
       const last = set.n - 1;
       load(last).then(() => {
@@ -138,12 +149,17 @@ export default function HeroScrub() {
     if (document.readyState === "complete") rest();
     else window.addEventListener("load", rest, { once: true });
 
+    let prevOut = -1;
     const frame = () => {
       raf = requestAnimationFrame(frame);
-      const raw = hero ? parseFloat(hero.style.getPropertyValue("--hero-p")) : 0;
-      const p = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 1) : 0;
-      const want = Math.round(p * (set.n - 1));
-      paint(Math.min(want, Math.max(ready - 1, 0)));
+      const span = spacer?.offsetHeight ?? 0;
+      const p = span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+      paint(Math.min(Math.round(p * (set.n - 1)), Math.max(ready - 1, 0)));
+      const out = Math.min(Math.max((p - OUT_FROM) / (1 - OUT_FROM), 0), 1);
+      if (hero && Math.abs(out - prevOut) > 0.002) {
+        prevOut = out;
+        hero.style.setProperty("--hero-out", out.toFixed(3));
+      }
     };
     raf = requestAnimationFrame(frame);
 
@@ -156,7 +172,7 @@ export default function HeroScrub() {
   }, []);
 
   return (
-    <div className="heroscrub li d5" aria-hidden="true">
+    <div className="hero-media" aria-hidden="true">
       <canvas ref={ref} />
     </div>
   );
