@@ -1575,7 +1575,23 @@ footer .base { padding-top: 18px }
      pidenna osiota vaan sulautuu siihen: min-height dominoi, ja lisatty
      padding vain kutistaa content-boxia. Mitattuna 900px nakymassa kasvu
      olisi ollut 123px (0,14vh) ja 1300px:ssa TASAN NOLLA. */
-  min-height: calc(100vh + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh));
+  /* --refs-tail: tyhjaa scrollimatkaa ennen kuin .aftercover saapuu.
+     JAKO ON PAKOTETTU, ei valittu. Merkitaan lisays min-heightiin m:lla
+     ja paddingeihin t (ylos) ja b (alas). Kaksi ehtoa:
+
+       1) H3 kasvaa T:lla MOLEMMISSA haaroissa. min-height-haara vaatii
+          m = T; sisaltohaara (H3 = padT + sisalto + padB) vaatii
+          t + b = T.
+       2) Pinnattuna sisallon ylareuna on
+            vh - CONTENT/2 - H3/2 + (padT - padB)/2,
+          joten H3:n kasvu T laskee sita T/2 ja se on kumottava:
+          (t - b)/2 = T/2  eli  t - b = T.
+
+     Yhtaloparista t + b = T ja t - b = T seuraa t = T ja b = 0. Lisays
+     menee siis min-heightiin ja YLApaddingiin, kumpaankin kertoimella 1,
+     eika alapaddingiin lainkaan. Alapaddingiin lisaaminen olisi
+     nostanut pinnattua sisaltoa, mika oli kielletty. */
+  min-height: calc(100vh + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh) + var(--refs-tail, 35vh));
   display: flex; align-items: center;
   /* --refs-lead PERUUTETTU. Simulaatio osoitti ettei mekanismi voi
      toimia: .refsticky pinnautuu kun scrollY = Z, ja .refs tulee
@@ -1613,6 +1629,7 @@ footer .base { padding-top: 18px }
      tyhjaa on 50vh - 283,5px. Isoilla nakymilla kumpikin ylittaa 120px,
      jolloin nosto on taysi. */
   --refs-lift: min(120px, 100vh - 687px, 50vh - 283.5px);
+  --refs-tail: 35vh;
   /* --refs-lift VAHENNETAAN ylapaddingista ja LISATAAN alapaddingiin.
      Summa pysyy samana, joten H3, --aftercover-min ja --refs-sticky-top
      eivat muutu lainkaan - vain sisalto nousee tasan liftin verran.
@@ -1620,7 +1637,7 @@ footer .base { padding-top: 18px }
      vaihtokauppa: korttirivin alareuna nousee saman verran, ja juuri se
      maaraa kuinka myohaan lamput ehtivat pois ennen kuin .aftercover
      alkaa peittaa videoita. */
-  padding: calc(var(--space-section) + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh) - var(--refs-lift, 120px))
+  padding: calc(var(--space-section) + var(--refs-extra, 10vh) + 2 * var(--refs-pause, 8vh) + var(--refs-tail, 35vh) - var(--refs-lift, 120px))
            0
            calc(var(--space-section) + var(--refs-lift, 120px));
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:

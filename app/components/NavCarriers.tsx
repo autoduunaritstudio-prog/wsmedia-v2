@@ -176,6 +176,21 @@ export default function NavCarriers() {
     const refCards = Array.from(document.querySelectorAll<HTMLElement>(".refcard"));
     // Inline-tyylista, ei getComputedStylesta: SiteEffects kirjoittaa arvot
     // juuri sinne, ja luku on pelkka merkkijono - ei tyylien uudelleenlaskentaa.
+    /**
+     * CSS-pituus pikseleina. Muuttuja on rekisteroimaton, joten
+     * getComputedStyle palauttaa kirjoitetun tokenin ("35vh") eika
+     * laskettua arvoa - yksikko on siksi purettava itse. vh ja px
+     * riittavat; muu palauttaa nollan, jolloin kaytos on sama kuin
+     * ennen hantaa.
+     */
+    const cssPx = (el: HTMLElement, name: string, vh: number) => {
+      const raw = getComputedStyle(el).getPropertyValue(name).trim();
+      const n = parseFloat(raw);
+      if (!Number.isFinite(n)) return 0;
+      if (raw.endsWith("vh")) return (n / 100) * vh;
+      return raw.endsWith("px") ? n : 0;
+    };
+
     const varNum = (el: HTMLElement | null, name: string) => {
       if (!el) return 0;
       const v = parseFloat(el.style.getPropertyValue(name));
@@ -217,7 +232,15 @@ export default function NavCarriers() {
         const rr = refCover.getBoundingClientRect();
         const gg = refGrid.getBoundingClientRect();
         const cardTop = vh - refCover.offsetHeight + (gg.top - rr.top);
-        holdHi = 1 - cardTop / vh;
+        // --refs-tail on tyhjaa scrollia jonka kuuluu tulla VASTA lamppujen
+        // jalkeen. Ilman tata vahennysta jakso venyisi tasan hannan verran:
+        // H3 kasvoi T:lla mutta korttirivin sijainti nakymassa ei, joten
+        // span = H3 - cardTop olisi kasvanut T:lla ja vaiheet a/b/c sen
+        // mukana. Ankkuroimalla T pikselia korttirivin ylapuolelle jakso
+        // paattyy samalla scrollY:lla kuin ennen ja hanta jaa kokonaan
+        // sen jalkeen.
+        const tail = cssPx(refCover, "--refs-tail", vh);
+        holdHi = 1 - (cardTop + tail) / vh;
       } else holdHi = 0;
       spanPx = (holdHi - holdLo) * vh;
       const conf: [HTMLElement, DOMRect, number][] = [
