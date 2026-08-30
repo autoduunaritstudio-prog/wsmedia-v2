@@ -37,10 +37,6 @@ const SETS = {
 };
 const WIDE = "(min-width: 980px)";
 const DPR_MAX = 2;
-/* Ulosnaivytys alkaa kun p lahestyy ykkosta. 0,12 * spacer on 336 px
-   1300px:n nakymalla ja 235 px 700px:n - riittava matka jotta siirtyma
-   ei ole tokkiva, mutta niin lyhyt ettei scrub ehdi haipya kesken. */
-const OUT_FROM = 0.88;
 
 const frameSrc = (dir: string, i: number) => `${dir}${String(i + 1).padStart(3, "0")}.webp`;
 
@@ -51,7 +47,6 @@ export default function HeroScrub() {
     const cv = ref.current;
     const ctx = cv?.getContext("2d");
     if (!cv || !ctx) return;
-    const hero = cv.closest<HTMLElement>(".hero");
     const spacer = document.querySelector<HTMLElement>(".hero-spacer");
     // Sarja valitaan kerran mountissa eika resizessa: vaihto kesken
     // istunnon heittaisi jo ladatut ruudut pois ja hakisi 76 uutta.
@@ -149,17 +144,11 @@ export default function HeroScrub() {
     if (document.readyState === "complete") rest();
     else window.addEventListener("load", rest, { once: true });
 
-    let prevOut = -1;
     const frame = () => {
       raf = requestAnimationFrame(frame);
       const span = spacer?.offsetHeight ?? 0;
       const p = span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
       paint(Math.min(Math.round(p * (set.n - 1)), Math.max(ready - 1, 0)));
-      const out = Math.min(Math.max((p - OUT_FROM) / (1 - OUT_FROM), 0), 1);
-      if (hero && Math.abs(out - prevOut) > 0.002) {
-        prevOut = out;
-        hero.style.setProperty("--hero-out", out.toFixed(3));
-      }
     };
     raf = requestAnimationFrame(frame);
 

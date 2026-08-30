@@ -748,7 +748,20 @@ h2.big { font-size: var(--text-h2-hero) }
    mittaa heron ja asettaa negatiivisen topin (vh - heroH), jolloin hero
    vierahtaa ensin kokonaan nakyviin ja pinnaa vasta kun sen alareuna on
    ruudun alareunassa. Ilman JS:aa fallback on 0px eli tavallinen sticky. */
-.stickyzone { position: relative }
+/* Hero dokumentin ylareunaan. #nav on position: sticky NORMAALISSA
+   VIRTAUKSESSA, joten se varaa 72px + --nav-top = 116px korkeutta ja
+   tyonsi heron sen verran alas - sivun ylalaidassa nakyi vaalea kaista
+   ennen kuin scrollaus alkoi. Negatiivinen margin nostaa heron takaisin
+   nollaan; navi jaa kellumaan sen paalle omalla z-indexillaan (50).
+   Sama lauseke kuin .navinin korkeus, jotta luvut eivat paase eroon.
+
+   Naviin itseensa ei kosketa: se on jaettu kaikkien sivujen kanssa, ja
+   position: fixed olisi vienyt alasivujen heroilta niiden ylatilan.
+
+   Talla on toinenkin seuraus, ks. .hero-spacer: kun heron dokumentti-
+   sijainti on 0 ja korkeus vh, scrub paattyy tasan silla scrollY:lla
+   jolla cover koskettaa nakyman alareunaa. */
+.stickyzone { position: relative; margin-top: calc(-72px - var(--nav-top)) }
 .hero { position: relative; text-align: center; padding: var(--space-hero-top) 0 var(--space-hero-bottom) }
 /* Sticky vain etusivun herolle. .hero on jaettu luokka, jota kayttavat myos
    /lyhytvideot ja /verkkosivut - ilman .stickyzone-rajausta myos niiden
@@ -799,18 +812,18 @@ h2.big { font-size: var(--text-h2-hero) }
 .stickyzone > .hero .sub { color: #e3e3e8 }
 .stickyzone > .hero .tlink { color: #b4dbff }
 
-/* Ulosnaivytys .bg:hen: kun scrub loppuu, hero on jo coverin varinen ja
-   siirtyma seuraavaan osioon ei tokkaa. Ei ristiriidassa #hero-scrimin
-   kanssa: se saa arvon vasta kun coverin ylareuna nousee nakyman
-   alareunan ylapuolelle, mika tapahtuu vasta kun p on jo 1. */
-.hero-out {
-  position: absolute; inset: 0; z-index: 4; pointer-events: none;
-  background: var(--bg); opacity: var(--hero-out, 0);
-}
-
 /* Scrollimatka scrubille. 280vh antaa 26 / 34 / 49 px ruutua kohti
    korkeuksilla 700 / 900 / 1300 (76 ruutua, 75 valia). Alle 980px:n
-   sarjassa on 51 ruutua, joten 100vh riittaa: 14 / 18 px ruutua kohti. */
+   sarjassa on 51 ruutua, joten 100vh riittaa: 14 / 18 px ruutua kohti.
+
+   KORKEUS EI VAIKUTA LOPETUSHETKEEN. Merkitaan heron dokumenttisijainti
+   T:lla, korkeus H:lla ja spacerin korkeus S:lla. Cover alkaa nousta kun
+       cover.top = T + H + S - scrollY = vh   eli   scrollY = T + H + S - vh,
+   ja p = scrollY / S saavuttaa ykkosen kun scrollY = S. Nama ovat sama
+   hetki kun T + H = vh - S SUPISTUU POIS molemmilta puolilta. Ehto on
+   siis T + H = vh, ei mikaan S:n arvo: spacerin korkeus voi olla mita
+   tahansa. Aiemmin T oli 116 (navin varaama tila) ja p osui ykkoseen
+   116px liian aikaisin; nyt T = 0 ja H = 100svh = vh, joten ero on 0. */
 .hero-spacer { height: 280vh }
 @media (max-width: 979px) { .hero-spacer { height: 100vh } }
 /* Cover nousee heron paalle: korkeampi z-index ja lapinakymaton tausta.

@@ -41,9 +41,6 @@ export default function Hero() {
             </a>
           </div>
         </div>
-        {/* Ulosnaivytys: opacity seuraa --hero-outia, jonka HeroScrub
-            laskee samasta p:sta kuin ruudun indeksin. */}
-        <div className="hero-out" aria-hidden="true" />
         {/* Coverin nousun tummennus. Eri kerros kuin .hero-scrim: tama
             on sidottu coverin sijaintiin, ei tekstin luettavuuteen, ja
             SiteEffects paivittaa sen --scrim-opacityn kautta. */}
