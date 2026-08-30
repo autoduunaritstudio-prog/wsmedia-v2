@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 // Lenisin oma tyylitiedosto on pakollinen, ei koriste: se antaa
 // [data-lenis-prevent] -elementeille overscroll-behavior: containin (jotta
@@ -32,6 +33,30 @@ export function getLenis(): Lenis | null {
 }
 
 export default function SmoothScroll() {
+  const pathname = usePathname();
+  const first = useRef(true);
+
+  /**
+   * Vieritys ylos sivunvaihdossa. Next vierittaa itse, mutta Lenis pitaa
+   * omaa targetScrolliaan: ilman nollausta se voi palauttaa edellisen
+   * sivun kohdalle heti ensimmaisella rullauksella. scrollTo immediate
+   * asettaa seka animatedScrollin etta targetScrollin samaan arvoon.
+   *
+   * Ei ensimmaisella ajolla: sivu on jo ylhaalla, ja pakotettu nollaus
+   * ohittaisi mahdollisen #-ankkurin. Samasta syysta ohitetaan myos
+   * navigoinnit joissa on hash - kohdesivun ankkuri hoitaa vierityksen.
+   * Saman sivun sisaiset #-linkit eivat muuta pathnamea lainkaan.
+   */
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    if (window.location.hash) return;
+    window.scrollTo(0, 0);
+    lenis?.scrollTo(0, { immediate: true, force: true });
+  }, [pathname]);
+
   useEffect(() => {
     // prefers-reduced-motion: ei pehmennysta lainkaan, selaimen oma
     // vieritys jaa voimaan sellaisenaan.

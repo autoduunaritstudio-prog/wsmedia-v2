@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+import { ViewTransition } from "react";
 import type { Metadata } from "next";
 import { Instrument_Sans } from "next/font/google";
 import "./globals.css";
@@ -5,6 +7,11 @@ import "./globals.css";
 import Analytics from "./components/consent/Analytics";
 import SmoothScroll from "./components/SmoothScroll";
 import CookieBanner from "./components/consent/CookieBanner";
+
+/* Ruudukon mitat. Suurin porrastus on (COLS - 1 + ROWS - 1) askelta, mika
+   yhdessa globals.css:n --vt-stepin kanssa maaraa siirtyman kokonaiskeston. */
+const PAGEGRID_COLS = 6;
+const PAGEGRID_ROWS = 4;
 
 const instrument = Instrument_Sans({
   variable: "--font-instrument",
@@ -58,7 +65,30 @@ export default function RootLayout({
     <html lang="fi" className={instrument.variable}>
       <body>
         <SmoothScroll />
-        {children}
+        {/* Sivunvaihtosiirtyma. default="page" antaa siirtymalle
+            view-transition-class:in "page", jota globals.css kohdistaa
+            ::view-transition-old(.page):lla - sama konventio kuin Nextin
+            oppaan .morph ja .nav-forward. Komponentti tulee Reactista,
+            ei uusia riippuvuuksia. Siirtyma laukeaa vain
+            client-navigoinnissa, joten ensilataus ei animoidu. */}
+        <ViewTransition default="page">{children}</ViewTransition>
+        {/* Ruudukko-overlay. Pelkkaa merkkausta: animaatio ajetaan
+            CSS:sta valitsimella :root:active-view-transition, jonka selain
+            asettaa siirtyman ajaksi. 6 x 4 = 24 ruutua, joista jokainen
+            tuntee sarakkeensa (--i) ja rivinsa (--j) porrastusta varten. */}
+        <div className="pagegrid" aria-hidden="true">
+          {Array.from({ length: PAGEGRID_COLS * PAGEGRID_ROWS }, (_, n) => (
+            <i
+              key={n}
+              style={
+                {
+                  "--i": n % PAGEGRID_COLS,
+                  "--j": Math.floor(n / PAGEGRID_COLS),
+                } as CSSProperties
+              }
+            />
+          ))}
+        </div>
         <CookieBanner />
         <Analytics />
       </body>

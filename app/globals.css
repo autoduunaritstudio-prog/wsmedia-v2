@@ -3597,3 +3597,97 @@ footer .base { padding-top: 18px }
 .page-toihin-meille .fcard .rp input {width:17px;height:17px;accent-color:var(--blue);cursor:pointer;flex:none;margin:0}
 .page-toihin-meille .fcard .rp.on {border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,227,.12)}
 .page-toihin-meille .hint {font-size:12.5px;color:var(--grey);margin-top:8px;line-height:1.5}
+
+/* ============ SIVUNVAIHTO: ruudukko kasaa seuraavan sivun ============
+   Pohja: React <ViewTransition> (app/layout.tsx) + selaimen View
+   Transitions API. Ei JS:aa - selain asettaa :root:active-view-transition
+   -tilan siirtyman ajaksi, ja ruudut animoituvat sen varassa.
+
+   AJOITUS. Ruudun oma kesto on --vt-tile ja porrastus
+   (--i + --j) * --vt-step. Suurin porrastus on (5 + 3) * 26ms = 208ms,
+   joten koko siirtyma kestaa 208 + 490 = 698ms eli alle vaaditun 700ms:n.
+
+   Taydellisen peiton ikkuna:
+     alkaa   208 + 0,28 * 490 = 345ms   viimeinen ruutu on paikallaan
+     paattyy       0,78 * 490 = 382ms   ensimmainen ruutu alkaa haipya
+   Vanha nakyma vaihdetaan uuteen tuon ikkunan keskella, 52 %:ssa eli
+   363ms:ssa, jolloin marginaalia jaa 18ms molempiin suuntiin. Vaihto on
+   siksi nakymaton: ruudukko peittaa koko ruudun juuri silla hetkella.
+   Jos naita lukuja muuttaa, ehto on (0,78 - 0,28) * --vt-tile >= suurin
+   porrastus - muuten ensimmainen ruutu alkaa paljastaa sivua ennen kuin
+   viimeinen on ehtinyt peittaa omansa. */
+:root {
+  --vt-total: 698ms;
+  --vt-tile: 490ms;
+  --vt-step: 26ms;
+}
+
+/* PAKOLLINEN: pseudoelementtien overlay kaappaa oletuksena
+   osoitintapahtumat, jolloin siirtyman aikainen klikkaus katoaa. */
+::view-transition { pointer-events: none }
+
+/* Vanha nakyma pysyy paallimmaisena kunnes ruudukko peittaa sen, ja
+   katoaa sitten yhdessa framessa. Uusi odottaa alla valmiina, joten
+   vaihdossa ei ole ristihaivytysta jota nakisi ruutujen valista.
+   root = kaikki nimeamaton (nav, footer), .page = <ViewTransition>. */
+::view-transition-old(root),
+::view-transition-old(.page) {
+  z-index: 2;
+  animation: var(--vt-total) linear both vt-swap;
+}
+::view-transition-new(root),
+::view-transition-new(.page) {
+  z-index: 1;
+  animation: none;
+}
+@keyframes vt-swap {
+  0%, 51.9% { opacity: 1 }
+  52%, 100% { opacity: 0 }
+}
+
+/* Overlay on oma nimetty ryhmansa. Nain se irtoaa juurikuvasta ja piirtyy
+   sen paalle omalla z-indexillaan, ja mika tarkeampaa: ::view-transition-new
+   on ELAVA esitys uudesta nakymasta, joten ruutujen CSS-animaatio nakyy
+   siirtyman lapi. Vanha tilannekuva olisi pysahtynyt (ruudut skaalassa 0),
+   joten se piilotetaan kokonaan. */
+.pagegrid {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  view-transition-name: pagegrid;
+}
+::view-transition-group(pagegrid) { z-index: 10; animation: none }
+::view-transition-old(pagegrid) { display: none }
+::view-transition-new(pagegrid) { animation: none }
+
+/* Levossa ruudut ovat olemattomia: ensilataus ei animoi mitaan eika
+   overlay peita klikkauksia. */
+.pagegrid > i {
+  background: var(--bg);
+  transform: scale(0);
+  opacity: 0;
+}
+:root:active-view-transition .pagegrid > i {
+  animation: vt-tile var(--vt-tile) cubic-bezier(.4, 0, .2, 1)
+             calc((var(--i) + var(--j)) * var(--vt-step)) both;
+}
+@keyframes vt-tile {
+  0%       { transform: scale(0); opacity: 0 }
+  28%, 78% { transform: scale(1); opacity: 1 }
+  100%     { transform: scale(1); opacity: 0 }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Ei ruudukkoa eika siirtymaa: navigointi tapahtuu valittomasti.
+     Kestojen nollaus on Nextin oppaan resepti - siirtyma paattyy heti,
+     jolloin selain vaihtaa nakyman kuten ilman koko API:a. */
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+  .pagegrid { display: none }
+}
