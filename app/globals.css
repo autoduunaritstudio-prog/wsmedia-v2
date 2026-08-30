@@ -3657,6 +3657,16 @@ footer .base { padding-top: 18px }
    joten se piilotetaan kokonaan. */
 .pagegrid {
   position: fixed; inset: 0;
+  /* z-index on pakollinen VARAREITILLE. Natiivilla reitilla ruudukko
+     nostetaan pseudopuussa ::view-transition-group(pagegrid):n
+     z-index: 10:lla, mutta .vt-run animoi oikeaa elementtia sivun omassa
+     kerroksessa - ilman tata se jaisi .coverin (2), .refzonen (3) ja
+     #navin (50) alle. 60 on yli navin, koska ruudukon kuuluu peittaa
+     myos ylapalkki sivunvaihdon ajaksi.
+     Rajaavaa pinoamiskontekstia ei ole: .pagegrid on bodyn suora lapsi,
+     eika html tai body aseta transformia, filteria, opacitya,
+     isolationia, containia, will-changea tai mix-blend-modea. */
+  z-index: 60;
   pointer-events: none;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
