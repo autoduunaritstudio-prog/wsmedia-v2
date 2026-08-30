@@ -415,6 +415,11 @@ export default function SiteEffects() {
       if (hero && cover) {
         const p = Math.min(Math.max(1 - cover.getBoundingClientRect().top / vh, 0), 1);
         hero.style.setProperty("--scrim-opacity", (p * SCRIM_MAX).toFixed(3));
+        // Sama p raakana HeroScrubille. Ruudun indeksi on round(p * (N-1)),
+        // joten se tarvitsee tarkemman arvon kuin scrimin kolme desimaalia
+        // - ja nimenomaan TAMAN saman mittauksen, ettei toinen silmukka lue
+        // samaa rectia eri vaiheessa framea.
+        hero.style.setProperty("--hero-p", p.toFixed(4));
       }
 
       if (strip && copyW > 0) {
