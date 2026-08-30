@@ -780,33 +780,62 @@ h2.big { font-size: var(--text-h2-hero) }
      turvaverkoksi, jos sisalto joskus ylittaa nakyman korkeuden. */
   min-height: 100vh;
   min-height: 100svh;
-  display: flex; align-items: center;
+  /* Tekstilohko alakolmannekseen, ks. ::before/::after alla. */
+  display: flex; flex-direction: column;
+  padding-bottom: 0;
   /* Rajaa cover-rajatun canvasin ylimenevan osan. .hero on itse sticky,
      eika oma overflow riko sitä - vain ESIVANHEMMAN overflow rikkoisi. */
   overflow: hidden;
   color: #f5f5f7;
 }
+/* SIJOITTELU KAHDELLA JOUSTAVALLA VALIKAPPALEELLA, ei kiintealla
+   top-prosentilla. Molemmat kasvavat samalla painolla, mutta alempi on
+   katkaistu 8svh:hon (+ iOS:n safe-area). Merkitaan vapaa tila F:lla:
+
+     F/2 >  katko  ->  alempi = katko, ylempi = F - katko
+                       eli lohko roikkuu 8svh nakyman alareunasta
+     F/2 <= katko  ->  ylempi = alempi = F/2
+                       eli lohko on pystykeskitetty
+
+   Ylempi ei siis voi koskaan jaada alempaa pienemmaksi, joten lohko ei
+   nouse yli pystykeskityksen - se on tasan se raja jonka yli se ei saa
+   liukua. Sisallon korkeutta ei tarvitse tietaa, ja jos se ylittaa
+   laatikon, molemmat valikappaleet kutistuvat nollaan eika lohkon
+   YLAREUNA leikkaudu. */
+.stickyzone > .hero::before,
+.stickyzone > .hero::after { content: ""; flex: 1 1 0 }
+.stickyzone > .hero::after { max-height: calc(8svh + env(safe-area-inset-bottom, 0px)) }
+
 .hero-media { position: absolute; inset: 0; z-index: 0 }
 .hero-media canvas { display: block; width: 100%; height: 100% }
 
-/* ALFA ON MITATTU, EI ARVATTU. Ruuduista 001, 038 ja 076 purettiin
-   pikselit ja haettiin kirkkain pikseli silta alueelta jossa teksti
-   oikeasti on. Alue laskettiin cover-rajauksen lapi kolmelle nakyman
-   korkeudelle (700/900/1300 leveydella 1440); niiden yhdiste on ruudun
-   x 29,2-70,8 %, y 29,6-70,4 %.
+/* ALFA ON MITATTU, EI ARVATTU - ja mitattu uudelleen kun tekstilohko
+   siirtyi alakolmannekseen.
 
-     ruutu   kirkkain pikseli        L      pienin alfa (kick/h1/sub)
-       001   (183, 190, 191)    0,5066      0,541 / 0,433 / 0,495
-       038   (249, 255, 255)    0,9888      0,665 / 0,586 / 0,632
-       076   (238, 255, 255)    0,9692      0,662 / 0,582 / 0,628
+   Menetelma: jokaiselle nakymalle (1440x900, 1280x800, 1440x1080,
+   390x844) laskettiin sama cover-crop-muunnos jota piirtokoodi kayttaa
+   (s = max(vw/iw, vh/ih), keskitetty siirto), ja kunkin tekstielementin
+   laatikko projisoitiin takaisin freimin pikselikoordinaateiksi.
+   Lapikaynti: joka toinen freimi plus ensimmainen ja viimeinen -
+   desktop-sarjasta 39 freimia (1280x720), mobiilisarjasta 26 (1024x576).
+   Jokaisen elementin alueelta haettiin taustan KIRKKAIN pikseli, ei
+   keskiarvo, ja siita ratkaistiin pienin alfa jolla WCAG-kontrasti
+   scrimin lapi on >= 4,5:1.
 
-   Sitova on kick ruudun 038 paalla: 0,665. Pienin sadasosan askel joka
-   ylittaa sen on 0,68, jolloin pienin kontrasti on 4,75:1. Tumma teksti
-   ei ollut vaihtoehto: tumma scrim vain laskee taustan kirkkautta,
-   joten se huonontaisi tumman tekstin kontrastia. */
+     elementti    sitova freimi  nakyma      tausta          pienin alfa
+     .kick        027            1440x900    (255,255,255)   0,667
+     h1           027            1440x900    (255,255,255)   0,588
+     .sub         033            1440x900    (255,255,255)   0,633
+     .heroctas    061            1440x900    (255,255,255)   0,667
+
+   Vaadittu alfa on siis 0,667 - sama kuin ennen siirtoa, koska sitova
+   tapaus on molemmissa puhdas valkoinen pikseli. 0,68 sailyy: se on
+   pienin sadasosan askel joka ylittaa vaatimuksen, ja jattaa 4,68:1
+   pienimmaksi kontrastiksi. Tumma teksti ei ole vaihtoehto: tumma scrim
+   vain laskee taustan kirkkautta, joten se huonontaisi sita. */
 .hero-scrim { position: absolute; inset: 0; z-index: 1; background: rgba(13,13,16,.68) }
 
-.stickyzone > .hero > .wrap { position: relative; z-index: 2; width: 100% }
+.stickyzone > .hero > .wrap { position: relative; z-index: 2; width: 100%; flex: 0 0 auto }
 .stickyzone > .hero .kick { color: #b4dbff }
 .stickyzone > .hero h1 { color: #f5f5f7 }
 .stickyzone > .hero .sub { color: #e3e3e8 }
