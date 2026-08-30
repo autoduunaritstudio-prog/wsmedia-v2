@@ -173,6 +173,12 @@ export default function NavCarriers() {
     // Nama on maariteltava ENNEN measurea: measure lukee ruudukon sijainnin
     // S_endia varten ja sita kutsutaan heti alustuksessa.
     const refGrid = document.querySelector<HTMLElement>(".refgrid");
+    // .refgap merkitsee .refsin OMAN lohkon loppua: sen rectin ylareuna on
+    // R + H3 - scrollY, eli tasan se piste josta lamppujakson matka
+    // mitataan. Se on tarkoituksella eri elementti kuin .aftercover -
+    // vali on niiden valissa, ja coveriin ankkuroitu jakso siirtyisi
+    // valin mukana.
+    const refGap = document.querySelector<HTMLElement>(".refgap");
     const refCards = Array.from(document.querySelectorAll<HTMLElement>(".refcard"));
     // Inline-tyylista, ei getComputedStylesta: SiteEffects kirjoittaa arvot
     // juuri sinne, ja luku on pelkka merkkijono - ei tyylien uudelleenlaskentaa.
@@ -191,11 +197,12 @@ export default function NavCarriers() {
     type Actor = { el: HTMLElement | null; lamp: boolean; home: Vec; edge: number; sign: number; face: number; prevX: number; prevDist: number | null; gaitAcc: number };
     const actors: Actor[] = [];
     let ground = 0;
-    // Lamppujakso apRaw-koordinaatistossa. holdLo vastaa S_startia,
-    // holdHi S_endia; spanPx on niiden vali pikseleina.
-    let holdLo = 0;
-    let holdHi = 0;
+    // Lamppujakso mitataan ALKUPAASTA: S_start on hetki jolloin .refsin
+    // ylareuna on tasan nakyman ylareunassa, ja jakso kestaa spanPx
+    // pikselia siita eteenpain. h3 on .refsin korkeus, jota vasten
+    // kuljettu matka lasketaan.
     let spanPx = 0;
+    let h3 = 0;
 
     const measure = () => {
       const lr = logo.getBoundingClientRect();
@@ -203,31 +210,18 @@ export default function NavCarriers() {
       ground = Math.max(lr.bottom, tr.bottom);
       const vh = window.innerHeight;
       const vw = window.innerWidth;
-      // Ikkunan alku. Kaava on (vh - H3) / vh, mutta se on syyta lukea
-      // LOPUSTA kasin: holdHi - (H3 - cardTop) / vh antaa saman arvon.
-      // Jakso siis PAATTYY kun cover saavuttaa korttirivin ja kestaa
-      // tasan H3 - cardTop pikselia.
-      //
-      // Ero on merkitseva .refgapin takia. Ilman valia apRaw = (vh - H3)
-      // / vh osui tasan hetkeen refs.top = 0; valin kanssa .aftercover on
-      // 35vh alempana dokumentissa, joten sama apRaw osuu 35vh myohemmin.
-      // Jakson PITUUS ei muutu, koska molemmat paat siirtyvat yhta
-      // paljon - vali jaa siis kokonaan lamppujen eteen, ei niiden
-      // sisaan. Kova ehto (refs.top <= 0) patee yha, ja se on nyt
-      // tosiaan portti eika pelkka yhtapitava kirjaus.
-      holdLo = refCover ? (vh - refCover.offsetHeight) / vh : 0;
-      // S_end: se apRaw jolla .aftercoverin ylareuna osuu korttirivin
-      // YLAREUNAAN. Ruudukon sijainti luetaan .refsin ylareunaan NAHDEN,
-      // jolloin arvo ei riipu siita millaisella scrollilla mittaus sattuu
-      // tapahtumaan; pinnattuna .refsin ylareuna on tasan vh - H3, joten
-      // korttirivin ylareuna nakymassa on (vh - H3) + gridRel.
+      h3 = refCover ? refCover.offsetHeight : 0;
+      // Jakson PITUUS on H3 - cardTop, missa cardTop on korttirivin
+      // ylareuna nakymassa pinnattuna. Sama luku kuin ennen valia:
+      // kumpikaan tekija ei muuttunut, koska .refgap on .refsin
+      // ULKOPUOLELLA. Ruudukon sijainti luetaan .refsin ylareunaan
+      // NAHDEN, jolloin arvo ei riipu mittaushetken scrollista.
       if (refCover && refGrid) {
         const rr = refCover.getBoundingClientRect();
         const gg = refGrid.getBoundingClientRect();
-        const cardTop = vh - refCover.offsetHeight + (gg.top - rr.top);
-        holdHi = 1 - cardTop / vh;
-      } else holdHi = 0;
-      spanPx = (holdHi - holdLo) * vh;
+        const cardTop = vh - h3 + (gg.top - rr.top);
+        spanPx = h3 - cardTop;
+      } else spanPx = 0;
       const conf: [HTMLElement, DOMRect, number][] = [
         [logo, lr, -1],
         [toggle, tr, 1],
@@ -322,9 +316,13 @@ export default function NavCarriers() {
       // molemmat ovat funktioita scrollista, joten tama ei ole tilaa.
       const refsTop = refCover ? refCover.getBoundingClientRect().top : 1;
       const covered = refsTop <= 0;
-      // t kulkee nollasta ykkoseen valilla S_start -> S_end.
-      const t =
-        covered && spanPx > 0 ? clamp((apRaw - holdLo) / (holdHi - holdLo), 0, 1) : 0;
+      // t kulkee nollasta ykkoseen S_startista spanPx pikselia eteenpain.
+      // Kuljettu matka mitataan .refgapin ylareunasta: se on R + H3 -
+      // scrollY, joten h3 - gap.top = scrollY - R eli tasan matka
+      // S_startista. .aftercover ei esiinny tassa lainkaan, joten vali
+      // jaa vaiheen c ja coverin valiin eika siirra lamppuja mukanaan.
+      const since = refGap ? h3 - refGap.getBoundingClientRect().top : 0;
+      const t = covered && spanPx > 0 ? clamp(since / spanPx, 0, 1) : 0;
       const uLamp = clamp(
         clamp(t / LAMP_A, 0, 1) - clamp((t - (1 - LAMP_C)) / LAMP_C, 0, 1),
         0,
