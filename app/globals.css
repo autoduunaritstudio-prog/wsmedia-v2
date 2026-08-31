@@ -785,6 +785,10 @@ h2.big { font-size: var(--text-h2-hero) }
      sellaisenaan: .navin on --nav-top + 72px korkea ja keskittaa
      sisaltonsa, joten alin elementti (.navtoggle 60px) paattyy
      --nav-top + (72-60)/2 + 60 = --nav-top + 66. Sen paalle 24px ilmaa. */
+  /* TUMMENNUKSEN PAAKYTKIN. 0 = pois, 1 = paalla. Kaikki kolme kerrosta
+     kertovat opacityn tällä, joten palautus on tasan tama yksi rivi.
+     Laskenta, muuttujat ja saannot jaavat paikoilleen. */
+  --hero-dim: 0;
   display: flex; flex-direction: column; justify-content: space-between;
   padding-top: calc(var(--nav-top) + 66px + 24px);
   padding-bottom: calc(8svh + env(safe-area-inset-bottom, 0px));
@@ -853,12 +857,13 @@ h2.big { font-size: var(--text-h2-hero) }
    keskiosa jaa kokonaan koskematta. */
 .hero-glow-top {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  opacity: var(--hero-dim, 1);
   background: linear-gradient(to bottom,
     rgba(13,13,16,.62) 0%, rgba(13,13,16,.62) 38%, rgba(13,13,16,0) 54%);
 }
 .hero-glow-bot {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  opacity: var(--hero-glow, 0);
+  opacity: calc(var(--hero-glow, 0) * var(--hero-dim, 1));
   background: linear-gradient(to top,
     rgba(13,13,16,1) 0%, rgba(13,13,16,1) 31%, rgba(13,13,16,0) 47%);
 }
@@ -866,12 +871,31 @@ h2.big { font-size: var(--text-h2-hero) }
    taysin kirkkaana ennen kuin scroll alkaa. */
 .hero-scrim {
   position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: rgb(13,13,16); opacity: var(--hero-scrim, 0);
+  background: rgb(13,13,16); opacity: calc(var(--hero-scrim, 0) * var(--hero-dim, 1));
 }
 
 .stickyzone > .hero > .wrap { position: relative; z-index: 3; width: 100%; flex: 0 0 auto }
 .stickyzone > .hero .heroh1 { text-align: center }
-.stickyzone > .hero .herobot { text-align: left }
+/* WordSwapin .swap on inline-grid jonka ainoa sarake (1fr) mitoittuu
+   PISIMMAN vaihtoehdon mukaan - se on tarkoituksellinen, jotta sanan
+   vaihtuminen ei aiheuta layout-hyppya. Kaikki neljä spania ovat samassa
+   grid-alueessa 1/1 ja venyvat sen levyisiksi, joten sanan sijainnin
+   laatikon sisalla maaraa .swapin text-align. Globaali arvo on left,
+   mika jatti lyhyet sanat laatikon vasempaan reunaan - "tekee kauppaa."
+   162px ja "jää mieleen." 198px keskikohdan vasemmalle puolelle.
+   Rajaus on heroon eika globaaliin .swapiin, koska sama komponentti on
+   kaytossa /lyhytvideot-sivulla. */
+.stickyzone > .hero .swap { text-align: center }
+.stickyzone > .hero .herobot {
+  text-align: left;
+  /* Sama kaista kuin .navinilla (max-width 1440px, keskitetty), jotta
+     teksti tasautuu logon kanssa. .wrapin oma 1080px jatti sen 204px:aan
+     1440px:n nakymalla eli 180px logon oikealle puolelle.
+     24px:n sisennys jaa: logon todellinen vasen reuna on mitattuna 0px
+     kaikilla mitatuilla nakymilla (--page-edge on 0), joten sille
+     tasaaminen veisi tekstin kiinni ruudun reunaan. */
+  max-width: 1440px;
+}
 /* Vasen reuna on sivuston oma container-marginaali: .wrapin max-width
    1080px keskitettyna + 24px sisennys. Ei uutta lukua. */
 .stickyzone > .hero h1 { margin-left: auto; margin-right: auto }
