@@ -780,9 +780,13 @@ h2.big { font-size: var(--text-h2-hero) }
      turvaverkoksi, jos sisalto joskus ylittaa nakyman korkeuden. */
   min-height: 100vh;
   min-height: 100svh;
-  /* Tekstilohko alakolmannekseen, ks. ::before/::after alla. */
+  /* Tekstilohko vasempaan ALANURKKAAN. ::before vie kaiken vapaan tilan,
+     joten .wrap painuu pohjaan; irrotus pohjasta tulee alapaddingista,
+     jossa iOS:n turva-alue on mukana. Jos sisalto ei mahdu, ::before
+     kutistuu nollaan ja ylivuoto menee ALAS - lohkon ylareuna ei
+     leikkaudu. */
   display: flex; flex-direction: column;
-  padding-bottom: 0;
+  padding-bottom: calc(8svh + env(safe-area-inset-bottom, 0px));
   /* Rajaa cover-rajatun canvasin ylimenevan osan. .hero on itse sticky,
      eika oma overflow riko sitä - vain ESIVANHEMMAN overflow rikkoisi. */
   overflow: hidden;
@@ -802,9 +806,7 @@ h2.big { font-size: var(--text-h2-hero) }
    liukua. Sisallon korkeutta ei tarvitse tietaa, ja jos se ylittaa
    laatikon, molemmat valikappaleet kutistuvat nollaan eika lohkon
    YLAREUNA leikkaudu. */
-.stickyzone > .hero::before,
-.stickyzone > .hero::after { content: ""; flex: 1 1 0 }
-.stickyzone > .hero::after { max-height: calc(8svh + env(safe-area-inset-bottom, 0px)) }
+.stickyzone > .hero::before { content: ""; flex: 1 1 0 }
 
 .hero-media { position: absolute; inset: 0; z-index: 0 }
 .hero-media canvas { display: block; width: 100%; height: 100% }
@@ -833,9 +835,66 @@ h2.big { font-size: var(--text-h2-hero) }
    pienin sadasosan askel joka ylittaa vaatimuksen, ja jattaa 4,68:1
    pienimmaksi kontrastiksi. Tumma teksti ei ole vaihtoehto: tumma scrim
    vain laskee taustan kirkkautta, joten se huonontaisi sita. */
-.hero-scrim { position: absolute; inset: 0; z-index: 1; background: rgba(13,13,16,.68) }
+/* PAIKALLINEN GRADIENTTI - vastaa tekstin luettavuudesta.
+   MUOTO ON PYSTYKAISTA, EI NURKKAELLIPSI, ja se on geometrian sanelema.
+   Tekstilaatikko on 821px levea 1440px:n nakymalla eli 57 % leveydesta
+   (1280px:lla 74 %). Nurkkaan ankkuroitu ellipsi ei voi samaan aikaan
+   sisaltaa laatikkoa ytimessaan JA paastaa oikeaa reunaa haivytykseen:
+   ratkaisemalla molemmat ehdot 1280x800:lla saadaan normalisoiduksi
+   etaisyydeksi 0,93 kun ytimen pitaisi olla 0,80. Nurkkagradientti
+   degeneroituisi siis kaistaksi joka tapauksessa - tama on se kaista,
+   kirjoitettuna suoraan.
 
-.stickyzone > .hero > .wrap { position: relative; z-index: 2; width: 100%; flex: 0 0 auto }
+   RAJAT MITATTU. Ydin ulottuu 60 %:iin pohjasta: laatikon ylareuna on
+   53,4 / 59,1 / 45,8 / 48,5 % pohjasta nakymilla 1440x900, 1280x800,
+   1440x1080 ja 390x844, joten 60 % kattaa tiukimman 0,9 pp:n varalla.
+
+   HAIVYTYS 16 pp = 144 / 128 / 173 / 135 px nailla nakymilla. Vaatimus
+   on mitattu kuvasta: gradientti muuttaa renderoityä arvoa
+   A*(bg-13) = 0,67*(200-13) = 125 sRGB-tasoa, ja jotta muutos pikselia
+   kohti jaa kuvan OMAN gradientin (mitattu mediaani 1 taso/px, otanta 32
+   freimia molemmista sarjoista) alle, haivytyksen on oltava >= 125px.
+
+   Haivytys paattyy 76 %:iin pohjasta eli 24 %:iin ylhaalta = 192-259px,
+   mika on navin alimman elementin (110px) alapuolella - gradientti ei siis
+   kosketa navin taustaa lainkaan. */
+.hero-glow {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  opacity: var(--hero-glow, 0);
+  background: linear-gradient(to top,
+    rgba(13,13,16,1) 0%, rgba(13,13,16,1) 60%, rgba(13,13,16,0) 76%);
+}
+/* GLOBAALI SCRIM - tunnelmaa, ei luettavuutta. p = 0 -> 0, eli kuva on
+   taysin kirkkaana ennen kuin scroll alkaa. */
+.hero-scrim {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: rgb(13,13,16); opacity: var(--hero-scrim, 0);
+}
+
+.stickyzone > .hero > .wrap { position: relative; z-index: 3; width: 100%; flex: 0 0 auto; text-align: left }
+/* Vasen reuna on sivuston oma container-marginaali: .wrapin max-width
+   1080px keskitettyna + 24px sisennys. Ei uutta lukua. */
+.stickyzone > .hero h1 { margin-left: 0; margin-right: 0 }
+.stickyzone > .hero .sub { max-width: 38ch; margin-left: 0; margin-right: 0 }
+.stickyzone > .hero .heroctas { justify-content: flex-start }
+
+/* VAIHEISTETTU ILMESTYMINEN. --st1..--st3 ovat smoothstep-arvoja
+   --hero-p:n yli, ja HeroScrub kirjoittaa ne joka framessa. Kaikki on
+   puhdas funktio scrollista: taaksepain scrollatessa arvot kulkevat
+   samaa rataa takaisin. transform on vapaa, koska SiteEffectsin
+   parallaksi kirjoittaa translate-ominaisuuteen. */
+.stickyzone > .hero .kick,
+.stickyzone > .hero h1 { opacity: var(--st1, 0); transform: translateY(calc((1 - var(--st1, 0)) * 16px)) }
+.stickyzone > .hero .sub { opacity: var(--st2, 0); transform: translateY(calc((1 - var(--st2, 0)) * 16px)) }
+.stickyzone > .hero .heroctas { opacity: var(--st3, 0); transform: translateY(calc((1 - var(--st3, 0)) * 16px)) }
+@media (prefers-reduced-motion: reduce) {
+  /* Tekstit lopputilassaan heti, ei fadea eika siirtymaa. Tummennus saa
+     silti seurata scrollia: se ei ole liiketta. */
+  .stickyzone > .hero .kick,
+  .stickyzone > .hero h1,
+  .stickyzone > .hero .sub,
+  .stickyzone > .hero .heroctas { opacity: 1; transform: none }
+}
 .stickyzone > .hero .kick { color: #b4dbff }
 .stickyzone > .hero h1 { color: #f5f5f7 }
 .stickyzone > .hero .sub { color: #e3e3e8 }
@@ -864,33 +923,11 @@ h2.big { font-size: var(--text-h2-hero) }
 .cover { position: relative; z-index: 2; background: var(--bg) }
 /* Erillinen kerros heron sisalla, sisallon paalla mutta coverin alla.
    Lyhyt transition tasaa framejen valisen nykimisen jaamatta jalkeen. */
-#hero-scrim {
-  position: absolute; inset: 0; z-index: 5; pointer-events: none;
-  /* KORJAUS: tasainen rgba-tayte teki scrimista teravarajaisen
-     suorakulmion, jonka korkeus oli tasan isantaelementin korkeus. Nyt
-     tayte on gradientti jonka ylin ja alin 120px liukuvat lapinakyvaan,
-     jolloin tummennuksella ei ole nakyvaa reunaa. Vaakareunat eivat
-     tarvitse haivytysta: lohko on taysleveä, joten ne ovat ruudun
-     ulkopuolella. mask-image olisi toinen tapa, mutta gradienttitayte
-     riittaa tassa eika vaadi toista ominaisuutta muuttujan rinnalle. */
-  /* Heron oma reuna oli kaytannossa aina ruudun ulkopuolella (hero on
-     viewporttia korkeampi), joten vika ei nakynyt taalla - haivytys
-     lisataan silti, jottei se paljastu jos hero joskus lyhenee. */
-  background: linear-gradient(
-    to bottom,
-    rgba(13,13,16,0) 0,
-    rgba(13,13,16, var(--scrim-opacity, 0)) 120px,
-    rgba(13,13,16, var(--scrim-opacity, 0)) calc(100% - 120px),
-    rgba(13,13,16,0) 100%
-  );
-  transition: background 80ms linear;
-}
 @media (prefers-reduced-motion: reduce) {
   /* Molemmat osiot normaalissa virtauksessa, ei peittoa eika tummennusta.
      SiteEffects ei aja scrim-laskentaa tassa tilassa, joten muuttuja jaa
      nollaan ja kerros on nakymaton. */
   .stickyzone > .hero { position: relative }
-  #hero-scrim { display: none }
 }
 .hero .kick { color: var(--grey); letter-spacing: .08em; margin-bottom: 18px }
 .hero h1 { max-width: 15ch; margin: 0 auto }

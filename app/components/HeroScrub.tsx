@@ -37,6 +37,32 @@ const SETS = {
 };
 const WIDE = "(min-width: 980px)";
 const DPR_MAX = 2;
+/* Vaiheistuksen ikkunat --hero-p:n yli. Smoothstep, ei lineaarinen. */
+const WIN: [number, number][] = [
+  [0.0, 0.14],   // .kick + h1
+  [0.16, 0.3],   // .sub
+  [0.32, 0.46],  // .heroctas
+];
+/* Paikallinen gradientti. Sen on oltava TAYDESSA arvossaan siina p:ssa
+   jossa ensimmainen elementti saavuttaa opacity 0,5 - smoothstep on
+   symmetrinen, joten se on ikkunan keskikohta 0,07. Siksi nousuikkuna on
+   [0, 0,07] eika elementin oma [0, 0,14]: jalkimmaisella gradientti olisi
+   puolivalissa (0,335) juuri silla hetkella kun tekstia pitaisi jo lukea.
+   0,67 on mitattu vaatimus: kirkkain pikseli tekstilaatikossa on puhdas
+   valkoinen, ja #b4dbff vaatii sen paalla 0,667. */
+const GLOW_MAX = 0.67;
+const GLOW_WIN: [number, number] = [0, 0.07];
+/* Globaali scrim: tunnelmaa, ei luettavuutta. 0,30 on maltillinen -
+   kuvasta jaa 70 % kirkkaudesta, ja luettavuus tulee gradientista.
+   p = 1:sta eteenpain jatketaan coverin omalla etenemalla q kohti
+   taytta peittoa; siirtyma on jatkuva, koska q = 0 kun p = 1. */
+const SCRIM_MID = 0.3;
+const SCRIM_WIN: [number, number] = [0, 0.46];
+
+const smoothstep = (a: number, b: number, x: number) => {
+  const t = Math.min(Math.max((x - a) / (b - a), 0), 1);
+  return t * t * (3 - 2 * t);
+};
 
 const frameSrc = (dir: string, i: number) => `${dir}${String(i + 1).padStart(3, "0")}.webp`;
 
@@ -47,6 +73,7 @@ export default function HeroScrub() {
     const cv = ref.current;
     const ctx = cv?.getContext("2d");
     if (!cv || !ctx) return;
+    const hero = cv.closest<HTMLElement>(".hero");
     const spacer = document.querySelector<HTMLElement>(".hero-spacer");
     // Sarja valitaan kerran mountissa eika resizessa: vaihto kesken
     // istunnon heittaisi jo ladatut ruudut pois ja hakisi 76 uutta.
@@ -95,6 +122,28 @@ export default function HeroScrub() {
         img.src = frameSrc(set.dir, i);
       });
 
+    // Kaikki kerrokset ovat puhtaita funktioita p:sta ja q:sta. Kirjoitus
+    // vain kun arvo oikeasti muuttuu, jottei joka frame likaa tyyleja.
+    const prev: Record<string, string> = {};
+    const put = (name: string, v: number) => {
+      const t = v.toFixed(3);
+      if (hero && prev[name] !== t) {
+        prev[name] = t;
+        hero.style.setProperty(name, t);
+      }
+    };
+    const schedule = (p: number) => {
+      for (let k = 0; k < WIN.length; k++) put(`--st${k + 1}`, smoothstep(WIN[k][0], WIN[k][1], p));
+      put("--hero-glow", GLOW_MAX * smoothstep(GLOW_WIN[0], GLOW_WIN[1], p));
+      const raw = hero ? parseFloat(hero.style.getPropertyValue("--hero-q")) : 0;
+      const q = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 1) : 0;
+      put("--hero-scrim", SCRIM_MID * smoothstep(SCRIM_WIN[0], SCRIM_WIN[1], p) + (1 - SCRIM_MID) * q);
+    };
+    const progress = () => {
+      const span = spacer?.offsetHeight ?? 0;
+      return span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+    };
+
     const onResize = () => {
       size();
       paint(Math.min(Math.max(shown, 0), Math.max(ready - 1, 0)));
@@ -104,14 +153,28 @@ export default function HeroScrub() {
     // Reduced motion: ei scrubia eika sarjan latausta, vain viimeinen
     // ruutu paikallaan.
     if (reduce) {
+      // Ei scrubia eika sarjan latausta, vain viimeinen ruutu. Tummennus
+      // saa silti seurata scrollia: se ei ole liiketta. Tekstien
+      // lopputila tulee CSS:n reduced-motion-saannosta, joten --st-arvoja
+      // ei tarvitse kirjoittaa.
       const last = set.n - 1;
       load(last).then(() => {
         ready = set.n;
         size();
         paint(last);
       });
+      const still = () => {
+        raf = requestAnimationFrame(still);
+        const p = progress();
+        put("--hero-glow", GLOW_MAX * smoothstep(GLOW_WIN[0], GLOW_WIN[1], p));
+        const raw = hero ? parseFloat(hero.style.getPropertyValue("--hero-q")) : 0;
+        const q = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 1) : 0;
+        put("--hero-scrim", SCRIM_MID * smoothstep(SCRIM_WIN[0], SCRIM_WIN[1], p) + (1 - SCRIM_MID) * q);
+      };
+      raf = requestAnimationFrame(still);
       return () => {
         stopped = true;
+        cancelAnimationFrame(raf);
         window.removeEventListener("resize", onResize);
       };
     }
@@ -146,9 +209,9 @@ export default function HeroScrub() {
 
     const frame = () => {
       raf = requestAnimationFrame(frame);
-      const span = spacer?.offsetHeight ?? 0;
-      const p = span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+      const p = progress();
       paint(Math.min(Math.round(p * (set.n - 1)), Math.max(ready - 1, 0)));
+      schedule(p);
     };
     raf = requestAnimationFrame(frame);
 

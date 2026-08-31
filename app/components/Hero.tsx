@@ -12,27 +12,31 @@ export default function Hero() {
   return (
     <>
       <header className="hero">
-        {/* Ruutuscrub koko heron kokoisena. Canvas ei ole LCP-ehdokas
-            (spesifikaatio laskee vain img, svg image, videon posterin,
-            taustakuvalliset lohkot ja tekstisolmut), joten LCP pysyy
-            h1:ssa. */}
+        {/* Ruutuscrub koko heron kokoisena. Canvas ei ole LCP-ehdokas. */}
         <HeroScrub />
-        {/* Tummennus tekstin luettavuutta varten. Alfa on mitattu
-            ruutujen 001, 038 ja 076 todellisista pikseleista siita
-            kohdasta jossa teksti on - ks. globals.css. */}
+        {/* Paikallinen gradientti vasemmasta alanurkasta: vastaa TEKSTIN
+            luettavuudesta. Voimakkuus --hero-glow seuraa tekstin
+            ilmestymista. */}
+        <div className="hero-glow" aria-hidden="true" />
+        {/* Globaali scrim: tunnelmaa, ei luettavuutta. --hero-scrim kasvaa
+            nollasta p:n mukana ja jatkaa coverin noustessa. */}
         <div className="hero-scrim" aria-hidden="true" />
         <div className="wrap">
-          <p className="kick li d1">Lyhytvideot · Verkkosivut · Tapahtumat</p>
-          <h1 className="li d2" data-par="0.05">
+          {/* Ei .li-luokkia eika data-paria: ilmestyminen tulee kokonaan
+              --st1..--st3:sta, jotka ovat puhtaita funktioita scrollista.
+              Latausanimaatio ja parallaksi olisivat ajasta ja rectista
+              riippuvia, eivatka purkautuisi taaksepain scrollatessa. */}
+          <p className="kick">Lyhytvideot · Verkkosivut · Tapahtumat</p>
+          <h1>
             Sisältöä, joka
             <br />
             <WordSwap words={WORDS} />
           </h1>
-          <p className="sub li d3" data-par="0.035">
+          <p className="sub">
             Lyhytvideot, verkkosivut ja tapahtumat samalta tiimiltä. Kiinteä hinta, ei pitkiä
             sopimuksia. Sinä hyväksyt, me hoidamme loput.
           </p>
-          <div className="heroctas li d4" data-par="0.025">
+          <div className="heroctas">
             <a className="btn mag" href="#lomake">
               Pyydä tarjous
             </a>
@@ -41,13 +45,8 @@ export default function Hero() {
             </a>
           </div>
         </div>
-        {/* Coverin nousun tummennus. Eri kerros kuin .hero-scrim: tama
-            on sidottu coverin sijaintiin, ei tekstin luettavuuteen, ja
-            SiteEffects paivittaa sen --scrim-opacityn kautta. */}
-        <div id="hero-scrim" aria-hidden="true" />
       </header>
-      {/* Scrollimatka scrubille. Hero on pinnattuna sen ajan; kun spacer
-          on kulutettu, .coverin ylareuna on tasan nakyman alareunassa. */}
+      {/* Scrollimatka scrubille. */}
       <div className="hero-spacer" aria-hidden="true" />
     </>
   );

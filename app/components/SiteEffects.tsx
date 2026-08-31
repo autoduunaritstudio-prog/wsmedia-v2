@@ -125,7 +125,6 @@ export default function SiteEffects() {
     // nakyviin ennen pinnausta) ja tummennuksen voimakkuus.
     const hero = document.querySelector<HTMLElement>(".stickyzone > .hero");
     const cover = document.querySelector<HTMLElement>(".cover");
-    const SCRIM_MAX = 0.65;
     let heroRo: ResizeObserver | null = null;
 
     // Kuviokerroksen korkeus: coverin ylareunasta footerin ylareunaan.
@@ -414,7 +413,11 @@ export default function SiteEffects() {
 
       if (hero && cover) {
         const p = Math.min(Math.max(1 - cover.getBoundingClientRect().top / vh, 0), 1);
-        hero.style.setProperty("--scrim-opacity", (p * SCRIM_MAX).toFixed(3));
+        // RAAKA q HeroScrubille: 0 kun coverin ylareuna on nakyman
+        // alareunassa, 1 kun cover peittaa heron. Sama mittaus kuin ennen,
+        // vain ilman kerrointa - scrimin aikataulu on nyt HeroScrubissa,
+        // jotta p:n ja q:n jaksot ovat yhdessa paikassa.
+        hero.style.setProperty("--hero-q", p.toFixed(4));
       }
 
       if (strip && copyW > 0) {
