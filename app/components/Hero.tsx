@@ -12,26 +12,30 @@ export default function Hero() {
   return (
     <>
       <header className="hero">
-        {/* Ruutuscrub koko heron kokoisena. Canvas ei ole LCP-ehdokas. */}
         <HeroScrub />
-        {/* Paikallinen gradientti vasemmasta alanurkasta: vastaa TEKSTIN
-            luettavuudesta. Voimakkuus --hero-glow seuraa tekstin
-            ilmestymista. */}
-        <div className="hero-glow" aria-hidden="true" />
-        {/* Globaali scrim: tunnelmaa, ei luettavuutta. --hero-scrim kasvaa
-            nollasta p:n mukana ja jatkaa coverin noustessa. */}
+        {/* Ylagradientti h1:n taakse. Taydessa voimassaan p = 0:sta, koska
+            h1 on nakyvissa heti - alfa on siksi kirjoitettu suoraan
+            variin eika muuttujaan. */}
+        <div className="hero-glow-top" aria-hidden="true" />
+        {/* Alanurkan gradientti .sub + .heroctas -ryhman taakse.
+            --hero-glow seuraa niiden ikkunoita. */}
+        <div className="hero-glow-bot" aria-hidden="true" />
+        {/* Globaali scrim: tunnelmaa, ei luettavuutta. */}
         <div className="hero-scrim" aria-hidden="true" />
-        <div className="wrap">
-          {/* Ei .li-luokkia eika data-paria: ilmestyminen tulee kokonaan
-              --st1..--st3:sta, jotka ovat puhtaita funktioita scrollista.
-              Latausanimaatio ja parallaksi olisivat ajasta ja rectista
-              riippuvia, eivatka purkautuisi taaksepain scrollatessa. */}
-          <p className="kick">Lyhytvideot · Verkkosivut · Tapahtumat</p>
+        {/* h1 omana lohkonaan nakyman ylaosassa, vaakakeskitettyna. Ei
+            opacity- eika translate-animaatiota: se on LCP-elementti, ja
+            opacity 0 poistaisi sen LCP-ehdokkaista latushetkella. */}
+        <div className="wrap heroh1">
           <h1>
             Sisältöä, joka
             <br />
             <WordSwap words={WORDS} />
           </h1>
+        </div>
+        {/* .sub ja .heroctas vasempaan alanurkkaan. Ilmestyminen tulee
+            --st2:sta ja --st3:sta, jotka ovat puhtaita funktioita
+            scrollista. */}
+        <div className="wrap herobot">
           <p className="sub">
             Lyhytvideot, verkkosivut ja tapahtumat samalta tiimiltä. Kiinteä hinta, ei pitkiä
             sopimuksia. Sinä hyväksyt, me hoidamme loput.
@@ -46,7 +50,6 @@ export default function Hero() {
           </div>
         </div>
       </header>
-      {/* Scrollimatka scrubille. */}
       <div className="hero-spacer" aria-hidden="true" />
     </>
   );

@@ -770,7 +770,6 @@ h2.big { font-size: var(--text-h2-hero) }
    pienemmalla arvolla ja sivu avautuu suoraan tiiviiseen asetteluun. */
 .stickyzone > .hero {
   position: sticky; top: var(--hero-sticky-top, 0px); z-index: 1;
-  padding-top: var(--space-hero-top-sticky);
   /* Koko nakyman kokoinen medialaatikko. svh eika vh: mobiilissa vh on
      osoiterivin kanssa suurempi kuin nakyva alue, jolloin heron alareuna
      jaisi palkin alle. Fallback vh:hon on ensin, jotta vanhempi selain
@@ -780,12 +779,14 @@ h2.big { font-size: var(--text-h2-hero) }
      turvaverkoksi, jos sisalto joskus ylittaa nakyman korkeuden. */
   min-height: 100vh;
   min-height: 100svh;
-  /* Tekstilohko vasempaan ALANURKKAAN. ::before vie kaiken vapaan tilan,
-     joten .wrap painuu pohjaan; irrotus pohjasta tulee alapaddingista,
-     jossa iOS:n turva-alue on mukana. Jos sisalto ei mahdu, ::before
-     kutistuu nollaan ja ylivuoto menee ALAS - lohkon ylareuna ei
-     leikkaudu. */
-  display: flex; flex-direction: column;
+  /* Kaksi lohkoa: h1 ylos, .sub + .heroctas pohjaan. space-between
+     hoitaa molemmat ilman valikappaleita.
+     Ylapadding lasketaan navin omista luvuista eika --nav-topista
+     sellaisenaan: .navin on --nav-top + 72px korkea ja keskittaa
+     sisaltonsa, joten alin elementti (.navtoggle 60px) paattyy
+     --nav-top + (72-60)/2 + 60 = --nav-top + 66. Sen paalle 24px ilmaa. */
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding-top: calc(var(--nav-top) + 66px + 24px);
   padding-bottom: calc(8svh + env(safe-area-inset-bottom, 0px));
   /* Rajaa cover-rajatun canvasin ylimenevan osan. .hero on itse sticky,
      eika oma overflow riko sitä - vain ESIVANHEMMAN overflow rikkoisi. */
@@ -806,7 +807,6 @@ h2.big { font-size: var(--text-h2-hero) }
    liukua. Sisallon korkeutta ei tarvitse tietaa, ja jos se ylittaa
    laatikon, molemmat valikappaleet kutistuvat nollaan eika lohkon
    YLAREUNA leikkaudu. */
-.stickyzone > .hero::before { content: ""; flex: 1 1 0 }
 
 .hero-media { position: absolute; inset: 0; z-index: 0 }
 .hero-media canvas { display: block; width: 100%; height: 100% }
@@ -835,34 +835,32 @@ h2.big { font-size: var(--text-h2-hero) }
    pienin sadasosan askel joka ylittaa vaatimuksen, ja jattaa 4,68:1
    pienimmaksi kontrastiksi. Tumma teksti ei ole vaihtoehto: tumma scrim
    vain laskee taustan kirkkautta, joten se huonontaisi sita. */
-/* PAIKALLINEN GRADIENTTI - vastaa tekstin luettavuudesta.
-   MUOTO ON PYSTYKAISTA, EI NURKKAELLIPSI, ja se on geometrian sanelema.
-   Tekstilaatikko on 821px levea 1440px:n nakymalla eli 57 % leveydesta
-   (1280px:lla 74 %). Nurkkaan ankkuroitu ellipsi ei voi samaan aikaan
-   sisaltaa laatikkoa ytimessaan JA paastaa oikeaa reunaa haivytykseen:
-   ratkaisemalla molemmat ehdot 1280x800:lla saadaan normalisoiduksi
-   etaisyydeksi 0,93 kun ytimen pitaisi olla 0,80. Nurkkagradientti
-   degeneroituisi siis kaistaksi joka tapauksessa - tama on se kaista,
-   kirjoitettuna suoraan.
+/* PAIKALLISET GRADIENTIT - vastaavat luettavuudesta. Kaksi vyohyketta,
+   koska teksti on kahdessa paikassa. Molemmat ovat pystykaistoja eivatka
+   ellipseja: laatikot ovat 57-74 % nakyman leveydesta, joten nurkkaan
+   ankkuroitu ellipsi ei voi sisaltaa laatikkoa ytimessaan ja samalla
+   paastaa vastakkaista reunaa haivytykseen.
 
-   RAJAT MITATTU. Ydin ulottuu 60 %:iin pohjasta: laatikon ylareuna on
-   53,4 / 59,1 / 45,8 / 48,5 % pohjasta nakymilla 1440x900, 1280x800,
-   1440x1080 ja 390x844, joten 60 % kattaa tiukimman 0,9 pp:n varalla.
+   RAJAT MITATTU. h1:n alareuna on 33,6 / 37,8 / 28,0 / 26,8 % ylhaalta
+   nakymilla 1440x900, 1280x800, 1440x1080, 390x844 -> ydin 38 %.
+   Ala-lohkon ylareuna on 28,2 / 30,7 / 24,8 / 30,6 % pohjasta -> ydin 31 %.
 
-   HAIVYTYS 16 pp = 144 / 128 / 173 / 135 px nailla nakymilla. Vaatimus
-   on mitattu kuvasta: gradientti muuttaa renderoityä arvoa
-   A*(bg-13) = 0,67*(200-13) = 125 sRGB-tasoa, ja jotta muutos pikselia
-   kohti jaa kuvan OMAN gradientin (mitattu mediaani 1 taso/px, otanta 32
-   freimia molemmista sarjoista) alle, haivytyksen on oltava >= 125px.
-
-   Haivytys paattyy 76 %:iin pohjasta eli 24 %:iin ylhaalta = 192-259px,
-   mika on navin alimman elementin (110px) alapuolella - gradientti ei siis
-   kosketa navin taustaa lainkaan. */
-.hero-glow {
+   HAIVYTYS 16 pp = 128-173 px. Vaatimus kuvasta: gradientti muuttaa
+   renderoityä arvoa A*(bg-13) = 0,62*(200-13) = 116 sRGB-tasoa, ja jotta
+   muutos pikselia kohti jaa kuvan oman gradientin (mitattu mediaani
+   1 taso/px, otanta 32 freimia molemmista sarjoista) alle, haivytyksen on
+   oltava >= 116px. Kaistat kohtaavat vasta 53-54 %:ssa, joten nakyman
+   keskiosa jaa kokonaan koskematta. */
+.hero-glow-top {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(13,13,16,.62) 0%, rgba(13,13,16,.62) 38%, rgba(13,13,16,0) 54%);
+}
+.hero-glow-bot {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   opacity: var(--hero-glow, 0);
   background: linear-gradient(to top,
-    rgba(13,13,16,1) 0%, rgba(13,13,16,1) 60%, rgba(13,13,16,0) 76%);
+    rgba(13,13,16,1) 0%, rgba(13,13,16,1) 31%, rgba(13,13,16,0) 47%);
 }
 /* GLOBAALI SCRIM - tunnelmaa, ei luettavuutta. p = 0 -> 0, eli kuva on
    taysin kirkkaana ennen kuin scroll alkaa. */
@@ -871,10 +869,12 @@ h2.big { font-size: var(--text-h2-hero) }
   background: rgb(13,13,16); opacity: var(--hero-scrim, 0);
 }
 
-.stickyzone > .hero > .wrap { position: relative; z-index: 3; width: 100%; flex: 0 0 auto; text-align: left }
+.stickyzone > .hero > .wrap { position: relative; z-index: 3; width: 100%; flex: 0 0 auto }
+.stickyzone > .hero .heroh1 { text-align: center }
+.stickyzone > .hero .herobot { text-align: left }
 /* Vasen reuna on sivuston oma container-marginaali: .wrapin max-width
    1080px keskitettyna + 24px sisennys. Ei uutta lukua. */
-.stickyzone > .hero h1 { margin-left: 0; margin-right: 0 }
+.stickyzone > .hero h1 { margin-left: auto; margin-right: auto }
 .stickyzone > .hero .sub { max-width: 38ch; margin-left: 0; margin-right: 0 }
 .stickyzone > .hero .heroctas { justify-content: flex-start }
 
@@ -883,19 +883,14 @@ h2.big { font-size: var(--text-h2-hero) }
    puhdas funktio scrollista: taaksepain scrollatessa arvot kulkevat
    samaa rataa takaisin. transform on vapaa, koska SiteEffectsin
    parallaksi kirjoittaa translate-ominaisuuteen. */
-.stickyzone > .hero .kick,
-.stickyzone > .hero h1 { opacity: var(--st1, 0); transform: translateY(calc((1 - var(--st1, 0)) * 16px)) }
 .stickyzone > .hero .sub { opacity: var(--st2, 0); transform: translateY(calc((1 - var(--st2, 0)) * 16px)) }
 .stickyzone > .hero .heroctas { opacity: var(--st3, 0); transform: translateY(calc((1 - var(--st3, 0)) * 16px)) }
 @media (prefers-reduced-motion: reduce) {
   /* Tekstit lopputilassaan heti, ei fadea eika siirtymaa. Tummennus saa
      silti seurata scrollia: se ei ole liiketta. */
-  .stickyzone > .hero .kick,
-  .stickyzone > .hero h1,
   .stickyzone > .hero .sub,
   .stickyzone > .hero .heroctas { opacity: 1; transform: none }
 }
-.stickyzone > .hero .kick { color: #b4dbff }
 .stickyzone > .hero h1 { color: #f5f5f7 }
 .stickyzone > .hero .sub { color: #e3e3e8 }
 .stickyzone > .hero .tlink { color: #b4dbff }

@@ -37,27 +37,28 @@ const SETS = {
 };
 const WIDE = "(min-width: 980px)";
 const DPR_MAX = 2;
-/* Vaiheistuksen ikkunat --hero-p:n yli. Smoothstep, ei lineaarinen. */
+/* Vaiheistuksen ikkunat --hero-p:n yli. Smoothstep, ei lineaarinen.
+   h1 EI ole listalla: se on nakyvissa heti p = 0:sta, koska opacity 0
+   poistaisi sen LCP-ehdokkaista latushetkella. Indeksit alkavat
+   kakkosesta, jotta CSS:n --st2 ja --st3 vastaavat elementteja. */
 const WIN: [number, number][] = [
-  [0.0, 0.14],   // .kick + h1
-  [0.16, 0.3],   // .sub
-  [0.32, 0.46],  // .heroctas
+  [0.3, 0.55],   // .sub
+  [0.62, 0.88],  // .heroctas
 ];
-/* Paikallinen gradientti. Sen on oltava TAYDESSA arvossaan siina p:ssa
-   jossa ensimmainen elementti saavuttaa opacity 0,5 - smoothstep on
-   symmetrinen, joten se on ikkunan keskikohta 0,07. Siksi nousuikkuna on
-   [0, 0,07] eika elementin oma [0, 0,14]: jalkimmaisella gradientti olisi
-   puolivalissa (0,335) juuri silla hetkella kun tekstia pitaisi jo lukea.
-   0,67 on mitattu vaatimus: kirkkain pikseli tekstilaatikossa on puhdas
-   valkoinen, ja #b4dbff vaatii sen paalla 0,667. */
-const GLOW_MAX = 0.67;
-const GLOW_WIN: [number, number] = [0, 0.07];
+/* Alanurkan gradientti. Taysi arvo on saavutettava siina p:ssa jossa
+   .sub saavuttaa opacity 0,5 - smoothstep on symmetrinen, joten se on
+   ikkunan keskikohta 0,425. Nousuikkuna [0,30, 0,425] on siis .subin oman
+   ikkunan alkupuolisko. .heroctas saavuttaa 0,5:n vasta 0,75:ssa, jolloin
+   gradientti on jo taysi. 0,62 kattaa mitatut vaatimukset (.sub 0,634 ja
+   .heroctas 0,667) yhdessa globaalin scrimin kanssa. */
+const GLOW_MAX = 0.62;
+const GLOW_WIN: [number, number] = [0.3, 0.425];
 /* Globaali scrim: tunnelmaa, ei luettavuutta. 0,30 on maltillinen -
    kuvasta jaa 70 % kirkkaudesta, ja luettavuus tulee gradientista.
    p = 1:sta eteenpain jatketaan coverin omalla etenemalla q kohti
    taytta peittoa; siirtyma on jatkuva, koska q = 0 kun p = 1. */
 const SCRIM_MID = 0.3;
-const SCRIM_WIN: [number, number] = [0, 0.46];
+const SCRIM_WIN: [number, number] = [0, 0.88];
 
 const smoothstep = (a: number, b: number, x: number) => {
   const t = Math.min(Math.max((x - a) / (b - a), 0), 1);
@@ -133,7 +134,7 @@ export default function HeroScrub() {
       }
     };
     const schedule = (p: number) => {
-      for (let k = 0; k < WIN.length; k++) put(`--st${k + 1}`, smoothstep(WIN[k][0], WIN[k][1], p));
+      for (let k = 0; k < WIN.length; k++) put(`--st${k + 2}`, smoothstep(WIN[k][0], WIN[k][1], p));
       put("--hero-glow", GLOW_MAX * smoothstep(GLOW_WIN[0], GLOW_WIN[1], p));
       const raw = hero ? parseFloat(hero.style.getPropertyValue("--hero-q")) : 0;
       const q = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 1) : 0;
