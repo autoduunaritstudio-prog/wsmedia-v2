@@ -813,7 +813,18 @@ h2.big { font-size: var(--text-h2-hero) }
    YLAREUNA leikkaudu. */
 
 .hero-media { position: absolute; inset: 0; z-index: 0 }
-.hero-media canvas { display: block; width: 100%; height: 100% }
+/* Kuva ja canvas tayttavat median samalla tavalla ja samassa kohdassa.
+   object-fit: cover + object-position 50% 50% on maaritelmaltaan sama
+   muunnos kuin canvasin drawImage: skaalaa pienimpaan kokoon joka peittaa
+   laatikon ja keskita. Canvas on jaljempana DOM:ssa, joten se piirtyy
+   kuvan paalle heti kun ensimmainen ruutu on maalattu; kuva jaa alle
+   nakymattomiin mutta pysyy DOM:ssa LCP-elementtina. */
+.hero-media img,
+.hero-media canvas {
+  position: absolute; inset: 0; display: block;
+  width: 100%; height: 100%;
+}
+.hero-media img { object-fit: cover; object-position: 50% 50% }
 
 /* ALFA ON MITATTU, EI ARVATTU - ja mitattu uudelleen kun tekstilohko
    siirtyi alakolmannekseen.
@@ -907,11 +918,13 @@ h2.big { font-size: var(--text-h2-hero) }
    puhdas funktio scrollista: taaksepain scrollatessa arvot kulkevat
    samaa rataa takaisin. transform on vapaa, koska SiteEffectsin
    parallaksi kirjoittaa translate-ominaisuuteen. */
+.stickyzone > .hero h1 { opacity: var(--st1, 0); transform: translateY(calc((1 - var(--st1, 0)) * 16px)) }
 .stickyzone > .hero .sub { opacity: var(--st2, 0); transform: translateY(calc((1 - var(--st2, 0)) * 16px)) }
 .stickyzone > .hero .heroctas { opacity: var(--st3, 0); transform: translateY(calc((1 - var(--st3, 0)) * 16px)) }
 @media (prefers-reduced-motion: reduce) {
   /* Tekstit lopputilassaan heti, ei fadea eika siirtymaa. Tummennus saa
      silti seurata scrollia: se ei ole liiketta. */
+  .stickyzone > .hero h1,
   .stickyzone > .hero .sub,
   .stickyzone > .hero .heroctas { opacity: 1; transform: none }
 }

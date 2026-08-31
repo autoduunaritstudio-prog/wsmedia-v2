@@ -38,12 +38,17 @@ const SETS = {
 const WIDE = "(min-width: 980px)";
 const DPR_MAX = 2;
 /* Vaiheistuksen ikkunat --hero-p:n yli. Smoothstep, ei lineaarinen.
-   h1 EI ole listalla: se on nakyvissa heti p = 0:sta, koska opacity 0
-   poistaisi sen LCP-ehdokkaista latushetkella. Indeksit alkavat
-   kakkosesta, jotta CSS:n --st2 ja --st3 vastaavat elementteja. */
+   Tekstit alkavat kolmen sekunnin kohdalta lahdevideota. Lahde on
+   151 freimia 25 fps:lla (6,040 s, varmistettu ffprobella); desktop-sarja
+   on joka toinen lahdefreimi (76 kpl) ja mobiili joka kolmas (51 kpl).
+   t = 3,000 s on lahdefreimi 75, mika on desktopilla sarjaindeksi
+   37,5 / 75 ja mobiilissa 25 / 50 - molemmissa p = 0,5000 tasan.
+   h1 saa nyt saman kohtelun kuin muut, joten LCP-ehdokkaana on
+   .hero-median <img> eika h1. */
 const WIN: [number, number][] = [
-  [0.3, 0.55],   // .sub
-  [0.62, 0.88],  // .heroctas
+  [0.5, 0.62],   // h1
+  [0.66, 0.78],  // .sub
+  [0.82, 0.94],  // .heroctas
 ];
 /* Alanurkan gradientti. Taysi arvo on saavutettava siina p:ssa jossa
    .sub saavuttaa opacity 0,5 - smoothstep on symmetrinen, joten se on
@@ -134,7 +139,7 @@ export default function HeroScrub() {
       }
     };
     const schedule = (p: number) => {
-      for (let k = 0; k < WIN.length; k++) put(`--st${k + 2}`, smoothstep(WIN[k][0], WIN[k][1], p));
+      for (let k = 0; k < WIN.length; k++) put(`--st${k + 1}`, smoothstep(WIN[k][0], WIN[k][1], p));
       put("--hero-glow", GLOW_MAX * smoothstep(GLOW_WIN[0], GLOW_WIN[1], p));
       const raw = hero ? parseFloat(hero.style.getPropertyValue("--hero-q")) : 0;
       const q = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 1) : 0;
@@ -226,6 +231,27 @@ export default function HeroScrub() {
 
   return (
     <div className="hero-media" aria-hidden="true">
+      {/* LCP-ELEMENTTI. Canvas ei ole LCP-ehdokas eika inline-SVG
+          myoskaan, ja h1 alkaa nyt opacity 0:sta - ilman tata
+          alkunakymassa ei olisi yhtaan ehdokasta.
+
+          Sama tiedosto jonka scrub hakee ensimmaisena (load(0)), ja
+          <source>-ehto on sama 980px:n raja jolla sarja valitaan, joten
+          selain nakee saman URL:n eika toista latausta synny.
+
+          Ei loading="lazy" eika decoding="async": molemmat siirtaisivat
+          maalausta ja siten LCP:ta. object-fit: cover keskitettyna on
+          sama rajaus kuin canvasin drawImage-laskenta. */}
+      <picture>
+        <source media="(max-width: 979px)" srcSet={frameSrc(SETS.m.dir, 0)} />
+        <img
+          src={frameSrc(SETS.d.dir, 0)}
+          alt=""
+          width={1280}
+          height={720}
+          fetchPriority="high"
+        />
+      </picture>
       <canvas ref={ref} />
     </div>
   );
