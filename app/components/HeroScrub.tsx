@@ -46,9 +46,9 @@ const DPR_MAX = 2;
    h1 saa nyt saman kohtelun kuin muut, joten LCP-ehdokkaana on
    .hero-median <img> eika h1. */
 const WIN: [number, number][] = [
-  [0.5, 0.62],   // h1
-  [0.66, 0.78],  // .sub
-  [0.82, 0.94],  // .heroctas
+  [0.56, 0.68],  // h1
+  [0.72, 0.82],  // .sub
+  [0.86, 0.96],  // .heroctas
 ];
 /* Alanurkan gradientti. Taysi arvo on saavutettava siina p:ssa jossa
    .sub saavuttaa opacity 0,5 - smoothstep on symmetrinen, joten se on
@@ -58,12 +58,26 @@ const WIN: [number, number][] = [
    .heroctas 0,667) yhdessa globaalin scrimin kanssa. */
 const GLOW_MAX = 0.62;
 const GLOW_WIN: [number, number] = [0.3, 0.425];
-/* Globaali scrim: tunnelmaa, ei luettavuutta. 0,30 on maltillinen -
-   kuvasta jaa 70 % kirkkaudesta, ja luettavuus tulee gradientista.
-   p = 1:sta eteenpain jatketaan coverin omalla etenemalla q kohti
-   taytta peittoa; siirtyma on jatkuva, koska q = 0 kun p = 1. */
-const SCRIM_MID = 0.3;
-const SCRIM_WIN: [number, number] = [0, 0.88];
+/* Globaali scrim, kaksi jaksoa. Gradienttikerrokset ovat pois paalta
+   (--hero-glow-on), joten tama on ainoa tummennus.
+
+     p = 0      : 0, ei tummennusta lainkaan
+     p = 0 -> 1 : LINEAARISESTI 0 -> SCRIM_P
+     q = 0 -> 1 : EASE OUT SCRIM_P -> SCRIM_Q, kayralla 1 - (1-q)^2
+
+   Kayra on nopea alussa ja hidastuu loppua kohti: tummennus ehtii tehda
+   tyonsa heti kun cover alkaa nousta eika jaa kiihtymaan siina vaiheessa
+   kun hero on jo lahes peitossa.
+
+   JATKUVUUS. Arvo on SCRIM_P molemmin puolin liitosta, koska q = 0 kun
+   p = 1. Muutosnopeus scroll-pikselia kohti:
+     scrubin puoli : SCRIM_P / S,  missa S = 2,24 * vh
+     coverin puoli : (SCRIM_Q - SCRIM_P) * f'(0) / vh,  f'(0) = 2
+   Suhde = (0,20 * 2 / vh) / (0,60 / (2,24 * vh)) = 0,4 * 2,24 / 0,6
+         = 1,493. Riippumaton nakyman korkeudesta ja alle kahden, joten
+   liitoksessa ei tunnu nykaysta. */
+const SCRIM_P = 0.6;
+const SCRIM_Q = 0.8;
 
 const smoothstep = (a: number, b: number, x: number) => {
   const t = Math.min(Math.max((x - a) / (b - a), 0), 1);
@@ -143,7 +157,7 @@ export default function HeroScrub() {
       put("--hero-glow", GLOW_MAX * smoothstep(GLOW_WIN[0], GLOW_WIN[1], p));
       const raw = hero ? parseFloat(hero.style.getPropertyValue("--hero-q")) : 0;
       const q = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 1) : 0;
-      put("--hero-scrim", SCRIM_MID * smoothstep(SCRIM_WIN[0], SCRIM_WIN[1], p) + (1 - SCRIM_MID) * q);
+      put("--hero-scrim", SCRIM_P * p + (SCRIM_Q - SCRIM_P) * (1 - (1 - q) * (1 - q)));
     };
     const progress = () => {
       const span = spacer?.offsetHeight ?? 0;
@@ -175,7 +189,7 @@ export default function HeroScrub() {
         put("--hero-glow", GLOW_MAX * smoothstep(GLOW_WIN[0], GLOW_WIN[1], p));
         const raw = hero ? parseFloat(hero.style.getPropertyValue("--hero-q")) : 0;
         const q = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 1) : 0;
-        put("--hero-scrim", SCRIM_MID * smoothstep(SCRIM_WIN[0], SCRIM_WIN[1], p) + (1 - SCRIM_MID) * q);
+        put("--hero-scrim", SCRIM_P * p + (SCRIM_Q - SCRIM_P) * (1 - (1 - q) * (1 - q)));
       };
       raf = requestAnimationFrame(still);
       return () => {

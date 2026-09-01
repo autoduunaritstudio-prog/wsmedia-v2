@@ -788,7 +788,12 @@ h2.big { font-size: var(--text-h2-hero) }
   /* TUMMENNUKSEN PAAKYTKIN. 0 = pois, 1 = paalla. Kaikki kolme kerrosta
      kertovat opacityn tällä, joten palautus on tasan tama yksi rivi.
      Laskenta, muuttujat ja saannot jaavat paikoilleen. */
-  --hero-dim: 0;
+  --hero-dim: 1;
+  /* GRADIENTTIKERROSTEN OMA KYTKIN. Ylagradientti oli mitattuna vakio
+     0,62 jo p = 0:ssa, mika teki alusta liian tumman; uusi maarittely
+     sanoo ettei alussa ole tummennusta lainkaan. Palautus on tasan tama
+     yksi rivi (0 -> 1), laskenta ja saannot jaavat paikoilleen. */
+  --hero-glow-on: 0;
   display: flex; flex-direction: column; justify-content: space-between;
   padding-top: calc(var(--nav-top) + 66px + 24px);
   padding-bottom: calc(8svh + env(safe-area-inset-bottom, 0px));
@@ -868,13 +873,13 @@ h2.big { font-size: var(--text-h2-hero) }
    keskiosa jaa kokonaan koskematta. */
 .hero-glow-top {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  opacity: var(--hero-dim, 1);
+  opacity: calc(var(--hero-dim, 1) * var(--hero-glow-on, 1));
   background: linear-gradient(to bottom,
     rgba(13,13,16,.62) 0%, rgba(13,13,16,.62) 38%, rgba(13,13,16,0) 54%);
 }
 .hero-glow-bot {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  opacity: calc(var(--hero-glow, 0) * var(--hero-dim, 1));
+  opacity: calc(var(--hero-glow, 0) * var(--hero-dim, 1) * var(--hero-glow-on, 1));
   background: linear-gradient(to top,
     rgba(13,13,16,1) 0%, rgba(13,13,16,1) 31%, rgba(13,13,16,0) 47%);
 }
