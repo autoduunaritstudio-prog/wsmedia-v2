@@ -903,20 +903,25 @@ h2.big { font-size: var(--text-h2-hero) }
    kaytossa /lyhytvideot-sivulla. */
 .stickyzone > .hero .swap { text-align: center }
 .stickyzone > .hero .herobot {
-  text-align: left;
-  /* Sama kaista kuin .navinilla (max-width 1440px, keskitetty), jotta
-     teksti tasautuu logon kanssa. .wrapin oma 1080px jatti sen 204px:aan
-     1440px:n nakymalla eli 180px logon oikealle puolelle.
-     24px:n sisennys jaa: logon todellinen vasen reuna on mitattuna 0px
-     kaikilla mitatuilla nakymilla (--page-edge on 0), joten sille
-     tasaaminen veisi tekstin kiinni ruudun reunaan. */
-  max-width: 1440px;
+  text-align: center;
+  /* LEVEYS JOHDETTU NYKYISESTA RIVINPITUUDESTA, ei valittu. .subin oma
+     max-width on 38ch, mika on sen suurimmalla kirjasinkoolla (22px)
+     38 * 0,55 * 22 = 460px. Kaaren leveys on siis 460 + .wrapin 2 x 24px
+     sisennys = 508px.
+
+     Rivikatkot EIVAT muutu: niita ohjaa .subin oma 38ch, ei kaare.
+     Juuri siksi leveys on johdettu siita eika keksitty - nain kaare
+     vastaa tasan tekstipalstaa, eika keskitetty rivi voi kasvaa
+     pidemmaksi kuin se oli vasemmalle tasattuna. Samalla nappirivi
+     rajautuu samaan palstaan sen sijaan etta levittaytyisi 1392px:n
+     levyiseksi. */
+  max-width: 508px;
 }
 /* Vasen reuna on sivuston oma container-marginaali: .wrapin max-width
    1080px keskitettyna + 24px sisennys. Ei uutta lukua. */
 .stickyzone > .hero h1 { margin-left: auto; margin-right: auto }
-.stickyzone > .hero .sub { max-width: 38ch; margin-left: 0; margin-right: 0 }
-.stickyzone > .hero .heroctas { justify-content: flex-start }
+.stickyzone > .hero .sub { max-width: 38ch; margin-inline: auto }
+.stickyzone > .hero .heroctas { justify-content: center }
 
 /* VAIHEISTETTU ILMESTYMINEN. --st1..--st3 ovat smoothstep-arvoja
    --hero-p:n yli, ja HeroScrub kirjoittaa ne joka framessa. Kaikki on
