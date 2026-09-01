@@ -28,7 +28,7 @@ export default function Booking() {
       <div className="wrap">
         <div className="svc rev rv">
           <div className="svc-visual" data-par="0.02">
-            <div className="cal" data-tilt="y" data-tilt-profile="mockup">
+            <div className="cal" data-tilt="-y" data-tilt-profile="mockup">
               <div className="cal-head">
                 <b>Valitse sopiva aika</b>
                 <span className="cal-len">30 min</span>
