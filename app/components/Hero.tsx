@@ -31,15 +31,17 @@ export default function Hero() {
             <br />
             <WordSwap words={WORDS} />
           </h1>
-        </div>
-        {/* .sub ja .heroctas vasempaan alanurkkaan. Ilmestyminen tulee
-            --st2:sta ja --st3:sta, jotka ovat puhtaita funktioita
-            scrollista. */}
-        <div className="wrap herobot">
+          {/* .sub nousi otsikon yhteyteen. Vali on .hero .sub -saannon
+              oma margin-top 22px, sama kuin alkuperaisessa pinotussa
+              asettelussa - ei uutta lukua. */}
           <p className="sub">
             Lyhytvideot, verkkosivut ja tapahtumat samalta tiimiltä. Kiinteä hinta, ei pitkiä
             sopimuksia. Sinä hyväksyt, me hoidamme loput.
           </p>
+        </div>
+        {/* .heroctas jaa alas keskelle. Ilmestyminen tulee --st3:sta,
+            joka on puhdas funktio scrollista. */}
+        <div className="wrap herobot">
           <div className="heroctas">
             <a className="btn mag" href="#lomake">
               Pyydä tarjous
