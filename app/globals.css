@@ -892,33 +892,10 @@ h2.big { font-size: var(--text-h2-hero) }
 
 .stickyzone > .hero > .wrap { position: relative; z-index: 3; width: 100%; flex: 0 0 auto }
 .stickyzone > .hero .heroh1 { text-align: center }
-/* WordSwapin .swap on inline-grid jonka ainoa sarake (1fr) mitoittuu
-   PISIMMAN vaihtoehdon mukaan - se on tarkoituksellinen, jotta sanan
-   vaihtuminen ei aiheuta layout-hyppya. Kaikki neljä spania ovat samassa
-   grid-alueessa 1/1 ja venyvat sen levyisiksi, joten sanan sijainnin
-   laatikon sisalla maaraa .swapin text-align. Globaali arvo on left,
-   mika jatti lyhyet sanat laatikon vasempaan reunaan - "tekee kauppaa."
-   162px ja "jää mieleen." 198px keskikohdan vasemmalle puolelle.
-   Rajaus on heroon eika globaaliin .swapiin, koska sama komponentti on
-   kaytossa /lyhytvideot-sivulla. */
-.stickyzone > .hero .swap { text-align: center }
-.stickyzone > .hero .herobot {
-  text-align: center;
-  /* LEVEYS JOHDETTU NYKYISESTA RIVINPITUUDESTA, ei valittu. .subin oma
-     max-width on 38ch, mika on sen suurimmalla kirjasinkoolla (22px)
-     38 * 0,55 * 22 = 460px. Kaaren leveys on siis 460 + .wrapin 2 x 24px
-     sisennys = 508px.
-
-     Rivikatkot EIVAT muutu: niita ohjaa .subin oma 38ch, ei kaare.
-     Juuri siksi leveys on johdettu siita eika keksitty - nain kaare
-     vastaa tasan tekstipalstaa, eika keskitetty rivi voi kasvaa
-     pidemmaksi kuin se oli vasemmalle tasattuna. Samalla nappirivi
-     rajautuu samaan palstaan sen sijaan etta levittaytyisi 1392px:n
-     levyiseksi. */
-  max-width: 508px;
-}
-/* Vasen reuna on sivuston oma container-marginaali: .wrapin max-width
-   1080px keskitettyna + 24px sisennys. Ei uutta lukua. */
+/* Koko ryhma - h1, .sub ja .heroctas - on yhdessa .wrap-kaareessa
+   (.heroh1) ja vaakakeskitetty. Keskipiste on vw/2, koska .wrapilla on
+   margin: 0 auto. Valit ovat elementtien omat: .sub 22px ja .heroctas
+   34px, molemmat alkuperaisesta pinotusta asettelusta. */
 .stickyzone > .hero h1 { margin-left: auto; margin-right: auto }
 .stickyzone > .hero .sub { max-width: 38ch; margin-inline: auto }
 .stickyzone > .hero .heroctas { justify-content: center }

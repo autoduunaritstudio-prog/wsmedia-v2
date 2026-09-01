@@ -38,14 +38,23 @@ export default function Hero() {
             Lyhytvideot, verkkosivut ja tapahtumat samalta tiimiltä. Kiinteä hinta, ei pitkiä
             sopimuksia. Sinä hyväksyt, me hoidamme loput.
           </p>
-        </div>
-        {/* .heroctas jaa alas keskelle. Ilmestyminen tulee --st3:sta,
-            joka on puhdas funktio scrollista. */}
-        <div className="wrap herobot">
+          {/* Nappirivi nousi samaan ryhmaan. Vali on .heroctas-saannon
+              oma margin-top 34px, sama kuin alkuperaisessa pinotussa
+              asettelussa - ei uutta lukua.
+
+              "Varaa kartoitus" on <button type="button">, ei <a>:
+              napilla ei ole viela kohdetta, ja href="#" hyppaisi sivun
+              alkuun kun taas <a> ilman hrefia putoaisi pois
+              nappaimistojarjestyksesta. Ei disabled-attribuuttia, jotta
+              nappi nayttaa ja kayttaytyy aktiivisena. Ulkoasu on
+              sivuston oma sekundaarityyli .btn.alt. */}
           <div className="heroctas">
             <a className="btn mag" href="#lomake">
               Pyydä tarjous
             </a>
+            <button className="btn alt" type="button">
+              Varaa kartoitus
+            </button>
             <a className="tlink" href="#tulokset">
               Katso tuloksia
             </a>
