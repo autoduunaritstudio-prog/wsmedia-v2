@@ -892,6 +892,18 @@ h2.big { font-size: var(--text-h2-hero) }
 
 .stickyzone > .hero > .wrap { position: relative; z-index: 3; width: 100%; flex: 0 0 auto }
 .stickyzone > .hero .heroh1 { text-align: center }
+/* WordSwapin .swap on inline-grid jonka ainoa sarake (1fr) mitoittuu
+   PISIMMAN vaihtoehdon mukaan - se on tarkoituksellinen, jotta sanan
+   vaihtuminen ei aiheuta layout-hyppya. Kaikki nelja spania ovat samassa
+   grid-alueessa 1/1 ja venyvat sen levyisiksi, joten sanan sijainnin
+   laatikon sisalla maaraa .swapin text-align. Globaali arvo on left,
+   mika jatti lyhyet sanat laatikon vasempaan reunaan - "tekee kauppaa."
+   162px ja "jaa mieleen." 198px keskikohdan vasemmalle puolelle.
+   Perinta .heroh1:n keskityksesta EI riita: .swapilla on oma
+   text-align-deklaraatio, joka voittaa perinnan.
+   Rajaus on heroon eika globaaliin .swapiin, koska sama komponentti on
+   kaytossa /lyhytvideot-sivulla. */
+.stickyzone > .hero .swap { text-align: center }
 /* Koko ryhma - h1, .sub ja .heroctas - on yhdessa .wrap-kaareessa
    (.heroh1) ja vaakakeskitetty. Keskipiste on vw/2, koska .wrapilla on
    margin: 0 auto. Valit ovat elementtien omat: .sub 22px ja .heroctas
