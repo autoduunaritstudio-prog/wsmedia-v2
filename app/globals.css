@@ -946,11 +946,11 @@ h2.big { font-size: var(--text-h2-hero) }
 .stickyzone > .hero .btn.alt { color: #f5f5f7; border-color: rgba(255,255,255,.48) }
 .stickyzone > .hero .btn.alt:hover { background: rgba(255,255,255,.10) }
 
-/* Scrollimatka scrubille. 224vh (= 280 / 1,25) antaa 20,9 / 26,9 /
-   38,8 px ruutua kohti korkeuksilla 700 / 900 / 1300 (76 ruutua, 75
-   valia) eli 2,99vh per ruutu. Alle 980px:n sarjassa on 51 ruutua ja
-   spacer 100vh: 14 / 18 px ruutua kohti eli 2,0vh per ruutu, siis jo
-   tiheampi kuin tyopoydalla - siksi mobiilia ei nopeuteta tassa.
+/* Scrollimatka scrubille. 90vh antaa 8,4 / 10,8 / 15,6 px ruutua kohti
+   korkeuksilla 700 / 900 / 1300 (76 ruutua, 75 valia) eli 1,20vh per
+   ruutu. Alle 980px:n sarjassa on 51 ruutua ja spacer 100vh: 14 / 18 px
+   ruutua kohti eli 2,0vh per ruutu, siis harvempi askel kuin
+   tyopoydalla - mobiilia ei muuteta tassa.
 
    KORKEUS EI VAIKUTA LOPETUSHETKEEN. Merkitaan heron dokumenttisijainti
    T:lla, korkeus H:lla ja spacerin korkeus S:lla. Cover alkaa nousta kun
@@ -959,8 +959,12 @@ h2.big { font-size: var(--text-h2-hero) }
    hetki kun T + H = vh - S SUPISTUU POIS molemmilta puolilta. Ehto on
    siis T + H = vh, ei mikaan S:n arvo: spacerin korkeus voi olla mita
    tahansa. Aiemmin T oli 116 (navin varaama tila) ja p osui ykkoseen
-   116px liian aikaisin; nyt T = 0 ja H = 100svh = vh, joten ero on 0. */
-.hero-spacer { height: 224vh }
+   116px liian aikaisin; nyt T = 0 ja H = 100svh = vh, joten ero on 0.
+
+   ARVO 90vh (aiemmin 224vh). Koska S supistuu pois lopetusehdosta, tama
+   ei siirra scrubin loppua vaan pelkastaan tiivistaa 75 ruutuvalia
+   lyhyempaan matkaan: 26,88 -> 10,80 px/ruutu 900px:n nakymalla. */
+.hero-spacer { height: 90vh }
 @media (max-width: 979px) { .hero-spacer { height: 100vh } }
 /* Cover nousee heron paalle: korkeampi z-index ja lapinakymaton tausta.
    Rajaus ulottuu Palvelut-osion loppuun, koska coverin on oltava vahintaan
