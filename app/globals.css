@@ -946,10 +946,10 @@ h2.big { font-size: var(--text-h2-hero) }
 .stickyzone > .hero .btn.alt { color: #f5f5f7; border-color: rgba(255,255,255,.48) }
 .stickyzone > .hero .btn.alt:hover { background: rgba(255,255,255,.10) }
 
-/* Scrollimatka scrubille. 90vh antaa 8,4 / 10,8 / 15,6 px ruutua kohti
-   korkeuksilla 700 / 900 / 1300 (76 ruutua, 75 valia) eli 1,20vh per
+/* Scrollimatka scrubille. 90vh antaa 17,0 / 21,9 / 31,6 px ruutua kohti
+   korkeuksilla 700 / 900 / 1300 (38 ruutua, 37 valia) eli 2,43vh per
    ruutu. Alle 980px:n sarjassa on 51 ruutua ja spacer 100vh: 14 / 18 px
-   ruutua kohti eli 2,0vh per ruutu, siis harvempi askel kuin
+   ruutua kohti eli 2,0vh per ruutu, siis kaytannossa sama askel kuin
    tyopoydalla - mobiilia ei muuteta tassa.
 
    KORKEUS EI VAIKUTA LOPETUSHETKEEN. Merkitaan heron dokumenttisijainti
@@ -962,8 +962,10 @@ h2.big { font-size: var(--text-h2-hero) }
    116px liian aikaisin; nyt T = 0 ja H = 100svh = vh, joten ero on 0.
 
    ARVO 90vh (aiemmin 224vh). Koska S supistuu pois lopetusehdosta, tama
-   ei siirra scrubin loppua vaan pelkastaan tiivistaa 75 ruutuvalia
-   lyhyempaan matkaan: 26,88 -> 10,80 px/ruutu 900px:n nakymalla. */
+   ei siirra scrubin loppua vaan pelkastaan tiivistaa ruutuvalit
+   lyhyempaan matkaan. Sarja puolitettiin samalla 76 -> 38, joten askel
+   on 21,9 px 900px:n nakymalla - hienompi kuin 26,88 px joka oli
+   kaytossa ennen 1,25x-nopeutusta. */
 .hero-spacer { height: 90vh }
 @media (max-width: 979px) { .hero-spacer { height: 100vh } }
 /* Cover nousee heron paalle: korkeampi z-index ja lapinakymaton tausta.

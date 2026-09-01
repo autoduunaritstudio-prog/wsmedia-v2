@@ -6,6 +6,10 @@ import { useEffect, useRef } from "react";
  * Hero-scrub: valmis ruutusarja piirretaan koko heron tayttavalle
  * canvasille scrollin mukana.
  *
+ * SARJAN PITUUS ON VAIN TASSA (SETS.d.n / SETS.m.n). Kaikki muu johtaa
+ * sen set.n:sta, myos <picture>-fallback, joten lukua ei ole missaan
+ * toisessa tiedostossa.
+ *
  * ETENEMA TULEE SPACERISTA, ei heron korkeudesta:
  *     p = clamp(scrollY / spacer.offsetHeight, 0, 1)
  *     i = round(p * (N - 1))
@@ -22,27 +26,40 @@ import { useEffect, useRef } from "react";
  * bittikartan sovitukseen, joten se olisi venyttanyt jo piirretyn kuvan.
  *
  * MUISTI. drawImage HTMLImageElementeista, ei createImageBitmapista:
- * 76 x 1280 x 720 x 4 tavua olisi 280 Mt purettuna ja pysyisi muistissa
+ * 38 x 1280 x 720 x 4 tavua olisi 140 Mt purettuna ja pysyisi muistissa
  * kunnes bitmapit vapautetaan kasin.
  *
- * LATAUSJARJESTYS. Ruutu 001 heti (21,0 kt) ja piirretaan; loput vasta
- * load-tapahtuman jalkeen yksi kerrallaan requestIdleCallbackissa.
- * Scrub ei odota: lataus etenee jarjestyksessa, joten ladatut ovat aina
- * yhtenainen etuliite 0..ready-1 ja lahin ladattu on min(i, ready-1).
+ * LATAUSJARJESTYS. Ruutu 001 heti (20,9 kt) ja piirretaan; loput vasta
+ * load-tapahtuman jalkeen, CONC kappaletta kerrallaan ja aina pienin
+ * lataamaton seuraavaksi.
+ *
+ * ALOITUS PYSYY load-TAPAHTUMASSA. Mountissa sarja kilpailisi <picture>-
+ * elementin LCP-kuvan kanssa samasta kaistasta; load takaa etta LCP on
+ * jo maalattu.
+ *
+ * YHTENAINEN ETULIITE. Rinnakkaisuudessa ruudut valmistuvat epa-
+ * jarjestyksessa, joten ready EI ole ladattujen lukumaara vaan pisin
+ * yhtenainen etuliite: while (ready < n && imgs[ready]) ready++. Vain
+ * silloin piirron leikkaus min(i, ready-1) osuu varmasti ladattuun -
+ * lukumaaralla se osoittaisi aukkoon heti kun ruutu 5 saapuu ennen
+ * ruutua 4.
  */
 
 const SETS = {
-  d: { dir: "/hero/d/", n: 76 },
+  d: { dir: "/hero/d/", n: 38 },
   m: { dir: "/hero/m/", n: 51 },
 };
 const WIDE = "(min-width: 980px)";
 const DPR_MAX = 2;
+/* Yhtaaikaisten ruutulatausten maara load-tapahtuman jalkeen. */
+const CONC = 5;
 /* Vaiheistuksen ikkunat --hero-p:n yli. Smoothstep, ei lineaarinen.
    Tekstit alkavat kolmen sekunnin kohdalta lahdevideota. Lahde on
    151 freimia 25 fps:lla (6,040 s, varmistettu ffprobella); desktop-sarja
-   on joka toinen lahdefreimi (76 kpl) ja mobiili joka kolmas (51 kpl).
-   t = 3,000 s on lahdefreimi 75, mika on desktopilla sarjaindeksi
-   37,5 / 75 ja mobiilissa 25 / 50 - molemmissa p = 0,5000 tasan.
+   on joka neljas lahdefreimi (38 kpl, indeksit 0..148) ja mobiili joka
+   kolmas (51 kpl). t = 3,000 s on lahdefreimi 75, mika on desktopilla
+   sarjaindeksi 18,75 / 37 ja mobiilissa 25 / 50 - molemmissa p = 0,5000
+   tasan.
    h1 saa nyt saman kohtelun kuin muut, joten LCP-ehdokkaana on
    .hero-median <img> eika h1. */
 const WIN: [number, number][] = [
@@ -103,7 +120,7 @@ export default function HeroScrub() {
     const hero = cv.closest<HTMLElement>(".hero");
     const spacer = document.querySelector<HTMLElement>(".hero-spacer");
     // Sarja valitaan kerran mountissa eika resizessa: vaihto kesken
-    // istunnon heittaisi jo ladatut ruudut pois ja hakisi 76 uutta.
+    // istunnon heittaisi jo ladatut ruudut pois ja hakisi koko uuden.
     const set = window.matchMedia(WIDE).matches ? SETS.d : SETS.m;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -219,17 +236,33 @@ export default function HeroScrub() {
         ? requestIdleCallback(() => cb())
         : window.setTimeout(cb, 1);
 
+    // Perakkainen ketju maksoi yhden RTT:n JOKA ruudusta, koska seuraavaa
+    // ei pyydetty ennen kuin edellinen oli valmis. Viidella yhtaaikaisella
+    // pyynnolla RTT jakautuu viidelle ja tehollinen aika ruutua kohti on
+    // RTT/5 + koko/kaista, eli kaistan asettama lattia on saavutettavissa.
+    // Viisi eika enempaa: HTTP/2:n ikkuna ja selaimen prioriteetit
+    // riittavat tahan, ja isompi maara vain pilkkoisi kaistan pienempiin
+    // osiin ilman etta yhtenainen etuliite kasvaisi nopeammin.
     const rest = () => {
       let next = 1;
-      const step = () => {
-        if (stopped || next >= set.n) return;
-        const i = next++;
-        load(i).then(() => {
-          while (ready < set.n && imgs[ready]) ready++;
-          idle(step);
-        });
+      let active = 0;
+      const pump = () => {
+        if (stopped) return;
+        // Aina pienin lataamaton seuraavaksi, joten etuliite kasvaa
+        // mahdollisimman nopeasti eika hyppely jata aukkoja alkuun.
+        while (active < CONC && next < set.n) {
+          const i = next++;
+          active++;
+          load(i).then(() => {
+            active--;
+            // PISIN YHTENAINEN ETULIITE, ei ladattujen lukumaara. Ks.
+            // tiedoston ylakommentti: piirron leikkaus nojaa tahan.
+            while (ready < set.n && imgs[ready]) ready++;
+            idle(pump);
+          });
+        }
       };
-      idle(step);
+      idle(pump);
     };
     if (document.readyState === "complete") rest();
     else window.addEventListener("load", rest, { once: true });
