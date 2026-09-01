@@ -789,11 +789,12 @@ h2.big { font-size: var(--text-h2-hero) }
      kertovat opacityn tällä, joten palautus on tasan tama yksi rivi.
      Laskenta, muuttujat ja saannot jaavat paikoilleen. */
   --hero-dim: 1;
-  /* GRADIENTTIKERROSTEN OMA KYTKIN. Ylagradientti oli mitattuna vakio
-     0,62 jo p = 0:ssa, mika teki alusta liian tumman; uusi maarittely
-     sanoo ettei alussa ole tummennusta lainkaan. Palautus on tasan tama
-     yksi rivi (0 -> 1), laskenta ja saannot jaavat paikoilleen. */
-  --hero-glow-on: 0;
+  /* GRADIENTTIKERROSTEN KYTKIMET. Ylagradientti on nyt ikkunoitu tekstin
+     ilmestymiseen (--hero-glow, HeroScrub) eika vakio, joten se on
+     paalla ilman etta alku tummuu. Alagradienttia ei tarvita: alalohko
+     poistettiin ja koko teksti on yhtena ryhmana ylhaalla. */
+  --hero-glow-on: 1;
+  --hero-glow-bot-on: 0;
   display: flex; flex-direction: column; justify-content: space-between;
   padding-top: calc(var(--nav-top) + 66px + 24px);
   padding-bottom: calc(8svh + env(safe-area-inset-bottom, 0px));
@@ -855,31 +856,32 @@ h2.big { font-size: var(--text-h2-hero) }
    pienin sadasosan askel joka ylittaa vaatimuksen, ja jattaa 4,68:1
    pienimmaksi kontrastiksi. Tumma teksti ei ole vaihtoehto: tumma scrim
    vain laskee taustan kirkkautta, joten se huonontaisi sita. */
-/* PAIKALLISET GRADIENTIT - vastaavat luettavuudesta. Kaksi vyohyketta,
-   koska teksti on kahdessa paikassa. Molemmat ovat pystykaistoja eivatka
-   ellipseja: laatikot ovat 57-74 % nakyman leveydesta, joten nurkkaan
-   ankkuroitu ellipsi ei voi sisaltaa laatikkoa ytimessaan ja samalla
-   paastaa vastakkaista reunaa haivytykseen.
+/* YLAGRADIENTTI - vastaa tekstiryhman luettavuudesta. Pystykaista, ei
+   ellipsi: ryhma on 57-74 % nakyman leveydesta, joten nurkkaan
+   ankkuroitu ellipsi ei voi sisaltaa sita ytimessaan ja samalla paastaa
+   vastakkaista reunaa haivytykseen.
 
-   RAJAT MITATTU. h1:n alareuna on 33,6 / 37,8 / 28,0 / 26,8 % ylhaalta
-   nakymilla 1440x900, 1280x800, 1440x1080, 390x844 -> ydin 38 %.
-   Ala-lohkon ylareuna on 28,2 / 30,7 / 24,8 / 30,6 % pohjasta -> ydin 31 %.
+   RAJAT MITATTU. Ryhman alareuna on 56,2 / 63,2 / 46,8 / 60,9 % ylhaalta
+   nakymilla 1440x900, 1280x800, 1440x1080 ja 390x844 -> ydin 64 % kattaa
+   tiukimman 0,8 pp:n varalla.
 
    HAIVYTYS 16 pp = 128-173 px. Vaatimus kuvasta: gradientti muuttaa
-   renderoityä arvoa A*(bg-13) = 0,62*(200-13) = 116 sRGB-tasoa, ja jotta
+   renderoityä arvoa A*(bg-13) = 0,36*(200-13) = 67 sRGB-tasoa, ja jotta
    muutos pikselia kohti jaa kuvan oman gradientin (mitattu mediaani
-   1 taso/px, otanta 32 freimia molemmista sarjoista) alle, haivytyksen on
-   oltava >= 116px. Kaistat kohtaavat vasta 53-54 %:ssa, joten nakyman
-   keskiosa jaa kokonaan koskematta. */
+   1 taso/px) alle, haivytyksen on oltava >= 67px. Toteutunut on siis
+   1,9-2,6-kertainen. Haivytys paattyy 80 %:iin, joten nakyman
+   alaviidennes jaa koskematta. */
 .hero-glow-top {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  opacity: calc(var(--hero-dim, 1) * var(--hero-glow-on, 1));
+  opacity: calc(var(--hero-glow, 0) * var(--hero-dim, 1) * var(--hero-glow-on, 1));
   background: linear-gradient(to bottom,
-    rgba(13,13,16,.62) 0%, rgba(13,13,16,.62) 38%, rgba(13,13,16,0) 54%);
+    rgba(13,13,16,1) 0%, rgba(13,13,16,1) 64%, rgba(13,13,16,0) 80%);
 }
+/* Alagradientti jaa nollaan omalla kytkimellaan. Saanto ja elementti
+   jaavat paikoilleen, jotta palautus on yksi rivi jos alalohko palaa. */
 .hero-glow-bot {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  opacity: calc(var(--hero-glow, 0) * var(--hero-dim, 1) * var(--hero-glow-on, 1));
+  opacity: calc(var(--hero-glow, 0) * var(--hero-dim, 1) * var(--hero-glow-bot-on, 0));
   background: linear-gradient(to top,
     rgba(13,13,16,1) 0%, rgba(13,13,16,1) 31%, rgba(13,13,16,0) 47%);
 }
@@ -930,6 +932,19 @@ h2.big { font-size: var(--text-h2-hero) }
 .stickyzone > .hero h1 { color: #f5f5f7 }
 .stickyzone > .hero .sub { color: #e3e3e8 }
 .stickyzone > .hero .tlink { color: #b4dbff }
+/* Sekundaarinapin vaalea variantti VAIN heron sisalla. Sivuston oma
+   .btn.alt kayttaa var(--blue) = #0064cc, jonka suhteellinen luminanssi
+   on 0,135; mustaa (#0d0d10) vasten se antaa 3,33:1 eli se ei lapaise
+   AA:ta millaan tummennuksella - ongelma on varissa, ei tummennuksessa.
+   Teksti on sama vaalea kuin h1:lla (#f5f5f7, luettu
+   .stickyzone > .hero h1 -saannosta). Reuna on valkoisen lapinakyva
+   hiusviiva 48 %:lla: 45 % jai mitattuna 2,99:1:een taustaa vasten eli
+   hiuksenverran alle 1.4.11:n 3:1:n, 48 % ylittaa sen. Erottuu tummaa
+   vasten mutta jaa selvasti taytetyn
+   "Pyyda tarjous" -napin taakse. Rajaus on heroon, joten .btn.alt
+   muualla sivustolla pysyy ennallaan. */
+.stickyzone > .hero .btn.alt { color: #f5f5f7; border-color: rgba(255,255,255,.48) }
+.stickyzone > .hero .btn.alt:hover { background: rgba(255,255,255,.10) }
 
 /* Scrollimatka scrubille. 224vh (= 280 / 1,25) antaa 20,9 / 26,9 /
    38,8 px ruutua kohti korkeuksilla 700 / 900 / 1300 (76 ruutua, 75

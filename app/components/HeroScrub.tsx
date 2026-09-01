@@ -50,14 +50,21 @@ const WIN: [number, number][] = [
   [0.72, 0.82],  // .sub
   [0.86, 0.96],  // .heroctas
 ];
-/* Alanurkan gradientti. Taysi arvo on saavutettava siina p:ssa jossa
-   .sub saavuttaa opacity 0,5 - smoothstep on symmetrinen, joten se on
-   ikkunan keskikohta 0,425. Nousuikkuna [0,30, 0,425] on siis .subin oman
-   ikkunan alkupuolisko. .heroctas saavuttaa 0,5:n vasta 0,75:ssa, jolloin
-   gradientti on jo taysi. 0,62 kattaa mitatut vaatimukset (.sub 0,634 ja
-   .heroctas 0,667) yhdessa globaalin scrimin kanssa. */
-const GLOW_MAX = 0.62;
-const GLOW_WIN: [number, number] = [0.3, 0.425];
+/* Ylagradientti tekstiryhman taakse. Ryhma (h1 + .sub + .heroctas) on
+   yhtena lohkona ylhaalla, joten gradientteja tarvitaan vain yksi.
+
+   IKKUNA [0,56, 0,62] on h1:n ikkunan alkupuolisko: taysi arvo on
+   saavutettava siina p:ssa jossa h1 saavuttaa opacity 0,5, ja smoothstep
+   on symmetrinen, joten se on h1:n ikkunan keskikohta 0,62. Ennen 0,56
+   arvo on TASAN 0 - kuva on siis koskematon koko alkuosan ajan, mika oli
+   koko muutoksen syy.
+
+   VOIMAKKUUS 0,36 ON MITATTU, ei peritty vanhasta 0,62:sta. Pienin arvo
+   joka vie kaikki nelja elementtia yli 4,5:1:n on 0,3411 (sitova h1
+   freimilla 048, 1440x900, kirkkain pikseli puhdas valkoinen, scrim
+   siina 0,376). 0,36 on pienin sadasosan askel sen yli. */
+const GLOW_MAX = 0.36;
+const GLOW_WIN: [number, number] = [0.56, 0.62];
 /* Globaali scrim, kaksi jaksoa. Gradienttikerrokset ovat pois paalta
    (--hero-glow-on), joten tama on ainoa tummennus.
 
