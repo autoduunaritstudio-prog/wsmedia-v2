@@ -3,6 +3,7 @@ import { Instrument_Sans } from "next/font/google";
 import "./globals.css";
 
 import Analytics from "./components/consent/Analytics";
+import SmoothScroll from "./components/SmoothScroll";
 import CookieBanner from "./components/consent/CookieBanner";
 
 const instrument = Instrument_Sans({
@@ -56,6 +57,7 @@ export default function RootLayout({
      */
     <html lang="fi" className={instrument.variable}>
       <body>
+        <SmoothScroll />
         {children}
         <CookieBanner />
         <Analytics />

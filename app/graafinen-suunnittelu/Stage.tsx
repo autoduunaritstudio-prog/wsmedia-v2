@@ -11,7 +11,7 @@ import { useEffect, useState, type CSSProperties } from "react";
  * kasin. CSS hoitaa 0.8s pehmennyksen.
  *
  * TAMA EI OLE SCROLL-SIDOTTU: pelkka ajastin, ei mitaan yhteytta
- * SiteEffectsin rAF-silmukkaan.
+ * SiteEffectsin rAF-silmukkaan eika Lenisiin.
  */
 
 const COLORS = ["#0064cc", "#1f8a70", "#6d4aff", "#c4553a"];
