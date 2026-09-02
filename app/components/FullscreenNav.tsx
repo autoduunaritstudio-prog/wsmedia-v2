@@ -5,7 +5,6 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { LogoFull, LogoMark } from "./Logo";
 import NavCarriers from "./NavCarriers";
 import SmartLink from "./SmartLink";
-import { getLenis } from "./SmoothScroll";
 import SocialIcon from "./SocialIcon";
 import { CONTACT, SOCIAL, type NavLink } from "./site-data";
 
@@ -61,9 +60,6 @@ export default function FullscreenNav({
     document.body.style.overflow = lockRef.current.overflow;
     document.body.style.paddingRight = lockRef.current.pad;
     lockRef.current = null;
-    // Lenis kaynnistetaan vasta lukon purun jalkeen, jotta se lukee
-    // vierityssijainnin uudelleen vasta kun sivu on taas vieritettava.
-    getLenis()?.start();
   }, []);
 
   const close = useCallback(() => {
@@ -85,10 +81,9 @@ export default function FullscreenNav({
     const gap = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = "hidden";
     if (gap > 0) document.body.style.paddingRight = `${gap}px`;
-    // Body-lukko yksin ei riita: Lenis ajaa window.scrollTo:ta omassa
-    // silmukassaan ja jatkaisi tavoitearvon paivittamista lukon takana.
-    // stop() pysayttaa sen, ja overlay vierittyy omana kontinaan.
-    getLenis()?.stop();
+    // Body-lukko YKSIN riittaa, koska vieritys on natiivi: aiemmin tassa
+    // tarvittiin lisaksi Lenisin stop(), koska se ajoi window.scrollTo:ta
+    // omassa silmukassaan lukon takana.
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -171,7 +166,7 @@ export default function FullscreenNav({
           onClick={close}
         />
 
-        <div className="fsnav-in" data-lenis-prevent>
+        <div className="fsnav-in">
           {/* Iso haivytetty merkki taustalla. aria-hidden ja pointer-events:
               none, joten se ei vaikuta luettavuuteen eika osoittimeen. */}
           <span className="fsnav-watermark" aria-hidden="true">

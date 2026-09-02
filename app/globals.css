@@ -223,9 +223,9 @@
    ne; muuten napit, kentat ja textarea kasvavat ja kirjainvali muuttuu.
    Sivun omat saannot (.fcard input, .btn) yliajavat nama normaalisti. */
 button, input, optgroup, select, textarea { font: revert; letter-spacing: revert; color: revert }
-/* Ei scroll-behavior: smooth: se on ristiriidassa Lenisin kanssa, joka
-   ajaa vierityksen itse. Ankkurien pehmennyksen hoitaa Lenisin
-   anchors-asetus. */
+/* Ei scroll-behavior: smooth. Ankkurihyppy on tarkoituksella valiton:
+   sivulla on kuusi scroll-sidottua efektia, ja pehmennetty hyppy ajaisi
+   ne lapi vauhdilla jota kayttaja ei ole pyytanyt. */
 html { scroll-behavior: auto }
 body {
   font-family: var(--font-sans);
@@ -452,7 +452,11 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
   background: var(--bg);
 }
 
+/* overscroll-behavior: contain oli aiemmin Lenisin tyylitiedostossa
+   ([data-lenis-prevent]). Se ei ole koriste: ilman sita paneelin oma
+   vieritys ketjuuntuu sivulle kun paneeli on paassaan. */
 .fsnav-in {
+  overscroll-behavior: contain;
   position: relative; height: 100%; overflow-y: auto;
   max-width: 1440px; margin: 0 auto; padding: 0 var(--page-edge);
   /* Sisaltolohko on referenssin tapaan keskitetty kaista, ei reunasta
@@ -977,7 +981,10 @@ h2.big { font-size: var(--text-h2-hero) }
    jalkimmainen nollaisi vierityssijainnin ja aiheuttaisi hypyn, kun taas
    overflow: hidden jaadyttaa sen paikalleen. Sijainti on joka tapauksessa
    0, koska HeroScrub pakottaa sen ennen kerroksen haivytysta. */
-html.hero-locked { overflow: hidden }
+/* overscroll-behavior: none lisaksi: overflow yksin ei esta iOS:n
+   veda-paivittaaksesi-eletta eika kumilenkkia, jotka nakyisivat
+   latauskerroksen liikkumisena. */
+html.hero-locked { overflow: hidden; overscroll-behavior: none }
 .hero-load {
   position: fixed; inset: 0; z-index: 60;
   /* Sivuston oma tumma, ei puhdas musta: #000 ei esiinny sivustolla

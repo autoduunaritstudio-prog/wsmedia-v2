@@ -23,7 +23,7 @@ import { LogoMark } from "./Logo";
  *
  * NOPEUS ON KAYTTAJAN. Scrubilla ei ole omaa ajastusta: aiempi
  * scroll-tween on poistettu kokonaan, samoin sen tukirakenteet
- * (wheel-kuuntelijat, preventDefault-kulutus, Lenis-synkronointi,
+ * (wheel-kuuntelijat, preventDefault-kulutus,
  * suunnan paattely, aikakatkaisut). Etenema on pelkka scrollY.
  *
  * COVER-RAJAUS LASKETAAN CANVASIN SISALLA, ei CSS:n object-fitilla:
@@ -39,9 +39,10 @@ import { LogoMark } from "./Logo";
  * load-tapahtuman jalkeen, CONC kappaletta kerrallaan, pienin
  * lataamaton seuraavaksi.
  *
- * ALOITUS PYSYY load-TAPAHTUMASSA. Mountissa sarja kilpailisi <picture>-
- * elementin LCP-kuvan kanssa samasta kaistasta; load takaa etta LCP on
- * jo maalattu.
+ * ALOITUS HERO-KUVAN load-TAPAHTUMASTA. Mountissa sarja kilpailisi
+ * <picture>-elementin LCP-kuvan kanssa samasta kaistasta, joten se on
+ * odotettava - mutta window.load odottaisi lisaksi kaikkea muutakin
+ * sivun resurssia, mika piti latausruutua turhaan pystyssa.
  *
  * INVARIANTTI. Piirrolle annetaan aina j = lahin residentti indeksi
  * i:sta, valittuna residenteista eika indeksiaritmetiikalla. Ruutu 0 on
@@ -146,6 +147,7 @@ const frameSrc = (dir: string, i: number) => `${dir}${String(i + 1).padStart(3, 
 export default function HeroScrub() {
   const ref = useRef<HTMLCanvasElement>(null);
   const load = useRef<HTMLDivElement>(null);
+  const lcp = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const cv = ref.current;
@@ -364,8 +366,23 @@ export default function HeroScrub() {
       };
       idle(pump);
     };
-    if (document.readyState === "complete") rest();
-    else window.addEventListener("load", rest, { once: true });
+    // ALOITUS HERO-KUVASTA, ei window.loadista. load odottaa sivun KAIKKIA
+    // resursseja - fontit, logot, aftermovie-posterin - ja latausruutu
+    // seisoi sen ajan odottamassa asiaa jota ei ollut edes alettu ladata.
+    // LCP-suoja sailyy tasmallisena: sarja ei voi kilpailla kaistasta
+    // <picture>-elementin kanssa, koska se lahtee vasta sen omasta
+    // load-tapahtumasta. complete-tarkistus kattaa valimuistista tulevan
+    // kuvan, jolle tapahtumaa ei enaa tule.
+    const img = lcp.current;
+    if (img?.complete) rest();
+    else if (img) {
+      img.addEventListener("load", rest, { once: true });
+      // Epaonnistunut kuva ei saa jattaa sarjaa lataamatta.
+      img.addEventListener("error", rest, { once: true });
+    }
+    // Varaverkko: jos kuvaelementtia ei jostain syysta ole, load-tapahtuma
+    // kaynnistaa sarjan viimeistaan. started tekee tasta idempotentin.
+    window.addEventListener("load", rest, { once: true });
 
     const frame = () => {
       raf = requestAnimationFrame(frame);
@@ -383,6 +400,8 @@ export default function HeroScrub() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("load", rest);
+      img?.removeEventListener("load", rest);
+      img?.removeEventListener("error", rest);
     };
   }, []);
 
@@ -402,6 +421,7 @@ export default function HeroScrub() {
       <picture>
         <source media="(max-width: 979px)" srcSet={frameSrc(SETS.m.dir, 0)} />
         <img
+          ref={lcp}
           src={frameSrc(SETS.d.dir, 0)}
           alt=""
           width={1280}
