@@ -1337,6 +1337,20 @@ section { padding: var(--space-section) 0 }
     0 calc(40px + var(--tilt, 0) * 34px) calc(90px + var(--tilt, 0) * 44px) -30px
     rgba(13,13,16, calc(.5 + var(--tilt, 0) * .18));
 }
+/* MOCKUPIN KAARI. max-width 504 = 1008 / 2 eli lahdevideon leveys
+   dpr 2:lla: sita leveampana lahde upskaalautuisi. Yhden palstan
+   asettelussa (<= 880px) .svc-visual on palstan levyinen - 880px:n
+   nakymassa 832 CSS px eli 1664 laitepikselia - ja ilman cappia lahde
+   venyisi 1,65-kertaiseksi. Kahden palstan asettelussa palsta on 486 px,
+   joten rajoitin ei sido siella lainkaan eika omaa media queryta tarvita.
+   Sama muoto kuin .cal:lla, joka ratkaisee saman kalenterimockupille.
+
+   KORISTEET OVAT TAMAN SISALLA. .cal ei ratkaise tata puolta - sen
+   .svc-visualissa ei ole koristeita lainkaan - joten kaari on omansa: se
+   on tasan .eventin levyinen, jolloin .decojen prosentit ja .float-tagin
+   px-siirtymat mittautuvat mockupin reunoista eivatka palstan. */
+.event-stage { position: relative; max-width: 504px; margin-inline: auto }
+
 /* MEDIAKERROKSET. Sama rakenne ja samat ominaisuudet kuin
    .refcard-vid / .refcard-poster -pareilla, jotta videoiden kaytos on
    sivustolla yhtenainen.

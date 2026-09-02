@@ -235,44 +235,60 @@ function EventStage() {
   const { vid, art, playing, bind } = useCardVideo(true, "Tapahtumat, aftermovie");
 
   return (
-    <div
-      ref={art as React.RefObject<HTMLDivElement>}
-      className="event"
-      data-tilt="-y"
-      data-tilt-profile="mockup"
-      {...bind}
-    >
-      {/* Sama rakenne kuin referenssikorteilla: <source>-lapsi eika
-          src-attribuutti, ja posteri omana laiskana <img>-kerroksenaan
-          eika poster-attribuuttina - attribuutti latautuu aina, myos
-          preload="none":n kanssa. */}
-      <video
-        ref={vid}
-        className="event-vid"
-        width={EW}
-        height={EH}
-        muted
-        loop
-        playsInline
-        preload="none"
+    /* KORISTEET OVAT TAMAN KAAREEN SISALLA eivatka .svc-visualin. .event on
+       capattu 504px:aan, joten yhden palstan asettelussa se on kapeampi kuin
+       .svc-visual, ja siihen sidotut koristeet jaisivat leijumaan tyhjaan
+       tilaan mockupin viereen. Kaari on tasan .eventin levyinen, joten
+       .decojen prosentit ja .float-tagin px-siirtymat mittautuvat mockupin
+       reunoista kaikilla nakymilla eika niita tarvitse saataa kasin. */
+    <div className="event-stage">
+      <span className="deco deco-dot" style={{ left: "-2%", top: "10%" }} />
+      <span className="deco deco-ring deco-ring-sm" style={{ right: "4%", bottom: "-10px" }} />
+      <div
+        ref={art as React.RefObject<HTMLDivElement>}
+        className="event"
+        data-tilt="-y"
+        data-tilt-profile="mockup"
+        {...bind}
       >
-        <source src="/tapahtumat/aftermovie.mp4" type="video/mp4" />
-      </video>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        className={`event-poster${playing ? " is-hidden" : ""}`}
-        src="/tapahtumat/aftermovie.webp"
-        width={EW}
-        height={EH}
-        loading="lazy"
-        decoding="async"
-        alt=""
-        aria-hidden="true"
-      />
-      <span className="chip">[Tapahtuman nimi] · [pvm]</span>
-      <div className="cap">
-        <b>Aftermovie</b>
-        <s>Täytetään tapahtumareferenssillä</s>
+        {/* Sama rakenne kuin referenssikorteilla: <source>-lapsi eika
+            src-attribuutti, ja posteri omana laiskana <img>-kerroksenaan
+            eika poster-attribuuttina - attribuutti latautuu aina, myos
+            preload="none":n kanssa. */}
+        <video
+          ref={vid}
+          className="event-vid"
+          width={EW}
+          height={EH}
+          muted
+          loop
+          playsInline
+          preload="none"
+        >
+          <source src="/tapahtumat/aftermovie.mp4" type="video/mp4" />
+        </video>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className={`event-poster${playing ? " is-hidden" : ""}`}
+          src="/tapahtumat/aftermovie.webp"
+          width={EW}
+          height={EH}
+          loading="lazy"
+          decoding="async"
+          alt=""
+          aria-hidden="true"
+        />
+        <span className="chip">[Tapahtuman nimi] · [pvm]</span>
+        <div className="cap">
+          <b>Aftermovie</b>
+          <s>Täytetään tapahtumareferenssillä</s>
+        </div>
+      </div>
+      <div className="float-tag ft-a">
+        <i />
+        Kävijät
+        <br />
+        {"[X] henkeä"}
       </div>
     </div>
   );
@@ -366,15 +382,7 @@ export default function Refs({ children }: { children: ReactNode }) {
             {/* 4. Tapahtumat */}
             <div className="svc rev rv">
               <div className="svc-visual" data-par="0.02">
-                <span className="deco deco-dot" style={{ left: "-2%", top: "10%" }} />
-                <span className="deco deco-ring deco-ring-sm" style={{ right: "4%", bottom: "-10px" }} />
                 <EventStage />
-                <div className="float-tag ft-a">
-                  <i />
-                  Kävijät
-                  <br />
-                  {"[X] henkeä"}
-                </div>
               </div>
               <div className="svc-txt" data-par="0.035">
                 <span className="kick">Tapahtumat</span>
