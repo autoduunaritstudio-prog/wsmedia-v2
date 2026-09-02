@@ -102,7 +102,13 @@ function stopOthers(el: HTMLVideoElement) {
   playingEl = el;
 }
 
-function RefCard({ c, i }: { c: RefItem; i: number }) {
+/**
+ * Videon toistologiikka jaettuna referenssikorttien ja Tapahtumat-
+ * mockupin kesken. Yksi mekanismi, yksi playingEl-vartija: rinnakkainen
+ * toteutus olisi tarkoittanut kahta yhden-kerrallaan-saantoa, jotka eivat
+ * tieda toisistaan. Ainoa ero kutsujien valilla on merkinta.
+ */
+function useCardVideo(media: boolean, label: string) {
   const vid = useRef<HTMLVideoElement>(null);
   const art = useRef<HTMLElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -110,7 +116,6 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
   // merkinta tasmaa; efekti nostaa kosketuspolun vasta kiinnityksen
   // jalkeen.
   const [touch, setTouch] = useState(false);
-  const media = Boolean(c.src);
 
   useEffect(() => {
     if (!media) return;
@@ -205,7 +210,7 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
   if (media) {
     bind.role = "button";
     bind.tabIndex = 0;
-    bind["aria-label"] = `Toista video: ${c.title}`;
+    bind["aria-label"] = `Toista video: ${label}`;
     bind.onKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
@@ -214,6 +219,67 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
     };
     if (touch) bind.onClick = toggle;
   }
+
+  return { vid, art, playing, bind };
+}
+
+/* Tapahtumat-mockupin aftermovie. Mitat ovat tiedoston omat: 1008x672 on
+   palstan leveys 486px x dpr 2 pyoristettyna ylospain 16:n monikertaan,
+   ja 3:2 on lahdevideon oma suhde. .event-laatikko on 16/11, joten
+   object-fit: cover rajaa sivuilta - siksi leveys on laskettu korkeudesta
+   eika toisin pain. */
+const EW = 1008;
+const EH = 672;
+
+function EventStage() {
+  const { vid, art, playing, bind } = useCardVideo(true, "Tapahtumat, aftermovie");
+
+  return (
+    <div
+      ref={art as React.RefObject<HTMLDivElement>}
+      className="event"
+      data-tilt="-y"
+      data-tilt-profile="mockup"
+      {...bind}
+    >
+      {/* Sama rakenne kuin referenssikorteilla: <source>-lapsi eika
+          src-attribuutti, ja posteri omana laiskana <img>-kerroksenaan
+          eika poster-attribuuttina - attribuutti latautuu aina, myos
+          preload="none":n kanssa. */}
+      <video
+        ref={vid}
+        className="event-vid"
+        width={EW}
+        height={EH}
+        muted
+        loop
+        playsInline
+        preload="none"
+      >
+        <source src="/tapahtumat/aftermovie.mp4" type="video/mp4" />
+      </video>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        className={`event-poster${playing ? " is-hidden" : ""}`}
+        src="/tapahtumat/aftermovie.webp"
+        width={EW}
+        height={EH}
+        loading="lazy"
+        decoding="async"
+        alt=""
+        aria-hidden="true"
+      />
+      <span className="chip">[Tapahtuman nimi] · [pvm]</span>
+      <div className="cap">
+        <b>Aftermovie</b>
+        <s>Täytetään tapahtumareferenssillä</s>
+      </div>
+    </div>
+  );
+}
+
+function RefCard({ c, i }: { c: RefItem; i: number }) {
+  const { vid, art, playing, bind } = useCardVideo(Boolean(c.src), c.title);
 
   return (
     <article
@@ -302,17 +368,7 @@ export default function Refs({ children }: { children: ReactNode }) {
               <div className="svc-visual" data-par="0.02">
                 <span className="deco deco-dot" style={{ left: "-2%", top: "10%" }} />
                 <span className="deco deco-ring deco-ring-sm" style={{ right: "4%", bottom: "-10px" }} />
-                <div className="event" data-tilt="-y" data-tilt-profile="mockup">
-                  <div className="lights" />
-                  <div className="truss" />
-                  <span className="chip">[Tapahtuman nimi] · [pvm]</span>
-                  <div className="play" />
-                  <div className="crowd" />
-                  <div className="cap">
-                    <b>Aftermovie</b>
-                    <s>Täytetään tapahtumareferenssillä</s>
-                  </div>
-                </div>
+                <EventStage />
                 <div className="float-tag ft-a">
                   <i />
                   Kävijät
