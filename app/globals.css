@@ -3288,7 +3288,13 @@ footer .base { padding-top: 18px }
   /* SAADIN: pyorasumennuksen huippuopacity. 1 = taysi, 0.7 = hillitty.
      Vaihtamalla tama yksi luku saatyy koko efektin voimakkuus. */
   --wheel-blur: 1 }
-.gsurf-van img { display: block; width: 100%; height: auto }
+/* :not(.gsurf-wheel) EI OLE KOSMETIIKKAA. Ilman sita tama saanto
+   (spesifisyys 0,1,1) voittaa .gsurf-wheel-frontin (0,1,0) ja antaa
+   spriteille width: 100%, jolloin ne renderoityvat auton levyisina.
+   Rajaus tehdaan tanne eika spriten spesifisyytta nostamalla, koska
+   nain saanto kertoo itse mita se tarkoittaa - vain auton valokuva -
+   eika sama ansa toistu jos .gsurf-vaniin lisataan lisaa kuvia. */
+.gsurf-van img:not(.gsurf-wheel) { display: block; width: 100%; height: auto }
 
 /* SISAANTULO. Ohittaa .rv:n oletustilat suuremmalla spesifisyydella.
    Alkutila ei ole taysin lapinakyva: "tekstin takaa" tarkoittaa osittaista
@@ -3327,15 +3333,24 @@ footer .base { padding-top: 18px }
    DOM-jarjestyksessa naiden jalkeen ja jaa siis paalle. Jarjestys on
    siis img < pyorat < valo ilman yhtaan z-indexia. */
 .gsurf-wheel { position: absolute; pointer-events: none; opacity: 0 }
-.gsurf-wheel-front { left: 38.410%; top: 64.621%; width: 10.042%; height: 18.527% }
-.gsurf-wheel-rear { left: 84.603%; top: 49.888%; width: 7.699%; height: 15.625% }
+/* Vain LEVEYS prosentteina. Spriten oma kuvasuhde on tasmalleen sama
+   kuin sen lahdealueen van-wrap.webp:ssa, joten height: auto antaa
+   saman korkeuden kuin prosenttiarvo mutta ei riipu .gsurf-vanin
+   korkeuden laskennasta lainkaan - yksi virhelahde vahemman. */
+.gsurf-wheel-front { left: 38.410%; top: 64.621%; width: 10.042%; height: auto }
+.gsurf-wheel-rear { left: 84.603%; top: 49.888%; width: 7.699%; height: auto }
 /* Sprite on lapinakymaton VAIN sisaantulon ajan: 0 -> huippu -> 0, sama
    1,8 s kuin .gsurf-van.rv:n transitionilla, kerran ja ilman toistoa.
+
+   HUIPPU ON 10 %:SSA, MITATTU. Sisaantulon kayra cubic-bezier(.2,.6,.2,1)
+   on nopeimmillaan kohdassa t = 7,1 %; 10 % vastaa 97,6 % huippu-
+   nopeudesta ja antaa opacityn nousulle 180 ms. Aiempi 22 % osui
+   kohtaan jossa auto liikkui enaa 57,7 % huippunopeudesta.
    both pitaa lopputilan nollassa, joten kuva palaa tasmalleen
    valokuvaksi eika jaa mihinkaan valitilaan. */
 @keyframes wheelspin {
   0% { opacity: 0 }
-  22% { opacity: var(--wheel-blur, 1) }
+  10% { opacity: var(--wheel-blur, 1) }
   100% { opacity: 0 }
 }
 .gsurf-van.rv.on .gsurf-wheel { animation: wheelspin 1.8s ease-out both }
@@ -3355,8 +3370,17 @@ footer .base { padding-top: 18px }
      sellaisena kuin se on valokuvassa. Ei siirtymia. */
   .gsurf-light { transition: none; opacity: 0 }
   /* Sama linja kuin .gsurf-lightilla: ei animaatiota lainkaan, spritet
-     nollassa, auto nakyy sellaisena kuin se valokuvassa on. */
-  .gsurf-wheel { animation: none; opacity: 0 }
+     nollassa, auto nakyy sellaisena kuin se valokuvassa on.
+
+     SAMA VALITSIN KUIN LAUKAISUSSA, ei pelkka .gsurf-wheel. Media query
+     ei lisaa spesifisyytta, joten .gsurf-wheel (0,1,0) haviaisi
+     laukaisusaannolle .gsurf-van.rv.on .gsurf-wheel (0,4,0) ja animaatio
+     jaisi paalle. .gsurf-light valttyy samalta ansalta vain siksi, ettei
+     SiteEffects lisaa .lights-on -luokkaa lainkaan taman asetuksen
+     ollessa paalla - .rv-paljastus sen sijaan ajetaan aina, joten .on
+     ilmestyy myos taalla. */
+  .gsurf-van.rv.on .gsurf-wheel { animation: none }
+  .gsurf-wheel { opacity: 0 }
 }
 
 /* ==================================================================
