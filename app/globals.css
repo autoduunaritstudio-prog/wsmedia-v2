@@ -3284,7 +3284,10 @@ footer .base { padding-top: 18px }
 /* Teksti auton edelle: auto "tulee esiin" tekstin takaa eika tyonny sen yli. */
 .svc-graafinen .svc-txt { position: relative; z-index: 2 }
 
-.gsurf-van { position: relative; width: 92%; margin: 0 auto }
+.gsurf-van { position: relative; width: 92%; margin: 0 auto;
+  /* SAADIN: pyorasumennuksen huippuopacity. 1 = taysi, 0.7 = hillitty.
+     Vaihtamalla tama yksi luku saatyy koko efektin voimakkuus. */
+  --wheel-blur: 1 }
 .gsurf-van img { display: block; width: 100%; height: auto }
 
 /* SISAANTULO. Ohittaa .rv:n oletustilat suuremmalla spesifisyydella.
@@ -3314,6 +3317,29 @@ footer .base { padding-top: 18px }
    ympärille korille ja NAKYY siella selvasti. Valkealla taustalla
    screen ei muuta mitaan, joten hehku haipyy itsestaan auton reunoilla
    eika levia paneelin pohjalle. */
+/* PYORIEN LIIKE-EPATERAVYYS. Laatikot on laskettu lahdekuvan 1195x896
+   pikseleista: etupyora 459/579, 120x166 ja takapyora 1011/447, 92x140.
+   img on width: 100% / height: auto, joten prosentit ovat sama suhde
+   kaikilla leveyksilla eika laatikko voi ajautua irti pyorasta.
+
+   EI z-INDEXIA. <img> ei ole positioitu, joten se maalautuu virtaan ja
+   jaa kaikkien positioitujen jalkelaisten alle; .gsurf-light tulee
+   DOM-jarjestyksessa naiden jalkeen ja jaa siis paalle. Jarjestys on
+   siis img < pyorat < valo ilman yhtaan z-indexia. */
+.gsurf-wheel { position: absolute; pointer-events: none; opacity: 0 }
+.gsurf-wheel-front { left: 38.410%; top: 64.621%; width: 10.042%; height: 18.527% }
+.gsurf-wheel-rear { left: 84.603%; top: 49.888%; width: 7.699%; height: 15.625% }
+/* Sprite on lapinakymaton VAIN sisaantulon ajan: 0 -> huippu -> 0, sama
+   1,8 s kuin .gsurf-van.rv:n transitionilla, kerran ja ilman toistoa.
+   both pitaa lopputilan nollassa, joten kuva palaa tasmalleen
+   valokuvaksi eika jaa mihinkaan valitilaan. */
+@keyframes wheelspin {
+  0% { opacity: 0 }
+  22% { opacity: var(--wheel-blur, 1) }
+  100% { opacity: 0 }
+}
+.gsurf-van.rv.on .gsurf-wheel { animation: wheelspin 1.8s ease-out both }
+
 .gsurf-light {
   position: absolute; left: 27%; top: 55%; width: 34%; aspect-ratio: 1;
   transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
@@ -3328,6 +3354,9 @@ footer .base { padding-top: 18px }
   /* Yksinkertaisin vaihtoehto: ei lisattya hehkua lainkaan, auto nakyy
      sellaisena kuin se on valokuvassa. Ei siirtymia. */
   .gsurf-light { transition: none; opacity: 0 }
+  /* Sama linja kuin .gsurf-lightilla: ei animaatiota lainkaan, spritet
+     nollassa, auto nakyy sellaisena kuin se valokuvassa on. */
+  .gsurf-wheel { animation: none; opacity: 0 }
 }
 
 /* ==================================================================

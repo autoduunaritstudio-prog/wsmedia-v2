@@ -30,6 +30,40 @@ export default function GraphicsSurfaces() {
           height={896}
           sizes="(max-width: 880px) 82vw, 40vw"
         />
+        {/* PYORIEN LIIKE-EPATERAVYYS sisaantulon ajaksi. Spritet ovat
+            pyorimissumennetut versiot van-wrap.webp:n pyorista, muu kuva
+            lapinakyvaa; terava pyora on koko ajan alla, joten lopputila
+            on tasmalleen sama kuva kuin ennen.
+
+            Sijainti prosentteina lahdekuvan 1195x896 pikseleista:
+            etupyora 459/579 px, 120x166 px ja takapyora 1011/447 px,
+            92x140 px. .gsurf-van img on width: 100% / height: auto ja
+            sailyttaa kuvasuhteen, joten prosentit osuvat samaan kohtaan
+            jokaisella leveydella.
+
+            Ei loading="lazy": sprite ei saa ilmestya kesken animaation.
+            Raaka <img> eika next/image, jotta tiedostot tarjoillaan
+            sellaisenaan public/-kansiosta eika optimoijan lapi. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="gsurf-wheel gsurf-wheel-front"
+          src="/graafinen/van-wheel-front-blur.webp"
+          width={120}
+          height={166}
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="gsurf-wheel gsurf-wheel-rear"
+          src="/graafinen/van-wheel-rear-blur.webp"
+          width={92}
+          height={140}
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+        />
         {/* Ajovalojen hehku: 27 % leveydesta, 55 % korkeudesta auton
             omissa suhteissa, eli kuvan valoryhman kohdalla. */}
         <span className="gsurf-light" aria-hidden="true" />
