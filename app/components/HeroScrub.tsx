@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
+import { getLenis } from "./SmoothScroll";
+
 /**
  * Hero-scrub: valmis ruutusarja piirretaan koko heron tayttavalle
  * canvasille scrollin mukana.
@@ -9,6 +11,13 @@ import { useEffect, useRef } from "react";
  * SARJAN PITUUS ON VAIN TASSA (SETS.d.n / SETS.m.n). Kaikki muu johtaa
  * sen set.n:sta, myos <picture>-fallback, joten lukua ei ole missaan
  * toisessa tiedostossa.
+ *
+ * SCROLL-TWEEN. Yksi vierityselele matkan aariplta ajaa koko heron lapi
+ * lahdevideon omassa tahdissa. Mekanismi LIIKUTTAA VAIN SCROLL-ASEMAA:
+ * scrubbaus pysyy puhtaana funktiona scrollY:sta, eika tween kirjoita
+ * yhtaan animaatioarvoa elementteihin. Siksi kaikki muut scroll-sidotut
+ * efektit (scrim, vaiheistus, cover, Referenssit) seuraavat mukana ilman
+ * etta niista tarvitsee tietaa mitaan.
  *
  * ETENEMA TULEE SPACERISTA, ei heron korkeudesta:
  *     p = clamp(scrollY / spacer.offsetHeight, 0, 1)
@@ -25,9 +34,9 @@ import { useEffect, useRef } from "react";
  * object-fit ei koske canvasin PIIRTOPINTAAN vaan vain elementin
  * bittikartan sovitukseen, joten se olisi venyttanyt jo piirretyn kuvan.
  *
- * MUISTI. drawImage HTMLImageElementeista, ei createImageBitmapista:
- * 38 x 1280 x 720 x 4 tavua olisi 140 Mt purettuna ja pysyisi muistissa
- * kunnes bitmapit vapautetaan kasin.
+ * MUISTI. drawImage HTMLImageElementeista, ei createImageBitmapista.
+ * Koko sarja purettuna olisi 531 MiB, joten residenttia joukkoa
+ * rajataan liukuvalla ikkunalla (WIN_AHEAD / WIN_TAIL).
  *
  * LATAUSJARJESTYS. Ruutu 001 heti (20,9 kt) ja piirretaan; loput vasta
  * load-tapahtuman jalkeen, CONC kappaletta kerrallaan ja aina pienin
@@ -37,22 +46,46 @@ import { useEffect, useRef } from "react";
  * elementin LCP-kuvan kanssa samasta kaistasta; load takaa etta LCP on
  * jo maalattu.
  *
- * YHTENAINEN ETULIITE. Rinnakkaisuudessa ruudut valmistuvat epa-
- * jarjestyksessa, joten ready EI ole ladattujen lukumaara vaan pisin
- * yhtenainen etuliite: while (ready < n && imgs[ready]) ready++. Vain
- * silloin piirron leikkaus min(i, ready-1) osuu varmasti ladattuun -
- * lukumaaralla se osoittaisi aukkoon heti kun ruutu 5 saapuu ennen
- * ruutua 4.
+ * INVARIANTTI. Yhtenainen etuliite ei enaa pade, koska ikkuna ei ala
+ * nollasta. Tilalla:
+ *
+ *     Ruutu 0 on pinnattu, joten residenttien joukko ei ole koskaan tyhja.
+ *     Piirrolle annetaan aina j = lahin residentti indeksi i:sta.
+ *     j valitaan residenteista, ei indeksiaritmetiikalla, joten se on
+ *     rakenteeltaan residentti - piirto ei voi osua puuttuvaan ruutuun.
+ *
+ * Todistus ei nojaa latausjarjestykseen eika ikkunan sijaintiin, toisin
+ * kuin etuliite. Kun j != i, canvasille jaa lahin olemassa oleva ruutu.
  */
 
 const SETS = {
-  d: { dir: "/hero/d/", n: 38 },
+  d: { dir: "/hero/d/", n: 151 },
   m: { dir: "/hero/m/", n: 51 },
 };
 const WIDE = "(min-width: 980px)";
+const COARSE = "(pointer: coarse)";
 const DPR_MAX = 2;
 /* Yhtaaikaisten ruutulatausten maara load-tapahtuman jalkeen. */
 const CONC = 5;
+/* LIUKUVA IKKUNA. 151 ruutua HTMLImageElementteina on 151 x 1280 x 720 x 4
+   = 531 MiB purettua bittikarttaa; selain alkaisi hylata ja dekoodata
+   uudelleen. Residenttina pidetaan pin + AHEAD + TAIL = 40 ruutua =
+   140,6 MiB, katon 150 MiB alla. AHEAD 30 on 1,2 s toistoa 25 fps:lla. */
+const WIN_AHEAD = 30;
+const WIN_TAIL = 9;
+/* SCROLL-TWEEN. Lahdevideon kesto: koko scrub-matka S kuljetaan tassa
+   ajassa, joten nopeus on S / 6,040 s riippumatta lahtokohdasta. */
+const SRC_MS = 6040;
+/* Laukaisukynnys: tween lahtee vain matkan aariplta. */
+const EDGE = 0.02;
+/* Nappaimet jotka peruvat tweenin. Home/End/PageUp/PageDown/nuolet ovat
+   vieritysnappaimia; Tab ja valilyonti ovat mukana kohdan 6 vuoksi -
+   kohdistuksen siirto vierittaa selaimen omasta toimesta, ja tween ei saa
+   pitaa nappaimistokayttajaa kiinni. */
+const CANCEL_KEYS = new Set([
+  "Home", "End", "PageUp", "PageDown",
+  "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Tab", " ",
+]);
 /* Vaiheistuksen ikkunat --hero-p:n yli. Smoothstep, ei lineaarinen.
    Tekstit alkavat kolmen sekunnin kohdalta lahdevideota. Lahde on
    151 freimia 25 fps:lla (6,040 s, varmistettu ffprobella); desktop-sarja
@@ -121,11 +154,25 @@ export default function HeroScrub() {
     const spacer = document.querySelector<HTMLElement>(".hero-spacer");
     // Sarja valitaan kerran mountissa eika resizessa: vaihto kesken
     // istunnon heittaisi jo ladatut ruudut pois ja hakisi koko uuden.
-    const set = window.matchMedia(WIDE).matches ? SETS.d : SETS.m;
+    const wide = window.matchMedia(WIDE).matches;
+    const set = wide ? SETS.d : SETS.m;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Liukuva ikkuna vain tyopoydalla: mobiilisarja on 51 x 1024 x 576 x 4
+    // = 120 MiB eli katon alla, joten haatoa ei tarvita. Kun ikkuna on pois,
+    // rajat asetetaan sarjan pituudeksi ja sama koodipolku pitaa koko
+    // sarjan residenttina.
+    const slide = wide;
+    const AHEAD = slide ? WIN_AHEAD : set.n;
+    const TAIL = slide ? WIN_TAIL : set.n;
+    // Tween ei ole kosketuslaitteilla (iOS:n momentum-vieritysta ei voi
+    // luotettavasti pysayttaa preventDefaultilla) eika reduced-motionissa.
+    const tweenOn = wide && !reduce && !window.matchMedia(COARSE).matches;
 
     const imgs: (HTMLImageElement | null)[] = new Array(set.n).fill(null);
-    let ready = 0;
+    const inflight = new Set<number>();
+    let active = 0;
+    let idx = 0;
+    let dir = 1;
     let shown = -1;
     let raf = 0;
     let stopped = false;
@@ -141,6 +188,37 @@ export default function HeroScrub() {
         cv.width = w;
         cv.height = h;
         shown = -1;
+      }
+    };
+
+    // Lahin residentti indeksi. Haku etenee ulospain i:sta, joten se
+    // loytaa aina lahimman; tasatilanteessa pienempi indeksi voittaa.
+    // Ruutu 0 on pinnattu, joten palautus on aina residentti.
+    const nearest = (i: number) => {
+      if (imgs[i]) return i;
+      for (let d = 1; d < set.n; d++) {
+        if (i - d >= 0 && imgs[i - d]) return i - d;
+        if (i + d < set.n && imgs[i + d]) return i + d;
+      }
+      return 0;
+    };
+
+    // Ikkunan ulkopuoliset vapautetaan. removeAttribute("src") eika
+    // src = "": tyhja src resolvoituu dokumentin base-URL:iin ja selain
+    // hakisi sivun itsensa kuvana. Viittaus nollataan samalla, jotta
+    // elementti on keraettavissa.
+    const evict = (i: number) => {
+      if (!slide) return;
+      const lo = dir >= 0 ? i - TAIL : i - AHEAD;
+      const hi = dir >= 0 ? i + AHEAD : i + TAIL;
+      for (let k = 1; k < set.n; k++) {
+        if (k < lo || k > hi) {
+          const img = imgs[k];
+          if (img) {
+            img.removeAttribute("src");
+            imgs[k] = null;
+          }
+        }
       }
     };
 
@@ -190,7 +268,10 @@ export default function HeroScrub() {
 
     const onResize = () => {
       size();
-      paint(Math.min(Math.max(shown, 0), Math.max(ready - 1, 0)));
+      // size() nollaa shownin jos puskuri muuttui, joten sama ruutu
+      // piirretaan uudelleen. nearest() takaa etta indeksi on residentti
+      // myos silloin kun ikkuna on ehtinyt liukua sen ohi.
+      paint(nearest(Math.max(shown, 0)));
     };
     window.addEventListener("resize", onResize, { passive: true });
 
@@ -203,7 +284,6 @@ export default function HeroScrub() {
       // ei tarvitse kirjoittaa.
       const last = set.n - 1;
       load(last).then(() => {
-        ready = set.n;
         size();
         paint(last);
       });
@@ -224,9 +304,11 @@ export default function HeroScrub() {
     }
 
     size();
+    // Ruutu 0 on PINNATTU: se on <picture>-elementin LCP-kuva, ja sen
+    // residenttius on se ehto joka pitaa nearest()-invariantin voimassa.
+    // evict() aloittaa ykkosesta, joten sita ei voi vapauttaa.
     load(0).then(() => {
       if (stopped) return;
-      ready = Math.max(ready, 1);
       size();
       paint(0);
     });
@@ -236,41 +318,153 @@ export default function HeroScrub() {
         ? requestIdleCallback(() => cb())
         : window.setTimeout(cb, 1);
 
-    // Perakkainen ketju maksoi yhden RTT:n JOKA ruudusta, koska seuraavaa
-    // ei pyydetty ennen kuin edellinen oli valmis. Viidella yhtaaikaisella
-    // pyynnolla RTT jakautuu viidelle ja tehollinen aika ruutua kohti on
+    // KYSYNTAOHJATTU LATAAJA. Ennen ketju kulki 1 -> n kertaalleen; nyt
+    // ikkuna liikkuu ja sama ruutu voidaan tarvita uudelleen, joten haku
+    // kohdistuu aina ikkunan puuttuviin ruutuihin. Jarjestys: lahimmasta
+    // ulospain ja kulkusuunta edella, koska seuraavaksi tarvittava ruutu
+    // on kulkusuunnassa.
+    //
+    // Rinnakkaisuus CONC = 5: tehollinen aika ruutua kohti on
     // RTT/5 + koko/kaista, eli kaistan asettama lattia on saavutettavissa.
-    // Viisi eika enempaa: HTTP/2:n ikkuna ja selaimen prioriteetit
-    // riittavat tahan, ja isompi maara vain pilkkoisi kaistan pienempiin
-    // osiin ilman etta yhtenainen etuliite kasvaisi nopeammin.
+    // Viisi eika enempaa: isompi maara vain pilkkoisi kaistan pienempiin
+    // osiin ilman etta ikkuna tayttyisi nopeammin.
+    const missing = () => {
+      const span = Math.max(AHEAD, TAIL);
+      for (let d = 0; d <= span; d++) {
+        const a = idx + dir * d;
+        if (d <= AHEAD && a >= 0 && a < set.n && !imgs[a] && !inflight.has(a)) return a;
+        const b = idx - dir * d;
+        if (d <= TAIL && b >= 0 && b < set.n && !imgs[b] && !inflight.has(b)) return b;
+      }
+      return -1;
+    };
+    // Aloitus pysyy load-tapahtumassa: ennen sita sarja kilpailisi
+    // <picture>-elementin LCP-kuvan kanssa samasta kaistasta. rAF-silmukka
+    // herattaa pumpun vasta kun tama on kytketty paalle.
+    let started = false;
+    const pump = () => {
+      if (stopped || !started) return;
+      while (active < CONC) {
+        const k = missing();
+        if (k < 0) return;
+        inflight.add(k);
+        active++;
+        load(k).then(() => {
+          active--;
+          inflight.delete(k);
+          idle(pump);
+        });
+      }
+    };
+    // Ikkuna liikkuu myos ilman etta yksikaan lataus valmistuu, joten
+    // pumppu herataan lisaksi rAF-silmukasta - mutta vain kun on tilaa,
+    // jottei joka framessa tehda turhaa tyota.
     const rest = () => {
-      let next = 1;
-      let active = 0;
-      const pump = () => {
-        if (stopped) return;
-        // Aina pienin lataamaton seuraavaksi, joten etuliite kasvaa
-        // mahdollisimman nopeasti eika hyppely jata aukkoja alkuun.
-        while (active < CONC && next < set.n) {
-          const i = next++;
-          active++;
-          load(i).then(() => {
-            active--;
-            // PISIN YHTENAINEN ETULIITE, ei ladattujen lukumaara. Ks.
-            // tiedoston ylakommentti: piirron leikkaus nojaa tahan.
-            while (ready < set.n && imgs[ready]) ready++;
-            idle(pump);
-          });
-        }
-      };
-      idle(pump);
+      started = true;
+      pump();
     };
     if (document.readyState === "complete") rest();
     else window.addEventListener("load", rest, { once: true });
 
-    const frame = () => {
-      raf = requestAnimationFrame(frame);
+    /* ---------------------------- SCROLL-TWEEN ----------------------------
+       Animoidaan VAIN window.scrollY. Kesto on lineaarinen ja mitoitettu
+       niin etta nopeus on aina S / SRC_MS riippumatta lahtokohdasta:
+
+           dur = SRC_MS * |to - from| / S     ->     |to - from| / dur = S / SRC_MS
+
+       Sama kaava kaytetaan kaannoksessa, joten px/s ei muutu suunnan-
+       vaihdossa. Ei easingia: "normaali nopeus" on videon oma rytmi.
+
+       LENIS. Sivustolla on Lenis, joka ajaa window.scrollTo:ta omassa
+       rAF-silmukassaan ja pitaa omaa targetScrolliaan. Pelkka
+       window.scrollTo jaisi sen alle seuraavassa framessa. lenis.stop()
+       ei kay: se lisaa lenis-stopped-luokan, joka asettaa html:lle
+       overflow: clip. Siksi joka framessa asetetaan MOLEMMAT - natiivi
+       sijainti ja Lenisin sisainen tavoite - samaan arvoon. Sivuloys:
+       Lenisin oma wheel-kertyma ylikirjoittuu joka framessa, joten
+       tweenia ei tarvitse suojella kuuntelijoiden jarjestykselta. */
+    type Tween = { from: number; to: number; t0: number; dur: number; last: number };
+    let tween: Tween | null = null;
+
+    const spanPx = () => spacer?.offsetHeight ?? 0;
+    const setScroll = (y: number) => {
+      window.scrollTo({ top: y, behavior: "instant" });
+      getLenis()?.scrollTo(y, { immediate: true, force: true });
+    };
+    const begin = (to: number) => {
+      const from = window.scrollY;
+      const S = spanPx();
+      if (S <= 0 || Math.abs(to - from) < 1) return;
+      tween = { from, to, t0: performance.now(), dur: (SRC_MS * Math.abs(to - from)) / S, last: from };
+    };
+    const cancel = () => {
+      tween = null;
+    };
+    const stepTween = (now: number) => {
+      if (!tween) return;
+      // Ulkopuolinen vieritys (selaimen haku, kohdistuksen siirto,
+      // ankkuri, vierityspalkki) tunnistetaan siita etta sijainti ei ole
+      // se jonka viimeksi asetimme. Silloin tween vaistaa.
+      if (Math.abs(window.scrollY - tween.last) > 2) return cancel();
+      const u = Math.min((now - tween.t0) / tween.dur, 1);
+      const y = tween.from + (tween.to - tween.from) * u;
+      tween.last = y;
+      setScroll(y);
+      if (u >= 1) cancel();
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (!tweenOn || e.ctrlKey) return;
+      const down = e.deltaY > 0;
+      if (e.deltaY === 0) return;
+      if (tween) {
+        // Sama ele tuottaa wheel-tapahtumia viela n. sekunnin ajan. Jos
+        // ne keskeyttaisivat tweenin, sama ele joka kaynnisti sen myos
+        // tappaisi sen - siksi samansuuntainen syote KULUTETAAN.
+        e.preventDefault();
+        if (down !== tween.to > tween.from) begin(down ? spanPx() : 0);
+        return;
+      }
       const p = progress();
-      paint(Math.min(Math.round(p * (set.n - 1)), Math.max(ready - 1, 0)));
+      if (down && p <= EDGE) {
+        e.preventDefault();
+        begin(spanPx());
+      } else if (!down && p >= 1 - EDGE) {
+        e.preventDefault();
+        begin(0);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (CANCEL_KEYS.has(e.key)) cancel();
+    };
+    // Valilehti taustalle kesken tweenin: PERUUNTUU. Jatkaminen vaatisi
+    // joko kuluneen ajan hylkaamista (jolloin tween venyisi) tai sen
+    // huomioimista (jolloin sijainti hyppaisi ajan verran eteenpain).
+    // Peruuntuminen on ainoa vaihtoehto jossa kumpaakaan ei tapahdu, ja
+    // itsestaan jatkuva liike paluuhetkella olisi myos yllattava.
+    const onHide = () => {
+      if (document.hidden) cancel();
+    };
+    if (tweenOn) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      window.addEventListener("keydown", onKey, { passive: true });
+      window.addEventListener("hashchange", cancel, { passive: true });
+      document.addEventListener("visibilitychange", onHide, { passive: true });
+    }
+
+    const frame = (now: number) => {
+      raf = requestAnimationFrame(frame);
+      stepTween(now);
+      const p = progress();
+      const i = Math.round(p * (set.n - 1));
+      // Kulkusuunta: tweenin aikana sen kohde on tarkempi lahde kuin
+      // indeksin erotus, joka on nollassa hitaan liikkeen aikana.
+      if (tween) dir = tween.to > tween.from ? 1 : -1;
+      else if (i !== idx) dir = i > idx ? 1 : -1;
+      idx = i;
+      evict(i);
+      if (started && active < CONC) pump();
+      paint(nearest(i));
       schedule(p);
     };
     raf = requestAnimationFrame(frame);
@@ -280,6 +474,10 @@ export default function HeroScrub() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("load", rest);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("hashchange", cancel);
+      document.removeEventListener("visibilitychange", onHide);
     };
   }, []);
 
