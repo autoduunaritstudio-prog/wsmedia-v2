@@ -995,12 +995,16 @@ html.hero-locked { overflow: hidden }
      easeInCubic siirtaa painopisteen loppuun, ja 700 ms on se kesto
      jolla loppupaa ehtii tapahtua rauhassa.
 
-     MITATTU: kayra jattaa 18,8 prosenttiyksikon poikkeaman suorasta,
-     koska ihanne on t^3 vain jos kerros on TAYSIN musta. #0d0d10:n
-     luminanssin kuutiojuuri on 26 % heron vastaavasta, joten t^3 laskee
-     alussa liian hitaasti. Ks. raportti - arvoa ei vaihdettu omin
-     paatoksin. */
-  transition: opacity .7s cubic-bezier(0.32, 0, 0.67, 0), visibility .7s;
+     KAYRA EI OLE t^3. Ihanne supistuu muotoon t^3 vain jos kerros on
+     TAYSIN musta; #0d0d10:n luminanssin kuutiojuuri on 26 % heron
+     vastaavasta, joten oikea ihanne on
+
+         F(t) = ([Yd^(1/3) + (Yh^(1/3) - Yd^(1/3)) t]^3 - Yd) / (Yh - Yd)
+
+     joka antaa t = 0,5 kohdalla 0,237 eika 0,125. Tama kayra on sovite
+     siihen: poikkeama suorasta L*-noususta on 0,44 prosenttiyksikkoa,
+     kun t^3 jatti 18,76 pp ja 400 ms lineaarinen 25,62 pp. */
+  transition: opacity .7s cubic-bezier(0.20, 0.05, 0.60, 0.10), visibility .7s;
 }
 /* MERKKI ON MITTARI. Navin oma LogoMark (app/components/Logo.tsx) kahtena
    kappaleena paallekkain: alempi himmea pohja, ylempi kirkas ja maskattu
@@ -1049,7 +1053,7 @@ html.hero-locked { overflow: hidden }
    navin F(t), joten navin nakyvyys on tasan kerroksen lapinakyvyys.
    Navi ei siis voi ilmestya ennen kerroksen haipymista eika jaada
    jalkeen - ne ovat saman luvun kaksi puolta. */
-#nav { transition: opacity .7s cubic-bezier(0.32, 0, 0.67, 0), visibility .7s }
+#nav { transition: opacity .7s cubic-bezier(0.20, 0.05, 0.60, 0.10), visibility .7s }
 html.hero-locked #nav { opacity: 0; visibility: hidden }
 
 /* ---------- SCROLL-VIHJE ----------
