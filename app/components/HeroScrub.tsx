@@ -73,9 +73,9 @@ const LOAD_TIMEOUT = 12000;
    on n. 400 px/s, mika on vh 700:lla 19,1 ruutua/s (lyhyt nakyma =
    lyhyt spacer = tihein kulutus). Hitaan 4G:n tuotto CONC 5:lla on
    8,8 ruutua/s, joten vajetta kertyy 10,3 ruutua sekunnissa sen 3,92 s
-   ajan jonka koko matka kestaa - yhteensa 40,5 ruutua. 41 on siis pienin
-   arvo jolla rauhallinen selaus ei jaa odottamaan yhdellakaan mitatulla
-   nakymalla eika profiililla.
+   ajan jonka koko matka kestaa - yhteensa 40,5 ruutua. 41 riittaisi
+   mitatuille nakymille; 45 kattaa lisaksi vh 600:n, jossa lyhyempi
+   spacer nostaa kulutuksen 22,3 ruutuun sekunnissa.
 
    Kuidulla ja tyypillisella 4G:lla tuotto (99,5 ja 25,5 ruutua/s)
    ylittaa rauhallisen kulutuksen jo ilman etuliitetta, joten kynnys
@@ -83,7 +83,7 @@ const LOAD_TIMEOUT = 12000;
    ruutua/s) ylittaa jokaisen profiilin eika mikaan kynnys korjaa sita;
    se on sama hyvaksytty heikennys kuin ennenkin, ja nearest-resident
    piirtaa silloin lahimman residentin. */
-const RELEASE_AT = 41;
+const RELEASE_AT = 45;
 /* Scroll-vihje piiloon heti kun liike alkaa. Sama kynnys molempiin
    suuntiin, joten vihje palaa kun kayttaja palaa alkuun. */
 const HINT_P = 0.02;
@@ -146,7 +146,6 @@ const frameSrc = (dir: string, i: number) => `${dir}${String(i + 1).padStart(3, 
 export default function HeroScrub() {
   const ref = useRef<HTMLCanvasElement>(null);
   const load = useRef<HTMLDivElement>(null);
-  const bar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const cv = ref.current;
@@ -282,12 +281,14 @@ export default function HeroScrub() {
       document.documentElement.classList.remove("hero-locked");
       load.current?.classList.add("is-gone");
     };
-    // Palkki mittaa 0 -> K eika 0 -> set.n: kayttajalle ei nayteta
-    // palkkia joka pysahtyy puoliveliin. Se on silti todellinen
-    // edistyminen - sama etuliite jolla vapautus tehdaan - ja tayttyy
-    // tasan silla hetkella kun kerros haipyy.
+    // Edistyminen menee YHTENA muuttujana CSS:aan, ja sielta seka logon
+    // tayttomaskiin etta palkin leveyteen. Mittari on 0 -> K eika
+    // 0 -> set.n: kayttajalle ei nayteta palkkia joka pysahtyy
+    // puoliveliin. Se on silti todellinen edistyminen - sama etuliite
+    // jolla vapautus tehdaan - ja tayttyy tasan silla hetkella kun
+    // kerros haipyy.
     const tick = () => {
-      if (bar.current) bar.current.style.width = `${Math.min(ready / K, 1) * 100}%`;
+      load.current?.style.setProperty("--hero-load-p", `${Math.min(ready / K, 1) * 100}%`);
       if (ready >= K) release();
     };
 
@@ -420,9 +421,16 @@ export default function HeroScrub() {
           LOAD_TIMEOUT laukeaa. Logo on navin oma LogoMark, ei uusi
           piirros. Palkin leveys tulee latauslaskurista suoraan DOMiin. */}
       <div className="hero-load" ref={load}>
-        <LogoMark className="hero-load-logo" />
+        {/* MERKKI ON MITTARI. Sama LogoMark kahdesti: alempi himmea,
+            ylempi kirkas ja maskattu alhaalta ylos --hero-load-p:n
+            mukaan. Merkin polkuihin ei kosketa - maski on elementin
+            paalla, ei sen sisalla. */}
+        <div className="hero-load-logo">
+          <LogoMark className="hero-load-dim" />
+          <LogoMark className="hero-load-fill" />
+        </div>
         <div className="hero-load-track">
-          <div className="hero-load-bar" ref={bar} />
+          <div className="hero-load-bar" />
         </div>
       </div>
     </div>

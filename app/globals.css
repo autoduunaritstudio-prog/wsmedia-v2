@@ -980,21 +980,59 @@ h2.big { font-size: var(--text-h2-hero) }
 html.hero-locked { overflow: hidden }
 .hero-load {
   position: fixed; inset: 0; z-index: 60;
-  background: var(--bg);
+  /* Sivuston oma tumma, ei puhdas musta: #000 ei esiinny sivustolla
+     missaan, kun taas #0d0d10 on sama arvo jolla hero-scrim, .refs ja
+     mockupit tummentavat. */
+  background: var(--dark);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 26px;
   touch-action: none; overscroll-behavior: contain;
   transition: opacity .4s ease, visibility .4s;
 }
-/* Navin oma merkki (LogoMark, app/components/Logo.tsx), ei uutta piirrosta.
-   Mitta annetaan korkeutena, width: auto pitaa kuvasuhteen viewBoxista. */
-.hero-load-logo { height: 46px; width: auto; color: var(--ink) }
-.hero-load-track { width: 180px; height: 2px; border-radius: 2px; background: var(--hair); overflow: hidden }
-/* Leveys = ladatut / yhteensa, kirjoitettuna suoraan latauslaskurista.
-   Siirtyma vain pehmentaa kahden MITATUN arvon valia; se ei liiku
-   itsestaan eika ennakoi, joten valeprogressia ei synny. */
-.hero-load-bar { height: 100%; width: 0; background: var(--blue); transition: width .12s linear }
+/* MERKKI ON MITTARI. Navin oma LogoMark (app/components/Logo.tsx) kahtena
+   kappaleena paallekkain: alempi himmea pohja, ylempi kirkas ja maskattu
+   alhaalta ylos. Merkin polkuihin ei kosketa - LogoMark on kolme
+   TAYTETTYA polkua yhdessa <g>:ssa ilman strokea, joten elementin paalle
+   pantu maski leikkaa sen puhtaasti; polkujen rakennetta ei tarvitse
+   tuntea eika muuttaa.
+
+   Alfa .36 on mitattu: pienin arvo joka yltaa 3:1:een #0d0d10:ta vasten
+   on 0,349, ja .36 antaa 3,12:1. */
+.hero-load-logo { position: relative; height: 46px; aspect-ratio: 1659.293862 / 795.969869 }
+.hero-load-logo svg { position: absolute; inset: 0; width: 100%; height: 100% }
+.hero-load-dim { color: rgba(245,245,247,.36); animation: loadbreath 2.4s ease-in-out infinite }
+.hero-load-fill {
+  color: #f5f5f7;
+  -webkit-mask-image: linear-gradient(to top, #000 0 var(--hero-load-p, 0%), #0000 var(--hero-load-p, 0%));
+  mask-image: linear-gradient(to top, #000 0 var(--hero-load-p, 0%), #0000 var(--hero-load-p, 0%));
+}
+/* Hengitys vain HIMMEASSA pohjassa ja vain ylospain (.36 -> .50), joten
+   mitattu 3:1 sailyy koko jakson ajan. Ei pyorimista, ei skaalausta,
+   eika mitaan mika jatkuisi kerroksen jalkeen: elementti poistuu
+   nakyvista samalla kun lataus paattyy. */
+@keyframes loadbreath {
+  0%, 100% { color: rgba(245,245,247,.36) }
+  50% { color: rgba(245,245,247,.50) }
+}
+/* Palkki jai logon rinnalle, koska tayttoaste yksin ei ole lineaarinen
+   lukema: merkin muste jakautuu epatasaisesti korkeudelle, ja 50 %:n
+   korkeudella tayttynytta pinta-alaa on vasta 34,7 % - poikkeama on
+   pahimmillaan 15,3 prosenttiyksikkoa. Merkki antaa luonteen, palkki
+   luvun. */
+.hero-load-track { width: 180px; height: 2px; border-radius: 2px; background: rgba(245,245,247,.36); overflow: hidden }
+/* Leveys tulee samasta muuttujasta kuin logon maski, joten kaksi
+   mittaria ei voi ajautua eri lukemiin. */
+.hero-load-bar { height: 100%; width: var(--hero-load-p, 0%); background: #f5f5f7; transition: width .12s linear }
 .hero-load.is-gone { opacity: 0; visibility: hidden; pointer-events: none }
+
+/* NAVI PIILOON LATAUKSEN AJAKSI. visibility: hidden poistaa alipuun myos
+   saavutettavuuspuusta ja valilehtijarjestyksesta, joten erillista
+   inertia tai tabindexia ei tarvita; display: none olisi lisaksi
+   romahduttanut asettelun. Siirtyma on sama 400 ms kuin kerroksella ja
+   alkaa samasta hetkesta, koska hero-locked poistetaan ja is-gone
+   lisataan samassa kutsussa. */
+#nav { transition: opacity .4s ease, visibility .4s }
+html.hero-locked #nav { opacity: 0; visibility: hidden }
 
 /* ---------- SCROLL-VIHJE ----------
    Nakyvyys tulee --hero-hintista, jonka HeroScrubin rAF-silmukka
@@ -1033,6 +1071,9 @@ html.hero-locked { overflow: hidden }
      pois: se on liiketta sekin. */
   .hero-hint i { animation: none; opacity: 1 }
   .hero-load-bar { transition: none }
+  /* Taytto seuraa yha todellista edistymista - se on dataa, ei
+     koristetta - mutta hengitys pois. */
+  .hero-load-dim { animation: none }
 }
 
 /* Cover nousee heron paalle: korkeampi z-index ja lapinakymaton tausta.
