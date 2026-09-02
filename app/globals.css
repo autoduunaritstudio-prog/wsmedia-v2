@@ -1742,6 +1742,24 @@ footer .base { padding-top: 18px }
 .rv.on .spark polyline { animation: draw 1.6s cubic-bezier(.3,.6,.2,1) forwards }
 .rv.on .spark .fillp { opacity: 1 }
 @keyframes draw { to { stroke-dashoffset: 0 } }
+@media (prefers-reduced-motion: reduce) {
+  /* Sparkline valmiina, ei piirtyvana. Kaksi asiaa on pakko tehda yhdessa:
+
+     1. animation: none. Pelkka .rv { animation: none !important } ei riita,
+        koska se osuu .rv-ELEMENTTIIN eika talle jalkelaiselle, ja .rv:n
+        .on-luokka lisataan myos tassa tilassa (SiteEffects observoi kaikki
+        .rv-elementit ehdoitta).
+     2. stroke-dashoffset: 0. Animoitava ominaisuus on juuri se, ja pohja-
+        arvo on 300 eli koko viivan mitta - alkutila on siis NAKYMATON
+        viiva. Ilman tata rivia animaation poisto poistaisi sparklinen
+        kokonaan.
+
+     !important eika pelkka spesifisyys: laukaisin .rv.on .spark polyline
+     on (0,3,1) ja on tassa tiedostossa ENNEN tata, joten sama spesifisyys
+     ratkeaisi lahdejarjestyksella - liian hauras tae sille etta liike
+     varmasti pysahtyy. */
+  .rv.on .spark polyline { animation: none !important; stroke-dashoffset: 0 !important }
+}
 
 /* ============ LUKUKAISTA ============ */
 .statband {
