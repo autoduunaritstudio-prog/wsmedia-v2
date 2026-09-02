@@ -33,9 +33,7 @@ import { LogoMark } from "./Logo";
  * bittikartan sovitukseen, joten se olisi venyttanyt jo piirretyn kuvan.
  *
  * MUISTI. 76 x 1280 x 720 x 4 tavua = 267 MiB purettuna. Liukuvaa
- * ikkunaa ei tarvita, koska latausruutu odottaa koko sarjan valmiiksi
- * ennen kuin scrollaus vapautuu - kaikki ruudut ovat joka tapauksessa
- * muistissa siina vaiheessa kun niita voi tarvita.
+ * ikkunaa ei tarvita: sarja on lyhyt ja koko joukko mahtuu muistiin.
  *
  * LATAUSJARJESTYS. Ruutu 001 heti ja piirretaan; loput vasta
  * load-tapahtuman jalkeen, CONC kappaletta kerrallaan, pienin
@@ -48,9 +46,10 @@ import { LogoMark } from "./Logo";
  * INVARIANTTI. Piirrolle annetaan aina j = lahin residentti indeksi
  * i:sta, valittuna residenteista eika indeksiaritmetiikalla. Ruutu 0 on
  * ladattu ennen kaikkea muuta, joten joukko ei ole koskaan tyhja.
- * Tama on tarpeen viela ikkunan poistonkin jalkeen: LOAD_TIMEOUT voi
- * vapauttaa scrollauksen vajaalla sarjalla, ja silloin se on ainoa mika
- * estaa piirron puuttuvaan ruutuun.
+ * Tama on tarpeen viela ikkunan poistonkin jalkeen: kerros vapautuu
+ * RELEASE_AT-etuliitteella tai LOAD_TIMEOUTilla, siis aina vajaalla
+ * sarjalla, ja silloin se on ainoa mika estaa piirron puuttuvaan
+ * ruutuun.
  */
 
 const SETS = {
@@ -61,14 +60,30 @@ const WIDE = "(min-width: 980px)";
 const DPR_MAX = 2;
 /* Yhtaaikaisten ruutulatausten maara load-tapahtuman jalkeen. */
 const CONC = 5;
-/* LATAUSRUUDUN AIKAKATKAISU. Mitattuna CONC 5:lla koko sarja (2339 kt)
-   valmistuu kuidulla 0,8 s, tyypillisella 4G:lla 3,0 s ja hitaalla
-   4G:lla 8,7 s. 12 s antaa hitaimmallekin naista noin 40 %:n varan
-   vaihtelulle eika laukea niilla lainkaan; sen alle jaava arvo
-   katkaisisi hitaan 4G:n normaalin latauksen kesken. Katkaisun jalkeen
-   scrubbaus toimii silla mita on ladattu (nearest-resident) ja loput
-   tulevat taustalla. */
+/* LATAUSRUUDUN AIKAKATKAISU. 12 s laskettuna latauksen alusta. Se on
+   varaventtiili, ei normaali reitti: RELEASE_AT tayttyy jokaisella
+   mitatulla profiililla selvasti aiemmin. Katkaisun jalkeen scrubbaus
+   toimii silla mita on ladattu (nearest-resident) ja loput tulevat
+   taustalla. */
 const LOAD_TIMEOUT = 12000;
+/* VAPAUTUSKYNNYS. Kerros ei odota koko sarjaa vaan yhtenaista etuliitetta
+   RELEASE_AT asti; loput ladataan taustalla samalla lataajalla.
+
+   ARVO ON JOHDETTU KULUTUKSEN JA TUOTON EROSTA. Rauhallinen ensikatselu
+   on n. 400 px/s, mika on vh 700:lla 19,1 ruutua/s (lyhyt nakyma =
+   lyhyt spacer = tihein kulutus). Hitaan 4G:n tuotto CONC 5:lla on
+   8,8 ruutua/s, joten vajetta kertyy 10,3 ruutua sekunnissa sen 3,92 s
+   ajan jonka koko matka kestaa - yhteensa 40,5 ruutua. 41 on siis pienin
+   arvo jolla rauhallinen selaus ei jaa odottamaan yhdellakaan mitatulla
+   nakymalla eika profiililla.
+
+   Kuidulla ja tyypillisella 4G:lla tuotto (99,5 ja 25,5 ruutua/s)
+   ylittaa rauhallisen kulutuksen jo ilman etuliitetta, joten kynnys
+   maksaa niilla vain 0,41 s ja 1,61 s. Trackpadin heilautus (187,5
+   ruutua/s) ylittaa jokaisen profiilin eika mikaan kynnys korjaa sita;
+   se on sama hyvaksytty heikennys kuin ennenkin, ja nearest-resident
+   piirtaa silloin lahimman residentin. */
+const RELEASE_AT = 41;
 /* Scroll-vihje piiloon heti kun liike alkaa. Sama kynnys molempiin
    suuntiin, joten vihje palaa kun kayttaja palaa alkuun. */
 const HINT_P = 0.02;
@@ -145,7 +160,16 @@ export default function HeroScrub() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const imgs: (HTMLImageElement | null)[] = new Array(set.n).fill(null);
-    let count = 0;
+    // RATKENNEET, ei ladatut: epaonnistunut pyynto merkitaan myos, jotta
+    // yksi 404 ei pysayta etuliitetta eika jata kerrosta odottamaan
+    // aikakatkaisuun asti. imgs[i] jaa silloin nulliksi ja nearest()
+    // ohittaa sen.
+    const settled: boolean[] = new Array(set.n).fill(false);
+    // Pisin yhtenainen etuliite ratkenneista. Vapautus nojaa juuri
+    // etuliitteeseen eika lukumaaraan: scrubbaus kuluttaa ruudut
+    // jarjestyksessa, joten aukkoinen joukko ei kata matkan alkua.
+    let ready = 0;
+    const K = Math.min(RELEASE_AT, set.n);
     let shown = -1;
     let raf = 0;
     let stopped = false;
@@ -200,7 +224,8 @@ export default function HeroScrub() {
           // Epaonnistunutkin pyynto kasvattaa laskuria: muuten palkki
           // jaisi jumiin ja kerros odottaisi aikakatkaisuun asti ruutua
           // joka ei koskaan tule.
-          count++;
+          settled[i] = true;
+          while (ready < set.n && settled[ready]) ready++;
           tick();
           done();
         };
@@ -257,9 +282,13 @@ export default function HeroScrub() {
       document.documentElement.classList.remove("hero-locked");
       load.current?.classList.add("is-gone");
     };
+    // Palkki mittaa 0 -> K eika 0 -> set.n: kayttajalle ei nayteta
+    // palkkia joka pysahtyy puoliveliin. Se on silti todellinen
+    // edistyminen - sama etuliite jolla vapautus tehdaan - ja tayttyy
+    // tasan silla hetkella kun kerros haipyy.
     const tick = () => {
-      if (bar.current) bar.current.style.width = `${(count / set.n) * 100}%`;
-      if (count >= set.n) release();
+      if (bar.current) bar.current.style.width = `${Math.min(ready / K, 1) * 100}%`;
+      if (ready >= K) release();
     };
 
     // Reduced motion: ei scrubia eika sarjan latausta, vain viimeinen
