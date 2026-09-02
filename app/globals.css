@@ -3367,18 +3367,28 @@ footer .base { padding-top: 18px }
 /* Sprite on lapinakymaton VAIN sisaantulon ajan: 0 -> huippu -> 0, sama
    1,8 s kuin .gsurf-van.rv:n transitionilla, kerran ja ilman toistoa.
 
-   HUIPPU ON 10 %:SSA, MITATTU. Sisaantulon kayra cubic-bezier(.2,.6,.2,1)
-   on nopeimmillaan kohdassa t = 7,1 %; 10 % vastaa 97,6 % huippu-
-   nopeudesta ja antaa opacityn nousulle 180 ms. Aiempi 22 % osui
-   kohtaan jossa auto liikkui enaa 57,7 % huippunopeudesta.
+   AJOITUS ON MITOITETTU EMON MUKAAN, ei pelkan nopeuskayran. Sprite on
+   .gsurf-vanin lapsi, joten sen opacity KERTAUTUU emon kanssa, ja emo
+   haivyttyy sisaantulossa .42 -> 1. Ilman viivetta efektiivinen huippu
+   jai 0,633:een kohdassa 308 ms, jolloin auto oli vasta ilmestymassa
+   nakyman alalaitaan.
+
+   Viive 0,4 s siirtaa huipun kohtaan 0,4 + 0,12 x 1,4 = 0,568 s, jolloin
+   emon opacity on jo 0,870 - efektiivinen huippu nousee 0,633 -> 0,870.
+   Kesto 1,4 s paattyy tasan sisaantulon kanssa (0,4 + 1,4 = 1,8 s),
+   joten sumennus ei jaa paalle auton pysahdyttya: efektiivinen opacity
+   on 1800 ms kohdalla tasan 0.
+
+   fill-mode both pitaa spriten nollassa myos viiveen ajan, joten mitaan
+   ei valahda ennen kuin auto on ehtinyt matkalle.
    both pitaa lopputilan nollassa, joten kuva palaa tasmalleen
    valokuvaksi eika jaa mihinkaan valitilaan. */
 @keyframes wheelspin {
   0% { opacity: 0 }
-  10% { opacity: var(--wheel-blur, 1) }
+  12% { opacity: var(--wheel-blur, 1) }
   100% { opacity: 0 }
 }
-.gsurf-van.rv.on .gsurf-wheel { animation: wheelspin 1.8s ease-out both }
+.gsurf-van.rv.on .gsurf-wheel { animation: wheelspin 1.4s .4s ease-out both }
 
 .gsurf-light {
   position: absolute; left: 27%; top: 55%; width: 34%; aspect-ratio: 1;
