@@ -379,7 +379,19 @@ export default function Refs({ children }: { children: ReactNode }) {
           Referenssit. Pelkkaa dokumenttikorkeutta: .refs on pinnattuna
           nakyman korkuinen, joten vali jaa kokonaan sen taakse. */}
       <div className="refgap" aria-hidden="true" />
-      <div className="aftercover">{children}</div>
+      {/* VAALEA KUVIOKERROS .aftercoverin SISAAN. Osion oma valkoinen
+          tausta jaa koskemattomana sen ALLE, joten videoseinan peitto ei
+          muutu lainkaan - kuvio vain maalataan peittavan pinnan paalle.
+
+          Kerroksen korkeus on --metalbd-tail (tasta footeriin) eika osion
+          korkeus: sticky-panen liikevaran on jatkuttava sauman yli, muuten
+          pane pinnautuisi osion alareunaan ja kuvio irtoaisi nakymasta
+          juuri siina kohdassa jonka pitaa olla saumaton. Maalaus rajataan
+          takaisin osion mittaan mask-imagella, ks. globals.css. */}
+      <div className="aftercover">
+        <MetalBackdrop inSection />
+        {children}
+      </div>
     </div>
   );
 }

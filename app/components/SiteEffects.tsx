@@ -136,8 +136,29 @@ export default function SiteEffects() {
       const layer = document.querySelector<HTMLElement>(".metalbd-v2");
       const foot = document.querySelector("footer");
       if (!layer || !foot) return;
-      const h = foot.getBoundingClientRect().top - layer.getBoundingClientRect().top;
+      const footTop = foot.getBoundingClientRect().top;
+      const h = footTop - layer.getBoundingClientRect().top;
       layer.style.setProperty("--metalbd-h", `${Math.round(h)}px`);
+
+      // .aftercoverin oma kuviokerros. KAKSI ARVOA SAMASTA RECTISTA:
+      // --metalbd-tail on kerroksen korkeus (tasta footeriin) ja antaa
+      // sticky-panelle liikevaran sauman yli; --aftercover-h on maskin
+      // alastop. Jos ne luettaisiin eri kutsuista, valiin ehtisi asettelu-
+      // muutos ja saumaan jaisi rako tai paallekkainen maalaus.
+      //
+      // EI PYORISTYSTA. Maskin alastop lasketaan samasta laatikosta kuin
+      // kerroksen ylareuna (molemmat .aftercoverin border-boxista), joten
+      // murtoluku osuu tasan alareunaan. Pyoristys ylospain tuottaisi
+      // ylimaaraisen maalatun rivin, alaspain raon.
+      const after = document.querySelector<HTMLElement>(".aftercover");
+      if (!after) return;
+      const r = after.getBoundingClientRect();
+      after.style.setProperty("--metalbd-tail", `${footTop - r.top}px`);
+      after.style.setProperty("--aftercover-h", `${r.height}px`);
+      // Liikevaran diagnostiikka: panen on pysyttava nakymaan pinnattuna
+      // koko osion ajan, mika vaatii ettei kerros lopu ennen kuin osio on
+      // ohitettu - eli footTop - r.bottom > nakyman korkeus.
+      after.style.setProperty("--aftercover-gap", `${footTop - r.bottom}px`);
     };
     measureMetal();
     // Sivun korkeus muuttuu fonttien latauksen ja kuvien mitoituksen myota,

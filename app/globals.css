@@ -3520,6 +3520,48 @@ footer .base { padding-top: 18px }
 
 /* ---------- OSION SISAINEN KUVIOKERROS ---------- */
 .metalbd-inset { height: 100% }
+
+/* VAALEA OSIOKERROS (.aftercover). Poikkeaa tummasta kahdessa asiassa.
+
+   KORKEUS EI OLE 100%. Sticky-panen nakymasijainti on
+       top = min( max(CB.top, 0), CB.bottom - vh )
+   missa CB on tama kerros. Jos CB olisi osion korkuinen, sen alareuna
+   olisi tasan se sauma jonka pitaa olla nakymaton: viimeisen nakyman
+   verran pane pinnautuisi osion pohjaan ja kuvio irtoaisi nakymasta,
+   jolloin sauman ylapuoli liikkuisi sisallon mukana ja alapuoli pysyisi
+   paikallaan. --metalbd-tail vie CB:n footeriin asti, jolloin
+   CB.bottom - vh > 0 koko osion ajan ja pane pysyy nakymaan pinnattuna
+   tasan kuten sivutason kerros.
+
+   MAALAUS RAJATAAN TAKAISIN osion mittaan. Rajan alapuolella jatkaa
+   sivutason .metalbd, ja koska molempien paneet ovat sticky top: 0 /
+   100vh taydella liikevaralla, ne ovat samassa nakymasijainnissa ja
+   piirtavat saman kuvion samassa vaiheessa - rajaus ei siis nay.
+   Ilman rajausta kerrokset maalaisivat paallekkain ja kuvio olisi
+   sauman alapuolella kaksinkertaisen tumma.
+
+   YLAREUNA saa saman 130px:n haivytyksen kuin tumma variantti: raja
+   .refsia vasten on varinvaihtoraja, ja ilman haivytysta vaalea kuvio
+   alkaisi teravalla reunalla. Molemmat rajaukset mahtuvat samaan
+   deklaraatioon. */
+.metalbd-inset:not(.metalbd-dark) {
+  height: var(--metalbd-tail, 100%);
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0, #000 130px,
+    #000 var(--aftercover-h, 100%), transparent var(--aftercover-h, 100%));
+  mask-image: linear-gradient(to bottom,
+    transparent 0, #000 130px,
+    #000 var(--aftercover-h, 100%), transparent var(--aftercover-h, 100%));
+}
+/* Porrastus .aftercoverin sisalla, sama periaate kuin .refsissa
+   (.metalbd 0 < .refsticky 1 < .refs 2): kuvio osion oman taustan paalle
+   mutta sisallon alle. Ilman tata sisalto jaisi kuvion alle, koska
+   staattinen sisalto maalautuu ennen positioituja jalkelaisia.
+
+   Tarkistettu ennen lisaysta: .aftercoverin alipuussa ei ole yhtaan
+   saantoa jolla on position: absolute tai fixed, joten uusi containing
+   block ei voi siirtaa mitaan. */
+.aftercover > *:not(.metalbd) { position: relative; z-index: 1 }
 /* KEVYT YLAHAIVYTYS. Vain tumman kerroksen oma opacity nousee 0 -> 1
    ensimmaisen 130px:n aikana, jolloin kuvio nayttaa jatkuvan varia
    vaihtaen lyhyella matkalla. Ei vie tilaa asettelusta eika korvaa
