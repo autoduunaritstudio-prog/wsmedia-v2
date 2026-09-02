@@ -282,6 +282,10 @@ export default function HeroScrub() {
       if (!window.location.hash) window.scrollTo(0, 0);
       document.documentElement.classList.remove("hero-locked");
       load.current?.classList.add("is-gone");
+      // Lukon purku ei itsessaan laukaise IntersectionObserveria, joten
+      // SiteEffectsin paljastusvarmistus herateta tapahtumalla. Tapahtuma
+      // eika tuonti: komponentit eivat tunne toisiaan.
+      window.dispatchEvent(new Event("hero:unlocked"));
     };
     // Edistyminen menee YHTENA muuttujana CSS:aan, ja sielta seka logon
     // tayttomaskiin etta palkin leveyteen. Mittari on 0 -> K eika

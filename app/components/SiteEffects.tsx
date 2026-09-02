@@ -603,6 +603,53 @@ export default function SiteEffects() {
     );
     document.querySelectorAll(".rv").forEach((el) => io.observe(el));
 
+    /* Varmistus havainnoijan rinnalle, ei sen korvaaja.
+     *
+     * MIKSI TATA TARVITAAN. Latauskerroksen ajan juuressa on
+     * html.hero-locked { overflow: hidden }, joka tekee <html>:sta
+     * LEIKKAAVAN esivanhemman. IntersectionObserver leikkaa kohteen
+     * suorakulmion jokaista esivanhemman leikkausta vasten, joten koko
+     * taitteen alapuolinen sisalto on lukituksen ajan nollattu. Kun
+     * luokka poistetaan, mikaan ei valttamatta laukaise IO:lle uutta
+     * arviota ennen kuin kayttaja on vierittanyt reilusti - ja koska
+     * paljastus on kertaluontoinen (unobserve), valiin jaaneet
+     * elementit jaavat opacity: 0 -tilaan. Mitattuna rvOn oli 0 / 33.
+     *
+     * Kynnys on sama 0,1 kuin havainnoijalla ja laskettu samalla
+     * maaritelmalla: leikkauspinta-ala jaettuna elementin pinta-alalla.
+     * classList.add on idempotentti, joten IO:n oma toimitus samalle
+     * elementille ei tee vahinkoa. */
+    const revealNow = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      document.querySelectorAll<HTMLElement>(".rv:not(.on)").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const area = r.width * r.height;
+        if (area <= 0) return;
+        const ih = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+        const iw = Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0));
+        if ((ih * iw) / area >= 0.1) el.classList.add("on");
+      });
+    };
+    revealNow();
+    // HeroScrub ilmoittaa lukon purusta tapahtumalla, ei tuonnilla:
+    // komponentit pysyvat erillaan. Synteettinen scroll ei auttaisi -
+    // IO:ta ei ajeta scroll-tapahtumista vaan renderointisilmukasta.
+    window.addEventListener("hero:unlocked", revealNow, { passive: true, signal });
+    let revealTick = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (revealTick) return;
+        revealTick = true;
+        requestAnimationFrame(() => {
+          revealTick = false;
+          revealNow();
+        });
+      },
+      { passive: true, signal },
+    );
+
     /* ---------- ajovalot (palautuva tila) ---------- */
     // Eri havainnoija kuin .rv-paljastus: TAMA EI TEE UNOBSERVEA, vaan
     // togglaa luokan nakyvyyden mukaan molempiin suuntiin. Sisaantulo on
