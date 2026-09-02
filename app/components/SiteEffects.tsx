@@ -20,6 +20,30 @@ export default function SiteEffects() {
     const ac = new AbortController();
     const { signal } = ac;
 
+    /* PALJASTUKSEN OLETUS ON NAKYVA, ei piilotettu.
+     *
+     * .rv:n perustila oli aiemmin opacity: 0, ja vain JS teki siita
+     * nakyvan. Mika tahansa vika paljastusketjussa - kaatunut skripti,
+     * estetty JS, havainnoija joka ei toimita - jatti sivun tyhjaksi.
+     * Nyt piilotus on kiinni TASSA luokassa: se lisataan ennen kuin
+     * mitaan observoidaan, joten ilman JS:aa tai ennen sen ajoa kaikki
+     * sisalto on nakyvissa ja animaatio jaa vain pois.
+     *
+     * VARMISTUSAIKAKATKAISU. Jos yksikaan .rv ei ole saanut .on:ia
+     * RV_FALLBACK:n kuluessa, luokka poistetaan kokonaan ja kaikki
+     * paljastumaton tulee nakyviin ilman animaatiota. Ajastin
+     * peruutetaan vasta kun paljastus on todistetusti toiminut, eli kun
+     * jokin .rv on .on. 8 s on riittavan pitka etteivat hitaat
+     * ensimmaiset framet katkaise animaatiota, ja lyhyempi kuin mikaan
+     * aika jonka kayttaja jaksaisi katsoa tyhjaa. */
+    const root = document.documentElement;
+    const RV_FALLBACK = 8000;
+    root.classList.add("rv-ready");
+    let rvTimer: number | undefined = window.setTimeout(() => {
+      root.classList.remove("rv-ready");
+      rvTimer = undefined;
+    }, RV_FALLBACK);
+
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const finePointer = window.matchMedia("(pointer: fine)").matches;
 
@@ -630,6 +654,12 @@ export default function SiteEffects() {
         const iw = Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0));
         if ((ih * iw) / area >= 0.1) el.classList.add("on");
       });
+      // Ajastin peruutetaan vasta kun paljastus on TODISTETUSTI
+      // toiminut. Pelkka funktion ajautuminen ei riita todisteeksi.
+      if (rvTimer !== undefined && document.querySelector(".rv.on")) {
+        window.clearTimeout(rvTimer);
+        rvTimer = undefined;
+      }
     };
     revealNow();
     // HeroScrub ilmoittaa lukon purusta tapahtumalla, ei tuonnilla:
@@ -733,6 +763,8 @@ export default function SiteEffects() {
       .forEach((el) => io2.observe(el));
 
     return () => {
+      if (rvTimer !== undefined) window.clearTimeout(rvTimer);
+      root.classList.remove("rv-ready");
       metalRo.disconnect();
       refRo?.disconnect();
       ac.abort();

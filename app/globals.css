@@ -2161,10 +2161,19 @@ footer .base { padding-top: 18px }
 .ft-b { left: -18px; bottom: 24px; animation: cfl 7s ease-in-out -3s infinite alternate }
 @media (max-width: 880px) { .ft-a { right: 6px } .ft-b { left: 6px } }
 
+/* PALJASTUKSEN OLETUS ON NAKYVA. Perussaanto kantaa vain siirtyman;
+   piilotus on kiinni html.rv-ready -luokassa, jonka SiteEffects lisaa
+   ennen kuin se observoi mitaan. Ilman JS:aa tai ennen sen ajoa sisalto
+   on siis nakyvissa ja pelkka animaatio jaa pois - aiemmin sama tilanne
+   jatti sivun tyhjaksi.
+
+   SIIRTYMA ON TASSA eika :not(.on) -saannossa. Jos se olisi siella, se
+   lakkaisi patemasta samalla hetkella kun .on lisataan, ja paluu
+   nakyvaan tapahtuisi ilman haivytysta. */
 .rv {
-  opacity: 0; transform: translateY(26px);
   transition: opacity .8s cubic-bezier(.2,.6,.2,1), transform .8s cubic-bezier(.2,.6,.2,1);
 }
+html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .rv.on { opacity: 1; transform: none }
 .stagger > * { transition-delay: calc(var(--i,0) * 90ms) }
 [data-par] { will-change: translate }
@@ -3326,8 +3335,11 @@ footer .base { padding-top: 18px }
    peittoa, ei katoamista.
    Kesto on eriytetty .rv:n oletuksesta (0.8s) omaksi arvokseen, jotta
    rauhallinen "ajaa esiin" -liike ei hidasta muita reveal-animaatioita. */
+/* Sama kaannos kuin .rv:lla, mutta oma lahtotila: auto tulee sivusta
+   ja himmeana, ei alhaalta. Spesifisyys (0,4,1) voittaa yleisen
+   html.rv-ready .rv:not(.on) -saannon (0,3,1). */
+html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) scale(.85) }
 .gsurf-van.rv {
-  opacity: .42; transform: translateX(38%) scale(.85);
   transition: opacity 1.8s cubic-bezier(.2,.6,.2,1),
               transform 1.8s cubic-bezier(.2,.6,.2,1);
 }
