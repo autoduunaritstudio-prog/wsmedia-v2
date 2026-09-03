@@ -30,3 +30,33 @@ Laatua ei todenneta tiedostokoosta vaan VP8-bittivirran
 kvantisointivektoreista (`webpinfo -bitstream_info`). Kokovertailu johtaa
 harhaan, koska skaalain vaikuttaa kokoon: se antoi q70:n silloin kun
 bittivirta osoitti q72:n.
+
+## Selaimen käyttö
+
+Oletus: **ÄLÄ aja selainta.** Johda tulokset koodista ja laskennasta ja sano se
+ääneen kun jokin arvo vaatisi elävän selaimen. Tämä koskee kaikkea tavallista
+työtä — asemointia, värejä, tekstimuutoksia, komponenttien siirtoja, uusia
+sääntöjä. Selaimen käynnistäminen tällaiseen maksaa minuutteja eikä tuota
+mitään mitä koodi ei jo kerro.
+
+Aja selain **VAIN** kun tehtävä on nimenomaisesti jokin näistä:
+
+- suorituskyvyn mittaus (pudotetut kehykset, maalausaika, long taskit,
+  LCP/CLS/INP)
+- ajoituksen tai latauksen todentaminen (latausruutu, scroll lock,
+  lazy-lataus, varaventtiilit)
+- scroll-sidotun mekaniikan auditointi (scrubbaus, sticky-elementit,
+  reveal-järjestelmä)
+- visuaalinen regressio jonka toistuminen pitää todistaa, ei arvioida
+- vian toisto joka ei toistu koodia lukemalla
+- käyttäjä pyytää sitä suoraan
+
+Kun selain ajetaan: Playwright `headless: false`, **tuotantobuild**
+(`next build && next start`) — ei koskaan dev-palvelimesta, koska sen
+suorituskyky ei kerro mitään. Throttlaus CDP:n kautta. Mittausskripti
+tallennetaan niin että sen voi ajaa uudelleen samoilla parametreilla —
+muuten ennen/jälkeen ei ole vertailu.
+
+**Rajatapaus:** jos tavallisessa tehtävässä törmäät arvoon jota et voi johtaa
+koodista, ÄLÄ käynnistä selainta oma-aloitteisesti. Sano mikä arvo se on ja
+miksi se vaatii selaimen, ja anna käyttäjän päättää.
