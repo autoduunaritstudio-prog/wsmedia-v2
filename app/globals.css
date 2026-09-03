@@ -1556,7 +1556,14 @@ section { padding: var(--space-section) 0 }
 /* ---------- cases / steps / plans / form ---------- */
 .cases { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-gap-grid) }
 @media (max-width: 820px) { .cases { grid-template-columns: 1fr } }
-.case { padding: var(--space-card-case); text-align: center; border-radius: 20px }
+/* Flex-pystysuunta, jotta kortit pysyvat samannakoisina vaikka kaikilla
+   ei ole sparklinea. Ruudukko venyttaa kortit jo valmiiksi yhta korkeiksi
+   (grid align-items: stretch), joten ongelma ei ole korkeus vaan se mihin
+   ylimaarainen tila menee: ilman tata se jaisi pillerin ALLE ja nayttaisi
+   virheelta. .case p kasvaa, joten tila menee tekstin ja pillerin valiin
+   ja pilleri istuu kaikissa korteissa kortin pohjalla. */
+.case { padding: var(--space-card-case); text-align: center; border-radius: 20px; display: flex; flex-direction: column }
+.case p { flex: 1 0 auto }
 .case .num {
   font-size: var(--text-metric); font-weight: var(--weight-bold); letter-spacing: -0.028em;
   color: var(--blue); font-variant-numeric: tabular-nums;
