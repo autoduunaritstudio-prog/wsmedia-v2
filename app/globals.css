@@ -1565,93 +1565,189 @@ section { padding: var(--space-section) 0 }
      - media query ei lisaa spesifisyytta (ks. CLAUDE.md). */
   .case[data-tilt]:not(:hover) { transform: none }
 }
-/* KUVAVETOINEN KORTTI. Padding siirtyi .case-bodyyn, jotta kuva yltaa
-   kortin reunoihin asti. Teksti on vasemmassa tasauksessa: kuusi
-   keskitettya elementtia tasavalein ei anna silmalle sisaankayntia. */
-.case { padding: 0; text-align: left; border-radius: 20px; display: flex; flex-direction: column }
-/* KIINTEA KUVASUHDE varaa tilan ennen kuin kuva on ladattu, joten CLS on
-   0 myos silloin kun tiedostoa ei viela ole. overflow: hidden on VAIN
-   tassa - kortissa se leikkaisi varjon. Ylakulmien pyoristys on kortin
-   20px miinus 1px reuna, jolloin kaari istuu reunan sisapuolelle.
-   Taustavari on neutraali taytto siksi ajaksi kun kuvaa ei ole. */
+/* ==================================================================
+   CASE-KORTTI: TUMMA METALBD-PANEELI
+   Osion vaaleaan taustaan ei kosketa - vain kortti on tumma.
+   ================================================================== */
+.case {
+  padding: 0; text-align: left; border-radius: 20px;
+  display: flex; flex-direction: column;
+  position: relative;
+  /* overflow: hidden rajaa kuvan ja metallikerrokset pyoristykseen.
+     Kortin OMA varjo ei leikkaudu: elementin oma box-shadow maalataan
+     sen border boxin ULKOPUOLELLE eika kuulu sen omaan overflow-
+     rajaukseen - rajaus koskee vain jalkelaisia. */
+  overflow: hidden;
+  background: #131317;
+  /* Vaalea hiusviiva pois: se on #f5f5f7-pohjaa vasten nakymaton
+     (1,22:1), joten se ei erottanut korttia mistaan. Kortin erottaa
+     pohjasta nyt pelkka varjo. */
+  border: 0;
+  box-shadow: 0 26px 54px -26px rgba(13,13,16,.52), 0 3px 10px -4px rgba(13,13,16,.30);
+}
+/* .card:hover on (0,2,0) ja voittaisi .casen (0,1,0), joten tumma
+   hover-varjo tarvitsee yhta spesifisen saannon. Tama koskee myos
+   keskimmaista korttia, jolla ei ole [data-tilt]-saantoa lainkaan. */
+.case:hover {
+  box-shadow: 0 34px 70px -28px rgba(13,13,16,.60), 0 3px 10px -4px rgba(13,13,16,.30);
+}
+
+/* ---------- METALLIKERROKSET KORTIN SISALLA ----------
+   Gradienttiarvot ovat samat kuin osiossa (.metalbd-a / -b / -sweep ja
+   .metalbd-dark .metalbd-glow), luettuina taman tiedoston omista
+   saannoista.
+
+   VAIN GEOMETRIA MUUTTUU. Osiossa mitat ovat vmax-yksikoissa eli
+   ikkunaan sidottuja: 105vmax olisi 333px kortissa tasainen lakka
+   ilman muotoa, ja 900px pyyhkaisyjakso mahtuisi kortin poikki kerran
+   eli tuottaisi yhden reunan, ei kuviota. Tassa mitat ovat prosentteja
+   korttilaatikosta, joten kuvio skaalautuu kortin mukana.
+
+   Ei will-change: transformia. Osiossa se on parallaksin takia; nama
+   kerrokset eivat liiku, joten se olisi kolme turhaa kerrospromootiota. */
+.cmb {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+  opacity: var(--cmb-opacity, .85);
+}
+.cmb > div { position: absolute }
+.cmb-a {
+  width: 190%; height: 150%; top: -55%; left: -40%;
+  background: radial-gradient(closest-side at 50% 50%,
+    rgba(26,26,28,.44) 0%, rgba(58,58,63,.34) 38%, rgba(96,96,102,.14) 64%,
+    rgba(106,106,112,0) 82%);
+}
+.cmb-b {
+  width: 210%; height: 165%; bottom: -62%; right: -55%;
+  background: radial-gradient(closest-side at 50% 50%,
+    rgba(112,112,118,.38) 0%, rgba(74,74,79,.28) 40%, rgba(40,40,44,.10) 66%,
+    rgba(26,26,28,0) 84%);
+}
+/* Kulmat 300/520/900 -> 107/185/320, skaalakerroin 320/900 = 0,3556.
+   118 asteen kulmalla gradienttiviivan pituus laatikon poikki on
+   |W*sin118| + |H*cos118|; ks. raportti - tulos on 1-2 juovaa. */
+.cmb-sweep {
+  inset: -40%;
+  background: repeating-linear-gradient(118deg,
+    rgba(255,255,255,0) 0px,
+    rgba(255,255,255,.10) 107px,
+    rgba(150,150,158,.055) 185px,
+    rgba(255,255,255,0) 320px);
+}
+.cmb-gl {
+  inset: 0;
+  background: radial-gradient(220% 190% at 56% 42%,
+    rgba(255,255,255,.106) 0%,
+    rgba(255,255,255,.081) 26%,
+    rgba(255,255,255,.046) 50%,
+    rgba(255,255,255,.016) 74%,
+    rgba(255,255,255,0)    100%);
+}
+/* SVG on korvattu elementti: mitat on annettava eksplisiittisesti,
+   muuten se putoaa virtaan ja saa oletusmittansa 300x150px. */
+.cmb-facets { position: absolute; inset: 0; width: 100%; height: 100% }
+.cmbf { stroke: rgba(255,255,255,.146) }
+.cmbc-1 { fill: rgba(255,255,255,.051) }
+.cmbc-2 { fill: rgba(255,255,255,.063) }
+.cmbc-3 { fill: rgba(0,0,0,.263) }
+.cmbc-4 { fill: rgba(0,0,0,.201) }
+.cmbc-5 { fill: rgba(0,0,0,.232) }
+
+/* ---------- KUVAKAISTA ----------
+   Tausta on lapinakyva eika --blue-tint: ilman kuvaa nakyy kortin oma
+   metallipinta, joka jatkuu saumatta. Vaalea taytto repisi silman
+   tummassa kortissa. aspect-ratio varaa tilan joka tapauksessa -> CLS 0,
+   eika rikkinaista kuvaikonia synny koska <img> jaa renderoimatta. */
 .case-shot {
+  position: relative; z-index: 1;
   aspect-ratio: 16 / 9; overflow: hidden;
   border-radius: 19px 19px 0 0;
-  background: var(--blue-tint); border-bottom: 1px solid var(--hair);
+  background: transparent;
 }
 .case-shot img { width: 100%; height: 100%; object-fit: cover; display: block }
-.case-body { padding: 24px 30px 30px; display: flex; flex-direction: column; flex: 1 }
+/* Kirkas kuva tumman paneelin paalla loppuisi muuten veitsella
+   leikattuna. :not(:empty) rajaa haivytyksen niihin kortteihin joissa
+   kuva on: ilman kuvaa .case-shot on aidosti tyhja, jolloin haivytys
+   piirtaisi tummaa tumman paalle. */
+.case-shot:not(:empty)::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 26px;
+  background: linear-gradient(180deg, rgba(19,19,23,0), rgba(19,19,23,.92));
+  pointer-events: none;
+}
+
+.case-body {
+  position: relative; z-index: 1;
+  padding: 24px 30px 30px; display: flex; flex-direction: column; flex: 1;
+}
 .case-body p { flex: 1 0 auto }
-/* Otsikko varaa kaksi rivia kaikilla korteilla. Ilman tata kortti 1
-   (25 merkkia = 1 rivi) jaa 25,5 px matalammaksi kuin kortit 2 ja 3
-   (49 ja 38 merkkia = 2 rivia), ja ruudukon venytys jattaisi siihen
-   juuri sen verran selittamatonta rakoa - yli 24 px:n rajan.
-   1,5em on peritty line-height, joten luku seuraa fonttikokoa. */
-.case h3 { min-height: calc(2 * 1.5em) }
-/* Asiakaslogo kortin ylalaitaan. Kiintea KORKEUS ja auto-leveys, jolloin
-   eri kuvasuhteet (2,347 / 1,001 / 2,085) eivat voi rikkoa ruudukon
-   tasakorkeutta. object-fit: contain on varmistus sille tapaukselle etta
-   jokin merkki joskus saa myos leveysrajan. */
-/* Logo kuvan alla VASEMMALLA, ei kuvan paalla: kuvan pikselit vaihtelevat
-   eika kontrastia voisi taata ilman etta se laskettaisiin jokaisen kuvan
-   kirkkaimmasta pikselista. 26 px 30:n sijaan, koska logo ei enaa ole
-   kortin ainoa visuaalinen elementti vaan kuvan alanimio; levein merkki
-   (Colormaster 798x340 = 2,347) on silla korkeudella 61 px. */
-.case-logo { height: 26px; margin-bottom: 12px; display: flex; align-items: center; justify-content: flex-start }
-.case-logo img, .case-logo svg { height: 100%; width: auto; object-fit: contain }
-/* LogoMark on currentColor-taytteinen: --ink antaa 16,83:1 valkoista
-   korttia vasten, eli reilusti yli 1.4.11:n 3:1:n. */
-.case-logo-mark { color: var(--ink) }
 
-
-
-/* KAANTO. Sama mekanismi kuin .browserilla ja .eventilla: SiteEffects
-   kirjoittaa --tilt-rotin ja CSS rakentaa ketjun. Vain reunimmaisilla
-   korteilla on data-tilt, joten keskimmainen jaa suoraan.
-
-   :not(:hover) EI OLE KOSMETIIKKAA. .card:hover asettaa oman
-   transforminsa (translateY(-6px)), ja SiteEffectsin .tilt-kasittelija
-   kirjoittaa hoverin aikana INLINE-transformin. Ilman rajausta nama
-   kolme kilpailisivat samasta ominaisuudesta ja lopputulos riippuisi
-   saantojen jarjestyksesta. Nyt scroll-kaanto luovuttaa hoverin ajaksi
-   ja palaa kun osoitin lahtee. Spesifisyys (0,3,0) > .card:hover (0,2,0),
-   joten jarjestys ei ratkaise.
-
-   Ei transitionia: arvo tulee joka framessa scroll-asemasta, ja siirtyma
-   viivastyttaisi sita - sama perustelu kuin [data-tilt]-saannossa. */
+/* Scroll-kaanto. Sailyy ennallaan: keskimmainen kortti jaa suoraan,
+   reunimmaiset kaantyvat toisiaan kohti. Spesifisyys (0,3,0) >
+   .card:hover (0,2,0), joten jarjestys ei ratkaise. Ei transitionia:
+   arvo tulee joka framessa scroll-asemasta. */
 .case[data-tilt]:not(:hover) { transform: perspective(1200px) var(--tilt-rot, rotateY(0deg)) }
-/* Varjo syvenee kaannon mukana, kuten .eventilla. Keskimmainen kortti
-   jaa .cardin tasaiseen varjoon, koska sita ei kaanneta. */
 .case[data-tilt] {
-  box-shadow: 0 calc(24px + var(--tilt, 0) * 14px) calc(60px + var(--tilt, 0) * 24px) -24px
-    rgba(29,29,31, calc(.16 + var(--tilt, 0) * .08));
+  /* Sama kaava kuin ennen (+14px y, +24px sumennus, +.08 alfa), uusi
+     pohja. Toinen, tiukka kerros pysyy vakiona: se on se joka piirtaa
+     kortin reunan irti vaaleasta pohjasta. */
+  box-shadow: 0 calc(26px + var(--tilt, 0) * 14px) calc(54px + var(--tilt, 0) * 24px) -26px
+    rgba(13,13,16, calc(.52 + var(--tilt, 0) * .08)),
+    0 3px 10px -4px rgba(13,13,16,.30);
 }
-.case .num {
-  font-size: var(--text-metric); font-weight: var(--weight-bold); letter-spacing: -0.028em;
-  color: var(--blue); font-variant-numeric: tabular-nums;
-}
-.case h3 { font-size: var(--text-body-lg); font-weight: var(--weight-semibold); margin-top: 12px }
-.case p { font-size: var(--text-ui-sm); color: var(--grey); margin-top: 7px }
-/* ALUSTARIVI. Kaksi alustaa erotettuna keskipisteella - ei kehyksia eika
-   laatikoita. Ikonit ovat SocialIconin viivaglyfeja ja perivat varin
-   currentColorista -> yksivarisia --inkilla, ei Instagramin liukua.
 
-   vertical-align on LASKETTU, ei silmamaaraa: numerot ovat versaali-
-   korkuisia, joten niiden pystykeskipiste on cap-height/2 perusviivan
-   ylapuolella. Instrument Sansin OS/2-taulun sCapHeight = 720/1000 upm
-   = 0,7200 em (luettu .next/static/median woff2:sta, ei arvattu),
-   fonttikoko 16 px -> keskipiste 5,760 px. Ikonilaatikko on 18 px ja
-   glyfi keskitetty siihen, joten sen keskipiste on 9 px laatikon
-   pohjasta. Siirto = 5,760 - 9 = -3,24 px. */
-.case-plat { margin-top: 14px; font-size: var(--text-ui-sm); line-height: 1.5; color: var(--grey) }
-.case-plat .plat { white-space: nowrap }
-.case-plat b { color: var(--ink); font-weight: var(--weight-semibold); font-variant-numeric: tabular-nums }
-.case-plat svg { color: var(--ink); vertical-align: -3.24px; margin-right: 6px }
-.case-plat .plat-sep { margin: 0 9px; color: var(--grey) }
+/* ---------- TYPOGRAFIA ----------
+   Ei uutta webfonttia: kaikki mikrolabelit ovat Instrument Sansia
+   versaaleina harvennettuna. Toinen webfontti maksaisi latausaikaa
+   sivulla jonka oma referenssikortti vaittaa PageSpeediksi 100/98. */
+.case-kick {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .19em;
+  text-transform: uppercase; color: #8A8A93;
+}
+.case-kick b { color: #EDEAE4; font-weight: 700 }
+.case .num {
+  font-size: 53px; font-weight: 700; letter-spacing: -.045em;
+  line-height: .88; color: #EDEAE4; margin-top: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.case p {
+  font-size: 12.5px; line-height: 1.5; color: #8A8A93;
+  max-width: 30ch; margin-top: 12px;
+}
+
+/* ---------- SPEC-RIVI ----------
+   Kummallakin sarakkeella on OMA yksikkoteksti, joten yksikko ei voi
+   irrota koskemaan vain toista alustaa vaikka rivi katkeaisi. */
+.case-spec {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid rgba(237,234,228,.11);
+  margin-top: 18px; padding-top: 14px;
+}
+.case-spec .spec + .spec {
+  border-left: 1px solid rgba(237,234,228,.11); padding-left: 16px;
+}
+.spec-label {
+  font-size: 9px; font-weight: 500; letter-spacing: .17em;
+  text-transform: uppercase; color: #8A8A93;
+}
+/* Ikoni 13px eika SocialIconin oma 18px: 9px versaalien vieressa 18px
+   olisi lahes kolminkertainen tekstin korkeuteen nahden. Pystysiirto
+   on laskettu cap-heightista, ks. raportti. */
+.spec-label svg { width: 13px; height: 13px; vertical-align: -3.26px; margin-right: 6px }
+.spec-val {
+  font-size: 20px; font-weight: 700; letter-spacing: -.03em;
+  color: #EDEAE4; margin-top: 7px; font-variant-numeric: tabular-nums;
+}
+.spec-unit {
+  font-size: 9px; font-weight: 500; letter-spacing: .13em;
+  text-transform: uppercase; color: #8A8A93; margin-top: 3px;
+}
+
 .case .fill {
-  display: inline-block; align-self: flex-start; margin-top: 18px; font-size: var(--text-micro); font-weight: var(--weight-semibold);
-  color: var(--grey); border: 1px solid var(--hair); border-radius: 980px;
-  padding: 4px 12px; letter-spacing: .04em;
+  display: inline-block; align-self: flex-start; margin-top: 18px;
+  font-size: 9.5px; font-weight: 700; letter-spacing: .19em;
+  text-transform: uppercase; color: #8A8A93;
+  border: 1px solid rgba(237,234,228,.11); border-radius: 980px;
+  padding: 5px 12px;
 }
 
 .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-gap-grid); counter-reset: s; position: relative }
