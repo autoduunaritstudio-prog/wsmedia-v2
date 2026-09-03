@@ -1736,12 +1736,24 @@ section { padding: var(--space-section) 0 }
    kova vaalea kehys eika hiusviiva - eivatka nama ole 1.4.11:n alaisia:
    alustan nimi on kirjoitettuna ikonin vieressa ja sarakkeet erottuvat
    asettelusta ilman viivaa. */
-.case-spec {
-  display: grid; grid-template-columns: 1fr 1fr;
-  border-top: 1px solid rgba(237,234,228,.22);
-  margin-top: 18px; padding-top: 14px;
+.case-spec { border-top: 1px solid rgba(237,234,228,.22); margin-top: 18px; padding-top: 14px }
+/* Yksikko on rivin YHTEINEN otsikko sarakeruudukon ulkopuolella: se
+   esiintyy kerran, ja alustan nimi mahtuu takaisin sarakkeen labeliin.
+
+   VALI OTSIKON JA SARAKKEIDEN VALILLA ON 14px, TASAN KAKSINKERTAINEN
+   sarakkeen sisaiseen label->arvo -valiin (7px, .spec-val margin-top).
+   Se on laheisyysperiaatteen kynnys: ryhmia EROTTAVAN valin on oltava
+   selvasti suurempi kuin ryhman sisalla SITOVAN, muuten otsikko
+   lukeutuisi ensimmaisen sarakkeen kolmanneksi riviksi. Suhde 2,0
+   riittaa; sita pienempi jattaisi otsikon leijumaan. Otsikko ei voi
+   lukeutua kolmanneksi SARAKKEEKSI, koska se on ruudukon ulkopuolella
+   omana lohkonaan koko rivin levyisena. */
+.case-spec-unit {
+  font-size: 9px; font-weight: 500; letter-spacing: .17em;
+  text-transform: uppercase; color: #CBCBD2;
 }
-.case-spec .spec + .spec {
+.case-spec-cols { display: grid; grid-template-columns: 1fr 1fr; margin-top: 14px }
+.case-spec-cols .spec + .spec {
   border-left: 1px solid rgba(237,234,228,.22); padding-left: 16px;
 }
 .spec-label {

@@ -81,12 +81,13 @@ const SHOTS = {
 const SHOT_FALLBACK = { w: 668, h: 376 };
 
 /**
- * Spec-sarake. KUMMALLAKIN ON OMA yksikkoteksti: aiemmassa versiossa
- * "seuraajaa" oli rivin lopussa yhteisena, jolloin rivin katketessa se
- * jai koskemaan vain jalkimmaista alustaa. Nyt irtoaminen on
- * rakenteellisesti mahdotonta, ei rivityslaskennan varassa.
+ * Spec-sarake. Yksikko EI ole sarakkeessa vaan rivin yhteisena
+ * otsikkona (specUnit): silloin se esiintyy kerran eika kahdesti, eika
+ * se voi irrota koskemaan vain toista saraketta niin kuin kavi kun se
+ * oli rivin lopussa yhteisena. Otsikko on oma lohkonsa sarakeruudukon
+ * ULKOPUOLELLA, joten rivitys ei voi sitoa sita kumpaankaan sarakkeeseen.
  */
-type Spec = { icon: SocialLink["icon"]; label: string; n: string; unit: string };
+type Spec = { icon: SocialLink["icon"]; label: string; n: string };
 
 const hasShot = (src: string) => fs.existsSync(path.join(process.cwd(), "public", src));
 
@@ -101,9 +102,10 @@ const CASES = [
     count: "1,6 milj.",
     title: "Colormaster · automaalamo",
     text: "Katselukertaa Instagramissa ja TikTokissa yhteensä, neljässä kuukaudessa ilman maksettua mainontaa.",
+    specUnit: "seuraajaa",
     spec: [
-      { icon: "instagram", label: "Instagram", n: "1 500", unit: "seuraajaa" },
-      { icon: "tiktok", label: "TikTok", n: "3 000", unit: "seuraajaa" },
+      { icon: "instagram", label: "Instagram", n: "1 500" },
+      { icon: "tiktok", label: "TikTok", n: "3 000" },
     ] as Spec[],
     par: "0.015",
     fill: "Lyhytvideot",
@@ -118,6 +120,7 @@ const CASES = [
     count: "100 / 98",
     title: "Laaksolahden Sähkö · sähkötyöt ja ilmalämpöpumput",
     text: "PageSpeed työpöydällä ja mobiilissa, mitattu 9/2026",
+    specUnit: null,
     spec: null,
     par: "0.035",
     fill: "Verkkosivut",
@@ -132,6 +135,7 @@ const CASES = [
     count: "1 000",
     title: "Garage Fest · autoviikonloppu Espoossa",
     text: "kävijää tapahtumaan, jonka järjestimme itse",
+    specUnit: null,
     spec: null,
     par: "0.015",
     fill: "Tapahtumat",
@@ -212,21 +216,30 @@ export default function Results() {
                     "INSTAGRAM · SEURAAJAA" ei mahtunut: 161,7 px vs.
                     sarakkeen 128,67 px. Siksi alusta on pelkka ikoni ja
                     label on "seuraajaa" (85,7 px, marginaali +43,0 px).
-                    Alustan nimi tulee ruudunlukijalle .vh:na - ja koska
-                    nimi ei ole enaa nakyvissa, ikoni KANTAA nyt tiedon
-                    ja on 1.4.11:n alainen. Mitattu 4,74:1 > 3:1. */}
+                    Yksikko on rivin yhteinen otsikko, joten se esiintyy
+                    kerran ja alustan nimi mahtuu takaisin nakyviin.
+
+                    IKONIN NORMISTATUS ON TAMAN SEURAUS, EI ITSENAINEN
+                    VALINTA - se on jo kaatunut kerran. Kun alustan nimi
+                    on kirjoitettuna ikonin vieressa, ikoni ei kanna
+                    tietoa jota ilman sisaltoa ei ymmarra: se on
+                    koristeellinen eika 1.4.11:n alainen. Jos nimi
+                    joskus poistetaan taas nakyvista, ikonista tulee
+                    tiedon ainoa kantaja ja 3:1 alkaa patea. */}
                 {c.spec ? (
                   <div className="case-spec">
-                    {c.spec.map((sp) => (
-                      <div className="spec" key={sp.icon}>
-                        <div className="spec-label">
-                          <SocialIcon name={sp.icon} />
-                          <span className="vh">{sp.label} </span>
-                          {sp.unit}
+                    <div className="case-spec-unit">{c.specUnit}</div>
+                    <div className="case-spec-cols">
+                      {c.spec.map((sp) => (
+                        <div className="spec" key={sp.icon}>
+                          <div className="spec-label">
+                            <SocialIcon name={sp.icon} />
+                            {sp.label}
+                          </div>
+                          <div className="spec-val">{sp.n}</div>
                         </div>
-                        <div className="spec-val">{sp.n}</div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 ) : null}
                 {/* Pilleri on tekstia eika linkkia: etusivulla ei ole
