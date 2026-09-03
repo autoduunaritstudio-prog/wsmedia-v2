@@ -29,13 +29,37 @@ export default function SiteEffects() {
      * mitaan observoidaan, joten ilman JS:aa tai ennen sen ajoa kaikki
      * sisalto on nakyvissa ja animaatio jaa vain pois.
      *
-     * VARMISTUSAIKAKATKAISU. Jos yksikaan .rv ei ole saanut .on:ia
+     * VARMISTUSAIKAKATKAISU. Jos paljastusta ei todisteta toimivaksi
      * RV_FALLBACK:n kuluessa, luokka poistetaan kokonaan ja kaikki
-     * paljastumaton tulee nakyviin ilman animaatiota. Ajastin
-     * peruutetaan vasta kun paljastus on todistetusti toiminut, eli kun
-     * jokin .rv on .on. 8 s on riittavan pitka etteivat hitaat
-     * ensimmaiset framet katkaise animaatiota, ja lyhyempi kuin mikaan
-     * aika jonka kayttaja jaksaisi katsoa tyhjaa. */
+     * paljastumaton tulee nakyviin ilman animaatiota.
+     *
+     * PERUUTUSEHTO EI SAA OLLA "jokin .rv on saanut .on". Se oli
+     * aiemmin, ja se on mahdoton tayttaa etusivulla: hero tayttaa
+     * ensimmaisen nakyman eika siina ole yhtaan .rv-elementtia, joten
+     * mitattuna 0/33 elementtia yltaa 10 %:n kynnykseen ennen kuin
+     * kayttaja vierittaa. Varaventtiili laukesi siis AINA jos kayttaja
+     * ei ehtinyt vierittaa 8 sekunnissa - mitattu tuotantobuildista,
+     * rv-ready poistui 8122 ms kohdalla ja koko reveal-jarjestelma
+     * kuoli. Ehto ei saa riippua kayttajan vierityksesta eika siita
+     * sattuuko ensimmaisessa nakymassa olemaan .rv-elementteja.
+     *
+     * OIKEA TODISTE ON ETTA HAVAINNOIJA ELAA. IntersectionObserver
+     * toimittaa ensimmaisen kutsun jokaisesta observoidusta kohteesta
+     * riippumatta siita leikkaako se nakymaa: mitattuna 1 kutsu, 33
+     * entrya, joista isIntersecting=true 0 kpl. Se on suora todiste
+     * siita etta havainnoija on asennettu ja toimittaa, eika vaadi
+     * kayttajalta mitaan. Ks. rvProven alempana.
+     *
+     * ARVO 8000 SAILYY. Vika oli ehdossa, ei ajassa. Mitattu aika
+     * sivun alusta havainnoijan ensimmaiseen toimitukseen: 137 ms
+     * normaalisti, 490 ms 6x CPU-throttlauksella ja 2293 ms 20x CPU +
+     * hidas 3G. 8 s antaa siis noin 3,5-kertaisen marginaalin
+     * pahimpaan mitattuun, ja koska ehto nyt tayttyy ensimmaisella
+     * framella, varaventtiili laukeaa kaytannossa vain jos havainnoija
+     * on aidosti rikki tai dokumentti on piilotettu (taustavalilehti,
+     * jolloin renderointipaivitysta ei aja eika IO toimita). Molemmissa
+     * tapauksissa laukeaminen on OIKEA lopputulos: sisalto tulee
+     * nakyviin, vain animaatio jaa pois. */
     const root = document.documentElement;
     const RV_FALLBACK = 8000;
     root.classList.add("rv-ready");
@@ -43,6 +67,13 @@ export default function SiteEffects() {
       root.classList.remove("rv-ready");
       rvTimer = undefined;
     }, RV_FALLBACK);
+    /* Paljastus on todistettu toimivaksi: varaventtiilia ei tarvita.
+       Idempotentti, joten sen voi kutsua jokaisesta todistepolusta. */
+    const rvProven = () => {
+      if (rvTimer === undefined) return;
+      window.clearTimeout(rvTimer);
+      rvTimer = undefined;
+    };
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const finePointer = window.matchMedia("(pointer: fine)").matches;
@@ -627,6 +658,15 @@ export default function SiteEffects() {
     /* ---------- reveal ---------- */
     const io = new IntersectionObserver(
       (es) => {
+        // ENSIMMAINEN TOIMITUS ON VARAVENTTIILIN PERUUTUSEHTO, ei se
+        // etta jokin elementti leikkaa nakymaa. Spesifikaation mukaan
+        // observe() ajastaa alkuhavainnon jokaiselle kohteelle, ja se
+        // toimitetaan seuraavassa renderointipaivityksessa myos silloin
+        // kun isIntersecting on false kaikilla. Tama on siis suora
+        // todiste siita etta havainnoija elaa - riippumatta siita onko
+        // kayttaja vierittanyt tai onko ensimmaisessa nakymassa yhtaan
+        // .rv-elementtia. Kumpikaan ei patenyt etusivulla.
+        rvProven();
         es.forEach((e) => {
           if (e.isIntersecting) {
             e.target.classList.add("on");
@@ -636,7 +676,12 @@ export default function SiteEffects() {
       },
       { threshold: 0.1 },
     );
-    document.querySelectorAll(".rv").forEach((el) => io.observe(el));
+    const rvNodes = document.querySelectorAll(".rv");
+    rvNodes.forEach((el) => io.observe(el));
+    // Sivu ilman yhtaan .rv-elementtia ei saa yhtaan toimitusta, koska
+    // observe():a ei kutsuta kertaakaan. Silloin ei ole mitaan
+    // paljastettavaa eika mitaan todistettavaa.
+    if (rvNodes.length === 0) rvProven();
 
     /* Varmistus havainnoijan rinnalle, ei sen korvaaja.
      *
@@ -665,12 +710,12 @@ export default function SiteEffects() {
         const iw = Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0));
         if ((ih * iw) / area >= 0.1) el.classList.add("on");
       });
-      // Ajastin peruutetaan vasta kun paljastus on TODISTETUSTI
-      // toiminut. Pelkka funktion ajautuminen ei riita todisteeksi.
-      if (rvTimer !== undefined && document.querySelector(".rv.on")) {
-        window.clearTimeout(rvTimer);
-        rvTimer = undefined;
-      }
+      // TOISSIJAINEN todistepolku. Ensisijainen on havainnoijan
+      // ensimmainen toimitus; tama kattaa sen epatodennakoisen
+      // tilanteen jossa IO ei toimita mutta tama varmistus onnistuu.
+      // Ei enaa ainoa ehto, joten se ei voi jaada tayttymatta siksi
+      // ettei kayttaja vierita.
+      if (document.querySelector(".rv.on")) rvProven();
     };
     revealNow();
     // HeroScrub ilmoittaa lukon purusta tapahtumalla, ei tuonnilla:
