@@ -51,11 +51,57 @@ Aja selain **VAIN** kun tehtävä on nimenomaisesti jokin näistä:
 - vian toisto joka ei toistu koodia lukemalla
 - käyttäjä pyytää sitä suoraan
 
-Kun selain ajetaan: Playwright `headless: false`, **tuotantobuild**
+Kun selain ajetaan: Playwright, **tuotantobuild**
 (`next build && next start`) — ei koskaan dev-palvelimesta, koska sen
 suorituskyky ei kerro mitään. Throttlaus CDP:n kautta. Mittausskripti
 tallennetaan niin että sen voi ajaa uudelleen samoilla parametreilla —
 muuten ennen/jälkeen ei ole vertailu.
+
+### Miten selainta ajetaan
+
+Oletus on **HEADLESS**. Käytä `chromium.launch({ headless: true })` kaikkeen
+mittaukseen. Chromen uusi headless käyttää samaa renderöijää kuin näkyvä
+ikkuna, joten kehysajat, maalaus ja layout ovat vertailukelpoisia — ja se ei
+varasta fokusta eikä avaa ikkunoita käyttäjän työpöydälle.
+
+Käytä näkyvää ikkunaa (`headless: false`) **VAIN** kun käyttäjä on
+nimenomaisesti pyytänyt näkevänsä ajon. Silloin käynnistä se niin ettei se
+häiritse:
+
+```js
+chromium.launch({
+  headless: false,
+  args: [
+    '--window-position=-2400,0',          // ruudun ulkopuolelle
+    '--disable-background-timer-throttling',
+    '--disable-backgrounding-occluded-windows',
+    '--disable-renderer-backgrounding',
+  ],
+})
+```
+
+Kolme viimeistä lippua ovat olennaiset: ilman niitä taustalle jäänyt ikkuna
+hidastaa ajastimet ja rAF:n, jolloin mittaus on roskaa. Niiden kanssa ikkuna
+ajaa täydellä nopeudella ilman fokusta.
+
+**ÄLÄ KOSKAAN:**
+
+- nosta selainikkunaa eteen (`bringToFront`, `focus`, `activate`)
+- avaa käyttäjän omaa Chromea tai käytä hänen profiiliaan — Playwright
+  käynnistää aina oman erillisen instanssinsa
+- jätä selainprosesseja pyörimään: sulje browser ja context aina, myös
+  virhetilanteessa (`try`/`finally`)
+- jätä tuotantopalvelinta pyörimään ajon jälkeen
+
+Sivun tila luetaan `page.evaluate()`-kutsulla. Ota screenshot vain jos ulkoasu
+on itse asian kannalta olennainen, ja tallenna se tiedostoon älä palauta sitä
+raportissa.
+
+**Huom mittauksesta headlessissa:** `document.visibilityState` on aina
+`'visible'` eikä taustavälilehteä voi jäljitellä. Jos testattava asia riippuu
+piilotetusta dokumentista (IntersectionObserver ei toimita, ajastimet
+hidastuvat), sano se suoraan äläkä väitä testanneesi sitä — korvaa se tyngällä
+joka jäljittelee puuttuvaa toimitusta.
 
 **Rajatapaus:** jos tavallisessa tehtävässä törmäät arvoon jota et voi johtaa
 koodista, ÄLÄ käynnistä selainta oma-aloitteisesti. Sano mikä arvo se on ja

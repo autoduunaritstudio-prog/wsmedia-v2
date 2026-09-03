@@ -4,7 +4,7 @@
  * Ajo:
  *   node rv-diag.mjs [--url=http://localhost:3111/] [--h=783] [--w=1254]
  *                    [--dpr=2] [--reduce] [--cpu=1] [--net=none|3g|4g]
- *                    [--wait=12000] [--headless]
+ *                    [--wait=12000] [--headed]
  *
  * Tuotantobuildia vastaan (next build && next start), EI dev-palvelinta.
  * Throttlaus CDP:n kautta (Emulation.setCPUThrottlingRate,
@@ -71,7 +71,24 @@ const INIT = () => {
   else addEventListener("DOMContentLoaded", start);
 };
 
-const browser = await chromium.launch({ headless: has("headless") });
+// CLAUDE.md: oletus on headless. Nakyva ikkuna vain kun kayttaja on
+// pyytanyt nakevansa ajon, ja silloin ruudun ulkopuolelle niin ettei se
+// varasta fokusta. Kolme viimeista lippua estavat taustaikkunan
+// ajastin- ja rAF-hidastuksen, jonka kanssa mittaus olisi roskaa.
+const HEADED = has("headed");
+const launchOpts = HEADED
+  ? {
+      headless: false,
+      args: [
+        "--window-position=-2400,0",
+        "--disable-background-timer-throttling",
+        "--disable-backgrounding-occluded-windows",
+        "--disable-renderer-backgrounding",
+      ],
+    }
+  : { headless: true };
+const browser = await chromium.launch(launchOpts);
+try {
 const ctx = await browser.newContext({
   viewport: { width: W, height: H },
   deviceScaleFactor: DPR,
@@ -106,4 +123,6 @@ for (const ms of [1000, 2000, 5000, 10000, WAIT].filter((x, i, a) => x <= WAIT &
 
 const out = await page.evaluate(() => ({ log: window.__rv.log, err: window.__rv.err }));
 console.log(JSON.stringify({ url: TARGET, w: W, h: H, dpr: DPR, cpu: CPU, net: NET, reduce: has("reduce"), snaps, log: out.log, err: out.err, pageErrors }, null, 1));
-await browser.close();
+} finally {
+  await browser.close().catch(() => {});
+}

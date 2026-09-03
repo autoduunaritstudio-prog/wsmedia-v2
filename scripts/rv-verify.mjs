@@ -2,7 +2,7 @@
  * rv-verify.mjs — reveal-jarjestelman hyvaksyntaajo.
  *
  * Ajo (tuotantobuild kaynnissa portissa 3111):
- *   node rv-verify.mjs [--headless] [--n=20] [--url=...]
+ *   node rv-verify.mjs [--headed] [--n=20] [--url=...]
  *
  * Ajaa kaikki vaaditut kokeet ja tulostaa yhteenvedon. Uudelleenajettava
  * samoilla parametreilla, joten ennen/jalkeen on vertailukelpoinen.
@@ -11,7 +11,22 @@ const PW = process.env.PW_ROOT || new URL("../node_modules/playwright/index.mjs"
 const { chromium } = await import(PW);
 
 const arg = (k, d) => { const m = process.argv.find((a) => a.startsWith(`--${k}=`)); return m ? m.slice(k.length + 3) : d; };
-const HEADLESS = process.argv.includes("--headless");
+// CLAUDE.md: oletus on headless. Nakyva ikkuna vain kun kayttaja on
+// pyytanyt nakevansa ajon, ja silloin ruudun ulkopuolelle niin ettei se
+// varasta fokusta. Kolme viimeista lippua estavat taustaikkunan
+// ajastin- ja rAF-hidastuksen, jonka kanssa mittaus olisi roskaa.
+const HEADED = process.argv.includes("--headed");
+const launchOpts = HEADED
+  ? {
+      headless: false,
+      args: [
+        "--window-position=-2400,0",
+        "--disable-background-timer-throttling",
+        "--disable-backgrounding-occluded-windows",
+        "--disable-renderer-backgrounding",
+      ],
+    }
+  : { headless: true };
 const N = +arg("n", 20);
 const TARGET = arg("url", "http://localhost:3111/");
 
@@ -24,9 +39,13 @@ const state = () => ({
   hidden: [...document.querySelectorAll(".rv")].filter((e) => +getComputedStyle(e).opacity < 0.05).length,
 });
 
-const browser = await chromium.launch({ headless: HEADLESS });
+const browser = await chromium.launch(launchOpts);
 let fails = 0;
 const ok = (c, msg) => { if (!c) fails++; console.log(`  ${c ? "OK  " : "FAIL"}  ${msg}`); };
+
+// try/finally: selain suljetaan MYOS virhetilanteessa, jottei prosesseja
+// jaa pyorimaan.
+try {
 
 // ---------- 1. N kylmaa latausta, tilannekuvat 2 / 5 / 10 s ----------
 console.log(`\n== 1. ${N} kylmaa latausta (1254x783, dpr 2) ==`);
@@ -159,6 +178,9 @@ for (const h of [600, 783, 900, 1080]) {
   await c.close();
 }
 
+} finally {
+  await browser.close().catch(() => {});
+}
+
 console.log(`\n${fails === 0 ? "KAIKKI LApAISI" : `${fails} EPAONNISTUNUTTA TARKISTUSTA`}`);
-await browser.close();
 process.exit(fails === 0 ? 0 : 1);
