@@ -171,7 +171,18 @@ export default function Results() {
               <CardMetal />
               <div className="case-shot">
                 {hasShot(c.shot) ? (
-                  <Image src={c.shot} alt={c.shotAlt ?? `${c.title} – kuva työstä`} width={c.shotW} height={c.shotH} />
+                  <Image
+                    src={c.shot}
+                    alt={c.shotAlt ?? `${c.title} – kuva työstä`}
+                    width={c.shotW}
+                    height={c.shotH}
+                    /* q88 eika oletus 75: lahde on viety q88:lla ja
+                       uudelleenpakkaus q75:lla pudottaisi SSIM:n
+                       0,9838 -> 0,9585 eli alle projektin rajan.
+                       Vaatii images.qualities-allowlistin, ks.
+                       next.config.ts. */
+                    quality={88}
+                  />
                 ) : null}
               </div>
               <div className="case-body">

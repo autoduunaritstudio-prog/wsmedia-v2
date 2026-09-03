@@ -1701,7 +1701,19 @@ section { padding: var(--space-section) 0 }
    sivulla jonka oma referenssikortti vaittaa PageSpeediksi 100/98. */
 .case-kick {
   font-size: 9.5px; font-weight: 700; letter-spacing: .19em;
-  text-transform: uppercase; color: #8A8A93;
+  /* #8A8A93 oli kortin kirkkainta pistetta (rgb 81,81,84) vasten 2,33:1
+     eli reilusti alle AA:n 4,5:1. --cmb-opacity ei kelpaa saatimeksi:
+     4,5:1 vaatisi pinnan putoavan 81 -> 37 kun pohja on 19, eli metallin
+     poistamisen. Teksti vaalenee, pinta ei tummene.
+
+     Arvo ei ole se 195,195,202 jonka aiempi laskenta antoi: se
+     johdettiin pintaa rgb(81,81,84) vasten, mutta metalligeometria on
+     suhteellinen ja lyhyempi kortti nayttaa kuviosta kirkkaamman
+     kohdan. Uudelleen renderoituna kirkkain piste on rgb(83,83,87)
+     korkeudella 498px ja rgb(86,86,90) korkeudella 420px, jolloin tuo
+     arvo jaa 4,37:1 / 4,15:1 eli yha alle AA:n. #CBCBD2 lapaisee
+     kaikilla korkeuksilla, pahin tapaus 4,51:1. */
+  text-transform: uppercase; color: #CBCBD2;
 }
 .case-kick b { color: #EDEAE4; font-weight: 700 }
 .case .num {
@@ -1710,24 +1722,31 @@ section { padding: var(--space-section) 0 }
   font-variant-numeric: tabular-nums;
 }
 .case p {
-  font-size: 12.5px; line-height: 1.5; color: #8A8A93;
+  font-size: 12.5px; line-height: 1.5; color: #CBCBD2;
   max-width: 30ch; margin-top: 12px;
 }
 
 /* ---------- SPEC-RIVI ----------
    Kummallakin sarakkeella on OMA yksikkoteksti, joten yksikko ei voi
    irrota koskemaan vain toista alustaa vaikka rivi katkeaisi. */
+/* Hiusviivan alfa .11 -> .22. Kontrastisuhde on vaara mittari 1px
+   viivalle; nakyvyys on dL*. .11 antoi kirkkaimmalla pinnalla dL* 7,0,
+   .22 antaa 13,8 (keskipinnalla 17,0, tummalla 20,6) eli selvasti
+   nakyvan viivan koko kortin alalla. 3:1 vaatisi alfan 0,51, joka olisi
+   kova vaalea kehys eika hiusviiva - eivatka nama ole 1.4.11:n alaisia:
+   alustan nimi on kirjoitettuna ikonin vieressa ja sarakkeet erottuvat
+   asettelusta ilman viivaa. */
 .case-spec {
   display: grid; grid-template-columns: 1fr 1fr;
-  border-top: 1px solid rgba(237,234,228,.11);
+  border-top: 1px solid rgba(237,234,228,.22);
   margin-top: 18px; padding-top: 14px;
 }
 .case-spec .spec + .spec {
-  border-left: 1px solid rgba(237,234,228,.11); padding-left: 16px;
+  border-left: 1px solid rgba(237,234,228,.22); padding-left: 16px;
 }
 .spec-label {
   font-size: 9px; font-weight: 500; letter-spacing: .17em;
-  text-transform: uppercase; color: #8A8A93;
+  text-transform: uppercase; color: #CBCBD2;
 }
 /* Ikoni 13px eika SocialIconin oma 18px: 9px versaalien vieressa 18px
    olisi lahes kolminkertainen tekstin korkeuteen nahden. Pystysiirto
@@ -1739,14 +1758,14 @@ section { padding: var(--space-section) 0 }
 }
 .spec-unit {
   font-size: 9px; font-weight: 500; letter-spacing: .13em;
-  text-transform: uppercase; color: #8A8A93; margin-top: 3px;
+  text-transform: uppercase; color: #CBCBD2; margin-top: 3px;
 }
 
 .case .fill {
   display: inline-block; align-self: flex-start; margin-top: 18px;
   font-size: 9.5px; font-weight: 700; letter-spacing: .19em;
-  text-transform: uppercase; color: #8A8A93;
-  border: 1px solid rgba(237,234,228,.11); border-radius: 980px;
+  text-transform: uppercase; color: #CBCBD2;
+  border: 1px solid rgba(237,234,228,.22); border-radius: 980px;
   padding: 5px 12px;
 }
 
