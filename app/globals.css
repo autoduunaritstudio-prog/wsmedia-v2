@@ -1555,7 +1555,16 @@ section { padding: var(--space-section) 0 }
 
 /* ---------- cases / steps / plans / form ---------- */
 .cases { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-gap-grid) }
-@media (max-width: 820px) { .cases { grid-template-columns: 1fr } }
+@media (max-width: 820px) {
+  .cases { grid-template-columns: 1fr }
+  /* Yhdessa sarakkeessa kaannolla ei ole merkitysta: kortit ovat
+     allekkain, joten "reunimmaista" paria ei ole eika peilaus kerro
+     mitaan. Lisaksi kapeammalla .wrapilla ulkoreunan ylivuoto olisi
+     suurempi osuus 24px:n paddingista. Sama spesifisyys (0,3,0) kuin
+     laukaisevalla saannolla ja myohemmin tiedostossa, joten tama voittaa
+     - media query ei lisaa spesifisyytta (ks. CLAUDE.md). */
+  .case[data-tilt]:not(:hover) { transform: none }
+}
 /* Flex-pystysuunta, jotta kortit pysyvat samannakoisina vaikka kaikilla
    ei ole sparklinea. Ruudukko venyttaa kortit jo valmiiksi yhta korkeiksi
    (grid align-items: stretch), joten ongelma ei ole korkeus vaan se mihin
@@ -1564,6 +1573,37 @@ section { padding: var(--space-section) 0 }
    ja pilleri istuu kaikissa korteissa kortin pohjalla. */
 .case { padding: var(--space-card-case); text-align: center; border-radius: 20px; display: flex; flex-direction: column }
 .case p { flex: 1 0 auto }
+/* Asiakaslogo kortin ylalaitaan. Kiintea KORKEUS ja auto-leveys, jolloin
+   eri kuvasuhteet (2,347 / 1,001 / 2,085) eivat voi rikkoa ruudukon
+   tasakorkeutta. object-fit: contain on varmistus sille tapaukselle etta
+   jokin merkki joskus saa myos leveysrajan. */
+.case-logo { height: 30px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center }
+.case-logo img, .case-logo svg { height: 100%; width: auto; object-fit: contain }
+/* LogoMark on currentColor-taytteinen: --ink antaa 16,83:1 valkoista
+   korttia vasten, eli reilusti yli 1.4.11:n 3:1:n. */
+.case-logo-mark { color: var(--ink) }
+
+/* KAANTO. Sama mekanismi kuin .browserilla ja .eventilla: SiteEffects
+   kirjoittaa --tilt-rotin ja CSS rakentaa ketjun. Vain reunimmaisilla
+   korteilla on data-tilt, joten keskimmainen jaa suoraan.
+
+   :not(:hover) EI OLE KOSMETIIKKAA. .card:hover asettaa oman
+   transforminsa (translateY(-6px)), ja SiteEffectsin .tilt-kasittelija
+   kirjoittaa hoverin aikana INLINE-transformin. Ilman rajausta nama
+   kolme kilpailisivat samasta ominaisuudesta ja lopputulos riippuisi
+   saantojen jarjestyksesta. Nyt scroll-kaanto luovuttaa hoverin ajaksi
+   ja palaa kun osoitin lahtee. Spesifisyys (0,3,0) > .card:hover (0,2,0),
+   joten jarjestys ei ratkaise.
+
+   Ei transitionia: arvo tulee joka framessa scroll-asemasta, ja siirtyma
+   viivastyttaisi sita - sama perustelu kuin [data-tilt]-saannossa. */
+.case[data-tilt]:not(:hover) { transform: perspective(1200px) var(--tilt-rot, rotateY(0deg)) }
+/* Varjo syvenee kaannon mukana, kuten .eventilla. Keskimmainen kortti
+   jaa .cardin tasaiseen varjoon, koska sita ei kaanneta. */
+.case[data-tilt] {
+  box-shadow: 0 calc(24px + var(--tilt, 0) * 14px) calc(60px + var(--tilt, 0) * 24px) -24px
+    rgba(29,29,31, calc(.16 + var(--tilt, 0) * .08));
+}
 .case .num {
   font-size: var(--text-metric); font-weight: var(--weight-bold); letter-spacing: -0.028em;
   color: var(--blue); font-variant-numeric: tabular-nums;

@@ -1,4 +1,7 @@
+import Image from "next/image";
 import type { CSSProperties } from "react";
+
+import { LogoMark } from "./Logo";
 
 /**
  * SPARKLINE VAIN SIELLA MISSA ON AIKASARJA.
@@ -10,8 +13,24 @@ import type { CSSProperties } from "react";
  *
  * points puuttuu -> kayraa ei renderoida lainkaan.
  */
+/**
+ * LOGON KORKEUS 30 px on johdettu kuvasuhteista, ei valittu silmalla.
+ * Levein merkki on Colormaster 798x340 (2,347), joka 30 px:n korkeudella
+ * on 70 px levea = 21 % kortin 333 px leveydesta. Kapein on
+ * LS-monogrammi 2054x2052 (1,001), joka on silla korkeudella 30x30.
+ * Suhde levein/kapein on siis 2,3 - riittavan lahella toisiaan etta
+ * kolmikko lukeutuu yhtenaisena rivina. Korkeus on kiintea ja leveys
+ * auto, joten eri kuvasuhteet eivat voi rikkoa ruudukon tasakorkeutta.
+ *
+ * WS Median oma merkki tulee LogoMark-komponenttina eika tiedostona:
+ * se on currentColor-taytteinen inline-SVG, joten se skaalautuu
+ * tarkkana ja perii varin CSS:sta.
+ */
+const LOGO_H = 30;
+
 const CASES = [
   {
+    logo: { src: "/logos/colormaster.png", w: 70, alt: "Colormaster" },
     count: "1 500",
     title: "Colormaster · automaalamo",
     text: "seuraajaa neljässä kuukaudessa, ilman maksettua mainontaa",
@@ -21,6 +40,7 @@ const CASES = [
     fill: "Lyhytvideot",
   },
   {
+    logo: { src: "/logos/ls-monogram-color.png", w: 30, alt: "Laaksolahden Sähkö" },
     count: "100 / 98",
     title: "Laaksolahden Sähkö · sähkötyöt ja ilmalämpöpumput",
     text: "PageSpeed työpöydällä ja mobiilissa, mitattu 9/2026",
@@ -28,6 +48,7 @@ const CASES = [
     fill: "Verkkosivut",
   },
   {
+    logo: null, // Garage Fest on oma tapahtumamme -> WS Median merkki
     count: "1 000",
     title: "Garage Fest · autoviikonloppu Espoossa",
     text: "kävijää tapahtumaan, jonka järjestimme itse",
@@ -65,8 +86,22 @@ export default function Results() {
               className="card case rv tilt"
               style={{ "--i": i } as CSSProperties}
               data-par={c.par}
+              /* Reunimmaiset kortit kaantyvat toisiaan kohti, keskimmainen
+                 jaa suoraan. Etumerkki on sama konventio kuin .cal ja
+                 .event kayttavat: rotateY + tuo VASEMMAN reunan katsojaa
+                 kohti, - oikean. Vasen kortti saa siis "y" ja oikea "-y",
+                 jolloin ne peilaavat toisensa keskikortin ympari. */
+              data-tilt={i === 0 ? "y" : i === 2 ? "-y" : undefined}
+              data-tilt-profile={i === 1 ? undefined : "card"}
               key={c.title}
             >
+              <div className="case-logo">
+                {c.logo ? (
+                  <Image src={c.logo.src} alt={c.logo.alt} width={c.logo.w} height={LOGO_H} />
+                ) : (
+                  <LogoMark className="case-logo-mark" />
+                )}
+              </div>
               <div className="num" data-count={c.count}>
                 {c.count}
               </div>

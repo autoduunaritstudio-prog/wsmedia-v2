@@ -89,6 +89,10 @@ export default function SiteEffects() {
     // ja lisaksi kevyt taaksepain-kallistus syvyysvaikutelmaksi.
     const TILT_MAX_MOCKUP = 13;  // .browser ja .event: rotateY
     const TILT_BACK_MAX = 5;     // .browser ja .event: rotateX, ylareuna taakse
+    // Case-kortit ovat pieni, tiivis kolmikko: nekin 13 astetta veisi
+    // reunimmaisten korttien ulkoreunan ruudukkosolun ulkopuolelle ja
+    // veisi huomion luvuilta. 4 astetta riittaa antamaan syvyyden.
+    const TILT_MAX_CARD = 4;     // .case: rotateY, ei taaksepain-kallistusta
     // Etaisyys viewportin keskelta (osuus vh:sta) jossa kulma on nollassa.
     // 0.5 = elementin keskikohta on ruudun ala- tai ylareunassa.
     const TILT_RANGE = 0.5;
@@ -300,10 +304,12 @@ export default function SiteEffects() {
         const spec = el.dataset.tilt ?? "x";
         const axis = spec.endsWith("y") ? "rotateY" : "rotateX";
         const sign = spec.startsWith("-") ? -1 : 1;
-        // data-tilt-profile="mockup" valitsee hillitymman kulman ja lisaa
-        // taaksepain-kallistuksen. Puhelimet jaavat oletusprofiiliin.
-        const mockup = el.dataset.tiltProfile === "mockup";
-        const main = sign * t * (mockup ? TILT_MAX_MOCKUP : TILT_MAX);
+        // data-tilt-profile valitsee kulman: "mockup" hillitympi + kevyt
+        // taaksepain-kallistus, "card" hyvin pieni ja ilman kallistusta.
+        // Puhelimet jaavat oletusprofiiliin.
+        const profile = el.dataset.tiltProfile;
+        const mockup = profile === "mockup";
+        const main = sign * t * (profile === "card" ? TILT_MAX_CARD : mockup ? TILT_MAX_MOCKUP : TILT_MAX);
         // Positiivinen rotateX vie ylareunan poispain katsojasta. Sama t,
         // joten molemmat akselit ovat huipussaan yhta aikaa keskella.
         const back = mockup ? ` rotateX(${(t * TILT_BACK_MAX).toFixed(2)}deg)` : "";
