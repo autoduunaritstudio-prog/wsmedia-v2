@@ -1632,6 +1632,22 @@ section { padding: var(--space-section) 0 }
 }
 .case h3 { font-size: var(--text-body-lg); font-weight: var(--weight-semibold); margin-top: 12px }
 .case p { font-size: var(--text-ui-sm); color: var(--grey); margin-top: 7px }
+/* ALUSTARIVI. Kaksi alustaa erotettuna keskipisteella - ei kehyksia eika
+   laatikoita. Ikonit ovat SocialIconin viivaglyfeja ja perivat varin
+   currentColorista -> yksivarisia --inkilla, ei Instagramin liukua.
+
+   vertical-align on LASKETTU, ei silmamaaraa: numerot ovat versaali-
+   korkuisia, joten niiden pystykeskipiste on cap-height/2 perusviivan
+   ylapuolella. Instrument Sansin OS/2-taulun sCapHeight = 720/1000 upm
+   = 0,7200 em (luettu .next/static/median woff2:sta, ei arvattu),
+   fonttikoko 16 px -> keskipiste 5,760 px. Ikonilaatikko on 18 px ja
+   glyfi keskitetty siihen, joten sen keskipiste on 9 px laatikon
+   pohjasta. Siirto = 5,760 - 9 = -3,24 px. */
+.case-plat { margin-top: 14px; font-size: var(--text-ui-sm); line-height: 1.5; color: var(--grey) }
+.case-plat .plat { white-space: nowrap }
+.case-plat b { color: var(--ink); font-weight: var(--weight-semibold); font-variant-numeric: tabular-nums }
+.case-plat svg { color: var(--ink); vertical-align: -3.24px; margin-right: 6px }
+.case-plat .plat-sep { margin: 0 9px; color: var(--grey) }
 .case .fill {
   display: inline-block; align-self: flex-start; margin-top: 18px; font-size: var(--text-micro); font-weight: var(--weight-semibold);
   color: var(--grey); border: 1px solid var(--hair); border-radius: 980px;

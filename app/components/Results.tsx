@@ -5,6 +5,8 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 
 import { LogoMark } from "./Logo";
+import SocialIcon from "./SocialIcon";
+import type { SocialLink } from "./site-data";
 
 /**
  * KUVAT TULEVAT VAKIOISTA, EIVAT KOODIIN KOVAKOODATTUINA POLKUINA.
@@ -25,42 +27,61 @@ import { LogoMark } from "./Logo";
  * px leveana dpr 2:lla), 16:9, WebP:
  */
 const SHOTS = {
-  colormaster: "/referenssit/colormaster-shot.webp",
+  colormaster: "/referenssit/colormaster.webp",
   laaksolahti: "/referenssit/laaksolahdensahko.webp",
   garagefest: "/tapahtumat/garage-fest.webp",
 } as const;
 
-/** Kuvan koko kortissa. 16:9 valittu, ks. raportti. */
-const SHOT_W = 668;
-const SHOT_H = 376;
+/**
+ * Kuvapaikan mitat. Kuvakaista on aina 16:9 (.case-shot aspect-ratio),
+ * mutta next/image saa TODELLISET intrinsic-mitat, ei rajattuja: rajaus
+ * tehdaan CSS:ssa object-fit: coverilla. Aspect-ratio varaa tilan ennen
+ * latausta -> CLS 0 riippumatta lahteen suhteesta.
+ */
+const SHOT_FALLBACK = { w: 668, h: 376 };
+
+/** Alustakohtainen luku. Ikoni tulee SocialIconista, ei uutta piirrosta. */
+type Plat = { icon: SocialLink["icon"]; label: string; n: string };
 
 const hasShot = (src: string) => fs.existsSync(path.join(process.cwd(), "public", src));
 
 const CASES = [
   {
     shot: SHOTS.colormaster,
+    shotW: 608,
+    shotH: 1080,
     logo: { src: "/logos/colormaster.png", w: 70, alt: "Colormaster" },
-    count: "1 500",
+    count: "1,6 milj.",
     title: "Colormaster · automaalamo",
-    text: "seuraajaa neljässä kuukaudessa, ilman maksettua mainontaa",
+    text: "Katselukertaa Instagramissa ja TikTokissa yhteensä, neljässä kuukaudessa ilman maksettua mainontaa.",
+    plat: [
+      { icon: "instagram", label: "Instagram", n: "1 500" },
+      { icon: "tiktok", label: "TikTok", n: "3 000" },
+    ] as Plat[],
     par: "0.015",
     fill: "Lyhytvideot",
   },
   {
     shot: SHOTS.laaksolahti,
+    shotW: SHOT_FALLBACK.w,
+    shotH: SHOT_FALLBACK.h,
     logo: { src: "/logos/ls-monogram-color.png", w: 30, alt: "Laaksolahden Sähkö" },
     count: "100 / 98",
     title: "Laaksolahden Sähkö · sähkötyöt ja ilmalämpöpumput",
     text: "PageSpeed työpöydällä ja mobiilissa, mitattu 9/2026",
+    plat: null,
     par: "0.035",
     fill: "Verkkosivut",
   },
   {
     shot: SHOTS.garagefest,
+    shotW: SHOT_FALLBACK.w,
+    shotH: SHOT_FALLBACK.h,
     logo: null, // Garage Fest on oma tapahtumamme -> WS Median merkki
     count: "1 000",
     title: "Garage Fest · autoviikonloppu Espoossa",
     text: "kävijää tapahtumaan, jonka järjestimme itse",
+    plat: null,
     par: "0.015",
     fill: "Tapahtumat",
   },
@@ -97,7 +118,7 @@ export default function Results() {
                   kortin varjo ei saa leikkautua. */}
               <div className="case-shot">
                 {hasShot(c.shot) ? (
-                  <Image src={c.shot} alt={`${c.title} – kuva työstä`} width={SHOT_W} height={SHOT_H} />
+                  <Image src={c.shot} alt={`${c.title} – kuva työstä`} width={c.shotW} height={c.shotH} />
                 ) : null}
               </div>
               <div className="case-body">
@@ -113,6 +134,26 @@ export default function Results() {
                 </div>
                 <h3>{c.title}</h3>
                 <p>{c.text}</p>
+                {/* Alustarivi: ikoni + luku samalla perusviivalla, ei laatikoita.
+                    Ikonit ovat aria-hidden, joten alustan nimi tulee .vh:na
+                    ruudunlukijalle. "seuraajaa" jakautuu molempiin luonnostaan. */}
+                {c.plat ? (
+                  <div className="case-plat">
+                    {c.plat.map((pl, j) => (
+                      <span className="plat" key={pl.icon}>
+                        {j > 0 ? (
+                          <span className="plat-sep" aria-hidden="true">
+                            ·
+                          </span>
+                        ) : null}
+                        <SocialIcon name={pl.icon} />
+                        <span className="vh">{pl.label} </span>
+                        <b>{pl.n}</b>
+                      </span>
+                    ))}{" "}
+                    seuraajaa
+                  </div>
+                ) : null}
                 {/* Pilleri on tekstia eika linkkia: etusivulla ei ole
                     palvelukohtaisia ankkureita eika Tapahtumille omaa
                     sivua. */}
