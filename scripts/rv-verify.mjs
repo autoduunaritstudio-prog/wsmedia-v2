@@ -10,6 +10,20 @@
 const PW = process.env.PW_ROOT || new URL("../node_modules/playwright/index.mjs", import.meta.url).href;
 const { chromium } = await import(PW);
 
+// SELAINBINAARI EI TULE npm ci:N MUKANA. Paketti asentuu, selain ei:
+// playwrightilla ei ole asennusskriptia (lock: hasInstallScript=false),
+// mika on tarkoituksellista - se pitaa Vercelin buildin kevyena. Siksi
+// tarkistus tassa: kaadutaan selkeaan virheeseen sen sijaan etta
+// Playwright heittaisi oman pitkan jaljityksensa. EI automaattista
+// asennusta: se latailisi satoja megatavuja kysymatta.
+const { existsSync } = await import("node:fs");
+let __exe = null;
+try { __exe = chromium.executablePath(); } catch { /* ei asennettu lainkaan */ }
+if (!__exe || !existsSync(__exe)) {
+  console.error("\nChromium-binaaria ei loydy. Playwright-paketti on asennettu, selain ei.\n\nAja:\n  npx playwright install chromium\n");
+  process.exit(1);
+}
+
 const arg = (k, d) => { const m = process.argv.find((a) => a.startsWith(`--${k}=`)); return m ? m.slice(k.length + 3) : d; };
 // CLAUDE.md: oletus on headless. Nakyva ikkuna vain kun kayttaja on
 // pyytanyt nakevansa ajon, ja silloin ruudun ulkopuolelle niin ettei se
