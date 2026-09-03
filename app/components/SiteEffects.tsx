@@ -89,10 +89,15 @@ export default function SiteEffects() {
     // ja lisaksi kevyt taaksepain-kallistus syvyysvaikutelmaksi.
     const TILT_MAX_MOCKUP = 13;  // .browser ja .event: rotateY
     const TILT_BACK_MAX = 5;     // .browser ja .event: rotateX, ylareuna taakse
-    // Case-kortit ovat pieni, tiivis kolmikko: nekin 13 astetta veisi
-    // reunimmaisten korttien ulkoreunan ruudukkosolun ulkopuolelle ja
-    // veisi huomion luvuilta. 4 astetta riittaa antamaan syvyyden.
-    const TILT_MAX_CARD = 4;     // .case: rotateY, ei taaksepain-kallistusta
+    // Case-kortit ovat pieni, tiivis kolmikko, joten 13 astetta olisi
+    // liikaa. 4 astetta taas jai havaintokynnyksen alle: lahi- ja
+    // kaukoreunan skaalojen ero oli vain 1,96 %. 9 on pienin kulma jolla
+    // ero ylittaa 4 %, ja ulostyontyma on siina 1,60 px eli 6,7 %
+    // .wrapin 24px paddingista. Ulostyontyma ei kasva lineaarisesti:
+    // cos(theta) kutistaa korttia samaa tahtia kuin perspektiivi tyontaa
+    // lahireunaa ulos, joten se on huipussaan 8 asteella (1,63 px) ja
+    // nollautuu 16 asteella.
+    const TILT_MAX_CARD = 9;     // .case: rotateY, ei taaksepain-kallistusta
     // Etaisyys viewportin keskelta (osuus vh:sta) jossa kulma on nollassa.
     // 0.5 = elementin keskikohta on ruudun ala- tai ylareunassa.
     const TILT_RANGE = 0.5;

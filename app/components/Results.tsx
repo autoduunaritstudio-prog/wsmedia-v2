@@ -38,6 +38,7 @@ const CASES = [
       "0,52 22,46 44,49 66,34 88,38 110,24 132,29 154,16 176,20 198,9 220,12",
     par: "0.015",
     fill: "Lyhytvideot",
+    proof: "spark" as const,
   },
   {
     logo: { src: "/logos/ls-monogram-color.png", w: 30, alt: "Laaksolahden Sähkö" },
@@ -46,6 +47,7 @@ const CASES = [
     text: "PageSpeed työpöydällä ja mobiilissa, mitattu 9/2026",
     par: "0.035",
     fill: "Verkkosivut",
+    proof: "rings" as const,
   },
   {
     logo: null, // Garage Fest on oma tapahtumamme -> WS Median merkki
@@ -54,11 +56,45 @@ const CASES = [
     text: "kävijää tapahtumaan, jonka järjestimme itse",
     par: "0.015",
     fill: "Tapahtumat",
+    proof: "shot" as const,
   },
 ];
 
 /** Sparkline-täytön alue: viivan pisteet plus sulkeva pohja. */
 const areaPoints = (points: string) => `${points} 220,60 0,60`;
+
+/**
+ * Pistemäärärengas. Kehä lasketaan sateesta (2πr), ei silmamääräisesti,
+ * joten dasharray on tasan oikea osuus: 100 % = koko kehä, 98 % = 98/100.
+ *
+ * EI JÄLJITTELE PageSpeed Insightsia. Sivuston oma sininen ja --ink, ei
+ * Lighthousen vihreää eikä sen kehysgrafiikkaa: luku on meidän
+ * raportoimamme mittaustulos, ei kuvaruutukaappauksen näköinen kopio
+ * Googlen widgetistä.
+ */
+const R = 20;
+const C = 2 * Math.PI * R;
+
+function ScoreRing({ score, label }: { score: number; label: string }) {
+  return (
+    <div className="ring">
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <circle className="ring-track" cx="24" cy="24" r={R} />
+        <circle
+          className="ring-arc"
+          cx="24"
+          cy="24"
+          r={R}
+          strokeDasharray={`${((C * score) / 100).toFixed(3)} ${((C * (100 - score)) / 100).toFixed(3)}`}
+        />
+        <text className="ring-num" x="24" y="24" dominantBaseline="central" textAnchor="middle">
+          {score}
+        </text>
+      </svg>
+      <span>{label}</span>
+    </div>
+  );
+}
 
 export default function Results() {
   return (
@@ -107,12 +143,34 @@ export default function Results() {
               </div>
               <h3>{c.title}</h3>
               <p>{c.text}</p>
-              {c.points ? (
-                <svg className="spark" viewBox="0 0 220 60" preserveAspectRatio="none">
-                  <polygon className="fillp" points={areaPoints(c.points)} />
-                  <polyline points={c.points} />
-                </svg>
-              ) : null}
+              {/* TODISTEVYOHYKE. Kiintea korkeus kaikilla kolmella, jotta
+                  ruudukon tasakorkeus ei tuota tyhjaa yhteenkaan korttiin:
+                  aiemmin vain kortti 1 kantoi sparklinen, ja ero oli
+                  mitattuna 34,5 px. */}
+              <div className="case-proof">
+                {c.proof === "spark" ? (
+                  <svg className="spark" viewBox="0 0 220 60" preserveAspectRatio="none">
+                    <polygon className="fillp" points={areaPoints(c.points!)} />
+                    <polyline points={c.points!} />
+                  </svg>
+                ) : c.proof === "rings" ? (
+                  <div className="rings">
+                    <ScoreRing score={100} label="Työpöytä" />
+                    <ScoreRing score={98} label="Mobiili" />
+                  </div>
+                ) : (
+                  /* Aito kuva tapahtumasta, ei abstraktia visualisointia:
+                     esim. 100 pistetta x 10 lukeutuisi luvuksi 100, mika
+                     olisi harhaanjohtavaa kortin luvun 1 000 rinnalla. */
+                  <Image
+                    className="case-shot"
+                    src="/tapahtumat/aftermovie.webp"
+                    alt="Garage Fest -tapahtuman aftermoviesta poimittu ruutu"
+                    width={274}
+                    height={72}
+                  />
+                )}
+              </div>
               {/* Pilleri on tekstia eika linkkia: etusivulla ei ole
                   palvelukohtaisia ankkureita (#palvelut kattaa kaikki nelja
                   paneelia), eika Tapahtumille ole omaa sivua lainkaan. */}

@@ -1583,6 +1583,46 @@ section { padding: var(--space-section) 0 }
    korttia vasten, eli reilusti yli 1.4.11:n 3:1:n. */
 .case-logo-mark { color: var(--ink) }
 
+/* TODISTEVYOHYKE. Kiintea korkeus kaikilla kolmella kortilla. Ennen tata
+   vain kortti 1 kantoi sparklinen (60 px), ja koska korttien h3 rivittyi
+   eri tavalla, ruudukon tasakorkeus jatti korteille 2 ja 3 mitatusti
+   34,5 px selittamatonta ilmaa tekstin ja pillerin valiin.
+
+   72 px on mitoitettu sisallosta: rengas 48 px + 4 px vali + label
+   11px x 1,5 = 16,5 px = 68,5 px, ja sparkline 44 px keskitettyna. */
+.case-proof {
+  height: 72px; margin-top: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+/* Sparkline sailyy ennallaan, vain sijoittuu vyohykkeen sisaan. */
+.case-proof .spark { margin-top: 0 }
+/* Kuva rajataan vyohykkeen mittoihin. Lahde on 1008x672, joten
+   274x72 CSS px kattaa dpr 2:lla 548x144 - ei upskaalausta. */
+.case-shot { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block }
+
+/* PISTEMAARARENKAAT. Kaari on sivuston oma sininen eika Lighthousen
+   vihrea: tama on meidan mittaustuloksemme, ei jaljitelma Googlen
+   widgetista. Ei piirtoanimaatiota - silloin ei ole myoskaan alkutilaa
+   johon reduced-motion voisi jattaa elementin, eika ohitussaantoa
+   tarvita. */
+.rings { display: flex; gap: 22px; align-items: center }
+.ring { display: flex; flex-direction: column; align-items: center; gap: 4px }
+.ring svg { width: 48px; height: 48px; display: block }
+.ring-track { fill: none; stroke: var(--hair); stroke-width: 4 }
+.ring-arc {
+  fill: none; stroke: var(--blue); stroke-width: 4; stroke-linecap: round;
+  /* Kaari alkaa kello 12:sta eika kello 3:sta. */
+  transform: rotate(-90deg); transform-origin: 24px 24px;
+}
+.ring-num { fill: var(--ink); font-size: 15px; font-weight: var(--weight-semibold) }
+.ring span { font-size: var(--text-micro); color: var(--grey); letter-spacing: .02em }
+
+/* Otsikko varaa kaksi rivia kaikilla korteilla. Ilman tata kortti 1
+   (25 merkkia = 1 rivi) jaisi 25,5 px matalammaksi kuin kortit 2 ja 3
+   (49 ja 38 merkkia = 2 rivia), ja ero siirtyisi vain toiseen kohtaan.
+   1,5em on peritty line-height, joten luku seuraa fonttikokoa. */
+.case h3 { min-height: calc(2 * 1.5em) }
+
 /* KAANTO. Sama mekanismi kuin .browserilla ja .eventilla: SiteEffects
    kirjoittaa --tilt-rotin ja CSS rakentaa ketjun. Vain reunimmaisilla
    korteilla on data-tilt, joten keskimmainen jaa suoraan.
