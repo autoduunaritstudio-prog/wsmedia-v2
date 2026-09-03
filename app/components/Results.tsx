@@ -176,6 +176,16 @@ export default function Results() {
                     alt={c.shotAlt ?? `${c.title} – kuva työstä`}
                     width={c.shotW}
                     height={c.shotH}
+                    /* Ilman sizes-proppia next/image menee haaraan
+                       kind:'x' ja tarjoilee lahteen taydella 1000px
+                       leveydella: 333px paikassa se on dpr 1:lla 3,0x
+                       ja dpr 2:lla 1,5x lineaarinen ylinaytteistys.
+                       Arvo on johdettu CSS:sta: .cases on yksi sarake
+                       <= 820px (silloin kortti = .wrapin sisaleveys eli
+                       lahes 100vw), muuten kolme saraketta .wrapin
+                       1080px - 48px paddingin ja 2 x 16px gapin jaolla
+                       = 333,33 px. */
+                    sizes="(max-width: 820px) 100vw, 334px"
                     /* q88 eika oletus 75: lahde on viety q88:lla ja
                        uudelleenpakkaus q75:lla pudottaisi SSIM:n
                        0,9838 -> 0,9585 eli alle projektin rajan.
@@ -193,19 +203,28 @@ export default function Results() {
                   {c.count}
                 </div>
                 <p>{c.text}</p>
-                {/* Spec-rivi. Ikonit ovat aria-hidden, mutta alustan nimi
-                    on nakyvana labelina, joten ruudunlukija saa sen ilman
-                    .vh-kikkaa. */}
+                {/* Spec-rivi. Yksikko on LABELISSA eika arvon vieressa:
+                    20px arvo ja 9px yksikko samalla rivilla lukeutuivat
+                    lahes samaksi tasoksi, kun sekundaarivarin nostaminen
+                    kontrastisyista kutisti kirkkauseron dL* 35,0 -> 10,9.
+                    Eri riveilla pelkka kokoero riittaa erotteluun.
+
+                    "INSTAGRAM · SEURAAJAA" ei mahtunut: 161,7 px vs.
+                    sarakkeen 128,67 px. Siksi alusta on pelkka ikoni ja
+                    label on "seuraajaa" (85,7 px, marginaali +43,0 px).
+                    Alustan nimi tulee ruudunlukijalle .vh:na - ja koska
+                    nimi ei ole enaa nakyvissa, ikoni KANTAA nyt tiedon
+                    ja on 1.4.11:n alainen. Mitattu 4,74:1 > 3:1. */}
                 {c.spec ? (
                   <div className="case-spec">
                     {c.spec.map((sp) => (
                       <div className="spec" key={sp.icon}>
                         <div className="spec-label">
                           <SocialIcon name={sp.icon} />
-                          {sp.label}
+                          <span className="vh">{sp.label} </span>
+                          {sp.unit}
                         </div>
                         <div className="spec-val">{sp.n}</div>
-                        <div className="spec-unit">{sp.unit}</div>
                       </div>
                     ))}
                   </div>

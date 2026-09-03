@@ -1752,13 +1752,13 @@ section { padding: var(--space-section) 0 }
    olisi lahes kolminkertainen tekstin korkeuteen nahden. Pystysiirto
    on laskettu cap-heightista, ks. raportti. */
 .spec-label svg { width: 13px; height: 13px; vertical-align: -3.26px; margin-right: 6px }
+/* Yksikko siirtyi labeliin: 20px arvo ja 9px yksikko samalla rivilla
+   lukeutuivat lahes samaksi tasoksi, kun sekundaarivarin nostaminen
+   kontrastisyista kutisti kirkkauseron dL* 35,0 -> 10,9. Eri riveilla
+   pelkka kokoero riittaa erotteluun. */
 .spec-val {
   font-size: 20px; font-weight: 700; letter-spacing: -.03em;
   color: #EDEAE4; margin-top: 7px; font-variant-numeric: tabular-nums;
-}
-.spec-unit {
-  font-size: 9px; font-weight: 500; letter-spacing: .13em;
-  text-transform: uppercase; color: #CBCBD2; margin-top: 3px;
 }
 
 .case .fill {
