@@ -359,6 +359,21 @@ export default function HeroScrub() {
       if (stopped) return;
       size();
       paint(0);
+      // LOPPUSARJAN KAYNNISTYS. Ruutu 0 on SAMA tiedosto kuin
+      // LCP-<img> (ks. <picture> alempana), joten sen valmistuminen on
+      // tasmalleen se hetki jolloin LCP on haettu eika loppusarja voi
+      // enaa kilpailla siita. rest() on idempotentti (started-lippu),
+      // joten tama ei ole ristiriidassa varaventtiilien kanssa.
+      //
+      // MIKSI EI window.load YKSIN. Se oli aiemmin AINOA laukaisija, ja
+      // se odottaa koko sivun aliresursseja. Mitattuna: Chromiumissa
+      // window.load 188 ms, WebKitissa 3193 ms (116 pyyntoa / 4503 kt).
+      // Ruudut latautuivat WebKitissa vasta 3200 ms kohdalla ja lukko
+      // aukesi 3241 ms - eli 3,2 sekunnin viiveesta 48 ms oli itse
+      // latausta ja loput pelkkaa odotusta. Lupaus ei voi myoskaan
+      // "mennä ohi" niin kuin kuuntelija joka ehditaan kiinnittaa
+      // vasta tapahtuman jalkeen.
+      rest();
     });
 
     const idle = (cb: () => void) =>
@@ -391,6 +406,9 @@ export default function HeroScrub() {
       };
       idle(pump);
     };
+    // VARAVENTTIILIT, eivat paapolku. Jaavat paikalleen sen varalta
+    // ettei ruutu 0 lataudu lainkaan (verkkovirhe): silloin lataus
+    // kaynnistyy silti eika sivu jaa latausruutuun LOAD_TIMEOUTiin asti.
     if (document.readyState === "complete") rest();
     else window.addEventListener("load", rest, { once: true });
 
