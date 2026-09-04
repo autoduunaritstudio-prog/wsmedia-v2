@@ -206,6 +206,10 @@ export default function HeroScrub() {
       return 0;
     };
 
+    // Todiste siita etta canvasilla on AIDOSTI sisaltoa: asetetaan vasta
+    // onnistuneen drawImagen jalkeen. Pelkka ready-laskuri kertoo etta
+    // ruudut on ladattu, ei sita etta yksikaan olisi piirretty.
+    let painted = false;
     const paint = (i: number) => {
       const img = imgs[i];
       if (!img || i === shown) return;
@@ -214,6 +218,11 @@ export default function HeroScrub() {
       const dw = img.naturalWidth * s;
       const dh = img.naturalHeight * s;
       ctx.drawImage(img, (cv.width - dw) / 2, (cv.height - dh) / 2, dw, dh);
+      if (!painted && cv.width > 0 && cv.height > 0) {
+        painted = true;
+        // Vapautus on voinut jaada odottamaan tata; yritetaan uudelleen.
+        tick();
+      }
     };
 
     const fetchFrame = (i: number) =>
@@ -271,8 +280,21 @@ export default function HeroScrub() {
     // Reactin tilaan, jottei 76 latausta tuota 76 uudelleenrenderointia.
     let timer = 0;
     let released = false;
-    const release = () => {
+    /**
+     * force = varaventtiili. LOAD_TIMEOUT purkaa lukon EHDOTTOMASTI,
+     * myos jos piirtoa ei koskaan tapahdu: kayttaja ei saa jaada
+     * lukkoon rikkinaisen canvasin takia.
+     *
+     * Muutoin vaaditaan todennettu piirto - canvasilla on koko ja
+     * vahintaan yksi drawImage on onnistunut ladatulla ruudulla. Mitattu
+     * tila on jo nyt oikea (3456x1984, sisaltoa 100 %, 1 piirto
+     * vapautushetkella molemmilla moottoreilla), joten tama ei korjaa
+     * havaittua vikaa vaan estaa sen luokan: vapautus ei voi ohittaa
+     * piirtoa vaikka ajoitus muuttuisi.
+     */
+    const release = (force = false) => {
       if (released) return;
+      if (!force && !painted) return;
       released = true;
       window.clearTimeout(timer);
       // Ankkurilinkki menee nollauksen edelle: kayttaja on pyytanyt
@@ -312,7 +334,9 @@ export default function HeroScrub() {
       // lopputila tulee CSS:n reduced-motion-saannosta, joten --st-arvoja
       // ei tarvitse kirjoittaa. Latausruutua ei nayteta lainkaan: yksi
       // ruutu ei ole lataus jota kannattaisi odottaa.
-      release();
+      // Reduced motion ei aja scrubia eika latausruutua, joten piirtoa
+      // ei ole odotettavissa: vapautus on ehdoton.
+      release(true);
       const last = set.n - 1;
       fetchFrame(last).then(() => {
         size();
@@ -390,7 +414,7 @@ export default function HeroScrub() {
       started = true;
       // KAYTTAJAA EI JATETA JUMIIN. Kello kaynnistyy vasta kun lataus
       // oikeasti alkaa, jottei hidas load-tapahtuma syo varaa.
-      timer = window.setTimeout(release, LOAD_TIMEOUT);
+      timer = window.setTimeout(() => release(true), LOAD_TIMEOUT);
       let next = 1;
       let active = 0;
       const pump = () => {
