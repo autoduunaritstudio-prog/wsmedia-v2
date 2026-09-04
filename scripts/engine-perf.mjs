@@ -31,7 +31,6 @@ const VARIANT = arg("variant", "base");
 const TARGET = arg("url", "http://localhost:3111/");
 const W = +arg("w", 1254), H = +arg("h", 783), DPR = +arg("dpr", 2), RUNS = +arg("runs", 1);
 
-if (!engine) { console.error(`Tuntematon moottori: ${ENGINE}`); process.exit(1); }
 
 
 const HEADED = process.argv.includes("--headed");
