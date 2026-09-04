@@ -59,49 +59,67 @@ muuten ennen/jälkeen ei ole vertailu.
 
 ### Miten selainta ajetaan
 
-Oletus on **HEADLESS**. Käytä `chromium.launch({ headless: true })` kaikkeen
-mittaukseen. Chromen uusi headless käyttää samaa renderöijää kuin näkyvä
-ikkuna, joten kehysajat, maalaus ja layout ovat vertailukelpoisia — ja se ei
-varasta fokusta eikä avaa ikkunoita käyttäjän työpöydälle.
-
-Käytä näkyvää ikkunaa (`headless: false`) **VAIN** kun käyttäjä on
-nimenomaisesti pyytänyt näkevänsä ajon. Silloin käynnistä se niin ettei se
-häiritse:
+**AINA HEADLESS.** Nakyva ikkuna vain jos kayttaja nimenomaan pyytaa
+nahda ajon.
 
 ```js
 chromium.launch({
-  headless: false,
-  args: [
-    '--window-position=-2400,0',          // ruudun ulkopuolelle
-    '--disable-background-timer-throttling',
-    '--disable-backgrounding-occluded-windows',
-    '--disable-renderer-backgrounding',
-  ],
+  headless: true,
+  args: ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist'],
 })
 ```
 
-Kolme viimeistä lippua ovat olennaiset: ilman niitä taustalle jäänyt ikkuna
-hidastaa ajastimet ja rAF:n, jolloin mittaus on roskaa. Niiden kanssa ikkuna
-ajaa täydellä nopeudella ilman fokusta.
+**GPU-liput ovat pakolliset, eivat koriste.** Playwrightin oletus-headless
+on "chromium headless shell", joka rasteroi SwiftShaderilla eli
+ohjelmistolla. Se vaaristaa kaiken rasterointiin liittyvan mittauksen.
+Mitattu tallä koneella, WebGL RENDERER:
 
-**ÄLÄ KOSKAAN:**
+| kaynnistys | renderoija |
+|---|---|
+| `headless: true` ilman lippuja | SwiftShader (ohjelmisto) |
+| `headless: true` + GPU-liput | **Apple M1 Pro, Metal** |
+| `channel: 'chromium'` + headless | Apple M1 Pro, Metal |
+| `headless: false` | Apple M1 Pro, Metal |
+
+Mittaustulos on lipuilla sama kuin nakyvalla ikkunalla: kehysvalin
+mediaani 8,3 ms ja p95 9,3 ms molemmilla, kun ohjelmistorasteroinnilla
+mediaani oli 16,7 ms. **Nakyvaa ikkunaa ei siis tarvita mihinkaan.**
+
+Kaikki mittausskriptit kayttavat yhteista `scripts/_browser.mjs`:aa,
+joka hoitaa liput ja binaarin tarkistuksen. Ala kirjoita
+launch-optioita uudestaan skriptikohtaisesti.
+
+**YKSI KAYNNISTYS PER TEHTAVA.** macOS aktivoi sovelluksen sen
+kaynnistyessa, joten `--window-position` ei estanyt ikkunaa tulemasta
+eteen silloin kun nakyvaa ikkunaa viela kaytettiin. Vaikka headless
+poistaa ongelman, sama saanto pysyy: variantit ja toistot ajetaan
+saman selaininstanssin sisalla omina konteksteinaan, ei omina
+selaimina. Ala kaynnista selainta valitarkistuksiin - keraa kaikki
+mitattava yhteen ajoon.
+
+**ALA KOSKAAN:**
 
 - nosta selainikkunaa eteen (`bringToFront`, `focus`, `activate`)
-- avaa käyttäjän omaa Chromea tai käytä hänen profiiliaan — Playwright
-  käynnistää aina oman erillisen instanssinsa
-- jätä selainprosesseja pyörimään: sulje browser ja context aina, myös
-  virhetilanteessa (`try`/`finally`)
-- jätä tuotantopalvelinta pyörimään ajon jälkeen
+- avaa kayttajan omaa Chromea tai kayta hanen profiiliaan - Playwright
+  kaynnistaa aina oman erillisen instanssinsa
+- jata selainprosesseja pyorimaan: sulje browser aina `try`/`finally`
+- jata tuotantopalvelinta pyorimaan ajon jalkeen
 
-Sivun tila luetaan `page.evaluate()`-kutsulla. Ota screenshot vain jos ulkoasu
-on itse asian kannalta olennainen, ja tallenna se tiedostoon älä palauta sitä
-raportissa.
+Sivun tila luetaan `page.evaluate()`-kutsulla. Ota screenshot vain jos
+ulkoasu on itse asian kannalta olennainen, ja tallenna se tiedostoon
+ala palauta sita raportissa.
 
 **Huom mittauksesta headlessissa:** `document.visibilityState` on aina
-`'visible'` eikä taustavälilehteä voi jäljitellä. Jos testattava asia riippuu
-piilotetusta dokumentista (IntersectionObserver ei toimita, ajastimet
-hidastuvat), sano se suoraan äläkä väitä testanneesi sitä — korvaa se tyngällä
-joka jäljittelee puuttuvaa toimitusta.
+`'visible'` eika taustavalilehtea voi jaljitella. Jos testattava asia
+riippuu piilotetusta dokumentista, sano se suoraan alaka vaita
+testanneesi sita - korvaa se tyngalla joka jaljittelee puuttuvaa
+toimitusta.
+
+**Huom kehysajoista:** ne EIVAT toistu kayttajan ikkunakoolla
+(1728x992 dpr 2). Sama ajo kolmesti antoi pahimmaksi kehykseksi 49,5 /
+316,7 / 541,5 ms. Validoi muutokset kerrosmaaralla ja kerrosmuistilla,
+jotka toistuvat. Jos raportoit kehysaikoja, aja vahintaan 10 kertaa ja
+kerro hajonta.
 
 **Rajatapaus:** jos tavallisessa tehtävässä törmäät arvoon jota et voi johtaa
 koodista, ÄLÄ käynnistä selainta oma-aloitteisesti. Sano mikä arvo se on ja

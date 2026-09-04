@@ -21,8 +21,7 @@
  * sisaista instrumentointia, joten se on identtinen molemmilla
  * moottoreilla eika vertailu vinoudu tyokalusta.
  */
-const PW = process.env.PW_ROOT || new URL("../node_modules/playwright/index.mjs", import.meta.url).href;
-const pw = await import(PW);
+const { pw, launchOptions, requireBrowser } = await import(new URL("./_browser.mjs", import.meta.url).href);
 
 const arg = (k, d) => { const m = process.argv.find((a) => a.startsWith(`--${k}=`)); return m ? m.slice(k.length + 3) : d; };
 const has = (k) => process.argv.includes(`--${k}`);
@@ -32,28 +31,12 @@ const VARIANT = arg("variant", "base");
 const TARGET = arg("url", "http://localhost:3111/");
 const W = +arg("w", 1254), H = +arg("h", 783), DPR = +arg("dpr", 2), RUNS = +arg("runs", 1);
 
-const engine = pw[ENGINE];
 if (!engine) { console.error(`Tuntematon moottori: ${ENGINE}`); process.exit(1); }
 
-const { existsSync } = await import("node:fs");
-let __exe = null;
-try { __exe = engine.executablePath(); } catch { /* ei asennettu */ }
-if (!__exe || !existsSync(__exe)) {
-  console.error(`\n${ENGINE}-binaaria ei loydy.\n\nAja:\n  npx playwright install ${ENGINE}\n`);
-  process.exit(1);
-}
 
-const HEADED = has("headed");
+const HEADED = process.argv.includes("--headed");
 // Chromiumin taustathrottlauksen estot eivat pade WebKitiin; se ei
 // myoskaan tue naita lippuja, joten ne annetaan vain Chromiumille.
-const launchOpts = HEADED
-  ? {
-      headless: false,
-      args: ENGINE === "chromium"
-        ? ["--window-position=-2400,0", "--disable-background-timer-throttling", "--disable-backgrounding-occluded-windows", "--disable-renderer-backgrounding"]
-        : [],
-    }
-  : { headless: true };
 
 const CSS = {
   // HYPOTEESI B: sekoitustila pakottaa alla olevan alueen uudelleen-
@@ -65,7 +48,7 @@ const CSS = {
 };
 
 const results = [];
-const browser = await engine.launch(launchOpts);
+const browser = await requireBrowser(ENGINE).launch(launchOptions(ENGINE, HEADED));
 try {
 for (let run = 0; run < RUNS; run++) {
   const ctx = await browser.newContext({

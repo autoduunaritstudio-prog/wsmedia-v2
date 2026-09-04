@@ -19,8 +19,7 @@
  * scrollY:n luku ja kaappaus vastaavat samaa hetkea - muuten jaannos
  * mittaisi omaa kilpajuoksuaan.
  */
-const PW = process.env.PW_ROOT || new URL("../node_modules/playwright/index.mjs", import.meta.url).href;
-const pw = await import(PW);
+const { pw, launchOptions, requireBrowser } = await import(new URL("./_browser.mjs", import.meta.url).href);
 const { createRequire } = await import("node:module");
 const require = createRequire(new URL("../package.json", import.meta.url));
 const sharp = require("sharp");
@@ -34,14 +33,6 @@ const TARGET = arg("url", "http://localhost:3111/");
 const FROM = +arg("from", 0), TO = +arg("to", 11000), STEP = +arg("step", 60);
 const W = +arg("w", 1254), H = +arg("h", 783);
 
-const engine = pw[ENGINE];
-const { existsSync } = await import("node:fs");
-let __exe = null;
-try { __exe = engine.executablePath(); } catch { /* ei asennettu */ }
-if (!__exe || !existsSync(__exe)) {
-  console.error(`\n${ENGINE}-binaaria ei loydy.\n\nAja:\n  npx playwright install ${ENGINE}\n`);
-  process.exit(1);
-}
 
 const CSS = {
   nowillchange: "*, *::before, *::after { will-change: auto !important }",
@@ -51,11 +42,9 @@ const CSS = {
   novideo: "video { visibility: hidden !important }",
 };
 
-const launchOpts = has("headed")
-  ? { headless: false, args: ENGINE === "chromium" ? ["--window-position=-2400,0", "--disable-background-timer-throttling", "--disable-backgrounding-occluded-windows", "--disable-renderer-backgrounding"] : [] }
-  : { headless: true };
 
-const browser = await engine.launch(launchOpts);
+const HEADED = process.argv.includes("--headed");
+const browser = await requireBrowser(ENGINE).launch(launchOptions(ENGINE, HEADED));
 try {
   const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
   const page = await ctx.newPage();
