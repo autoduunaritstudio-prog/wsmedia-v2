@@ -223,10 +223,34 @@
    ne; muuten napit, kentat ja textarea kasvavat ja kirjainvali muuttuu.
    Sivun omat saannot (.fcard input, .btn) yliajavat nama normaalisti. */
 button, input, optgroup, select, textarea { font: revert; letter-spacing: revert; color: revert }
-/* Ei scroll-behavior: smooth: se on ristiriidassa Lenisin kanssa, joka
-   ajaa vierityksen itse. Ankkurien pehmennyksen hoitaa Lenisin
-   anchors-asetus. */
-html { scroll-behavior: auto }
+/* ==================================================================
+   MIKSI LENIS ON POISTETTU - ALA KOKEILE UUDELLEEN
+
+   Lenis ajoi window.scrollTo:ta joka kehyksessa murto-osapikselin
+   tarkkuudella. Kortit (.case) ja kalenteri (.cal) ovat ainoat
+   elementit joilla on 3D-muunnos (perspective + rotateY), ja
+   murto-osapikselin siirtyma pakottaa niiden komposiittikerroksen
+   RASTEROITUMAAN UUDELLEEN joka kehyksessa sen sijaan etta sita vain
+   siirrettaisiin.
+
+   Siksi kayttajan Chromesta mitattiin 34,3-35,3 ms:n piikkeja - tasan
+   4 x 8,33 ms vsync-valia, eli kompositorin kadenssin pudotus - ja
+   NOLLA Long Animation Frame -osumaa: kyse oli rasteroinnista, ei
+   paasaikeesta. Kun Lenisin wheel- ja touch-kuuntelijat ohitettiin
+   ajonaikaisesti, seka Chromen valkkyminen etta Safarin tahmeus
+   katosivat, eika mikaan muu muuttunut samassa testissa.
+
+   Playwright ei toistanut tata kertaakaan viidella eri
+   mittaustavalla, koska synteettiset wheel-tapahtumat tuottavat eri
+   scroll-kadenssin kuin oikea laite.
+   ================================================================== */
+
+/* NATIIVI PEHMEA VIERITYS ankkurilinkeille. Tama korvaa Lenisin
+   anchors: true -asetuksen; Lenis on poistettu kokonaan (ks.
+   HeroScrub ja FullscreenNav). Sama ratkaisu kuin
+   ydr-autohuolto.vercel.appissa. */
+html { scroll-behavior: smooth }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto } }
 body {
   font-family: var(--font-sans);
   background: var(--bg); color: var(--ink);
@@ -453,6 +477,10 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 }
 
 .fsnav-in {
+  /* overscroll-behavior tuli aiemmin lenis.css:sta [data-lenis-prevent]
+     -valitsimella. Lenis on poistettu, joten se on nyt tassa: ilman sita
+     valikon vieritys ketjuuntuisi sivulle reunaan osuessa. */
+  overscroll-behavior: contain;
   position: relative; height: 100%; overflow-y: auto;
   max-width: 1440px; margin: 0 auto; padding: 0 var(--page-edge);
   /* Sisaltolohko on referenssin tapaan keskitetty kaista, ei reunasta

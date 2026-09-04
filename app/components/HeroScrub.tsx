@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { getLenis } from "./SmoothScroll";
 
 import { LogoMark } from "./Logo";
 
@@ -301,13 +300,6 @@ export default function HeroScrub() {
       // SmoothScrollin sivunvaihtonollauksessa.
       if (!window.location.hash) window.scrollTo(0, 0);
       document.documentElement.classList.remove("hero-locked");
-      // Kaynnistys VASTA lukon purun ja scrollTo:n jalkeen, sama
-      // jarjestys kuin FullscreenNavissa: internalStart() kutsuu
-      // reset():n, joka asettaa animatedScrollin ja targetScrollin
-      // actualScrolliin (lenis.mjs:676-681). Jos start() tulisi ennen
-      // nollausta, Lenis jaisi vanhaan tavoitearvoonsa ja vetaisi sivun
-      // takaisin.
-      getLenis()?.start();
       load.current?.classList.add("is-gone");
       // Lukon purku ei itsessaan laukaise IntersectionObserveria, joten
       // SiteEffectsin paljastusvarmistus herateta tapahtumalla. Tapahtuma
@@ -339,21 +331,11 @@ export default function HeroScrub() {
     // suoraan vierityksesta - joten mitaan ei tarvitse poistaa.
     // Sammutettavat asiat ovat CSS:ssa.
     document.documentElement.classList.add("hero-locked");
-    // html.hero-locked { overflow: hidden } EI YKSIN RIITA. Lenis
-    // kuuntelee wheelia ja touchia window-tasolla (VirtualScroll saa
-    // eventsTargetiksi wrapperin eli windowin) ja ajaa window.scrollTo:ta
-    // omassa rAF-silmukassaan, joten se liikuttaa sivua lukon takana:
-    // overflow: hidden estaa kayttajan vierityksen mutta ei skriptattua.
-    //
-    // Lenisilla ON overflow-tunnistus (checkOverflow -> internalStop),
-    // mutta se on kokonaan autoToggle-lipun takana (lenis.mjs:484-486 ja
-    // 529-531), eika SmoothScroll aseta sita - oletus on false. Tassa
-    // kokoonpanossa Lenis ei siis koskaan lue juurielementin overflowia.
-    //
-    // Sama mekanismi kuin FullscreenNavilla, joka pysayttaa Lenisin
-    // valikon ajaksi. Null reduced-motion -tilassa, jolloin instanssia ei
-    // luoda lainkaan ja lukko toimii natiivisti.
-    getLenis()?.stop();
+    // html.hero-locked { overflow: hidden } RIITTAA nyt yksin. Aiemmin ei
+    // riittanyt, koska Lenis ajoi window.scrollTo:ta omassa
+    // rAF-silmukassaan lukon ohi - overflow: hidden estaa kayttajan
+    // vierityksen mutta ei skriptattua. Lenis on poistettu, joten
+    // erillista pysaytysta ei tarvita.
     if (!window.location.hash) window.scrollTo(0, 0);
 
     size();
@@ -427,11 +409,6 @@ export default function HeroScrub() {
       history.scrollRestoration = restore;
       window.clearTimeout(timer);
       document.documentElement.classList.remove("hero-locked");
-      // TAMA ON TOINEN POISTUMISREITTI: siivous purkaa lukon KUTSUMATTA
-      // release():a, joten ilman tata Lenis jaisi pysaytetyksi jos
-      // komponentti unmounttaa ennen vapautusta. Pysaytetyksi jaanyt
-      // Lenis olisi pahempi vika kuin alkuperainen.
-      getLenis()?.start();
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("load", rest);
