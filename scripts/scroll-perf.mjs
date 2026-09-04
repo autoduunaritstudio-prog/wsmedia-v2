@@ -66,6 +66,9 @@ const launchOpts = HEADED
 
 const CSS = {
   nometal: ".metalbd, .metalbd-glow, .metalbd-facets { display: none !important }",
+  // Opacity taysimittaisesta sailiosta sticky-paneelle: sama lopputulos,
+  // mutta kerros on 100vh eika koko dokumentin korkuinen.
+  opamove: ".metalbd-v2:not(.metalbd-dark){opacity:1!important}.metalbd-v2:not(.metalbd-dark) .metalbd-pane{opacity:.45!important}.metalbd-dark{opacity:1!important}.metalbd-dark .metalbd-pane{opacity:.85!important}",
   noglow: ".metalbd-glow { display: none !important }",
   nofacets: ".metalbd-facets { display: none !important }",
   nocards: ".cmb { display: none !important }",
