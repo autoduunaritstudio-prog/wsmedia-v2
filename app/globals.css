@@ -1109,10 +1109,13 @@ html.hero-locked #nav { opacity: 0; visibility: hidden }
 /* Erillinen kerros heron sisalla, sisallon paalla mutta coverin alla.
    Lyhyt transition tasaa framejen valisen nykimisen jaamatta jalkeen. */
 @media (prefers-reduced-motion: reduce) {
-  /* Molemmat osiot normaalissa virtauksessa, ei peittoa eika tummennusta.
-     SiteEffects ajaa scrim-laskennan MYOS tassa tilassa: tummennus
-     seuraa vieritysta eika ole automaattista liiketta. */
-  .stickyzone > .hero { position: relative }
+  /* PINNAUS EI OLE LIIKETTA vaan asettelua: sticky pitaa heron
+     paikallaan sen oman vyohykkeen ajan, ja scrub tayttaa vyohykkeen
+     kayttajan vierityksen mukaan. Aiemmin tassa oli position: relative,
+     jolloin hero vieri pois ja .hero-spacerin 2222 px jai tyhjaksi -
+     mitattuna nakyman keskikohdassa oli .hero-spacer y 792..2600
+     valilla, kun normaalitilassa siina on .heroctas. Tummennus ja
+     peitto lasketaan nyt myos tassa tilassa. */
 }
 .hero .kick { color: var(--grey); letter-spacing: .08em; margin-bottom: 18px }
 .hero h1 { max-width: 15ch; margin: 0 auto }
@@ -2303,11 +2306,10 @@ footer .base { padding-top: 18px }
 .refcard-meta span { display: block; font-size: var(--text-caption-sm); color: #d2d2d7; margin-top: 2px }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Sama kaytos kuin herolla: molemmat osiot normaalissa virtauksessa,
-     peitto ja tummennus lasketaan MYOS tassa tilassa: ne seuraavat
-     vieritysta eivatka ole automaattista liiketta. */
-  .refsticky, .refs { position: relative }
-  .refscrim, .refsscrim { display: none }
+  /* Sama kuin herolla: pinnaus on asettelua eika liiketta, joten
+     .refsticky ja .refs jaavat stickyksi ja scrim jaa nakyviin. Aiemmin
+     molemmat purettiin, mika jatti Referenssien ja kalenterin valiin
+     tyhjaa. */
 }
 
 /* ============ DEKO-ELEMENTIT ============ */
