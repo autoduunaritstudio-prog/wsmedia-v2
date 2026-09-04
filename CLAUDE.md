@@ -124,3 +124,44 @@ kerro hajonta.
 **Rajatapaus:** jos tavallisessa tehtävässä törmäät arvoon jota et voi johtaa
 koodista, ÄLÄ käynnistä selainta oma-aloitteisesti. Sano mikä arvo se on ja
 miksi se vaatii selaimen, ja anna käyttäjän päättää.
+
+## prefers-reduced-motion
+
+Asetus koskee ei-välttämätöntä **liikettä**. Se ei koske asettelua, mittausta
+eikä geometriaa.
+
+**ÄLÄ KOSKAAN** gataa reduced-motionin taakse:
+
+- `position: sticky` tai muuta pinnausta — pinnaus on asettelua, ei liikettä
+- elementtien mittausfunktioita jotka kirjoittavat CSS-muuttujia
+  (`measureRef`, `measureHero`, `measureMetal` tms.)
+- spacereita, `min-height`ejä tai muuta tilanvarausta
+- scroll-sidottua geometriaa: sticky-topit, cover-fadet, scrimit
+- **scroll-scrubbausta.** Se etenee käyttäjän oman vierityksen mukaan ja
+  pysähtyy kun hän pysähtyy — se ei ole automaattista liikettä.
+  Vertailukohta: `ydr-autohuolto.vercel.app` tekee tämän oikein, se muuttaa
+  vain `idle = 0` ja `follow = 1` eli poistaa ajelehduksen ja pehmennyksen
+  mutta jättää scrubin.
+
+**SAMMUTA** vain se mikä liikkuu itsestään ajan funktiona: sisääntulo-
+animaatiot, `@keyframes`-loopit, karusellit, count-up-laskurit,
+hiiriparallaksit, hover-käännöt, automaattinen pehmennys (Lenis-tyyppinen),
+autoplay-videot.
+
+**RAUTAINEN SÄÄNTÖ:** jos sammutat efektin, sammuta myös sen geometria.
+Spacer ilman sisältöä on huonompi lopputulos kuin efekti — myös sille
+käyttäjälle joka asetuksen laittoi päälle. Joko molemmat jäävät tai
+molemmat lähtevät.
+
+CSS-puolella pakota **lopputila**, älä pelkkää `animation: none` — se jättää
+elementin alkutilaan (`opacity: 0`, `translateY`, `scale`). Kirjoita
+`opacity: 1` ja `transform: none` eksplisiittisesti.
+
+JS haarautuu reduced-motionin mukaan **vain** silloin kun CSS ei pysty
+pysäyttämään asiaa (rAF-silmukat, ajastimet). Kaikki muu hoidetaan CSS:ssä.
+
+**VERIFIOINTI:** elementtikohtainen tarkastelu, ei kuvan keskihajonta.
+Keskihajontamittari ei löydä ruutua jossa on navi ja yksi tekstirivi — se
+antoi 0 tyhjää ruutua myös silloin kun hero oli pinnaamatta ja 2222 px oli
+tyhjää. Tarkista mikä elementti on näkymän keskellä eri scrollY-kohdissa ja
+vertaa normaalitilaan.
