@@ -165,3 +165,31 @@ Keskihajontamittari ei löydä ruutua jossa on navi ja yksi tekstirivi — se
 antoi 0 tyhjää ruutua myös silloin kun hero oli pinnaamatta ja 2222 px oli
 tyhjää. Tarkista mikä elementti on näkymän keskellä eri scrollY-kohdissa ja
 vertaa normaalitilaan.
+
+## body { overflow-x } ja position: sticky
+
+Kun elementin toinen overflow-akseli on jokin muu kuin `visible`, toinen
+laskeutuu arvoon `auto`. `body { overflow-x: hidden }` tekee siis bodystä
+scroll-containerin (`overflow-y: auto`). **Chromium propagoi bodyn overflown
+viewportille, Safari ei** — Safarissa sticky sitoutuu bodyyn ja lakkaa
+toimimasta kokonaan.
+
+Oire tässä projektissa: hero jäi valkoiseksi kun scrollaus alkoi, ja
+Referenssit-osion jälkeen tuli tyhjää aluetta. Kumpikin **vain Safarissa**.
+Sticky-topin CSS-muuttuja mitattiin oikein (`-124px`), computed top oli
+`-124px`, mutta todellinen top oli `-1126`.
+
+Oikea ratkaisu on **`overflow-x: clip`**: se leikkaa luomatta
+scroll-containeria.
+
+```css
+body { overflow-x: clip }
+@supports not (overflow: clip) { body { overflow-x: hidden } }
+```
+
+`@supports`-haara jättää vanhat Safarit ennalleen sen sijaan että rikkoisi
+kaikki.
+
+**ÄLÄ palauta `body { overflow-x: hidden }` -sääntöä** vaikka mobiilissa
+ilmenisi vaakaylivuotoa. Ylivuoto on todellinen vain ≤ 820 px leveydellä
+(mitattu 162 px @ 820, 109 px @ 600, 58 px @ 390) ja `clip` hoitaa sen.
