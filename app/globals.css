@@ -1339,8 +1339,12 @@ section { padding: var(--space-section) 0 }
   /* --tilt tulee nyt puhelimelta itseltaan (data-tilt siirtyi sailiolta
      kummallekin .minille), joten varjo syvenee sen oman kaannon mukana. */
   --ph-drop:
-    0 calc(34px + var(--tilt, 0) * 28px) calc(70px + var(--tilt, 0) * 36px) -24px
-    rgba(29,29,31, calc(.4 + var(--tilt, 0) * .18));
+    /* --tilt-step EIKA --tilt: varjon sumennussade ja siirtyma ovat
+       MAALAUSOMINAISUUKSIA, joten portaaton arvo maalaa ison sumennetun
+       varjon uudelleen joka kehyksessa. Kaanto (--tilt-rot) on
+       komposiittia ja jaa portaattomaksi. Ks. SiteEffects: TILT_STEPS. */
+    0 calc(34px + var(--tilt-step, 0) * 28px) calc(70px + var(--tilt-step, 0) * 36px) -24px
+    rgba(29,29,31, calc(.4 + var(--tilt-step, 0) * .18));
   /* Hienovarainen reunavalo ylareunassa antaa rungolle metallisen
      pyoreyden. Heron .phone jattaa taman pois (--ph-rim: transparent),
      jotta sen ulkoasu ei muutu taman muutoksen yhteydessa. */
@@ -1388,8 +1392,8 @@ section { padding: var(--space-section) 0 }
   border-radius: 16px; overflow: hidden; background: #fff;
   border: 1px solid var(--hair);
   box-shadow:
-    0 calc(40px + var(--tilt, 0) * 34px) calc(90px + var(--tilt, 0) * 44px) -30px
-    rgba(29,29,31, calc(.3 + var(--tilt, 0) * .18));
+    0 calc(40px + var(--tilt-step, 0) * 34px) calc(90px + var(--tilt-step, 0) * 44px) -30px
+    rgba(29,29,31, calc(.3 + var(--tilt-step, 0) * .18));
 }
 .browser .bar {
   display: flex; align-items: center; gap: 8px;
@@ -1469,8 +1473,8 @@ section { padding: var(--space-section) 0 }
   position: relative; border-radius: 18px; overflow: hidden; background: var(--dark);
   aspect-ratio: 16/11; color: #fff;
   box-shadow:
-    0 calc(40px + var(--tilt, 0) * 34px) calc(90px + var(--tilt, 0) * 44px) -30px
-    rgba(13,13,16, calc(.5 + var(--tilt, 0) * .18));
+    0 calc(40px + var(--tilt-step, 0) * 34px) calc(90px + var(--tilt-step, 0) * 44px) -30px
+    rgba(13,13,16, calc(.5 + var(--tilt-step, 0) * .18));
 }
 /* MOCKUPIN KAARI. max-width 504 = 1008 / 2 eli lahdevideon leveys
    dpr 2:lla: sita leveampana lahde upskaalautuisi. Yhden palstan
@@ -1696,8 +1700,8 @@ section { padding: var(--space-section) 0 }
   /* Sama kaava kuin ennen (+14px y, +24px sumennus, +.08 alfa), uusi
      pohja. Toinen, tiukka kerros pysyy vakiona: se on se joka piirtaa
      kortin reunan irti vaaleasta pohjasta. */
-  box-shadow: 0 calc(26px + var(--tilt, 0) * 14px) calc(54px + var(--tilt, 0) * 24px) -26px
-    rgba(13,13,16, calc(.52 + var(--tilt, 0) * .08)),
+  box-shadow: 0 calc(26px + var(--tilt-step, 0) * 14px) calc(54px + var(--tilt-step, 0) * 24px) -26px
+    rgba(13,13,16, calc(.52 + var(--tilt-step, 0) * .08)),
     0 3px 10px -4px rgba(13,13,16,.30);
 }
 
@@ -1990,8 +1994,8 @@ footer .base { padding-top: 18px }
   padding: 20px 20px 22px;
   transform: perspective(1200px) var(--tilt-rot, rotateY(0deg));
   box-shadow:
-    0 calc(40px + var(--tilt, 0) * 34px) calc(90px + var(--tilt, 0) * 44px) -30px
-    rgba(29,29,31, calc(.3 + var(--tilt, 0) * .18));
+    0 calc(40px + var(--tilt-step, 0) * 34px) calc(90px + var(--tilt-step, 0) * 44px) -30px
+    rgba(29,29,31, calc(.3 + var(--tilt-step, 0) * .18));
 }
 .cal-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px }
 .cal-head b { font-size: var(--text-title-xs); font-weight: var(--weight-semibold); letter-spacing: -0.014em }

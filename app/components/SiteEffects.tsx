@@ -132,6 +132,8 @@ export default function SiteEffects() {
     // Etaisyys viewportin keskelta (osuus vh:sta) jossa kulma on nollassa.
     // 0.5 = elementin keskikohta on ruudun ala- tai ylareunassa.
     const TILT_RANGE = 0.5;
+    /** Varjon porrastus, ks. --tilt-step alempana. */
+    const TILT_STEPS = 20;
 
     /* ---------- parallaksi ---------- */
     const pars = Array.from(
@@ -333,6 +335,19 @@ export default function SiteEffects() {
         // poistuessaan.
         const t = Math.max(1 - Math.abs(d) / TILT_RANGE, 0);
         el.style.setProperty("--tilt", t.toFixed(3));
+        // VARJOLLE PORRASTETTU ARVO. box-shadow'n sumennussade ja
+        // siirtyma ovat maalausominaisuuksia: portaattomana ne maalaavat
+        // ison sumennetun varjon uudelleen joka kehyksessa. Mitattuna
+        // kayttajan Chromessa 158 hidasta kehysta (>18 ms) kasautui
+        // valille scrollY 7815-8619, jossa nakyvissa ovat vain .cal ja
+        // .case, ja pahimmat kehykset olivat 34,3-35,3 ms eli tasan
+        // 4 x 8,33 ms vsync - kompositorin kadenssin pudotus, ei
+        // skriptijumi. Long Animation Frames antoi 0 osumaa, joten
+        // paasaikeen tyo oli suljettu pois.
+        //
+        // Kaanto (--tilt-rot) jaa portaattomaksi: transform on
+        // komposiittia eika maksa maalausta.
+        el.style.setProperty("--tilt-step", (Math.round(t * TILT_STEPS) / TILT_STEPS).toFixed(3));
         // data-tilt: "x" | "y" | "-x" | "-y". Etumerkki valitsee kumpi
         // reuna tulee katsojaa kohti.
         //   rotateX +  : ylareuna poispain (sarana alareunassa)
