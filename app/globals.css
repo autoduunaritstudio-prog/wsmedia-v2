@@ -1018,6 +1018,9 @@ html.hero-locked { overflow: hidden }
 .hero-load-logo { position: relative; height: 46px; aspect-ratio: 1659.293862 / 795.969869 }
 .hero-load-logo svg { position: absolute; inset: 0; width: 100%; height: 100% }
 .hero-load-dim { color: rgba(245,245,247,.36); animation: loadbreath 2.4s ease-in-out infinite }
+/* Hengitys on automaattista liiketta; palkki itse on edistymismittari
+   ja jaa nakyviin. */
+@media (prefers-reduced-motion: reduce) { .hero-load-dim { animation: none } }
 .hero-load-fill {
   color: #f5f5f7;
   -webkit-mask-image: linear-gradient(to top, #000 0 var(--hero-load-p, 0%), #0000 var(--hero-load-p, 0%));
@@ -1107,8 +1110,8 @@ html.hero-locked #nav { opacity: 0; visibility: hidden }
    Lyhyt transition tasaa framejen valisen nykimisen jaamatta jalkeen. */
 @media (prefers-reduced-motion: reduce) {
   /* Molemmat osiot normaalissa virtauksessa, ei peittoa eika tummennusta.
-     SiteEffects ei aja scrim-laskentaa tassa tilassa, joten muuttuja jaa
-     nollaan ja kerros on nakymaton. */
+     SiteEffects ajaa scrim-laskennan MYOS tassa tilassa: tummennus
+     seuraa vieritysta eika ole automaattista liiketta. */
   .stickyzone > .hero { position: relative }
 }
 .hero .kick { color: var(--grey); letter-spacing: .08em; margin-bottom: 18px }
@@ -2301,8 +2304,8 @@ footer .base { padding-top: 18px }
 
 @media (prefers-reduced-motion: reduce) {
   /* Sama kaytos kuin herolla: molemmat osiot normaalissa virtauksessa,
-     ei peittoa eika tummennusta. SiteEffects ei aja scrub-laskentaa
-     tassa tilassa, joten muuttuja jaa nollaan. */
+     peitto ja tummennus lasketaan MYOS tassa tilassa: ne seuraavat
+     vieritysta eivatka ole automaattista liiketta. */
   .refsticky, .refs { position: relative }
   .refscrim, .refsscrim { display: none }
 }

@@ -277,7 +277,8 @@ export default function SiteEffects() {
       }
     };
 
-    if ((refSticky || refCover) && !reduce) {
+    // Mittaus, ei animaatio: ajaa myos reduced-motion-tilassa.
+    if (refSticky || refCover) {
       measureRef();
       refRo = new ResizeObserver(measureRef);
       if (refSticky) refRo.observe(refSticky);
@@ -292,7 +293,8 @@ export default function SiteEffects() {
       hero.style.setProperty("--hero-sticky-top", `${Math.round(top)}px`);
     };
 
-    if (hero && !reduce) {
+    // Mittaus, ei animaatio: ajaa myos reduced-motion-tilassa.
+    if (hero) {
       measureHero();
       // ResizeObserver kattaa sisallon muutokset (fontin lataus, tekstin
       // rivittyminen), window-resize taas pelkan viewportin korkeuden
@@ -309,14 +311,19 @@ export default function SiteEffects() {
       const h = document.documentElement;
       const sc = window.scrollY;
 
-      pars.forEach((el) => {
+      // PARALLAKSI on automaattista liiketta -> sammuu. Taman funktion
+      // loppupaan GEOMETRIAN MITTAUS ei ole liiketta vaan asettelua, ja
+      // se ajaa aina: muuten sticky-osiot jaavat ilman mittojaan ja
+      // sivulle jaa ruudullisia tyhjaa.
+      if (!reduce) pars.forEach((el) => {
         const sp = parseFloat(el.dataset.par ?? "0");
         const r = el.getBoundingClientRect();
         const mid = r.top + r.height / 2 - vh / 2;
         el.style.setProperty("translate", `0 ${(-mid * sp).toFixed(1)}px`);
       });
 
-      tilts.forEach((el) => {
+      // KAANTO on automaattista -> sammuu.
+      if (!reduce) tilts.forEach((el) => {
         const r = el.getBoundingClientRect();
         // Keskikohtien etaisyys, normalisoitu viewportin korkeuteen.
         const d = (r.top + r.height / 2 - vh / 2) / vh;
@@ -548,23 +555,17 @@ export default function SiteEffects() {
       }
     };
 
-    const onScrollReduced = () => {
-      navAndProgress(window.scrollY, document.documentElement);
-      ticking = false;
-    };
-
     window.addEventListener(
       "scroll",
       () => {
         if (!ticking) {
-          requestAnimationFrame(reduce ? onScrollReduced : onScroll);
+          requestAnimationFrame(onScroll);
           ticking = true;
         }
       },
       { passive: true, signal },
     );
-    if (!reduce) onScroll();
-    else onScrollReduced();
+    onScroll();
 
     /* ---------- korttien tilt ---------- */
     if (finePointer && !reduce) {

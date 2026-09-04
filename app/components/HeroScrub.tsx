@@ -157,7 +157,6 @@ export default function HeroScrub() {
     // Sarja valitaan kerran mountissa eika resizessa: vaihto kesken
     // istunnon heittaisi jo ladatut ruudut pois ja hakisi koko uuden.
     const set = window.matchMedia(WIDE).matches ? SETS.d : SETS.m;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const imgs: (HTMLImageElement | null)[] = new Array(set.n).fill(null);
     // RATKENNEET, ei ladatut: epaonnistunut pyynto merkitaan myos, jotta
@@ -328,38 +327,17 @@ export default function HeroScrub() {
 
     // Reduced motion: ei scrubia eika sarjan latausta, vain viimeinen
     // ruutu paikallaan.
-    if (reduce) {
-      // Ei scrubia eika sarjan latausta, vain viimeinen ruutu. Tummennus
-      // saa silti seurata scrollia: se ei ole liiketta. Tekstien
-      // lopputila tulee CSS:n reduced-motion-saannosta, joten --st-arvoja
-      // ei tarvitse kirjoittaa. Latausruutua ei nayteta lainkaan: yksi
-      // ruutu ei ole lataus jota kannattaisi odottaa.
-      // Reduced motion ei aja scrubia eika latausruutua, joten piirtoa
-      // ei ole odotettavissa: vapautus on ehdoton.
-      release(true);
-      const last = set.n - 1;
-      fetchFrame(last).then(() => {
-        size();
-        paint(last);
-      });
-      const still = () => {
-        raf = requestAnimationFrame(still);
-        const p = progress();
-        put("--hero-glow", GLOW_MAX * smoothstep(GLOW_WIN[0], GLOW_WIN[1], p));
-        const raw = hero ? parseFloat(hero.style.getPropertyValue("--hero-q")) : 0;
-        const q = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 1) : 0;
-        put("--hero-scrim", SCRIM_P * p + (SCRIM_Q - SCRIM_P) * (1 - (1 - q) * (1 - q)));
-        put("--hero-hint", p > HINT_P ? 0 : 1);
-      };
-      raf = requestAnimationFrame(still);
-      return () => {
-        stopped = true;
-        history.scrollRestoration = restore;
-        cancelAnimationFrame(raf);
-        window.removeEventListener("resize", onResize);
-      };
-    }
-
+    // SCRUBBAUS EI OLE AUTOMAATTISTA LIIKETTA: se etenee tasmalleen
+    // kayttajan vierityksen mukaan ja pysahtyy kun han pysahtyy, joten
+    // prefers-reduced-motion ei koske sita. Aiempi reduce-haara piirsi
+    // vain viimeisen ruudun, jolloin .hero-spacerin 224vh jai
+    // tayttamatta ja kayttaja vieritti ruudullisia tyhjaa.
+    //
+    // Sama ratkaisu kuin ydr-autohuolto.vercel.appissa: se pitaa scrubin
+    // kaynnissa ja poistaa vain automaattiset osat (idle-ajelehdus,
+    // pehmennys). Talla scrubilla ei ole kumpaakaan - asento luetaan
+    // suoraan vierityksesta - joten mitaan ei tarvitse poistaa.
+    // Sammutettavat asiat ovat CSS:ssa.
     document.documentElement.classList.add("hero-locked");
     // html.hero-locked { overflow: hidden } EI YKSIN RIITA. Lenis
     // kuuntelee wheelia ja touchia window-tasolla (VirtualScroll saa
