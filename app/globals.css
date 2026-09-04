@@ -255,7 +255,30 @@ body {
   font-family: var(--font-sans);
   background: var(--bg); color: var(--ink);
   line-height: 1.5; -webkit-font-smoothing: antialiased;
-  letter-spacing: -0.011em; overflow-x: hidden;
+  letter-spacing: -0.011em;
+  /* CLIP EIKA HIDDEN. overflow-x: hidden tekee bodysta
+     vierityskontekstin: kun toinen akseli ei ole visible, toinen
+     muuttuu autoksi. Spesifikaation mukaan bodyn overflow propagoituu
+     nakymalle eika bodysta pitaisi tulla vierityslaatikkoa, mutta
+     Safari ei toteuta propagaatiota samoin kuin Chromium - ja
+     vierityskonteksti rikkoo sen sisalla olevan position: stickyn.
+
+     Mitattu kayttajan Safarista: --hero-sticky-top oli asetettu
+     oikein (-124px, myos computed ja cssTop), mutta heron todellinen
+     top oli -1126, eli sticky ei pitanyt. Esivanhempien ketjussa
+     ainoa vierityskonteksti oli body. Hero katosi 545 px:n jalkeen ja
+     loput 1120 px:n spacerista jai paljaaksi taustaksi.
+
+     clip leikkaa LUOMATTA vierityskontekstia, joten sticky sailyy.
+     Ylivuoto on todellista vain kapeilla nakymilla (mitattu 162 px
+     820:lla, 109 px 600:lla, 58 px 390:lla), joten rajaus on yha
+     tarpeen - vain sen tapa vaihtuu. */
+  overflow-x: clip;
+}
+/* Safari < 16 ei tue clippia. Siella hidden jaa fallbackiksi, jolloin
+   sticky on rikki vain niissa versioissa eika kaikissa. */
+@supports not (overflow: clip) {
+  body { overflow-x: hidden }
 }
 ::selection { background: rgba(0,113,227,.15) }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px }
