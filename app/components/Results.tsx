@@ -68,7 +68,7 @@ const SHOTS = {
   // Refs.tsx kayttaa colormaster.mp4:n posterina. Case-kortilla on
   // oma, valmiiksi 16:9 rajattu tiedosto.
   colormaster: "/referenssit/colormaster-case.webp",
-  laaksolahti: "/referenssit/laaksolahdensahko.webp",
+  laaksolahti: "/referenssit/laaksolahdensahko-case.webp",
   garagefest: "/tapahtumat/garage-fest.webp",
 } as const;
 
@@ -112,9 +112,9 @@ const CASES = [
   },
   {
     shot: SHOTS.laaksolahti,
-    shotAlt: null,
-    shotW: SHOT_FALLBACK.w,
-    shotH: SHOT_FALLBACK.h,
+    shotAlt: "Laaksolahden Sähkön verkkosivun etusivu",
+    shotW: 1000,
+    shotH: 563,
     name: "Laaksolahden Sähkö",
     trade: "sähkötyöt ja ilmalämpöpumput",
     count: "100 / 98",
