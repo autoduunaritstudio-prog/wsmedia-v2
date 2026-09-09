@@ -4050,6 +4050,15 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
    rajauslaatikot mahtuvat 16384 laitepikselin sisaan, ja poista tama
    sääntö. Mittaa bbox getBoundingClientRectilla, ei silmalla. */
 .metalbd-facets { display: none }
+/* Kaaret piirretaan taustakuvana, ei DOM-SVG:na. Taustakuva rasteroidaan
+   kerran elementin kokoiseksi, joten geometria ei paase kasvamaan
+   kerrokseksi jota Chrome ei saa piirrettya. Sama laatikko kuin
+   .metalbd-facetsilla oli: inset -30% eli 160% paneesta. */
+.metalbd-pane::after {
+  content: ""; position: absolute; inset: -30%;
+  background: url(/metalbd-facets.svg) center / 100% 100% no-repeat;
+  pointer-events: none;
+}
 
 .metalbd-facets {
   position: absolute;

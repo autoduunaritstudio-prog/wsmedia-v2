@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2765" height="1450" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice">
+  <g fill="none" stroke="rgba(255,255,255,.62)" stroke-width="1" vector-effect="non-scaling-stroke">
+    <circle cx="-200" cy="-500" r="1300" fill="rgba(255,255,255,.055)"/>
+    <circle cx="600" cy="2600" r="1750" fill="rgba(255,255,255,.07)"/>
+    <circle cx="-500" cy="1400" r="900" fill="rgba(10,10,12,.10)"/>
+  </g>
+  <g fill="none" stroke="rgba(255,255,255,.62)" stroke-width="1" vector-effect="non-scaling-stroke">
+    <circle cx="1700" cy="-300" r="1350" fill="rgba(10,10,12,.075)"/>
+    <circle cx="1900" cy="1500" r="1250" fill="rgba(10,10,12,.085)"/>
+  </g>
+</svg>
