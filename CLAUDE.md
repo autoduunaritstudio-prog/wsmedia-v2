@@ -221,3 +221,65 @@ mittaat scroll-riippuvaista geometriaa. Sama koskee `scrollIntoView`ta.
 Toinen sama ansa: mittaa evästebanneri hylättynä tai hyväksyttynä. Tuore
 konteksti näyttää bannerin, ja se esiintyy peittäjänä `elementFromPoint`
 -mittauksissa.
+
+## Chromen renderointi: kolme sääntöä joita ei saa rikkoa
+
+Nämä kolme maksoivat kokonaisen työpäivän. Kaikki kolme oireilivat vain
+Chromessa, Safari oli oikein koko ajan, ja kaikki kolme todennettiin
+eristämällä käyttäjän omassa selaimessa: eston jälkeen oire hävisi,
+palautuksen jälkeen se palasi.
+
+### 1. Ei `filter`-ominaisuutta `#navin` sisällä
+
+`#nav` on `mix-blend-mode: difference`. Kun sen sisällä olevalle
+elementille asetetaan `filter` — myös `drop-shadow`, ei vain `blur` —
+Chrome rasteroi koko jäljen pehmeäksi. Safari pitää viivan terävänä.
+
+Oire: navin kantajahahmot ja kannettu logo näyttivät sumeilta jatkuvasti.
+Syy oli `NavCarriers.tsx`, joka kirjoitti joka kehyksessä sekä
+`filter: blur()` (liikeblur) että `filter: drop-shadow()` (reunus).
+
+Jos tarvitset reunuksen, tee se ilman filtteriä. Vetoa (`stroke`) ei voi
+käyttää sellaisenaan, koska hahmot on itse piirretty vedoilla; oikea tapa
+on kaksoiskappale taakse paksummalla vedolla.
+
+### 2. Ei kehyskohtaista `box-shadow`in muutosta
+
+`box-shadow`in sumennussäde ja siirtymä ovat **maalausominaisuuksia**.
+Niiden päivittäminen joka kehyksessä maalaa elementin uudelleen.
+
+Oire: `.aftercover` välkkyi kalenterin ja case-korttien kohdalla. Syy oli
+`--tilt-step`, jota SiteEffects kirjoitti joka kehyksessä ja josta CSS
+johti varjon. Arvon portaistus **ei riittänyt** — portaita oli 20, ja
+jokainen porras oli oma uudelleenmaalaus. Muuttujaa ei enää kirjoiteta.
+
+Kääntö (`--tilt-rot`) saa jäädä portaattomaksi: `transform` on
+komposiittia eikä maksa maalausta.
+
+### 3. Ei kehyskohtaista transformia isolla taustakuviokerroksella
+
+Näkymän kokoisen taustakuviokerroksen liikuttaminen `transformilla` joka
+kehyksessä saa Chromen pudottamaan sisältöä sen päältä: kalenteri,
+StatBand ja `.case`-kortit katosivat ja ilmestyivät. Tämä koski **mitä
+tahansa** kehyskohtaista transformia, myös pelkkää siirtymää, ja sekä
+DOM-SVG:tä että taustakuvaa.
+
+Taustalla oli myös tekstuuriraja: `preserveAspectRatio="slice"` skaalasi
+viewBoxin niin että SVG-ryhmien rajauslaatikot olivat 17741 x 28339
+laitepikseliä, kun Chromen maksimitekstuuri on 16384.
+
+**Liike tehdään `background-positionilla`**, joka on sama tekniikka jolla
+gradientin kirkas kohta jo liikkui ja joka on todistetusti turvallinen.
+Kaaret ovat nyt taustakuva: `public/metalbd-facets.svg` ja `-dark.svg`.
+
+### Menetelmä joka toimi
+
+Kaikki kolme löytyivät samalla tavalla: **ajonaikainen eristys käyttäjän
+omassa selaimessa**, yksi ominaisuus kerrallaan pois CSS-injektiolla, ja
+sivu ladattuna puhtaaksi jokaisen kokeen välissä. Kompositointi- ja
+kerrosmittaukset Playwrightilla eivät löytäneet mitään näistä, koska vika
+ei toistu siinä ympäristössä.
+
+**Lataa sivu uudelleen jokaisen kokeen välissä.** Chromen kompositorin
+tila jää elämään, ja peräkkäiset kokeet ilman uudelleenlatausta antavat
+ristiriitaisia tuloksia.
