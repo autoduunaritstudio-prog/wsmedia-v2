@@ -4026,6 +4026,31 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
    se putoaa virtaan ja saa oletusmittansa 300x150px (ks. .metalbd-noise).
    Laatikko on 130% ja siirretty -15%, jotta parallaksitransform ei paljasta
    reunaa. preserveAspectRatio="slice" pitaa kaaret oikean muotoisina. */
+/* VALIAIKAINEN: FASETIT POIS KUNNES GEOMETRIA ON MITOITETTU UUDELLEEN.
+   ------------------------------------------------------------------
+   Todennettu eristamalla kayttajan omassa Chromessa 9.9.2026: kun VAIN
+   tama kerros on pois ja kaikki muu on ennallaan (gradientti liikkuu,
+   opacity .45, kaikki kolme metalbd-instanssia paikallaan), etusivun
+   valkkyminen ja elementtien katoaminen loppuvat kokonaan. Kun se
+   palautetaan, molemmat palaavat.
+
+   MEKANISMI. preserveAspectRatio="xMidYMid slice" skaalaa viewBoxin
+   n. 2,3-kertaiseksi, jolloin kaariryhmien (.mbf-a / .mbf-b)
+   rajauslaatikot ovat mitattuna 17741 x 28339 laitepikselia. Chromen
+   maksimitekstuuri on 16384. Ylisuurta kompositorikerrosta ei saada
+   piirrettya oikein, ja kaikki sen kanssa yhdistettava sisalto -
+   kalenteri, case-kortit, prosessikortit - katoaa ja ilmestyy.
+   Safari kasittelee ylisuuret kerrokset toisin, siksi se on puhdas.
+
+   EI RATKAISE: will-change: auto (puolitti oireen), opacity paneelille,
+   position: fixed sailiolle, gradientin jaadyttaminen, clip-path
+   ryhmille. Kaikki mitattu ja hylatty samana iltana.
+
+   OIKEA KORJAUS: mitoita kaarten geometria niin etta ryhmien
+   rajauslaatikot mahtuvat 16384 laitepikselin sisaan, ja poista tama
+   sääntö. Mittaa bbox getBoundingClientRectilla, ei silmalla. */
+.metalbd-facets { display: none }
+
 .metalbd-facets {
   position: absolute;
   /* 160% eika 130%: paneen ylivuoto on nyt myos parallaksin liikevara.

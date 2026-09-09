@@ -307,28 +307,56 @@ export default function SiteEffects() {
     }
 
     let ticking = false;
+    // Paljastusjarjestelmalla oli OMA scroll-kuuntelija ja OMA rAF, joka
+    // ajoi rect-lukunsa vasta taman funktion kirjoitusten jalkeen - eli
+    // yksi ylimaarainen pakotettu asettelulaskenta joka kehyksessa.
+    // Nyt se ajetaan samassa tickissa ja lukuvaiheessa. Asetetaan vasta
+    // kun revealNow on maaritelty, koska onScroll ajetaan kerran heti.
+    let revealFn: (() => void) | null = null;
 
     const onScroll = () => {
       const vh = window.innerHeight;
       const h = document.documentElement;
       const sc = window.scrollY;
 
+      // Lukuvaihe ensin, ennen yhtaan kirjoitusta.
+      revealFn?.();
+
       // PARALLAKSI on automaattista liiketta -> sammuu. Taman funktion
       // loppupaan GEOMETRIAN MITTAUS ei ole liiketta vaan asettelua, ja
       // se ajaa aina: muuten sticky-osiot jaavat ilman mittojaan ja
       // sivulle jaa ruudullisia tyhjaa.
-      if (!reduce) pars.forEach((el) => {
-        const sp = parseFloat(el.dataset.par ?? "0");
-        const r = el.getBoundingClientRect();
-        const mid = r.top + r.height / 2 - vh / 2;
-        el.style.setProperty("translate", `0 ${(-mid * sp).toFixed(1)}px`);
-      });
+      // LUE ENSIN, KIRJOITA VASTA SITTEN. Aiemmin rect luettiin ja tyyli
+      // kirjoitettiin saman kierroksen sisalla, jolloin SEURAAVA luku
+      // pakotti selaimen laskemaan asettelun synkronisesti uudelleen.
+      // Etusivulla on 22 data-par- ja 7 data-tilt-elementtia, eli noin 29
+      // turhaa asettelulaskentaa joka kehyksessa 12 000 px korkealla
+      // dokumentilla.
+      //
+      // Kirjoitetut ominaisuudet (translate, CSS-muuttujat) EIVAT vaikuta
+      // asetteluun, joten lukujen siirtaminen eteen ei muuta yhtaan
+      // laskettua arvoa - se vain poistaa laskennat joita ei tarvita.
+      if (!reduce) {
+        const parMids = pars.map((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top + r.height / 2 - vh / 2;
+        });
+        pars.forEach((el, i) => {
+          const sp = parseFloat(el.dataset.par ?? "0");
+          el.style.setProperty("translate", `0 ${(-parMids[i] * sp).toFixed(1)}px`);
+        });
+      }
 
       // KAANTO on automaattista -> sammuu.
-      if (!reduce) tilts.forEach((el) => {
-        const r = el.getBoundingClientRect();
+      if (!reduce) {
+        // Sama jako kuin parseissa: kaikki rectit ensin, kirjoitukset sitten.
+        const tiltDs = tilts.map((el) => {
+          const r = el.getBoundingClientRect();
+          return (r.top + r.height / 2 - vh / 2) / vh;
+        });
+        tilts.forEach((el, i) => {
         // Keskikohtien etaisyys, normalisoitu viewportin korkeuteen.
-        const d = (r.top + r.height / 2 - vh / 2) / vh;
+        const d = tiltDs[i];
         // 1 = keskella (taysi kaanto), 0 = TILT_RANGEn paassa keskelta
         // (tasainen). Elementti on siis "avautuneimmillaan" kun se on
         // parhaiten katsottavissa ja suoristuu tullessaan nakyviin seka
@@ -372,7 +400,8 @@ export default function SiteEffects() {
         // joten molemmat akselit ovat huipussaan yhta aikaa keskella.
         const back = mockup ? ` rotateX(${(t * TILT_BACK_MAX).toFixed(2)}deg)` : "";
         el.style.setProperty("--tilt-rot", `${axis}(${main.toFixed(2)}deg)${back}`);
-      });
+        });
+      }
 
       if (mbLayer) {
         // Ajuriksi coverin oma sijainti, ei raaka scrollY: arvo kulkee
@@ -741,19 +770,9 @@ export default function SiteEffects() {
     // komponentit pysyvat erillaan. Synteettinen scroll ei auttaisi -
     // IO:ta ei ajeta scroll-tapahtumista vaan renderointisilmukasta.
     window.addEventListener("hero:unlocked", revealNow, { passive: true, signal });
-    let revealTick = false;
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (revealTick) return;
-        revealTick = true;
-        requestAnimationFrame(() => {
-          revealTick = false;
-          revealNow();
-        });
-      },
-      { passive: true, signal },
-    );
+    // Ei omaa kuuntelijaa eika omaa rAF:aa: onScroll kutsuu taman
+    // lukuvaiheessaan. Yksi silmukka, yksi asettelulaskenta.
+    revealFn = revealNow;
 
     /* ---------- ajovalot (palautuva tila) ---------- */
     // Eri havainnoija kuin .rv-paljastus: TAMA EI TEE UNOBSERVEA, vaan
