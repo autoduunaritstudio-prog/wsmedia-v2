@@ -38,7 +38,20 @@ const SCENES: Scene[] = [
 
 const START_RANK = 7;
 
-export default function SearchDemo() {
+type Props = {
+  /**
+   * "full"   = SEO-sivun versio: tulos nousee sijalta 7 sijalle 1 ja
+   *            tekoalyvastaus kirjoittuu peraan.
+   * "simple" = etusivun palvelupaneeli: pelkka hakutuloslista, oma tulos
+   *            ykkosena ylimpana ja kilpailijat sen alla. Ei tekoalylohkoa,
+   *            koska paneelissa ei ole tilaa kertoa sen tarinaa - se on
+   *            SEO-sivun oma aihe.
+   */
+  variant?: "full" | "simple";
+};
+
+export default function SearchDemo({ variant = "full" }: Props) {
+  const simple = variant === "simple";
   const [query, setQuery] = useState("");
   const [desc, setDesc] = useState("");
   const [aiText, setAiText] = useState("");
@@ -150,6 +163,11 @@ export default function SearchDemo() {
         </span>
       </div>
 
+      {/* Palvelun nimi tekstina, ei logona: Googlen sanamerkki on
+          tavaramerkki eika sita saa piirtaa uudelleen omaan grafiikkaan.
+          Nimeaminen tekstilla on tavallista ja sallittua kayttoa, ja se
+          kertoo katsojalle saman asian. */}
+      {simple && <p className="sdemo-cap">Google-haku</p>}
       <div className="sbar">
         <span className="ico" aria-hidden="true" />
         <span className="q" id="sq">
@@ -164,43 +182,63 @@ export default function SearchDemo() {
         aria-hidden="true"
         style={{ opacity: resultsVisible ? 1 : 0.45 }}
       >
+        {/* JARJESTYS. simple-versiossa oma tulos on ylimpana sijalla 1 ja
+            kilpailijat sen alla: lista luetaan ylhaalta alas, joten
+            korostettu rivi keskella olisi ristiriidassa oman numeronsa
+            kanssa. full-versiossa jarjestys on osa animaatiota - tulos
+            nousee alhaalta ylos, ja silloin sen kuuluukin aloittaa alta. */}
+        {simple && (
+          <div className="srow us" data-slot="1">
+            <span className="rk">1</span>
+            <span className="ln">
+              <b>yrityksesi.fi</b>
+              <i id="sdesc">{desc || "Palvelu paikkakunnalla — hinnat, aikataulu ja yhteydenotto"}</i>
+            </span>
+          </div>
+        )}
         <div className="srow" data-slot="1">
-          <span className="rk">1</span>
+          <span className="rk">{simple ? 2 : 1}</span>
           <span className="ln">
+            {simple ? <em>Kilpailija</em> : null}
             <s />
             <s />
           </span>
         </div>
         <div className="srow" data-slot="2">
-          <span className="rk">2</span>
+          <span className="rk">{simple ? 3 : 2}</span>
           <span className="ln">
+            {simple ? <em>Kilpailija</em> : null}
             <s />
             <s />
           </span>
         </div>
-        <div className="srow us" data-slot="3">
-          <span className="rk" id="srank">
-            {rank}
-          </span>
-          <span className="ln">
-            <b>yrityksesi.fi</b>
-            <i id="sdesc">{desc || "Palvelu paikkakunnalla — hinnat, aikataulu ja yhteydenotto"}</i>
-          </span>
-        </div>
+        {!simple && (
+          <div className="srow us" data-slot="3">
+            <span className="rk" id="srank">
+              {rank}
+            </span>
+            <span className="ln">
+              <b>yrityksesi.fi</b>
+              <i id="sdesc">{desc || "Palvelu paikkakunnalla — hinnat, aikataulu ja yhteydenotto"}</i>
+            </span>
+          </div>
+        )}
       </div>
 
-      <div className={`aians${aiVisible ? " on" : ""}`} id="aians" aria-hidden="true">
-        <p className="ah">
-          <em>✦</em>Tekoälyn vastaus
-        </p>
-        <p id="aitext">{aiText}</p>
-        <div className="src">
-          <small>Lähteet:</small>
-          <span>toimiala-lehti.fi</span>
-          <span className="us">yrityksesi.fi</span>
-          <span>hakemisto.fi</span>
+      {!simple && (
+        <div className={`aians${aiVisible ? " on" : ""}`} id="aians" aria-hidden="true">
+          <p className="ah">
+            <em>✦</em>Tekoälyn vastaus
+          </p>
+          <p id="aitext">{aiText}</p>
+          <div className="src">
+            <small>Lähteet:</small>
+            <span>toimiala-lehti.fi</span>
+            <span className="us">yrityksesi.fi</span>
+            <span>hakemisto.fi</span>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

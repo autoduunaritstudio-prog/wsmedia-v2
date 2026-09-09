@@ -113,6 +113,14 @@ export default function SiteEffects() {
     // kanssa. Kaanto ei ole kertaalleen laukeava sisaantulo vaan taysin
     // palautuva. Samalla asetetaan --tilt, jota varjot lukevat CSS:ssa.
     const tilts = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt]"));
+    /* VIERINTAAN SIDOTTU PALJASTUS. Vastapari .rv:lle, joka on
+       kertalaukaisu: se lisaa .on-luokan ja tekee unobserven, joten
+       ylospain palatessa ja uudelleen alas tullessa mitaan ei enaa
+       tapahdu. Nama elementit saavat sen sijaan --rvp:n joka kehyksessa
+       omasta sijainnistaan, jolloin liike purkautuu samaa rataa takaisin.
+       Opt-in data-attribuutilla, jotta kirjoituksia tulee vain niille
+       elementeille jotka sita oikeasti kayttavat. */
+    const rvsEls = Array.from(document.querySelectorAll<HTMLElement>("[data-rvs]"));
     const TILT_MAX = 19;         // puhelinparin sivuttaiskulma
     // Selainmockup ja tapahtumakortti ovat isoja pintoja, joilla sama 19
     // astetta nayttaa liialliselta. Niille oma, hillitympi sivuttaiskulma
@@ -131,6 +139,16 @@ export default function SiteEffects() {
     // Etaisyys viewportin keskelta (osuus vh:sta) jossa kulma on nollassa.
     // 0.5 = elementin keskikohta on ruudun ala- tai ylareunassa.
     const TILT_RANGE = 0.5;
+    /* Korkeus nakymasta jolla vierintaan sidottu paljastus on valmis.
+       0,45 = elementin keskikohta on 45 %:n korkeudella nakyman
+       ylareunasta, eli hieman keskikohdan ylapuolella. */
+    const RVS_END = 0.45;
+    /* Kynnys jolla elementti lasketaan "esilla olevaksi" (.rvs-in).
+       EI 1: se on sisaantulon paatepiste, joten silla ehdolla jatkuva
+       animaatio alkaisi vasta kun liike on jo kokonaan ohi ja rivi on
+       seissyt hetken paikallaan. 0,7 aloittaa sen jo ennen kuin
+       sisaantulo on maalissa, jolloin kehotus jatkaa suoraan liikkeesta. */
+    const RVS_IN = 0.7;
     /** Varjon porrastus, ks. --tilt-step alempana. */
 
     /* ---------- parallaksi ---------- */
@@ -345,6 +363,36 @@ export default function SiteEffects() {
         });
       }
 
+      // VIERINTAAN SIDOTTU PALJASTUS. Sama lue-ensin-kirjoita-sitten -jako
+      // kuin parallaksilla.
+      //
+      // ETENEMA on 0 kun elementin ylareuna on tasan nakyman alareunassa
+      // ja 1 kun elementin KESKIKOHTA on RVS_END:n korkeudella. Aiemmin
+      // jakajana oli pelkka elementin korkeus, jolloin liike oli ohi jo
+      // silla hetkella kun kortti oli kokonaan nakyvissa - 906px
+      // nakymassa 290px korkealla kortilla se tarkoitti 290px matkaa ja
+      // kortti oli valmis viela nakyman alalaidassa. Nyt matka on
+      // 0,45*vh + h/2 eli samoilla luvuilla 553px, ja liike jatkuu siihen
+      // asti kunnes kortti on luettavalla korkeudella.
+      if (!reduce) {
+        const rvsP = rvsEls.map((el) => {
+          const r = el.getBoundingClientRect();
+          const span = Math.max(vh * (1 - RVS_END) + r.height / 2, 1);
+          return Math.min(Math.max((vh - r.top) / span, 0), 1);
+        });
+        rvsEls.forEach((el, i) => {
+          el.style.setProperty("--rvp", rvsP[i].toFixed(3));
+          // PALAUTUVA "OSIO ON ESILLA" -TILA. Tarvitaan koska CSS ei osaa
+          // haarautua muuttujan ARVOSTA: animaatiota ei voi kaynnistaa
+          // ehdolla var(--rvp) === 1. Luokka on siis sama tieto luettavassa
+          // muodossa, ja se poistuu itsestaan kun etenema laskee alle
+          // ykkosen. classList.add/remove jo oikeassa tilassa ei muuta
+          // DOMTokenListia, joten tasta ei tule kehyskohtaista tyota.
+          if (rvsP[i] >= RVS_IN) el.classList.add("rvs-in");
+          else el.classList.remove("rvs-in");
+        });
+      }
+
       // KAANTO on automaattista -> sammuu.
       if (!reduce) {
         // Sama jako kuin parseissa: kaikki rectit ensin, kirjoitukset sitten.
@@ -528,6 +576,7 @@ export default function SiteEffects() {
         // laskentaa - rp on jo tassa ja se on 0,000 tasan pin-hetkella.
         refCover.style.setProperty("--refs-dim", rp.toFixed(3));
       }
+
 
       // Coverit materialisoituvat sisaan: koko elementin opacity seuraa
       // sita kuinka suuri osa nakymasta on jo sen peitossa. Arvo johdetaan

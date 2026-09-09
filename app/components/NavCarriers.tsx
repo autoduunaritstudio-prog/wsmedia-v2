@@ -105,7 +105,7 @@ const LEAN_MAX = 0.28; // rad, n. 16 astetta
    kavelynopeus ei muutu; alaraja 0,85 -> 0,95 siirtaa koko ikkunan tasan
    0,10 * vh pikselia myohemmaksi. Rajattu ap ei olisi tahan kelvannut:
    se on jo 1,0 kun .aftercover peittaa nakyman ylareunan. */
-const RET_LO = 0.95;
+const RET_LO = 0.86;
 /* 0,15 -> 0,45. Kolminkertainen ikkuna samasta alkupisteesta. Kavelymatka
    jaa ennalleen: se on JAETTU logonauhavyohykkeen kanssa (sama a.edge,
    sama a.home), joten sen kasvattaminen nopeuttaisi myos lahtoa. Eika
@@ -138,7 +138,7 @@ const BEAM_RAMP = 0.15; // keilan nousu/lasku vaiheen b sisalla
 const BEAM_HALF_O = 0.30; // rad, ulkokeilan puolikulma (n. 17 astetta)
 const BEAM_HALF_I = 0.15; // rad, sisakeila
 const LAMP_LEN = 15;      // lampun rungon pituus kadesta paahan
-const MASK_PAD = 4;       // px, videokorttien maskin varmuusmarginaali
+const MASK_PAD = 1;       // px, videoseinan maskin varmuusmarginaali
 /* Taustan aariarvot navipalkin takana: --color-bg ja --color-dark.
    Kaytetaan blendin lapi nakyvan varin laskentaan, ks. paintFor(). */
 const BG = 255;
@@ -274,8 +274,10 @@ export default function NavCarriers() {
     let prevTop: number | null = null;
     let prevT = 0;
     let prevBack = -1;
+    let prevBeam = -1;
     let backCss = `rgb(${BG},${BG},${BG})`;
     let idle = true;
+    const root = document.documentElement;
 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
@@ -614,6 +616,20 @@ export default function NavCarriers() {
         }
       }
 
+      // --- keilan voimakkuus ulos CSS:lle ---
+      // Korttien reunuskehys syttyy tasan silloin kun keila osuu niihin.
+      // Muuttuja on juuressa, jotta CSS saa sen ilman lisaselektoreita, ja
+      // se ohjaa VAIN opacityn arvoa: reunus itse on staattinen box-shadow
+      // .refcard::afterissa. Nain kehyskohtainen kirjoitus ei koske
+      // maalausominaisuuksiin, mika on taman projektin Chrome-saanto.
+      // Kirjoitus vain kun arvo muuttuu: yksi merkitseva desimaali riittaa
+      // silmalle ja pitaa kirjoitusten maaran kymmenesosassa.
+      const beamQ = Math.round(beamOn * 100) / 100;
+      if (beamQ !== prevBeam) {
+        prevBeam = beamQ;
+        root.style.setProperty("--beam", beamQ.toFixed(2));
+      }
+
       // --- keilat omalla kerroksellaan ---
       const be = getBeam();
       if (be) {
@@ -640,22 +656,41 @@ export default function NavCarriers() {
               );
             }
           }
-          // Videokortit LEIKATAAN keilasta maskilla. Kortteihin itseensa ei
-          // kosketa millaan tavalla: niiden opacity, filter ja tausta
-          // pysyvat sellaisina kuin CSS ne maarittelee, ja keila piirtyy
-          // vain niiden ohi ja valiin. Marginaali kattaa osapikselit.
-          for (let n = 0; n < be.mask.length; n++) {
-            const cr = refCards[n]?.getBoundingClientRect();
-            const m = be.mask[n];
-            if (!cr) {
-              m.setAttribute("width", "0");
-              continue;
-            }
-            m.setAttribute("x", (cr.left - MASK_PAD).toFixed(1));
-            m.setAttribute("y", (cr.top - MASK_PAD).toFixed(1));
-            m.setAttribute("width", (cr.width + MASK_PAD * 2).toFixed(1));
-            m.setAttribute("height", (cr.height + MASK_PAD * 2).toFixed(1));
+          // Videoseina LEIKATAAN keilasta YHTENA laatikkona, ei viitena.
+          //
+          // Viisi erillista maskilaatikkoa jatti korttien VALIIN raon josta
+          // keila paistoi lapi: rako on --space-gap-grid miinus kaksi
+          // MASK_PADia, ja koska laatikot olivat teravakulmaisia kun kortit
+          // ovat 20px pyoristettyja, samasta syysta jai valo myos jokaisen
+          // kortin kulmaan. Molemmat nakyivat harmaina teravareunaisina
+          // suikaleina korttirivin ylareunassa.
+          //
+          // Unioni lasketaan korttien omista rectesita eika .refgridista:
+          // kortit ovat 3D-kaannettyja, joten niiden nakyva ala ei ole sama
+          // kuin ruudukon asettelulaatikko. rx vastaa kortin omaa
+          // border-radiusta, jolloin unionin ulkokulmat seuraavat
+          // reunimmaisten korttien pyoristysta.
+          let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+          for (const c of refCards) {
+            if (!c) continue;
+            const cr = c.getBoundingClientRect();
+            if (cr.width <= 0) continue;
+            if (cr.left < x0) x0 = cr.left;
+            if (cr.top < y0) y0 = cr.top;
+            if (cr.right > x1) x1 = cr.right;
+            if (cr.bottom > y1) y1 = cr.bottom;
           }
+          const m0 = be.mask[0];
+          if (m0) {
+            if (x1 > x0) {
+              m0.setAttribute("x", (x0 - MASK_PAD).toFixed(1));
+              m0.setAttribute("y", (y0 - MASK_PAD).toFixed(1));
+              m0.setAttribute("width", (x1 - x0 + MASK_PAD * 2).toFixed(1));
+              m0.setAttribute("height", (y1 - y0 + MASK_PAD * 2).toFixed(1));
+              m0.setAttribute("rx", "20");
+            } else m0.setAttribute("width", "0");
+          }
+          for (let n = 1; n < be.mask.length; n++) be.mask[n].setAttribute("width", "0");
         }
       }
     };

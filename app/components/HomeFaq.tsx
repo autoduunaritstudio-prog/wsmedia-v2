@@ -3,7 +3,7 @@ import { HOME_FAQ } from "../faq-data";
 /**
  * Etusivun UKK. Kayttaa samaa .faq-haitaritylia kuin alasivut (details/
  * summary + .a), ei omaa tyylia. Yksi sarake eika alasivujen .faq2-
- * kaksisaraketta: kysymyksia on vain kahdeksan, jolloin kaksi saraketta
+ * kaksisaraketta: kysymyksia on vain kymmenen, jolloin kaksi saraketta
  * jaisi vajaaksi.
  */
 export default function HomeFaq() {

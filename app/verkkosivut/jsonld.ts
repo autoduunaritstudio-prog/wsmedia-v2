@@ -12,7 +12,7 @@ const BASE_GRAPH = [
       "name": "WS Media Oy",
       "alternateName": "WS Media",
       "url": "https://wsmedia.fi/",
-      "description": "WS Media on espoolainen verkkosivuihin, lyhytvideotuotantoon ja tapahtumiin erikoistunut toimisto.",
+      "description": "WS Media on espoolainen verkkosivuihin, lyhytvideotuotantoon ja graafiseen suunnitteluun erikoistunut toimisto.",
       "vatID": "FI36150844",
       "taxID": "3615084-4",
       "address": {

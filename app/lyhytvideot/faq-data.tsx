@@ -241,19 +241,19 @@ export const FAQ_GROUPS: FaqGroup[] = [
           "Itse tekeminen on halvinta silloin, kun yrityksestä löytyy henkilö, jolla on aikaa opetella kuvaus, editointi ja alustakohtainen optimointi sekä pitää julkaisutahtia yllä kuukaudesta toiseen. Ulkoistamisen etu ei ole pelkkä laatu vaan se, että tahti ei katkea kiireisenä kuukautena.",
       },
       {
-        q: "Teettekö myös verkkosivut ja tapahtumavideot?",
+        q: "Teettekö myös verkkosivut ja yritysilmeen?",
         answer: (
           <>
             Kyllä. WS Media tekee lyhytvideoiden lisäksi{" "}
             <SmartLink href="/verkkosivut">hakukoneoptimoidut verkkosivut</SmartLink>,{" "}
             Meta-mainonnan ja{" "}
-            <SmartLink href="/#palvelut">tapahtumatuotannot</SmartLink>. Kun sisältö, sivusto ja mainonta tulevat
+            <SmartLink href="/graafinen-suunnittelu">graafisen suunnittelun</SmartLink>. Kun sisältö, sivusto ja mainonta tulevat
             samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee kaikkia
             kolmea.
           </>
         ),
         schema:
-          "Kyllä. WS Media tekee lyhytvideoiden lisäksi hakukoneoptimoidut verkkosivut, Meta-mainonnan ja tapahtumatuotannot. Kun sisältö, sivusto ja mainonta tulevat samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee kaikkia kolmea.",
+          "Kyllä. WS Media tekee lyhytvideoiden lisäksi hakukoneoptimoidut verkkosivut, Meta-mainonnan ja graafisen suunnittelun. Kun sisältö, sivusto ja mainonta tulevat samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee kaikkia kolmea.",
       },
     ],
   },

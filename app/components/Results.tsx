@@ -48,12 +48,10 @@ import type { SocialLink } from "./site-data";
 /**
  * KUVAT TULEVAT VAKIOISTA, EIVAT KOODIIN KOVAKOODATTUINA POLKUINA.
  *
- * Colormasterille on toimitettu valmis, lahteessa 16:9 rajattu kuva.
- * Kahdelle muulle ei viela ole: referenssiposterit ovat 608x1080
- * pystykuvaa ja aftermovie on kolmen ruudun kollaasi, jonka saumat
- * ovat 31,4 % ja 63,8 % kohdalla joka ainoassa ruudussa. Kumpaakaan ei
- * voi rajata vaakakaistaleeksi ilman etta lopputulosta pitaisi katsoa
- * silmalla - ja sita ei tassa tyotavassa tehda.
+ * Colormasterille ja Laaksolahdelle on toimitettu valmiit, lahteessa
+ * 16:9 rajatut kuvat. YDR:lle ei viela ole: Refs.tsx:n
+ * ydr-autohuolto.webp on 608x1080 pystyposteri, eika sita voi rajata
+ * vaakakaistaleeksi ilman etta lopputulosta katsotaan silmalla.
  *
  * Siksi polut ovat vakioita ja komponentti tarkistaa KAANNOSAIKANA
  * (palvelinkomponentti) onko tiedosto olemassa. Jos ei ole, kuvapaikka
@@ -69,7 +67,7 @@ const SHOTS = {
   // oma, valmiiksi 16:9 rajattu tiedosto.
   colormaster: "/referenssit/colormaster-case.webp",
   laaksolahti: "/referenssit/laaksolahdensahko-case.webp",
-  garagefest: "/tapahtumat/garage-fest.webp",
+  ydr: "/referenssit/ydr-autohuolto-case.webp",
 } as const;
 
 /**
@@ -98,14 +96,14 @@ const CASES = [
     shotW: 1000,
     shotH: 563,
     name: "Colormaster",
-    trade: "automaalamo",
+    trade: "automaalaamo",
     count: "1,6 milj.",
-    title: "Colormaster · automaalamo",
+    title: "Colormaster · automaalaamo",
     text: "Katselukertaa Instagramissa ja TikTokissa yhteensä, neljässä kuukaudessa ilman maksettua mainontaa.",
     specUnit: "seuraajaa",
     spec: [
-      { icon: "instagram", label: "Instagram", n: "1 500" },
-      { icon: "tiktok", label: "TikTok", n: "3 000" },
+      { icon: "instagram", label: "Instagram", n: "1 600" },
+      { icon: "tiktok", label: "TikTok", n: "2 651" },
     ] as Spec[],
     par: "0.015",
     fill: "Lyhytvideot",
@@ -126,19 +124,25 @@ const CASES = [
     fill: "Verkkosivut",
   },
   {
-    shot: SHOTS.garagefest,
-    shotAlt: null,
-    shotW: SHOT_FALLBACK.w,
-    shotH: SHOT_FALLBACK.h,
-    name: "Garage Fest",
-    trade: "autoviikonloppu Espoossa",
-    count: "1 000",
-    title: "Garage Fest · autoviikonloppu Espoossa",
-    text: "kävijää tapahtumaan, jonka järjestimme itse",
-    specUnit: null,
-    spec: null,
+    shot: SHOTS.ydr,
+    shotAlt: "YDR Autohuollon korjaamo Tuusulassa",
+    shotW: 1000,
+    shotH: 563,
+    name: "YDR Autohuolto",
+    trade: "autohuolto",
+    /* Luvut asiakkaan omasta koosteesta 9/2026. Instagram kasvoi
+       250 -> 824 ja TikTok 0 -> 300; sarake nayttaa loppuluvun, koska
+       pohja on yksiarvoinen (Colormasterin kortti). */
+    count: "390 000",
+    title: "YDR Autohuolto · autohuolto",
+    text: "Katselukertaa Instagramissa ja TikTokissa yhteensä, kahdessa kuukaudessa aloituksesta.",
+    specUnit: "seuraajaa",
+    spec: [
+      { icon: "instagram", label: "Instagram", n: "824" },
+      { icon: "tiktok", label: "TikTok", n: "300" },
+    ] as Spec[],
     par: "0.015",
-    fill: "Tapahtumat",
+    fill: "Lyhytvideot",
   },
 ];
 
@@ -156,7 +160,7 @@ export default function Results() {
         <div className="cases stagger">
           {CASES.map((c, i) => (
             <div
-              className="card case rv tilt"
+              className="card case rv"
               style={{ "--i": i } as CSSProperties}
               data-par={c.par}
               /* Reunimmaiset kortit kaantyvat toisiaan kohti, keskimmainen
@@ -243,8 +247,7 @@ export default function Results() {
                   </div>
                 ) : null}
                 {/* Pilleri on tekstia eika linkkia: etusivulla ei ole
-                    palvelukohtaisia ankkureita eika Tapahtumille omaa
-                    sivua. */}
+                    palvelukohtaisia ankkureita. */}
                 <span className="fill">{c.fill}</span>
               </div>
             </div>

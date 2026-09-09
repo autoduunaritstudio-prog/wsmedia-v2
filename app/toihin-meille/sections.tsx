@@ -66,7 +66,7 @@ export function Roolit() {
                 <li>Lyhytvideoiden kuvaus asiakkaan tiloissa</li>
                 <li>Editointi, tekstitys ja alustakohtaiset versiot</li>
                 <li>Motion graphics ja animoidut grafiikat</li>
-                <li>Tapahtuma- ja yritysvideokuvaus</li>
+                <li>Yritysvideokuvaus ja haastattelut</li>
               </ul>
               <div className="tags">
                 <span>Premiere Pro</span><span>After Effects</span><span>DaVinci Resolve</span>
@@ -114,7 +114,6 @@ export function Roolit() {
                 <li>Ajoneuvo- ja julkisivuteippausten asennus</li>
                 <li>Digipainot ja suurkuvatulostus</li>
                 <li>Valomainosten valmistus ja asennus</li>
-                <li>Tapahtumatekniikka ja rakenteet</li>
               </ul>
               <div className="tags">
                 <span>Koko Suomi</span><span>Tarrakalvot</span><span>Suurkuva</span>
@@ -132,7 +131,7 @@ export function ValiCta() {
       <section style={{ paddingTop: 20 }}>
         <div className="closer rv">
           <div>
-            <h2>Näytä mitä olet <span style={{ color: "#6fb1ff" }}>tehnyt.</span></h2>
+            <h2>Näytä mitä olet <span style={{ color: "#6fecff" }}>tehnyt.</span></h2>
             <p>Yksi linkki työnäytteisiin riittää. Luemme jokaisen hakemuksen ja vastaamme viikon sisällä.</p>
           </div>
           <div>

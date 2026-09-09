@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport = { themeColor: "#0064cc" };
+export const viewport = { themeColor: "#ffffff" };
 
 const MARQUEE = [
   "Lyhytvideotuotanto",
@@ -176,7 +176,7 @@ export default function Lyhytvideot() {
       </section>
 
       <Footer
-        intro="Lyhytvideotuotanto, verkkosivut ja tapahtumat yrityksille. Espoo ja Helsinki, koko Suomi."
+        intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
         base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
         brandHeading="h2"

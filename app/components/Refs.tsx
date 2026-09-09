@@ -4,13 +4,16 @@ import type { CSSProperties } from "react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import GraphicsSurfaces from "./GraphicsSurfaces";
+import SearchDemo from "./SearchDemo";
 import MetalBackdrop from "./MetalBackdrop";
 import SmartLink from "./SmartLink";
+import StatBand, { type Stat } from "./StatBand";
 
 /**
  * REFERENSSIT: toinen sticky+cover-pari samalla sivulla.
  *
- * PINNATTAVANA ON KAKSI PANEELIA: Graafinen suunnittelu ja Tapahtumat.
+ * PINNATTAVANA ON YKSI PANEELI: Graafinen suunnittelu. Tapahtumat-paneeli
+ * poistettiin kun tapahtumapalvelu jai pois tarjonnasta.
  * Molemmat on irrotettu Services.tsx:sta, jolloin #palvelut jaa kolmen
  * paneelin osioksi (Lyhytvideot, Verkkosivut, Graafinen -> ei, kolmas on
  * nyt taalla; #palvelutissa on Lyhytvideot ja Verkkosivut).
@@ -356,84 +359,13 @@ function useCardVideo(media: boolean, label: string) {
   return { vid, art, playing, bind };
 }
 
-/* Tapahtumat-mockupin aftermovie. Mitat ovat tiedoston omat: 1008x672 on
-   palstan leveys 486px x dpr 2 pyoristettyna ylospain 16:n monikertaan,
-   ja 3:2 on lahdevideon oma suhde. .event-laatikko on 16/11, joten
-   object-fit: cover rajaa sivuilta - siksi leveys on laskettu korkeudesta
-   eika toisin pain. */
-const EW = 1008;
-const EH = 672;
-
-function EventStage() {
-  const { vid, art, playing, bind } = useCardVideo(true, "Tapahtumat, aftermovie");
-
-  return (
-    /* KORISTEET OVAT TAMAN KAAREEN SISALLA eivatka .svc-visualin. .event on
-       capattu 504px:aan, joten yhden palstan asettelussa se on kapeampi kuin
-       .svc-visual, ja siihen sidotut koristeet jaisivat leijumaan tyhjaan
-       tilaan mockupin viereen. Kaari on tasan .eventin levyinen, joten
-       .decojen prosentit ja .float-tagin px-siirtymat mittautuvat mockupin
-       reunoista kaikilla nakymilla eika niita tarvitse saataa kasin. */
-    <div className="event-stage">
-      <span className="deco deco-dot" style={{ left: "-2%", top: "10%" }} />
-      <span className="deco deco-ring deco-ring-sm" style={{ right: "4%", bottom: "-10px" }} />
-      <div
-        ref={art as React.RefObject<HTMLDivElement>}
-        className="event"
-        data-tilt="-y"
-        data-tilt-profile="mockup"
-        {...bind}
-      >
-        {/* Sama rakenne kuin referenssikorteilla: <source>-lapsi eika
-            src-attribuutti, ja posteri omana laiskana <img>-kerroksenaan
-            eika poster-attribuuttina - attribuutti latautuu aina, myos
-            preload="none":n kanssa. */}
-        <video
-          ref={vid}
-          className="event-vid"
-          width={EW}
-          height={EH}
-          muted
-          loop
-          playsInline
-          preload="none"
-        >
-          <source src="/tapahtumat/aftermovie.mp4" type="video/mp4" />
-        </video>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className={`event-poster${playing ? " is-hidden" : ""}`}
-          src="/tapahtumat/aftermovie.webp"
-          width={EW}
-          height={EH}
-          loading="lazy"
-          decoding="async"
-          alt=""
-          aria-hidden="true"
-        />
-        <span className="chip">[Tapahtuman nimi] · [pvm]</span>
-        <div className="cap">
-          <b>Aftermovie</b>
-          <s>Täytetään tapahtumareferenssillä</s>
-        </div>
-      </div>
-      <div className="float-tag ft-a">
-        <i />
-        Kävijät
-        <br />
-        {"[X] henkeä"}
-      </div>
-    </div>
-  );
-}
-
 function RefCard({ c, i }: { c: RefItem; i: number }) {
   const { vid, art, playing, bind } = useCardVideo(Boolean(c.src), c.title);
 
   return (
     <article
       ref={art as React.RefObject<HTMLElement>}
-      className="refcard rv"
+      className={`refcard${c.poster ? "" : " is-empty"}`}
       style={{ "--i": i } as CSSProperties}
       {...bind}
     >
@@ -480,19 +412,61 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
   );
 }
 
-export default function Refs({ children }: { children: ReactNode }) {
+export default function Refs({ children, stats }: { children: ReactNode; stats?: Stat[] }) {
   return (
     <div className="refzone">
       {/* Pinnautuva osa. Scrim on paneelin sisalla ja sen paalla
           (z-index 5), kuten #hero-scrim heron sisalla. */}
-      <section className="refsticky" aria-label="Tapahtumat">
+      <section className="refsticky" aria-label="Graafinen suunnittelu ja hakukoneoptimointi">
         <div className="wrap">
-            {/* 3. Graafinen suunnittelu */}
-            <div className="svc rv svc-graafinen">
+            {/* 3. Hakukoneoptimointi. Visuaalina SEO-sivun oma hakunayttamo:
+                sama tyo nakyy seka hakutuloslistassa etta tekoalyn
+                vastauksessa, ja se on koko palvelun ydinviesti. */}
+            <div className="svc rv">
+              <div className="svc-visual" data-par="0.02">
+                <div className="sdemo">
+                  <SearchDemo variant="simple" />
+                </div>
+                <div className="float-tag ft-d">
+                  <i />
+                  Orgaaninen näkyvyys
+                  <br />
+                  ei lopu kun budjetti loppuu
+                </div>
+              </div>
+              <div className="svc-txt" data-par="0.035">
+                <span className="kick">Hakukoneoptimointi</span>
+                <h3>Löydy silloin, kun asiakas etsii palvelua.</h3>
+                <p>
+                  Tekninen optimointi, sisältö ja paikallinen näkyvyys yhdeltä tiimiltä — ja sama
+                  työ nostaa sinut myös tekoälyhakujen vastauksiin.
+                </p>
+                <ul>
+                  <li>Näkyvyys Googlessa ja tekoälyhauissa samalla työllä</li>
+                  <li>Sovitut mittarit ja raportointi, ei sijoituslupauksia</li>
+                  <li>Kuukausipaketit alkaen 390 €/kk</li>
+                </ul>
+                <div className="svc-cta">
+                  <a className="btn mag" href="#lomake">
+                    Pyydä tarjous
+                  </a>
+                  <SmartLink className="btn alt" href="/hakukoneoptimointi">
+                    Lue lisää hakukoneoptimoinnista
+                  </SmartLink>
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Graafinen suunnittelu */}
+            <div className="svc rev rv svc-graafinen">
             <div className="svc-visual" data-par="0.02">
-              <span className="deco deco-ring deco-ring-sm" style={{ right: "-3%", top: "-10px" }} />
-              <span className="deco deco-dot" style={{ left: "-2%", bottom: "18%" }} />
               <GraphicsSurfaces />
+              <div className="float-tag ft-c">
+                <i />
+                Avaimet käteen
+                <br />
+                suunnittelu, materiaalit, asennus
+              </div>
             </div>
             <div className="svc-txt" data-par="0.035">
               <span className="kick">Graafinen suunnittelu</span>
@@ -506,36 +480,17 @@ export default function Refs({ children }: { children: ReactNode }) {
                 <li>Suunnittelu, materiaalit ja asennus samalta tiimiltä</li>
                 <li>Hinta-arvion näet itse laskurilla ennen tarjousta</li>
               </ul>
-              <SmartLink className="tlink" href="/graafinen-suunnittelu">
-                Lue lisää graafisesta suunnittelusta
-              </SmartLink>
+              <div className="svc-cta">
+                <a className="btn mag" href="#lomake">
+                  Pyydä tarjous
+                </a>
+                <SmartLink className="btn alt" href="/graafinen-suunnittelu">
+                  Lue lisää graafisesta suunnittelusta
+                </SmartLink>
+              </div>
             </div>
           </div>
 
-            {/* 4. Tapahtumat */}
-            <div className="svc rev rv">
-              <div className="svc-visual" data-par="0.02">
-                <EventStage />
-              </div>
-              <div className="svc-txt" data-par="0.035">
-                <span className="kick">Tapahtumat</span>
-                <h3>Tapahtumat, joista puhutaan vielä viikkoja.</h3>
-                <p>
-                  Suunnittelusta toteutukseen ja taltiointiin. Tapahtuma tuottaa samalla sisältöä someen
-                  ja sivuillesi, yksi ilta ruokkii koko vuoden markkinointia.
-                </p>
-                <ul>
-                  <li>[Tapahtumapalvelun sisältö 1, täytetään]</li>
-                  <li>[Tapahtumapalvelun sisältö 2, täytetään]</li>
-                  <li>Aftermovie ja some-nostot samasta tuotannosta</li>
-                </ul>
-                {/* Tapahtumat-sivua ei ole viela; ankkuri pitaa kayttajan
-                    paikallaan sen sijaan etta tyhja "#" hyppaisi sivun ylalaitaan. */}
-                <a className="tlink" href="#palvelut">
-                  Lue lisää tapahtumista
-                </a>
-              </div>
-            </div>
         </div>
         <div className="refscrim" aria-hidden="true" />
       </section>
@@ -568,6 +523,10 @@ export default function Refs({ children }: { children: ReactNode }) {
               <RefCard c={c} i={i} key={c.title} />
             ))}
           </div>
+          {/* Luvut kuuluvat todisteiden viereen, ei erilliseen lohkoon
+              coverin alle: sama osio kertoo mita on tehty ja kuinka
+              paljon. */}
+          {stats && <StatBand stats={stats} />}
         </div>
       </section>
 

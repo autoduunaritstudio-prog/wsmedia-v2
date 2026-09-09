@@ -292,7 +292,7 @@ export function Tulokset() {
       <div className="work">
         <div className="wrap">
           <div className="shead rv">
-            <span className="kick" style={{ color: "#6fb1ff" }}>
+            <span className="kick" style={{ color: "#6fecff" }}>
               Tulokset
             </span>
             <h2 style={{ color: "#f5f5f7" }}>Näytämme mieluummin kuin kerromme.</h2>

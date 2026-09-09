@@ -110,10 +110,10 @@ export const FAQ_GROUPS: FaqGroup[] = [
       <>
         {"Kyllä. WS Media tekee verkkosivujen lisäksi "}
         <SmartLink href="/lyhytvideot">lyhytvideot</SmartLink>
-        {" TikTokiin, Instagram Reelsiin ja YouTube Shortsiin sekä Meta-mainonnan ja tapahtumatuotannot. Kun sivusto ja sisältö tulevat samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee sekä sivustoa että somekanavia."}
+        {" TikTokiin, Instagram Reelsiin ja YouTube Shortsiin sekä Meta-mainonnan ja graafisen suunnittelun. Kun sivusto ja sisältö tulevat samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee sekä sivustoa että somekanavia."}
       </>
     ),
-        plain: "Kyllä. WS Media tekee verkkosivujen lisäksi lyhytvideot TikTokiin, Instagram Reelsiin ja YouTube Shortsiin sekä Meta-mainonnan ja tapahtumatuotannot. Kun sivusto ja sisältö tulevat samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee sekä sivustoa että somekanavia.",
+        plain: "Kyllä. WS Media tekee verkkosivujen lisäksi lyhytvideot TikTokiin, Instagram Reelsiin ja YouTube Shortsiin sekä Meta-mainonnan ja graafisen suunnittelun. Kun sivusto ja sisältö tulevat samalta tiimiltä, viesti pysyy yhtenäisenä ja sama kuvausmateriaali palvelee sekä sivustoa että somekanavia.",
       },
     ],
   },

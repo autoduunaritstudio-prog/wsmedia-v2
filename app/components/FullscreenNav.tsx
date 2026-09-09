@@ -177,7 +177,8 @@ export default function FullscreenNav({
               onClick={close}
               aria-label="Sulje valikko"
             >
-              <svg width="26" height="26" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              {/* 34px, sama suhde nappiin (84px) kuin ennen: 26/64 = 0,41. */}
+              <svg width="34" height="34" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path
                   d="M12 4 L6 10 L12 16"
                   stroke="currentColor"

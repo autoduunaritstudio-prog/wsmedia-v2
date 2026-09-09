@@ -161,7 +161,7 @@ export function Loppu() {
       <section style={{ paddingTop: 20 }}>
         <div className="closer rv">
           <div>
-            <h2>Sama yritys <span style={{ color: "#6fb1ff" }}>joka pinnalla.</span></h2>
+            <h2>Sama yritys <span style={{ color: "#6fecff" }}>joka pinnalla.</span></h2>
             <p>Varaa maksuton kartoitus. Käymme läpi mitä pintoja ilmeen pitäisi kattaa ja missä järjestyksessä ne kannattaa tehdä.</p>
           </div>
           <div>

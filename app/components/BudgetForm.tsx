@@ -29,6 +29,26 @@ type Props = {
   submitLabel?: string;
   note?: string;
   /**
+   * Budjettiliukuri. Etusivulla POIS: siella lomake on ensikosketus, ja
+   * budjetin kysyminen ennen kuin kavija tietaa mita han on ostamassa
+   * karsii yhteydenottoja. Palvelusivuilla se on paikallaan, koska sinne
+   * tullaan jo tietyn palvelun perassa ja hinnat on juuri luettu.
+   */
+  showBudget?: boolean;
+  /**
+   * Scroll-kaanto. Arvo menee sellaisenaan data-tiltiin: "y" tuo VASEMMAN
+   * reunan katsojaa kohti, "-y" oikean. Kaksipalstaisessa asettelussa
+   * oikeanpuoleinen lohko saa "-y", jolloin se kaantyy kohti vasenta
+   * palstaa - sama konventio kuin case-korteilla.
+   *
+   * Profiili on "card" (9 astetta, ei taaksepain-kallistusta) eika
+   * "mockup" (13 + 5): lomake on luettava ja tayttyva pinta, ei
+   * esiteltava mockup, joten kulman pitaa jaada niin pieneksi ettei
+   * teksti ala vaantya. Mockup-profiilia ei saa pienentaa taman takia:
+   * se on yhteinen .browserin ja .eventin kanssa.
+   */
+  tilt?: "y" | "-y" | "x" | "-x";
+  /**
    * Valinnainen lisakentta ennen viestikenttaa. Palvelusivut kysyvat tassa
    * eri asiaa: verkkosivut nykyista osoitetta, hakukoneoptimointi omaa
    * sivustoa.
@@ -38,7 +58,7 @@ type Props = {
 
 export default function BudgetForm({
   budgetLabel = "Budjetti",
-  messageLabel = "Mitä tarvitset? Videot, sivusto, tapahtuma vai kokonaisuus?",
+  messageLabel = "Mitä tarvitset? Videot, sivusto, yritysilme vai kokonaisuus?",
   min = DEFAULT_MIN,
   max = DEFAULT_MAX,
   initial = DEFAULT_INITIAL,
@@ -46,29 +66,35 @@ export default function BudgetForm({
   unit = "€",
   submitLabel = "Lähetä tarjouspyyntö",
   note = "Vastaamme 24 tunnin sisällä. Ei sitoumuksia.",
+  showBudget = true,
+  tilt,
   extraField,
 }: Props) {
   const [budget, setBudget] = useState(initial);
   const pct = ((budget - min) / (max - min)) * 100;
 
   return (
-    <div className="card fcard rv" data-par="0.02">
-      <label htmlFor="bud">{budgetLabel}</label>
-      <div className="budget">
-        <input
-          type="range"
-          id="bud"
-          min={min}
-          max={max}
-          step={step}
-          value={budget}
-          onChange={(e) => setBudget(Number(e.target.value))}
-          style={{ "--p": `${pct}%` } as CSSProperties}
-        />
-        <output id="budout" htmlFor="bud">
-          {fmt(budget)} {unit}
-        </output>
-      </div>
+    <div className="card fcard rv" data-par="0.02" data-tilt={tilt} data-tilt-profile={tilt ? "card" : undefined}>
+      {showBudget && (
+        <>
+          <label htmlFor="bud">{budgetLabel}</label>
+          <div className="budget">
+            <input
+              type="range"
+              id="bud"
+              min={min}
+              max={max}
+              step={step}
+              value={budget}
+              onChange={(e) => setBudget(Number(e.target.value))}
+              style={{ "--p": `${pct}%` } as CSSProperties}
+            />
+            <output id="budout" htmlFor="bud">
+              {fmt(budget)} {unit}
+            </output>
+          </div>
+        </>
+      )}
       <div className="row2">
         <div>
           <label htmlFor="nimi">Nimi</label>

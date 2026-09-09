@@ -26,7 +26,7 @@ const instrument = Instrument_Sans({
 export const metadata: Metadata = {
   title: "WS Media, etusivu",
   description:
-    "Lyhytvideot, verkkosivut ja tapahtumat samalta tiimiltä. Kiinteä hinta, ei pitkiä sopimuksia.",
+    "Lyhytvideot, verkkosivut ja graafinen ilme samalta tiimiltä. Kiinteä hinta, ei pitkiä sopimuksia.",
   icons: {
     // .ico ilman sizes-arvoa on yleinen varasija; selain valitsee
     // PNG-versioista sopivimman ilmoitettujen kokojen perusteella.

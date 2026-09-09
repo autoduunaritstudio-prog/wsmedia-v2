@@ -412,7 +412,7 @@ export function Loppu() {
       <div className="closer rv">
         <div>
           <h2>
-            Valmis uudistamaan <span style={{ color: "#6fb1ff" }}>verkkosivusi?</span>
+            Valmis uudistamaan <span style={{ color: "#6fecff" }}>verkkosivusi?</span>
           </h2>
           <p>
             Varaa maksuton 30 minuutin kartoitus. Käymme läpi nykyisen sivuston, kilpailijoiden

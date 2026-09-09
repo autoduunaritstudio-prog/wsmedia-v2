@@ -17,7 +17,7 @@ export const structuredData = {
       alternateName: "WS Media",
       url: "https://wsmedia.fi/",
       description:
-        "WS Media on espoolainen lyhytvideotuotantoon, verkkosivuihin ja tapahtumiin erikoistunut toimisto.",
+        "WS Media on espoolainen lyhytvideotuotantoon, verkkosivuihin ja graafiseen suunnitteluun erikoistunut toimisto.",
       vatID: "FI36150844",
       taxID: "3615084-4",
       address: {

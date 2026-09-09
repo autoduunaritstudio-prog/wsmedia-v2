@@ -8,17 +8,14 @@ export default function Services() {
         <div className="shead rv" data-par="0.03">
           <h2 className="big">Neljä tapaa erottua. Yksi tiimi.</h2>
           <p className="sub">
-            Video tuo huomion, sivusto tekee kaupan, tapahtuma sinetöi suhteen. Rakennamme koko
-            polun.
+            Video tuo huomion, sivusto tekee kaupan, hakunäkyvyys tuo ne jotka jo etsivät. Yksi
+            ilme pitää kaiken kasassa.
           </p>
         </div>
 
         {/* 1. Lyhytvideot */}
         <div className="svc rv">
           <div className="svc-visual" data-par="0.02">
-            <span className="deco deco-grid" style={{ left: "-30px", top: "-20px" }} />
-            <span className="deco deco-ring" style={{ right: "6%", top: "-8px" }} />
-            <span className="deco deco-dot" style={{ right: "2%", bottom: "30%" }} />
             <div className="mini-phones">
               {/* Sisalto kuuluu .scr:n sisaan, ei suoraan runkoon: rungon
                   reunus on inset-varjo, jonka lapset peittaisivat. */}
@@ -48,7 +45,7 @@ export default function Services() {
               </div>
               <div className="float-tag ft-a">
                 <i />
-                Näkymät
+                Katselukerrat
                 <br />
                 +312 %
               </div>
@@ -66,19 +63,20 @@ export default function Services() {
               <li>Kuvaus sinun tiloissasi ammattikalustolla</li>
               <li>Tekstitykset, grafiikat ja alustakohtainen optimointi</li>
             </ul>
-            <SmartLink className="tlink" href="/lyhytvideot">
-              Lue lisää lyhytvideoista
-            </SmartLink>
+            <div className="svc-cta">
+              <a className="btn mag" href="#lomake">
+                Pyydä tarjous
+              </a>
+              <SmartLink className="btn alt" href="/lyhytvideot">
+                Lue lisää lyhytvideoista
+              </SmartLink>
+            </div>
           </div>
         </div>
 
         {/* 2. Verkkosivut */}
         <div className="svc rev rv">
           <div className="svc-visual" data-par="0.02">
-            <span className="deco deco-ring deco-ring-sm" style={{ left: "-4%", top: "-14px" }} />
-            <span className="deco deco-plus" style={{ right: "-4%", bottom: "14%" }}>
-              +
-            </span>
             <div className="browser" data-tilt="-y" data-tilt-profile="mockup">
               <div className="bar">
                 <span className="dot" />
@@ -120,9 +118,14 @@ export default function Services() {
               <li>Hakukoneoptimointi rakennettu sisään alusta asti</li>
               <li>Video ja sivusto samalta tiimiltä, viesti pysyy yhtenäisenä</li>
             </ul>
-            <SmartLink className="tlink" href="/verkkosivut">
-              Lue lisää verkkosivuista
-            </SmartLink>
+            <div className="svc-cta">
+              <a className="btn mag" href="#lomake">
+                Pyydä tarjous
+              </a>
+              <SmartLink className="btn alt" href="/verkkosivut">
+                Lue lisää verkkosivuista
+              </SmartLink>
+            </div>
           </div>
         </div>
 

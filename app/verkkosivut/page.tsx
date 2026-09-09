@@ -129,7 +129,7 @@ export default function Verkkosivut() {
       <Loppu />
 
       <Footer
-        intro="Lyhytvideot, verkkosivut ja tapahtumat. Espoo ja Helsinki, koko Suomi. Yrityksille jotka haluavat kasvaa."
+        intro="Lyhytvideot, verkkosivut ja graafinen ilme. Espoo ja Helsinki, koko Suomi. Yrityksille jotka haluavat kasvaa."
         columns={VERKKOSIVUT_FOOTER}
         base="© 2026 WS Media Oy · Espoo · Y-tunnus 3615084-4"
       />

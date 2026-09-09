@@ -294,7 +294,8 @@ export function Kaytannossa() {
           <p>
             WS Media tuottaa lyhytvideot Espoosta ja kuvaa päivittäin pääkaupunkiseudulla. Koska
             teemme myös <SmartLink href="/verkkosivut">verkkosivut</SmartLink>, hakukoneoptimoinnin,{" "}
-            Meta-mainonnan ja <SmartLink href="/#palvelut">tapahtumat</SmartLink>, sama
+            Meta-mainonnan ja{" "}
+            <SmartLink href="/graafinen-suunnittelu">graafisen suunnittelun</SmartLink>, sama
             kuvausmateriaali palvelee somen lisäksi sivustoasi ja mainontaasi — ja viesti pysyy
             yhtenäisenä kanavasta riippumatta.
           </p>

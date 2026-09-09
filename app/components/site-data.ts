@@ -14,8 +14,6 @@ export const ROUTES = {
   graafinen: "/graafinen-suunnittelu",
   toihin: "/toihin-meille",
   tietosuoja: "/tietosuoja",
-  /** Sivua ei viela ole -> etusivun Palvelut-osio. */
-  tapahtumat: "/#palvelut",
   palvelut: "/#palvelut",
   prosessi: "/#prosessi",
   yhteys: "/#lomake",
@@ -59,15 +57,6 @@ export const SERVICE_MENU: ServiceMenuItem[] = [
     label: "Graafinen suunnittelu",
     desc: "Yritysilme, painotuotteet ja teippaukset",
     icon: "site",
-  },
-  {
-    // Ankkuri, ei ROUTES.tapahtumat: FullscreenNav prefiksoi #-alkuiset
-    // hrefit anchorBasella, jolloin alasivuilta tulee /#palvelut ja
-    // etusivulla linkki vierittaa samalla sivulla.
-    href: "#palvelut",
-    label: "Tapahtumat",
-    desc: "Suunnittelu, toteutus ja taltiointi",
-    icon: "event",
   },
   {
     href: ROUTES.seo,
@@ -122,33 +111,19 @@ export const HOME_FOOTER: FooterColumn[] = [
     title: "Palvelut",
     links: [
       { href: ROUTES.lyhytvideot, label: "Lyhytvideot" },
-      // TikTok, Reels ja Shorts kasitellaan lyhytvideosivulla; omia
-      // alasivuja ei ole, joten kaikki kolme osoittavat sinne.
-      { href: ROUTES.lyhytvideot, label: "TikTok-videot" },
-      { href: ROUTES.lyhytvideot, label: "Instagram Reels" },
-      { href: ROUTES.lyhytvideot, label: "YouTube Shorts" },
       { href: ROUTES.verkkosivut, label: "Verkkosivut" },
       { href: ROUTES.seo, label: "Hakukoneoptimointi" },
-      { href: "#palvelut", label: "Tapahtumat" },
-    ],
-  },
-  {
-    title: "Töihin meille",
-    links: [
-      { href: "/toihin-meille#roolit", label: "Keitä etsimme" },
-      { href: "/toihin-meille#tyomalli", label: "Freelancerina tai työsuhteessa" },
-      { href: "/toihin-meille#prosessi", label: "Näin haku etenee" },
-      { href: ROUTES.toihin, label: "Jätä hakemus" },
+      { href: ROUTES.graafinen, label: "Graafinen suunnittelu" },
     ],
   },
   {
     title: "Yritys",
     links: [
+      { href: "#referenssit", label: "Referenssit" },
       { href: "#prosessi", label: "Prosessi" },
       { href: "#ukk", label: "Usein kysyttyä" },
+      { href: ROUTES.toihin, label: "Töihin meille" },
       { href: "#lomake", label: "Ota yhteyttä" },
-      { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
-      { action: "consent", label: "Evästeasetukset" },
     ],
   },
 ];
@@ -160,35 +135,17 @@ export const SUBPAGE_FOOTER: FooterColumn[] = [
       { href: ROUTES.lyhytvideot, label: "Lyhytvideot" },
       { href: ROUTES.verkkosivut, label: "Verkkosivut" },
       { href: ROUTES.seo, label: "Hakukoneoptimointi" },
-      { href: ROUTES.tapahtumat, label: "Tapahtumat" },
-    ],
-  },
-  {
-    title: "Lyhytvideot",
-    links: [
-      { href: ROUTES.lyhytvideot, label: "Lyhytvideotuotanto" },
-      { href: "/lyhytvideot#sisalto", label: "Palvelun sisältö" },
-      { href: "/lyhytvideot#prosessi", label: "Prosessi" },
-      { href: "/lyhytvideot#hinnoittelu", label: "Lyhytvideon hinta" },
-      { href: "/lyhytvideot#ukk", label: "Usein kysyttyä" },
-    ],
-  },
-  {
-    title: "Töihin meille",
-    links: [
-      { href: "/toihin-meille#roolit", label: "Keitä etsimme" },
-      { href: "/toihin-meille#tyomalli", label: "Freelancerina tai työsuhteessa" },
-      { href: "/toihin-meille#prosessi", label: "Näin haku etenee" },
-      { href: ROUTES.toihin, label: "Jätä hakemus" },
+      { href: ROUTES.graafinen, label: "Graafinen suunnittelu" },
     ],
   },
   {
     title: "Yritys",
     links: [
+      { href: "/#referenssit", label: "Referenssit" },
+      { href: "/#prosessi", label: "Prosessi" },
       { href: "/#ukk", label: "Usein kysyttyä" },
+      { href: ROUTES.toihin, label: "Töihin meille" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
-      { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
-      { action: "consent", label: "Evästeasetukset" },
     ],
   },
 ];
@@ -202,7 +159,6 @@ export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
       { href: ROUTES.verkkosivut, label: "Verkkosivut yritykselle" },
       { href: ROUTES.seo, label: "Hakukoneoptimointi" },
       { href: "/verkkosivut#toteutustapa", label: "Räätälöidyt verkkosivut" },
-      { href: ROUTES.tapahtumat, label: "Tapahtumat" },
     ],
   },
   {
@@ -244,7 +200,6 @@ export const SEO_FOOTER: FooterColumn[] = [
       { href: ROUTES.verkkosivut, label: "Verkkosivut yritykselle" },
       { href: ROUTES.seo, label: "Hakukoneoptimointi" },
       { href: "/hakukoneoptimointi#paikallinen", label: "Paikallinen SEO" },
-      { href: ROUTES.tapahtumat, label: "Tapahtumat" },
     ],
   },
   {

@@ -6,7 +6,6 @@ import SiteEffects from "./components/SiteEffects";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Logos from "./components/Logos";
-import StatBand from "./components/StatBand";
 import Services from "./components/Services";
 import Booking from "./components/Booking";
 import Refs from "./components/Refs";
@@ -61,10 +60,18 @@ export default function Home() {
           sen jalkeisen sisallon - sticky-elementti ja sen cover on oltava
           saman kaareen lapsia. Lukukaista ja Tulokset menevat .aftercoveriin
           eli Referenssien coveriksi. */}
-      <Refs>
-        <section className="statband-sec">
+      <Refs stats={STATS}>
+        {/* Silta referensseista varaukseen. Kayttaja on juuri katsonut
+            tyot, ja cover avautuu tahan: keskitetty otsikko kertoo mita
+            seuraavaksi tapahtuu ennen kuin kalenteri tulee esiin. */}
+        <section className="kartlead">
           <div className="wrap">
-            <StatBand stats={STATS} />
+            <div className="shead center rv" data-par="0.03">
+              <h2 className="big">
+                Katsotaan mitä sinun yrityksellesi{" "}
+                <span className="accent">kannattaa tehdä.</span>
+              </h2>
+            </div>
           </div>
         </section>
         <Booking />
@@ -79,7 +86,7 @@ export default function Home() {
         <Contact />
       </div>
       <Footer
-        intro="Lyhytvideot, verkkosivut ja tapahtumat. Espoo ja Helsinki. Yrityksille jotka haluavat kasvaa."
+        intro="Lyhytvideot, verkkosivut ja graafinen ilme. Espoo ja Helsinki. Yrityksille jotka haluavat kasvaa."
         columns={HOME_FOOTER}
         base="© 2026 WS Media Oy · Espoo"
       />

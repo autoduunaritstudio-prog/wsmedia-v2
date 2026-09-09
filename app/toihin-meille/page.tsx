@@ -104,7 +104,7 @@ export default function ToihinMeille() {
       <ApplicationForm />
 
       <Footer
-        intro="Lyhytvideot, verkkosivut, graafinen suunnittelu ja tapahtumat. Espoo ja koko Suomi."
+        intro="Lyhytvideot, verkkosivut ja graafinen suunnittelu. Espoo ja koko Suomi."
         columns={SUBPAGE_FOOTER}
         base="© 2026 WS Media Oy · Espoo"
         brandHeading="h2"

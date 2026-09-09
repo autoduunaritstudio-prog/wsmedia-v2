@@ -13,8 +13,6 @@ import SmartLink from "./components/SmartLink";
  * kilpailisi niiden kanssa uusilla muotoiluilla. Lahteet:
  *   lyhytvideot/faq-data.tsx, verkkosivut/faq.tsx,
  *   hakukoneoptimointi/faq.tsx, graafinen-suunnittelu/faq-data.ts.
- * Tapahtumat on ainoa jolla ei viela ole omaa UKK:ta; sen vastaus on
- * tiivistetty Palvelut-osion tapahtumapaneelin omasta tekstista.
  *
  * [HINTA]-paikkamerkit ovat lahteessa sellaisenaan eika niita tayteta tassa.
  */
@@ -113,17 +111,44 @@ export const HOME_FAQ: HomeFaqItem[] = [
       "Hinta riippuu laajuudesta: markkinoilla logoteippaus asettuu 200–500 euroon, osateippaus 400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 590 eurosta ja sisältää suunnittelun, materiaalit ja asennuksen.",
   },
   {
-    q: "Mitä yritystapahtuman tuotanto sisältää?",
+    q: "Kuka omistaa valmiit aineistot?",
     a: (
       <>
-        Suunnittelusta toteutukseen ja taltiointiin. Tapahtuma tuottaa samalla sisältöä someen ja
-        sivuillesi: aftermovie ja some-nostot syntyvät samasta tuotannosta, joten yksi ilta ruokkii
-        koko vuoden markkinointia.{" "}
-        <SmartLink href="/#palvelut">Lue lisää tapahtumista →</SmartLink>
+        Sinä. Saat täydet käyttöoikeudet valmiisiin videoihin ja raakamateriaaliin sekä
+        muokattavat alkuperäistiedostot ilmetyöstä, ja niistä sovitaan kirjallisesti ennen työn
+        aloittamista. Voit käyttää aineistoja myös maksetussa mainonnassa, verkkosivuilla ja
+        messuilla ilman lisäkorvausta.{" "}
+        <SmartLink href="/lyhytvideot">Lue lisää lyhytvideoista →</SmartLink>
       </>
     ),
     plain:
-      "Suunnittelusta toteutukseen ja taltiointiin. Tapahtuma tuottaa samalla sisältöä someen ja sivuillesi: aftermovie ja some-nostot syntyvät samasta tuotannosta, joten yksi ilta ruokkii koko vuoden markkinointia.",
+      "Asiakas. Saat täydet käyttöoikeudet valmiisiin videoihin ja raakamateriaaliin sekä muokattavat alkuperäistiedostot ilmetyöstä, ja niistä sovitaan kirjallisesti ennen työn aloittamista. Voit käyttää aineistoja myös maksetussa mainonnassa, verkkosivuilla ja messuilla ilman lisäkorvausta.",
+  },
+  {
+    q: "Onko pakko sitoutua pitkäksi aikaa?",
+    a: (
+      <>
+        Ei. Jatkuva yhteistyö jatkuu kuukausi kerrallaan ja irtisanomisaika on yksi kuukausi.
+        Verkkosivut ja ilmetyöt ovat kiinteähintaisia projekteja, joissa ei ole
+        kuukausisitoumusta lainkaan.{" "}
+        <SmartLink href="/lyhytvideot">Lue lisää lyhytvideoista →</SmartLink>
+      </>
+    ),
+    plain:
+      "Ei. Jatkuva yhteistyö jatkuu kuukausi kerrallaan ja irtisanomisaika on yksi kuukausi. Verkkosivut ja ilmetyöt ovat kiinteähintaisia projekteja, joissa ei ole kuukausisitoumusta lainkaan.",
+  },
+  {
+    q: "Meillä ei ole ketään kameran eteen. Mitä teemme?",
+    a: (
+      <>
+        Tämä on yleisin huoli, eikä se ole este. Voimme hankkia esiintyjän puolestasi tai rakentaa
+        sisällöt ilman puhuvaa päätä: tuote-, prosessi- ja kulissien takaa -sisällöt,
+        tekstivetoiset videot ja asiakastarinat toimivat monella toimialalla jopa paremmin.{" "}
+        <SmartLink href="/lyhytvideot">Lue lisää lyhytvideoista →</SmartLink>
+      </>
+    ),
+    plain:
+      "Voimme hankkia esiintyjän puolestasi tai rakentaa sisällöt ilman puhuvaa päätä: tuote-, prosessi- ja kulissien takaa -sisällöt, tekstivetoiset videot ja asiakastarinat toimivat monella toimialalla jopa paremmin.",
   },
 ];
 

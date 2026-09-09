@@ -98,7 +98,7 @@ export default function GraafinenSuunnittelu() {
       <Loppu />
 
       <Footer
-        intro="Graafinen suunnittelu, verkkosivut, lyhytvideot ja tapahtumat. Espoo ja koko Suomi."
+        intro="Graafinen suunnittelu, verkkosivut ja lyhytvideot. Espoo ja koko Suomi."
         columns={SUBPAGE_FOOTER}
         base="© 2026 WS Media Oy · Espoo"
         brandHeading="h2"

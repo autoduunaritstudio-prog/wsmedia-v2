@@ -1,6 +1,8 @@
 import { LogoMark } from "./Logo";
 import SmartLink from "./SmartLink";
+import SocialIcon from "./SocialIcon";
 import CookieSettingsButton from "./consent/CookieSettingsButton";
+import { CONTACT, SOCIAL, ROUTES } from "./site-data";
 
 /**
  * Footerin linkki on joko tavallinen osoite tai toiminto. Toimintovariantti on
@@ -23,21 +25,41 @@ type Props = {
   brandHeading?: "h2" | "h4";
 };
 
+/**
+ * RAKENNE on alan vakiomalli:
+ *   brandilohko (logo, lupaus, some) | linkkisarakkeet | yhteystiedot
+ *   ------------------------------------------------------------------
+ *   lakirivi: copyright ja Y-tunnus vasemmalla, lakilinkit oikealla
+ *
+ * Tietosuojaseloste ja evasteasetukset kuuluvat lakiriville eivatka
+ * linkkisarakkeeseen: ne ovat velvoitteita eivatka navigaatiota, ja
+ * kayttaja etsii ne aina footerin alalaidasta.
+ */
 export default function Footer({ intro, columns, base, brandHeading = "h4" }: Props) {
   const Brand = brandHeading;
   return (
     <footer>
       <div className="wrap">
-        <div className="cols">
-          <div style={{ maxWidth: "280px" }}>
+        <div className="foot-top">
+          <div className="foot-brand">
             <span className="footer-mark" aria-hidden="true">
               <LogoMark />
             </span>
             <Brand>WS Media</Brand>
             <p>{intro}</p>
+            <ul className="foot-social">
+              {SOCIAL.map((s) => (
+                <li key={s.label}>
+                  <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}>
+                    <SocialIcon name={s.icon} />
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
+
           {columns.map((col) => (
-            <div key={col.title}>
+            <div className="foot-col" key={col.title}>
               <h4>{col.title}</h4>
               {col.links.map((l) =>
                 "action" in l ? (
@@ -50,8 +72,26 @@ export default function Footer({ intro, columns, base, brandHeading = "h4" }: Pr
               )}
             </div>
           ))}
+
+          <div className="foot-col">
+            <h4>Yhteystiedot</h4>
+            <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+            <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>
+            <address>
+              {CONTACT.street}
+              <br />
+              {CONTACT.city}
+            </address>
+          </div>
         </div>
-        <div className="base">{base}</div>
+
+        <div className="foot-base">
+          <span>{base}</span>
+          <span className="foot-legal">
+            <SmartLink href={ROUTES.tietosuoja}>Tietosuojaseloste</SmartLink>
+            <CookieSettingsButton label="Evästeasetukset" />
+          </span>
+        </div>
       </div>
     </footer>
   );

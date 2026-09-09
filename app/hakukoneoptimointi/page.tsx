@@ -129,7 +129,7 @@ export default function Hakukoneoptimointi() {
       <Loppu />
 
       <Footer
-        intro="Lyhytvideot, verkkosivut, hakukoneoptimointi ja tapahtumat. Espoo ja Helsinki, koko Suomi."
+        intro="Lyhytvideot, verkkosivut, hakukoneoptimointi ja graafinen ilme. Espoo ja Helsinki, koko Suomi."
         columns={SEO_FOOTER}
         base="© 2026 WS Media Oy · Espoo · Y-tunnus 3615084-4"
       />

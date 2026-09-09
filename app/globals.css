@@ -7,9 +7,22 @@
   --color-ink: #1d1d1f;
   --color-grey: #616166;
   --color-hair: #e8e8ed;
-  --color-blue: #0064cc;
-  --color-blue-d: #0062c4;
-  --color-blue-tint: #f0f6ff;
+  /* SAVY TULEE SIGNAALIGRAFIIKASTA, ei brandikirjasta.
+     Mitattu suoraan lahdekuvasta: kylläiset pikselit (H 0,42-0,60,
+     S >= 0,35, V >= 0,30, n = 192 214) asettuvat mediaanissa savyyn
+     187,6 astetta ja kirkkain kymmenys savyyn 186,7. Yleisin yksittainen
+     savy on 188. Savy on siis 188, ei aiempi 211 - se on syaani, ei
+     sininen, ja se on tarkoitus.
+
+     PAAVARIA EI VOI OTTAA KUVASTA SELLAISENAAN. Signaalin ydin on
+     #0ec9e1, jonka kontrasti valkoista vasten on 2,01:1 eli reilusti
+     alle AA:n 4,5:1. Savy ja kyllaisyys sailytetaan, kirkkautta
+     lasketaan kunnes suhde on 4,91:1 (#007c8f). Vaaleat savyt ovat sen
+     sijaan puhtaita savykiertoja: ne ovat tummalla pohjalla ja niiden
+     kontrasti PARANI kierrossa. */
+  --color-blue: #007c8f;
+  --color-blue-d: #006e7e;
+  --color-blue-tint: #f0fdff;
   --color-dark: #0d0d10;
   /* var():lle on annettava vara-arvo. Ilman sita puuttuva --font-instrument
      mitatoisi koko font-familyn ja sivu perisi selaimen oletuspinon - juuri
@@ -280,7 +293,7 @@ body {
 @supports not (overflow: clip) {
   body { overflow-x: hidden }
 }
-::selection { background: rgba(0,113,227,.15) }
+::selection { background: rgba(0,197,227,.15) }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px }
 .wrap-n { max-width: 820px; margin: 0 auto; padding: 0 24px }
 
@@ -396,10 +409,10 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 .navtoggle:hover { transform: scale(1.05) }
 /* Fokusrengas on kirjoitettava KAANTEISENA varina. #nav on
    mix-blend-mode: difference, joten se kaantaa myos renkaan: sivuston
-   sininen rgb(0,113,227) renderoityisi vaalealla taustalla arvoksi
+   sininen rgb(0,197,227) renderoityisi vaalealla taustalla arvoksi
    rgb(255,193,130) eli oranssiksi - juuri se oranssi reunus jonka
    kayttaja nakee. Kaanteinen lahde rgb(255,142,28) renderoityy vastaavasti
-   arvoksi rgb(115,177,240) eli sivuston siniseksi.
+   arvoksi rgb(115,223,240) eli sivuston siniseksi.
    Huom: tummalla taustalla (tyonaytekaista) sekoitus antaa toisen savyn -
    se on blendin luonne, ja sama koskee logoa ja painiketta itseaan. */
 /* Rengas on 2.5px eika 3.5px: --page-edge on 0, joten elementti on kiinni
@@ -564,12 +577,17 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
    aidosti sinisena toisin kuin navissa. */
 .fsnav-close {
   background: none; border: 1px solid var(--hair); border-radius: 50%;
-  width: 64px; height: 64px; cursor: pointer; color: var(--ink);   /* > .navtoggle 60px */
+  /* 84px, aiemmin 64px. Nappi on taysvalikon ainoa poistumistie, ja se
+     istuu yksin isolla tyhjalla alueella oikeassa ylakulmassa, jossa
+     64px luki pienena yksityiskohtana valikon 64px otsikoiden rinnalla.
+     Suhde .navtoggleen (60px) sailyy oikeansuuntaisena: sulkeva nappi on
+     edelleen suurempi kuin avaava. */
+  width: 84px; height: 84px; cursor: pointer; color: var(--ink);
   display: flex; align-items: center; justify-content: center;
   transition: border-color .2s, color .2s;
 }
 .fsnav-close:hover { border-color: var(--blue); color: var(--blue) }
-.fsnav-close:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,113,227,.35) }
+.fsnav-close:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,197,227,.35) }
 .fsnav-close:focus:not(:focus-visible) { outline: none; box-shadow: none }
 
 .fsnav-body {
@@ -591,9 +609,9 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
      flex-lapsi jonka min-height on auto, joten se kasvaa aina vahintaan
      sisallon korkuiseksi eika keskitettavaa vapaata tilaa jaa miinukselle. */
   align-content: center;
-  /* Rivigeometria yhdesta paikasta: riviväli, palvelusarakkeen ankkuri ja
-     Palvelut-yhdysviiva johdetaan kaikki naista, joten ne pysyvat
-     synkassa jos fonttikoko tai riviväli muuttuu. */
+  /* Rivigeometria yhdesta paikasta: rivivali ja Palvelut-yhdysviiva
+     johdetaan naista, joten ne pysyvat synkassa jos fonttikoko tai
+     rivivali muuttuu. */
   --fsnav-lh: 1.16;                 /* .fsnav-links a line-height */
   --fsnav-pitch: 1.42;              /* rivin pitch kerrannaisena fonttikoosta */
   --fsnav-gutter: 46px;             /* sarakkeen ja erotinviivan valinen rako */
@@ -626,28 +644,45 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
 /* Sarakkeiden sisapadding. Pystyviivat tulevat .fsnav-bodyn taustasta
    (ks. yllä), joten sarakkeilla itsellaan ei ole reunuksia. */
 .fsnav-links { padding-right: var(--fsnav-gutter); position: relative }
-/* Palvelulista kohdistuu "Palvelut"-sanaan: ankkurilaatikon ylareuna on
-   sarakkeen ylareunassa ja korkeus tasan kaksi kertaa Palvelut-rivin
-   keskikohta, joten laatikon keskikohta osuu siihen. Sisalto keskitetaan
-   laatikkoon, jolloin nelja rivia haarautuu symmetrisesti ylos ja alas.
-   align-self: start estaa venymisen; erotinviivat eivat ole enaa taman
-   sarakkeen reunuksia vaan .fsnav-bodyn taustaa, joten korkeus on vapaa.
-   Jos sisalto on laatikkoa korkeampi, se vuotaa symmetrisesti yli eika
-   mikaan leikkaudu - laatikko on vain asemointiapu. */
+/* SARAKKEET LINJATAAN VALIKON ENSIMMAISEEN RIVIIN ("Etusivu").
+   Linjaus on TEKSTIRIVIEN, ei laatikoiden: kirjasinkoot ovat eri
+   (64px vs 20px), joten pelkka align-self: start jattaisi otsikot 15px
+   eri tasolle vaikka laatikot alkaisivat samasta kohdasta.
+
+   Molemmat keskikohdat johdetaan samoista muuttujista kuin itse
+   typografia, joten linjaus pysyy jos kumpi tahansa koko muuttuu:
+     Etusivu-rivin keskikohta  = --text-nav-huge * --fsnav-lh / 2
+     Palvelurivin keskikohta   = .fsnav-subitemin ylapadding (9px)
+                                 + --text-title-xs * 1,3 / 2
+   Erotus on sarakkeen ylamarginaali. Mitattuna 37,12px - 22,00px, eli
+   15,12px nykyisilla koolla. */
+.fsnav-sub, .fsnav-side {
+  --fsnav-row1-mid: calc(var(--text-nav-huge) * var(--fsnav-lh) / 2);
+  align-self: start;
+}
 .fsnav-sub {
   padding: 0 var(--fsnav-gutter);
-  align-self: start;
-  height: calc(var(--fsnav-palvelut-mid) * 2);
-  display: flex; flex-direction: column; justify-content: center;
+  display: flex; flex-direction: column;
+  margin-top: calc(var(--fsnav-row1-mid) - (9px + var(--text-title-xs) * 1.3 / 2));
 }
-.fsnav-side { padding-left: var(--fsnav-gutter) }
+/* Yhteystietosarake alkaa KORKEAMMALTA kuin kaksi muuta, ja se on
+   tarkoitus. Sen ensimmainen elementti ei ole tekstirivi vaan lyhyt
+   vaakaviiva, joka on optisesti paljon kevyempi kuin "Etusivu" tai
+   "Lyhytvideot": samalle tasolle vietyna koko lohko nayttaa valuvan
+   alaspain. Puolet Etusivu-rivin keskikohdasta nostaa sen noin 19px,
+   jolloin viiva asettuu Etusivun kirjainten ylareunan tuntumaan eika
+   niiden puolivaliin. Sarakkeella on lisaksi oma 8px ylapadding
+   (ks. .fsnav-side alempana), joka tulee taman paalle. */
+.fsnav-side { padding-left: var(--fsnav-gutter); margin-top: calc(var(--fsnav-row1-mid) / 2) }
 
 /* Yhdysviiva "Palvelut"-sanasta pystyerottimeen: kytkee alasivut
-   visuaalisesti Palvelut-kokonaisuuteen. right: 0 on sarakerajalla eli
-   tarkalleen pystyviivan kohdalla; leveys kattaa gutterin lisaksi
-   --fsnav-tie-extra verran sarakkeen omaa tekstialuetta, jotta viiva
-   lahtee lahempaa "Palvelut"-sanaa eika jaa irralliseksi. Vasen paa
-   liikkuu leveyden mukana, oikea pysyy erottimessa. */
+   visuaalisesti Palvelut-kokonaisuuteen. Viiva osoittaa nimenomaan
+   Palvelut-riviin, EI sarakkeiden ylalinjaan - lista on linjattu
+   Etusivu-riviin, mutta se on eri asia kuin se mihin kokonaisuus
+   kuuluu. right: 0 on sarakerajalla eli tarkalleen pystyviivan kohdalla;
+   leveys kattaa gutterin lisaksi --fsnav-tie-extra verran sarakkeen omaa
+   tekstialuetta, jotta viiva lahtee lahempaa sanaa eika jaa
+   irralliseksi. */
 .fsnav-links::after {
   content: ""; position: absolute; right: 0;
   top: calc(var(--fsnav-palvelut-mid) - .5px);
@@ -672,12 +707,13 @@ header, section, footer, nav, .marq { position: relative; z-index: 1 }
      taustaviiva jatkuisi sen lapi. Yksi erotin riittaa, ja reunuksena se
      rajautuu oikein pelkkaan ensimmaiseen riviin. */
   .fsnav-body { background-image: none }
-  /* Ankkurointi ja yhdysviiva ovat kolmen sarakkeen asettelun juttuja:
+  /* Keskitys ja yhdysviiva ovat kolmen sarakkeen asettelun juttuja:
      kapeammalla naytolla sarake venyy taas riviin ja erotin on reunus. */
   .fsnav-sub {
     border-left: 1px solid var(--hair); padding-right: 0;
-    align-self: stretch; height: auto; display: block;
+    align-self: stretch; display: block; margin-top: 0;
   }
+  .fsnav-side { align-self: auto }
   .fsnav-links::after { display: none }
 }
 @media (max-width: 860px) {
@@ -805,7 +841,7 @@ h2.big { font-size: var(--text-h2-hero) }
   padding: 12px 24px; border-radius: 980px; border: none; cursor: pointer;
   transition: background .2s, transform .25s, box-shadow .25s; will-change: transform;
 }
-.btn:hover { background: var(--blue-d); box-shadow: 0 8px 24px rgba(0,113,227,.28) }
+.btn:hover { background: var(--blue-d); box-shadow: 0 8px 24px rgba(0,197,227,.28) }
 .btn.alt { background: transparent; color: var(--blue); border: 1px solid var(--hair) }
 .btn.alt:hover { background: rgba(0,0,0,.03); box-shadow: none }
 .tlink { font-size: var(--text-body); color: var(--blue); text-decoration: none; font-weight: var(--weight-medium) }
@@ -1006,10 +1042,10 @@ h2.big { font-size: var(--text-h2-hero) }
 }
 .stickyzone > .hero h1 { color: #f5f5f7 }
 .stickyzone > .hero .sub { color: #e3e3e8 }
-.stickyzone > .hero .tlink { color: #b4dbff }
+.stickyzone > .hero .tlink { color: #b4f5ff }
 /* Sekundaarinapin vaalea variantti VAIN heron sisalla. Sivuston oma
-   .btn.alt kayttaa var(--blue) = #0064cc, jonka suhteellinen luminanssi
-   on 0,135; mustaa (#0d0d10) vasten se antaa 3,33:1 eli se ei lapaise
+   .btn.alt kayttaa var(--blue) = #007c8f, jonka suhteellinen luminanssi
+   on 0,164; mustaa (#0d0d10) vasten se antaa 3,95:1 eli se ei lapaise
    AA:ta millaan tummennuksella - ongelma on varissa, ei tummennuksessa.
    Teksti on sama vaalea kuin h1:lla (#f5f5f7, luettu
    .stickyzone > .hero h1 -saannosta). Reuna on valkoisen lapinakyva
@@ -1261,8 +1297,8 @@ html.hero-locked #nav { opacity: 0; visibility: hidden }
 .phone .vid {
   position: absolute; inset: -12%;
   background:
-    radial-gradient(95% 75% at 28% 86%, rgba(0,113,227,.55), transparent 60%),
-    radial-gradient(75% 65% at 80% 16%, rgba(100,168,255,.35), transparent 65%),
+    radial-gradient(95% 75% at 28% 86%, rgba(0,197,227,.55), transparent 60%),
+    radial-gradient(75% 65% at 80% 16%, rgba(100,234,255,.35), transparent 65%),
     radial-gradient(120% 100% at 50% 50%, #15161a 0%, #0c0c0e 80%);
   animation: vidmove 10s ease-in-out infinite alternate;
 }
@@ -1348,6 +1384,12 @@ section { padding: var(--space-section) 0 }
   will-change: transform;
 }
 .card:hover { transform: translateY(-6px); box-shadow: 0 34px 80px -28px rgba(29,29,31,.24) }
+/* PROSESSI- JA CASE-KORTIT EIVAT REAGOI OSOITTIMEEN. Ne eivat ole
+   linkkeja eivatka painikkeita, joten nouseva hover lupaa klikkausta
+   jota ei ole. Sama spesifisyys (0,2,0) kuin .card:hoverilla ja
+   myohemmin tiedostossa, joten tama voittaa. Vierintakaanto (data-tilt)
+   ei ole osoitinreaktio ja jaa case-korteille ennalleen. */
+#prosessi .step:hover, .case:hover { transform: none }
 
 /* ============ PALVELUT: 3 isoa paneelia ============ */
 .svc { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-gap-xl); align-items: center; margin-bottom: 110px }
@@ -1364,6 +1406,14 @@ section { padding: var(--space-section) 0 }
 .svc-txt li { font-size: var(--text-ui); color: var(--ink); padding: 7px 0 7px 22px; position: relative }
 .svc-txt li::before { content: "\2014"; position: absolute; left: 0; color: var(--blue) }
 .svc-txt .tlink { display: inline-block; margin-top: 18px }
+/* Nappi ja tekstilinkki samalle riville. Vali 22px on sama kuin heron
+   nappiparilla. Rivi kantaa yhteisen ylavalin, joten lapsilta se
+   nollataan - muuten vali olisi kaksinkertainen. */
+.svc-cta { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-top: 24px }
+.svc-cta .btn, .svc-cta .tlink { margin-top: 0 }
+/* Vali kahden napin valilla on pienempi kuin napin ja tekstilinkin:
+   kaksi samanmuotoista elementtia lukeutuu pariksi lahempana. */
+.svc-cta { gap: 14px }
 /* Nappi saa saman ylavalin kuin tekstilinkki ja lista. Mitattuna
    .svc-txt-ryhmassa oli aukko: .kick 10px, h3 -> p 14px, mutta p -> .btn
    0px, koska ainoa saanto p:n jalkeiselle elementille oli .tlink ja .ul.
@@ -1607,8 +1657,8 @@ section { padding: var(--space-section) 0 }
 .work::before {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background:
-    radial-gradient(40% 50% at 12% 18%, rgba(0,113,227,.16), transparent 70%),
-    radial-gradient(38% 48% at 88% 82%, rgba(100,168,255,.12), transparent 70%);
+    radial-gradient(40% 50% at 12% 18%, rgba(0,197,227,.16), transparent 70%),
+    radial-gradient(38% 48% at 88% 82%, rgba(100,234,255,.12), transparent 70%);
 }
 .work .wrap { position: relative }
 .work .sub { color: #a1a1a6 }
@@ -1648,7 +1698,7 @@ section { padding: var(--space-section) 0 }
      suurempi osuus 24px:n paddingista. Sama spesifisyys (0,3,0) kuin
      laukaisevalla saannolla ja myohemmin tiedostossa, joten tama voittaa
      - media query ei lisaa spesifisyytta (ks. CLAUDE.md). */
-  .case[data-tilt]:not(:hover) { transform: none }
+  .case[data-tilt] { transform: none }
 }
 /* ==================================================================
    CASE-KORTTI: TUMMA METALBD-PANEELI
@@ -1670,11 +1720,13 @@ section { padding: var(--space-section) 0 }
   border: 0;
   box-shadow: 0 26px 54px -26px rgba(13,13,16,.52), 0 3px 10px -4px rgba(13,13,16,.30);
 }
-/* .card:hover on (0,2,0) ja voittaisi .casen (0,1,0), joten tumma
-   hover-varjo tarvitsee yhta spesifisen saannon. Tama koskee myos
-   keskimmaista korttia, jolla ei ole [data-tilt]-saantoa lainkaan. */
+/* Ei omaa hover-varjoa. Kortti ei reagoi osoittimeen lainkaan, joten
+   syvempi varjo hoverilla olisi ainoa jaljelle jaava vihje siita etta
+   siina olisi jotain painettavaa - eika ole. .card:hoverin oma varjo
+   torjutaan yhta spesifisella (0,2,0) saannolla, koska .case yksin on
+   (0,1,0) eika voittaisi sita. */
 .case:hover {
-  box-shadow: 0 34px 70px -28px rgba(13,13,16,.60), 0 3px 10px -4px rgba(13,13,16,.30);
+  box-shadow: 0 26px 54px -26px rgba(13,13,16,.52), 0 3px 10px -4px rgba(13,13,16,.30);
 }
 
 /* ---------- METALLIKERROKSET KORTIN SISALLA ----------
@@ -1769,8 +1821,13 @@ section { padding: var(--space-section) 0 }
 /* Scroll-kaanto. Sailyy ennallaan: keskimmainen kortti jaa suoraan,
    reunimmaiset kaantyvat toisiaan kohti. Spesifisyys (0,3,0) >
    .card:hover (0,2,0), joten jarjestys ei ratkaise. Ei transitionia:
-   arvo tulee joka framessa scroll-asemasta. */
-.case[data-tilt]:not(:hover) { transform: perspective(1200px) var(--tilt-rot, rotateY(0deg)) }
+   arvo tulee joka framessa scroll-asemasta.
+
+   :not(:hover) poistettu: se oli olemassa vain siksi etta .tilt kirjoitti
+   hoverilla oman transforminsa inline. Kortti ei enaa reagoi osoittimeen,
+   joten vierintakaannon ei tarvitse vaistaa mitaan - ja aiemmin se
+   nykaisi kortin suoraksi heti kun hiiri osui siihen. */
+.case[data-tilt] { transform: perspective(1200px) var(--tilt-rot, rotateY(0deg)) }
 .case[data-tilt] {
   /* Sama kaava kuin ennen (+14px y, +24px sumennus, +.08 alfa), uusi
      pohja. Toinen, tiukka kerros pysyy vakiona: se on se joka piirtaa
@@ -1873,6 +1930,160 @@ section { padding: var(--space-section) 0 }
   z-index: -1;
 }
 @media (max-width: 820px) { .steps { grid-template-columns: 1fr } .steps::before { display: none } }
+
+/* PROSESSIN NAPPIRIVI. Keskitetty, koska otsikko on vasemmalla mutta
+   korttirivi tayttaa koko leveyden: rivin oma keskitys sitoo napit
+   kortteihin eika otsikkoon. Ylavali 40px on sama kuin .steps-ruudukon
+   oma gap kaksinkertaisena, joten rivi luetaan ryhman ulkopuolelle
+   kuuluvaksi eika neljantena korttina. */
+.proc-cta {
+  display: flex; justify-content: center; align-items: center;
+  gap: 14px; flex-wrap: wrap; margin-top: 40px;
+}
+/* Soita-nappi vaihtaa sisaltonsa: "Soita" -> puhelinnumero. min-width
+   pitaa rivin paikallaan, jotta paljastus ei tyonna viereista nappia
+   sivuun - rivi on keskitetty, joten leveyden muutos siirtaisi molempia.
+   Arvo on numeron oma pituus: "040 564 8770" on 12 merkkia, ja ch on
+   numeron 0 leveys, joten 12ch on tasan riittava ilman arvausta.
+   min-width koskee sisaltolaatikkoa, joten padding tulee sen paalle. */
+.proc-call { display: inline-flex; align-items: baseline; justify-content: center; min-width: 12ch }
+.proc-call b { font-weight: var(--weight-semibold); white-space: nowrap }
+
+/* NAPPIEN SISAANTULO JA PULSSI.
+
+   KOLME OMINAISUUTTA, KOLME JARJESTELMAA, EI YHTAAN RISTIRIITAA:
+     translate  sisaantulo (tama saanto, ohjattuna --rvp:sta)
+     scale      pulssi (keyframe alla)
+     transform  magneettinen hover (.mag, SiteEffects kirjoittaa inline)
+   Jos sisaantulo olisi transformissa, .magin hoverkirjoitus nollaisi sen
+   kesken liikkeen. translate ja scale ovat omia ominaisuuksiaan ja
+   yhdistyvat transformiin, joten kaikki kolme voivat olla paalla yhta
+   aikaa.
+
+   PORRASTUS. Molemmat napit lukevat saman rivin --rvp:n mutta omalla
+   viiveellaan (--d). Ikkuna 0,55: ensimmainen nappi on perilla kun rivin
+   etenema on 0,55 ja toinen kun se on 0,67, eli molemmat ennen kuin
+   pulssi kaynnistyy kynnyksella 0,7. */
+.proc-cta > * {
+  --p: clamp(0, calc((var(--rvp, 1) - var(--d, 0)) / .55), 1);
+  translate: 0 calc(30px * (1 - var(--p)));
+  opacity: var(--p);
+}
+.proc-cta > *:nth-child(2) { --d: .12 }
+
+/* PULSSI JA HEHKU. Kay vain kun rivi on kokonaan esilla (.rvs-in, ks.
+   SiteEffects).
+
+   MIKSI EI box-shadow. Sumennussade ja siirtyma ovat maalausominaisuuksia:
+   animoituna nappi maalattaisiin uudelleen joka kehyksessa. Tama on
+   projektin oma sokea piste, joka aiheutti Chromen valkkymisen, ja se
+   patee myos pieneen elementtiin.
+
+   MITEN TAMA ON TEHTY SEN SIJAAN. Hehku on ::after-rengas, joka
+   maalataan KERRAN ja jonka jalkeen animoidaan vain scale ja opacity -
+   molemmat kompositorin omia. Rengas laajenee napin ULKOPUOLELLE
+   (inset -4px + scale 1,34), joten se ei tummenna eika peita nappia
+   vaikka se piirtyy taustan paalle. Se on kolmen sekunnin sykli, jossa
+   rengas lahtee napin reunalta ja hiipuu ulos - sama luettava kuvio
+   kuin kosketuksen aaltorenkaassa.
+
+   Nappi itse skaalautuu samassa tahdissa 1,05:een. Yhdessa nama lukevat
+   kehotuksena; kumpikaan yksin ei riita, koska pelkka skaalaus on liian
+   hiljainen ja pelkka rengas irtoaa napista. */
+@keyframes procpulse {
+  0%, 100% { scale: 1 }
+  42% { scale: 1.05 }
+}
+@keyframes procping {
+  0%   { scale: 1; opacity: .55 }
+  70%  { opacity: 0 }
+  100% { scale: 1.34; opacity: 0 }
+}
+.proc-cta > * { position: relative }
+.proc-cta > *::after {
+  content: ""; position: absolute; inset: -4px; border-radius: 980px;
+  /* Molemmilla napeilla sama sininen: ensisijaisen oma vari on valkoinen,
+     joka jaisi vaalealla taustalla nakymattomiin. */
+  border: 2px solid var(--blue);
+  opacity: 0; pointer-events: none;
+}
+.proc-cta.rvs-in > * { animation: procpulse 3s cubic-bezier(.4,0,.2,1) infinite }
+.proc-cta.rvs-in > *::after { animation: procping 3s cubic-bezier(.2,.7,.3,1) infinite }
+/* Toinen nappi puoli sykli jaljessa: renkaat eivat laajene yhta aikaa,
+   jolloin rivi lukee kahtena kehotuksena eika yhtena valahduksena. */
+.proc-cta.rvs-in > *:nth-child(2),
+.proc-cta.rvs-in > *:nth-child(2)::after { animation-delay: 1.5s }
+/* Hoverilla kehotus on jo mennyt perille. */
+.proc-cta > *:hover { animation-play-state: paused; scale: 1 }
+.proc-cta > *:hover::after { animation: none; opacity: 0 }
+
+@media (prefers-reduced-motion: reduce) {
+  .proc-cta > * { translate: none; opacity: 1; animation: none; scale: 1 }
+  .proc-cta > *::after { animation: none; opacity: 0 }
+}
+
+/* PROSESSIKORTTIEN PALJASTUS ON SIDOTTU VIERINTAAN.
+   SiteEffects kirjoittaa --rvp:n jokaiselle [data-rvs]-elementille joka
+   kehyksessa sen omasta sijainnista: 0 kun kortin ylareuna on tasan
+   nakyman alareunassa, 1 kun kortti on kokonaan sisalla. Ylospain
+   palatessa sama luku laskee takaisin, joten liike purkautuu - .rv:n
+   kertalaukaisu ei sita tehnyt, vaan kerran nahty kortti jai lopullisesti
+   paikalleen eika toista kertaa nakynyt mitaan.
+
+   Suunta on sama kieli kuin videoseinalla: reunimmaiset tulevat sivusta
+   ja keskimmainen alhaalta. Matka 64px vaakaan ja 44px pystyyn - pystyssa
+   sama matka lukee pidempana, koska kortti on leveyttaan matalampi.
+
+   transform eika translate: parallaksi ([data-par]) kirjoittaa naille
+   samoille korteille translaten joka kehyksessa. Kaksi jarjestelmaa, kaksi
+   eri ominaisuutta, ei ristiriitaa.
+
+   Varasyotto 1 pitaa kortit paikallaan jos JS ei aja frameakaan. */
+#prosessi .step {
+  /* PORRASTUS. Kaikilla kolmella on sama ylareuna, joten ilman omaa
+     viivetta ne liikkuisivat tasan samassa tahdissa ja rivi nayttaisi
+     yhdelta palikalta. --d siirtaa kunkin kortin ikkunaa; jakaja 0,78
+     jattaa viimeiselle (0,16) tilaa tulla perille ennen kuin rivin
+     etenema tayttyy. */
+  --p: clamp(0, calc((var(--rvp, 1) - var(--d, 0)) / .78), 1);
+
+  /* PEHMENNYS. Vierintaan sidottu arvo on lineaarinen: sellaisenaan
+     kortti liikkuu tasaisella nopeudella ja pysahtyy tyssaten, mika on
+     juuri se keskeneraisen oloinen liike. cubic-bezieria ei voi kayttaa,
+     koska tassa ei ole siirtymaa jota easettaa - arvo tulee suoraan
+     vierinnasta. Sen sijaan etenema itse muotoillaan: 1-(1-p)^3 on
+     ease-out cubic, joka calcissa kirjoitetaan auki kolmena tulona
+     (calcissa ei ole potenssia). Nopea alku, pehmea pysahdys. */
+  --e: calc(1 - (1 - var(--p)) * (1 - var(--p)) * (1 - var(--p)));
+
+  /* HAIVYTYS ON NOPEAMPI KUIN LIIKE. Kortti on tayteen nakyva jo kun
+     matkasta on kuljettu 42 %, ja loput matkasta se vain liukuu
+     paikalleen. Yhta pitka haivytys jattaisi kortin puolilapinakyvaksi
+     koko liikkeen ajaksi, mika lukee keskeneraisyytena eika liikkeena. */
+  --o: clamp(0, calc(var(--p) / .42), 1);
+
+  opacity: var(--o);
+  transform:
+    translateX(calc(var(--rvsx, 0px) * (1 - var(--e))))
+    translateY(calc(var(--rvsy, 0px) * (1 - var(--e))));
+  /* Erillisena ominaisuutena, ei transformissa: .tilt kirjoittaa hoverilla
+     transformin inline, ja scale saa jaada voimaan sen alle. Lahtoarvo
+     0,965 on juuri sen verran etta kortti nayttaa tulevan syvyydesta
+     ilman etta teksti ehtii nakya skaalattuna. */
+  scale: calc(.965 + .035 * var(--e));
+}
+#prosessi .step:nth-child(1) { --rvsx: -64px; --d: 0 }
+#prosessi .step:nth-child(2) { --rvsy: 52px; --d: .08 }
+#prosessi .step:nth-child(3) { --rvsx: 64px; --d: .16 }
+@media (max-width: 820px) {
+  /* Yhdella sarakkeella sivusuunta ei tarkoita mitaan: kaikki kolme
+     ovat samalla kohdalla vaakasuunnassa. Silloin myos porrastus
+     nollataan, koska kortit tulevat nakyviin eri aikaan muutenkin. */
+  #prosessi .step { --rvsx: 0px; --rvsy: 44px; --d: 0 }
+}
+@media (prefers-reduced-motion: reduce) {
+  #prosessi .step { opacity: 1; transform: none; scale: 1 }
+}
 .step { padding: var(--space-card-step); border-radius: 16px }
 .step::before {
   counter-increment: s; content: counter(s);
@@ -1892,7 +2103,7 @@ section { padding: var(--space-section) 0 }
   font-size: var(--text-caption); font-weight: var(--weight-semibold); letter-spacing: .05em; text-transform: uppercase;
   height: 18px; margin-bottom: 6px; color: var(--blue);
 }
-.plan.pop .pt { color: #6fb1ff }
+.plan.pop .pt { color: #6fecff }
 .plan h3 { font-size: var(--text-title-lg); font-weight: var(--weight-semibold); letter-spacing: -0.018em }
 .plan .for { font-size: var(--text-ui-sm); color: var(--grey); margin: 6px 0 22px; min-height: 40px }
 .plan.pop .for { color: #a1a1a6 }
@@ -1917,7 +2128,7 @@ section { padding: var(--space-section) 0 }
   background: #fff; transition: border-color .2s, box-shadow .2s;
 }
 .fcard input:focus, .fcard textarea:focus {
-  outline: none; border-color: var(--blue); box-shadow: 0 0 0 3.5px rgba(0,113,227,.16);
+  outline: none; border-color: var(--blue); box-shadow: 0 0 0 3.5px rgba(0,197,227,.16);
 }
 .budget { display: flex; align-items: center; gap: 18px }
 .budget input[type=range] {
@@ -1934,6 +2145,49 @@ section { padding: var(--space-section) 0 }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px }
 @media (max-width: 560px) { .row2 { grid-template-columns: 1fr } }
 .fcard .btn { width: 100%; margin-top: 26px; padding: 14px }
+
+/* ETUSIVUN CTA KAHTEEN PALSTAAN. Kuva vasemmalle, lomake oikealle.
+   1fr / 1,1fr: lomake saa hieman enemman, koska sen sisalla on
+   kaksisarakkeinen kenttaruudukko (.row2) jolla on oma minimileveytensa,
+   kun taas kuva skaalautuu mihin tahansa leveyteen. align-items: start
+   estaa kuvaa venymasta lomakkeen korkuiseksi. */
+.ctasplit {
+  display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr);
+  gap: 48px; align-items: stretch;
+}
+.ctasplit .fcard { max-width: none; margin: 0 }
+/* Lomakkeen scroll-kaanto. Ketju rakennetaan CSS:ssa samalla kaavalla
+   kuin .browserilla ja .case-korteilla: SiteEffects kirjoittaa vain
+   --tilt-rotin, jolloin elementin oma perusmuunnos sailyy ja ilman
+   JS:aa fallback on 0 astetta. */
+.ctasplit .fcard[data-tilt] { transform: perspective(1200px) var(--tilt-rot, rotateY(0deg)) }
+@media (max-width: 900px) {
+  /* Yhdella palstalla kuva menee lomakkeen ALLE: lomake on osion
+     tarkoitus, eika sita saa tyontaa ruudun alareunaan kuvituksella. */
+  .ctasplit { grid-template-columns: 1fr; gap: 28px }
+  .ctasplit .ctashot { order: 2 }
+}
+
+/* Valiaikainen tiimikuvan paikkamerkki. Viivapiirros samalla kielella
+   kuin navipalkin kantajat: 1,6px viiva, pyoristetyt paat, ei tayttoa.
+   Paikkamerkki saa nayttaa paikkamerkilta - oikean nakoinen
+   kuvituskuva jaisi helposti sivulle huomaamatta. */
+.ctashot {
+  position: relative; border-radius: 24px; overflow: hidden;
+  min-height: 340px; display: grid; place-items: end center;
+  background:
+    linear-gradient(160deg, rgba(0,0,0,.045), rgba(0,0,0,.015) 45%, rgba(0,0,0,.05));
+  border: 1px dashed var(--hair);
+}
+.ctashot svg { display: block; width: 100%; height: 100%; }
+.ctashot g { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; opacity: .28 }
+.ctashot g circle { stroke: var(--ink) }
+.ctashot .ctashot-floor { stroke: var(--ink); stroke-width: 1; opacity: .12 }
+.ctashot-tag {
+  position: absolute; left: 20px; top: 18px;
+  font-size: var(--text-label); font-weight: var(--weight-semibold);
+  letter-spacing: .04em; text-transform: uppercase; color: var(--grey);
+}
 .fnote { text-align: center; font-size: var(--text-label-sm); color: var(--grey); margin-top: 13px }
 
 .final { text-align: center; padding: var(--space-final) 0 }
@@ -1946,13 +2200,73 @@ footer {
   border-top: 1px solid var(--hair);
   padding: 42px 0 46px; font-size: var(--text-caption); color: var(--grey);
 }
-footer .cols { display: flex; gap: var(--space-gap-footer); flex-wrap: wrap; padding-bottom: 26px; border-bottom: 1px solid var(--hair) }
+/* FOOTERI ON LEVEAMPI KUIN SIVUN LUKUPALSTA.
+   .wrap on 1080px, mika on mitoitettu LUETTAVAAN tekstiin: 1728px
+   nakymassa se jattaa 324px tyhjaa molempiin reunoihin. Footerissa ei ole
+   luettavaa leipatekstia vaan lyhyita linkkisarakkeita, joten sama raja
+   ei palvele sita - se vain kokoaa sarakkeet keskelle ja jattaa reunat
+   tyhjiksi.
+   1320px on sama luku jota .refs > .wrap jo kayttaa, ei uusi mitta.
+   Reunapehmuste kasvaa 24 -> 40px, jotta leveampi rivi ei liimaudu
+   ikkunan reunaan silloin kun nakyma on tasan 1320px. */
+footer > .wrap { max-width: 1320px; padding: 0 40px }
+@media (max-width: 700px) { footer > .wrap { padding: 0 24px } }
+/* NELJA TASAISESTI JAETTUA SARAKETTA koko footerin leveydelta.
+   Kokeilin valissa mallia jossa linkkipalstat ovat auto-levyisia ja
+   pakkautuvat oikeaan reunaan. Se toimi 1080px:n palstalla, mutta kun
+   footeri levennettiin 1320px:aan, brandin ja linkkien valiin jai 475px
+   yhtenainen aukko - eli tyhja tila ei havinnyt, se vain siirtyi
+   reunoilta keskelle. Tasajako levittaa saman tilan sarakkeiden valeihin,
+   jolloin sita ei lue reikana.
+
+   1,4fr brandille: lupausteksti tarvitsee noin 340px kolmelle riville,
+   ja tasan se on 1,4 kertaa linkkipalstan leveys tallla palstalla.
+
+   minmax(0,1fr) eika 1fr: ilman nollaminimia pitka sana
+   ("Hakukoneoptimointi") ei anna sarakkeen kaventua ja ruudukko vuotaa
+   yli kapealla ikkunalla. */
+footer .foot-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  gap: 30px 56px;
+  padding-bottom: 30px; border-bottom: 1px solid var(--hair);
+}
+/* Ei omaa max-widthia: sarake maaraa leveyden, ja 300px:n kiinnitys
+   jattaisi sarakkeen sisaan oman lisatyhjansa. */
+footer .foot-brand { max-width: none }
+footer .foot-brand p { margin-bottom: 18px }
+footer .foot-social { display: flex; gap: 14px; list-style: none; margin: 0; padding: 0 }
+footer .foot-social a {
+  display: grid; place-items: center; width: 34px; height: 34px;
+  border: 1px solid var(--hair); border-radius: 50%; color: var(--grey);
+  transition: color .2s, border-color .2s;
+}
+footer .foot-social a:hover { color: var(--ink); border-color: var(--ink) }
+footer .foot-social svg { width: 16px; height: 16px; display: block }
+footer address { font-style: normal; color: var(--grey); padding: 4px 0 }
+/* Lakirivi: copyright vasemmalle, lakilinkit oikealle. Kaantyy allekkain
+   kun tilaa ei ole, jolloin jarjestys sailyy. */
+footer .foot-base {
+  padding-top: 20px; display: flex; flex-wrap: wrap; gap: 10px 24px;
+  align-items: center; justify-content: space-between;
+}
+footer .foot-legal { display: flex; gap: 24px; flex-wrap: wrap }
+footer .foot-legal a, footer .foot-legal button { padding: 0 }
+@media (max-width: 900px) {
+  /* Kahdella sarakkeella auto ei enaa palvele: sarakkeita on yhta monta
+     kuin sisaltoa, joten ne jaetaan tasan. */
+  footer .foot-top { grid-template-columns: 1fr 1fr; gap: 30px 40px }
+  footer .foot-brand { grid-column: 1 / -1; max-width: none }
+}
+@media (max-width: 560px) {
+  footer .foot-top { grid-template-columns: 1fr }
+}
 footer .footer-mark { display: block; color: var(--ink); margin-bottom: 12px }
 footer .footer-mark svg { height: 26px; width: auto; display: block }
 footer h4 { font-size: var(--text-caption); color: var(--ink); font-weight: var(--weight-semibold); margin-bottom: 10px }
 footer a { display: block; color: var(--grey); text-decoration: none; padding: 4px 0 }
 footer a:hover { color: var(--ink) }
-footer .base { padding-top: 18px }
+
 
 /* ============ KELLUVAT TILASTOCHIPIT (hero) ============ */
 .chip-f {
@@ -2040,6 +2354,20 @@ footer .base { padding-top: 18px }
 }
 .stat .num b { color: var(--blue); font-weight: var(--weight-bold) }
 .stat p { font-size: var(--text-label-sm); color: var(--grey); font-weight: var(--weight-medium); margin-top: 6px }
+/* LUVUT TUMMASSA REFERENSSIOSIOSSA. Samat varit kuin osion muullakin
+   tekstilla: #f5f5f7 on jo kaytossa .refs h2:lla ja #b4f5ff .kickilla,
+   ja molemmat on mitattu tumman kuvion pahimpaan kohtaan. --grey ja
+   --ink olisivat lukukelvottomia tummalla. */
+/* Korttiruudukko kapeammaksi, jotta lukurivi mahtuu samaan osioon.
+   Kortit ovat 9/16, joten korkeus seuraa sarakkeen leveytta: kapeampi
+   ruudukko = matalammat kortit = tilaa numeroille ilman etta osio
+   kasvaa nakymaa korkeammaksi. .refs on flex + align-items: center,
+   joten sisalto pysyy pystykeskitettyna. */
+.refs .refgrid { max-width: 1120px; margin: 0 auto }
+.refs .statband { padding: 64px 0 0 }
+.refs .stat .num { color: #f5f5f7 }
+.refs .stat .num b { color: #b4f5ff }
+.refs .stat p { color: #cbcbd2 }
 
 /* ============ ILMAINEN KARTOITUS + KALENTERIMOCKUP ============
    Tavallinen sisaltoosio .aftercoverin sisalla, lukukaistan ja Tulokset-
@@ -2060,6 +2388,23 @@ footer .base { padding-top: 18px }
    pohjalla ilman korttia. Levyn padding ja negatiivinen marginaali
    kumosivat toisensa, joten tekstin sijainti ei muutu. */
 .kart { padding: 0 }
+/* Silta referensseista varaukseen. Ei omaa alapaddingia: .kart tulee
+   heti perass ja tuo oman rytminsa, joten vali tulee tasta ylhaalta. */
+.kartlead { padding: 0 0 56px }
+.kartlead .shead { margin-bottom: 0 }
+/* LEVEYS ENNEN KORKEUTTA. 18ch pakotti otsikon kolmelle riville, jolloin
+   siita tuli kapea pino keskelle leveaa osiota. 30ch antaa sen levita
+   kahdelle riville ja kayttaa saman tilan jonka kalenteri ja teksti
+   allakin kayttavat. text-wrap: balance jakaa rivit tasapituisiksi. */
+.kartlead h2 {
+  max-width: 30ch; margin-left: auto; margin-right: auto; text-wrap: balance;
+  /* Hero 2. Osio on sivun toinen aloitus, joten otsikko nostetaan
+     osiotasosta (--text-h2-hero, 34-56px) sivun h1-tasolle
+     (--text-h1, 38-68px) ja saa saman kirjainvalin ja rivikorkeuden
+     kuin h1. Yli 68px ei menna: --text-display on varattu heron
+     omalle otsikolle eika sama sivu saa kahta samankokoista. */
+  font-size: var(--text-h1); letter-spacing: -0.028em; line-height: 1.05;
+}
 
 /* Kalenterimockup. Kehys noudattaa selainmockupin arvoja (radius 16px,
    valkoinen pohja, --hair-reunus, pehmea varjo joka syvenee kaannon
@@ -2290,6 +2635,15 @@ footer .base { padding-top: 18px }
      ensimmaista framea tai jos prefers-reduced-motion pysayttaa scrubin. */
   opacity: var(--cover-fade, 1);
 }
+/* SISALTO ALEMMAS. Tama on .refs-perussaannon JALKEEN tarkoituksella:
+   sama spesifisyys, joten jarjestys ratkaisee. Aiemmin sijoitettuna
+   ylempana align-items: center voitti eika mikaan muuttunut.
+
+   Osio on pinnattu niin etta sen ALAREUNA on nakyman alalaidassa, joten
+   sisaltoa lasketaan pienentamalla etaisyytta alareunaan: pystykeskitys
+   vaihtuu alareunaan sidotuksi ja vali annetaan padding-bottomilla.
+   Videot ja lukurivi liikkuvat yhtena pakettina. */
+.refs { align-items: flex-end; padding-bottom: 120px }
 
 /* Sisalto kuviokerroksen ja tummennuksen ylle. Porrastus .refsin sisalla:
      .metalbd-dark (0) < .refs::before (1) < .wrap sisalto (2) < .refsscrim (5)
@@ -2340,7 +2694,11 @@ footer .base { padding-top: 18px }
   /* Jaa maskin ajalta, mutta perustelu on nyt eri: kaista antaa
      lukukaistan numeroille ilmaa siina kohdassa jossa tumma osio vaihtuu
      vaaleaan - ilman sita ne alkaisivat 44px:n paasta rajasta. */
-  padding-top: 80px;
+  /* Kaista lukukaistan numeroille siina kohdassa jossa tumma osio
+     vaihtuu vaaleaan. Kantajien ajoitus EI ole enaa taman varassa:
+     se hoidetaan RET_LO:lla NavCarriersissa, joten tyhjaa ei tarvitse
+     kasvattaa sita varten. */
+  padding-top: 72px;
   /* Koko osion opacity sidotaan nakyvyysosuuteen SiteEffectsissa:
      0 kun ylareuna on nakyman alalaidassa, 1 kun osiota on nakyvissa 35 %
      nakymasta. Varasyotto 1 pitaa osion nakyvissa jos JS ei ehdi ajaa
@@ -2349,10 +2707,11 @@ footer .base { padding-top: 18px }
 }
 
 .refs h2 { color: #f5f5f7 }
-/* Vaaleampi kuin muualla kaytetty #6fb1ff. Tumma kuviokerros nostaa
-   pohjan vaaleimmillaan RGB 87:aan, jossa #6fb1ff jaisi 3,26:1:een.
-   #b4dbff antaa 5,03:1. Sama syy .refcard-meta spanin muutokselle. */
-.refs .kick { color: #b4dbff }
+/* Vaaleampi kuin muualla kaytetty #6fecff. Tumma kuviokerros nostaa
+   pohjan vaaleimmillaan RGB 87:aan, jossa #6fecff jaa 5,20:1:een.
+   #b4f5ff antaa 6,00:1. Sama syy .refcard-meta spanin muutokselle.
+   Luvut mitattu uudelleen kun savy siirtyi 188 asteeseen. */
+.refs .kick { color: #b4f5ff }
 
 /* Ruudukko kaarelle. perspective luo pinoamiskontekstin ja containing
    blockin, mutta VAIN taman elementin sisalle: .refsin ja .refstickyn
@@ -2367,30 +2726,83 @@ footer .base { padding-top: 18px }
 /* translateZ ENSIN, rotateY sen jalkeen: nain siirto tapahtuu vanhemman
    Z-akselilla eika jo kaannetylla, jolloin kortit asettuvat samalle
    kaarelle eivatka eri sateille. */
-.refcard { transform-origin: 50% 50% }
-.refcard:nth-child(1) { transform: translateZ(66px) rotateY(14deg) }
-.refcard:nth-child(2) { transform: translateZ(17px) rotateY(7deg) }
-.refcard:nth-child(3) { transform: none }
-.refcard:nth-child(4) { transform: translateZ(17px) rotateY(-7deg) }
-.refcard:nth-child(5) { transform: translateZ(66px) rotateY(-14deg) }
+/* KAARI OMAAN MUUTTUJAANSA. Kortit olivat aiemmin .rv-paljastuksessa,
+   jolloin .rv.on (transform: none) ja html.rv-ready .rv:not(.on)
+   (translateY) voittivat nth-childin (0,2,0) ja kaari ei ollut voimassa
+   lainkaan - mitattuna kaikkien viiden kortin leveys oli sama 211px, eli
+   perspektiivin skaalausta ei tapahtunut. Kortit on nyt otettu koko
+   paljastuksesta pois, ja kaari luetaan muuttujasta yhdella saannolla:
+   silloin uusi transformia kirjoittava saanto ei voi hiljaa syrjayttaa
+   sita niin kuin edellinen teki. */
+.refcard { transform-origin: 50% 50%; --curve: none }
+.refcard:nth-child(1) { --curve: translateZ(66px) rotateY(14deg) }
+.refcard:nth-child(2) { --curve: translateZ(17px) rotateY(7deg) }
+.refcard:nth-child(4) { --curve: translateZ(17px) rotateY(-7deg) }
+.refcard:nth-child(5) { --curve: translateZ(66px) rotateY(-14deg) }
+/* Spesifisyys 0,4,1 lyo seka .rv.on (0,2,0) etta
+   html.rv-ready .rv:not(.on) (0,3,1). Toinen valinta kattaa tilanteen
+   ennen kuin SiteEffects on lisannyt rv-readyn. */
+.refgrid .refcard { transform: var(--curve) }
+
 
 @media (max-width: 980px) {
   /* Kolmella sarakkeella kaari menisi rikki: nth-child(1..5) osuisi eri
      riveille, jolloin sama kierto toistuisi rivin sisalla vaarin pain. */
   .refgrid { grid-template-columns: repeat(3, 1fr); perspective: none; transform-style: flat }
   .refcard:nth-child(1), .refcard:nth-child(2),
-  .refcard:nth-child(4), .refcard:nth-child(5) { transform: none }
+  .refcard:nth-child(4), .refcard:nth-child(5) { --curve: none }
 }
 @media (max-width: 620px) { .refgrid { grid-template-columns: repeat(2, 1fr) } }
 
-/* 9:16 pystyvideokortti. Katkoviivareunus kertoo etta sisalto on viela
-   tulossa - sama merkintatapa kuin muissa taman projektin paikkamerkeissa. */
+/* 9:16 pystyvideokortti.
+
+   REUNUS. Katkoviiva oli paikkamerkin merkintatapa siita kun korteilla ei
+   viela ollut mediaa. Nyt kaikilla viidella on, jolloin katkoviiva jai
+   piirtymaan taytetyn kuvan paalle: 0,28-alfa valkoista tummaa kuvaa
+   vasten nakyy pisterivina eika reunana, ja kortin oma 3D-kaanto tekee
+   siita eri levyisen joka kortissa. Taytetty kortti saa siksi umpinaisen
+   hiusviivan ja katkoviiva jaa vain tyhjalle kortille (.is-empty), joka
+   renderoi "Video tulossa" -merkin.
+
+   Alfa 0,10 on johdettu kortin omasta taustasta rgba(255,255,255,.05):
+   reunan pitaa erottua siita mutta ei kuvasta, joten se on tasan kaksi
+   kertaa tausta. */
 .refcard {
   position: relative; aspect-ratio: 9 / 16; border-radius: 20px;
   overflow: hidden; background: rgba(255,255,255,.05);
-  border: 1px dashed rgba(255,255,255,.28);
+  border: 1px solid transparent;
   display: grid; place-items: center;
 }
+.refcard.is-empty { border-style: dashed; border-color: rgba(255,255,255,.28) }
+
+/* VALAISTU KEHYS. Yksi ja sama kaikilla korteilla, ja se syttyy tasan
+   silloin kun lampunkantajat osoittavat keilan videoseinaan.
+
+   OHJAUS. NavCarriers kirjoittaa juureen --beam (0..1), sama luku joka
+   ohjaa keilaryhman opacityn. CSS kayttaa sita VAIN opacityssa: itse
+   reunus on staattinen box-shadow, joten kehyskohtainen muutos ei osu
+   maalausominaisuuteen. Tama on projektin Chrome-saanto, joka opittiin
+   kun per-frame box-shadow ja filter aiheuttivat valkkymisen.
+
+   MUOTO. Kolme kerrosta samasta valonlahteesta:
+     1. umpinainen hiusviiva koko reunalle, alfa 0,30
+     2. kirkkaampi viiva ylareunaan, alfa 0,50 - siella keila osuu
+     3. pehmea valo ylhaalta alas, hapertuu 30 %:iin mennessa
+   Reunus on box-shadow inset eika border: border kasvattaisi laatikkoa
+   ja 3D-kaanto (rotateY 7-14 astetta) tekisi siita eri levyisen joka
+   kortissa - juuri se sai aiemman katkoviivan nakymaan epatasaisena.
+
+   Varasyotto 0 pitaa kehyksen sammuksissa jos JS ei aja frameakaan. */
+.refcard::after {
+  content: ""; position: absolute; inset: 0; z-index: 3;
+  pointer-events: none; border-radius: inherit;
+  opacity: var(--beam, 0);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.45),
+    inset 0 0 12px 0 rgba(255,255,255,.16);
+  background: linear-gradient(to bottom, rgba(255,255,255,.10), transparent 30%);
+}
+@media (prefers-reduced-motion: reduce) { .refcard::after { opacity: .55 } }
 /* backface-visibility: hidden pakottaa oman rasterointikerroksen, jolloin
    pyoristetty overflow: hidden leikkaa myos 3D-muunnetun kortin sisallon.
    Ilman sita WebKit rasteroi lapsen erikseen ja video/poster vuotaa
@@ -2431,10 +2843,10 @@ footer .base { padding-top: 18px }
    utility-luokkiin (display: grid, box-shadow-rengas), joten deko-osat on
    nimetty deco-etuliitteella. */
 .deco { position: absolute; pointer-events: none; z-index: 0; display: block }
-.deco-ring { width: 64px; height: 64px; border-radius: 50%; border: 1.6px solid #dbe9ff }
-.deco-ring.deco-ring-sm { width: 26px; height: 26px; border-color: #cfe3ff }
+.deco-ring { width: 64px; height: 64px; border-radius: 50%; border: 1.6px solid #dbfaff }
+.deco-ring.deco-ring-sm { width: 26px; height: 26px; border-color: #cff9ff }
 .deco-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); opacity: .35 }
-.deco-plus { width: 18px; height: 18px; color: #c9dcf7; font-size: 22px; line-height: 16px; font-weight: var(--weight-regular) }
+.deco-plus { width: 18px; height: 18px; color: #c9f1f7; font-size: 22px; line-height: 16px; font-weight: var(--weight-regular) }
 .deco-grid {
   width: 140px; height: 100px; opacity: .5;
   background-image: radial-gradient(#d4d4da 1.2px, transparent 1.3px);
@@ -2452,7 +2864,12 @@ footer .base { padding-top: 18px }
 .float-tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); flex: none }
 .ft-a { right: -14px; top: -16px; animation: cfl 6s ease-in-out infinite alternate }
 .ft-b { left: -18px; bottom: 24px; animation: cfl 7s ease-in-out -3s infinite alternate }
-@media (max-width: 880px) { .ft-a { right: 6px } .ft-b { left: 6px } }
+/* Graafinen suunnittelu ja hakukoneoptimointi: samat kelluvat kortit kuin
+   kahdella ensimmaisella paneelilla, jotta kaikki nelja ovat linjassa.
+   Eri kulmat ja eri animaatiovaihe, jottei rivista tule mekaaninen. */
+.ft-c { left: -18px; top: -14px; animation: cfl 6.5s ease-in-out -1.5s infinite alternate }
+.ft-d { right: -16px; bottom: 26px; animation: cfl 7.5s ease-in-out -4s infinite alternate }
+@media (max-width: 880px) { .ft-a { right: 6px } .ft-b { left: 6px } .ft-c { left: 6px } .ft-d { right: 6px } }
 
 /* PALJASTUKSEN OLETUS ON NAKYVA. Perussaanto kantaa vain siirtyman;
    piilotus on kiinni html.rv-ready -luokassa, jonka SiteEffects lisaa
@@ -2468,6 +2885,16 @@ footer .base { padding-top: 18px }
 }
 html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .rv.on { opacity: 1; transform: none }
+/* PALVELUPANEELIT TULEVAT SIVUSTA, EIVAT ALHAALTA.
+   Suunta seuraa paneelin omaa asettelua: kun kuva on vasemmalla
+   (.svc ilman .rev) paneeli liukuu vasemmalta, ja kaannetyssa
+   (.svc.rev) oikealta. Nain liike jatkaa sita rytmia jonka
+   vuorotteleva asettelu jo luo, eika taistele sita vastaan.
+   36px eika 26px: vaakasuunnassa sama matka nakyy pienempana,
+   koska palsta on korkeuttaan leveampi. */
+html.rv-ready .svc.rv:not(.on) { transform: translateX(-36px) }
+html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
+
 .stagger > * { transition-delay: calc(var(--i,0) * 90ms) }
 [data-par] { will-change: translate }
 
@@ -2569,7 +2996,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 }
 .page-palvelu .w-item .thumb {
   position: absolute; inset: 0;
-  background: radial-gradient(95% 75% at 28% 86%, rgba(0,113,227,.4), transparent 60%), #141418;
+  background: radial-gradient(95% 75% at 28% 86%, rgba(0,197,227,.4), transparent 60%), #141418;
 }
 .page-palvelu .w-item .n {
   position: relative; z-index: 2;
@@ -2776,7 +3203,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 }
 .cc-sw:checked { background: var(--blue) }
 .cc-sw:checked::after { transform: translateX(16px) }
-.cc-sw:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,113,227,.28) }
+.cc-sw:focus-visible { outline: none; box-shadow: 0 0 0 3.5px rgba(0,197,227,.28) }
 .cc-btns { display: flex; gap: 10px; margin-top: 18px }
 .cc-btns .btn { flex: 1; text-align: center; font-size: var(--text-ui); padding: 11px 18px }
 @media (max-width: 520px) {
@@ -2885,8 +3312,8 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .page-verkkosivut .serprow u s { display:block;text-decoration:none;height:7px;border-radius:4px;background:#e6e6eb;width:74% }
 .page-verkkosivut .serprow u s+s { margin-top:5px;height:5px;width:52%;background:#f0f0f4 }
 .page-verkkosivut .serprow.us i { background:var(--blue);color:#fff }
-.page-verkkosivut .serprow.us u s { background:#bcd9ff;width:82% }
-.page-verkkosivut .serprow.us u s+s { background:#ddeaff;width:60% }
+.page-verkkosivut .serprow.us u s { background:#bcf6ff;width:82% }
+.page-verkkosivut .serprow.us u s+s { background:#ddfaff;width:60% }
 .page-verkkosivut .serprow.r1 { top:0 }
 .page-verkkosivut .serprow.r2 { top:34px }
 .page-verkkosivut .serprow.r3 { top:68px }
@@ -2929,7 +3356,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .page-verkkosivut .cmprow .lb s { display:block;text-decoration:none;font-size: var(--text-caption);color:var(--grey);font-weight: var(--weight-regular);margin-top:2px }
 .page-verkkosivut .cmpbar { height:10px;border-radius:6px;background:#f0f0f4;overflow:hidden }
 .page-verkkosivut .cmpbar i { display:block;height:100%;border-radius:6px;width:0; background:linear-gradient(90deg,#c8c8d0,#a8a8b2); transition:width 1.4s cubic-bezier(.2,.6,.2,1); }
-.page-verkkosivut .cmpbar.good i { background:linear-gradient(90deg,var(--blue),#5aa9ff) }
+.page-verkkosivut .cmpbar.good i { background:linear-gradient(90deg,var(--blue),#5ae9ff) }
 .page-verkkosivut .rv.on .cmpbar i { width:var(--w,50%) }
 .page-verkkosivut .cmprow .vv { font-size: var(--text-ui-sm);font-weight: var(--weight-bold);text-align:right;font-variant-numeric:tabular-nums;color:var(--grey) }
 @media (max-width:640px) {
@@ -2954,29 +3381,29 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 }
 .page-verkkosivut .ba .lay { position:absolute;inset:0;padding:24px 28px 46px;display:flex;flex-direction:column }
 .page-verkkosivut .ba .old { background:#1a1a1f }
-.page-verkkosivut .ba .new { background: radial-gradient(80% 95% at 74% 105%,rgba(0,113,227,.28),transparent 62%), #0e0e13; clip-path:inset(0 0 0 var(--x,50%)); }
+.page-verkkosivut .ba .new { background: radial-gradient(80% 95% at 74% 105%,rgba(0,197,227,.28),transparent 62%), #0e0e13; clip-path:inset(0 0 0 var(--x,50%)); }
 .page-verkkosivut .ba .fnav { display:flex;gap:9px;align-items:center;margin-bottom:22px }
 .page-verkkosivut .ba .fnav span { width:40px;height:7px;border-radius:3px;background:rgba(255,255,255,.14) }
 .page-verkkosivut .ba .fnav span:first-child { width:62px;background:rgba(255,255,255,.26) }
-.page-verkkosivut .ba .new .fnav span { border-radius:4px;background:rgba(150,199,255,.32) }
-.page-verkkosivut .ba .new .fnav span:first-child { background:#6fb1ff }
+.page-verkkosivut .ba .new .fnav span { border-radius:4px;background:rgba(150,241,255,.32) }
+.page-verkkosivut .ba .new .fnav span:first-child { background:#6fecff }
 .page-verkkosivut .ba .bl { height:9px;border-radius:3px;background:rgba(255,255,255,.13);width:46% }
 .page-verkkosivut .ba .bl+.bl { margin-top:8px;width:30%;height:7px }
 .page-verkkosivut .ba .bbtn { margin-top:15px;width:78px;height:20px;border-radius:4px;background:rgba(255,255,255,.15) }
 .page-verkkosivut .ba .new .bl { background:rgba(180,215,255,.62);width:60%;height:13px;border-radius:6px }
-.page-verkkosivut .ba .new .bl+.bl { background:rgba(150,199,255,.3);width:40%;height:9px }
+.page-verkkosivut .ba .new .bl+.bl { background:rgba(150,241,255,.3);width:40%;height:9px }
 .page-verkkosivut .ba .new .bbtn { background:var(--blue);width:96px;height:26px;border-radius:980px }
 .page-verkkosivut .ba .btxt { margin-top:20px;max-width:58% }
 .page-verkkosivut .ba .btxt span { display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.08);margin-bottom:7px }
 .page-verkkosivut .ba .btxt span:nth-child(2) { width:88% }
 .page-verkkosivut .ba .btxt span:nth-child(3) { width:66% }
-.page-verkkosivut .ba .new .btxt span { background:rgba(160,205,255,.18) }
+.page-verkkosivut .ba .new .btxt span { background:rgba(160,242,255,.18) }
 .page-verkkosivut .ba .bcards { display:flex;gap:10px;margin-top:auto }
 .page-verkkosivut .ba .bcards span { flex:1;height:54px;border-radius:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09) }
-.page-verkkosivut .ba .new .bcards span { border-radius:11px;background:rgba(0,113,227,.15);border-color:rgba(120,180,255,.28); box-shadow:0 10px 26px -12px rgba(0,113,227,.6); }
+.page-verkkosivut .ba .new .bcards span { border-radius:11px;background:rgba(0,197,227,.15);border-color:rgba(120,237,255,.28); box-shadow:0 10px 26px -12px rgba(0,197,227,.6); }
 .page-verkkosivut .ba .tag { position:absolute;bottom:14px;font-size:9.5px;font-weight: var(--weight-semibold);letter-spacing:.14em; text-transform:uppercase;color:rgba(255,255,255,.55); }
 .page-verkkosivut .ba .tag.l { left:16px }
-.page-verkkosivut .ba .tag.r { right:16px;color:#6fb1ff }
+.page-verkkosivut .ba .tag.r { right:16px;color:#6fecff }
 .page-verkkosivut .ba .handle { position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.85); left:var(--x,50%);transform:translateX(-1px);pointer-events:none; }
 .page-verkkosivut .ba .handle::after { content:"⟷";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%); width:34px;height:34px;border-radius:50%;background:#fff;color:var(--ink); font-size: var(--text-label);display:flex;align-items:center;justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,.3); }
 .page-verkkosivut .ba input[type=range] { position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize; -webkit-appearance:none;appearance:none;background:transparent; }
@@ -2989,7 +3416,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .page-verkkosivut .care h3 { font-size: var(--text-title-lg);font-weight: var(--weight-semibold);margin-bottom:8px }
 .page-verkkosivut .care p { font-size: var(--text-body-sm);color:var(--grey);max-width:58ch;line-height:1.6 }
 .page-verkkosivut .care ul { list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:16px }
-.page-verkkosivut .care li { font-size: var(--text-label-sm);background:#fff;border:1px solid #dbe9ff;border-radius:980px;padding:6px 13px;color:var(--ink) }
+.page-verkkosivut .care li { font-size: var(--text-label-sm);background:#fff;border:1px solid #dbfaff;border-radius:980px;padding:6px 13px;color:var(--ink) }
 .page-verkkosivut .careprice { text-align:right;white-space:nowrap }
 @media (max-width:820px) {
   .page-verkkosivut .careprice { text-align:left }
@@ -3014,9 +3441,9 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .page-verkkosivut .hsplit .sub { font-size: var(--text-title-xs);padding-bottom:6px }
 .page-verkkosivut .hsplit h2 { margin-top:12px }
 .page-verkkosivut .band { background:var(--dark);color:#f5f5f7;position:relative;overflow:hidden }
-.page-verkkosivut .band::before { content:"";position:absolute;inset:0;pointer-events:none; background: radial-gradient(46% 62% at 6% 0%,rgba(0,113,227,.22),transparent 68%), radial-gradient(42% 55% at 94% 100%,rgba(100,168,255,.14),transparent 70%); }
+.page-verkkosivut .band::before { content:"";position:absolute;inset:0;pointer-events:none; background: radial-gradient(46% 62% at 6% 0%,rgba(0,197,227,.22),transparent 68%), radial-gradient(42% 55% at 94% 100%,rgba(100,234,255,.14),transparent 70%); }
 .page-verkkosivut .band .wrap { position:relative }
-.page-verkkosivut .band .kick { color:#6fb1ff }
+.page-verkkosivut .band .kick { color:#6fecff }
 .page-verkkosivut .band h2 { color:#f5f5f7 }
 .page-verkkosivut .band .sub { color:#a1a1a6 }
 .page-verkkosivut .band .hsplit { align-items:end }
@@ -3025,8 +3452,8 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
   .page-verkkosivut .probs { grid-template-columns:1fr;gap:0 }
 }
 .page-verkkosivut .prob { padding:24px 0;border-top:1px solid rgba(255,255,255,.13); display:grid;grid-template-columns:auto 1fr;gap:20px; transition:border-color .3s; }
-.page-verkkosivut .prob:hover { border-top-color:rgba(111,177,255,.5) }
-.page-verkkosivut .prob em { font-style:normal;font-size: var(--text-caption-sm);font-weight: var(--weight-bold);letter-spacing:.1em;color:#6fb1ff;padding-top:5px }
+.page-verkkosivut .prob:hover { border-top-color:rgba(111,236,255,.5) }
+.page-verkkosivut .prob em { font-style:normal;font-size: var(--text-caption-sm);font-weight: var(--weight-bold);letter-spacing:.1em;color:#6fecff;padding-top:5px }
 .page-verkkosivut .prob h3 { font-size: var(--text-title-sm);font-weight: var(--weight-semibold);margin-bottom:7px;letter-spacing:-.016em }
 .page-verkkosivut .prob p { font-size: var(--text-body-sm);color:#a1a1a6;line-height:1.6 }
 .page-verkkosivut .bstats { display:flex;flex-wrap:wrap;margin-top:56px;border-top:1px solid rgba(255,255,255,.13);padding-top:34px }
@@ -3226,7 +3653,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 }
 .page-verkkosivut .pan.dark { background:var(--dark);color:#f5f5f7;border-color:var(--dark) }
 .page-verkkosivut .pan h3 { font-size: var(--text-label-sm);font-weight: var(--weight-semibold);letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:18px }
-.page-verkkosivut .pan.dark h3 { color:#6fb1ff }
+.page-verkkosivut .pan.dark h3 { color:#6fecff }
 .page-verkkosivut .pan ul { list-style:none }
 .page-verkkosivut .pan li { font-size: var(--text-body-sm);padding:11px 0 11px 26px;position:relative;line-height:1.5;border-bottom:1px solid var(--hair) }
 .page-verkkosivut .pan li:last-child { border-bottom:none }
@@ -3257,7 +3684,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 @media (max-width:820px) {
   .page-verkkosivut .closer { grid-template-columns:1fr;padding:48px 30px;gap:28px }
 }
-.page-verkkosivut .closer::before { content:"";position:absolute;inset:0;pointer-events:none; background: radial-gradient(44% 60% at 88% 6%,rgba(0,113,227,.3),transparent 68%), radial-gradient(40% 55% at 4% 100%,rgba(100,168,255,.14),transparent 70%); }
+.page-verkkosivut .closer::before { content:"";position:absolute;inset:0;pointer-events:none; background: radial-gradient(44% 60% at 88% 6%,rgba(0,197,227,.3),transparent 68%), radial-gradient(40% 55% at 4% 100%,rgba(100,234,255,.14),transparent 70%); }
 .page-verkkosivut .closer>* { position:relative }
 .page-verkkosivut .closer h2 { color:#f5f5f7;max-width:16ch }
 .page-verkkosivut .closer p { color:#a1a1a6;font-size: var(--text-title-xs);margin-top:16px;max-width:46ch;line-height:1.55 }
@@ -3294,45 +3721,71 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .page-hakukoneoptimointi .hero h1 { max-width:19ch;margin:0 auto;text-wrap:balance }
 .page-hakukoneoptimointi .hero .sub { max-width:56ch;margin:22px auto 0 }
 @keyframes liin {to{opacity:1;transform:none}}
-.page-hakukoneoptimointi .sstage { max-width:760px;margin:54px auto 0;padding:0 24px;position:relative;text-align:left }
-.page-hakukoneoptimointi .sbar { display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--hair); border-radius:980px;padding:15px 24px;box-shadow:0 26px 64px -30px rgba(29,29,31,.34); font-size: var(--text-title-xs);position:relative;z-index:2; }
-.page-hakukoneoptimointi .sbar .ico { width:17px;height:17px;flex:none;border:2px solid #bfbfc7;border-radius:50%;position:relative }
-.page-hakukoneoptimointi .sbar .ico::after { content:"";position:absolute;right:-6px;bottom:-6px;width:9px;height:2px;background:#bfbfc7;transform:rotate(45deg);border-radius:2px }
-.page-hakukoneoptimointi .sbar .q { flex:1;color:var(--ink);white-space:nowrap;overflow:hidden;letter-spacing:-.012em }
+:is(.page-hakukoneoptimointi, .sdemo) .sstage { max-width:760px;margin:54px auto 0;padding:0 24px;position:relative;text-align:left }
+:is(.page-hakukoneoptimointi, .sdemo) .sbar { display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--hair); border-radius:980px;padding:15px 24px;box-shadow:0 26px 64px -30px rgba(29,29,31,.34); font-size: var(--text-title-xs);position:relative;z-index:2; }
+:is(.page-hakukoneoptimointi, .sdemo) .sbar .ico { width:17px;height:17px;flex:none;border:2px solid #bfbfc7;border-radius:50%;position:relative }
+:is(.page-hakukoneoptimointi, .sdemo) .sbar .ico::after { content:"";position:absolute;right:-6px;bottom:-6px;width:9px;height:2px;background:#bfbfc7;transform:rotate(45deg);border-radius:2px }
+:is(.page-hakukoneoptimointi, .sdemo) .sbar .q { flex:1;color:var(--ink);white-space:nowrap;overflow:hidden;letter-spacing:-.012em }
 .page-hakukoneoptimointi .caret { display:inline-block;width:2px;height:19px;background:var(--blue);vertical-align:-4px;margin-left:1px;animation:blink 1.05s step-end infinite }
 @keyframes blink {50%{opacity:0}}
 @media (max-width:560px) {
-  .page-hakukoneoptimointi .sbar { font-size: var(--text-body);padding:13px 18px }
+  :is(.page-hakukoneoptimointi, .sdemo) .sbar { font-size: var(--text-body);padding:13px 18px }
   .page-hakukoneoptimointi .caret { height:17px }
 }
-.page-hakukoneoptimointi .sres { margin-top:16px;background:#fff;border:1px solid var(--hair);border-radius:20px;padding:9px; box-shadow:0 30px 70px -34px rgba(29,29,31,.3);position:relative;z-index:1; }
-.page-hakukoneoptimointi .srow { display:flex;gap:13px;align-items:center;padding:12px 14px;border-radius:13px;transition:background .5s }
-.page-hakukoneoptimointi .srow .rk { width:22px;height:22px;border-radius:7px;background:#f0f0f3;color:#9a9aa1;flex:none; font-size: var(--text-micro-sm);font-weight: var(--weight-bold);display:flex;align-items:center;justify-content:center; }
-.page-hakukoneoptimointi .srow .ln { flex:1;min-width:0 }
-.page-hakukoneoptimointi .srow .ln s { display:block;text-decoration:none;height:8px;border-radius:4px;background:#e8e8ee;width:58% }
-.page-hakukoneoptimointi .srow .ln s+s { margin-top:6px;height:6px;width:38%;background:#f1f1f5 }
-.page-hakukoneoptimointi .srow.us { background:var(--blue-tint) }
-.page-hakukoneoptimointi .srow.us .rk { background:var(--blue);color:#fff }
-.page-hakukoneoptimointi .srow.us b { display:block;font-size: var(--text-body-sm);font-weight: var(--weight-semibold);color:var(--blue);letter-spacing:-.014em }
-.page-hakukoneoptimointi .srow.us i { display:block;font-style:normal;font-size: var(--text-label-sm);color:var(--grey);margin-top:3px }
-.page-hakukoneoptimointi .srow.hide { display:none }
-.page-hakukoneoptimointi .aians { margin-top:16px;border:1px solid #dbe9ff;border-radius:20px;padding:20px 22px; background:linear-gradient(180deg,#f7fbff,#ffffff); opacity:0;transform:translateY(12px);transition:opacity .7s,transform .7s; }
-.page-hakukoneoptimointi .aians.on { opacity:1;transform:none }
-.page-hakukoneoptimointi .aians .ah { display:flex;align-items:center;gap:9px;font-size: var(--text-micro-sm);font-weight: var(--weight-semibold);letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:12px }
-.page-hakukoneoptimointi .aians .ah em { font-style:normal;width:17px;height:17px;border-radius:6px;background:var(--blue);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center }
-.page-hakukoneoptimointi .aians p { font-size: var(--text-body-sm);color:var(--ink);line-height:1.6;min-height:2.9em }
-.page-hakukoneoptimointi .aians .src { margin-top:15px;display:flex;gap:8px;flex-wrap:wrap;align-items:center }
-.page-hakukoneoptimointi .aians .src small { font-size: var(--text-micro);color:var(--grey);letter-spacing:.04em }
-.page-hakukoneoptimointi .aians .src span { font-size: var(--text-caption-sm);border:1px solid #e2e2e8;background:#fff;border-radius:980px;padding:5px 11px;color:var(--grey) }
-.page-hakukoneoptimointi .aians .src span.us { border-color:var(--blue);color:var(--blue);font-weight: var(--weight-semibold);background:var(--blue-tint) }
-.page-hakukoneoptimointi .chip-f { position:absolute;z-index:4;display:flex;align-items:center;gap:8px; background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,.06); border-radius:14px;box-shadow:0 18px 44px -16px rgba(29,29,31,.28); padding:10px 14px;font-size: var(--text-label-sm);font-weight: var(--weight-semibold);white-space:nowrap; }
-.page-hakukoneoptimointi .chip-f em { font-style:normal;width:26px;height:26px;border-radius:8px;background:var(--blue-tint);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size: var(--text-caption) }
-.page-hakukoneoptimointi .cf1 { left:-198px;top:78px;animation:cfl 6.5s ease-in-out infinite alternate }
-.page-hakukoneoptimointi .cf2 { right:-198px;bottom:56px;animation:cfl 7.5s ease-in-out -2s infinite alternate }
+:is(.page-hakukoneoptimointi, .sdemo) .sres { margin-top:16px;background:#fff;border:1px solid var(--hair);border-radius:20px;padding:9px; box-shadow:0 30px 70px -34px rgba(29,29,31,.3);position:relative;z-index:1; }
+:is(.page-hakukoneoptimointi, .sdemo) .srow { display:flex;gap:13px;align-items:center;padding:12px 14px;border-radius:13px;transition:background .5s }
+:is(.page-hakukoneoptimointi, .sdemo) .srow .rk { width:22px;height:22px;border-radius:7px;background:#f0f0f3;color:#9a9aa1;flex:none; font-size: var(--text-micro-sm);font-weight: var(--weight-bold);display:flex;align-items:center;justify-content:center; }
+:is(.page-hakukoneoptimointi, .sdemo) .srow .ln { flex:1;min-width:0 }
+:is(.page-hakukoneoptimointi, .sdemo) .srow .ln s { display:block;text-decoration:none;height:8px;border-radius:4px;background:#e8e8ee;width:58% }
+:is(.page-hakukoneoptimointi, .sdemo) .srow .ln s+s { margin-top:6px;height:6px;width:38%;background:#f1f1f5 }
+:is(.page-hakukoneoptimointi, .sdemo) .srow.us { background:var(--blue-tint) }
+:is(.page-hakukoneoptimointi, .sdemo) .srow.us .rk { background:var(--blue);color:#fff }
+:is(.page-hakukoneoptimointi, .sdemo) .srow.us b { display:block;font-size: var(--text-body-sm);font-weight: var(--weight-semibold);color:var(--blue);letter-spacing:-.014em }
+:is(.page-hakukoneoptimointi, .sdemo) .srow.us i { display:block;font-style:normal;font-size: var(--text-label-sm);color:var(--grey);margin-top:3px }
+:is(.page-hakukoneoptimointi, .sdemo) .srow.hide { display:none }
+:is(.page-hakukoneoptimointi, .sdemo) .aians { margin-top:16px;border:1px solid #dbfaff;border-radius:20px;padding:20px 22px; background:linear-gradient(180deg,#f7fbff,#ffffff); opacity:0;transform:translateY(12px);transition:opacity .7s,transform .7s; }
+:is(.page-hakukoneoptimointi, .sdemo) .aians.on { opacity:1;transform:none }
+:is(.page-hakukoneoptimointi, .sdemo) .aians .ah { display:flex;align-items:center;gap:9px;font-size: var(--text-micro-sm);font-weight: var(--weight-semibold);letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:12px }
+:is(.page-hakukoneoptimointi, .sdemo) .aians .ah em { font-style:normal;width:17px;height:17px;border-radius:6px;background:var(--blue);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center }
+:is(.page-hakukoneoptimointi, .sdemo) .aians p { font-size: var(--text-body-sm);color:var(--ink);line-height:1.6;min-height:2.9em }
+:is(.page-hakukoneoptimointi, .sdemo) .aians .src { margin-top:15px;display:flex;gap:8px;flex-wrap:wrap;align-items:center }
+:is(.page-hakukoneoptimointi, .sdemo) .aians .src small { font-size: var(--text-micro);color:var(--grey);letter-spacing:.04em }
+:is(.page-hakukoneoptimointi, .sdemo) .aians .src span { font-size: var(--text-caption-sm);border:1px solid #e2e2e8;background:#fff;border-radius:980px;padding:5px 11px;color:var(--grey) }
+:is(.page-hakukoneoptimointi, .sdemo) .aians .src span.us { border-color:var(--blue);color:var(--blue);font-weight: var(--weight-semibold);background:var(--blue-tint) }
+:is(.page-hakukoneoptimointi, .sdemo) .chip-f { position:absolute;z-index:4;display:flex;align-items:center;gap:8px; background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,.06); border-radius:14px;box-shadow:0 18px 44px -16px rgba(29,29,31,.28); padding:10px 14px;font-size: var(--text-label-sm);font-weight: var(--weight-semibold);white-space:nowrap; }
+:is(.page-hakukoneoptimointi, .sdemo) .chip-f em { font-style:normal;width:26px;height:26px;border-radius:8px;background:var(--blue-tint);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size: var(--text-caption) }
+:is(.page-hakukoneoptimointi, .sdemo) .cf1 { left:-198px;top:78px;animation:cfl 6.5s ease-in-out infinite alternate }
+:is(.page-hakukoneoptimointi, .sdemo) .cf2 { right:-198px;bottom:56px;animation:cfl 7.5s ease-in-out -2s infinite alternate }
 @keyframes cfl {from{translate:0 0}to{translate:0 -12px}}
 @media (max-width:1180px) {
-  .page-hakukoneoptimointi .chip-f { display:none }
+  :is(.page-hakukoneoptimointi, .sdemo) .chip-f { display:none }
 }
+
+/* Hakunayttamo etusivun Palvelut-paneelissa. Samat saannot kuin
+   SEO-sivulla (:is-valitsin ylla), vain mitat sovitettu kapeampaan
+   palstaan: sivulla se on 760px keskitetty nayttamo, tassa se tayttaa
+   paneelin oman sarakkeen. */
+.sdemo .sstage { max-width: none; margin: 0; padding: 0 }
+/* Kelluvat sirut ovat -198px palstan ulkopuolella: sivulla siella on
+   tilaa, paneelissa ei. */
+.sdemo .chip-f { display: none }
+.sdemo .sbar { font-size: var(--text-body); padding: 13px 18px }
+/* Sama tyyli kuin osioiden .kick-otsikoilla, jotta nayttamo istuu sivun
+   omaan typografiaan eika nayta lainatulta. */
+/* Kilpailijarivin nimilappu. Harmaa ja pienempi kuin oma tulos, jotta
+   hierarkia sailyy: oma rivi on ainoa jossa on varia ja nimi. */
+.sdemo .srow:not(.us) .ln em {
+  display: block; font-style: normal;
+  font-size: var(--text-body-sm); font-weight: var(--weight-medium);
+  color: var(--grey); letter-spacing: -.012em; margin-bottom: 6px;
+}
+.sdemo-cap {
+  font-size: var(--text-micro-sm); font-weight: var(--weight-semibold);
+  letter-spacing: .13em; text-transform: uppercase; color: var(--grey);
+  margin: 0 0 10px 4px;
+}
+.sdemo .sres { margin-top: 12px }
+
 .page-hakukoneoptimointi .marq .track { display:flex;width:max-content;animation:marq 30s linear infinite }
 @keyframes marq {from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .page-hakukoneoptimointi .marq span { display:flex;align-items:center;gap:26px;padding:16px 26px 16px 0;font-size: var(--text-label);font-weight: var(--weight-semibold);letter-spacing:.18em;text-transform:uppercase;color:var(--grey);white-space:nowrap }
@@ -3351,10 +3804,10 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 }
 .page-hakukoneoptimointi .dcard { border:1px solid var(--hair);border-radius:24px;padding:34px 30px 30px;background:#fff;position:relative;overflow:hidden }
 .page-hakukoneoptimointi .dcard.ai { background:var(--dark);border-color:var(--dark);color:#f5f5f7 }
-.page-hakukoneoptimointi .dcard.ai::before { content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(64% 60% at 84% 0%,rgba(0,113,227,.3),transparent 70%) }
+.page-hakukoneoptimointi .dcard.ai::before { content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(64% 60% at 84% 0%,rgba(0,197,227,.3),transparent 70%) }
 .page-hakukoneoptimointi .dcard>* { position:relative }
 .page-hakukoneoptimointi .dcard .dk { font-size: var(--text-micro);font-weight: var(--weight-semibold);letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:10px }
-.page-hakukoneoptimointi .dcard.ai .dk { color:#6fb1ff }
+.page-hakukoneoptimointi .dcard.ai .dk { color:#6fecff }
 .page-hakukoneoptimointi .dcard h3 { font-size: var(--text-title-xl);font-weight: var(--weight-semibold);letter-spacing:-.02em;margin-bottom:10px }
 .page-hakukoneoptimointi .dcard p { font-size: var(--text-body-sm);color:var(--grey);line-height:1.6 }
 .page-hakukoneoptimointi .dcard.ai p { color:#a1a1a6 }
@@ -3364,7 +3817,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .page-hakukoneoptimointi .dcard.ai li { border-bottom-color:rgba(255,255,255,.1);color:#d6d6da }
 .page-hakukoneoptimointi .dcard li:last-child { border-bottom:none }
 .page-hakukoneoptimointi .dcard li::before { content:"→";position:absolute;left:0;color:var(--blue);font-size: var(--text-caption) }
-.page-hakukoneoptimointi .dcard.ai li::before { color:#6fb1ff }
+.page-hakukoneoptimointi .dcard.ai li::before { color:#6fecff }
 .page-hakukoneoptimointi .duelnote { margin-top:22px;padding-top:20px;border-top:1px solid var(--hair);font-size: var(--text-body);color:var(--grey);line-height:1.65;max-width:74ch }
 .page-hakukoneoptimointi .duelnote strong { color:var(--ink);font-weight: var(--weight-semibold) }
 .page-hakukoneoptimointi .tabbar { display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--hair);padding-bottom:16px;margin-bottom:8px }
@@ -3408,10 +3861,10 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .page-hakukoneoptimointi .lpack { border:1px solid var(--hair);border-radius:22px;overflow:hidden;background:#fff;box-shadow:0 30px 76px -40px rgba(29,29,31,.3) }
 .page-hakukoneoptimointi .lmap { height:170px;position:relative;background:#eef1f5;overflow:hidden }
 .page-hakukoneoptimointi .lmap svg { position:absolute;inset:0;width:100%;height:100% }
-.page-hakukoneoptimointi .lpin { position:absolute;left:50%;top:44%;width:26px;height:26px;margin:-26px 0 0 -13px; border-radius:50% 50% 50% 0;background:var(--blue);transform:rotate(-45deg); box-shadow:0 8px 18px -6px rgba(0,113,227,.7);animation:pin 2.6s ease-in-out infinite; }
+.page-hakukoneoptimointi .lpin { position:absolute;left:50%;top:44%;width:26px;height:26px;margin:-26px 0 0 -13px; border-radius:50% 50% 50% 0;background:var(--blue);transform:rotate(-45deg); box-shadow:0 8px 18px -6px rgba(0,197,227,.7);animation:pin 2.6s ease-in-out infinite; }
 .page-hakukoneoptimointi .lpin::after { content:"";position:absolute;inset:7px;border-radius:50%;background:#fff }
 @keyframes pin {0%,100%{transform:rotate(-45deg) translateY(0)}50%{transform:rotate(-45deg) translateY(-7px)}}
-.page-hakukoneoptimointi .lpulse { position:absolute;left:50%;top:44%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:rgba(0,113,227,.3);animation:pulse 2.6s ease-out infinite }
+.page-hakukoneoptimointi .lpulse { position:absolute;left:50%;top:44%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:rgba(0,197,227,.3);animation:pulse 2.6s ease-out infinite }
 @keyframes pulse {0%{transform:scale(1);opacity:.7}100%{transform:scale(4.5);opacity:0}}
 .page-hakukoneoptimointi .lrow { display:flex;gap:12px;align-items:center;padding:14px 18px;border-top:1px solid var(--hair) }
 .page-hakukoneoptimointi .lrow .lb { width:26px;height:26px;border-radius:8px;background:#f0f0f3;color:#9a9aa1;font-size: var(--text-micro);font-weight: var(--weight-bold);display:flex;align-items:center;justify-content:center;flex:none }
@@ -3428,9 +3881,9 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 @media (max-width:1280px) {
   .page-hakukoneoptimointi .report { margin:0 16px }
 }
-.page-hakukoneoptimointi .report::before { content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(42% 55% at 10% 0%,rgba(0,113,227,.2),transparent 70%),radial-gradient(40% 52% at 90% 100%,rgba(100,168,255,.12),transparent 70%) }
+.page-hakukoneoptimointi .report::before { content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(42% 55% at 10% 0%,rgba(0,197,227,.2),transparent 70%),radial-gradient(40% 52% at 90% 100%,rgba(100,234,255,.12),transparent 70%) }
 .page-hakukoneoptimointi .report .wrap { position:relative }
-.page-hakukoneoptimointi .report .kick { color:#6fb1ff }
+.page-hakukoneoptimointi .report .kick { color:#6fecff }
 .page-hakukoneoptimointi .report h2 { color:#f5f5f7 }
 .page-hakukoneoptimointi .report .sub { color:#a1a1a6 }
 .page-hakukoneoptimointi .mrows { border-top:1px solid rgba(255,255,255,.13) }
@@ -3470,7 +3923,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
   .page-hakukoneoptimointi .prow>div { padding:9px 18px }
   .page-hakukoneoptimointi .prow.head { background:transparent }
   .page-hakukoneoptimointi .prow.head>div { border:1px solid var(--hair);border-radius:18px;margin-bottom:10px;background:#fff }
-  .page-hakukoneoptimointi .prow.head .hl { background:var(--blue-tint);border-color:#dbe9ff }
+  .page-hakukoneoptimointi .prow.head .hl { background:var(--blue-tint);border-color:#dbfaff }
   .page-hakukoneoptimointi .prow:not(.head):not(.foot)>div:first-child { font-size: var(--text-caption);text-transform:uppercase;letter-spacing:.07em;color:var(--grey);font-weight: var(--weight-semibold);padding-top:16px }
   .page-hakukoneoptimointi .prow:not(.head):not(.foot)>div:not(:first-child)::before { content:attr(data-l) " — ";color:var(--ink);font-weight: var(--weight-semibold) }
   .page-hakukoneoptimointi .prow:not(.head):not(.foot) { padding-bottom:10px;border-bottom:1px solid var(--hair) }
@@ -3487,7 +3940,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 }
 .page-hakukoneoptimointi .pan.dark { background:var(--dark);color:#f5f5f7;border-color:var(--dark) }
 .page-hakukoneoptimointi .pan h3 { font-size: var(--text-label-sm);font-weight: var(--weight-semibold);letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:18px }
-.page-hakukoneoptimointi .pan.dark h3 { color:#6fb1ff }
+.page-hakukoneoptimointi .pan.dark h3 { color:#6fecff }
 .page-hakukoneoptimointi .pan ul { list-style:none }
 .page-hakukoneoptimointi .pan li { font-size: var(--text-body-sm);padding:11px 0 11px 26px;position:relative;line-height:1.5;border-bottom:1px solid var(--hair) }
 .page-hakukoneoptimointi .pan li:last-child { border-bottom:none }
@@ -3502,8 +3955,8 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .page-hakukoneoptimointi .fcard input[type=text] { width:100%;border:1px solid var(--hair);border-radius:10px;padding:13px 15px;font-family:inherit;font-size: var(--text-body);color:var(--ink);background:#fff;transition:border-color .2s, box-shadow .2s }
 .page-hakukoneoptimointi .fcard input[type=email] { width:100%;border:1px solid var(--hair);border-radius:10px;padding:13px 15px;font-family:inherit;font-size: var(--text-body);color:var(--ink);background:#fff;transition:border-color .2s, box-shadow .2s }
 .page-hakukoneoptimointi .fcard textarea { width:100%;border:1px solid var(--hair);border-radius:10px;padding:13px 15px;font-family:inherit;font-size: var(--text-body);color:var(--ink);background:#fff;transition:border-color .2s, box-shadow .2s }
-.page-hakukoneoptimointi .fcard input:focus { outline:none;border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(0,113,227,.16) }
-.page-hakukoneoptimointi .fcard textarea:focus { outline:none;border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(0,113,227,.16) }
+.page-hakukoneoptimointi .fcard input:focus { outline:none;border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(0,197,227,.16) }
+.page-hakukoneoptimointi .fcard textarea:focus { outline:none;border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(0,197,227,.16) }
 .page-hakukoneoptimointi .budget input[type=range] { flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--blue) var(--p,14%),#e5e5ea var(--p,14%));outline:none }
 .page-hakukoneoptimointi .budget input[type=range]::-webkit-slider-thumb { -webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:1px solid var(--hair);box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:pointer }
 .page-hakukoneoptimointi .budget output { font-size: var(--text-title-xs);font-weight: var(--weight-bold);min-width:110px;text-align:right;font-variant-numeric:tabular-nums }
@@ -3535,7 +3988,7 @@ html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 /* Lahdedokumentin luonnosvaroitus. */
 .ts-warn {
   margin-top: 26px; padding: 16px 18px;
-  background: var(--blue-tint); border: 1px solid #d6e6ff; border-radius: 14px;
+  background: var(--blue-tint); border: 1px solid #d6faff; border-radius: 14px;
 }
 .ts-warn b {
   display: block; font-size: var(--text-caption-sm); font-weight: var(--weight-semibold);
@@ -3700,7 +4153,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
   transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
   mix-blend-mode: screen; opacity: 0; transition: opacity .55s ease;
   background: radial-gradient(circle,
-    rgba(214,236,255,.95) 0%, rgba(122,190,255,.5) 32%, rgba(90,160,255,0) 70%);
+    rgba(214,236,255,.95) 0%, rgba(122,237,255,.5) 32%, rgba(90,233,255,0) 70%);
 }
 /* Nakyvissa = valot palavat. */
 .gsurf-van.lights-on .gsurf-light { opacity: .95 }
@@ -3735,7 +4188,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
    --brand on pintanayttamon vaihtuva brandivari. ColorCycle-komponentti
    paivittaa sen; ilman JS:aa se jaa lahtoarvoonsa.
    ================================================================== */
-.page-graafinen-suunnittelu { --brand: #0064cc }
+.page-graafinen-suunnittelu { --brand: #007c8f }
 .page-graafinen-suunnittelu .pal {display:flex;gap:9px;justify-content:center;margin-bottom:26px;align-items:center}
 .page-graafinen-suunnittelu .pal span {width:26px;height:26px;border-radius:8px;border:1px solid rgba(0,0,0,.07); transition:transform .45s cubic-bezier(.2,.6,.2,1),background .8s;}
 .page-graafinen-suunnittelu .pal span:nth-child(1) {background:var(--brand)}
@@ -3779,7 +4232,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
   .page-graafinen-suunnittelu .bcard.mid {background:var(--dark);color:#f5f5f7;border-color:var(--dark)}
 }
 .page-graafinen-suunnittelu .bcard .bt {font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--grey);margin-bottom:12px}
-.page-graafinen-suunnittelu .bcard.mid .bt {color:#6fb1ff}
+.page-graafinen-suunnittelu .bcard.mid .bt {color:#6fecff}
 .page-graafinen-suunnittelu .bcard h3 {font-size:18px;font-weight:600;margin-bottom:10px;line-height:1.25}
 .page-graafinen-suunnittelu .bcard.mid h3 {font-size:20px}
 .page-graafinen-suunnittelu .bcard p {font-size:14px;color:var(--grey);line-height:1.6}
@@ -3788,7 +4241,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
 .page-graafinen-suunnittelu .bcard li {font-size:13.5px;padding:8px 0 8px 20px;position:relative;color:var(--grey);line-height:1.5;border-top:1px solid var(--hair)}
 .page-graafinen-suunnittelu .bcard.mid li {border-top-color:rgba(255,255,255,.12);color:#d6d6da}
 .page-graafinen-suunnittelu .bcard li::before {content:"–";position:absolute;left:0;color:#c2c2c8}
-.page-graafinen-suunnittelu .bcard.mid li::before {content:"✓";color:#6fb1ff;font-size:11px;font-weight:700;top:9px}
+.page-graafinen-suunnittelu .bcard.mid li::before {content:"✓";color:#6fecff;font-size:11px;font-weight:700;top:9px}
 .page-graafinen-suunnittelu .bridgenote {margin-top:34px;font-size:15.5px;color:var(--grey);line-height:1.65;max-width:74ch}
 .page-graafinen-suunnittelu .bridgenote strong {color:var(--ink);font-weight:600}
 .page-graafinen-suunnittelu .bento {display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -3826,7 +4279,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
   .page-graafinen-suunnittelu .hstep {display:block;padding-left:52px;margin-bottom:20px;position:relative}
   .page-graafinen-suunnittelu .hstep .dot {position:absolute;left:19px;top:14px;transform:translateX(-50%)}
 }
-.page-graafinen-suunnittelu .conf {border:1px solid #dbe9ff;background:var(--blue-tint);border-radius:24px;padding:34px 34px 30px}
+.page-graafinen-suunnittelu .conf {border:1px solid #dbfaff;background:var(--blue-tint);border-radius:24px;padding:34px 34px 30px}
 @media (max-width:600px) {
   .page-graafinen-suunnittelu .conf {padding:24px 20px 22px}
 }
@@ -3836,13 +4289,13 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
 @media (max-width:760px) {
   .page-graafinen-suunnittelu .cgrid {grid-template-columns:1fr}
 }
-.page-graafinen-suunnittelu .copt {display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid #dbe9ff;border-radius:13px; padding:13px 15px;cursor:pointer;transition:border-color .2s,box-shadow .2s;}
-.page-graafinen-suunnittelu .copt:hover {border-color:#b9d6ff}
+.page-graafinen-suunnittelu .copt {display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid #dbfaff;border-radius:13px; padding:13px 15px;cursor:pointer;transition:border-color .2s,box-shadow .2s;}
+.page-graafinen-suunnittelu .copt:hover {border-color:#b9f6ff}
 .page-graafinen-suunnittelu .copt input {margin:2px 0 0;width:17px;height:17px;accent-color:var(--blue);cursor:pointer;flex:none}
 .page-graafinen-suunnittelu .copt b {display:block;font-size:14px;font-weight:600;line-height:1.35}
 .page-graafinen-suunnittelu .copt s {display:block;text-decoration:none;font-size:12px;color:var(--grey);margin-top:3px;line-height:1.4}
-.page-graafinen-suunnittelu .copt.on {border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,227,.12)}
-.page-graafinen-suunnittelu .cres {margin-top:24px;padding-top:22px;border-top:1px solid #dbe9ff; display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center;}
+.page-graafinen-suunnittelu .copt.on {border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,197,227,.12)}
+.page-graafinen-suunnittelu .cres {margin-top:24px;padding-top:22px;border-top:1px solid #dbfaff; display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center;}
 @media (max-width:700px) {
   .page-graafinen-suunnittelu .cres {grid-template-columns:1fr;gap:16px}
 }
@@ -3873,7 +4326,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
 }
 .page-graafinen-suunnittelu .pan.dark {background:var(--dark);color:#f5f5f7;border-color:var(--dark)}
 .page-graafinen-suunnittelu .pan h3 {font-size:12.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:18px}
-.page-graafinen-suunnittelu .pan.dark h3 {color:#6fb1ff}
+.page-graafinen-suunnittelu .pan.dark h3 {color:#6fecff}
 .page-graafinen-suunnittelu .pan ul {list-style:none}
 .page-graafinen-suunnittelu .pan li {font-size:14.5px;padding:11px 0 11px 26px;position:relative;line-height:1.5;border-bottom:1px solid var(--hair)}
 .page-graafinen-suunnittelu .pan li:last-child {border-bottom:none}
@@ -3888,7 +4341,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
 @media (max-width:820px) {
   .page-graafinen-suunnittelu .closer {grid-template-columns:1fr;padding:48px 30px;gap:28px}
 }
-.page-graafinen-suunnittelu .closer::before {content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(44% 60% at 88% 6%,rgba(0,113,227,.3),transparent 68%),radial-gradient(40% 55% at 4% 100%,rgba(100,168,255,.14),transparent 70%)}
+.page-graafinen-suunnittelu .closer::before {content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(44% 60% at 88% 6%,rgba(0,197,227,.3),transparent 68%),radial-gradient(40% 55% at 4% 100%,rgba(100,234,255,.14),transparent 70%)}
 .page-graafinen-suunnittelu .closer > * {position:relative}
 .page-graafinen-suunnittelu .closer h2 {color:#f5f5f7;max-width:17ch}
 .page-graafinen-suunnittelu .closer p {color:#a1a1a6;font-size:17px;margin-top:16px;max-width:46ch;line-height:1.55}
@@ -4190,7 +4643,12 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
    .shead EI ole enaa mukana: uusilla vareilla se lapaisee AA:n suoraan
    kuvion paalla (grey 5,45-5,70:1, blue 5,03-5,26:1 koko ruudun
    korkeudella), joten levy oli siina turha. */
+/* .refsticky mukaan: lukukaistan paneelit ovat .coverin ULKOPUOLELLA
+   mutta samalla vaihtelevalla metallikuviolla, joten levylla on siella
+   tasan sama tehtava kuin Palvelut-osiossa - nostaa teksti kuvion palta.
+   Ilman tata kaksi neljasta palvelupaneelista naytti erilaiselta. */
 .cover .svc-txt,
+.refsticky .svc-txt,
 .cover .statband {
   background: rgba(255,255,255,.45);
   -webkit-backdrop-filter: blur(8px) saturate(170%);
@@ -4202,7 +4660,8 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
     inset 0 1px 0 rgba(255,255,255,.65);
 }
 
-.cover .svc-txt {
+.cover .svc-txt,
+.refsticky .svc-txt {
   padding: 28px 20px;
   margin: -29px -21px;
 }
@@ -4251,7 +4710,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
 }
 .page-toihin-meille .pan.dark {background:var(--dark);color:#f5f5f7;border-color:var(--dark)}
 .page-toihin-meille .pan h3 {font-size:12.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:18px}
-.page-toihin-meille .pan.dark h3 {color:#6fb1ff}
+.page-toihin-meille .pan.dark h3 {color:#6fecff}
 .page-toihin-meille .pan ul {list-style:none}
 .page-toihin-meille .pan li {font-size:14.5px;padding:11px 0 11px 26px;position:relative;line-height:1.5;border-bottom:1px solid var(--hair)}
 .page-toihin-meille .pan li:last-child {border-bottom:none}
@@ -4297,7 +4756,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
 @media (max-width:820px) {
   .page-toihin-meille .closer {grid-template-columns:1fr;padding:48px 30px;gap:28px}
 }
-.page-toihin-meille .closer::before {content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(44% 60% at 88% 6%,rgba(0,113,227,.3),transparent 68%),radial-gradient(40% 55% at 4% 100%,rgba(100,168,255,.14),transparent 70%)}
+.page-toihin-meille .closer::before {content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(44% 60% at 88% 6%,rgba(0,197,227,.3),transparent 68%),radial-gradient(40% 55% at 4% 100%,rgba(100,234,255,.14),transparent 70%)}
 .page-toihin-meille .closer > * {position:relative}
 .page-toihin-meille .closer h2 {color:#f5f5f7;max-width:17ch}
 .page-toihin-meille .closer p {color:#a1a1a6;font-size:17px;margin-top:16px;max-width:46ch;line-height:1.55}
@@ -4349,11 +4808,11 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
   .page-toihin-meille .path.on {grid-template-columns:1fr}
 }
 .page-toihin-meille .pbox {border:1px solid var(--hair);border-radius:20px;padding:28px 26px;background:#fff}
-.page-toihin-meille .pbox.hl {background:var(--blue-tint);border-color:#dbe9ff}
+.page-toihin-meille .pbox.hl {background:var(--blue-tint);border-color:#dbfaff}
 .page-toihin-meille .pbox h3 {font-size:12.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
 .page-toihin-meille .pbox ul {list-style:none}
 .page-toihin-meille .pbox li {font-size:14.5px;padding:11px 0 11px 24px;position:relative;line-height:1.55;border-bottom:1px solid var(--hair);color:#38383d}
-.page-toihin-meille .pbox.hl li {border-bottom-color:#dbe9ff}
+.page-toihin-meille .pbox.hl li {border-bottom-color:#dbfaff}
 .page-toihin-meille .pbox li:last-child {border-bottom:none}
 .page-toihin-meille .pbox li::before {content:"✓";position:absolute;left:0;top:12px;color:var(--blue);font-size:12px;font-weight:700}
 .page-toihin-meille .pbox li strong {color:var(--ink);font-weight:600}
@@ -4371,7 +4830,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
   .page-toihin-meille .rolepick {grid-template-columns:1fr}
 }
 .page-toihin-meille .fcard .rp {display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--hair); border-radius:12px;padding:12px 14px;margin:0;cursor:pointer;font-size:14px;font-weight:500; line-height:1.3;transition:border-color .2s,box-shadow .2s;}
-.page-toihin-meille .fcard .rp:hover {border-color:#c9d6e8}
+.page-toihin-meille .fcard .rp:hover {border-color:#c9e4e8}
 .page-toihin-meille .fcard .rp input {width:17px;height:17px;accent-color:var(--blue);cursor:pointer;flex:none;margin:0}
-.page-toihin-meille .fcard .rp.on {border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,227,.12)}
+.page-toihin-meille .fcard .rp.on {border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,197,227,.12)}
 .page-toihin-meille .hint {font-size:12.5px;color:var(--grey);margin-top:8px;line-height:1.5}

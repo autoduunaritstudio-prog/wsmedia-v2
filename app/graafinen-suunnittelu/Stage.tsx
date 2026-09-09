@@ -14,7 +14,7 @@ import { useEffect, useState, type CSSProperties } from "react";
  * SiteEffectsin rAF-silmukkaan eika Lenisiin.
  */
 
-const COLORS = ["#0064cc", "#1f8a70", "#6d4aff", "#c4553a"];
+const COLORS = ["#007c8f", "#1f8a70", "#6d4aff", "#c4553a"];
 const PERIOD = 4200;
 
 export default function Stage() {
