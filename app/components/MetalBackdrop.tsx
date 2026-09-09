@@ -75,40 +75,16 @@ export default function MetalBackdrop({ variant = "facets", tone = "light", inSe
           saumaa synny, koska kerroksia on yha vain yksi. */}
       <div className="metalbd-pane">
         <div className="metalbd-glow" />
-        <svg
-          className="metalbd-facets"
-          viewBox="0 0 1200 1600"
-          preserveAspectRatio="xMidYMid slice"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Kaaret on jaettu KAHTEEN RYHMAAN joita SiteEffects kiertaa eri
-              suuntiin ja eri vaiheessa. Tama on syy siihen etta kuvio
-              muuttaa muotoaan matkan varrella: leikkauspisteet siirtyvat
-              ryhmien valilla, jolloin fasettien rajat piirtyvat joka
-              kohdassa eri tavalla. Pelkka yhteinen siirtyma vain liu'uttaa
-              samaa muotoa ohi, mika oli koko yksitoikkoisuuden syy. */}
-          <g
-            className="mbf mbf-a"
-            fill="none"
-            stroke="rgba(255,255,255,.62)"
-            strokeWidth="1"
-            vectorEffect="non-scaling-stroke"
-          >
-            <circle className="mbc-1" cx="-200" cy="-500" r="1300" fill="rgba(255,255,255,.055)" />
-            <circle className="mbc-2" cx="600" cy="2600" r="1750" fill="rgba(255,255,255,.07)" />
-            <circle className="mbc-3" cx="-500" cy="1400" r="900" fill="rgba(10,10,12,.10)" />
-          </g>
-          <g
-            className="mbf mbf-b"
-            fill="none"
-            stroke="rgba(255,255,255,.62)"
-            strokeWidth="1"
-            vectorEffect="non-scaling-stroke"
-          >
-            <circle className="mbc-4" cx="1700" cy="-300" r="1350" fill="rgba(10,10,12,.075)" />
-            <circle className="mbc-5" cx="1900" cy="1500" r="1250" fill="rgba(10,10,12,.085)" />
-          </g>
-        </svg>
+        {/* Kaaret ovat TAUSTAKUVA, eivat DOM-SVG. Syy on mitattu:
+            kehyskohtainen transformi tolla nakymankokoisella kerroksella sai
+            Chromen pudottamaan sisaltoa sen paalta (kalenteri, StatBand,
+            .case-kortit katosivat), ja SVG-ryhmien rajauslaatikot kasvoivat
+            preserveAspectRatio="slice":n takia 17741x28339 laitepikseliin eli
+            yli Chromen tekstuurirajan. Taustakuvana geometriaa ei ole, ja
+            liike hoidetaan background-positionilla, joka on sama turvallinen
+            tekniikka kuin gradientin kirkkaan kohdan siirto.
+            Kuvat: public/metalbd-facets.svg ja -dark.svg. */}
+        <div className="metalbd-facets" />
       </div>
     </div>
   );

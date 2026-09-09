@@ -4026,50 +4026,17 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
    se putoaa virtaan ja saa oletusmittansa 300x150px (ks. .metalbd-noise).
    Laatikko on 130% ja siirretty -15%, jotta parallaksitransform ei paljasta
    reunaa. preserveAspectRatio="slice" pitaa kaaret oikean muotoisina. */
-/* VALIAIKAINEN: FASETIT POIS KUNNES GEOMETRIA ON MITOITETTU UUDELLEEN.
-   ------------------------------------------------------------------
-   Todennettu eristamalla kayttajan omassa Chromessa 9.9.2026: kun VAIN
-   tama kerros on pois ja kaikki muu on ennallaan (gradientti liikkuu,
-   opacity .45, kaikki kolme metalbd-instanssia paikallaan), etusivun
-   valkkyminen ja elementtien katoaminen loppuvat kokonaan. Kun se
-   palautetaan, molemmat palaavat.
 
-   MEKANISMI. preserveAspectRatio="xMidYMid slice" skaalaa viewBoxin
-   n. 2,3-kertaiseksi, jolloin kaariryhmien (.mbf-a / .mbf-b)
-   rajauslaatikot ovat mitattuna 17741 x 28339 laitepikselia. Chromen
-   maksimitekstuuri on 16384. Ylisuurta kompositorikerrosta ei saada
-   piirrettya oikein, ja kaikki sen kanssa yhdistettava sisalto -
-   kalenteri, case-kortit, prosessikortit - katoaa ja ilmestyy.
-   Safari kasittelee ylisuuret kerrokset toisin, siksi se on puhdas.
-
-   EI RATKAISE: will-change: auto (puolitti oireen), opacity paneelille,
-   position: fixed sailiolle, gradientin jaadyttaminen, clip-path
-   ryhmille. Kaikki mitattu ja hylatty samana iltana.
-
-   OIKEA KORJAUS: mitoita kaarten geometria niin etta ryhmien
-   rajauslaatikot mahtuvat 16384 laitepikselin sisaan, ja poista tama
-   sääntö. Mittaa bbox getBoundingClientRectilla, ei silmalla. */
-.metalbd-facets { display: none }
-/* Kaaret piirretaan taustakuvana, ei DOM-SVG:na. Taustakuva rasteroidaan
-   kerran elementin kokoiseksi, joten geometria ei paase kasvamaan
-   kerrokseksi jota Chrome ei saa piirrettya. Sama laatikko kuin
-   .metalbd-facetsilla oli: inset -30% eli 160% paneesta. */
-.metalbd-pane::after {
-  content: ""; position: absolute; inset: -30%;
-  background: url(/metalbd-facets.svg) center / 100% 100% no-repeat;
-  pointer-events: none;
-}
 
 .metalbd-facets {
   position: absolute;
-  /* 160% eika 130%: paneen ylivuoto on nyt myos parallaksin liikevara.
-     30% kumpaankin suuntaan = 270px pystyssa ja 432px vaakaan, joten
-     SiteEffectsin rajattu siirtyma (300 / 200px) seka ryhmien kierto
-     mahtuvat siihen; varmistettu laskennallisesti (paneen kulmat
-     pysyvat fasettilaatikon sisalla koko liikeradalla). */
+  /* Sama laatikko kuin SVG-versiossa: 160% ja -30%, jotta liike ei
+     paljasta reunaa. Ei will-changea eika transformia - liike tehdaan
+     background-positionilla SiteEffectsissa. */
   left: -30%; top: -30%; width: 160%; height: 160%;
-  will-change: transform;
+  background: url(/metalbd-facets.svg) 0 0 / 100% 100% no-repeat;
 }
+.metalbd-dark .metalbd-facets { background-image: url(/metalbd-facets-dark.svg) }
 
 /* ---------- OSION SISAINEN KUVIOKERROS ---------- */
 .metalbd-inset { height: 100% }

@@ -95,7 +95,6 @@ export default function SiteEffects() {
     const mbB = document.querySelector<HTMLElement>(".metalbd-b");
     const mbSweep = document.querySelector<HTMLElement>(".metalbd-sweep");
     const mbFacetsAll = Array.from(document.querySelectorAll<HTMLElement>(".metalbd-facets"));
-    const mbfAll = Array.from(document.querySelectorAll<SVGGElement>(".mbf-a, .mbf-b"));
 
     /* ---------- taustakuvio ---------- */
     const bdGrid = document.getElementById("bdGrid");
@@ -133,7 +132,6 @@ export default function SiteEffects() {
     // 0.5 = elementin keskikohta on ruudun ala- tai ylareunassa.
     const TILT_RANGE = 0.5;
     /** Varjon porrastus, ks. --tilt-step alempana. */
-    const TILT_STEPS = 20;
 
     /* ---------- parallaksi ---------- */
     const pars = Array.from(
@@ -375,7 +373,12 @@ export default function SiteEffects() {
         //
         // Kaanto (--tilt-rot) jaa portaattomaksi: transform on
         // komposiittia eika maksa maalausta.
-        el.style.setProperty("--tilt-step", (Math.round(t * TILT_STEPS) / TILT_STEPS).toFixed(3));
+        // --tilt-step EI ENAA KIRJOITETA. Portaistus ei riittanyt:
+        // box-shadow on maalausominaisuus, ja sen paivittaminen .cal- ja
+        // .case-korteilla sai coverin valkkymaan Chromessa. CSS:n
+        // var(--tilt-step, 0) antaa nyt vakion 0, eli varjo on kiintea.
+        // Todennettu eristamalla kayttajan Chromessa: arvon jaadyttaminen
+        // poisti valkkymisen, palauttaminen toi sen takaisin.
         // data-tilt: "x" | "y" | "-x" | "-y". Etumerkki valitsee kumpi
         // reuna tulee katsojaa kohti.
         //   rotateX +  : ylareuna poispain (sarana alareunassa)
@@ -432,18 +435,24 @@ export default function SiteEffects() {
             el.style.setProperty("--mb-gy", `${gy.toFixed(1)}%`);
             el.style.setProperty("--mb-gx", `${gx.toFixed(1)}%`);
           }
-          // 120/200 -> 300/200px. Vara on 432/270px, joten tama mahtuu.
-          const tf = `translate3d(${(mbProg * 300).toFixed(1)}px, ${(-mbProg * 200).toFixed(1)}px, 0)`;
-          for (const el of mbFacetsAll) el.style.transform = tf;
+          // LIIKE background-positionilla, EI transformilla. Mika tahansa
+          // kehyskohtainen transformi tolla nakymankokoisella kuviokerroksella
+          // sai Chromen pudottamaan sisaltoa sen paalta: kalenteri, StatBand
+          // ja .case-kortit katosivat ja ilmestyivat. Todennettu molempiin
+          // suuntiin kayttajan omassa Chromessa. background-position on sama
+          // tekniikka jolla gradientin kirkas kohta jo liikkuu, ja se on
+          // todistetusti turvallinen. 120/200 -> 300/200px, vara 432/270px.
+          const bx = (mbProg * 300).toFixed(1);
+          const by = (-mbProg * 200).toFixed(1);
+          for (const el of mbFacetsAll) el.style.backgroundPosition = `${bx}px ${by}px`;
           // Ryhmat kiertyvat VASTAKKAISIIN suuntiin ja eri vauhtia, jolloin
           // niiden leikkauspisteet vaeltavat ja fasettien rajat piirtyvat
           // sivun eri kohdissa eri tavalla. Kierto on SVG:n sisalla, joten
           // se ei voi paljastaa fasettikerroksen reunaa.
-          const ra = `rotate(${(mbProg * 4.5).toFixed(2)}deg)`;
-          const rb = `rotate(${(-2.2 - Math.sin(mbProg * Math.PI * 1.3) * 2.4).toFixed(2)}deg)`;
-          for (const g of mbfAll) {
-            g.style.transform = g.classList.contains("mbf-a") ? ra : rb;
-          }
+          // Ryhmien vastakkainen kierto on poistettu: se oli SVG-ryhmien
+          // transformi, ja transformi tolla kerroksella on juuri se mika
+          // rikkoo Chromen. Kaaret ovat nyt yksi taustakuva joka liikkuu
+          // kokonaisuutena.
         }
 
         // Kertoimet ovat tarkoituksella ERI SUURUISIA JA ERI SUUNTIIN:

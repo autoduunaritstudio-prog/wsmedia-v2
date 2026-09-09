@@ -101,9 +101,6 @@ const LEAN_MAX = 0.28; // rad, n. 16 astetta
    .logostrip-rectista kuin hahmojen sijainti - ei erillista mekanismia.
    K on mitoitettu niin etta reipas veto (n. 2000 px/s) osuu kattoon ja
    tavallinen selailu (n. 400 px/s) jaa 0,6px:aan eli tuskin nakyvaksi. */
-const BLUR_K = 0.0015;
-const BLUR_MAX = 3;
-const BLUR_DECAY = 0.75; // per frame; palautuu teravaksi n. 8 framessa
 /* Palautusikkuna RAAKANA apRaw:na. Leveys 0,15 on sama kuin ennen, joten
    kavelynopeus ei muutu; alaraja 0,85 -> 0,95 siirtaa koko ikkunan tasan
    0,10 * vh pikselia myohemmaksi. Rajattu ap ei olisi tahan kelvannut:
@@ -276,7 +273,6 @@ export default function NavCarriers() {
     let raf = 0;
     let prevTop: number | null = null;
     let prevT = 0;
-    let blur = 0;
     let prevBack = -1;
     let backCss = `rgb(${BG},${BG},${BG})`;
     let idle = true;
@@ -288,13 +284,10 @@ export default function NavCarriers() {
       // Scroll-nopeus rectin muutoksesta: nauha liikkuu sivun mukana, joten
       // |dTop|/dt ON scroll-nopeus. Ei omaa scroll-kuuntelijaa.
       const dt = prevT ? Math.min((now - prevT) / 1000, 0.05) : 0;
-      const vScroll = prevTop !== null && dt > 0 ? Math.abs(r.top - prevTop) / dt : 0;
       prevTop = r.top;
       prevT = now;
       // Nousee heti, laskee vaimennetusti - blur ei jaa roikkumaan kun
       // scroll pysahtyy, mutta ei myoskaan valky yksittaisista frameista.
-      blur = Math.max(Math.min(vScroll * BLUR_K, BLUR_MAX), blur * BLUR_DECAY);
-      const blurPx = blur < 0.05 ? 0 : blur;
       const navH = nav.getBoundingClientRect().height;
       const ph = clamp((navH + HIDE_BUF + RUN - r.top) / RUN, 0, 1);
       const ps = clamp((SHOW_BUF - r.bottom) / RUN, 0, 1);
@@ -389,7 +382,12 @@ export default function NavCarriers() {
         const visible = a.lamp ? u > 0.001 : u > 0.001 && u < 0.999;
         if (grp) {
           grp.style.opacity = visible ? "1" : "0";
-          grp.style.filter = blurPx ? `blur(${blurPx.toFixed(2)}px)` : "";
+          // LIIKEBLUR POISTETTU. filter: blur() yhdessa #navin
+          // mix-blend-mode: differencen kanssa saa Chromen rasteroimaan
+          // hahmot ja kannetun logon pehmeaksi bittikartaksi; Safari pitaa
+          // viivan teravana. Pienikin scroll-varina piti blurin paalla,
+          // joten ne nayttivat sumeilta kaytannossa koko ajan.
+          grp.style.filter = "";
         }
         // Reunus taustan varilla. Viivan oma lahdevari on #fff, joka
         // renderoityy arvoksi 255-B: se on vahva vaalealla (0 = musta) ja
@@ -402,9 +400,23 @@ export default function NavCarriers() {
         // kontaktivarjoja.
         const fig = P(`c${i}f`);
         if (fig) {
-          fig.style.filter = visible
-            ? `drop-shadow(0 0 2px ${backCss}) drop-shadow(0 0 1px ${backCss})`
-            : "";
+          // REUNUS POISTETTU, JA SE ON TIETOINEN VAIHTOKAUPPA.
+          // drop-shadow on filtteri. Filtteri yhdessa #navin
+          // mix-blend-mode: differencen kanssa saa Chromen rasteroimaan
+          // koko hahmon pehmeasti, ja koska tama kirjoitettiin joka
+          // kehyksessa, hahmot ja kannettu logo nayttivat sumeilta
+          // kaytannossa aina. Safari piti viivan teravana, siksi vika
+          // nakyi vain Chromessa. Todennettu eristamalla kayttajan
+          // omassa selaimessa: filtterin esto teki niista teravat,
+          // palautus toi sumeuden takaisin.
+          //
+          // JOS HAHMOT HUKKUVAT TAUSTAAN jollain taustan savyllä, reunus
+          // on tehtava uudelleen ILMAN filtteria. Vetoa (stroke) ei voi
+          // kayttaa sellaisenaan, koska hahmot itse on piirretty vedoilla
+          // - se yliajaisi niiden oman varin. Oikea tapa on piirtaa
+          // hahmosta kaksoiskappale taakse paksummalla vedolla backCss:n
+          // varilla.
+          fig.style.filter = "";
         }
 
         // --- polku: reuna -> pysahdys -> reuna, x puhtaana funktiona u:sta.
@@ -595,7 +607,8 @@ export default function NavCarriers() {
         // Sama haivytys kannettavaan elementtiin, mutta VAIN kun se on
         // kasissa - muuten logo sumenisi jokaisella nopealla scrollilla.
         if (a.el) {
-          a.el.style.filter = hold > 0.001 && blurPx ? `blur(${blurPx.toFixed(2)}px)` : "";
+          // Sama syy kuin hahmoilla: ei filter: bluria #navin sisalla.
+          a.el.style.filter = "";
           // Tab-jarjestys: piiloon vasta kun elementti on oikeasti pois ruudulta.
           a.el.style.visibility = u > 0.985 ? "hidden" : "";
         }
