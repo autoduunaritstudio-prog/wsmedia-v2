@@ -264,6 +264,15 @@ button, input, optgroup, select, textarea { font: revert; letter-spacing: revert
    ydr-autohuolto.vercel.appissa. */
 html { scroll-behavior: smooth }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto } }
+/* KUMINAUHAKIMMOKE POIS PYSTYSUUNNASSA.
+   Safarissa sivun ylaosassa vetaminen paljastaa dokumentin taustan heron
+   YLAPUOLELLA, ja koska body on valkoinen, hero nayttaa irtoavan
+   ylareunasta. Kimmoke ei ole tassa mihinkaan tarpeen: sivun alku on
+   pinnattu hero-scrub, jonka oma nollakohta on jo ruudun ylareunassa.
+
+   VAIN -y. Vaakasuuntainen kimmoke on Safarissa sama ele kuin
+   sivuhistorian selaus (swipe back), joten sita ei saa sammuttaa. */
+html { overscroll-behavior-y: none }
 body {
   font-family: var(--font-sans);
   background: var(--bg); color: var(--ink);

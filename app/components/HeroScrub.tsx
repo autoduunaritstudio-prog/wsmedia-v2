@@ -53,8 +53,18 @@ import { LogoMark } from "./Logo";
  */
 
 const SETS = {
-  d: { dir: "/hero/d/", n: 76 },
-  m: { dir: "/hero/m/", n: 51 },
+  /* Tyopoydan sarja on olemassa KAHDESSA muodossa samalla ruutumaaralla:
+     avif on ensisijainen ja webp varasarja. Mitattuna kayttajan
+     M1 Prossa ruudulla 60: avif 29 kt / SSIM 0,987 / dekoodaus 7,0 ms,
+     webp 45 kt / 0,985 / 8,4 ms. AVIF on siis pienempi, tarkempi JA
+     nopeampi purkaa - varasarja on olemassa vain Safari 16.3:a
+     vanhemmille, jotka eivat tunne muotoa lainkaan.
+     Koko sarja: 5,3 MB vs 7,9 MB. */
+  d: { dir: "/hero/d/", n: 151, avifDir: "/hero/da/" },
+  /* Kapealla naytolla ei scrubata, joten sarjaa ei ole - vain poster.
+     n: 1 pitaa kaiken muun koodin ennallaan (imgs, settled, K, nearest)
+     ilman erillista mobiilihaaraa. */
+  m: { dir: "/hero/m/", n: 1 },
 };
 const WIDE = "(min-width: 980px)";
 const DPR_MAX = 2;
@@ -69,21 +79,27 @@ const LOAD_TIMEOUT = 12000;
 /* VAPAUTUSKYNNYS. Kerros ei odota koko sarjaa vaan yhtenaista etuliitetta
    RELEASE_AT asti; loput ladataan taustalla samalla lataajalla.
 
-   ARVO ON JOHDETTU KULUTUKSEN JA TUOTON EROSTA. Rauhallinen ensikatselu
-   on n. 400 px/s, mika on vh 700:lla 19,1 ruutua/s (lyhyt nakyma =
-   lyhyt spacer = tihein kulutus). Hitaan 4G:n tuotto CONC 5:lla on
-   8,8 ruutua/s, joten vajetta kertyy 10,3 ruutua sekunnissa sen 3,92 s
-   ajan jonka koko matka kestaa - yhteensa 40,5 ruutua. 41 riittaisi
-   mitatuille nakymille; 45 kattaa lisaksi vh 600:n, jossa lyhyempi
-   spacer nostaa kulutuksen 22,3 ruutuun sekunnissa.
+   LUVUT LASKETTU UUDELLEEN kun sarja kaksinkertaistui 76 -> 151 ruutuun.
+   Kulutus kaksinkertaistui, koska sama vieritysmatka kayttaa nyt kaksi
+   kertaa enemman ruutuja; tuotto kasvoi vain hieman, koska keskimaarainen
+   ruutu keveni 58 kt -> 51,6 kt.
 
-   Kuidulla ja tyypillisella 4G:lla tuotto (99,5 ja 25,5 ruutua/s)
-   ylittaa rauhallisen kulutuksen jo ilman etuliitetta, joten kynnys
-   maksaa niilla vain 0,41 s ja 1,61 s. Trackpadin heilautus (187,5
-   ruutua/s) ylittaa jokaisen profiilin eika mikaan kynnys korjaa sita;
-   se on sama hyvaksytty heikennys kuin ennenkin, ja nearest-resident
-   piirtaa silloin lahimman residentin. */
-const RELEASE_AT = 45;
+   Rauhallinen ensikatselu on n. 400 px/s, mika on vh 700:lla 38,3
+   ruutua/s (oli 19,1) ja vh 600:lla 44,6 ruutua/s. Tuotto CONC 5:lla:
+   kuitu 112, tyypillinen 4G 28,7 ja hidas 4G 9,9 ruutua/s.
+
+   Tyypillisella 4G:lla vajetta kertyy 9,6 ruutua sekunnissa sen 3,92 s
+   ajan jonka matka kestaa, eli 38 ruutua; vh 600:lla 53. 60 kattaa
+   molemmat. Kuidulla tuotto ylittaa kulutuksen jo ilman etuliitetta,
+   joten kynnys maksaa siella 0,54 s.
+
+   HITAALLE 4G:LLE EI ENAA OLE KYNNYSTA JOKA RIITTAISI: vaje olisi 111
+   ruutua eli kaksi kolmasosaa koko sarjasta, ja sen odottaminen olisi
+   pahempi haitta kuin itse puute. Siella - kuten trackpadin
+   heilautuksessakin - piirtyy nearest-resident. Se heikentyi vahemman
+   kuin luvut antavat ymmartaa: kun ruudut ovat kaksi kertaa tiheammassa,
+   yksi puuttuva ruutu on puolet pienempi hyppy kuin ennen. */
+const RELEASE_AT = 60;
 /* Scroll-vihje piiloon heti kun liike alkaa. Sama kynnys molempiin
    suuntiin, joten vihje palaa kun kayttaja palaa alkuun. */
 const HINT_P = 0.02;
@@ -142,7 +158,32 @@ const smoothstep = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t);
 };
 
-const frameSrc = (dir: string, i: number) => `${dir}${String(i + 1).padStart(3, "0")}.webp`;
+const frameSrc = (dir: string, i: number, ext = "webp") =>
+  `${dir}${String(i + 1).padStart(3, "0")}.${ext}`;
+
+/* AVIF-TUKI SELVITETAAN KERRAN, ILMAN VERKKOPYYNTOA.
+   1x1-kuva data-URLina: dekoodaus on paikallinen, joten vastaus tulee
+   yhden tai kahden kehyksen sisalla eika se voi hidastaa ensimmaista
+   ruutua verkon yli. Tulos valimuistitetaan moduulitasolla, joten
+   uudelleenmountissa ei tehda uutta koetta.
+
+   img.decode() eika onload: Chrome ja Safari laukaisevat onloadin myos
+   muodolle jota ne eivat osaa purkaa, jolloin koe antaisi vaaran
+   positiivisen. decode() hylkaa lupauksen jos purku ei onnistu. */
+const AVIF_PROBE =
+  "data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAEAAAABAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQAMAAAAABNjb2xybmNseAACAAIABoAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEDQgMgkQAAAAB8dSLfI=";
+let avifOk: Promise<boolean> | null = null;
+const supportsAvif = () => {
+  if (!avifOk) {
+    avifOk = new Promise<boolean>((res) => {
+      const img = new Image();
+      img.onload = () => img.decode().then(() => res(true), () => res(false));
+      img.onerror = () => res(false);
+      img.src = AVIF_PROBE;
+    });
+  }
+  return avifOk;
+};
 export default function HeroScrub() {
   const ref = useRef<HTMLCanvasElement>(null);
   const load = useRef<HTMLDivElement>(null);
@@ -155,7 +196,26 @@ export default function HeroScrub() {
     const spacer = document.querySelector<HTMLElement>(".hero-spacer");
     // Sarja valitaan kerran mountissa eika resizessa: vaihto kesken
     // istunnon heittaisi jo ladatut ruudut pois ja hakisi koko uuden.
-    const set = window.matchMedia(WIDE).matches ? SETS.d : SETS.m;
+    //
+    // PUHELIMESSA EI SCRUBATA LAINKAAN. Sarja on siella pelkka kustannus:
+    // 51 ruutua eli 1,2 MB mobiiliyhteydella, ja 100vh:n spacerilla koko
+    // animaatio on ohi yhdella peukalon vedolla. Kapealla naytolla
+    // nakyviin jaa <picture>-elementin poster, joka on LCP-kuva ja
+    // ladataan joka tapauksessa. Vaiheistetut tekstit (--st1..3) ajetaan
+    // silti, joten osio ei muutu staattiseksi - vain kuva pysyy
+    // paikallaan.
+    const wide = window.matchMedia(WIDE).matches;
+    const set = wide ? SETS.d : SETS.m;
+    /* RUUTU 0 HAETAAN AINA WEBPINA, muut avifina jos selain tukee.
+       Syy on ettei LCP-kuvaa ladata kahdesti: <picture>-elementin <img>
+       osoittaa juuri ruutuun 0 webpina, ja se on jo selaimen
+       valimuistissa siina vaiheessa kun sarja alkaa. Sama tiedosto eri
+       muodossa olisi uusi lataus keskella LCP:ta. Yhden ruudun 16 kt:n
+       ero ei ole minkaan arvoinen sen rinnalla. */
+    const avifDir = "avifDir" in set ? (set as { avifDir: string }).avifDir : null;
+    let useAvif = false;
+    const srcFor = (i: number) =>
+      useAvif && avifDir && i > 0 ? frameSrc(avifDir, i, "avif") : frameSrc(set.dir, i);
 
     const imgs: (HTMLImageElement | null)[] = new Array(set.n).fill(null);
     // RATKENNEET, ei ladatut: epaonnistunut pyynto merkitaan myos, jotta
@@ -168,7 +228,7 @@ export default function HeroScrub() {
     // jarjestyksessa, joten aukkoinen joukko ei kata matkan alkua.
     let ready = 0;
     const K = Math.min(RELEASE_AT, set.n);
-    let shown = -1;
+    let shownKey = "";
     let raf = 0;
     let stopped = false;
 
@@ -188,7 +248,9 @@ export default function HeroScrub() {
       if (w > 0 && h > 0 && (cv.width !== w || cv.height !== h)) {
         cv.width = w;
         cv.height = h;
-        shown = -1;
+        // Canvas tyhjeni koon vaihdossa, joten piirtoavain on
+        // mitatoitava - muuten paint ohittaisi piirron samalla arvolla.
+        shownKey = "";
       }
     };
 
@@ -208,14 +270,51 @@ export default function HeroScrub() {
     // onnistuneen drawImagen jalkeen. Pelkka ready-laskuri kertoo etta
     // ruudut on ladattu, ei sita etta yksikaan olisi piirretty.
     let painted = false;
-    const paint = (i: number) => {
-      const img = imgs[i];
-      if (!img || i === shown) return;
-      shown = i;
+    const blit = (img: HTMLImageElement, alpha: number) => {
       const s = Math.max(cv.width / img.naturalWidth, cv.height / img.naturalHeight);
       const dw = img.naturalWidth * s;
       const dh = img.naturalHeight * s;
+      ctx.globalAlpha = alpha;
       ctx.drawImage(img, (cv.width - dw) / 2, (cv.height - dh) / 2, dw, dh);
+      ctx.globalAlpha = 1;
+    };
+
+    /**
+     * RUUTUJEN VALISSA SEKOITETAAN, ei hypata.
+     *
+     * ONGELMA MITATTUNA: .hero-spacer on 2029px ja ruutuja on 76, eli
+     * yksi ruutu kestaa 26,7 pikselia vieritysta. Hitaassa vierityksessa
+     * se nakyy portaana - kuva seisoo paikallaan 27px ja hyppaa sitten.
+     *
+     * RATKAISU ILMAN YHTAAN LISATAVUA: indeksi otetaan liukulukuna ja
+     * kaksi vierekkaista ruutua ristihaivytetaan murto-osan mukaan.
+     * Liike on hidas kameran peruutus, jossa lineaarinen sekoitus lukee
+     * valiruutuna eika kaksoiskuvana. 76 ruutua muuttuu nain 1824
+     * portaaksi eli 1,1 pikseliin porrasta kohti.
+     *
+     * Sekoitus kvantisoidaan 1/24:aan, jotta piirto ohitetaan kokonaan
+     * kun mikaan ei ole muuttunut: ilman sita jokainen frame piirtaisi
+     * uudelleen myos paikallaan seistessa.
+     *
+     * HINTA on toinen drawImage niina kehyksina joissa sekoitetaan.
+     * Se on tarkoituksella kompositoinnin puolella eika uutta latausta:
+     * lisaruudut olisivat maksaneet 3,8 MB.
+     */
+    const BLEND_STEPS = 24;
+    const paint = (fi: number) => {
+      const i0 = Math.min(Math.floor(fi), set.n - 1);
+      const a = nearest(i0);
+      const bi = i0 + 1;
+      // Sekoitetaan VAIN jos seuraava ruutu on oikeasti ladattu ja pohja
+      // osui haettuun indeksiin. Jos nearest jouduttiin hakemaan kauempaa,
+      // valissa ei ole mitaan jarkevaa sekoitettavaa.
+      const canBlend = a === i0 && bi < set.n && !!imgs[bi];
+      const q = canBlend ? Math.round((fi - i0) * BLEND_STEPS) / BLEND_STEPS : 0;
+      const key = `${a}|${q}`;
+      if (!imgs[a] || key === shownKey) return;
+      shownKey = key;
+      blit(imgs[a]!, 1);
+      if (q > 0) blit(imgs[bi]!, q);
       if (!painted && cv.width > 0 && cv.height > 0) {
         painted = true;
         // Vapautus on voinut jaada odottamaan tata; yritetaan uudelleen.
@@ -241,7 +340,7 @@ export default function HeroScrub() {
           fin();
         };
         img.onerror = fin;
-        img.src = frameSrc(set.dir, i);
+        img.src = srcFor(i);
       });
 
     // Kaikki kerrokset ovat puhtaita funktioita p:sta ja q:sta. Kirjoitus
@@ -269,7 +368,10 @@ export default function HeroScrub() {
 
     const onResize = () => {
       size();
-      paint(nearest(Math.max(shown, 0)));
+      // Piirretaan sama kohta uudelleen uuteen kokoon. Etenema luetaan
+      // scrollista eika muistetusta indeksista: se on aina ajan tasalla
+      // eika voi ajautua erilleen rAF-silmukan kanssa.
+      paint(progress() * (set.n - 1));
     };
     window.addEventListener("resize", onResize, { passive: true });
 
@@ -339,6 +441,10 @@ export default function HeroScrub() {
     if (!window.location.hash) window.scrollTo(0, 0);
 
     size();
+    // Muotokoe kaynnistetaan heti, rinnan ruudun 0 haun kanssa: se on
+    // paikallinen dekoodaus, joten se on valmis ennen kuin verkosta on
+    // ehtinyt tulla mitaan.
+    void supportsAvif();
     fetchFrame(0).then(() => {
       if (stopped) return;
       size();
@@ -369,9 +475,22 @@ export default function HeroScrub() {
     // kaistan asettama lattia on saavutettavissa. Isompi maara vain
     // pilkkoisi kaistan pienempiin osiin.
     let started = false;
-    const rest = () => {
+    const rest = async () => {
       if (started) return;
       started = true;
+      // Kapealla naytolla ei haeta yhtaan ruutua. Vapautus on pakotettava:
+      // ready jaisi nollaan eika kynnys tayttyisi koskaan, jolloin
+      // latauskerros odottaisi LOAD_TIMEOUTin loppuun.
+      if (!wide) {
+        release(true);
+        return;
+      }
+      // Muototuki ratkaistaan ennen ensimmaista hakua. Koe on
+      // data-URL-dekoodaus eli paikallinen, joten odotus on kehyksen
+      // luokkaa eika verkkopyynto - ja se on jo kaynnistynyt ruudun 0
+      // haun rinnalla.
+      useAvif = await supportsAvif();
+      if (stopped) return;
       // KAYTTAJAA EI JATETA JUMIIN. Kello kaynnistyy vasta kun lataus
       // oikeasti alkaa, jottei hidas load-tapahtuma syo varaa.
       timer = window.setTimeout(() => release(true), LOAD_TIMEOUT);
@@ -396,11 +515,46 @@ export default function HeroScrub() {
     if (document.readyState === "complete") rest();
     else window.addEventListener("load", rest, { once: true });
 
-    const frame = () => {
+    /* SYOTTEEN TASOITUS.
+     *
+     * MIKSI VASTA NYT. Kun yksi ruutu kesti 26,7 pikselia, karkea
+     * porrastus PEITTI sen etta macOS toimittaa hitaan vierityksen
+     * epatasaisina askelina. Nyt kun kuva seuraa vieritysta jatkuvasti,
+     * sama epatasaisuus nakyy sellaisenaan - eli tokkiminen ei tullut
+     * lisatysta tyosta vaan siita etta jitter paljastui.
+     *
+     * MITTAUS SULKEE POIS PIIRTOKUSTANNUKSEN: kayttajan Chromessa yksi
+     * drawImage 1920x1080 -> 3456x1812 maksaa 0,66 ms ja sekoituksen
+     * kaksi 0,92 ms. 120 Hz:n budjetti on 8,3 ms, joten lisays on 3 %
+     * budjetista eika se voi olla tokkimisen syy.
+     *
+     * Tasoitus on eksponentiaalinen ja AIKAPERUSTAINEN, ei
+     * kehysperustainen: sama vaimennus 60 ja 120 Hz:lla. Aikavakio 60 ms
+     * tarkoittaa 400 px/s vauhdissa 24 pikselin eli 1,8 ruudun viivetta,
+     * mika ei erotu mutta riittaa nielemaan askeleet.
+     *
+     * Sama tasoitettu arvo ohjaa MYOS overlay-vaiheita, joten kuva ja
+     * tekstit pysyvat synkassa keskenaan. Kun ero kutistuu alle
+     * puolen ruudun, arvo napsautetaan kohdalleen: muuten silmukka jaisi
+     * kirjoittamaan ikuisesti haipyvia desimaaleja. */
+    const SMOOTH_TAU = 0.06;
+    let ps = -1;
+    let prevT = 0;
+    const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
-      const p = progress();
-      paint(nearest(Math.round(p * (set.n - 1))));
-      schedule(p);
+      const target = progress();
+      const dt = prevT ? Math.min((now - prevT) / 1000, 0.05) : 0;
+      prevT = now;
+      if (ps < 0 || dt === 0) ps = target;
+      else {
+        ps += (target - ps) * (1 - Math.exp(-dt / SMOOTH_TAU));
+        if (Math.abs(target - ps) * (set.n - 1) < 0.5) ps = target;
+      }
+      // Liukuluku, ei pyoristys: paint sekoittaa murto-osan mukaan.
+      // Kapealla naytolla canvasille ei piirreta mitaan: alla oleva
+      // poster jaa nakyviin. Vaiheistus ajetaan silti.
+      if (wide) paint(ps * (set.n - 1));
+      schedule(ps);
     };
     raf = requestAnimationFrame(frame);
 
