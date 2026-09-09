@@ -203,3 +203,21 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Mittaaminen ja scroll-behavior: smooth
+
+`html`:lla on `scroll-behavior: smooth`. Jos mittausskripti scrollaa
+`window.scrollTo(0, y)` ja odottaa silmukassa "kunnes `scrollY` lakkaa
+muuttumasta", näytteet osuvat kesken animaation ja mittaus valehtelee.
+
+Tästä syntyi virheellinen tulos: `.svc`-lohkojen lukuikkunaksi mitattiin
+475 ja 525 px, kun oikea arvo oli 850 px. Yhtenäinen kaista näytti
+reikäiseltä, ja koko sitä seurannut korjausarvio oli väärässä
+mittakaavassa.
+
+**Käytä aina `window.scrollTo({ top: y, behavior: "instant" })`** kun
+mittaat scroll-riippuvaista geometriaa. Sama koskee `scrollIntoView`ta.
+
+Toinen sama ansa: mittaa evästebanneri hylättynä tai hyväksyttynä. Tuore
+konteksti näyttää bannerin, ja se esiintyy peittäjänä `elementFromPoint`
+-mittauksissa.

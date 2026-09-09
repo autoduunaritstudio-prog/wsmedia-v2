@@ -565,8 +565,11 @@ export default function SiteEffects() {
       }
 
       if (prog) {
+        // scaleX eika width: palkki on taysilevyinen ja etenema on pelkka
+        // kompositoritransformi, joten kehysta kohden ei tule asettelua,
+        // maalausta eika rasterointia. Ks. #prog globals.css:ssa.
         const max = h.scrollHeight - window.innerHeight;
-        prog.style.width = (max > 0 ? (sc / max) * 100 : 0) + "%";
+        prog.style.transform = `scaleX(${(max > 0 ? sc / max : 0).toFixed(4)})`;
       }
     };
 

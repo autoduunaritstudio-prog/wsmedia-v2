@@ -540,6 +540,12 @@ export default function Refs({ children }: { children: ReactNode }) {
         <div className="refscrim" aria-hidden="true" />
       </section>
 
+      {/* Lukuaika: tyhjaa scrollimatkaa ennen kuin Referenssit alkaa
+          nousta paneelin paalle. Ilman tata cover lahtee nousemaan tasan
+          samalla hetkella kun paneeli pinnautuu. Kaava ja mitatut luvut
+          globals.cssn .refhold-saannossa. */}
+      <div className="refhold" aria-hidden="true" />
+
       {/* Cover: nousee normaalissa dokumenttivirtauksessa pinnatun paneelin
           paalle. Tausta on lapinakymaton (--dark) kolmesta syysta: cover-
           mekanismi VAATII peittavan taustan, 9:16-videokortit lukeutuvat

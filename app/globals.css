@@ -297,7 +297,31 @@ body {
 }
 
 header, section, footer, nav, .marq { position: relative; z-index: 1 }
-#prog { position: fixed; top: 0; left: 0; height: 2px; width: 0; z-index: 100; background: var(--blue) }
+/* KAKSI ERILLISTA SYYTA, JOTKA MOLEMMAT KOSKEVAT TATA SAANTOA.
+
+   1. Vari on taustaKUVA eika background-color, koska WebKit poimii
+      ylareunaan kiinnitetyn elementin taustavarin overscroll-alueen
+      variksi. Gradientti kahdella identtisella pysakilla on
+      visuaalisesti tasavari.
+
+   2. Etenema ajetaan scaleX:lla eika leveydella. Leveyden kirjoitus
+      joka kehyksessa on asettelu + maalaus, ja taustakuvallisena se on
+      lisaksi uusi RASTEROINTI joka kehyksessa - kiintea background-color
+      olisi voinut jaada kompositorin tasavarikerrokseksi jota ei
+      rasteroida lainkaan. Mitattu (scripts/prog-raster.mjs, vyohyke
+      scrollY 6957..9252 jossa .cal ja .case ovat nakyvissa, 1728x992
+      dpr 2, n=3 mediaani): RasterTask leveydella + varilla 50,1 ms,
+      leveydella + gradientilla 71,9 ms, scaleX:lla + gradientilla
+      44,2 ms ja koko palkki poistettuna 43,2 ms. scaleX siis poistaa
+      palkin rasterikustannuksen kokonaan, myos alkuperaiseen
+      verrattuna. Yli 20 ms kehyksia: 0,5 % / 1,3 % / 0 % / 0 %.
+      Sama vyohyke on eb339c2:n mukaan rasterirajoitteinen, joten
+      kehyksittainen lisarasterointi nakyy juuri siella. */
+#prog {
+  position: fixed; top: 0; left: 0; height: 2px; width: 100%; z-index: 100;
+  background: linear-gradient(var(--blue), var(--blue));
+  transform: scaleX(0); transform-origin: 0 50%; will-change: transform;
+}
 
 /* ---------- nav ---------- */
 /* Logo ja valikkopainike eivat istu kiinni sivun ylareunassa vaan
@@ -2121,6 +2145,41 @@ footer .base { padding-top: 18px }
    Sitova on 900px:n 0,7008 - 70vh jaisi siita 0,7px vajaaksi, joten
    71vh. Marginaali on silloin +19,8 / +8,3 / +92,3 px. */
 .refgap { height: 71vh }
+/* LUKUAIKA: tyhjaa dokumenttikorkeutta .refstickyn ja .refsin VALISSA.
+   Sama idiomi kuin .refgap, eri kohdassa ketjua ja eri syysta.
+
+   ONGELMA. .refs alkaa tasan .refstickyn alareunasta, joten
+     .refs saapuu nakyman alareunaan kun scrollY = Z + H1 - vh
+     .refsticky pinnautuu kun                scrollY = Z + H1 - vh
+   Nama ovat SAMA LUKU. Cover lahtee siis nousemaan tasan silla
+   hetkella kun paneeli pysahtyy, eika lukukaistalla ole yhtaan
+   pysahdysta - vain se matka jonka cover kayttaa noustessaan otsikon
+   kohdalle. Mitattu (elementFromPoint, kolme pistetta otsikon
+   leveydelta, 1728px leveys): Tapahtumat-lohko on esteettomasti
+   nakyvissa 850px kaikilla nakymankorkeuksilla 700/900/992/1080.
+
+   KAAVA. Lukuikkuna = tama korkeus + (H1 - C), missa C on otsikon
+   etaisyys paneelin ylareunasta. H1 - C on nakymankorkeudesta
+   RIIPPUMATON niin kauan kuin paneeli on nakymaa korkeampi, silla
+   otsikon paikka nakymassa on C + (vh - H1). Siksi arvo on pikseleina
+   eika vh:na - vh-yksikko sailisi vaarin skaalatun lisayksen.
+   Mitattu suoraan: 850 + tama, arvoilla 100/200/300 tuli
+   950/1050/1150 px.
+
+   ARVO. Tavoite 900px vaatii 50px. 150px antaa 1000px eli 100px
+   marginaalin mittausaskeleen (25px) ja sisallon rivityksen varalle,
+   ja sivu pitenee 150px.
+
+   Ei muuta .refsia eika .aftercoveria mitenkaan: .refsin korkeus,
+   --refs-sticky-top ja --aftercover-min (= .refsin korkeus + 2)
+   pysyvat ennallaan, ja SiteEffectsin --ref-scrim on rajattu nollaan
+   niin kauan kuin cover on paneelin alareunan alapuolella - tummennus
+   siis vain alkaa 150px myohemmin, samasta geometriasta.
+
+   Ei omaa z-indexia eika taustaa, samasta syysta kuin .refgap:
+   positioimattomana ja tyhjana sen lapi ei voi nakya mitaan, ja
+   pinnattu .refsticky peittaa nakyman koko taman matkan. */
+.refhold { height: 150px }
 #palvelut { padding-bottom: 0 }
 
 /* Paneeli on SISALLON mittainen, ei nakymankorkuinen. Aiempi
