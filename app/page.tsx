@@ -14,7 +14,6 @@ import Results from "./components/Results";
 import Process from "./components/Process";
 import HomeFaq from "./components/HomeFaq";
 import Contact from "./components/Contact";
-import FinalCta from "./components/FinalCta";
 import Footer from "./components/Footer";
 import { HOME_FOOTER, OVERLAY_NAV } from "./components/site-data";
 import { buildHomeFaqJsonLd } from "./faq-data";
@@ -78,7 +77,6 @@ export default function Home() {
         <Process />
         <HomeFaq />
         <Contact />
-        <FinalCta />
       </div>
       <Footer
         intro="Lyhytvideot, verkkosivut ja tapahtumat. Espoo ja Helsinki. Yrityksille jotka haluavat kasvaa."
