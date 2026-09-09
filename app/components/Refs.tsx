@@ -94,11 +94,52 @@ const VH = 894;
  */
 let playingEl: HTMLVideoElement | null = null;
 
+/**
+ * Poster palaa CSS-siirtymalla (.18s), joten kelaus alkuun EI SAA tapahtua
+ * heti pausen jalkeen: video ehtii nayttaa nollaruudun - Chromella
+ * hetkellisesti tyhjan - viela puolilapinakyvan posterin lapi. Kelaus jaa
+ * siksi odottamaan etta poster on jo peittava.
+ *
+ * Ajastin on elementtikohtainen WeakMapissa eika refissa, koska
+ * yhden-kerrallaan-vartija pysayttaa TOISEN kortin elementin eika paase
+ * sen hookin refeihin. Nain kaikki kolme pysayttajaa - vartija,
+ * nakyvyystarkkailija ja kosketuksen stop() - kayttavat samaa mekanismia.
+ */
+const POSTER_FADE_MS = 220;
+const rewindTimers = new WeakMap<HTMLVideoElement, number>();
+
+function pauseAndRewind(v: HTMLVideoElement) {
+  v.pause();
+  const pending = rewindTimers.get(v);
+  if (pending !== undefined) clearTimeout(pending);
+  rewindTimers.set(
+    v,
+    window.setTimeout(() => {
+      rewindTimers.delete(v);
+      // Toisto on voinut alkaa uudelleen odotuksen aikana; silloin kelaus
+      // olisi hyppy keskella toistoa.
+      if (v.paused) v.currentTime = 0;
+    }, POSTER_FADE_MS),
+  );
+}
+
+/**
+ * Suorittaa odottavan kelauksen ETUAJASSA play():n alla. Peruminen olisi
+ * vaarin: stop() lupaa kortin alkavan alusta, ja jos kayttaja napauttaa
+ * uudelleen ennen kuin ajastin ehti laueta, video jatkaisi keskelta.
+ * Nakyviin tama ei tule, koska poster piilotetaan vasta ensimmaisesta
+ * esitetysta ruudusta.
+ */
+function flushRewind(v: HTMLVideoElement) {
+  const pending = rewindTimers.get(v);
+  if (pending === undefined) return;
+  clearTimeout(pending);
+  rewindTimers.delete(v);
+  if (v.paused) v.currentTime = 0;
+}
+
 function stopOthers(el: HTMLVideoElement) {
-  if (playingEl && playingEl !== el) {
-    playingEl.pause();
-    playingEl.currentTime = 0;
-  }
+  if (playingEl && playingEl !== el) pauseAndRewind(playingEl);
   playingEl = el;
 }
 
@@ -117,6 +158,26 @@ function useCardVideo(media: boolean, label: string) {
   // jalkeen.
   const [touch, setTouch] = useState(false);
 
+  /**
+   * KATTELY ENSIMMAISESTA RUUDUSTA. 'playing' kertoo etta toisto on
+   * alkanut, EI etta selain olisi jo esittanyt ruudun. Chromella nama ovat
+   * eri hetkia: posterin piilottaminen 'playing'-tapahtumassa paljasti
+   * videoelementin ennen kuin sen ensimmaista ruutua oli kompositoitu, ja
+   * Referenssit-coverin tummalla pohjalla se nakyi valahduksena.
+   *
+   * requestVideoFrameCallback laukeaa vasta kun ruutu on lahetetty
+   * kompositorille, joten poster haipyy tasan silloin kun sen alla on
+   * varmasti kuvaa.
+   *
+   * gen mitatoi vanhentuneet kuittaukset: pause, nakymasta poistuminen ja
+   * efektin purku kasvattavat numeroa, ja kuittaus vertaa omaansa siihen
+   * ennen kuin koskee tilaan. Ilman tata 'playing' -> pause -jarjestyksessa
+   * jonossa ollut kuittaus piilottaisi posterin pysaytetyn videon paalta.
+   */
+  const gen = useRef(0);
+  const frameCb = useRef(0);
+  const rafId = useRef(0);
+
   useEffect(() => {
     if (!media) return;
     setTouch(!window.matchMedia("(hover: hover)").matches);
@@ -134,12 +195,77 @@ function useCardVideo(media: boolean, label: string) {
     // nakyviin eika mitaan kaynnisteta.
     const auto = hover && !reduce;
 
+    /** Mitatoi odottavat kuittaukset ja vapauttaa kahvat. */
+    const disarm = () => {
+      gen.current += 1;
+      if (frameCb.current) {
+        v.cancelVideoFrameCallback?.(frameCb.current);
+        frameCb.current = 0;
+      }
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+        rafId.current = 0;
+      }
+    };
+
+    const arm = () => {
+      disarm(); // yksi kattely kerrallaan
+      const mine = gen.current;
+      const reveal = () => {
+        if (gen.current !== mine || v.paused) return;
+        setPlaying(true);
+      };
+
+      if (typeof v.requestVideoFrameCallback === "function") {
+        frameCb.current = v.requestVideoFrameCallback(() => {
+          frameCb.current = 0;
+          reveal();
+        });
+        return;
+      }
+
+      // VARAPOLKU (Firefox, vanhat WebKitit): odotetaan rAF-silmukassa
+      // etta dekooderilla on ruutu (readyState) JA etta mediakello etenee.
+      //
+      // KELLON ON EDETTAVA KAHDEN MAALATUN KEHYKSEN YLI, ei vain kertaa.
+      // Mitattu: yksi rAF 'playingin' jalkeen tayttyi jo 3-7 ms kohdalla,
+      // kun rVFC:lla mitattu todellinen ensimmainen esitetty ruutu tuli
+      // vasta 17-50 ms kohdalla. Yhden rasti olisi siis piilottanut
+      // posterin lahes yhta aikaisin kuin korjattu vika. Kahden kehyksen
+      // yli edennyt kello sen sijaan todistaa etta putki tuottaa ruutuja
+      // eika vain aikoo.
+      //
+      // Takaraja pitaa huolen ettei poster jaa jumiin jos jokin ehto ei
+      // toteudu: pahin tapaus on silloin vanha kaytos, ei rikkinainen.
+      const from = v.currentTime;
+      const deadline = performance.now() + 500;
+      let mark = -1;
+      const tick = () => {
+        rafId.current = 0;
+        if (gen.current !== mine || v.paused) return;
+        if (v.readyState >= v.HAVE_CURRENT_DATA && v.currentTime > from) {
+          if (mark < 0) mark = v.currentTime;
+          else if (v.currentTime > mark) {
+            reveal();
+            return;
+          }
+        }
+        if (performance.now() >= deadline) {
+          reveal();
+          return;
+        }
+        rafId.current = requestAnimationFrame(tick);
+      };
+      rafId.current = requestAnimationFrame(tick);
+    };
+
     const onPlaying = () => {
-      setPlaying(true);
+      arm();
       // Yhden-kerrallaan-vartija kuuluu vain kosketuspolulle.
       if (!auto) stopOthers(v);
     };
     const onPause = () => {
+      disarm();
       setPlaying(false);
       if (playingEl === v) playingEl = null;
     };
@@ -156,10 +282,16 @@ function useCardVideo(media: boolean, label: string) {
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) {
-          if (auto) v.play().catch(() => {});
-        } else if (!v.paused) {
-          v.pause();
-          v.currentTime = 0;
+          if (auto) {
+            flushRewind(v);
+            v.play().catch(() => {});
+          }
+        } else {
+          // Kattely puretaan myos silloin kun elementti ei ollut soimassa:
+          // play() on voitu kutsua ilman etta 'playing' ehti laueta, ja
+          // sen kuittaus tulisi ruudun ulkopuolelta.
+          disarm();
+          if (!v.paused) pauseAndRewind(v);
         }
       },
       auto ? { threshold: 0.25, rootMargin: "200px 0px" } : { threshold: 0 },
@@ -169,6 +301,7 @@ function useCardVideo(media: boolean, label: string) {
     return () => {
       v.removeEventListener("playing", onPlaying);
       v.removeEventListener("pause", onPause);
+      disarm();
       io.disconnect();
       if (playingEl === v) playingEl = null;
     };
@@ -178,13 +311,13 @@ function useCardVideo(media: boolean, label: string) {
     const v = vid.current;
     if (!v) return;
     stopOthers(v);
+    flushRewind(v);
     v.play().catch(() => {});
   };
   const stop = () => {
     const v = vid.current;
     if (!v) return;
-    v.pause();
-    v.currentTime = 0;
+    pauseAndRewind(v);
   };
   const toggle = () => {
     const v = vid.current;
