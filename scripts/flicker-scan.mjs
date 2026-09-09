@@ -28,10 +28,15 @@ const arg = (k, d) => { const m = process.argv.find((a) => a.startsWith(`--${k}=
 const has = (k) => process.argv.includes(`--${k}`);
 
 const ENGINE = arg("engine", "chromium");
-const VARIANT = arg("variant", "base");
+// --variants=a,b,c ajaa useamman variantin SAMAN selaininstanssin sisalla
+// omina konteksteinaan; --variant=x on sen yhden variantin lyhenne.
+const VARIANTS = arg("variants", arg("variant", "base")).split(",").filter(Boolean);
 const TARGET = arg("url", "http://localhost:3111/");
-const FROM = +arg("from", 0), TO = +arg("to", 11000), STEP = +arg("step", 60);
+const STEP = +arg("step", 60);
 const W = +arg("w", 1254), H = +arg("h", 783);
+// --band=cal johtaa vyohykkeen .cal- ja .case-elementtien sijainnista,
+// jolloin mittaus osuu samaan kohtaan vaikka sivun korkeus muuttuisi.
+const BAND = arg("band", "");
 
 
 const CSS = {
@@ -40,12 +45,40 @@ const CSS = {
   nocmb: ".cmb { display: none !important }",
   nometal: ".metalbd { display: none !important }",
   novideo: "video { visibility: hidden !important }",
+  // Parallaksielementit saavat pysyvan komposiittikerroksen
+  // (will-change: translate) ja niiden translate kirjoitetaan joka
+  // kehyksessa. Tama poistaa molemmat: kerroksen ja liikkeen.
+  nopar: "[data-par] { will-change: auto !important; translate: none !important }",
+  // Vain kerrospromootio pois, liike jaa: erottaa kerrosbudjetin
+  // per-frame-kirjoituksesta.
+  noparwc: "[data-par] { will-change: auto !important }",
+  notilt: "[data-tilt] { will-change: auto !important; transform: none !important }",
+  noshadow: "* { box-shadow: none !important }",
 };
 
 
+// Jaannos: siirra edellista dy:n verran ja vertaa paallekkain jaavaa osaa.
+const residual = (prev, cur, dy) => {
+  const { data: A, info } = prev, { data: B } = cur;
+  const w = info.width, h = info.height, ch = info.channels;
+  let diff = 0, tot = 0;
+  const rows = new Array(h).fill(0);
+  for (let y = 0; y + dy < h && y >= 0; y++) {
+    const ya = y + dy; if (ya < 0 || ya >= h) continue;
+    for (let x = 0; x < w; x++) {
+      const ia = (ya * w + x) * ch, ib = (y * w + x) * ch;
+      tot++;
+      if (Math.abs(A[ia] - B[ib]) > 12 || Math.abs(A[ia + 1] - B[ib + 1]) > 12 || Math.abs(A[ia + 2] - B[ib + 2]) > 12) { diff++; rows[y]++; }
+    }
+  }
+  return { pct: tot ? +(diff / tot * 100).toFixed(2) : 0, rows };
+};
+
 const HEADED = process.argv.includes("--headed");
 const browser = await requireBrowser(ENGINE).launch(launchOptions(ENGINE, HEADED));
+const summary = [];
 try {
+for (const VARIANT of VARIANTS) {
   const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
   const page = await ctx.newPage();
 
@@ -66,24 +99,21 @@ try {
   await page.waitForTimeout(4000);
   if (has("novideo") || VARIANT === "novideo") await page.evaluate(() => document.querySelectorAll("video").forEach((v) => v.pause()));
 
-  const raw = async () => sharp(await page.screenshot()).raw().toBuffer({ resolveWithObject: true });
+  let FROM = +arg("from", 0), TO = +arg("to", 11000);
+  if (BAND === "cal") {
+    const b = await page.evaluate(() => {
+      const cal = document.querySelector(".cal");
+      if (!cal) return null;
+      const top = cal.getBoundingClientRect().top + scrollY;
+      const last = [...document.querySelectorAll(".case")].at(-1);
+      const bottom = last ? last.getBoundingClientRect().bottom + scrollY : top + innerHeight;
+      return { from: Math.max(0, Math.round(top - innerHeight)), to: Math.round(bottom) };
+    });
+    if (!b) throw new Error(".cal puuttuu sivulta - vaara URL?");
+    FROM = b.from; TO = b.to;
+  }
 
-  // Jaannos: siirra edellista dy:n verran ja vertaa paallekkain jaavaa osaa.
-  const residual = (prev, cur, dy) => {
-    const { data: A, info } = prev, { data: B } = cur;
-    const w = info.width, h = info.height, ch = info.channels;
-    let diff = 0, tot = 0;
-    const rows = new Array(h).fill(0);
-    for (let y = 0; y + dy < h && y >= 0; y++) {
-      const ya = y + dy; if (ya < 0 || ya >= h) continue;
-      for (let x = 0; x < w; x++) {
-        const ia = (ya * w + x) * ch, ib = (y * w + x) * ch;
-        tot++;
-        if (Math.abs(A[ia] - B[ib]) > 12 || Math.abs(A[ia + 1] - B[ib + 1]) > 12 || Math.abs(A[ia + 2] - B[ib + 2]) > 12) { diff++; rows[y]++; }
-      }
-    }
-    return { pct: tot ? +(diff / tot * 100).toFixed(2) : 0, rows };
-  };
+  const raw = async () => sharp(await page.screenshot()).raw().toBuffer({ resolveWithObject: true });
 
   await page.evaluate((y) => scrollTo(0, y), FROM);
   await page.waitForTimeout(900);
@@ -116,16 +146,32 @@ try {
     const band = top.length ? `rivit ${top[0]}-${top[top.length - 1]} / ${H}` : "hajallaan";
     console.log(`    y=${String(p.y).padStart(5)}  jaannos ${String(p.res).padStart(6)} %  dy=${String(p.dy).padStart(4)}  ${band}  kerroksia ${p.layers ?? "-"}`);
   }
+  const sy = series.filter((s) => s.layers !== null);
   if (layers.length) {
     const ns = layers.map((l) => l.n);
     console.log(`  KERROKSET: muutoksia ${layers.length}, min ${Math.min(...ns)}, max ${Math.max(...ns)}, viimeinen ${ns[ns.length - 1]}`);
-    const sy = series.filter((s) => s.layers !== null);
     if (sy.length) {
       const uniq = [...new Set(sy.map((s) => s.layers))];
       console.log(`  kerrosmaara scrollY:n funktiona: ${uniq.length} eri arvoa ${JSON.stringify(uniq.slice(0, 12))}`);
       console.log(`  muistin huippu ${Math.max(...sy.map((s) => s.mem))} Mpx`);
     }
   }
+  summary.push({
+    variant: VARIANT, med, max: Math.max(...series.map((s) => s.res)), peaks: peaks.length,
+    layers: sy.length ? Math.max(...sy.map((s) => s.layers)) : null,
+    mem: sy.length ? Math.max(...sy.map((s) => s.mem)) : null,
+  });
+  await ctx.close();
+}
+if (summary.length > 1) {
+  console.log("\n=== yhteenveto ===");
+  for (const s of summary) {
+    console.log(
+      `  ${s.variant.padEnd(13)} jaannos med ${s.med.toFixed(2).padStart(6)} %  max ${s.max.toFixed(2).padStart(6)} %  ` +
+      `piikkeja ${String(s.peaks).padStart(3)}  kerroksia ${String(s.layers ?? "-").padStart(4)}  muisti ${String(s.mem ?? "-").padStart(5)} Mpx`,
+    );
+  }
+}
 } finally {
   await browser.close().catch(() => {});
 }

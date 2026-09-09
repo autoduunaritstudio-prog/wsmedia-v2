@@ -64,3 +64,7 @@ Siirtodokumentit/
 # /*.mp4 on ankkuroitu juureen eika osu alikansioon, joten tama tarvitaan
 # erikseen. Julkaistavat versiot pakataan public/referenssit/-kansioon.
 Referenssi videot/
+
+# Valkkymisen mittausajojen valiaikaiskansio (11 MB kuvakaappauksia).
+# Syntyy scripts/flicker-scan.mjs -ajosta, ei kuulu repoon.
+.tmp-flicker/
