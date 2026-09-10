@@ -153,7 +153,7 @@ export default function SiteEffects() {
 
     /* ---------- parallaksi ---------- */
     const pars = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-par]"),
+      document.querySelectorAll<HTMLElement>("[data-par], [data-parx]"),
     );
 
     /* ---------- asiakaslogonauha ---------- */
@@ -359,7 +359,17 @@ export default function SiteEffects() {
         });
         pars.forEach((el, i) => {
           const sp = parseFloat(el.dataset.par ?? "0");
-          el.style.setProperty("translate", `0 ${(-parMids[i] * sp).toFixed(1)}px`);
+          /* VAAKAKOMPONENTTI SAMASTA LUVUSTA. data-parx kayttaa tasan
+             samaa etaisyytta nakyman keskelta kuin pysty, joten liike on
+             sidottu vierintaan eika ajastimeen ja purkautuu samaa rataa
+             takaisin. Molemmat kirjoitetaan YHTEEN translate-arvoon:
+             kaksi erillista setPropertya samalle ominaisuudelle jattaisi
+             vain jalkimmaisen voimaan. */
+          const spx = parseFloat(el.dataset.parx ?? "0");
+          el.style.setProperty(
+            "translate",
+            `${(-parMids[i] * spx).toFixed(1)}px ${(-parMids[i] * sp).toFixed(1)}px`,
+          );
         });
       }
 
@@ -690,8 +700,18 @@ export default function SiteEffects() {
     }
 
     /* ---------- puhelinten hiiriparallaksi ---------- */
+    // POIS KAYTOSTA. Mockupit eivat ole interaktiivisia: niissa ei ole
+    // mitaan painettavaa, joten osoittimen mukaan kaantyminen lupaa
+    // toiminnallisuutta jota ei ole. Lisaksi se kirjoitti transformin
+    // inline ja yliajoi CSS:n kaariasetelman (translateZ + rotateY),
+    // jolloin kaari hajosi heti kun hiiri osui nayttamoon.
+    //
+    // Koodi jaa paikalleen kytkettyna pois: jos kaanto joskus halutaan
+    // takaisin, se on palautettava CSS-muuttujaan eika suoraan
+    // transformiin, jotta se yhdistyy kaaren kanssa.
+    const PHONE_TILT = false;
     const stage = document.getElementById("stage");
-    if (stage && finePointer && !reduce) {
+    if (PHONE_TILT && stage && finePointer && !reduce) {
       const phones = Array.from(stage.querySelectorAll<HTMLElement>(".phone"));
       stage.addEventListener(
         "mousemove",

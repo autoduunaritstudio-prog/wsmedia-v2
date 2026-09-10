@@ -13,15 +13,29 @@ import Image from "next/image";
  * Lahteina ovat kayttajan @2x-tiedostot, joten tarkkuus riittaa myos 3x:lle.
  */
 
-type ClientLogo = { src: string; alt: string; w: number; h: number };
+/**
+ * ink = lahdekuva on tayttaa mustaa.
+ *
+ * Mitattuna kolmen tiedoston kaikkien lapinakymattomien pikselien
+ * keskikirkkaus on 0 ja kylläisyys 0, eli niissa ei ole yhtaan varia
+ * kaannettavaksi. Tummalla pohjalla ne katoaisivat kokonaan, joten juuri
+ * ne kaannetaan valkoisiksi. Kaksi muuta ovat varillisia (kirkkaus 87 ja
+ * 93, kylläisyys 182 ja 103) ja nakyvat tummalla sellaisenaan - niiden
+ * kaantaminen olisi vain harmaannuttanut ne.
+ *
+ * Lippu on tiedostokohtainen eika koko nauhaa koskeva suodin, koska
+ * lahdekuvat ovat keskenaan erilaisia. Uutta logoa lisatessa: jos
+ * tiedosto on mustavalkoinen viivapiirros, ink: true.
+ */
+type ClientLogo = { src: string; alt: string; w: number; h: number; ink?: boolean };
 
 const H = 48;
 
 const LOGOS: ClientLogo[] = [
-  { src: "/logos/porsche-club-finland.png", alt: "Porsche Club Finland", w: 159, h: H },
+  { src: "/logos/porsche-club-finland.png", alt: "Porsche Club Finland", w: 159, h: H, ink: true },
   { src: "/logos/tesla-owners-finland-color.png", alt: "Tesla Owners Finland", w: 50, h: H },
-  { src: "/logos/colormaster.png", alt: "Colormaster", w: 113, h: H },
-  { src: "/logos/ydr-autohuolto.png", alt: "YDR Autohuolto", w: 159, h: H },
+  { src: "/logos/colormaster.png", alt: "Colormaster", w: 113, h: H, ink: true },
+  { src: "/logos/ydr-autohuolto.png", alt: "YDR Autohuolto", w: 159, h: H, ink: true },
   // TARKISTA: tiedosto tuli nimella ls-monogram.png ilman yritysnimea.
   // LS-monogrammi + sivustolla jo oleva asiakas viittaavat Laaksolahden
   // Sahkoon, mutta tata ei ole vahvistettu.
@@ -50,6 +64,7 @@ export default function Logos() {
                   alt={copy === 0 ? l.alt : ""}
                   width={l.w}
                   height={l.h}
+                  className={l.ink ? "ink" : undefined}
                 />
               ))}
             </div>
