@@ -1341,9 +1341,9 @@ html.hero-locked #nav { opacity: 0; visibility: hidden }
   position: absolute; top: 44px; left: 0; right: 0; text-align: center; z-index: 4;
   font-size: 9.5px; font-weight: var(--weight-semibold); letter-spacing: .2em; color: rgba(255,255,255,.5);
 }
-.p1 { left: 50%; top: 0; margin-left: -112px; z-index: 3; animation: float1 7.5s ease-in-out infinite alternate }
-.p2 { left: 10%; top: 64px; transform: rotate(-8deg) scale(.85); z-index: 2; animation: float2 9s ease-in-out infinite alternate }
-.p3 { right: 10%; top: 86px; transform: rotate(7deg) scale(.8); z-index: 1; animation: float3 10s ease-in-out infinite alternate }
+.p1 { left: 50%; top: 34px; margin-left: -112px; z-index: 3; animation: float1 7.5s ease-in-out infinite alternate }
+.p2 { left: 10%; top: 26px; transform: rotate(-8deg) scale(.85); z-index: 2; animation: float2 9s ease-in-out infinite alternate }
+.p3 { right: 10%; top: 44px; transform: rotate(7deg) scale(.8); z-index: 1; animation: float3 10s ease-in-out infinite alternate }
 @keyframes float1 { from { translate: 0 0 } to { translate: 0 -16px } }
 @keyframes float2 { from { translate: 0 0; rotate: -8deg } to { translate: 0 -22px; rotate: -6deg } }
 @keyframes float3 { from { translate: 0 0; rotate: 7deg } to { translate: 0 -18px; rotate: 9deg } }
@@ -2292,9 +2292,57 @@ footer a:hover { color: var(--ink) }
   display: flex; align-items: center; justify-content: center; font-size: var(--text-caption);
 }
 .chip-f small { display: block; font-weight: var(--weight-medium); color: var(--grey); font-size: var(--text-micro-sm); margin-top: 1px }
-.cf1 { left: 6%; top: 34px; animation: cfl 6s ease-in-out infinite alternate }
-.cf2 { right: 5%; top: 300px; animation: cfl 7s ease-in-out -2s infinite alternate }
-.cf3 { left: 12%; bottom: 36px; animation: cfl 8s ease-in-out -4s infinite alternate }
+/* HUOM: .p1/.p2/.p3 top-arvot muutettiin (0/64/86 -> 34/26/44), eli
+   keskimmainen laskettiin ja reunimmaiset nostettiin. Kuplien
+   pystyarvot alla on saadetty samassa yhteydessa.
+
+   KUPLAT ANKKUROIDAAN MOCKUPEIHIN, EIVAT KELLU IRRALLAAN.
+   Edellinen yritys vei kaksi kuplaa nayttamon ulkopuolelle. Ne eivat
+   enaa peittaneet videoita, mutta ne myos irtosivat kokonaan: kupla
+   1500 pikselin paassa mockupista ei kerro kenellekaan mihin se liittyy.
+
+   Kaytetty malli on sama jota tuotesivut kayttavat mockupien ympärilla:
+   kupla KIINNITTYY yhden laitteen reunaan ja menee siita hieman yli.
+   Kolme sääntöä:
+     1. Limitys on pieni, noin neljasosa kuplan leveydesta. Silloin
+        kupla kuuluu laitteeseen ja syntyy syvyysvaikutelma, mutta
+        videosta jaa peittoon vain kulma.
+     2. Kulmiin, ei reunojen keskelle. Pystyvideon kulmissa on vahiten
+        sisaltoa, ja Reelsin ja TikTokin oma kayttoliittyma on oikeassa
+        laidassa ja alakolmanneksessa - ne kulmat jaavat siis vapaiksi.
+     3. Vastakkaisille kulmille, jotta ryhma on tasapainossa eika kallistu
+        toiselle laidalle: keskimmainen ylavasen, vasen alavasen, oikea
+        ylaoikea.
+
+   Kaikki arvot on johdettu mockupien omista asemointiarvoista
+   (.p1 left 50 % / margin-left -112px, .p2 left 10 %, .p3 right 10 %),
+   joten kuplat seuraavat jos mockupeja siirretaan.
+
+   HUOM MITTAAMISESTA: .p2 ja .p3 ovat kaannettyja (-8 ja 7 astetta),
+   joten getBoundingClientRect antaa niille KIERRETYN suorakulmion
+   rajat - se on 90 pikselia leveampi kuin itse laite. Limitysta ei siis
+   voi lukea suoraan rectien leikkauksesta; laskettuna cf2:n todellinen
+   limitys .p2:n reunaan on noin kolmasosa kuplasta, vaikka rect-vertailu
+   vaittaa 77 %. Sama koskee cf3:a. */
+.cf1 {
+  left: calc(50% - 112px - 96px); top: 42px;
+  animation: cfl 6s ease-in-out infinite alternate;
+}
+.cf2 {
+  left: calc(10% - 88px); top: 298px;
+  animation: cfl 7s ease-in-out -2s infinite alternate;
+}
+.cf3 {
+  right: calc(10% - 88px); top: 46px;
+  animation: cfl 8s ease-in-out -4s infinite alternate;
+}
+@media (max-width: 1180px) {
+  /* Kapeammassa nayttamossa mockupit ovat lahempana toisiaan ja
+     limitys kasvaisi liikaa; kuplat vedetaan tiukemmin kiinni. */
+  .cf1 { left: calc(50% - 112px - 70px) }
+  .cf2 { left: calc(10% - 30px) }
+  .cf3 { right: calc(10% - 30px) }
+}
 @keyframes cfl { from { translate: 0 0 } to { translate: 0 -12px } }
 @media (max-width: 900px) { .chip-f { display: none } }
 
@@ -3111,8 +3159,9 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 .page-lyhytvideot .incl a { color: var(--blue); text-decoration: none }
 .page-lyhytvideot .incl a:hover { text-decoration: underline }
 .page-lyhytvideot .grid4 { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-gap-grid) }
+.page-lyhytvideot .grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-gap-grid) }
 @media (max-width: 960px) {
-  .page-lyhytvideot .grid4 { grid-template-columns: repeat(2,1fr) }
+  .page-lyhytvideot .grid4, .page-lyhytvideot .grid3 { grid-template-columns: repeat(2,1fr) }
 }
 @media (max-width: 560px) {
   .page-lyhytvideot .grid4 { grid-template-columns: 1fr; gap: 12px }
@@ -4843,3 +4892,1639 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
 .page-toihin-meille .fcard .rp input {width:17px;height:17px;accent-color:var(--blue);cursor:pointer;flex:none;margin:0}
 .page-toihin-meille .fcard .rp.on {border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,197,227,.12)}
 .page-toihin-meille .hint {font-size:12.5px;color:var(--grey);margin-top:8px;line-height:1.5}
+
+/* ==================================================================
+   ELAVA VERKOSTOTAUSTA JA TUMMA SIVUPOHJA
+   ================================================================== */
+
+/* Kerros on FIXED eika absolute: sivu on 10 000+ px korkea, ja
+   absoluuttisena canvas olisi sen korkuinen - eli 20 kertaa nakyman
+   verran rasteroitavaa pintaa. Kiinnitettyna se on aina tasan yhden
+   nakyman kokoinen ja kuvio jatkuu vieritettaessa itsestaan.
+   z-index 0 ja sisalto z-index 1: header/section/footer nostetaan jo
+   yhteen (ks. "header, section, footer, nav, .marq"). */
+.netbd {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  /* Verkon varit tulevat muuttujista, koska canvas lukee ne samasta
+     paikasta kuin ruudukko. Ilman tata vaalea ja tumma variantti
+     olisivat kahdessa eri tiedostossa ja paasisivat eroon toisistaan.
+     --net-rgb on pelkka kolmikko, koska viivan lapinakyvyys lasketaan
+     pituuden mukaan piirtohetkella. */
+  --net-rgb: 111,236,255;
+  --net-dot: rgba(180,245,255,.85);
+  --net-grid: rgba(111,236,255,.045);
+  background-color: #060b14;
+  /* Ruudukko CSS:lla eika canvasilla: se ei liiku, joten sen
+     piirtaminen joka kehyksessa olisi hukkatyota. 44px on johdettu
+     viivojen piirtoetaisyydesta (150px): ruudukon pitaa olla selvasti
+     tihempi kuin verkko, jotta se lukee taustaksi eika toiseksi
+     verkoksi. */
+  background-image:
+    linear-gradient(var(--net-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--net-grid) 1px, transparent 1px);
+  background-size: 44px 44px, 44px 44px;
+}
+.netbd canvas { display: block; width: 100%; height: 100% }
+
+/* ALUSTAMERKIT VERKOSTON SEASSA.
+   Kerros on koko .netbd:n kokoinen ja perii sen fixed-sijainnin, joten
+   merkit pysyvat nakymassa paikallaan ja jaavat coverin alle samalla
+   tavalla kuin verkko. Erillista piilotusta ei tarvita.
+
+   pointer-events: none periytyy .netbd:sta - merkit eivat saa napata
+   klikkeja heron napeilta jotka ovat niiden paalla. */
+.netmarks { position: absolute; inset: 0 }
+.nm {
+  position: absolute; display: block; color: var(--net-mark, #6fecff);
+  /* translate-ominaisuus, ei transform: kellunta ei saa tormata mihinkaan
+     mahdolliseen transformiin, ja translate on oma kompositoitava
+     ominaisuutensa. Sama konventio kuin puhelinten kelluntassa. */
+  animation-name: nmfloat;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  /* VIERITYS ON transformissa, KELLUNTA translatessa. Ne ovat eri
+     ominaisuuksia ja lasketaan yhteen, joten molemmat mahtuvat samaan
+     elementtiin. Jos kumpikin kirjoitettaisiin translateen, keyframe
+     voittaisi ja vieritys jaisi kokonaan pois.
+
+     --nsp on NetBackdropin tasoitettu etenema 0..1, sama luku jolla
+     canvas ajaa kameraansa. --nx ja --ny ovat merkin oma matka, ja ne
+     on kerrottu jo syvyydella komponentissa: kaukainen merkki liikkuu
+     vahemman. translate3d eika translate: kolmas akseli pakottaa oman
+     kompositointikerroksen, jolloin vieritys ei maalaa merkkia
+     uudestaan vaan siirtaa valmista tekstuuria. */
+  transform: translate3d(
+    calc(var(--nsp, 0) * var(--nx, 0) * 1px),
+    calc(var(--nsp, 0) * var(--ny, 0) * 1px),
+    0
+  );
+  /* Pehmea hehku merkin OMASTA varista. drop-shadow eika box-shadow,
+     koska merkki on lapinakyva SVG-viiva: box-shadow olisi piirtanyt
+     kehyksen sen laatikon ympari, ei viivan ympari. Staattinen, eli
+     rasteroidaan kerran. */
+  filter: drop-shadow(0 0 10px currentColor);
+}
+.nm svg { display: block; width: 100%; height: auto }
+@keyframes nmfloat { from { translate: 0 0 } to { translate: 0 -22px } }
+
+/* Vaalealla pohjalla hehku ei saa olla merkin OMAA varia: tumma sinesta
+   levitetty haiven likaisi vaalean pohjan harmaaksi renkaaksi merkin
+   ympari. Hehku tulee kirkkaasta syaanista ja viiva jaa tummaksi, eli
+   sama neon-vaikutelma kuin mallissa mutta paain: kirkas keha tumman
+   viivan ympari eika tumma keha kirkkaan ympari. */
+.page-lyhytvideot .netbd { --net-mark: #007c8f }
+.page-lyhytvideot .nm { filter: drop-shadow(0 0 12px rgba(0,197,227,.55)) }
+
+/* Kapealla naytolla merkit jaisivat tekstin ja puhelinten alle, koska
+   vapaita reunakaistoja ei ole. Pois. */
+@media (max-width: 900px) { .netmarks { display: none } }
+@media (prefers-reduced-motion: reduce) { .nm { animation: none } }
+/* Hehku keskelle ja tummennus reunoihin. Molemmat ovat staattisia
+   gradientteja: maalataan kerran, ei kehyskohtaista tyota. */
+.netbd-glow {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(60% 50% at 50% 40%, rgba(0,197,227,.10), transparent 70%),
+    radial-gradient(120% 100% at 50% 50%, transparent 40%, rgba(3,6,12,.85) 100%);
+}
+
+/* TUMMA SIVUPOHJA. Vain varit vaihtuvat, ei rakenne: kaikki mitat,
+   valit ja asettelut ovat samat kuin vaalealla sivulla. */
+.page-dark { background: #060b14; color: #e6e9f0 }
+.page-dark h1, .page-dark h2, .page-dark h3, .page-dark h4 { color: #f5f5f7 }
+.page-dark .sub, .page-dark p { color: #b9c0cf }
+.page-dark .kick { color: #6fecff }
+.page-dark .accent { color: #6fecff }
+.page-dark .tlink { color: #6fecff }
+/* Kortit ja paneelit: lasipinta tumman paalla, ei valkoinen laatta. */
+.page-dark .card,
+.page-dark .fcard,
+.page-dark .faq details {
+  background: rgba(255,255,255,.045);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: 0 24px 60px -24px rgba(0,0,0,.6);
+}
+.page-dark .fcard input[type=text],
+.page-dark .fcard input[type=email],
+.page-dark .fcard textarea {
+  background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.14); color: #f5f5f7;
+}
+.page-dark .fcard label { color: #e6e9f0 }
+.page-dark hr, .page-dark .foot-top, .page-dark .foot-base { border-color: rgba(255,255,255,.12) }
+/* Footer ei ole enaa vaalea laatta tumman sivun alla. */
+.page-dark footer { background: rgba(6,11,20,.85); border-top-color: rgba(255,255,255,.12) }
+.page-dark footer a, .page-dark footer address { color: #b9c0cf }
+.page-dark footer a:hover { color: #f5f5f7 }
+/* KOLME ELEMENTTIA JAI ILMAN TUMMAN TILAN VARIA. Footerin merkki,
+   brandinimi ja sarakeotsikot perivat var(--ink) = #1d1d1f, joka on
+   mitoitettu vaalealle pohjalle. Tummalla (#060b14) niiden kontrasti
+   on mitattuna 1,2:1 eli ne ovat kaytannossa nakymattomia - juuri ne
+   kolme jotka kertovat kenen sivu tama on. Muu footeri sai varinsa jo
+   yleisesta .page-dark footer a -saannosta, mika on syy miksi vika ei
+   nakynyt: puolet footerista nayttii oikealta. */
+.page-dark footer .footer-mark { color: #f5f5f7 }
+.page-dark footer .foot-brand > :not(p):not(ul) { color: #f5f5f7 }
+.page-dark footer .foot-col h4 { color: #f5f5f7 }
+
+/* ==================================================================
+   VAALEALLE POHJALLE MITOITETUT VARIT TUMMALLA SIVULLA
+   ==================================================================
+   Sivukohtainen pohja on tarkoitus, ei sattuma: jokainen sivu saa
+   oman taustansa, jotta ne eivat toista toisiaan. Sen hinta on se,
+   etta jokainen var(--ink):iin nojaava saanto on tarkistettava
+   erikseen - #1d1d1f tummalla (#060b14) antaa kontrastin 1,2:1 eli
+   teksti katoaa kokonaan.
+
+   Nama loytyivat mittaamalla: kavin sivun jokaisen tekstisolmun lapi
+   ja laskin kontrastin sen todellista pohjaa vasten. Loytoja oli 21
+   kolmessa paikassa. Hinnoittelun listat olivat vakavin: pakettien
+   koko sisalto oli nakymatta, eli osio jossa myydaan nayttii tyhjilta
+   korteilta joissa on vain hinta ja nappi.
+
+   PITKALLA TAHTAIMELLA nama kannattaa hoitaa muuttujilla (pinta,
+   teksti, vaimennettu teksti, hiusviiva) joita komponentit lukevat,
+   ei sivukohtaisilla yliajoilla. Silloin uusi sivu on yksi lohko
+   arvoja eika kymmenia korjauksia eri puolilla tiedostoa. */
+.page-dark .plan li { color: #b9c0cf; border-bottom-color: rgba(255,255,255,.10) }
+.page-dark .fitbox li { color: #b9c0cf }
+.page-dark .prose strong { color: #f5f5f7 }
+.page-dark .ctashot { border-color: rgba(255,255,255,.14) }
+.page-dark .ctashot g { stroke: #b9c0cf }
+.page-dark .ctashot .ctashot-floor { stroke: #b9c0cf }
+.page-dark .ctashot-tag { color: #8f98aa }
+
+/* ==================================================================
+   INSTAGRAM REELS -KAYTTOLIITTYMA PUHELINMOCKUPISSA (PhoneReel)
+   Kaikki mitat ovat suhteessa .phonen 224px leveyteen, joten ne
+   skaalautuvat mockupin oman koon mukana kun sita muutetaan yhdesta
+   paikasta.
+   ================================================================== */
+.phone .ph-vid {
+  position: absolute; inset: 0; z-index: 1;
+  width: 100%; height: 100%; object-fit: cover;
+  /* backface-visibility pakottaa oman rasterointikerroksen, jolloin
+     pyoristetty overflow: hidden leikkaa myos 3D-muunnetun mockupin
+     sisallon. Sama syy ja sama ratkaisu kuin .refcard-vidilla. */
+  backface-visibility: hidden;
+}
+/* Tummennus ylos ja alas. Kaksi erillista gradienttia eika yhta:
+   ylapaassa tarvitaan vain vahan (siella on pelkka "Reels"), alapaassa
+   selvasti enemman (siella on kolme riviä tekstia). */
+.ig-scrim {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.45), transparent 18%),
+    linear-gradient(to top, rgba(0,0,0,.72), transparent 42%);
+}
+.ig { position: absolute; inset: 0; z-index: 4; color: #fff }
+.ig svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round }
+
+.ig-top {
+  position: absolute; top: 38px; left: 14px; right: 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ig-top b { font-size: var(--text-caption); font-weight: var(--weight-semibold) }
+.ig-top svg { width: 17px; height: 17px }
+
+/* Oikea palkki. gap 14px ja luku heti kuvakkeen alla ilman omaa
+   marginaalia: IG:ssa luku on osa nappia, ei erillinen rivi. */
+.ig-side {
+  position: absolute; right: 9px; bottom: 62px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.ig-act {
+  background: none; border: 0; padding: 0; color: #fff; cursor: default;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.ig-act svg { width: 22px; height: 22px }
+.ig-act small { font-size: 9.5px; font-weight: var(--weight-semibold); letter-spacing: -.01em }
+/* Sydan tayttyy ja sykkii vain kun video oikeasti pyorii. Ominaisuutena
+   scale eika box-shadow tai filter: se on kompositorin oma, joten
+   jatkuva sykkiminen ei maalaa mockupia uudelleen joka kehyksessa. */
+.ig-like svg { fill: #ff2f55; stroke: #ff2f55 }
+.ig-like.is-live svg { animation: iglike 2.8s ease-in-out infinite }
+@keyframes iglike { 0%, 82%, 100% { scale: 1 } 88% { scale: 1.22 } 94% { scale: .96 } }
+/* Levylautanen. Pyorii tasaisesti, rotate-ominaisuudella. */
+.ig-disc {
+  width: 21px; height: 21px; border-radius: 50%;
+  background: conic-gradient(#3a3a42, #16161a 40%, #4a4a55 60%, #16161a);
+  border: 2px solid rgba(255,255,255,.85);
+  animation: igdisc 6s linear infinite;
+}
+@keyframes igdisc { to { rotate: 360deg } }
+
+.ig-bottom { position: absolute; left: 14px; right: 52px; bottom: 22px }
+.ig-user { display: flex; align-items: center; gap: 6px }
+/* Gradientti on VARASIJA, ei oletus: background-size ja -position ovat
+   valmiina, joten inline asetettu background-image korvaa gradientin
+   ilman etta rajaus tai keskitys pitaa toistaa. */
+.ig-ava {
+  width: 19px; height: 19px; border-radius: 50%; flex: none;
+  background: linear-gradient(140deg, #6fecff, #007c8f);
+  background-size: cover; background-position: 50% 50%;
+  box-shadow: 0 0 0 1.5px rgba(255,255,255,.9);
+}
+.ig-user b { font-size: 10.5px; font-weight: var(--weight-semibold) }
+.ig-follow {
+  font-size: 9px; font-weight: var(--weight-semibold);
+  border: 1px solid rgba(255,255,255,.85); border-radius: 5px; padding: 1.5px 6px;
+}
+.ig-cap {
+  font-size: 9.5px; line-height: 1.35; margin: 7px 0 0;
+  /* Kaksi rivia ja katkaisu: IG nayttaa pitkasta tekstista alun ja
+     "lisaa". Kolme rivia tyontaisi musiikkirivin palkin paalle. */
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.ig-music { display: flex; align-items: center; gap: 5px; margin-top: 7px; overflow: hidden }
+.ig-music svg { width: 11px; height: 11px; flex: none }
+.ig-music span { overflow: hidden; white-space: nowrap; flex: 1 }
+/* Musiikkirivi juoksee kuten IG:ssa. translate eika margin: kompositorin
+   oma ominaisuus, ei asettelua joka kehyksessa. */
+.ig-music i {
+  display: inline-block; font-style: normal; font-size: 9px; opacity: .9;
+  padding-right: 28px; animation: igmusic 9s linear infinite;
+}
+@keyframes igmusic { from { translate: 0 } to { translate: -100% } }
+
+.ig-prg {
+  position: absolute; left: 0; right: 0; bottom: 6px; height: 2px;
+  background: rgba(255,255,255,.25);
+}
+/* scaleX eika width: etenema kirjoitetaan joka kehyksessa videon ajasta,
+   ja leveyden kirjoitus olisi asettelu + maalaus. Sama ratkaisu kuin
+   sivun ylareunan #prog-palkilla. */
+.ig-prg i { display: block; height: 100%; background: #fff; transform-origin: 0 50%; will-change: transform }
+
+@media (prefers-reduced-motion: reduce) {
+  .ig-like.is-live svg, .ig-disc, .ig-music i { animation: none }
+}
+
+/* TIKTOK-VARIANTIN EROT. Runko, video, scrim, laskurit ja
+   etenemapalkki ovat samat; vain nama kohdat eroavat. */
+/* Valilehtipari otsikon tilalla. */
+.ig-tabs { justify-content: center; gap: 14px; font-size: 10.5px; font-weight: var(--weight-semibold) }
+.ig-tabs span { opacity: .6 }
+.ig-tabs .on { opacity: 1; position: relative }
+.ig-tabs .on::after {
+  content: ""; position: absolute; left: 50%; bottom: -5px;
+  width: 16px; height: 2px; margin-left: -8px; background: #fff; border-radius: 2px;
+}
+/* Profiilikuva oikeassa palkissa, oma seuraa-nappi alareunassa. */
+.tt-ava {
+  position: relative; width: 26px; height: 26px; border-radius: 50%;
+  background: linear-gradient(140deg, #6fecff, #007c8f);
+  background-size: cover; background-position: 50% 50%;
+  box-shadow: 0 0 0 1.5px rgba(255,255,255,.9); margin-bottom: 4px;
+}
+.tt-ava i {
+  position: absolute; left: 50%; bottom: -6px; margin-left: -6px;
+  width: 12px; height: 12px; border-radius: 50%; background: #fe2c55;
+}
+/* Plusmerkki piirretaan kahdella pseudolla eika kuvakkeella: se on 12px
+   ympyrassa kaksi viivaa, ja SVG olisi siihen turha lataus. */
+.tt-ava i::before, .tt-ava i::after {
+  content: ""; position: absolute; left: 50%; top: 50%; background: #fff;
+}
+.tt-ava i::before { width: 6px; height: 1.4px; margin: -.7px 0 0 -3px }
+.tt-ava i::after { width: 1.4px; height: 6px; margin: -3px 0 0 -.7px }
+/* TikTokin sydan on valkoinen, ei punainen: punainen on vasta
+   tykatyssa tilassa. */
+.is-tt .ig-like svg { fill: #fff; stroke: #fff }
+/* Alalaidan lohko on TikTokissa leveampi, koska oikea palkki on
+   kapeampi eika siina ole seuraa-pilleria vieressa. */
+.is-tt .ig-bottom { right: 48px; bottom: 20px }
+.is-tt .ig-user b { font-size: 11px }
+/* Levylautanen on TikTokissa isompi ja se on palkin alin elementti. */
+.is-tt .ig-disc { width: 25px; height: 25px }
+
+
+/* Kuplat tummalla sivulla. Vaalea lasi luki tummaa videota vasten
+   kirkkaana laattana, ja harmaa alateksti (var(--grey) = #616166) jai
+   sen paalla 2,1:1:een. Tumma lasi vaalealla tekstilla: #f5f5f7 antaa
+   pohjaa rgba(10,18,30,.78) vasten 15,2:1 ja alateksti #b9c0cf 8,4:1. */
+.page-dark .chip-f {
+  background: rgba(10,18,30,.78);
+  border-color: rgba(255,255,255,.12);
+  box-shadow: 0 18px 44px -16px rgba(0,0,0,.7);
+  color: #f5f5f7;
+}
+.page-dark .chip-f small { color: #b9c0cf }
+.page-dark .chip-f em { background: rgba(111,236,255,.14); color: #6fecff }
+
+/* ==================================================================
+   ALASIVUN PINNATTU HERO (.stickysub)
+   ==================================================================
+   OMA LUOKKA, EI .stickyzone. Etusivun saannot sitovat heron
+   vaiheistuksen HeroScrubin --st1..3 -muuttujiin
+   (esim. .stickyzone > .hero h1 { opacity: var(--st1, 0) }). Alasivulla
+   scrubia ei ole, joten otsikko olisi jaanyt varasyottoon 0 eli
+   nakymattomaksi. Sama periaate, eri toteutus. */
+/* TYHJA VIERITYS SIVUN ALUSTA POIS.
+   Mitattuna hero alkoi y 141:sta: navi vie 108px virtaa ja murupolku
+   33px, ja heron OMA ylapadding varaa navin tilan jo toiseen kertaan.
+   Hero oli siis 141px nakyman alapuolella ja alin rivi jai piiloon,
+   eli ensimmaiset 141 pikselia vieritysta eivat paljastaneet mitaan
+   uutta.
+
+   Kaksi korjausta: murupolku otetaan pois virrasta (absoluuttiseksi
+   navin alle, se on 33px korkea tekstirivi eika tarvitse omaa
+   kaistaansa) ja vyohyke vedetaan ylos tasan navin korkeuden verran.
+   Sama tekniikka ja sama luku kuin etusivun .stickyzonessa. */
+.stickysub { position: relative; margin-top: calc(-72px - var(--nav-top)) }
+.page-palvelu > .crumbs {
+  position: absolute; left: 0; right: 0; z-index: 4;
+  top: calc(var(--nav-top) + 72px - 30px);
+}
+.stickysub > .hero {
+  position: sticky; top: 0; z-index: 1;
+  /* KOKO RUUTU. 560px jatti mitattuna 906px:n nakymaan 346px vapaaksi,
+     jolloin cover ja logonauha olivat esilla heti ilman vieritysta ja
+     hero luki pienena kaistana ison tyhjan paalla. svh eika vh, koska
+     mobiilissa vh laskee osoiterivin mukaan ja tuottaa hyppyja. */
+  /* +116px: .stickysubin negatiivinen marginaali (-72 - --nav-top) vie
+     heron VIRTAUSLAATIKON ylos, joten 100svh:n laatikko paattyi 116px
+     ennen nakyman alareunaa ja coverista jai mitattuna 28px kaista
+     nakyviin ilman vieritysta. Korotus vie sen tasan alareunaan. */
+  min-height: calc(100svh + var(--nav-top) + 72px);
+  /* Pystykeskitys. Alapadding on kaksinkertainen ylapaddingiin nahden:
+     yllaoleva korotus tekee laatikosta nakymaa korkeamman, jolloin tasan
+     jaettuna sisalto olisi valunut 101px nakyman keskikohdan alle.
+     116 / 232 palauttaa sen kohdalleen (nakyma 906, sisaltolaatikko
+     116..790, keskikohta 453). */
+  display: flex; align-items: center;
+  padding: calc(var(--nav-top) + 72px) 0 calc((var(--nav-top) + 72px) * 2);
+}
+/* Flex-lapsen leveys on kirjoitettava auki: .wrapin margin: 0 auto
+   kumoaa poikittaisen venytyksen, jolloin leveys romahtaisi sisallon
+   mukaan. Sama ansa kuin .stagen kanssa aiemmin.
+
+   LEVEAMPI KUIN SIVUN 1080px. Kaksi palstaa joista toisessa on kolme
+   puhelinta ei mahdu 1032px:n sisaleveyteen ilman etta jompikumpi
+   kutistuu: mitattuna otsikko sai 481px palstan, jolloin sen suurin
+   mahdollinen fonttikoko oli 39px eli 29px pienempi kuin etusivun
+   heron 68px. 1460px antaa tekstipalstalle noin 770px, jolla otsikko
+   yltaa 63px:aan. 93vw pitaa reunat hengittavina kapeammilla naytoilla. */
+.stickysub > .hero > .wrap { width: 100%; max-width: min(1460px, 93vw) }
+/* KAKSI PALSTAA. Vasen on kapeampi: siina on luettavaa tekstia, jolle
+   45-70 merkkia riviä kohti on luettavuuden vakiosuositus, ja oikea saa
+   loput koska mockuprivi tarvitsee leveytta enemman kuin teksti. */
+.stickysub .hero-split {
+  position: relative;
+  display: grid;
+  /* 1,122 / 0,878 eli noin 770px ja 602px 1412px:n sisaleveydesta.
+     Luvut on johdettu molempien palstojen minimivaatimuksista:
+     otsikon pisin rivi on 12,05em, joten 63px:n koko vaatii 760px, ja
+     kolme puhelinta valeineen vievat 664 * skaala + 16px. */
+  grid-template-columns: minmax(0, 1.122fr) minmax(0, .878fr);
+  gap: 40px; align-items: center;
+}
+/* Teksti vasempaan reunaan, ei keskitettyna: kaksipalstaisessa
+   asettelussa keskitetty palsta jattaa molemmille puolille eri
+   suuruisen tyhjan eika riviala ala samasta pystyviivasta. */
+.stickysub .hero-copy {
+  text-align: left;
+  /* Sailio kyselyita varten: otsikon koko lasketaan PALSTAN leveydesta,
+     ei nakyman. Syy on WordSwap: .swap span on white-space: nowrap,
+     koska vaihtuvan rivin on oltava yhdella rivilla animaation ajan.
+     Pisin vaihtoehto "pysayttavat skrollauksen." on 24 merkkia, ja
+     nakymaan sidottu clamp() antoi sille 62px:n koon jolloin rivi oli
+     noin 740px levea - eli 350px leveampi kuin palsta. Rivi vuoti
+     puhelinten alle. Palstaan sidottuna se ei voi vuotaa. */
+  container-type: inline-size;
+}
+/* 8,2cqi: pisin vaihtoehto (24 merkkia) vie noin 12 em, joten palstan
+   leveys W kestaa fonttikoon W/12. 8,2 % palstasta on hieman sen alle
+   ja jattaa marginaalin kirjasinleikkauksen vaihtelulle. Ylaraja 52px
+   on sivun oma --text-h1-sm ilman nakymaskaalausta. */
+/* Ylaraja 64px on alle etusivun heron 68px:n, kuten pyydettiin. Se ei
+   silti sido: 8,2 % 770px:n palstasta on 63px, eli palstan leveys on
+   rajoittava tekija ja otsikko taittuu kahdelle riville niin kuin
+   <br> edellyttaa. */
+.stickysub .hero-copy h1 { max-width: none; margin: 0; font-size: clamp(28px, 8.2cqi, 64px) }
+.stickysub .hero-copy .sub { max-width: 46ch; margin: 22px 0 0 }
+.stickysub .hero-copy .heroctas { justify-content: flex-start; margin-top: 26px }
+.stickysub .hero-copy .herotrust { justify-content: flex-start; margin-top: 22px }
+
+/* MOCKUPIT OIKEAAN PALSTAAN.
+   Palsta on noin puolet .wrapin 1080 pikselista, joten alkuperaiset
+   sijainnit (left 10 %, 50 %, right 10 %) veisivat puhelimet
+   paallekkain. Tiiviimpi viuhka: kolme laitetta 8 %:n valein, keskimmainen
+   edessa ja reunimmaiset kallistuneina taakse. Korkeus on pienempi kuin
+   etusivun 500px, koska palsta on kapeampi ja ryhma skaalautuu sen
+   mukana. */
+.stickysub .stage {
+  /* MITOITUS ON LASKETTU, EI ARVATTU.
+     Kolme laitetta vievat skaalalla s leveyden
+       224*s (keski) + 245*s (vasen, kaanto levittaa laatikkoa)
+       + 224*s (oikea) = 693*s.
+     LAITTEET EIVAT SAA KOSKETTAA TOISIAAN - erikseen pyydetty.
+     Suoristuksen jalkeen laatikoiden summa on 682 skaalalla 1. Palsta
+     on 518px, joten rinnakkain ilman kosketusta tarvitaan joko
+     pienempi skaala tai enemman leveytta. Molempia: skaala 0,655 vie
+     447px ja reunimmaisten -17 %:n ulostyonto kasvattaa kaytettavan
+     janteen noin 480 pikseliin, jolloin valeiksi jaa muutama pikseli
+     per pari. Ulostyonto on turvallinen, koska tekstipalstaan jaa
+     mitattuna yli 50px ilmaa. */
+  --stage-scale: .88;
+  width: 100%; max-width: none; height: 470px; margin: 0;
+  scale: var(--stage-scale); transform-origin: 50% 50%;
+  margin-block: calc(470px * (var(--stage-scale) - 1) / 2);
+}
+/* Keskimmainen 8px ylemmas, reunimmaiset 8px alemmas: kaari saa
+   pienen pystysuuntaisen kaarevuuden vaakasuuntaisen lisaksi. */
+.stickysub .stage .p1 { left: 50%; margin-left: -112px; top: -8px }
+/* REUNIMMAISET SUORISTETAAN JA TUODAAN ESIIN.
+   Loytyi kaksinkertainen kierto: .p2:lla on transform: rotate(-8deg) JA
+   float2-keyframe joka animoi rotate-OMINAISUUTTA valilla -8..-6 astetta.
+   Ne ovat eri ominaisuuksia ja summautuvat, joten laite oli todellisuudessa
+   noin -16 asteessa. Mitattuna .p2:n laatikko oli 292px levea vaikka itse
+   laite on 190px - ero selittyy tasan 16 asteella, ei 8:lla.
+
+   Korjaus: kierto jaa vain transformiin ja keyframe animoi pelkkaa
+   translatea.
+
+   KAIKKI KOLME SAMAN KOKOISIA. Omat skaalat (.85 ja .80) on poistettu,
+   joten kaikki kolme ovat 224px levyisia ja koko tulee yksin .stagen
+   --stage-scalesta. Yhtenainen koko tarkoittaa myos etta top: 0 asettaa
+   ylareunat tasan samalle korkeudelle - eri skaaloilla ne jaivat 5 ja 9
+   pikselia eri tasolle, koska skaalaus tapahtuu keskipisteen ympari.
+
+   KAARI, EI TASOKIERTOA. Reunimmaiset kaannetaan Y-akselin ympari
+   kohti keskilinjaa, jolloin kolmikko asettuu kaarelle: keskimmainen
+   on suoraan katsojaa kohti ja reunimmaiset kaantyvat sisaanpain.
+   Tasokierto (rotate) olisi kallistanut laitteet sivusuunnassa, mika on
+   eri asia - se ei luo syvyytta vaan nayttaa vinolta.
+
+   .stagella on jo perspective: 1300px ja perspective-origin 50% 50%,
+   eli katsomispiste on tasan keskilinjalla. Kaari syntyy siita
+   itsestaan.
+
+   translateZ ENSIN, rotateY vasta sen jalkeen. Sama konventio kuin
+   etusivun .refgridissa: silloin siirto tapahtuu VANHEMMAN Z-akselilla
+   eika jo kaannetylla, jolloin laitteet asettuvat samalle kaarelle
+   eivatka eri sateille. -46px tyontaa reunimmaiset taaksepain, mika
+   pienentaa niita perspektiivissa noin 3,5 % - juuri se tekee kaaresta
+   luettavan. */
+.stickysub .stage .p2 {
+  left: calc(50% - 348px); top: 8px;
+  transform: translateZ(-46px) rotateY(14deg);
+  animation-name: floatsub2;
+}
+.stickysub .stage .p3 {
+  right: calc(50% - 348px); top: 8px;
+  transform: translateZ(-46px) rotateY(-14deg);
+  animation-name: floatsub3;
+}
+/* Kellunta koskee VAIN translatea: kierto tulee transformista, eika
+   samaa asiaa saa ohjata kahdesta paikasta. */
+@keyframes floatsub2 { from { translate: 0 0 } to { translate: 0 -18px } }
+@keyframes floatsub3 { from { translate: 0 0 } to { translate: 0 -16px } }
+
+/* REUNIMMAISET OVAT ANDROIDEJA. Kolme identtista iPhonea rinnakkain
+   vaittaisi etta sisalto on tehty vain yhdelle laitteelle; kaksi
+   Androidia ja yksi iPhone kertoo etta se toimii molemmilla.
+
+   Ero on kolme yksityiskohtaa, ei pelkka notchin poisto:
+     1. Ei notchia. Tilalle keskitetty reikakamera, halkaisija 8px
+        eli sama kuin notchin korkeus jaettuna 2,5:lla.
+     2. Loivempi kulmasade (34px -> 26px): Androidien kulmat ovat
+        tyypillisesti vahemman pyoristettyja kuin iPhonen.
+     3. Ohuempi reunus (3,5px -> 3px). */
+.stickysub .stage .p2, .stickysub .stage .p3 {
+  --ph-radius: 26px; --ph-bezel: 3px;
+}
+.stickysub .stage .p2::before, .stickysub .stage .p3::before {
+  top: 9px; width: 8px; height: 8px; border-radius: 50%;
+}
+
+/* PAKSUUS. Puhelin on tasainen suorakulmio, joten syvyys on tehtava
+   valaistuksella: kirkas viiva ylareunaan (valo osuu ylapintaan), tumma
+   alareunaan (varjopuoli) ja pystyreunoihin kapeat liukuvarit jotka
+   lukevat pyoristyvana kylkena. Kaikki yhdessa inset-varjossa, joten
+   tama ei lisaa yhtaan elementtia eika kerrosta.
+
+   Ulkovarjo syvennetaan samalla: --ph-drop kasvaa, jolloin laite irtoaa
+   taustasta selvemmin. Reunimmaiset ovat kaaressa taaempana, joten ne
+   saavat pienemman varjon kuin keskimmainen. */
+.stickysub .stage .phone {
+  box-shadow:
+    var(--ph-drop),
+    inset 0 0 0 var(--ph-bezel) #2e2e34,
+    inset 0 1.5px 0 0 rgba(255,255,255,.22),
+    inset 0 -2px 0 0 rgba(0,0,0,.55),
+    inset 2px 0 3px -1px rgba(0,0,0,.5),
+    inset -2px 0 3px -1px rgba(0,0,0,.5),
+    var(--ph-rim);
+}
+.stickysub .stage .p1 { --ph-drop: 0 60px 110px -34px rgba(0,0,0,.72) }
+.stickysub .stage .p2, .stickysub .stage .p3 { --ph-drop: 0 46px 90px -32px rgba(0,0,0,.62) }
+/* KUPLIEN PAIKAT.
+   Yksi kupla per laite, ja kukin kertoo juuri sen laitteen asiasta:
+     cf1  keskimmaisen YLAPUOLELLA, katselukerrat
+     cf3  vasemman ALAKULMASSA, asiakastyytyvaisyys
+     cf2  oikean ALAKULMASSA, toimitusaika
+   Ylimmainen on keskitetty (left 50 % + translate -50 %) eika laskettu
+   laitteen leveydesta: kupla on kapeampi kuin laite, joten keskitys on
+   luotettavampi kuin kiintea offset. Alakulmien kuplat roikkuvat
+   laitteen reunan yli noin neljasosan leveydestaan - sama ankkurointi
+   kuin ennen, jotta ne kuuluvat nakyvasti laitteeseen. */
+/* transform eika translate: kellunta-animaatio cfl ohjaa translatea
+   (0 -> -12px), joten sinne kirjoitettu keskitys olisi hukkunut
+   ensimmaiseen keyframeen. Mitattuna kupla oli 43px sivussa. */
+.stickysub .stage .cf1 { left: 50%; transform: translateX(-50%); top: -68px; right: auto }
+/* Reunakuplat laitteiden YLAPUOLELLE, kuten keskimmainen, mutta
+   ULOSPAIN siirrettyna eika keskitettyna. Kolme keskitettya kuplaa
+   olisi lukenut kolmena samanlaisena merkintana; ulospain siirretyt
+   avaavat ryhman ja jattavat keskimmaiselle sen oman tilan.
+   Laite on 224 layout-px ja kupla noin 165, joten keskitys olisi 30px;
+   -14px vie sen sen sijaan 44px ulommas eli reunan yli.
+
+   PYSTYSIJAINTI ON SAADETTY LAITTEEN MUKAAN, EI YHTEISELLA ARVOLLA.
+   Reunimmaiset ovat 8px alempana kuin keskimmainen ja lisaksi kaaressa
+   taaempana, joten sama top olisi jattanyt niiden alle isomman raon.
+   Arvot on haettu mittaamalla niin etta jokaisen kuplan ja oman
+   laitteensa valiin jaa noin 2px.
+
+   KUPLA KELLUU SAMASSA TAHDISSA OMAN LAITTEENSA KANSSA. Aiemmin kupla
+   ajoi cfl:aa (0..-12px, 6-8s) ja laite float1/floatsub2/floatsub3:a
+   (0..-16..-18px, 7,5-10s). Jaksot eivat ole yhteismitallisia, joten
+   rako hengitti valilla -11px ja +18px: mitattuna sama pari nayttti
+   milloin limittyvalta milloin irralliselta, eika mikaan yksittainen
+   top-arvo voinut korjata sita. Kun kupla saa laitteensa animaation
+   sellaisenaan, pari liikkuu yhtena kappaleena ja rako on vakio.
+   Siksi 2px riittaa eika tarvita marginaalia heilahdukselle. */
+.stickysub .stage .cf1 { animation: float1 7.5s ease-in-out infinite alternate }
+.stickysub .stage .cf3 { animation: floatsub2 9s ease-in-out infinite alternate }
+.stickysub .stage .cf2 { animation: floatsub3 10s ease-in-out infinite alternate }
+.stickysub .stage .cf3 { left: calc(50% - 348px); margin-left: -14px; top: -49px; right: auto }
+.stickysub .stage .cf2 { right: calc(50% - 348px); margin-right: -14px; top: -49px; left: auto }
+
+/* COVER. Sama rooli kuin etusivulla: liukuu heron paalle ja lopettaa
+   pinnauksen. Sen on oltava vahintaan heron korkuinen - talla sivulla
+   se on koko muu sisalto, joten ehto tayttyy moninkertaisesti. */
+.stickysub > .cover { position: relative; z-index: 2 }
+/* Cover on TAYSIN lapinakymaton. Aiempi 0,94 paasti vaalean
+   verkostotaustan lapi koko sivun matkalta, jolloin tumma pohja luki
+   likaisena harmaana eika mustana. Verkosto kuuluu nyt vain heroon:
+   se on fixed-kerros, joten peittava cover riittaa rajaamaan sen
+   ensimmaiseen ruutuun ilman erillista piilotusta. */
+.page-dark .stickysub > .cover { background: #060b14 }
+/* LOGONAUHA ON TUMMA, JA KAANTO TEHDAAN LOGOKOHTAISESTI.
+   Koko nauhan yhteinen invert-suodin oli vaara tyokalu: se teki
+   mustista logoista valkoisia mutta samalla varillisistakin harmaita.
+   Lahdekuvat ovat keskenaan erilaisia, joten kasittelynkin on oltava.
+
+   Mitattuna kolme viidesta (Porsche Club, ColorMaster, YDR) on tayttaa
+   mustaa - kirkkaus 0, kylläisyys 0 - eli niissa ei ole varia jota
+   sailyttaa, ja tummalla ne katoaisivat kokonaan. Ne merkitaan
+   Logos.tsx:ssa ink-lipulla ja kaannetaan valkoisiksi. Kaksi muuta ovat
+   varillisia (kirkkaus 87 ja 93, kylläisyys 182 ja 103) ja jaavat
+   koskematta.
+
+   Huom: valittava lapsi on .logos, ei .logostrip. Aiempi saanto osoitti
+   .logostripiin joka on lapsenlapsi, eika siis ollut voimassa lainkaan. */
+/* z-index 1: coverin verkostokerros on positioitu (z-index 0), ja
+   positioimaton .logos olisi jaanyt sen ALLE maalausjarjestyksessa eli
+   kuvio olisi piirtynyt logojen paalle. Osiot saavat saman nostonsa
+   globaalista "header, section, footer, nav, .marq" -saannosta, .logos
+   ei ole niiden joukossa. */
+.page-dark .stickysub > .cover > .logos { position: relative; z-index: 1; padding: 40px 0 34px }
+.page-dark .logostrip img.ink { filter: invert(1) }
+
+/* LUKUKAISTA SAMANNAKOISEKSI KUIN ETUSIVUN REFERENSSIOSIOSSA.
+   .cover .statband antaa lukukaistalle jaisen valkoisen levyn. Se on
+   tehty etusivun VAALEAN coverin metallikuviota vasten, jossa sen
+   tehtava on nostaa numerot kuvion palta. Talla sivulla cover on tumma
+   ja kuvioton, joten levylla ei ole mitaan tehtavaa - se oli vain
+   vaalea laatikko tumman keskella. Pois, ja tilalle .refs-osion omat
+   varit ja koko sellaisenaan. */
+.page-dark .stickysub .statband {
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 44px 0;
+  margin: 0;
+}
+.page-dark .stickysub .stat .num { color: #f5f5f7; font-size: var(--text-stat) }
+.page-dark .stickysub .stat .num b { color: #b4f5ff }
+.page-dark .stickysub .stat p { color: #cbcbd2 }
+
+/* MIKSI-OSION KAKSI PALSTAA.
+   Teksti on VASEMMALLA ja kuva oikealla, eli lahdekoodin jarjestys.
+
+   MITAT OVAT PEILIKUVA KANAVAOSIOSTA: 0,82 : 1,18 ja 30px:n vali
+   antavat tekstille 415px ja kuvalle 584px, tasan painvastoin kuin
+   siella. Nain kaksi peratysta osiota ovat sama asettelu kaannettyna
+   eivatka kaksi eri mitoitusta.
+
+   Kuva kasvoi 415 -> 584px, ja se on suoraan pois tekstipalstasta:
+   1032px:n sisaleveys on kiintea, joten toinen palsta ei voi kasvaa
+   ilman etta toinen kapenee. Otsikko pienenee siksi 43,6px:sta
+   35px:aan - se on taman muutoksen hinta.
+
+   align-items: center eika start: kuvan korkeus (noin 300px) on selvasti
+   pienempi kuin tekstipalstan, ja ylareunaan sidottuna sen alle olisi
+   jaanyt iso tyhja lovi ennen .rows-riveja. */
+/* Tekstipalsta levenee 534 -> 585px ja vali kapenee 44 -> 32px.
+   Syy on otsikon koko: rivimaara on palstan leveyden funktio, joten
+   isompi otsikko KOLMELLA rivilla vaatii leveamman palstan. Mitattuna
+   534px:n palstalla katto oli tasan 40px - 41px taittoi jo neljalle
+   riville - eli katto on 0,0749 x palstan leveys. */
+.miksi-split {
+  display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+  gap: 30px; align-items: center;
+}
+.miksi-split .shead { margin: 0; container-type: inline-size }
+/* OTSIKON KOKO SIDOTAAN PALSTAAN, EI NAKYMAAN.
+   .big on mitoitettu koko leveydelle ja antoi 1727px:n nakymassa 54px,
+   jolla 70 merkin otsikko taittui mitattuna NELJALLE riville 534px:n
+   palstassa. Palstaan sidottuna sama otsikko ei voi ylittaa sille
+   varattua tilaa vaikka palsta kapenee.
+
+   8,6cqi: sama kerroin kuin kanavaosion otsikossa, jotta kahden osion
+   otsikot ovat samankokoiset. 415px:n palstalla se on 35,7px. Otsikko
+   on 70 merkkia eli selvasti pidempi kuin kanavaosion 44, joten se
+   taittuu useammalle riville - se on sisallon ero, ei mitoituksen.
+
+   text-wrap: balance jakaa rivit tasapituisiksi. Ilman sita viimeiselle
+   riville jai yksi sana, mika nayttaa katkenneelta otsikolta. */
+.miksi-split .shead h2 {
+  /* Sama katto kuin sivuston --text-h2:lla (46px) ja kuin
+     kuvanauhoilla. Aiempi 42px:n katto ei ollut ongelma, vaan se etta
+     8,6cqi 411px:n palstassa antoi vain 35,3px - eli osio luki
+     alempana tasona kuin sen jalkeen tulevat nauhat, vaikka ne ovat
+     samaa tasoa. Palstan leveys jai ennalleen (411px), joten
+     kerroin nousi 8,6 -> 10,7cqi jotta 44px syntyy siina. */
+  font-size: clamp(26px, 10.7cqi, 46px);
+  line-height: 1.07;
+  text-wrap: balance;
+}
+/* SiteEffects kirjoittaa --tilt-rotin ja CSS rakentaa ketjun, sama
+   konventio kuin .browserissa ja .eventissa.
+
+   NELJA LUOKKAA VALITSIMESSA. Kuvalla on .rv, ja html.rv-ready
+   .rv:not(.on) on painoarvoltaan (0,3,1); luokkien maara ratkaisee
+   ennen elementteja, joten (0,4,0) voittaa sen. Aiemmin kolmella
+   luokalla --tilt-rot laskettiin oikein (-12,99 astetta) mutta
+   computed transform oli none.
+
+   Paljastus on translatessa samasta syysta kuin korteilla: transform
+   on varattu kaannolle. */
+.page-lyhytvideot .miksi-split .miksi-kuva.rv {
+  transform: perspective(1200px) var(--tilt-rot, rotateY(0deg));
+  transition:
+    opacity .8s cubic-bezier(.2,.6,.2,1),
+    translate .8s cubic-bezier(.2,.6,.2,1);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+/* Kuva on oikealla, joten se liukuu oikealta. */
+html.rv-ready .page-lyhytvideot .miksi-split .miksi-kuva.rv:not(.on) { translate: 36px 0 }
+/* Otsikko on vasemmalla ja liukuu vasemmalta. Silla ei ole kaantoa,
+   joten paljastus voi jaada transformiin. */
+html.rv-ready .miksi-split .shead.rv:not(.on) { transform: translateX(-36px) }
+/* Nappirivi tulee samalta puolelta kuin teksti jonka jatko se on. */
+html.rv-ready .whycta.rv:not(.on) { transform: translateX(-36px) }
+.miksi-kuva {
+  margin: 0; border-radius: 20px; overflow: hidden;
+  /* Reuna ja varjo tumman pohjan paalla: kuva on itsekin tumma, joten
+     ilman reunaa sen rajaus katoaisi taustaan eika kuva luekisi
+     itsenaisena kappaleena. */
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 30px 70px -30px rgba(0,0,0,.75);
+}
+.miksi-kuva img { display: block; width: 100%; height: auto }
+@media (max-width: 900px) {
+  .miksi-split { grid-template-columns: minmax(0, 1fr); gap: 28px }
+  /* Kapealla naytolla kuva on lahes koko leveydelta, jolloin 13 asteen
+     kaanto veisi sen reunan yli. Sama painoarvo kuin yllä. */
+  .page-lyhytvideot .miksi-split .miksi-kuva.rv { transform: none }
+}
+
+/* MIKSI-OSION PERUSTELUKORTIT.
+   Aiemmin nama olivat .rows-rivit eli pelkkia hiusviivalla erotettuja
+   tekstilohkoja. Se toimii vaalealla yksivarisella pohjalla, mutta
+   taman osion takana kulkee verkostokuvio: viivat ja pisteet kulkivat
+   kirjainten lapi ja leipateksti muuttui levottomaksi. Kortti tuo
+   tekstin alle oman pinnan.
+
+   Pinta on VALKOINEN. Kortti on siis oma vaalea saarekkeensa tummalla
+   sivulla, ja se on vahvin mahdollinen tapa nostaa teksti kuvion
+   palta: verkosto ei paase lapi lainkaan eika luettavuus riipu
+   lapinakyvyyden hienosaadosta. Hinta on se, etta kortin sisalla
+   kaikki varit on kaannettava - teksti, numeromerkki ja ensimmaisen
+   kortin kavijatietonakyma. Ne ovat alla. */
+.whygrid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 18px; margin-top: 40px;
+}
+@media (max-width: 760px) { .whygrid { grid-template-columns: 1fr } }
+/* KORTEILLA ON VAIN PALJASTUS, EI KAANTOA.
+
+   PALJASTUS ON translatessa, ei transformissa. .rv:n perussaanto kantaa
+   sen transformissa (translateY(26px) -> none) ja se on PYSTYSUUNTAINEN;
+   nailla korteilla se tulee sivusta. transform: none nollaa
+   perussaannon, jolloin pystysiirtymaa ei jaa paalle, ja sivuttainen
+   liike ajetaan translatessa.
+
+   NELJA LUOKKAA VALITSIMESSA. html.rv-ready .rv:not(.on) on
+   painoarvoltaan (0,3,1), ja luokkien maara ratkaisee ennen
+   elementteja, joten (0,4,0) voittaa sen. Vahemmalla perussaannon
+   pystysiirtyma olisi jaanyt voimaan sivuttaisen paalle. */
+.page-lyhytvideot .whygrid .whycard.rv {
+  transform: none;
+  transition:
+    opacity .8s cubic-bezier(.2,.6,.2,1),
+    translate .8s cubic-bezier(.2,.6,.2,1);
+  /* Porrastus on kirjoitettava tahan uudestaan. transition on
+     lyhennemerkinta, joten se nollaa transition-delayn, ja tama saanto
+     voittaa painoarvollaan .stagger > * -saannon. Mitattuna korttien
+     viive oli 0s eli porrastus oli kadonnut kokonaan. */
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+/* PALJASTUS TULEE SIVUSTA, EI ALHAALTA. Vasemman sarakkeen kortit
+   liukuvat vasemmalta ja oikean oikealta, eli kumpikin omalta
+   puoleltaan. 36px eika 26px: vaakasuunnassa sama matka nakyy
+   pienempana, koska kortti on korkeuttaan leveampi. Sama luku ja sama
+   perustelu kuin etusivun palvelupaneeleissa. */
+html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:not(.on) { translate: -36px 0 }
+html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { translate: 36px 0 }
+
+.whycard {
+  padding: 26px 26px 28px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  /* Syvempi varjo kuin vaalealla sivulla: valkoinen laatta tumman
+     paalla tarvitsee varjon irrotakseen taustasta, muuten se leijuu
+     ilman ankkuria. */
+  box-shadow: 0 26px 64px -28px rgba(0,0,0,.75);
+}
+/* .page-dark asettaa h3:lle #f5f5f7 ja p:lle #b9c0cf. Kortti on
+   vaalea saareke sen sisalla, joten molemmat on kumottava. */
+.page-dark .whycard h3 {
+  font-size: var(--text-body-lg); font-weight: var(--weight-semibold);
+  letter-spacing: -0.012em; margin: 0 0 7px; color: var(--ink);
+}
+/* Leipateksti on tummempi kuin sivuston vakioharmaa (#616166 ->
+   #3c3c44) ja rivivali hieman avarampi. Molemmat koskevat KAIKKIA
+   nelja korttia, ei vain kuvallista: yksi tummempi kortti nelján
+   joukossa olisi lukenut virheena. Vari on sidottu .whycard-artin
+   veilin voimakkuuteen: veilatulla pohjalla (229) kontrasti on
+   8,7:1. */
+.page-dark .whycard p {
+  /* Sama aste kuin kuvanauhojen leipatekstilla. --text-ui antoi 16px,
+     joka on skaalan ulkopuolella ja luki 1,5px pienempana kuin
+     seuraavan osion teksti samalla etaisyydella silmasta. */
+  font-size: var(--text-body-xl); line-height: 1.62; color: #3c3c44; margin: 0;
+}
+
+/* CTA korttien alla. Nappi ja sen ehto samalla rivilla: ehto on
+   pieni ja se luetaan vasta napin jalkeen, joten se ei ansaitse omaa
+   rivialaansa.
+
+   Viive 360ms = 4 x 90ms eli korttien porrastuksen jatko. .stagger > *
+   koskee vain suoria lapsia, ja .whycta on .wrapin lapsi eika
+   .whygridin, joten sama viive on kirjoitettava tahan kasin. Nain koko
+   osio ilmestyy yhtena sarjana: otsikko, kuva, nelja korttia, nappi. */
+.whycta {
+  display: flex; align-items: center; gap: 18px;
+  margin-top: 30px; flex-wrap: wrap;
+  transition-delay: 360ms;
+}
+.page-dark .whycta span { font-size: var(--text-label-sm); color: #8f98aa }
+
+/* ==================================================================
+   TULOKSET: NAYTTAMO (.showcase)
+   ==================================================================
+   Etusivulla samat kortit ovat metallikuvion paalla. Sita ei voi
+   toistaa tassa kahdesta syysta: kuvio on sen osion oma tunnus, ja
+   talla sivulla on jo oma taustakuvionsa (verkosto) jonka paalla
+   toinen kuvio lukisi sotkuna.
+
+   Kuvion tilalla on VALO. Pehmea keila korttirivin takana ja valaistu
+   reuna sen alla lukevat nayttamona, mika on tasan se mita osion
+   otsikko lupaa. Valo ei myoskaan kilpaile verkoston kanssa: kuvio ja
+   kuvio kilpailevat, kuvio ja valo kerrostuvat. */
+.showcase { position: relative; overflow: clip }
+/* Keila on ellipsi eika ympyra: korttirivi on leveampi kuin korkea,
+   joten pyorea keila olisi joko liian matala reunoilla tai liian
+   korkea keskella. */
+.showcase::before {
+  content: "";
+  position: absolute; z-index: 0; pointer-events: none;
+  left: 50%; translate: -50% 0; top: 26%;
+  width: min(1580px, 134vw); aspect-ratio: 1.85 / 1;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    rgba(111,236,255,.15) 0%,
+    rgba(0,124,143,.08) 34%,
+    rgba(6,11,20,0) 68%
+  );
+}
+.showcase > .wrap { position: relative; z-index: 1 }
+.showcase .refgrid { max-width: 1120px; margin: 0 auto }
+
+/* Valaistu reuna korttien alla. Viiva on kapeampi kuin ruudukko ja
+   haipyy molemmista paista, jolloin se lukee valona eika rajana -
+   umpinainen viiva reunasta reunaan olisi ollut osion alaviiva. */
+.showstage { position: relative }
+.showstage::after {
+  content: "";
+  position: absolute; left: 50%; translate: -50% 0; bottom: -30px;
+  width: min(1010px, 88%); height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(111,236,255,0) 0%,
+    rgba(111,236,255,.5) 26%,
+    rgba(111,236,255,.5) 74%,
+    rgba(111,236,255,0) 100%
+  );
+  pointer-events: none;
+}
+/* Hehku viivan ylla: kortit nayttavat seisovan valaistulla pinnalla
+   eivatka leijuvan viivan paalla. */
+.showstage::before {
+  content: "";
+  position: absolute; left: 50%; translate: -50% 0; bottom: -30px;
+  width: min(1010px, 88%); height: 86px;
+  background: linear-gradient(0deg, rgba(111,236,255,.14) 0%, rgba(111,236,255,0) 100%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+.showcase .cta-row { margin-top: 64px }
+
+/* SIVUN SISAINEN KEHOTERIVI. Sama muoto kuin .whycta, mutta ilman
+   sen kiinteaa 360ms viivetta: se oli sidottu Miksi-osion neljan
+   kortin porrastukseen eika pade muualla. */
+.cta-row { display: flex; align-items: center; gap: 18px; margin-top: 30px; flex-wrap: wrap }
+.cta-row-c { justify-content: center }
+.page-dark .cta-row span { font-size: var(--text-label-sm); color: #8f98aa }
+/* .btn.alt kayttaa var(--blue) = #007c8f ja var(--hair) -reunaa, jotka
+   on mitoitettu vaalealle pohjalle. Tumman nauhan paalla molemmat
+   katoavat, joten vari ja reuna kaannetaan - sama korjaus kuin heron
+   toissijaisessa napissa. */
+.page-dark .cta-row .btn.alt { color: #f5f5f7; border-color: rgba(255,255,255,.42) }
+.page-dark .cta-row .btn.alt:hover { background: rgba(255,255,255,.10) }
+
+/* OTSIKKOLOHKO OIKEAAN REUNAAN.
+   max-width jaa voimaan, joten rivipituus ei muutu - vain lohkon
+   sijainti ja tekstin tasaus. margin-left: auto tyontaa sen oikeaan
+   reunaan; ilman sita max-width olisi pitanyt sen vasemmalla ja
+   pelkka text-align olisi tasannut rivit lohkon SISALLA, mika nayttaa
+   epahuomiossa jaaneelta. */
+.shead-r { margin-left: auto; margin-right: 0; text-align: right }
+
+/* KANAVAOSIO: KUVANAUHA JA SEN PAALLE MENEVAT KORTIT.
+   Edellinen osio on kaksi palstaa vierekkain, joten tama ei voi olla
+   sama asettelu peilikuvana - se olisi rakenteellista toistoa vaikka
+   sisalto on eri. Tama osio on kerroksellinen: kuva koko leveydelta,
+   teksti sen paalla ja kortit nauhan alareunan yli.
+
+   LIMITYS ON SE MIKA SITOO OSION YHTEEN. Ilman sita tama olisi vain
+   kuva ja sen alla kolme korttia, eli taas kaksi erillista lohkoa. */
+/* KANAVAOSIO: EPASYMMETRINEN JAKO, SISALTO VASEMMALLA JA KUVA OIKEALLA.
+
+   Aiempi versio oli kuva koko leveydelta ja teksti sen paalla
+   liukupeitteen takana. Vika ei ollut saadoissa vaan rakenteessa: kun
+   kaikki on saman kuvan paalla, mikaan ei ole etualalla eika taustalla.
+
+   Nyt jako on TODELLINEN REUNA. Kumpikin puoli on oma pintansa, ja
+   suhde 56/44 on tarkoituksella epatasainen - tasajako panisi puolet
+   kilpailemaan keskenaan eika kumpikaan olisi paaosassa.
+
+   Nauha irtoaa wrapista margin-inline: calc(50% - 50vw) -tempulla:
+   50% on wrapin sisaleveydesta ja 50vw puolet nakymasta, joten reunat
+   osuvat nakyman laitaan ilman yhtaan kiinteaa lukua. */
+/* NAVIN TURVAKAISTAT. #nav on sticky ilman palkkia ja mix-blend-mode:
+   difference, joten logo ja valikkopainike kelluvat sisallon paalla koko
+   sivun matkan. Mika tahansa teksti menee niiden alle JOSSAIN
+   vierityskohdassa, joten pystysuora sisennys ei voi korjata asiaa -
+   vain vaakasuora ero voi. Navin sisus on max-width 1440px keskitettyna;
+   mitattuna 1727px:n leveydella logo on 144..231 ja painike 1524..1584.
+   Kaistat jattavat lisaksi 28px / 24px ilmaraon. */
+.mband {
+  --nav-safe-l: calc((100vw - min(1440px, 100vw)) / 2 + 116px);
+  --nav-safe-r: calc((100vw - min(1440px, 100vw)) / 2 + 84px);
+
+  /* NAUHAN KAKSI VARIA MUUTTUJINA, EI KOVAKOODATTUINA.
+     Nauha on tarkoitus siirtaa muillekin palvelusivuille, ja jokainen
+     sivu saa oman pohjansa. Verho, haivytykset ja korostukset olivat
+     kirjoitettu suoraan tamnn sivun savyihin (#060b14 ja #6fecff),
+     joten toisella pohjalla nauha ei olisi mukautunut vaan
+     rikkoutunut: tumma verho vaalealla sivulla on laikka, ei verho.
+
+     Arvot ovat KANAVIA eivatka valmiita vareja (6 11 20, ei #060b14),
+     jotta samasta muuttujasta saa myos lapinakyvat asteet muodossa
+     rgb(var(--band-ink) / .9). Ilman tata jokainen aste tarvitsisi
+     oman muuttujansa.
+
+     Haivytyksen lapinakyva paa on SAMA savy alfalla 0, ei
+     "transparent": transparent on rgba(0,0,0,0), ja gradientti
+     interpoloi sita kohti mustan lapi, mika nakyy likaisena
+     harmaana keskivaiheilla. */
+  --band-ink: 6 11 20;
+  --band-accent: 111 236 255;
+}
+.mband {
+  position: relative;
+  margin-top: 30px;
+  width: 100vw; margin-inline: calc(50% - 50vw);
+  display: grid; grid-template-columns: 52% 48%;
+  align-items: stretch;
+  min-height: max(640px, 100svh);
+  /* EI OMAA POHJAVARIA. Umpinainen pohja esti coverin
+     verkostokuvion nakymisen kuvan takaa; nyt kuva on hieman
+     lapinakyva ja kuvio kulkee sen lapi, jolloin nauha kuuluu samaan
+     maailmaan kuin muu sivu eika ole irrallinen laatta. */
+  overflow: clip;
+  /* SIIRTYMAVARA. Nauha on koko nakyman levyinen ja sen ylapuolella
+     ja alapuolella on 1032px:n levyisia osioita, joten leveyden
+     muutos on iso. Osioiden vakiorytmi on mitattuna 20px ylos ja
+     110px alas eli 130px valia; nauha saa sita enemman, jotta se
+     lukee tarkoituksellisena valilohkona eika sisaan tyontyneena
+     laattana. Yhta suuri molemmin puolin, koska epasymmetrinen vali
+     nayttaisi vahingolta. */
+  margin-block: 96px;
+}
+/* NAUHAT KIINNI TOISIINSA. Kolme nauhaa perakkain on yksi jakso, ei
+   kolme irrallista lohkoa: jakson sisalla valia ei ole, ja 96px:n
+   vaaka jaa vain jakson alkuun ja loppuun. Reunojen haivytys hoitaa
+   nauhojen valisen sauman - kahden vierekkaisen nauhan haivytykset
+   muodostavat yhdessa pehmean tumman vyon, joka erottaa kuvat ilman
+   etta valiin jaa tyhjaa. */
+/* .page-palvelu section (0,1,1) asettaa osioille --space-section-sub
+   -paddingin, joten nollauksen on oltava painavampi. Mitattuna
+   nauhojen valiin jai 220px vaikka saanto pyysi nollaa. */
+.page-lyhytvideot .bandsec { padding: 0 }
+.bandsec + .bandsec .mband { margin-top: 0 }
+/* Ensimmainen nauha: se ei jatka toista nauhaa vaan seuraa tavallista
+   osiota, joten sen ylareuna on sivun ainoa kohta jossa nauha ALKAA.
+   Haivytys 120 -> 26px, jotta kuvan kohteen paalaki (27px reunasta)
+   jaa sen ulkopuolelle.
+
+   Vali edelliseen osioon oli mitattuna 206px (Miksi-osion 110px
+   alasisennys + nauhan 96px ylamarginaali). Se luki tyhjana kaistana
+   eika vaihtona: nauha nayttii irralliselta laatalta joka leijuu
+   sivun paalla. 80px riittaa erottamaan osiot toisistaan. */
+.bandsec:not(.bandsec + .bandsec) .mband { --mb-fade-top: 26px; margin-top: 40px }
+.page-lyhytvideot #miksi { padding-bottom: 40px }
+.bandsec:has(+ .bandsec) .mband { margin-bottom: 0 }
+
+/* KAANNETTY NAUHA: sisalto oikealle, kuva vasemmalle.
+   Joka toinen nauha kaannetaan, jotta kolmen nauhan jakso ei lue
+   samana asetteluna kolmesti. Kaikki mitat ovat samat, vain puolet
+   vaihtavat paikkaa - myos paddingit, jotta sisalto pysyy wrapin
+   linjassa kummallakin puolella. */
+.mband-r { grid-template-columns: 48% 52% }
+.mband-r .mband-in {
+  grid-column: 2;
+  padding-left: clamp(40px, 5vw, 80px);
+  padding-right: calc((100vw - min(1080px, 100vw)) / 2 + 24px);
+  background: linear-gradient(
+    270deg,
+    rgb(var(--band-ink) / .9) 0%,
+    rgb(var(--band-ink) / .88) 62%,
+    rgb(var(--band-ink) / .72) 84%,
+    rgb(var(--band-ink) / 0) 100%
+  );
+}
+/* PEILAUS. Kaannetyssa asettelussa kuvan kohteen on oltava vasemmalla,
+   ja jos se on lahdekuvassa oikealla, sita ei voi siirtaa sinne
+   rajaamalla - se vaatisi niin ison zoomin etta kuvasta jaisi jaljelle
+   vain murto-osa. Peilaus kaantaa koko naytelman kerralla.
+
+   Peilaus on turvallinen vain kun kuvassa ei ole luettavaa tekstia
+   eika tunnistettavaa logoa: kaannettyna ne lukisivat vaarin. */
+.mband-mirror .mband-bg { transform: scaleX(-1) }
+
+/* REUNOJEN HAIVYTYS. Tama on koko siirtyman ydin: ilman sita nauha
+   alkaa ja loppuu vaakasuoraan viivaan, ja juuri se viiva tekee
+   vaihdosta tokkoisen. Nyt valokuva nousee sivun omasta pohjavarista
+   esiin ja sulaa siihen takaisin, jolloin rakenteen muutos tapahtuu
+   asteittain eika kertarysayksella.
+
+   120px on noin kolmasosa siita matkasta jonka lukija vierittaa
+   sekunnissa, eli haivytys ehtii nakya liikkeessa mutta ei syo
+   kuvasta merkittavaa osaa (13 % 906px:n nauhasta).
+
+   z-index 1: kerroksen on oltava kuvan (0) PAALLA mutta sisallon
+   (.mband-in, z-index 2) alla. pointer-events: none, jottei se
+   nappaa listarivien klikkeja. */
+/* HAIVYTYSSYVYYS ON NAUHAKOHTAINEN, EI VAKIO.
+   120px on oikein saumassa jossa kaksi nauhaa kohtaa: siina hamara
+   kaista on nimenomaan se mika sitoo ne yhteen. Ensimmaisen nauhan
+   YLAREUNASSA se on vaara, koska kuvan kohteen paalaki on vain 27px
+   nauhan ylareunasta - lahdekuvassa paan ylapuolelle jaa tilaa vain
+   3,6 % korkeudesta, eika sita voi rajaamalla lisata. 120px:n
+   haivytys sulatti siis paalaen pimeaan, ja se lukee katkaisuna.
+   Ylahaivytys on siksi oma muuttujansa. */
+.mband { --mb-fade-top: 120px }
+.mband::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgb(var(--band-ink)) 0%, rgb(var(--band-ink) / 0) var(--mb-fade-top)),
+    linear-gradient(0deg, rgb(var(--band-ink)) 0%, rgb(var(--band-ink) / 0) 120px);
+}
+/* Kuva koko nauhan alla, ei vain oikeassa puoliskossa. Vasen puoli on
+   lapinakyva verho sen paalla, jotta kuvauskaluston siluetti nakyy
+   tekstin takaa: se on kuvassa tarkoituksella.
+
+   SIIRTOVARA ON LASKETTU LOGOJEN OIKEASTA PIKSELISTA, EI SILMALLA.
+   Mittasin lahdekuvasta varialueiden rajat: Shorts-tunnus on
+   79,8-91,7 %:n kohdalla, kasvot 50-62 %:n. Reunaehdot ovat siis
+   kaksi:
+     kasvojen vasen reuna >= tekstin oikea reuna (818px)
+     Shortsin oikea reuna <= nauhan oikea reuna (1727px)
+   Vasempaan ankkuroituna nama antavat leveydelle valin 95-109 %.
+   105 % on siita keskivaiheilta: kasvot alkavat 907px:sta (89px
+   tekstin ulkopuolella) ja Shorts paattyy 1663px:aan (64px reunasta).
+   109 % olisi vienyt tunnuksen tasan reunaan kiinni.
+
+   Aiempi 114 % ylitti ylarajan, ja siksi tunnuksesta leikkautui 74px.
+   Vika ei ollut suunnassa vaan maarassa.
+
+   Pystysuunta: 105 %:lla skaalattu kuva on 1025px korkea eli 119px
+   nauhaa korkeampi. 24 %:lla ylareunasta leikkautuu 29px, ja paalaki
+   on 3,9 %:n korkeudella eli 40px - se jaa nakyviin 11px:n varalla.
+   32 % olisi leikannut 38px ja jattanyt vain 2px. */
+.mband-bg {
+  position: absolute; inset: 0 auto 0 0; z-index: 0;
+  /* Leveys ja rajaus tulevat komponentilta: jokaisella kuvalla on omat
+     kohteensa, joten yksi yhteinen arvo ei voi palvella kaikkia. */
+  width: var(--mb-w, 100%); max-width: none; height: 100%;
+  object-fit: cover; object-position: var(--mb-pos, 50% 50%);
+  /* 0,92: verkostokuvio erottuu kuvan takaa mutta valokuva pysyy
+     valokuvana. Selvasti matalampi arvo olisi haalentanyt kasvot ja
+     tunnukset, jotka ovat koko kuvan syy. */
+  opacity: .92;
+}
+
+/* Vasen puoli. Sisalto pitaytyy WRAPIN linjassa: vasen padding
+   lasketaan samasta kaavasta kuin wrapin oma sijainti, jolloin otsikko
+   alkaa samasta pystyviivasta kuin muu sivu. Oikea padding on reilu,
+   jotta teksti ei paina kuvan reunaa vasten. */
+.mband-in {
+  position: relative; z-index: 1;
+  /* VERHO, EI UMPINAINEN POHJA. 0,88 paastaa noin 12 % kuvasta lapi,
+     mika riittaa kuvauskaluston siluetin lukemiseen mutta pitaa
+     tekstin kontrastin: verhon alla oleva alue on kuvassa muutenkin
+     tumma (kamera ja tummansininen seina).
+
+     Viimeiset 22 % haipyvat lapinakyvaksi, mika tekee sauman
+     pehmeaksi. Erillista saumaelementtia ei siis tarvita - se oli
+     ennen .mband-median tehtava. */
+  background: linear-gradient(
+    90deg,
+    rgb(var(--band-ink) / .9) 0%,
+    rgb(var(--band-ink) / .88) 62%,
+    rgb(var(--band-ink) / .72) 84%,
+    rgb(var(--band-ink) / 0) 100%
+  );
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(30px, 5vh, 54px);
+  padding-block: 64px;
+  padding-left: calc((100vw - min(1080px, 100vw)) / 2 + 24px);
+  padding-right: clamp(40px, 5vw, 80px);
+  /* 2, ei 1: reunojen haivytys on kerroksessa 1 ja sen on jaatava
+     sisallon alle. */
+  z-index: 2;
+}
+.mband-txt { container-type: inline-size }
+/* 9,2cqi antaa noin 540px:n palstassa 50px. */
+.mband-txt h2 {
+  font-size: clamp(28px, 9.2cqi, 46px);
+  line-height: 1.04; letter-spacing: -0.03em;
+  text-wrap: balance; margin: 0;
+}
+.page-dark .mband-txt h2 { color: #f5f5f7 }
+/* 4,1cqi antaa 470px:n palstassa 19px. Aiempi 3,1 jai 14,6px:aan eli
+   alarajan varaan, joten arvo ei tehnyt mitaan - koko tuli clampin
+   minimista. */
+.mband-txt .sub { margin: 18px 0 0; max-width: 44ch; font-size: clamp(17px, 4.1cqi, 22px); line-height: 1.55 }
+.page-dark .mband-txt .sub { color: #b9c0cf }
+
+/* LISTA, EI KORTTEJA. Kolme laatikkoa oli oikea valinta kun jokaisessa
+   oli oma tunnuksensa; ilman tunnusta ne olivat kuvattomia kortteja eli
+   vaara tyokalu. Hiusviiva erottaa rivit kevyemmin, ja tumman pinnan
+   paalla kolme valkoista laatikkoa nakyi pinona joka peitti kuvan. */
+.mband-list { display: grid; border-top: 1px solid rgba(255,255,255,.14) }
+.mband-row {
+  display: block; text-decoration: none;
+  padding: 20px 4px 20px 0;
+  border-bottom: 1px solid rgba(255,255,255,.14);
+  /* Vaakasiirto hoverissa: rivi liikkuu lukusuuntaan, mika lukee
+     eteenpain vievana eleena eika korostuksena. */
+  transition: padding-left .28s cubic-bezier(.2,.6,.2,1), border-color .28s;
+}
+.page-dark .mband-row b {
+  display: block; font-size: var(--text-body-lg); font-weight: var(--weight-semibold);
+  letter-spacing: -0.012em; color: #f5f5f7;
+}
+/* 17,5px eli askel yli sivun perusleipatekstin (16,5px). Nauha on
+   ruudun korkuinen ja teksti on kuvan paalla, jolloin perusaste jai
+   liian pieneksi suhteessa 43px:n otsikkoon. */
+.page-dark .mband-row s {
+  display: block; text-decoration: none; margin-top: 6px;
+  font-size: 17.5px; line-height: 1.5; color: #c2c8d4;
+  max-width: 52ch;
+}
+.page-dark .mband-row .tlink { display: inline-block; margin-top: 9px; font-size: var(--text-label-sm); color: rgb(var(--band-accent)) }
+.mband-row:hover { padding-left: 12px; border-color: rgb(var(--band-accent) / .45) }
+
+/* ============================================================
+   LISTAN VARIANTIT
+
+   Nauhan RUNKO toistuu kolmesti tarkoituksella: kun sama muoto
+   palaa, lukija oppii sen ja osioiden vaihdot muuttuvat rytmiksi
+   kertarysayksien sijaan. Sisallon ASETTELU ei kuitenkaan saa
+   toistua, koska silloin kolme perakkaista ruudun korkuista nauhaa
+   lukee yhtena pitkana osiona eika kolmena. Perusvariantti
+   (hiusviivarivit) jaa Kanaville, ja kaksi seuraavaa saavat omansa.
+   ============================================================ */
+
+/* --- VARIANTTI 2: NUMEROITU KISKO (Prosessi) ---
+   Prosessi on ainoa naista jossa jarjestys on merkitseva: vaiheet
+   tapahtavat perakkain. Numero ja yhtenainen pystyviiva sanovat sen
+   ilman etta tekstissa tarvitsee sanoa "ensin" ja "sitten".
+   Vaakaviivat pois, koska ne katkoisivat juuri sen jatkumon jota
+   kisko esittaa. */
+/* ASETTELU, EI VAIN KORISTELU. Numerot ja kisko eivat yksin riita:
+   jos kaikki kolme nauhaa pinoavat otsikon ja listan samaan kapeaan
+   palkkiin, ne lukevat samana ruutuna vaikka viivat olisivat eri
+   suuntaan. Siksi tassa nauhassa palkki jaetaan pystysuunnassa
+   (otsikko ylas, vaiheet alas, kuva nakyviin valista) ja vaiheet
+   ladotaan kahteen palstaan. */
+.mband:has(.mband-steps) .mband-in {
+  justify-content: space-between;
+  /* Teksti loppuu ennen valikkopainiketta (1727px:n leveydella 1500 vs
+     painikkeen 1524), joten se ei osu siihen missaan vierityskohdassa.
+     Palstoille jaa 909..1500 eli 591px, kaksi 276px:n palstaa. */
+  padding-right: var(--nav-safe-r);
+}
+.mband-steps {
+  border-top: 0;
+  counter-reset: mbstep;
+  /* YKSI PALSTA, EI KAHTA. Kaksi palstaa mahtui leveyteen mutta ei
+     luettavuuteen: mitattuna rivilla oli 25 merkkia, kun luettava
+     mitta on 45-75. Ero edelliseen nauhaan syntyy pystyjaosta
+     (otsikko ylhaalla, vaiheet alhaalla) ja numerokiskosta, ei
+     palstamaarasta. Nyt tekstipalsta on 537px eli noin 61 merkkia. */
+  row-gap: 26px;
+}
+.mband-steps .mband-row {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  /* Perusviivatasaus eika pikselisiirto: numero ja otsikko ovat eri
+     kokoisia, joten mika tahansa kiinteä siirto rikkoutuisi heti kun
+     jompaakumpaa muutetaan. Grid osaa tasata ne oikeasti samalle
+     perusviivalle. */
+  align-items: baseline;
+  padding: 0 4px 0 0;
+  border-bottom: 0;
+  border-left: 1px solid rgba(255,255,255,.16);
+  counter-increment: mbstep;
+  transition: border-color .28s;
+}
+.mband-steps .mband-row::before {
+  content: counter(mbstep, decimal-leading-zero);
+  grid-column: 1;
+  padding-left: 18px;
+  line-height: 1.3;
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: .06em;
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--band-accent));
+  opacity: .75;
+}
+.mband-steps .mband-row > * { grid-column: 2 }
+.mband-steps .mband-row:hover { padding-left: 0; border-color: rgb(var(--band-accent) / .45) }
+
+/* --- VARIANTTI 3: YLIOTSIKKO JA KOROSTUSPALKKI (Kokonaisuus) ---
+   Talla listalla ei ole jarjestysta vaan roolit: jokainen kanava
+   tekee ketjussa eri tyon. Rooli on siksi nostettu omaksi
+   yliotsikoksi otsikon ylapuolelle, ja rivit erotetaan lyhyella
+   ylapalkilla eika alaviivalla - eri suunta kuin Kanavien
+   hiusviivoissa, jolloin osiot eivat lue samana. */
+/* Kolmas asettelu: otsikko koko leveydelta ja ketju kolmena
+   rinnakkaisena palstana sen alla. Ketjun kolme kanavaa toimivat
+   rinnakkain eivatka perakkain, joten vaakalato kertoo suhteen
+   oikein - ja samalla se on eri muoto kuin kahdessa edellisessa
+   nauhassa. */
+/* Kolmas nauha tarvitsee leveamman palkin kuin 52 %: kolme palstaa
+   vie 770px, jolloin viimeinen palsta paattyi 843:een eli kohtaan
+   jossa perusverho on jo lahes lapinakyva. Taustalla on juuri siina
+   valkoinen dashboard, joten teksti jai lukukelvottomaksi. Palkki
+   levenee 58 %:iin ja verho pidetaan tummana pidempaan, jolloin
+   himmennys osuu tyhjaan oikeaan sisennykseen eika tekstiin. */
+.mband:has(.mband-cols) { grid-template-columns: 66% 34% }
+.mband:has(.mband-cols) .mband-in {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--band-ink) / .93) 0%,
+    rgb(var(--band-ink) / .92) 78%,
+    rgb(var(--band-ink) / .86) 92%,
+    rgb(var(--band-ink) / 0) 100%
+  );
+  /* Teksti alkaa vasta logon oikealta puolelta (260 vs logon 231),
+     joten se ei osu siihen missaan vierityskohdassa. Palstoille jaa
+     260..1020 eli 760px, kolme 226px:n palstaa. */
+  padding-left: var(--nav-safe-l);
+  padding-right: clamp(24px, 7vw, 120px);
+}
+.mband-cols {
+  border-top: 0;
+  /* KAKSI PALSTAA, EI KOLMEA. Kolme palstaa jatti rivilla 29 merkkia.
+     Kahdella palstalla mitta on 360px eli noin 41 merkkia, ja kolme
+     kohtaa + loppuhuomio tayttavat 2x2-ruudukon ilman tyhjaa solua. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 44px;
+  row-gap: 34px;
+  align-items: start;
+}
+
+.mband-cols .mband-row {
+  padding: 15px 4px 0 0;
+  border-bottom: 0;
+  border-top: 2px solid rgb(var(--band-accent) / .45);
+  transition: border-color .28s;
+}
+.mband-cols .mband-row:hover { padding-left: 0; border-top-color: rgb(var(--band-accent) / .9) }
+.page-dark .mband-cols .mband-row i {
+  display: block;
+  font-style: normal;
+  margin-bottom: 7px;
+  font-size: var(--text-label-sm);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #8f9bb3;
+}
+/* Loppuhuomio ei ole listan rivi vaan koko ketjun paatelma, joten se
+   erottuu pienempana ja ilman omaa palkkia. */
+/* Loppuhuomio on neljas solu, mutta pudotettuna naapurinsa
+   leipatekstin tasolle. Ilman pudotusta se alkoi samalta viivalta kuin
+   viereisen kohdan yliotsikko, jolloin se luki neljantena kanavana.
+
+   KOKEILTU JA HYLATTY: valkoinen laatta. Se antoi tekstille oman
+   roolin, mutta yksi umpinainen laatta kolmen ilmavan tekstilohkon
+   seassa lukee ponnahdusikkunana eika sivuhuomiona - nauhan muu kieli
+   on reunatonta tekstia tummalla kuvalla. Pudotus riittaa erottamaan
+   tason ilman etta osioon tuodaan uutta muotokieltä. */
+.page-dark .mband-note {
+  margin: 74px 0 0;
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: #98a1b3;
+  max-width: 54ch;
+}
+.page-dark .mband-note a { color: rgb(var(--band-accent)) }
+
+/* Oikea sarake on tyhja: kuva on nauhan taustana ja nakyy siina
+   sellaisenaan. Sarake on olemassa vain jotta vasen sisalto pysyy
+   56 %:n levyisena. */
+
+@media (max-width: 900px) {
+  /* Kapealla naytolla jako pinoutuu: kuva ensin, sisalto sen alle.
+     Kaksi palstaa alle 900px:n leveydella jattaisi molemmille liian
+     vahan tilaa. */
+  /* Yhdessa palstassa verho kaannetaan pystysuuntaiseksi: kuva jaa
+     ylaosaan nakyviin ja teksti saa tummenevan pohjan sen alle. */
+  .mband { grid-template-columns: minmax(0, 1fr); min-height: 0 }
+  .mband-in {
+    padding: 220px 24px 44px;
+    background: linear-gradient(
+      180deg,
+      rgb(var(--band-ink) / .35) 0%,
+      rgb(var(--band-ink) / .86) 34%,
+      rgb(var(--band-ink) / .94) 100%
+    );
+  }
+}
+
+/* Kanavakortit poistuivat: osio on nyt lista, ei kortteja (ks.
+   .mband-list). Taalla olleet .plat-mark- ja valkoinen kortti -saannot on
+   poistettu, koska niiden ainoa kayttokohta oli tama osio. */
+@media (max-width: 760px) {
+  /* Kapealla naytolla lohko tayttaa leveyden, jolloin oikea tasaus on
+     vain vaikeampi lukea ilman etta se tuo mitaan rytmia. */
+  .shead-r { text-align: left }
+}
+
+/* PALVELUN SISALTO -OSIO POISTETTIIN, ja sen mukana .steps/.step
+   -saannot jotka oli kirjoitettu sen omalle em/i/u/s -rakenteelle.
+   Ne EIVAT olleet sivukohtaisia, joten ne yliajoivat myos etusivun
+   <Process>-osion .steps-ruudukon; jattaminen olisi tarkoittanut
+   kuollutta saantoa joka silti muuttaa toista sivua. */
+/* KAVIJATIETONAKYMA ENSIMMAISEN KORTIN TAUSTANA.
+
+   Nakyma tayttaa koko kortin ja teksti on sen paalla. Se on
+   lahtokohtaisesti huono yhdistelma, ja aiemmat yritykset kaatuivat
+   siihen etta luettavuutta yritettiin ostaa nakyman lapinakyvyydesta:
+   sama saato palveli kahta vastakkaista tavoitetta, joten nakyma oli
+   yhtaikaa liian himmea nahdakseen ja liian vahva luettavaksi.
+
+   NYT LUETTAVUUS TULEE TEKSTIN OMASTA KEHASTA, EI NAKYMAN
+   VAIMENTAMISESTA. Jokainen kirjain saa ympärilleen valkoisen hehkun,
+   joka puskee reian nakymaan tasan siihen kohtaan missa kirjain on.
+   Nakyma saa siis olla vahva ja teksti silti terava - kaksi tavoitetta,
+   kaksi saatoa.
+
+   Hehku on NELJA pientasateista varjoa eika yksi iso. Yksi 8px:n varjo
+   on reunoiltaan lapinakyva eika peita alleen mitaan; nelja
+   paallekkaista 3-4px:n varjoa kasvattaa peittavyyden lahes
+   umpinaiseksi kirjaimen vieressa ja haipyy silti pehmeasti. */
+.whycard-art { position: relative; overflow: clip }
+/* KEVYT TUMMENNUS GRAAFIN PAALLE, TEKSTIN ALLE.
+   Kortin luettavuusongelma ei ole kontrasti vaan kohina: vaaleat
+   kayrat kulkevat kirjainten lapi ja silma joutuu erottamaan ne
+   toisistaan. Veili tekee kaksi asiaa kerralla. Se vaimentaa graafin
+   omaa kirkkautta, ja koska tekstilla on valkoinen hehkukeha, keha
+   erottuu nyt hieman tummemmasta pohjasta selvasti - aiemmin se oli
+   valkoista valkoisella.
+
+   Peite on ::after eika oma elementti, koska se on puhtaasti
+   visuaalinen. ::after piirtyy lapsien jalkeen, joten se peittaa
+   .whypanelin ilman z-indexia; teksti on z-index 1 eli sen paalla.
+
+   VOIMAKKUUS JA TEKSTIN VARI ON PAKKO SAATAA YHDESSA. .11 tummentaa
+   pohjan 255 -> 229, mika olisi vienyt vanhan #4d4d55-tekstin
+   kontrastin 8,4:1 -> 6,7:1 eli AAA-rajan (7:1) alle. Teksti
+   tummennettiin samalla #3c3c44:aan, jolloin kontrasti on 8,7:1 eli
+   parempi kuin alkuperainen valkoisella. Veili siis vahvistui JA
+   luettavuus parani; toinen ilman toista olisi tehnyt vain toisen. */
+.whycard-art::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: rgba(15,18,26,.11);
+  pointer-events: none;
+}
+.whycard-art > h3, .whycard-art > p { position: relative; z-index: 1 }
+.whycard-art > h3 {
+  text-shadow:
+    0 0 3px #fff, 0 0 3px #fff, 0 0 4px #fff,
+    0 0 8px #fff, 0 0 8px #fff, 0 0 14px #fff;
+}
+/* Leipateksti saa VAHVEMMAN kehan kuin otsikko, ei saman. Se on
+   pienempaa ja ohuempaa, joten sama hehku peittaa siita suhteessa
+   vahemman: 15px:n otsikon viivanpaksuus on noin 1,6px ja 15px:n
+   leipatekstin noin 1,1px, joten sama 3px:n sade jattaa ohuemman
+   kirjaimen ympärille kapeamman puhtaan alueen. Lisaksi juuri
+   leipatekstin rivit osuvat kayrän kohdalle. */
+.whycard-art > p {
+  text-shadow:
+    0 0 2px #fff, 0 0 3px #fff, 0 0 3px #fff, 0 0 4px #fff,
+    0 0 6px #fff, 0 0 9px #fff, 0 0 9px #fff, 0 0 16px #fff;
+}
+.whypanel {
+  position: absolute; inset: 0;
+  padding: 14px 16px 10px;
+  color: var(--ink);
+  opacity: .8;
+  pointer-events: none;
+  /* GRAAFI HIMMENEE SIELLA MISSA TEKSTI ON, EI KAIKKIALLA.
+     Mitattuna teksti vie kortista 27..145 ja graafi piirtyy 1..173,
+     eli ne ovat paallekkain koko matkalta. Tasainen opacity oli
+     siksi mahdoton tehtava: sama luku joutui palvelemaan seka
+     luettavuutta etta graafin nakyvyytta.
+
+     Maski erottaa nama toisistaan. Tekstin alueella lapinakyvyys on
+     .8 x .42 = .34 eli noin puolet entisesta, ja alimmassa 14px:n
+     kaistassa (akselien nimet, joiden kohdalla ei ole tekstia) se
+     nousee tayteen .8:aan - siis vahvempaan kuin ennen.
+
+     Maski EIKA rajaus: rajaus katkaisisi kayran kesken, mika lukee
+     virheena. Maski himmentaa sen mutta jattaa muodon ehjaksi. */
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.42) 80%, #000 92%);
+  mask-image: linear-gradient(180deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.42) 80%, #000 92%);
+}
+
+/* Luku ylanurkkaan, ILMAN LAATIKKOA.
+   Numeromerkkien poiston jalkeen kortti lyheni 208px:sta 166px:aan ja
+   otsikko nousi ylareunaan, jolloin se leikkasi lukuruudun poikki.
+   Umpinainen valkoinen laatikko reunuksineen keskella otsikkoa lukee
+   virheena; sama luku pelkkana tekstina on osa taustaa, ja otsikon
+   valkoinen keha puskee sen lapi siististi. Oikea tasaus, koska luku
+   on kortin oikeassa reunassa. */
+.wp-tile {
+  position: absolute; top: 16px; right: 16px; width: 128px;
+  text-align: right;
+}
+.wp-tile span { display: block; font-size: 9.5px; color: var(--grey) }
+.wp-tile b {
+  display: block; margin-top: 1px;
+  font-size: 14px; font-weight: var(--weight-bold);
+  letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+
+/* Kayrä kortin alaosaan. Kiintea korkeus, jotta se ei kasva kortin
+   mukana ja nouse otsikon riveille. */
+.wp-strip { position: absolute; left: 16px; right: 16px; bottom: 22px; height: 74px }
+.wp-chart { position: absolute; inset: 0; width: 100%; height: 100% }
+.wp-grid { stroke: rgba(0,0,0,.14); stroke-width: 1; fill: none }
+.wp-line {
+  fill: none; stroke: #d81b83; stroke-width: 1.8;
+  stroke-linejoin: round; stroke-linecap: round;
+  /* vectorEffect pitaa viivan yhta paksuna vaikka viewBox venytetaan
+     preserveAspectRatio="none":lla - ilman tata pystysuorat nousut
+     olisivat olleet selvasti ohuempia kuin vaakaosuudet. */
+  vector-effect: non-scaling-stroke;
+}
+/* Katkoviiva kolmen sekunnin kohdalle. Ohuempi ja himmeampi kuin
+   kayrä: se on lukuohje, ei toinen mittaus. */
+.wp-mark {
+  stroke: rgba(0,0,0,.34); stroke-width: 1; fill: none;
+  stroke-dasharray: 2.5 3;
+  vector-effect: non-scaling-stroke;
+}
+.wp-from, .wp-to, .wp-mid {
+  position: absolute; bottom: -16px;
+  font-size: 8.5px; color: #8a8a90; font-variant-numeric: tabular-nums;
+}
+.wp-from { left: 0 }
+.wp-to { right: 0 }
+/* 10 %: aika-akseli on 0:00-0:30, joten kolme sekuntia on tasan
+   kymmenesosa kaistan leveydesta. translateX(-50%) keskittaa merkinnan
+   katkoviivan kohdalle. */
+.wp-mid {
+  left: 10%; transform: translateX(-50%);
+  color: var(--blue); font-weight: var(--weight-semibold);
+}
+
+
+/* KANAVAPYLVAAT (3. kortti).
+   Ruudukko tulee CSS:n taustakuvana eika svg:sta: pylvaat ja akselin
+   nimet ovat HTML:aa, joten kaistalla ei ole svg:ta johon viivat
+   voisi piirtaa. Sama kolme viivaa ja sama savy kuin kayräkorteissa,
+   jotta kaikki nelja korttia ovat samassa kehyksessa. */
+.wp-ruled {
+  background-image: linear-gradient(rgba(0,0,0,.14) 1px, transparent 1px);
+  background-size: 100% 36.5px;
+  background-position: 0 0;
+}
+.wp-cols {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end; gap: 10%;
+  padding: 0 4%;
+}
+/* s on pylvään ura: se vie tasan yhtä suuren osan leveydesta kuin
+   muutkin, jolloin pylvaat ovat samanlevyisia riippumatta siita kuinka
+   pitka kanavan nimi on. */
+.wp-cols s { flex: 1; height: 100%; display: flex; align-items: flex-end; text-decoration: none }
+.wp-cols u {
+  display: block; width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, var(--blue), rgba(0,124,143,.55));
+  text-decoration: none;
+}
+/* Nimirivi kayttaa TASAN samaa asettelua kuin pylvasrivi: sama flex,
+   sama gap, sama padding. Ensin kokeiltu neljan sarakkeen grid ei
+   voinut osua kohdalleen, koska pylvailla on 10 %:n valit joita
+   gridin tasajako ei tunne - mitattuna nimet olivat 16px sivussa
+   reunimmaisten pylvaiden kohdalla. */
+.wp-axis4 {
+  position: absolute; left: 0; right: 0; bottom: -16px;
+  display: flex; gap: 10%; padding: 0 4%;
+  font-size: 8.5px; color: #8a8a90;
+}
+.wp-axis4 span { flex: 1; text-align: center }
+
+/* KAKSI KAYRAA (4. kortti). Ylempi harmaa, alempi sivun sininen.
+   Ohuemmat kuin yksittainen kayrä muissa korteissa: kaksi 1,8px:n
+   viivaa samassa ruudukossa olisi tayttanyt kaistan. */
+.wp-line2, .wp-line3 {
+  fill: none; stroke-width: 1.5;
+  stroke-linejoin: round; stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.wp-line2 { stroke: rgba(0,0,0,.28) }
+.wp-line3 { stroke: var(--blue) }
+/* Selitteen pallot. Ne ovat kaistan alapuolella samalla rivilla kuin
+   muiden korttien akselimerkinnat, joten rivikorkeus ei muutu. */
+.wp-from i, .wp-to i {
+  display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+  margin-right: 4px; vertical-align: middle;
+}
+.wp-from i.k2 { background: rgba(0,0,0,.28) }
+.wp-to i.k3 { background: var(--blue) }
+@media (max-width: 760px) {
+  .wp-tile { top: 10px; width: 116px }
+  .wp-strip { height: 58px }
+}
+
+/* ==================================================================
+   VAALEA HERO TUMMAN SIVUN PAALLA
+   ==================================================================
+   Sivu on .page-dark, mutta hero on vaalea ja tumma pohja alkaa
+   coverista. Syy on rajan lukeminen: kun molemmat olivat tummia,
+   cover ei nakynyt omana kerroksenaan vaan samana pintana johon
+   verkostotausta paistoi lapi. Vaalea hero tekee coverin liu'usta
+   nakyvan tapahtuman ja antaa verkostolle oman ruutunsa.
+
+   TAMA EI OLE TEEMAN VAIHTO VAAN RAJATTU POIKKEUS. Kaikki alla oleva
+   koskee vain .stickysub > .hero -laatikkoa; sen ulkopuolella
+   .page-dark patee sellaisenaan. */
+
+/* Verkosto vaaleaksi. Sama kuvio, samat mitat, vain varit vaihtuvat:
+   viivat ja pisteet sivun omalla sinisella (#007c8f) vaalean pohjan
+   paalla. Lapinakyvyydet ovat suuremmat kuin tummassa variantissa,
+   koska tumma viiva vaalealla haviaa nopeammin kuin vaalea tummalla:
+   sama .045 olisi jaanyt nakymattomaksi. */
+/* :not(.netbd-cover) - vaalea variantti koskee VAIN heron kerrosta.
+   Coverin kerros jaa .netbd:n omiin tummiin oletusarvoihin, jolloin
+   sama kuvio nakyy kummallakin puolella oikean varisena ilman toista
+   sarjaa muuttujia. */
+.page-lyhytvideot .netbd:not(.netbd-cover) {
+  --net-rgb: 0,124,143;
+  --net-dot: rgba(0,110,126,.55);
+  --net-grid: rgba(0,124,143,.07);
+  background-color: #f4fafb;
+}
+/* COVERIN KERROS.
+   sticky eika fixed: sticky-lapsi rajautuu vanhemman laatikkoon, joten
+   kuvio alkaa ja loppuu tasan coverin mukana. Fixed-lapsi ei rajaudu
+   vanhempaansa vaan olisi nakynyt myos heron kohdalla.
+
+   Korkeus on tasan yksi nakyma, ei coverin korkeus: cover on yli
+   10 000px, ja sen korkuinen kangas olisi kymmenia kertoja nakyman
+   verran rasteroitavaa pintaa. Pinnattuna yksi nakyma riittaa ja kuvio
+   jatkuu vieritettaessa itsestaan - sama perustelu kuin fixed-kerroksen
+   kohdalla.
+
+   Tausta on lapinakyva: coverin oma #060b14 on jo sen alla, eika samaa
+   varia kannata maalata kahdesti. */
+.netbd-cover {
+  /* inset ENNEN topia. .netbd asettaa inset: 0, ja se on nollattava,
+     mutta jos inset: auto kirjoitetaan topin JALKEEN se nollaa myos
+     sen - ja top: auto tekee stickysta tehottoman. Mitattuna kerros
+     valui 1386px nakyman ylapuolelle eli ei pinnautunut lainkaan. */
+  inset: auto;
+  position: sticky; top: 0;
+  width: 100%; height: 100svh;
+  background-color: transparent;
+}
+/* Kaare joka rajaa pinnatun kerroksen coverin mittaan. Absoluuttinen,
+   joten se ei vie tilaa virrassa; overflow: clip eika hidden, koska
+   clip ei tee elementista vieritettavaa ja sticky-lapsi pinnautuu
+   edelleen nakymaan. Ks. NetBackdrop.tsx. */
+.netbd-clip {
+  position: absolute; inset: 0; z-index: 0;
+  overflow: clip; pointer-events: none;
+}
+/* Hehku ja vinjetti kaannetaan: tummassa reunat tummenivat, vaaleassa
+   ne vaalenevat. Muuten reunoille olisi jaanyt tumma kehys vaalean
+   heron ympari. */
+.page-lyhytvideot .netbd:not(.netbd-cover) .netbd-glow {
+  background:
+    radial-gradient(60% 50% at 50% 40%, rgba(0,197,227,.13), transparent 70%),
+    radial-gradient(120% 100% at 50% 50%, transparent 42%, rgba(255,255,255,.72) 100%);
+}
+
+/* Tekstit takaisin tummiksi. .page-dark-saannot ovat muotoa
+   .page-dark h1 (0,1,1), joten .page-dark .stickysub > .hero h1
+   (0,3,1) voittaa ne ilman !importantia. */
+.page-dark .stickysub > .hero { color: var(--ink) }
+.page-dark .stickysub > .hero h1,
+.page-dark .stickysub > .hero h2 { color: var(--ink) }
+.page-dark .stickysub > .hero p,
+.page-dark .stickysub > .hero .sub { color: var(--grey) }
+.page-dark .stickysub > .hero .accent,
+.page-dark .stickysub > .hero .tlink,
+.page-dark .stickysub > .hero .kick { color: var(--blue) }
+
+/* Kuplat takaisin vaaleaksi lasiksi. Tumma lasi vaalealla pohjalla
+   olisi lukenut mustana laattana puhelinten paalla. */
+.page-dark .stickysub > .hero .chip-f {
+  background: rgba(255,255,255,.86);
+  border-color: rgba(0,0,0,.06);
+  box-shadow: 0 18px 44px -16px rgba(29,29,31,.28);
+  color: var(--ink);
+}
+.page-dark .stickysub > .hero .chip-f small { color: var(--grey) }
+.page-dark .stickysub > .hero .chip-f em { background: var(--blue-tint); color: var(--blue) }
+
+/* Footer on coverin ULKOPUOLELLA, joten sen lapi nakyi vaalea
+   verkostotausta heti kun sen tausta oli 0,85. Umpinaiseksi. */
+.page-dark footer { background: #060b14 }
+
+@media (max-width: 900px) {
+  /* Kapealla naytolla mockupit ovat rivissa eivatka pinossa, ja hero
+     saa kasvaa sisallon mukaan: pakotettu 100svh olisi tyontanyt napit
+     ulos nakymasta. */
+  .stickysub > .hero { min-height: 0; display: block; padding-bottom: 56px }
+  .stickysub > .hero > .wrap { max-width: 1080px }
+  .stickysub .hero-split { grid-template-columns: minmax(0, 1fr); gap: 0 }
+  .stickysub .hero-copy { text-align: center }
+  .stickysub .hero-copy .heroctas, .stickysub .hero-copy .herotrust { justify-content: center }
+  .stickysub > .hero .stage { margin-top: 32px }
+  /* Kiintea calc(50% - 348px) olettaa vahintaan 686px levean lavan.
+     Kapealla naytolla lava on noin 350px, jolloin sama arvo veisi
+     reunimmaiset 168px nakyman ulkopuolelle. Prosentti skaalautuu. */
+  .stickysub .stage { --stage-scale: .62 }
+  .stickysub .stage .p2, .stickysub .stage .cf3 { left: -17% }
+  .stickysub .stage .p3, .stickysub .stage .cf2 { right: -17% }
+}

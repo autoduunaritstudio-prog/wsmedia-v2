@@ -1,4 +1,4 @@
-import Phone from "../../components/Phone";
+import PhoneReel from "../../components/PhoneReel";
 import WordSwap from "../../components/WordSwap";
 
 /**
@@ -15,94 +15,118 @@ const WORDS = [
 export default function Hero() {
   return (
     <header className="hero">
-      <div className="wrap">
-        <p className="kick li d1">Lyhytvideotuotanto yrityksille</p>
-        <h1 className="li d2" data-par="0.05">
-          Lyhytvideot yrityksille, jotka
-          <br />
-          <WordSwap words={WORDS} deferToClient />
-        </h1>
-        <p className="sub li d3" data-par="0.035">
-          Avaimet käteen -lyhytvideotuotanto yrityksille: TikTok, Instagram Reels ja YouTube Shorts.
-          Strategia, käsikirjoitus, kuvaus ja editointi yhdeltä tiimiltä — kiinteällä
-          kuukausihinnalla.
-        </p>
-        <div className="heroctas li d4" data-par="0.025">
-          <a className="btn mag" href="#tarjous">
-            Pyydä tarjous
-          </a>
-          <a className="tlink" href="#hinnoittelu">
-            Katso lyhytvideopaketit
-          </a>
+      {/* KAKSI PALSTAA: teksti vasemmalle, mockupit oikealle.
+          Pystysuuntainen jarjestys (otsikko - puhelimet - teksti) toimi
+          vain jos jokin niista sai jaada taitteen alle. Rinnakkain
+          kaikki mahtuu samaan ruutuun: lukija saa otsikon, lupauksen ja
+          napin yhdella silmayksella ja naytteet niiden vieressa. */}
+      <div className="wrap hero-split">
+        <div className="hero-copy">
+          <h1 className="li d2">
+            Lyhytvideot yrityksille, jotka
+            <br />
+            <WordSwap words={WORDS} deferToClient />
+          </h1>
+          <p className="sub li d3">
+            Avaimet käteen -lyhytvideotuotanto yrityksille: TikTok, Instagram Reels ja YouTube
+            Shorts. Strategia, käsikirjoitus, kuvaus ja editointi yhdeltä tiimiltä, kiinteällä
+            kuukausihinnalla.
+          </p>
+          <div className="heroctas li d4">
+            <a className="btn mag" href="#tarjous">
+              Pyydä tarjous
+            </a>
+            <a className="tlink" href="#hinnoittelu">
+              Katso lyhytvideopaketit
+            </a>
+          </div>
+          <p className="herotrust li d4">
+            <span>
+              <i />
+              Vastaamme 24 tunnissa
+            </span>
+            <span>
+              <i />
+              Ei pitkiä sopimuksia
+            </span>
+            <span>
+              <i />
+              Espoo · Helsinki · koko Suomi
+            </span>
+          </p>
         </div>
-        <p className="herotrust li d4">
-          <span>
-            <i />
-            Vastaamme 24 tunnissa
-          </span>
-          <span>
-            <i />
-            Ei pitkiä sopimuksia
-          </span>
-          <span>
-            <i />
-            Espoo · Helsinki · koko Suomi
-          </span>
-        </p>
-      </div>
 
-      <div
-        className="stage li d5"
-        id="stage"
-        data-par="-0.03"
-        aria-label="Esimerkkejä WS Median tuottamista lyhytvideoista"
-      >
+        <div
+          className="stage li d5"
+          id="stage"
+          aria-label="Esimerkkejä WS Median tuottamista lyhytvideoista"
+        >
         <div className="chip-f cf1">
           <em>▲</em>
           <span>
-            Näyttökerrat<small>[LUKU] / 30 pv</small>
+            1,7 milj.<small>katselukertaa</small>
           </span>
         </div>
+        {/* cf2 oikealle, cf3 vasemmalle - ks. .stickysub .stage .cfN
+            globals.css:ssa. Jarjestys DOMissa ei ohjaa sijaintia. */}
         <div className="chip-f cf2">
           <em>✓</em>
           <span>
-            Toimitettu<small>[X] arkipäivässä</small>
+            Toimitettu<small>7 päivässä</small>
           </span>
         </div>
         <div className="chip-f cf3">
           <em>★</em>
           <span>
-            {"[LUKU] / 5"}
-            <small>Asiakastyytyväisyys</small>
+            5 / 5<small>Asiakastyytyväisyys</small>
           </span>
         </div>
-        <Phone
+        <PhoneReel
           className="p2"
           depth={26}
-          tag="TIKTOK"
-          handle="@[asiakas]"
-          caption="Ennen ja jälkeen. Katso muutos loppuun asti."
-          likes="[LUKU]"
-          comments="[LUKU]"
+          variant="tiktok"
+          src="/hero/laaksolahti-hero.mp4"
+          poster="/hero/laaksolahti-hero.webp"
+          handle="laaksolahdensahko"
+          avatar="/hero/laaksolahti-ava.webp"
+          caption="TOP 3 mallit alle 1400 eurolla jotka tuovat viilennystä kesähelteille."
+          music="Alkuperäinen ääni · laaksolahdensahko"
+          likes={[820, 2140]}
+          comments={[38, 121]}
+          shares={[24, 96]}
+          saves={[62, 188]}
         />
-        <Phone
+        {/* Kaikissa kolmessa on asiakkaan oma video ja alustan oma
+            kayttoliittyma. Videot ovat 540x960 ja 10 s, yhteensa 1,3 MB,
+            ja jokainen alkaa vasta kun mockup on nakyvissa. */}
+        <PhoneReel
           className="p1"
           depth={14}
-          tag="REELS"
-          handle="@wsmedia"
-          caption="Näin teemme lyhytvideot jotka pysäyttävät. 30 s."
-          likes="[LUKU]"
-          comments="[LUKU]"
+          src="/hero/white-star-hero.mp4"
+          poster="/hero/white-star-hero.webp"
+          handle="whitestardetailing"
+          avatar="/hero/whitestar-ava.webp"
+          caption="Tarvitsetko nopean auton muodonmuutoksen? White Star hoitaa homman."
+          music="whitestardetailing · Alkuperäinen ääni"
+          likes={[1240, 3180]}
+          comments={[86, 214]}
+          shares={[41, 132]}
         />
-        <Phone
+        <PhoneReel
           className="p3"
           depth={34}
-          tag="SHORTS"
-          handle="@[asiakas]"
-          caption="Kolme virhettä jotka kaatavat somenäkyvyyden."
-          likes="[LUKU]"
-          comments="[LUKU]"
+          src="/hero/vauhtiveikot-hero.mp4"
+          poster="/hero/vauhtiveikot-hero.webp"
+          handle="vauhtiveikot.fi"
+          avatar="/hero/vauhtiveikot-ava.webp"
+          caption="Meiltä löydät yli 22 000 tuotetta auton virittämiseen ja huoltoon."
+          music="vauhtiveikot.fi · Alkuperäinen ääni"
+          likes={[540, 1490]}
+          comments={[27, 88]}
+          shares={[19, 74]}
         />
+      </div>
+
       </div>
     </header>
   );

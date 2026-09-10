@@ -1,5 +1,7 @@
 import SmartLink from "../../components/SmartLink";
 
+import Cta from "./Cta";
+
 import { Fragment } from "react";
 import type { CSSProperties } from "react";
 import { FAQ_GROUPS } from "../faq-data";
@@ -52,7 +54,6 @@ export function Hinnoittelu() {
     <section id="hinnoittelu">
       <div className="wrap">
         <div className="shead center rv" data-par="0.03">
-          <span className="kick">Hinnoittelu</span>
           <h2>Paljonko lyhytvideotuotanto maksaa?</h2>
           <p className="sub">
             Kiinteä kuukausihinta, ei aloitusmaksuja eikä pitkiä sopimuksia. Irtisanominen kuukausi
@@ -73,8 +74,12 @@ export function Hinnoittelu() {
                   <li key={f}>{f}</li>
                 ))}
               </ul>
+              {/* Sama sanamuoto kuin muissa hintavaiheen kehotteissa.
+                  "Pyyda suunnitelma" oli kolmas nimi samalle lomakkeelle,
+                  ja kolme nimea saa lukijan arvailemaan vievatko ne eri
+                  paikkoihin. */}
               <a className={p.pop ? "btn" : "btn alt"} href="#tarjous">
-                Pyydä suunnitelma
+                Pyydä tarjous
               </a>
             </div>
           ))}
@@ -99,7 +104,6 @@ export function Kenelle() {
     <section id="kenelle" style={{ paddingTop: "20px" }}>
       <div className="wrap">
         <div className="shead rv" data-par="0.03">
-          <span className="kick">Kenelle</span>
           <h2>Kenelle lyhytvideotuotanto sopii?</h2>
         </div>
         <div className="fit rv">
@@ -165,7 +169,6 @@ export function Alueet() {
     <section id="alueet" style={{ paddingTop: "20px" }}>
       <div className="wrap">
         <div className="shead rv" data-par="0.03">
-          <span className="kick">Toiminta-alue</span>
           <h2>Lyhytvideotuotantoa Espoosta koko Suomeen</h2>
           <p className="sub">
             Toimipisteemme on Espoossa ja kuvaamme päivittäin pääkaupunkiseudulla. Kuvauspäivät
@@ -191,7 +194,6 @@ export function Ukk() {
     <section id="ukk" style={{ paddingTop: "20px" }}>
       <div className="wrap">
         <div className="shead center rv" data-par="0.03">
-          <span className="kick">Usein kysyttyä</span>
           <h2>Usein kysytyt kysymykset lyhytvideotuotannosta</h2>
         </div>
         <div className="faq rv">
@@ -210,6 +212,10 @@ export function Ukk() {
             </Fragment>
           ))}
         </div>
+        {/* Vastavakysymyksien jalkeen takaisin matalaan kynnykseen: se
+            joka lukee UKK:n loppuun asti epäröi vielä, joten hanelle
+            tarjotaan kartoitus eika tarjouspyyntoa. */}
+        <Cta kind="kartoitus" center />
       </div>
     </section>
   );
@@ -221,7 +227,6 @@ export function Kaytannossa() {
     <section id="kaytannossa" style={{ paddingTop: "20px" }}>
       <div className="wrap-n">
         <div className="shead rv" data-par="0.03" style={{ marginBottom: "34px" }}>
-          <span className="kick">Taustaa</span>
           <h2>Lyhytvideotuotanto käytännössä</h2>
         </div>
         <div className="prose rv">
@@ -325,7 +330,6 @@ export function Blogi() {
     <section id="blogi" style={{ paddingTop: "20px" }}>
       <div className="wrap">
         <div className="shead rv" data-par="0.03" style={{ marginBottom: "30px" }}>
-          <span className="kick">Blogi</span>
           <h2>Lue lisää lyhytvideoista</h2>
         </div>
         <div className="postrows rv">
