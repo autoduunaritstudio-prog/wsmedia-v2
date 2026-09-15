@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 
-import Backdrop from "../components/Backdrop";
+import Logos from "../components/Logos";
+import MetalBackdrop from "../components/MetalBackdrop";
 import Footer from "../components/Footer";
-import HeroBrowserStage from "../components/HeroBrowserStage";
 import Nav from "../components/Nav";
 import SiteEffects from "../components/SiteEffects";
-import SmartLink from "../components/SmartLink";
-import WordSwap from "../components/WordSwap";
+import StatBand from "../components/StatBand";
 import { OVERLAY_NAV, VERKKOSIVUT_FOOTER } from "../components/site-data";
 
+import Hero from "./components/Hero";
 import { buildJsonLd } from "./jsonld";
 import { Asiakkaat, Nakyvyys, Ongelma, Prosessi, Sisalto, Toteutustapa } from "./sections";
-import { Alueet, Blogi, Hinnoittelu, Kenelle, Loppu, Tarjous, Taustaa, Tulokset, Ukk } from "./sections2";
+import { Alueet, Hinnoittelu, Kenelle, Tarjous, Tulokset, Ukk } from "./sections2";
 
 export const metadata: Metadata = {
   title: "Verkkosivut yritykselle | Kotisivujen suunnittelu ja toteutus | WS Media",
@@ -30,13 +30,17 @@ export const metadata: Metadata = {
   },
 };
 
-/** Heron vaihtuvat lauseet. Vain ensimmainen renderoityy palvelimella, jotta
- *  H1 pysyy hakukoneelle yhtena lauseena. */
-const SWAP_WORDS = [
-  "löytyvät Googlesta.",
-  "latautuvat sekunnissa.",
-  "muuttavat kävijät yhteydenotoiksi.",
-  "kestävät vuosia.",
+/* SAMAT LUVUT KUIN ETUSIVULLA (app/page.tsx STATS). Nama ovat yrityksen
+   lukuja, eivat taman sivun lukuja, joten kahta eri arvoa samasta
+   asiasta ei saa olla olemassa. Kun luvut paivitetaan, molemmat paikat
+   on paivitettava yhdessa.
+
+   \u00A0 = sitomaton valilyonti: tuhaterotin ei saa katketa riville. */
+const STATS = [
+  { value: "150+", label: "toteutettua projektia" },
+  { value: "5\u00A0000\u00A0000+", label: "katselukertaa yhteensä" },
+  { value: "8", label: "arkipäivää keskim. toimitusaika" },
+  { value: "4,8/5", label: "keskiarvosana asiakkailta" },
 ];
 
 export default function Verkkosivut() {
@@ -47,7 +51,12 @@ export default function Verkkosivut() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd()) }}
       />
 
-      <Backdrop variant="simple" />
+      {/* ETUSIVUN TAUSTAKUVIO, EI OMAA. Sivu kaytti aiemmin
+          <Backdrop variant="simple" />:a, joka ei esiinny etusivulla
+          lainkaan, joten alasivu luki eri sivustona. Metallikuvio on
+          etusivun tunnus ja se tuodaan tanne sellaisenaan: sama kuvio,
+          sama kirkas aukko keskella, sama SiteEffectsin ohjaama liike. */}
+      <MetalBackdrop />
       <div id="prog" />
 
       <Nav
@@ -58,75 +67,56 @@ export default function Verkkosivut() {
         logoHref="/"
       />
 
-      <div className="wrap crumbs">
-        <nav aria-label="Murupolku">
-          <ol>
-            <li>
-              <SmartLink href="/">Etusivu</SmartLink>
-            </li>
-            <li>
-              <SmartLink href="/#palvelut">Palvelut</SmartLink>
-            </li>
-            <li aria-current="page">Verkkosivut</li>
-          </ol>
-        </nav>
-      </div>
+      {/* PINNATTU HERO JA PEITTAVA COVER, sama periaate kuin etusivulla ja
+          lyhytvideosivulla. Hero jaa kiinni nakyman ylareunaan ja cover
+          liukuu sen paalle natiivilla sticky-kaytoksella. Pari ja sen
+          cover ovat saman kaareen lapsia, se on ehto jonka rikkominen
+          kaataa pinnauksen.
 
-      <header className="hero">
-        <div className="wrap">
-          <p className="kick li d1">Verkkosivut yritykselle</p>
-          <h1 className="li d2" data-par="0.05">
-            Verkkosivut yritykselle, jotka
-            <br />
-            <WordSwap words={SWAP_WORDS} deferToClient />
-          </h1>
-          <p className="sub li d3" data-par="0.035">
-            Verkkosivujen suunnittelu ja toteutus avaimet käteen: sivurakenne, tekstit, tekninen
-            hakukoneoptimointi ja julkaisu. Perussivustosta täysin räätälöityyn toteutukseen —
-            kiinteällä projektihinnalla.
-          </p>
-          <div className="heroctas li d4" data-par="0.025">
-            <a className="btn mag" href="#tarjous">
-              Pyydä tarjous
-            </a>
-            <a className="tlink" href="#hinnoittelu">
-              Katso mitä verkkosivut maksavat
-            </a>
-          </div>
-          <p className="herotrust li d4">
-            <span>
-              <i />
-              Kiinteä projektihinta, ei piilokuluja
-            </span>
-            <span>
-              <i />
-              Valmis 2–4 viikossa
-            </span>
-            <span>
-              <i />
-              Espoo · Helsinki · koko Suomi
-            </span>
-          </p>
+          Coverin ylareunassa on sama asiakaslogonauha ja sama lukukaista
+          kuin etusivulla: ensimmainen asia joka nousee heron paalle on
+          todiste, ei uusi myyntilause.
+
+          Murupolku poistui virrasta kokonaan. Se oli 33px korkea rivi
+          heron ylapuolella, ja pinnatun heron kanssa se olisi jaanyt
+          navin ja heron valiin omaksi kaistakseen. BreadcrumbList-
+          merkinta sailyy jsonld.ts:ssa, eli hakukone saa polun yha. */}
+      <div className="stickysub">
+        <Hero />
+        <div className="cover">
+          <MetalBackdrop />
+          <Logos />
+
+          <section style={{ padding: "64px 0 20px" }}>
+            <div className="wrap">
+              <StatBand stats={STATS} />
+            </div>
+          </section>
+
+          <Ongelma />
+          <Sisalto />
+          <Toteutustapa />
+          <Nakyvyys />
+          <Prosessi />
+          <Tulokset />
+          <Asiakkaat />
+          <Hinnoittelu />
+          <Kenelle />
+          <Alueet />
+          <Ukk />
+          {/* YKSI CTA KAHDEN SIJAAN. Sivun lopussa oli <Loppu />, jonka
+              ainoa nappi osoitti takaisin samaan lomakkeeseen muutaman
+              sadan pikselin paahan. Kaksi pyyntoa samaan kohteeseen on
+              pelkkaa valinnan vaivaa, joten paatosotsikko ja lomake ovat
+              nyt samassa osiossa, kuten lyhytvideosivulla.
+
+              Blogi ja Taustaa ovat pois toistaiseksi. Blogissa ei ole
+              viela tarpeeksi sisaltoa, ja Taustaa oli 1059px hakukonetta
+              varten kirjoitettua toistoa asioista jotka sivu on jo
+              sanonut. Molempien koodi sailyy sections2.tsx:ssa. */}
+          <Tarjous />
         </div>
-
-        <HeroBrowserStage />
-      </header>
-
-      <Ongelma />
-      <Sisalto />
-      <Toteutustapa />
-      <Nakyvyys />
-      <Prosessi />
-      <Tulokset />
-      <Asiakkaat />
-      <Hinnoittelu />
-      <Kenelle />
-      <Alueet />
-      <Ukk />
-      <Taustaa />
-      <Blogi />
-      <Tarjous />
-      <Loppu />
+      </div>
 
       <Footer
         intro="Lyhytvideot, verkkosivut ja graafinen ilme. Espoo ja Helsinki, koko Suomi. Yrityksille jotka haluavat kasvaa."

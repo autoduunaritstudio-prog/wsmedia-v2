@@ -5635,6 +5635,47 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
 .stickysub .stage .cf3 { left: calc(50% - 348px); margin-left: -14px; top: -49px; right: auto }
 .stickysub .stage .cf2 { right: calc(50% - 348px); margin-right: -14px; top: -49px; left: auto }
 
+/* ==================================================================
+   VAALEA ALASIVUN HERO (.page-verkkosivut .stickysub)
+   ==================================================================
+   Sama runko kuin lyhytvideosivulla, kaannetty kontrasti. Lyhytvideot
+   on tumma ja sen hero lepaa mustalla verkostolla; verkkosivut on
+   vaalea ja lepaa etusivun metallikuviolla. Rakenne, mitat ja rytmi
+   ovat samat, joten sivut lukevat saman sivuston sivuina vaikka
+   pohjavari eroaa.
+
+   MIKSI TEKSTIVAREILLE EI OLE SAANTOJA TASSA: vaalealla sivulla
+   .page-palvelun oma typografia on jo oikea. Tumma variantti tarvitsee
+   omat varinsa, vaalea ei tarvitse yhtaan.
+   ================================================================== */
+/* Selainnayttamo oikeaan palstaan. Sen oma saanto on kirjoitettu
+   pinottuun asetteluun (max-width 1080px ja margin: 58px auto 0), joka
+   kaksipalstaisessa herossa tyontaisi nayttamon palstan ulkopuolelle ja
+   jattaisi sen ylle 58px turhaa ilmaa. Palstan levyisena se skaalautuu
+   ruudun mukana ilman omaa maksimileveytta. */
+.page-verkkosivut .stickysub .bstage {
+  max-width: none; margin: 0; padding: 0;
+  /* Perspektiivi jaa .bstagelle kuten ennenkin: .bwrap kallistuu sen
+     sisalla hiiren mukana, eika perspektiiviä saa siirtaa .bwrapiin
+     itseensa - silloin kaanto tapahtuisi elementin omassa
+     koordinaatistossa ja syvyysvaikutelma katoaisi. */
+}
+/* Nayttamo on leveampi kuin korkea, ja palsta on noin 600px. Ilman
+   skaalausta selainikkuna tayttaisi palstan reunasta reunaan eika
+   kelluville tiedoille (.chip-f) jaisi tilaa sen ulkopuolelle. */
+@media (min-width: 981px) {
+  .page-verkkosivut .stickysub .bwrap { scale: .92; transform-origin: 50% 50% }
+}
+/* Kelluvat tiedot palstan sisapuolelle. Alkuperainen sijoitus on tehty
+   1080px:n nayttamolle, jossa ne mahtuivat ikkunan ulkopuolelle
+   molemmin puolin. Kapeammassa palstassa ne on tuotava ikkunan reunan
+   paalle, tai ne leikkautuisivat palstan rajaan. */
+@media (min-width: 981px) {
+  .page-verkkosivut .stickysub .bstage .cf1 { left: -18px; right: auto; top: 8%
+  }
+  .page-verkkosivut .stickysub .bstage .cf2 { right: -14px; left: auto; bottom: 14% }
+}
+
 /* COVER. Sama rooli kuin etusivulla: liukuu heron paalle ja lopettaa
    pinnauksen. Sen on oltava vahintaan heron korkuinen - talla sivulla
    se on koko muu sisalto, joten ehto tayttyy moninkertaisesti. */
@@ -5664,7 +5705,7 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
    kuvio olisi piirtynyt logojen paalle. Osiot saavat saman nostonsa
    globaalista "header, section, footer, nav, .marq" -saannosta, .logos
    ei ole niiden joukossa. */
-.page-dark .stickysub > .cover > .logos { position: relative; z-index: 1; padding: 40px 0 34px }
+.stickysub > .cover > .logos { position: relative; z-index: 1; padding: 40px 0 34px }
 .page-dark .logostrip img.ink { filter: invert(1) }
 
 /* LUKUKAISTA SAMANNAKOISEKSI KUIN ETUSIVUN REFERENSSIOSIOSSA.
@@ -5890,44 +5931,93 @@ html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { 
    ei enaa nojaa korttien reunoihin.
    ================================================================== */
 
+/* ==================================================================
+   ALAOSAN KALUSTON TEEMATOKENIT
+   ==================================================================
+   Kalusto (.ledger, .dir, .qa, .next3) oli kirjoitettu .page-dark-
+   etuliitteella ja kovakoodatuilla variarvoilla, joten se toimi vain
+   tummalla sivulla. Toinen sivu olisi vaatinut koko lohkon toisinnon
+   toisilla vareilla, eli kaksi paikkaa joita on muistettava paivittaa
+   yhdessa - juuri se on tapa jolla kaksi sivua ajautuvat erilleen.
+
+   Nyt rakenne on kirjoitettu kerran ja vari tulee neljasta tokenista.
+   Uusi sivu tarvitsee vain nelja riviä, ei yhtaan uutta saantoa.
+
+   VAALEAT ARVOT EIVAT OLE TUMMIEN KAANNOS. Tumman pohjan valkoinen
+   hiusviiva .14 alfalla nakyy selvasti, mutta vaalealla sama alfa
+   mustana olisi liian voimakas: valkoinen tummaa vasten kirkastuu,
+   musta vaaleaa vasten ei tummu samassa suhteessa. Vaaleat rajat ovat
+   siksi sivuston oma --hair ja sen puolikas. */
+:root {
+  --kit-rule: var(--hair);
+  --kit-rule-soft: rgba(29,29,31,.08);
+  --kit-ink: var(--ink);
+  --kit-ink-2: #4a4a52;
+  --kit-ink-3: var(--grey);
+  --kit-acc: var(--blue-d);
+  /* VERHO ON VAIN TUMMAN SIVUN TARVE. Tumman pohjan paalla valokuva on
+     pohjaa kirkkaampi ja vetaa katseen pois otsikosta, joten se
+     himmennetaan. Vaalealla suhde on painvastainen: kuva on pohjaa
+     tummempi ja asettuu jarjestykseen itsestaan, joten tummennus tekisi
+     siita vain likaisen. Lapinakyva verho on siksi vaalean oletus, ei
+     poikkeus jota pitaisi kumota erillisella saannolla. */
+  --kit-shade-a: transparent;
+  --kit-shade-b: transparent;
+  /* Vaalea kuva tarvitsee sen sijaan ohuen rajan, tai sen vaalea reuna
+     sulaa valkoiseen pohjaan. Tummalla raja on turha: kontrasti hoitaa
+     saman. */
+  --kit-shot-edge: inset 0 0 0 1px var(--kit-rule);
+}
+.page-dark {
+  --kit-rule: rgba(255,255,255,.14);
+  --kit-rule-soft: rgba(255,255,255,.08);
+  --kit-ink: #f5f5f7;
+  --kit-ink-2: #b9c0cf;
+  --kit-ink-3: #8f98aa;
+  --kit-acc: rgb(111 236 255);
+  --kit-shade-a: rgba(6,11,20,.10);
+  --kit-shade-b: rgba(6,11,20,.52);
+  --kit-shot-edge: none;
+}
+
 /* --- TILIKIRJA: kaksi palstaa, yksi jaettu raja --- */
 .ledger {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
-  border-top: 1px solid rgba(255,255,255,.14);
+  border-top: 1px solid var(--kit-rule);
 }
 @media (max-width: 860px) { .ledger { grid-template-columns: minmax(0, 1fr) } }
 .ledger-col { padding: 26px 0 8px }
 /* Pystyviiva vain palstojen VALIIN, ei molempien ymparille: raja on
    jaettu, ei kahden laatikon reuna. */
-.ledger-col + .ledger-col { border-left: 1px solid rgba(255,255,255,.14); padding-left: 38px }
+.ledger-col + .ledger-col { border-left: 1px solid var(--kit-rule); padding-left: 38px }
 .ledger-col:first-child { padding-right: 38px }
 @media (max-width: 860px) {
   .ledger-col + .ledger-col {
     border-left: 0; padding-left: 0;
-    border-top: 1px solid rgba(255,255,255,.14);
+    border-top: 1px solid var(--kit-rule);
   }
   .ledger-col:first-child { padding-right: 0 }
 }
-.page-dark .ledger-col h3 {
+.ledger-col h3 {
   font-size: var(--text-label-sm); font-weight: var(--weight-semibold);
   letter-spacing: .12em; text-transform: uppercase;
-  color: #8f98aa; margin: 0 0 18px;
+  color: var(--kit-ink-3); margin: 0 0 18px;
 }
 .ledger-col ul { list-style: none; margin: 0 }
-.page-dark .ledger-col li {
-  padding: 13px 0; border-top: 1px solid rgba(255,255,255,.07);
-  font-size: var(--text-body-xl); line-height: 1.55; color: #d4d9e2;
+.ledger-col li {
+  padding: 13px 0; border-top: 1px solid var(--kit-rule-soft);
+  font-size: var(--text-body-xl); line-height: 1.55; color: var(--kit-ink-2);
 }
-.page-dark .ledger-col li:first-child { border-top: 0; padding-top: 0 }
-.page-dark .ledger-col a { color: rgb(111 236 255); text-decoration: none }
+.ledger-col li:first-child { border-top: 0; padding-top: 0 }
+.ledger-col a { color: var(--kit-acc); text-decoration: none }
 /* Himmennys opasiteetilla eika harmaammalla varilla: sama perhe,
    pienempi paino. Harmaampi vari olisi tehnyt siita toisen luokan
    tekstia. */
 .ledger-soft { opacity: .66 }
-.page-dark .ledger-soft li b {
+.ledger-soft li b {
   display: block; margin-top: 6px; font-weight: var(--weight-regular);
-  font-size: var(--text-label-sm); color: rgb(111 236 255);
+  font-size: var(--text-label-sm); color: var(--kit-acc);
 }
 
 /* --- HAKEMISTO: sticky-otsikko ja metatietosarake --- */
@@ -5938,31 +6028,31 @@ html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { 
    sticky lakkaa toimimasta aanettomasti. */
 .dir-side { position: sticky; top: calc(var(--nav-top) + 116px); align-self: start }
 @media (max-width: 900px) { .dir-side { position: static } }
-.page-dark .dir-side h2 { margin: 0 0 16px }
-.page-dark .dir-side p { font-size: var(--text-body); line-height: 1.6; color: #98a1b3; margin: 0 0 14px }
-.page-dark .dir-note {
-  padding-top: 14px; border-top: 1px solid rgba(255,255,255,.12);
-  font-size: var(--text-label-sm); color: #8f98aa;
+.dir-side h2 { margin: 0 0 16px }
+.dir-side p { font-size: var(--text-body); line-height: 1.6; color: var(--kit-ink-3); margin: 0 0 14px }
+.dir-note {
+  padding-top: 14px; border-top: 1px solid var(--kit-rule);
+  font-size: var(--text-label-sm); color: var(--kit-ink-3);
 }
 /* Kaksi saraketta rivien sisalla, ei kahta erillista listaa: nain
    metatietosarake on samalla x-koordinaatilla joka rivilla. Juuri se
    sarake tekee linkkilistasta hakemiston. */
 .dir-list {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 40px; border-top: 1px solid rgba(255,255,255,.14);
+  column-gap: 40px; border-top: 1px solid var(--kit-rule);
 }
 @media (max-width: 560px) { .dir-list { grid-template-columns: minmax(0, 1fr) } }
-.page-dark .dir-list a {
+.dir-list a {
   display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 12px;
-  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: 14px 0; border-bottom: 1px solid var(--kit-rule-soft);
   text-decoration: none; transition: padding-left .25s cubic-bezier(.2,.6,.2,1), border-color .25s;
 }
-.page-dark .dir-list a:hover { padding-left: 10px; border-color: rgb(111 236 255 / .45) }
-.page-dark .dir-list span { font-size: var(--text-body-xl); color: #f5f5f7 }
-.page-dark .dir-list s {
-  text-decoration: none; font-size: var(--text-label-sm); color: #8f98aa;
+.dir-list a:hover { padding-left: 10px; border-color: var(--kit-acc) }
+.dir-list span { font-size: var(--text-body-xl); color: var(--kit-ink) }
+.dir-list s {
+  text-decoration: none; font-size: var(--text-label-sm); color: var(--kit-ink-3);
 }
-.page-dark .dir-list a:hover span { color: rgb(111 236 255) }
+.dir-list a:hover span { color: var(--kit-acc) }
 
 /* Valokuva sticky-palstan ylaosassa. Sama 4:3-rajaus kuin
    referenssikorteissa, jotta kuva lukee saman perheen kuvana eika
@@ -5972,14 +6062,16 @@ html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { 
   position: relative; overflow: hidden;
   aspect-ratio: 4 / 3; margin-bottom: 22px;
   border-radius: 3px;
+  box-shadow: var(--kit-shot-edge);
 }
 .dir-shot img { width: 100%; height: 100%; object-fit: cover; display: block }
 /* Verho: kuva on kirkkaampi kuin sivun pohja, ja ilman verhoa se
    vetaa katseen pois otsikosta joka on osion varsinainen vaite. */
 .dir-shot::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, rgba(6,11,20,.10) 0%, rgba(6,11,20,.52) 100%);
+  background: linear-gradient(180deg, var(--kit-shade-a) 0%, var(--kit-shade-b) 100%);
 }
+
 @media (max-width: 900px) { .dir-shot { aspect-ratio: 16 / 9 } }
 
 /* --- UKK: sticky-palsta ja eksklusiivinen haitari --- */
@@ -5987,32 +6079,32 @@ html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { 
 @media (max-width: 900px) { .qa { grid-template-columns: minmax(0, 1fr); gap: 28px } }
 .qa-side { position: sticky; top: calc(var(--nav-top) + 116px); align-self: start }
 @media (max-width: 900px) { .qa-side { position: static } }
-.page-dark .qa-side h2 { margin: 0 0 16px }
-.page-dark .qa-side p { font-size: var(--text-body); line-height: 1.6; color: #98a1b3; margin: 0 0 24px }
+.qa-side h2 { margin: 0 0 16px }
+.qa-side p { font-size: var(--text-body); line-height: 1.6; color: var(--kit-ink-3); margin: 0 0 24px }
 /* Yhteydenottonosto UKK:n SISALLA: tama on se kohta jossa viimeinen
    este poistuu, joten kehote kuuluu tanne eika vasta osion jalkeen. */
 .qa-ask {
   display: flex; flex-direction: column; gap: 6px;
-  padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12);
+  padding-top: 18px; border-top: 1px solid var(--kit-rule);
 }
-.page-dark .qa-ask span { font-size: var(--text-label-sm); color: #8f98aa }
-.page-dark .qa-ask a {
-  font-size: var(--text-body-lg); color: rgb(111 236 255); text-decoration: none;
+.qa-ask span { font-size: var(--text-label-sm); color: var(--kit-ink-3) }
+.qa-ask a {
+  font-size: var(--text-body-lg); color: var(--kit-acc); text-decoration: none;
   font-weight: var(--weight-medium);
 }
-.page-dark .qa-ask a:hover { text-decoration: underline }
+.qa-ask a:hover { text-decoration: underline }
 
-.qa-list { border-top: 1px solid rgba(255,255,255,.14) }
-.page-dark .qa-list details { border-bottom: 1px solid rgba(255,255,255,.10) }
-.page-dark .qa-list summary {
+.qa-list { border-top: 1px solid var(--kit-rule) }
+.qa-list details { border-bottom: 1px solid var(--kit-rule-soft) }
+.qa-list summary {
   display: grid; grid-template-columns: 1fr 22px; align-items: center; gap: 16px;
   padding: 19px 0; cursor: pointer; list-style: none;
   font-size: var(--text-body-lg); font-weight: var(--weight-medium);
-  color: #f5f5f7; transition: color .2s;
+  color: var(--kit-ink); transition: color .2s;
 }
 .qa-list summary::-webkit-details-marker { display: none }
-.page-dark .qa-list summary:hover { color: rgb(111 236 255) }
-.page-dark .qa-list details[open] summary { color: rgb(111 236 255) }
+.qa-list summary:hover { color: var(--kit-acc) }
+.qa-list details[open] summary { color: var(--kit-acc) }
 /* Plus-merkki kahdesta taustagradientista: pystyviiva kutistuu
    nollaan auki-tilassa, jolloin merkki muuttuu miinukseksi ilman
    toista elementtia. */
@@ -6030,12 +6122,12 @@ html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { 
     linear-gradient(currentColor, currentColor) center / 1.5px 0 no-repeat;
   rotate: 180deg;
 }
-.page-dark .qa-list .a {
+.qa-list .a {
   padding: 0 44px 22px 0; font-size: var(--text-body);
-  line-height: 1.65; color: #b9c0cf; max-width: 60ch;
+  line-height: 1.65; color: var(--kit-ink-2); max-width: 60ch;
 }
-.page-dark .qa-list .a a { color: rgb(111 236 255); text-decoration: none }
-.page-dark .qa-list .a a:hover { text-decoration: underline }
+.qa-list .a a { color: var(--kit-acc); text-decoration: none }
+.qa-list .a a:hover { text-decoration: underline }
 
 /* --- LAHETYKSEN JALKEEN: kolme askelta, jaettu ylareuna --- */
 /* Numerot tulevat sisallosta (24 h, 30 min, Tarjous) eivatka
@@ -6044,21 +6136,21 @@ html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { 
 .next3 {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0 40px; list-style: none; margin: 34px 0 40px; padding: 0;
-  border-top: 1px solid rgba(255,255,255,.14);
+  border-top: 1px solid var(--kit-rule);
 }
 @media (max-width: 760px) { .next3 { grid-template-columns: minmax(0, 1fr); gap: 0 } }
 .next3 li { padding: 20px 0 0 }
 @media (max-width: 760px) {
-  .next3 li + li { border-top: 1px solid rgba(255,255,255,.08) }
+  .next3 li + li { border-top: 1px solid var(--kit-rule-soft) }
 }
-.page-dark .next3 b {
+.next3 b {
   display: block; margin-bottom: 8px;
   font-size: var(--text-body-lg); font-weight: var(--weight-semibold);
-  color: rgb(111 236 255);
+  color: var(--kit-acc);
 }
-.page-dark .next3 span {
+.next3 span {
   display: block; max-width: 34ch;
-  font-size: var(--text-body); line-height: 1.6; color: #b9c0cf;
+  font-size: var(--text-body); line-height: 1.6; color: var(--kit-ink-2);
 }
 
 /* ==================================================================

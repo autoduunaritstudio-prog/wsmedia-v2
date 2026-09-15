@@ -6,7 +6,7 @@ const i = (n: number) => ({ "--i": n }) as CSSProperties;
 const PROBLEMS = [
   {
     h: "Sivusto ei löydy Googlesta",
-    p: "Ilman selkeää sivurakennetta, hakusanoja ja teknistä hakukoneoptimointia sivusto jää hakutulosten toiselle sivulle. Asiakas ei etsi sinua nimellä — hän etsii palvelua, ja päätyy kilpailijan sivuille.",
+    p: "Ilman selkeää sivurakennetta, hakusanoja ja teknistä hakukoneoptimointia sivusto jää hakutulosten toiselle sivulle. Asiakas ei etsi sinua nimellä, hän etsii palvelua, ja päätyy kilpailijan sivuille.",
   },
   {
     h: "Kävijät tulevat, mutta eivät ota yhteyttä",
@@ -79,7 +79,7 @@ const INCLUDES = [
   ["Sivurakenne ja hakusanat", "Selvitämme mitä asiakkaasi oikeasti hakevat Googlesta ja rakennamme sivuston niin, että jokaiselle palvelulle on oma alasivunsa. Tämä on yksittäisistä ratkaisuista se, joka vaikuttaa näkyvyyteen eniten."],
   ["Ulkoasu yrityksesi näköisenä", "Yksilöllinen ulkoasu yrityksesi väreillä ja materiaaleilla. Ei tunnistettavaa valmisteemaa, jonka näkee joka toisella sivustolla."],
   ["Tekstit ja sisällöntuotanto", "Kirjoitamme palvelukuvaukset, otsikot ja yhteydenottoon ohjaavat tekstit valmiiksi. Sinä hyväksyt ennen julkaisua."],
-  ["Tekninen hakukoneoptimointi", "Otsikkorakenne, metatiedot, sivustokartta, indeksoitavuus, sisäinen linkitys ja strukturoitu data kuntoon jo ennen julkaisua — ei jälkikäteen korjauksena."],
+  ["Tekninen hakukoneoptimointi", "Otsikkorakenne, metatiedot, sivustokartta, indeksoitavuus, sisäinen linkitys ja strukturoitu data kuntoon jo ennen julkaisua, ei jälkikäteen korjauksena."],
   ["Responsiivinen ja mobiilioptimoitu toteutus", "Sivusto suunnitellaan mobiili edellä ja testataan puhelimella, tabletilla ja työpöydällä ennen kuin se menee live-tilaan."],
   ["Lomakkeet ja yhteydenottopolut", "Yhteydenotto- ja tarjouspyyntölomakkeet, soittopainikkeet ja selkeät CTA-napit siellä, missä kävijä on valmis toimimaan."],
   ["Analytiikka ja mittaus", "Google Analytics ja Search Console asennettuna, jotta näet mistä kävijät tulevat ja mikä sivu tuottaa yhteydenottoja."],
@@ -141,7 +141,7 @@ const OPTIONS = [
 ];
 
 const VS_ROWS: [string, string, string][] = [
-  ["Nopeus", "Työn tulos — vaatii jatkuvaa optimointia", "Lähtökohta — mukana on vain tarvittava koodi"],
+  ["Nopeus", "Työn tulos, vaatii jatkuvaa optimointia", "Lähtökohta, mukana on vain tarvittava koodi"],
   ["Ulkoasu", "Teeman rajoissa, muistuttaa muita sivustoja", "Täysin vapaa, yrityksesi näköinen"],
   ["Toiminnallisuudet", "Lisäosien varassa", "Rakennetaan juuri tarpeeseen"],
   ["Ylläpito", "Ydin, teema ja lisäosat päivittyvät jatkuvasti", "Ei riipu alustapäivityksistä"],
@@ -166,7 +166,7 @@ export function Toteutustapa() {
             <h2>Perussivusto vai räätälöidyt verkkosivut?</h2>
           </div>
           <p className="sub">
-            Teemme molemmat. Ero ei ole laadussa vaan siinä, kuinka paljon sivustolta vaaditaan — ja
+            Teemme molemmat. Ero ei ole laadussa vaan siinä, kuinka paljon sivustolta vaaditaan, ja
             kuinka pitkälle sen pitää skaalautua.
           </p>
         </div>
@@ -247,7 +247,7 @@ export function Toteutustapa() {
 
 /* ---------- Näkyvyys Googlessa ---------- */
 const SEO_POINTS = [
-  ["Nopeat latausajat", "Google mittaa sivuston nopeutta oikeilta käyttäjiltä. Hidas sivu ei ainoastaan menetä kävijää, se menettää myös sijoituksia — ja mobiilissa ero on suurin."],
+  ["Nopeat latausajat", "Google mittaa sivuston nopeutta oikeilta käyttäjiltä. Hidas sivu ei ainoastaan menetä kävijää, se menettää myös sijoituksia, ja mobiilissa ero on suurin."],
   ["Selkeä sivurakenne ja sisäinen linkitys", "Jokaiselle palvelulle oma alasivunsa. Näin sivusto voi näkyä useilla eri hauilla sen sijaan, että kaikki puristetaan yhdelle etusivulle."],
   ["Optimoitu sisältö ja oikeat hakusanat", "Tekstit kirjoitetaan niillä sanoilla, joilla asiakkaat oikeasti hakevat. Otsikot, metatiedot ja sisältö vastaavat siihen kysymykseen, joka hakuun johti."],
   ["Hyvä käyttäjäkokemus", "Google seuraa, jääkö kävijä sivulle vai palaako hän hakutuloksiin. Selkeä rakenne, luettava teksti ja toimiva mobiilinäkymä pitävät kävijän sivulla."],
@@ -303,7 +303,7 @@ export function Nakyvyys() {
             </div>
             <p className="tn">
               Jokainen sivu voi sijoittua omalla hakusanallaan. Yhdelle etusivulle puristettuna ne
-              kilpailisivat keskenään — ja Google ei tietäisi, mikä sivu vastaa mihinkin hakuun.
+              kilpailisivat keskenään, ja Google ei tietäisi, mikä sivu vastaa mihinkin hakuun.
             </p>
           </div>
         </div>
@@ -316,7 +316,7 @@ export function Nakyvyys() {
 const STEPS = [
   ["Kartoitus", "Käymme läpi mitä yritys tekee, kenelle ja millä hauilla asiakkaat etsivät palvelua. Et tarvitse mitään valmiiksi.", "noin 30 min"],
   ["Rakenne ja hakusanat", "Päätämme mitkä sivut tehdään ja millä hakusanoilla kukin sivu pyrkii näkymään. Hyväksyt sivustokartan.", "2–3 päivää"],
-  ["Suunnittelu", "Rakennamme ulkoasun ja näytämme sen sinulle. Kommentoit, me viilaamme — vasta sitten siirrytään toteutukseen.", "3–5 päivää"],
+  ["Suunnittelu", "Rakennamme ulkoasun ja näytämme sen sinulle. Kommentoit, me viilaamme, vasta sitten siirrytään toteutukseen.", "3–5 päivää"],
   ["Toteutus ja sisältö", "Koodaus, tekstit, kuvat, lomakkeet ja tekninen hakukoneoptimointi. Seuraat etenemistä demo-osoitteesta.", "1–2 viikkoa"],
   ["Julkaisu ja ylläpito", "Testaamme lomakkeet, mobiilinäkymän, metatiedot ja mittauksen, siirrämme verkkotunnuksen ja julkaisemme.", "1–2 päivää"],
 ];

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import type { CSSProperties } from "react";
 
 import BeforeAfter from "../components/BeforeAfter";
@@ -21,7 +23,7 @@ export function Tulokset() {
         <div className="hsplit rv">
           <div>
             <span className="kick">Tulokset</span>
-            <h2>Ero näkyy heti — ja se mitataan.</h2>
+            <h2>Ero näkyy heti, ja se mitataan.</h2>
           </div>
           <p className="sub">
             Vedä kahvasta ja katso ero. Jokainen sivusto mitataan ennen julkaisua, ja nämä tasot ovat
@@ -144,7 +146,7 @@ export function Hinnoittelu() {
         <p className="pricenote rv">
           Kaikki hinnat + alv 25,5 %. Projektihinta on kertaluonteinen eikä sivusto vaadi pakollista
           kuukausisitoutumista. Verkkotunnus, palvelintila ja SSL-suojaus sisältyvät ensimmäiseen
-          vuoteen. Jatkuvan paketin voi lopettaa kuukauden irtisanomisajalla — sivusto ja
+          vuoteen. Jatkuvan paketin voi lopettaa kuukauden irtisanomisajalla, sivusto ja
           verkkotunnus jäävät joka tapauksessa sinulle.
         </p>
       </div>
@@ -153,33 +155,69 @@ export function Hinnoittelu() {
 }
 
 /* ---------- Kenelle ---------- */
+/**
+ * TILIKIRJA, EI KAHTA KORTTIA.
+ *
+ * Osio oli kaksi saman levyista paneelia rinnakkain, molemmilla oma
+ * tausta ja oma reuna. Se on sama muoto jota sivun jokainen muukin
+ * osio kaytti, jolloin lukija ei tiedä kumpi puoli on kumpi ennen kuin
+ * lukee otsikot - vaikka juuri vastakkainasettelu on koko osion asia.
+ *
+ * Jaettu pystyviiva tekee sen minka kaksi reunaa hukkasivat: yksi raja
+ * kahden asian valissa lukee vertailuna, kaksi reunaa lukee kahtena
+ * laatikkona. Sama rakenne on lyhytvideosivulla, ja se on nyt
+ * teemaneutraali (ks. ALAOSAN KALUSTON TEEMATOKENIT globals.css:ssa),
+ * joten vaalea ja tumma sivu jakavat saman kaluston eivatka kahta
+ * toisintoa.
+ *
+ * EI-PUOLI HIMMENNETAAN OPASITEETILLA eika harmaammalla varilla: sama
+ * tekstiperhe pienemmalla painolla. Harmaampi vari olisi tehnyt siita
+ * toisen luokan tekstia, vaikka se on yhta rehellista sisaltoa.
+ */
+const SOPII = [
+  "Yritykselläsi on useampi palvelu, joilla jokaisella on oma asiakaskuntansa",
+  "Haluat näkyä Googlessa palveluhauilla, et vain yrityksen nimellä",
+  "Nykyinen sivusto on hidas, vanhentunut tai sitä ei voi päivittää itse",
+  "Haluat kiinteän hinnan ja tietää etukäteen mitä siihen sisältyy",
+  "Toivot, että tekstit, kuvat ja tekniikka hoituvat samalta tiimiltä",
+];
+
+const EI_SOVI: [string, string][] = [
+  ["Etsit halvinta mahdollista sivustoa", "Emme kilpaile hinnalla vaan sillä, että sivusto löytyy ja myy"],
+  ["Haluat rakentaa sivut itse", "Tarvitset silloin alustan ja mallipohjan, et toteuttajaa"],
+  ["Palvelusi tai kohderyhmäsi on vielä auki", "Kannattaa ensin päättää mitä myyt ja kenelle"],
+  ["Odotat Google-sijoituksia muutamassa viikossa", "Tekninen pohja on valmis heti, sijoitukset kertyvät kuukausissa"],
+];
+
 export function Kenelle() {
   return (
     <section id="kenelle" style={{ paddingTop: "20px" }}>
       <div className="wrap">
-        <div className="hsplit rv">
-          <div>
-            <span className="kick">Kenelle</span>
-            <h2>Kenelle verkkosivut kannattaa teettää meillä?</h2>
-          </div>
+        <div className="shead rv" data-par="0.03">
+          <span className="kick">Kenelle</span>
+          <h2>Kenelle verkkosivut kannattaa teettää meillä?</h2>
           <p className="sub">
-            Emme sovi kaikille, ja se on rehellisempää sanoa etukäteen kuin kolmannessa palaverissa.
+            Emme sovi kaikille, ja se on rehellisempää sanoa etukäteen kuin kolmannessa
+            palaverissa.
           </p>
         </div>
-        <div className="twopanel stagger">
-          <div className="pan yes rv" style={i(0)}>
+        <div className="ledger rv">
+          <div className="ledger-col">
             <h3>Sopii sinulle, jos</h3>
             <ul>
-              {["Yritykselläsi on useampi palvelu, joilla jokaisella on oma asiakaskuntansa", "Haluat näkyä Googlessa palveluhauilla, et vain yrityksen nimellä", "Nykyinen sivusto on hidas, vanhentunut tai sitä ei voi päivittää itse", "Haluat kiinteän hinnan ja tietää etukäteen mitä siihen sisältyy", "Toivot, että tekstit, kuvat ja tekniikka hoituvat samalta tiimiltä"].map((x) => (
+              {SOPII.map((x) => (
                 <li key={x}>{x}</li>
               ))}
             </ul>
           </div>
-          <div className="pan dark rv" style={i(1)}>
+          <div className="ledger-col ledger-soft">
             <h3>Ei ehkä vielä, jos</h3>
             <ul>
-              {["Etsit halvinta mahdollista sivustoa etkä välitä siitä, löytyykö se hakukoneista", "Haluat rakentaa sivut itse ja tarvitset vain alustan ja mallipohjan", "Palvelusi tai kohderyhmäsi on vielä auki — kannattaa ensin päättää mitä myyt", "Odotat sijoituksia Googlessa muutamassa viikossa julkaisun jälkeen"].map((x) => (
-                <li key={x}>{x}</li>
+              {EI_SOVI.map(([x, why]) => (
+                <li key={x}>
+                  {x}
+                  <b>{why}</b>
+                </li>
               ))}
             </ul>
           </div>
@@ -190,34 +228,83 @@ export function Kenelle() {
 }
 
 /* ---------- Toiminta-alue ---------- */
-const CITIES = ["Espoo", "Helsinki", "Vantaa", "Tampere", "Turku", "Oulu", "Lahti", "Kuopio", "Pori", "Joensuu"];
+/**
+ * HAKEMISTO, EI PILLERIRIVI.
+ *
+ * Kaupungit olivat rivi keskitettyja pillereita otsikon ja pitkan
+ * kappaleen alla. Pillerirfvi on muodoltaan tagipilvi, eli se lukee
+ * koristeena vaikka jokainen niista on oma sivunsa - ja keskitettyna
+ * rivin katkeamiskohdat vaihtelevat ruudun leveyden mukaan, joten
+ * listalla ei ole yhtaan pystysuoraa jota silmalla seurata.
+ *
+ * Hakemistossa on kaksi saraketta rivin SISALLA: nimi vasemmalla,
+ * metatieto oikeassa reunassa. Juuri se toinen sarake tekee
+ * linkkilistasta hakemiston, koska se vastaa kysymykseen jonka lukija
+ * oikeasti tekee - onko tama lahella vai ei.
+ *
+ * Vasen palsta on sticky, koska oikea on pidempi eika osion vasen
+ * puoli saa jaada tyhjaksi. Ehto: yhdellakaan esivanhemmalla ei saa
+ * olla overflow: hidden, tai sticky lakkaa toimimasta aanettomasti.
+ */
+const SLUGS: Record<string, string> = { Jyväskylä: "jyvaskyla" };
+const slug = (city: string) => SLUGS[city] ?? city.toLowerCase();
+
+const PAIKAT = [
+  { c: "Espoo", meta: "Toimipiste" },
+  { c: "Helsinki", meta: "Tapaamisia viikoittain" },
+  { c: "Vantaa", meta: "Tapaamisia viikoittain" },
+  { c: "Tampere", meta: "Etänä tai paikan päällä" },
+  { c: "Turku", meta: "Etänä tai paikan päällä" },
+  { c: "Lahti", meta: "Etänä tai paikan päällä" },
+  { c: "Pori", meta: "Etänä" },
+  { c: "Jyväskylä", meta: "Etänä" },
+  { c: "Kuopio", meta: "Etänä" },
+  { c: "Oulu", meta: "Etänä" },
+  { c: "Joensuu", meta: "Etänä" },
+  { c: "Vaasa", meta: "Etänä" },
+];
 
 export function Alueet() {
   return (
     <section id="alueet" style={{ paddingTop: "20px" }}>
-      <div className="wrap-n">
-        <div className="shead center rv" data-par="0.03">
-          <span className="kick">Toiminta-alue</span>
-          <h2>Verkkosivut yritykselle Espoosta koko Suomeen</h2>
-          <p className="sub">
-            Verkkosivuprojekti ei vaadi paikallaoloa. Kartoitus hoituu puhelimessa, suunnittelua
-            seurataan demo-osoitteesta ja julkaisu tapahtuu verkossa — joten sijainti ei vaikuta
-            hintaan eikä aikatauluun.
-          </p>
-        </div>
-        <p className="lead rv" style={{ textAlign: "center", margin: "0 auto" }}>
-          Kotipaikkamme on <strong>Espoo</strong> ja suurin osa asiakkaistamme on
-          pääkaupunkiseudulta, mutta toteutamme verkkosivuja yrityksille ympäri Suomen.
-          Paikkakunnalla on merkitystä yhdessä asiassa: jos yrityksesi palvelee tiettyä aluetta,
-          sivusto kannattaa rakentaa niin, että se näkyy juuri niillä palveluhauilla, joissa
-          paikkakunta on mukana.
-        </p>
-        <div className="cities rv" style={{ justifyContent: "center" }}>
-          {CITIES.map((c) => (
-            <SmartLink href={`/verkkosivut/${c.toLowerCase().replace("ä", "a").replace("ö", "o")}`} key={c}>
-              Verkkosivut {c}
-            </SmartLink>
-          ))}
+      <div className="wrap">
+        <div className="dir rv">
+          <div className="dir-side">
+            {/* SIVUN AINOA VALOKUVA. Sivulla ei ollut yhtaan kuvaa, ja
+                juuri se tekee siita tekstiseinan: lukija ei saa yhtaan
+                lepopistetta 14 000 pikselin matkalla. Kuva on
+                toteutettu asiakastyo, eli se todistaa samalla mita
+                osion ymparilla luvataan. Sticky-palstan sisalla se
+                seuraa otsikkoa eika jaa hakemiston ylaosaan. */}
+            <div className="dir-shot">
+              <Image
+                src="/referenssit/laaksolahdensahko-case.webp"
+                alt="Toteutettu verkkosivusto asiakkaalle"
+                width={1000}
+                height={563}
+                sizes="(max-width: 900px) 100vw, 400px"
+              />
+            </div>
+            <span className="kick">Toiminta-alue</span>
+            <h2>Verkkosivut yritykselle Espoosta koko Suomeen</h2>
+            <p>
+              Verkkosivuprojekti ei vaadi paikallaoloa. Kartoitus hoituu puhelimessa, suunnittelua
+              seurataan demo-osoitteesta ja julkaisu tapahtuu verkossa, joten sijainti ei vaikuta
+              hintaan eikä aikatauluun.
+            </p>
+            <p className="dir-note">
+              Paikkakunnalla on merkitystä yhdessä asiassa: jos yrityksesi palvelee tiettyä aluetta,
+              sivusto rakennetaan näkymään juuri niillä palveluhauilla joissa paikkakunta on mukana.
+            </p>
+          </div>
+          <div className="dir-list">
+            {PAIKAT.map((p) => (
+              <SmartLink href={`/verkkosivut/${slug(p.c)}`} key={p.c}>
+                <span>{p.c}</span>
+                <s>{p.meta}</s>
+              </SmartLink>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -225,32 +312,72 @@ export function Alueet() {
 }
 
 /* ---------- UKK ---------- */
+/**
+ * STICKY-PALSTA JA NATIIVI EKSKLUSIIVINEN HAITARI.
+ *
+ * Osio oli kaksi rinnakkaista saraketta ryhmaotsikoineen, eli 17
+ * kysymysta kahdessa pinossa. Kaksi saraketta pakottaa silman
+ * hyppimaan puolelta toiselle, ja ryhmaotsikot kertoivat vain sen mika
+ * kysymyksista jo nakyy.
+ *
+ * Yksi palsta ja sticky-otsikko sen vieressa. name-attribuutti tekee
+ * haitarista eksklusiivisen ilman JS:aa: kun kaikilla details-
+ * elementeilla on sama name, selain sulkee edellisen kun seuraava
+ * avataan. Lista pysyy hallitun mittaisena, nappaimisto ja ruudunlukija
+ * toimivat itsestaan, ja suljettu sisalto loytyy yha selaimen omalla
+ * haulla.
+ *
+ * KYSYMYKSIA KARSITTIIN 17 -> 10. Seitseman vastasi asiaan joka on jo
+ * sanottu muualla sivulla, ja pitka lista lukee itsessaan
+ * epavarmuutena: mita enemman kysymyksia, sita enemman selittelya.
+ * Karsitut sailyvat faq.tsx:ssa, joten FAQPage-merkinta ei koydy.
+ */
+const UKK_KYSYMYKSET = [
+  "Paljonko verkkosivut maksavat yritykselle?",
+  "Mitä verkkosivujen hinta sisältää?",
+  "Kuinka nopeasti verkkosivut valmistuvat?",
+  "Onko pakko sitoutua kuukausimaksuun?",
+  "Käytättekö WordPressiä?",
+  "Voinko päivittää sisältöä itse?",
+  "Kuka omistaa sivuston ja verkkotunnuksen?",
+  "Tarvitseeko minulla olla valmiit tekstit ja kuvat?",
+  "Voiko vanhat sivut uudistaa ilman että Google-näkyvyys katoaa?",
+  "Teettekö myös verkkokaupan?",
+];
+
 export function Ukk() {
-  const half = Math.ceil(FAQ_GROUPS.length / 2);
-  const cols = [FAQ_GROUPS.slice(0, half), FAQ_GROUPS.slice(half)];
+  const kaikki = FAQ_GROUPS.flatMap((g) => g.items);
+  const nakyvat = UKK_KYSYMYKSET.map((q) => kaikki.find((it) => it.q === q)).filter(
+    (it): it is NonNullable<typeof it> => Boolean(it),
+  );
+
   return (
     <section id="ukk" style={{ paddingTop: "20px" }}>
       <div className="wrap">
-        <div className="shead center rv" data-par="0.03">
-          <span className="kick">Usein kysyttyä</span>
-          <h2>Usein kysytyt kysymykset verkkosivuista</h2>
-        </div>
-        <div className="faq2 rv">
-          {cols.map((col, ci) => (
-            <div className="faq" key={ci}>
-              {col.map((g) => (
-                <div key={g.title}>
-                  <p className="faqgroup">{g.title}</p>
-                  {g.items.map((it) => (
-                    <details key={it.q}>
-                      <summary>{it.q}</summary>
-                      <div className="a">{it.a}</div>
-                    </details>
-                  ))}
-                </div>
-              ))}
+        <div className="qa rv">
+          <div className="qa-side">
+            <span className="kick">Usein kysyttyä</span>
+            <h2>Usein kysytyt kysymykset verkkosivuista</h2>
+            <p>
+              Hinta, aikataulu, omistajuus ja ylläpito. Nämä kymmenen tulevat vastaan lähes joka
+              projektissa.
+            </p>
+            {/* Yhteydenottonosto UKK:n SISALLA: tama on se kohta jossa
+                viimeinen este poistuu, joten kehote kuuluu tanne eika
+                vasta osion jalkeen. */}
+            <div className="qa-ask">
+              <span>Etkö löytänyt vastausta?</span>
+              <a href="#tarjous">Kysy suoraan, vastaamme 24 tunnissa</a>
             </div>
-          ))}
+          </div>
+          <div className="qa-list">
+            {nakyvat.map((item, n) => (
+              <details key={item.q} name="ukk-verkkosivut" open={n === 0}>
+                <summary>{item.q}</summary>
+                <div className="a">{item.a}</div>
+              </details>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -294,8 +421,7 @@ export function Taustaa() {
               Käsin koodatussa toteutuksessa sivustolla on vain se koodi, jota oikeasti tarvitaan.
             </strong>{" "}
             Se näkyy latausajoissa, ylläpitotaakassa ja siinä, ettei ulkoasu muistuta muita samalla
-            pohjalla tehtyjä sivustoja. Kumpikaan ei kuitenkaan nouse Googlessa itsestään —
-            toteutustapa ratkaisee lähtötason, sisältö ratkaisee sijoituksen.
+            pohjalla tehtyjä sivustoja. Kumpikaan ei kuitenkaan nouse Googlessa itsestään, toteutustapa ratkaisee lähtötason, sisältö ratkaisee sijoituksen.
           </p>
 
           <h3>Miksi nopeus on osa hakukoneoptimointia</h3>
@@ -311,7 +437,7 @@ export function Taustaa() {
           <p>
             Lyhytvideot ja mainonta tuovat liikennettä, mutta liikenne päätyy aina samaan paikkaan:
             verkkosivuille. Jos sivusto on hidas tai epäselvä, koko mainosbudjetti valuu hukkaan
-            viimeisellä metrillä. Siksi järjestys kannattaa pitää selvänä — ensin sivusto kuntoon,
+            viimeisellä metrillä. Siksi järjestys kannattaa pitää selvänä, ensin sivusto kuntoon,
             sitten liikennettä sen päälle.
           </p>
           <p>
@@ -328,9 +454,9 @@ export function Taustaa() {
 
 /* ---------- Blogi ---------- */
 const POSTS = [
-  ["Opas", "Verkkosivujen hinta — mistä nettisivujen hinta oikeasti muodostuu"],
+  ["Opas", "Verkkosivujen hinta, mistä nettisivujen hinta oikeasti muodostuu"],
   ["Vertailu", "WordPress vai räätälöidyt verkkosivut? Näin valitset yritykselle"],
-  ["Hakukoneoptimointi", "Hakukoneoptimoidut verkkosivut — mitä niissä kannattaa oikeasti tehdä"],
+  ["Hakukoneoptimointi", "Hakukoneoptimoidut verkkosivut, mitä niissä kannattaa oikeasti tehdä"],
   ["Sivustouudistus", "Sivustouudistus ilman että Google-näkyvyys katoaa"],
 ];
 
@@ -364,7 +490,7 @@ export function Blogi() {
 /* ---------- Tarjous ---------- */
 const FLIST = [
   ["Vastaus 24 tunnin sisällä", "Arkipäivisin useimmiten samana päivänä."],
-  ["Kiinteä hinta ennen aloitusta", "Näet mitä hintaan sisältyy — ei piilokuluja eikä aloitusmaksuja."],
+  ["Kiinteä hinta ennen aloitusta", "Näet mitä hintaan sisältyy, ei piilokuluja eikä aloitusmaksuja."],
   ["Et tarvitse mitään valmiiksi", "Sisältö, tekstit ja rakenne suunnitellaan yhdessä kartoituksessa."],
   ["Ei sitoutumista", "Tarjouspyyntö ei velvoita mihinkään."],
 ];
@@ -389,6 +515,25 @@ export function Tarjous() {
                 </li>
               ))}
             </ul>
+
+            {/* MITA LAHETYKSEN JALKEEN TAPAHTUU. Lomakkeen viereen ei
+                kuulu lisaa myyntia vaan se mita nappi tekee: kynnys ei
+                ole napin vari vaan epavarmuus siita mihin sitoutuu.
+                Sama kolmen askeleen rakenne kuin lyhytvideosivulla. */}
+            <ol className="next3 stagger">
+              <li className="rv" style={i(0)}>
+                <b>24 h</b>
+                <span>Luemme viestin ja vastaamme sähköpostilla arkipäivän sisällä.</span>
+              </li>
+              <li className="rv" style={i(1)}>
+                <b>30 min</b>
+                <span>Puhelu tai etäpalaveri: tavoite, sivurakenne ja aikataulu.</span>
+              </li>
+              <li className="rv" style={i(2)}>
+                <b>Tarjous</b>
+                <span>Kiinteähintainen ehdotus. Ei sitoumuksia ennen hyväksyntää.</span>
+              </li>
+            </ol>
           </div>
 
           <BudgetForm

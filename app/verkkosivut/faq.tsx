@@ -36,8 +36,8 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Miten hakukoneoptimointi vaikuttaa hintaan?",
-        a: "Tekninen hakukoneoptimointi sisältyy jokaiseen toteutukseen. Hintaa nostaa sisältötyö: mitä useammalle palvelulle tehdään oma alasivunsa ja mitä laajempi hakusanatyö tehdään, sitä enemmän sivuja kirjoitetaan — ja sitä useammalla haulla sivusto voi näkyä.",
-        plain: "Tekninen hakukoneoptimointi sisältyy jokaiseen toteutukseen. Hintaa nostaa sisältötyö: mitä useammalle palvelulle tehdään oma alasivunsa ja mitä laajempi hakusanatyö tehdään, sitä enemmän sivuja kirjoitetaan — ja sitä useammalla haulla sivusto voi näkyä.",
+        a: "Tekninen hakukoneoptimointi sisältyy jokaiseen toteutukseen. Hintaa nostaa sisältötyö: mitä useammalle palvelulle tehdään oma alasivunsa ja mitä laajempi hakusanatyö tehdään, sitä enemmän sivuja kirjoitetaan, ja sitä useammalla haulla sivusto voi näkyä.",
+        plain: "Tekninen hakukoneoptimointi sisältyy jokaiseen toteutukseen. Hintaa nostaa sisältötyö: mitä useammalle palvelulle tehdään oma alasivunsa ja mitä laajempi hakusanatyö tehdään, sitä enemmän sivuja kirjoitetaan, ja sitä useammalla haulla sivusto voi näkyä.",
       },
     ],
   },
@@ -45,7 +45,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
     title: "Toteutus ja tekniikka",
     items: [
       {
-        q: "Perussivusto vai räätälöidyt verkkosivut — kumpi kannattaa valita?",
+        q: "Perussivusto vai räätälöidyt verkkosivut, kumpi kannattaa valita?",
         a: "Perussivusto riittää, kun palveluita on muutama, tarpeet ovat tavanomaisia ja sivusto halutaan nopeasti verkkoon. Räätälöity kannattaa, kun nopeus ja erottuvuus ovat tärkeitä kilpaillulla alalla, tarvitset toiminnallisuuksia joita valmiit ratkaisut eivät kata, tai haluat minimoida jatkuvan ylläpidon ja tietoturvahuolet.",
         plain: "Perussivusto riittää, kun palveluita on muutama, tarpeet ovat tavanomaisia ja sivusto halutaan nopeasti verkkoon. Räätälöity kannattaa, kun nopeus ja erottuvuus ovat tärkeitä kilpaillulla alalla, tarvitset toiminnallisuuksia joita valmiit ratkaisut eivät kata, tai haluat minimoida jatkuvan ylläpidon ja tietoturvahuolet.",
       },
@@ -76,8 +76,8 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Tarvitseeko minulla olla valmiit tekstit ja kuvat?",
-        a: "Ei tarvitse. Kirjoitamme tekstit puolestasi ja käsittelemme olemassa olevan kuvamateriaalin. Jos kuvia ei ole, voimme kuvata ne tai käyttää kuvapankkia — kuvaus hinnoitellaan erikseen.",
-        plain: "Ei tarvitse. Kirjoitamme tekstit puolestasi ja käsittelemme olemassa olevan kuvamateriaalin. Jos kuvia ei ole, voimme kuvata ne tai käyttää kuvapankkia — kuvaus hinnoitellaan erikseen.",
+        a: "Ei tarvitse. Kirjoitamme tekstit puolestasi ja käsittelemme olemassa olevan kuvamateriaalin. Jos kuvia ei ole, voimme kuvata ne tai käyttää kuvapankkia, kuvaus hinnoitellaan erikseen.",
+        plain: "Ei tarvitse. Kirjoitamme tekstit puolestasi ja käsittelemme olemassa olevan kuvamateriaalin. Jos kuvia ei ole, voimme kuvata ne tai käyttää kuvapankkia, kuvaus hinnoitellaan erikseen.",
       },
     ],
   },
