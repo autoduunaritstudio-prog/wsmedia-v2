@@ -3479,9 +3479,34 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 .page-verkkosivut .bdot { width:10px;height:10px;border-radius:50%;background:#d9d9de;flex:none }
 .page-verkkosivut .burl { flex:1;margin-left:10px;background:#fff;border:1px solid var(--hair); border-radius:8px;padding:6px 14px;font-size: var(--text-caption-sm);color:var(--grey); display:flex;align-items:center;gap:7px; }
 .page-verkkosivut .burl em { font-style:normal;color:#9a9aa1;font-size:10px }
-.page-verkkosivut .bpage { padding:34px 34px 40px;position:relative;overflow:hidden;min-height:300px }
-@media (max-width:640px) {
-  .page-verkkosivut .bpage { padding:22px 20px 26px;min-height:240px }
+/* SIVUPINTA ON NYT VIDEO, joten padding on 0: oikea kuvakaappaus
+   ulottuu selainikkunan reunaan kuten oikeassa selaimessa. Aiempi 34px
+   oli skeleton-rivien sisennys, ja videon ymparilla se olisi lukenut
+   kehyksena kehyksen sisalla.
+
+   aspect-ratio lahteen omista mitoista (900x518), jolloin ikkunan
+   korkeus seuraa leveytta eika videon ympari jaa tyhjaa. min-height
+   poistui samasta syysta: se oli skeleton-pinon korkeus. */
+.page-verkkosivut .bpage {
+  padding: 0; position: relative; overflow: hidden;
+  aspect-ratio: 900 / 518;
+}
+/* Video ja sen poster tayttavat pinnan. object-fit: cover eika contain:
+   ikkunan kuvasuhde voi pyoristya pikselin verran lahteesta, ja contain
+   jattaisi siita ohuen vaalean raidan reunaan. */
+.page-verkkosivut .bvid,
+.page-verkkosivut .bpage .demo-poster {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.page-verkkosivut .bpage .demo-poster { transition: opacity .45s ease }
+.page-verkkosivut .bpage .demo-poster.is-hidden { opacity: 0 }
+/* PageSpeed-mittari videon PAALLE. Se oli ennen skeleton-pinon paalla
+   samassa tasossa; nyt pinnan alla on liikkuvaa kuvaa, joten mittari
+   tarvitsee oman tasonsa ja pehmean varjon erottuakseen. */
+.page-verkkosivut .bpage .bscore {
+  z-index: 2;
+  box-shadow: 0 10px 30px -10px rgba(29,29,31,.45);
 }
 .page-verkkosivut .sk { opacity:0;transform:translateY(14px);animation:skin .7s cubic-bezier(.2,.6,.2,1) forwards }
 .page-verkkosivut .sk1 { animation-delay:.9s }
@@ -3565,27 +3590,6 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 .page-verkkosivut .plat ul { list-style:none;margin-top:14px }
 .page-verkkosivut .plat li { font-size: var(--text-ui-sm);color:var(--ink);padding:6px 0 6px 18px;position:relative;line-height:1.5 }
 .page-verkkosivut .plat li::before { content:"—";position:absolute;left:0;color:var(--blue) }
-.page-verkkosivut .cmp { margin-top:40px;border:1px solid var(--hair);border-radius:20px;background:#fff; padding:32px 30px 28px;box-shadow:0 24px 60px -30px rgba(29,29,31,.18); }
-@media (max-width:640px) {
-  .page-verkkosivut .cmp { padding:24px 20px 20px }
-}
-.page-verkkosivut .cmp .ct { font-size: var(--text-caption-sm);font-weight: var(--weight-semibold);letter-spacing:.1em;text-transform:uppercase; color:var(--grey);margin-bottom:20px; }
-.page-verkkosivut .cmprow { display:grid;grid-template-columns:150px 1fr 92px;gap:16px;align-items:center;padding:11px 0 }
-@media (max-width:640px) {
-  .page-verkkosivut .cmprow { grid-template-columns:1fr;gap:6px;padding:12px 0;border-bottom:1px solid var(--hair) }
-}
-.page-verkkosivut .cmprow .lb { font-size: var(--text-ui);font-weight: var(--weight-semibold) }
-.page-verkkosivut .cmprow .lb s { display:block;text-decoration:none;font-size: var(--text-caption);color:var(--grey);font-weight: var(--weight-regular);margin-top:2px }
-.page-verkkosivut .cmpbar { height:10px;border-radius:6px;background:#f0f0f4;overflow:hidden }
-.page-verkkosivut .cmpbar i { display:block;height:100%;border-radius:6px;width:0; background:linear-gradient(90deg,#c8c8d0,#a8a8b2); transition:width 1.4s cubic-bezier(.2,.6,.2,1); }
-.page-verkkosivut .cmpbar.good i { background:linear-gradient(90deg,var(--blue),#5ae9ff) }
-.page-verkkosivut .rv.on .cmpbar i { width:var(--w,50%) }
-.page-verkkosivut .cmprow .vv { font-size: var(--text-ui-sm);font-weight: var(--weight-bold);text-align:right;font-variant-numeric:tabular-nums;color:var(--grey) }
-@media (max-width:640px) {
-  .page-verkkosivut .cmprow .vv { text-align:left }
-}
-.page-verkkosivut .cmprow.good .vv { color:var(--blue) }
-.page-verkkosivut .cmpnote { margin-top:18px;padding-top:16px;border-top:1px solid var(--hair);font-size: var(--text-ui-sm);color:var(--grey);line-height:1.6 }
 .page-verkkosivut .steps { display:grid;grid-template-columns:repeat(5,1fr);gap:14px;counter-reset:s;position:relative }
 .page-verkkosivut .steps::before { content:"";position:absolute;top:56px;left:7%;right:7%;height:1px; background:repeating-linear-gradient(90deg,var(--hair) 0 8px,transparent 8px 16px); z-index:-1; }
 @media (max-width:1000px) {
@@ -3662,32 +3666,94 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 }
 .page-verkkosivut .hsplit .sub { font-size: var(--text-title-xs);padding-bottom:6px }
 .page-verkkosivut .hsplit h2 { margin-top:12px }
-.page-verkkosivut .band { background:var(--dark);color:#f5f5f7;position:relative;overflow:hidden }
-.page-verkkosivut .band::before { content:"";position:absolute;inset:0;pointer-events:none; background: radial-gradient(46% 62% at 6% 0%,rgba(0,197,227,.22),transparent 68%), radial-gradient(42% 55% at 94% 100%,rgba(100,234,255,.14),transparent 70%); }
-.page-verkkosivut .band .wrap { position:relative }
-.page-verkkosivut .band .kick { color:#6fecff }
-.page-verkkosivut .band h2 { color:#f5f5f7 }
-.page-verkkosivut .band .sub { color:#a1a1a6 }
-.page-verkkosivut .band .hsplit { align-items:end }
-.page-verkkosivut .probs { display:grid;grid-template-columns:repeat(2,1fr);gap:0 60px }
-@media (max-width:820px) {
-  .page-verkkosivut .probs { grid-template-columns:1fr;gap:0 }
+/* ==================================================================
+   TUTTU TILANNE (.probgrid, .probcard, .proof)
+   ==================================================================
+   Osio oli tumma saareke vaalealla sivulla: .band maalasi sen mustaksi
+   ja peitti juuri sen metallikuvion, jonka takia sivu tunnistetaan
+   etusivun sivuksi. Nyt pohja on sivun oma, ja erottelu tehdaan
+   korteilla ja yhdella kuvalla.
+   ================================================================== */
+/* Nelja korttia, kaksi riviä. Neljan sarakkeen rivi olisi antanut
+   jokaiselle noin 240px, jolla otsikko "Kavijat tulevat, mutta eivat
+   ota yhteytta" olisi taittunut kolmelle riville - kortit olisivat
+   kasvaneet eri korkuisiksi pelkan otsikon takia. Kaksi saraketta
+   antaa 500px, jolloin jokainen otsikko mahtuu kahdelle riville. */
+.page-verkkosivut .probgrid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px; margin-top: 46px;
 }
-.page-verkkosivut .prob { padding:24px 0;border-top:1px solid rgba(255,255,255,.13); display:grid;grid-template-columns:auto 1fr;gap:20px; transition:border-color .3s; }
-.page-verkkosivut .prob:hover { border-top-color:rgba(111,236,255,.5) }
-.page-verkkosivut .prob em { font-style:normal;font-size: var(--text-caption-sm);font-weight: var(--weight-bold);letter-spacing:.1em;color:#6fecff;padding-top:5px }
-.page-verkkosivut .prob h3 { font-size: var(--text-title-sm);font-weight: var(--weight-semibold);margin-bottom:7px;letter-spacing:-.016em }
-.page-verkkosivut .prob p { font-size: var(--text-body-sm);color:#a1a1a6;line-height:1.6 }
-.page-verkkosivut .bstats { display:flex;flex-wrap:wrap;margin-top:56px;border-top:1px solid rgba(255,255,255,.13);padding-top:34px }
-.page-verkkosivut .bstat { flex:1;min-width:140px;padding:8px 24px 8px 0 }
-.page-verkkosivut .bstat+.bstat { padding-left:24px;border-left:1px solid rgba(255,255,255,.13) }
-@media (max-width:640px) {
-  .page-verkkosivut .bstat { flex:0 0 50%;min-width:0;padding:12px 16px 12px 0 }
-  .page-verkkosivut .bstat+.bstat { padding-left:0;border-left:none }
-  .page-verkkosivut .bstat:nth-child(even) { padding-left:16px;border-left:1px solid rgba(255,255,255,.13) }
+@media (max-width: 760px) {
+  .page-verkkosivut .probgrid { grid-template-columns: minmax(0, 1fr) }
 }
-.page-verkkosivut .bstat .n { font-size: var(--text-stat-sm);font-weight: var(--weight-bold);letter-spacing:-.028em;font-variant-numeric:tabular-nums }
-.page-verkkosivut .bstat p { font-size: var(--text-label-sm);color:#a1a1a6;margin-top:6px;line-height:1.45 }
+/* Valkoinen kortti, ei lasia: sivu on vaalea ja metallikuvion paalla
+   lapinakyva kortti olisi paastanyt kuvion tekstin alle. Varjo on sama
+   kuin sivuston muilla korteilla (.card), jotta nama eivat ole uusi
+   korttityyppi vaan sama kortti. */
+.page-verkkosivut .probcard {
+  background: #fff; border: 1px solid var(--hair); border-radius: 18px;
+  padding: 26px 26px 28px;
+  box-shadow: 0 24px 60px -30px rgba(29,29,31,.16);
+  transition: border-color .3s, box-shadow .3s;
+}
+.page-verkkosivut .probcard:hover {
+  border-color: rgba(0,164,189,.4);
+  box-shadow: 0 28px 70px -30px rgba(29,29,31,.24);
+}
+/* Ikoni ei ole nappi eika merkki, joten silla ei ole omaa laatikkoa
+   eika tayttovaria: pelkka viivapiirros sivun sinisella. Laatikko olisi
+   tehnyt siita kortin sisaisen toisen kortin. */
+.page-verkkosivut .probicon {
+  width: 26px; height: 26px; display: block; margin-bottom: 16px;
+  color: var(--blue-d);
+}
+.page-verkkosivut .probcard h3 {
+  font-size: var(--text-title-sm); font-weight: var(--weight-semibold);
+  letter-spacing: -.016em; margin: 0 0 8px; text-wrap: balance;
+}
+.page-verkkosivut .probcard p {
+  font-size: var(--text-body-sm); line-height: 1.6; color: var(--grey); margin: 0;
+}
+
+/* --- TODISTE: kuva ja luvut samassa --- */
+/* Luvut olivat ennen paljas hiusviivarivi osion pohjalla, eli neljas
+   perakkainen tekstirivisto. Kuvan paalla ne lukevat mittaustuloksina
+   jostain oikeasta, ja osio saa lepopisteen jota koko sivulta puuttui. */
+.page-verkkosivut .proof {
+  position: relative; margin: 46px 0 0;
+  border-radius: 22px; overflow: hidden;
+  box-shadow: 0 40px 90px -40px rgba(29,29,31,.34);
+}
+.page-verkkosivut .proof img { display: block; width: 100%; height: auto }
+/* Alareunan tummennus lukujen alle. Gradientti eika tasainen levy:
+   levyn ylareuna olisi ollut viiva kuvan poikki, ja gradientti antaa
+   lukujen nousta kuvasta ilman rajaa. Ylapaa on tayttaa lapinakyva,
+   joten itse sivustosta nakyy edelleen ylin kaksi kolmasosaa. */
+.page-verkkosivut .proof figcaption {
+  position: absolute; inset: auto 0 0 0;
+  padding: 90px 30px 26px;
+  background: linear-gradient(180deg, rgba(13,13,16,0) 0%, rgba(13,13,16,.72) 46%, rgba(13,13,16,.92) 100%);
+}
+.page-verkkosivut .proofstats {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 20px;
+}
+@media (max-width: 720px) {
+  .page-verkkosivut .proofstats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px }
+  .page-verkkosivut .proof figcaption { padding: 60px 20px 20px }
+}
+.page-verkkosivut .proofstats > * + * {
+  padding-left: 20px; border-left: 1px solid rgba(255,255,255,.22);
+}
+@media (max-width: 720px) {
+  .page-verkkosivut .proofstats > * + * { padding-left: 0; border-left: 0 }
+}
+.page-verkkosivut .proofstats .n {
+  font-size: var(--text-stat-sm); font-weight: var(--weight-bold);
+  letter-spacing: -.028em; font-variant-numeric: tabular-nums; color: #fff;
+}
+.page-verkkosivut .proofstats p {
+  font-size: var(--text-label-sm); color: #d4d5da; margin-top: 6px; line-height: 1.45;
+}
 .page-verkkosivut .split { display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:72px;align-items:start }
 @media (max-width:900px) {
   .page-verkkosivut .split { grid-template-columns:1fr;gap:32px }
@@ -3741,6 +3807,48 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 .page-verkkosivut .vsr.head>div { font-size: var(--text-label);font-weight: var(--weight-semibold);color:var(--ink);letter-spacing:.02em }
 .page-verkkosivut .vsr.head>div:first-child { color:var(--grey);font-weight: var(--weight-medium) }
 .page-verkkosivut .vsr.head .hl { background:var(--blue-tint);color:var(--blue) }
+/* MITATTU SOLU. Arvo ja sen alla palkki, joka nayttaa suhteen yhdella
+   silmayksella. Palkki on solun sisalla eika omana sarakkeenaan: oma
+   sarake olisi tehnyt taulukosta viisisarakkeisen, jolloin viisi
+   arviorivia olisivat jattaneet kaksi saraketta tyhjaksi.
+
+   --w tulee komponentilta inline-tyylina, koska arvo on dataa eika
+   tyyliä. CSS ei voi tietaa lukua, ja kahdeksan valmista leveysluokkaa
+   olisi ollut sama data toisessa paikassa. */
+.page-verkkosivut .vsmeas { display: block }
+.page-verkkosivut .vsmeas b {
+  display: block; font-size: var(--text-ui); font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: 8px;
+}
+/* PALKKI ON URA JA TAYTTO, EI PELKKA TAYTTO.
+   Ensin tassa oli vain tayttopalkki, jonka leveys oli --w prosenttia
+   solusta ja jolla oli max-width 220px. Mitattuna se rikkoi juuri sen
+   vertailun jota varten palkki on: 90 % ylitti 220px:n katon ja
+   leikkautui siihen, kun taas 21 % jai 59 pikseliin - eli 4,3-kertainen
+   ero nayttti 3,7-kertaiselta. Kun ura on kiintean levyinen ja taytto
+   sen prosentti, molemmat puolet mitataan samasta janasta. */
+.page-verkkosivut .vsmeas i {
+  display: block; position: relative; overflow: hidden;
+  width: min(100%, 220px); height: 8px; border-radius: 5px;
+  background: #f0f0f4;
+}
+.page-verkkosivut .vsmeas i::after {
+  content: ""; position: absolute; inset: 0 auto 0 0;
+  width: var(--w, 0); border-radius: 5px;
+  background: linear-gradient(90deg, #c8c8d0, #a8a8b2);
+}
+/* Kasin koodatun puoli sinisella: vari erottaa puolet toisistaan silloin
+   kin kun palkit sattuvat olemaan lahella toisiaan. */
+.page-verkkosivut .vsmeas.good b { color: var(--blue-d) }
+.page-verkkosivut .vsmeas.good i::after { background: linear-gradient(90deg, var(--blue), #5ae9ff) }
+/* Mitattu rivi on korkeampi kuin tekstirivi, koska siina on kaksi
+   tasoa. Pystypadding tasataan rivityypin mukaan, jotta taulukon rytmi
+   pysyy tasaisena eika mitattu rivi nayta virheelta. */
+.page-verkkosivut .vsr.meas > div { padding-top: 18px; padding-bottom: 18px }
+.page-verkkosivut .vsnote {
+  margin-top: 18px; font-size: var(--text-ui-sm); color: var(--grey); line-height: 1.6;
+  max-width: 88ch;
+}
 @media (max-width:760px) {
   .page-verkkosivut .vsr { grid-template-columns:1fr;padding:12px 0 }
   .page-verkkosivut .vsr.head { display:none }
@@ -3752,11 +3860,28 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 @media (max-width:960px) {
   .page-verkkosivut .duo { grid-template-columns:1fr;gap:38px }
 }
-.page-verkkosivut .numlist { border-top:1px solid var(--hair);counter-reset:nl;margin-top:28px }
-.page-verkkosivut .numlist li { list-style:none;counter-increment:nl;position:relative; padding:19px 0 19px 46px;border-bottom:1px solid var(--hair); }
-.page-verkkosivut .numlist li::before { content:counter(nl,decimal-leading-zero);position:absolute;left:0;top:21px; font-size: var(--text-caption-sm);font-weight: var(--weight-bold);color:var(--blue);letter-spacing:.08em; }
-.page-verkkosivut .numlist h3 { font-size: var(--text-body-xl);font-weight: var(--weight-semibold);margin-bottom:6px;letter-spacing:-.014em }
-.page-verkkosivut .numlist p { font-size: var(--text-ui);color:var(--grey);line-height:1.6 }
+/* NUMEROT KORVAUTUIVAT IKONEILLA. Lista oli numeroitu 01-04
+   counterilla, mutta nelja tekijaa eivat ole jarjestys: ne vaikuttavat
+   yhtaikaa eika mikaan niista ole ensimmainen. Numero lupasi
+   etenemista, ikoni kertoo mista on kyse ja antaa silmalle saman
+   kiinnekohdan rivin alkuun. */
+.page-verkkosivut .iconlist { border-top: 1px solid var(--hair); margin-top: 28px }
+.page-verkkosivut .iconlist li {
+  list-style: none;
+  display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 18px;
+  padding: 19px 0; border-bottom: 1px solid var(--hair);
+}
+/* Ikoni linjataan otsikon ensimmaisen rivin KESKIKOHTAAN eika
+   ylareunaan: 24px ikoni otsikon 27px rivin ylareunassa nayttaisi
+   nousseen rivin ylapuolelle. */
+.page-verkkosivut .iconlist svg {
+  width: 24px; height: 24px; color: var(--blue-d); margin-top: 1px;
+}
+.page-verkkosivut .iconlist h3 {
+  font-size: var(--text-body-xl); font-weight: var(--weight-semibold);
+  margin-bottom: 6px; letter-spacing: -.014em;
+}
+.page-verkkosivut .iconlist p { font-size: var(--text-ui); color: var(--grey); line-height: 1.6 }
 .page-verkkosivut .tree { border:1px solid var(--hair);border-radius:24px;background:#fff;padding:32px 30px 28px; box-shadow:0 30px 80px -44px rgba(29,29,31,.3); }
 @media (max-width:560px) {
   .page-verkkosivut .tree { padding:24px 20px 20px }
@@ -3780,32 +3905,79 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
   .page-verkkosivut .kids .trow::before { display:none }
 }
 .page-verkkosivut .tree .tn { margin-top:22px;padding-top:18px;border-top:1px solid var(--hair); font-size: var(--text-ui-sm);color:var(--grey);line-height:1.6; }
-.page-verkkosivut .tl { position:relative;max-width:880px;margin:0 auto }
-.page-verkkosivut .tl::before { content:"";position:absolute;left:50%;top:14px;bottom:14px;width:1px; background:repeating-linear-gradient(180deg,var(--hair) 0 7px,transparent 7px 14px); transform:translateX(-.5px); }
-@media (max-width:820px) {
-  .page-verkkosivut .tl::before { left:18px }
+/* ==================================================================
+   PROSESSI VAAKARIVIIN (.hsteps)
+   ==================================================================
+   Pystysuuntainen zigzag vei 1311px, ja suurin osa siita oli janan
+   omaa geometriaa eika sisaltoa. Vaakarivissa jarjestys on suunta
+   johon kieli jo lukee, joten jana voi olla yksi ohut viiva pisteiden
+   lapi.
+   ================================================================== */
+.page-verkkosivut .hsteps {
+  position: relative; list-style: none;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0 var(--hstep-gap); margin: 46px 0 0; padding: 0;
 }
-.page-verkkosivut .tlrow { display:grid;grid-template-columns:1fr 78px 1fr;align-items:center;margin-bottom:14px }
-.page-verkkosivut .tlrow:last-child { margin-bottom:0 }
-@media (max-width:820px) {
-  .page-verkkosivut .tlrow { grid-template-columns:38px 1fr;gap:16px;margin-bottom:12px }
+/* Jana kulkee pisteiden KESKELTA ja paattyy reunimmaisiin pisteisiin,
+   ei osion reunaan: muuten se leijailisi askelten yli sen sijaan etta
+   yhdistaisi ne.
+
+   PAAT ON LASKETTU, EI ARVATTU. Ensin tassa oli left/right: 10%, mutta
+   mitattuna ensimmaisen pisteen keskikohta on 15px ja viimeisen 860px
+   1032px:n rivilla, kun viiva alkoi 103px:sta ja paattyi 929px:aan -
+   eli molemmat paat olivat noin 80px vaarassa suuntaan.
+
+   Vasen on pisteen sade eli 15px. Oikea on viimeisen sarakkeen leveys
+   miinus sama sade, ja sarakkeen leveys on (100% - 4 valia) / 5.
+   --hstep-gap pitaa luvun yhdessa paikassa, jotta valin muuttaminen ei
+   riko janaa hiljaa. */
+.page-verkkosivut .hsteps { --hstep-gap: 24px; --hstep-r: 15px }
+.page-verkkosivut .hsteps::before {
+  content: ""; position: absolute; top: var(--hstep-r); height: 1px;
+  left: var(--hstep-r);
+  right: calc((100% - 4 * var(--hstep-gap)) / 5 - var(--hstep-r));
+  background: repeating-linear-gradient(90deg, var(--hair) 0 7px, transparent 7px 14px);
 }
-.page-verkkosivut .tlrow .dot { grid-column:2;justify-self:center; width:38px;height:38px;border-radius:50%;background:#fff;border:1px solid var(--hair); display:flex;align-items:center;justify-content:center; font-size: var(--text-label);font-weight: var(--weight-bold);color:var(--blue);position:relative;z-index:1; box-shadow:0 0 0 6px #fff; }
-@media (max-width:820px) {
-  .page-verkkosivut .tlrow .dot { grid-column:1;justify-self:start;box-shadow:0 0 0 5px #fff }
+.page-verkkosivut .hsteps li { position: relative; padding-top: 0 }
+.page-verkkosivut .hstep-dot {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  width: calc(var(--hstep-r) * 2); height: calc(var(--hstep-r) * 2); border-radius: 50%;
+  background: #fff; border: 1px solid var(--hair);
+  font-size: var(--text-label); font-weight: var(--weight-bold); color: var(--blue-d);
+  /* Valkoinen rengas katkaisee janan pisteen kohdalta, jolloin viiva ei
+     piirry pisteen ali. Sama tekniikka kuin vanhassa pystyjanassa. */
+  box-shadow: 0 0 0 6px #fff;
 }
-.page-verkkosivut .tlbox { grid-row:1;padding:22px 26px;border:1px solid var(--hair);border-radius:16px;background:#fff; box-shadow:0 20px 50px -30px rgba(29,29,31,.22);transition:transform .35s cubic-bezier(.2,.6,.2,1),box-shadow .35s; }
-.page-verkkosivut .tlbox:hover { transform:translateY(-4px);box-shadow:0 30px 70px -34px rgba(29,29,31,.3) }
-.page-verkkosivut .tlrow:nth-child(odd) .tlbox { grid-column:1;text-align:right }
-.page-verkkosivut .tlrow:nth-child(even) .tlbox { grid-column:3 }
-@media (max-width:820px) {
-  .page-verkkosivut .tlrow:nth-child(odd) .tlbox { grid-column:2;text-align:left }
-  .page-verkkosivut .tlrow:nth-child(even) .tlbox { grid-column:2;text-align:left }
-  .page-verkkosivut .tlbox { padding:18px 20px }
+.page-verkkosivut .hstep-sw {
+  display: block; margin-top: 18px;
+  font-size: var(--text-micro); font-weight: var(--weight-semibold);
+  letter-spacing: .09em; text-transform: uppercase; color: var(--blue-d);
 }
-.page-verkkosivut .tlbox h3 { font-size: var(--text-title-xs);font-weight: var(--weight-semibold);margin-bottom:7px;letter-spacing:-.016em }
-.page-verkkosivut .tlbox p { font-size: var(--text-ui);color:var(--grey);line-height:1.55 }
-.page-verkkosivut .tlbox .sw { display:inline-block;margin-top:11px;font-size: var(--text-micro);font-weight: var(--weight-semibold);letter-spacing:.09em;text-transform:uppercase;color:var(--blue) }
+.page-verkkosivut .hsteps h3 {
+  font-size: var(--text-title-xs); font-weight: var(--weight-semibold);
+  margin: 7px 0 7px; letter-spacing: -.016em; text-wrap: balance;
+}
+.page-verkkosivut .hsteps p {
+  font-size: var(--text-ui-sm); color: var(--grey); line-height: 1.55; margin: 0;
+}
+/* Alle 900px viisi saraketta olisi noin 60px kukin, eli otsikko
+   taittuisi kirjain kerrallaan. Pystyssa jana siirtyy vasempaan
+   reunaan, jolloin se on yha jana eika pelkka lista. */
+@media (max-width: 900px) {
+  .page-verkkosivut .hsteps { grid-template-columns: minmax(0, 1fr); gap: 0 }
+  .page-verkkosivut .hsteps::before {
+    top: 15px; bottom: 15px; height: auto; left: 15px; right: auto; width: 1px;
+    background: repeating-linear-gradient(180deg, var(--hair) 0 7px, transparent 7px 14px);
+  }
+  .page-verkkosivut .hsteps li {
+    display: grid; grid-template-columns: 30px minmax(0, 1fr);
+    column-gap: 20px; padding-bottom: 26px;
+  }
+  .page-verkkosivut .hsteps li > * { grid-column: 2 }
+  .page-verkkosivut .hstep-dot { grid-column: 1; grid-row: 1 / span 4; align-self: start }
+  .page-verkkosivut .hstep-sw { margin-top: 4px }
+}
 .page-verkkosivut .frame { border:1px solid var(--hair);border-radius:24px;padding:18px;background:#fff; box-shadow:0 34px 90px -44px rgba(29,29,31,.3); }
 @media (max-width:640px) {
   .page-verkkosivut .frame { padding:10px;border-radius:18px }
@@ -3918,7 +4090,7 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 }
 @media (prefers-reduced-motion:reduce) {
   .page-verkkosivut .opt::before { transition:none !important }
-  .page-verkkosivut .tlbox { transition:none !important }
+  .page-verkkosivut .probcard { transition:none !important }
   .page-verkkosivut .refchip { transition:none !important }
 }
 

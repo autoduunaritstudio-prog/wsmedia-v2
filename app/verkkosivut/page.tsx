@@ -5,13 +5,12 @@ import MetalBackdrop from "../components/MetalBackdrop";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 import SiteEffects from "../components/SiteEffects";
-import StatBand from "../components/StatBand";
-import { OVERLAY_NAV, VERKKOSIVUT_FOOTER } from "../components/site-data";
+import { OVERLAY_NAV, SUBPAGE_FOOTER } from "../components/site-data";
 
 import Hero from "./components/Hero";
 import { buildJsonLd } from "./jsonld";
 import { Asiakkaat, Nakyvyys, Ongelma, Prosessi, Sisalto, Toteutustapa } from "./sections";
-import { Alueet, Hinnoittelu, Kenelle, Tarjous, Tulokset, Ukk } from "./sections2";
+import { Hinnoittelu, Kenelle, Tarjous, Tulokset, Ukk } from "./sections2";
 
 export const metadata: Metadata = {
   title: "Verkkosivut yritykselle | Kotisivujen suunnittelu ja toteutus | WS Media",
@@ -29,19 +28,6 @@ export const metadata: Metadata = {
       "Verkkosivut yritykselle avaimet käteen: suunnittelu, tekstit ja tekninen hakukoneoptimointi. Kiinteä projektihinta.",
   },
 };
-
-/* SAMAT LUVUT KUIN ETUSIVULLA (app/page.tsx STATS). Nama ovat yrityksen
-   lukuja, eivat taman sivun lukuja, joten kahta eri arvoa samasta
-   asiasta ei saa olla olemassa. Kun luvut paivitetaan, molemmat paikat
-   on paivitettava yhdessa.
-
-   \u00A0 = sitomaton valilyonti: tuhaterotin ei saa katketa riville. */
-const STATS = [
-  { value: "150+", label: "toteutettua projektia" },
-  { value: "5\u00A0000\u00A0000+", label: "katselukertaa yhteensä" },
-  { value: "8", label: "arkipäivää keskim. toimitusaika" },
-  { value: "4,8/5", label: "keskiarvosana asiakkailta" },
-];
 
 export default function Verkkosivut() {
   return (
@@ -73,9 +59,16 @@ export default function Verkkosivut() {
           cover ovat saman kaareen lapsia, se on ehto jonka rikkominen
           kaataa pinnauksen.
 
-          Coverin ylareunassa on sama asiakaslogonauha ja sama lukukaista
-          kuin etusivulla: ensimmainen asia joka nousee heron paalle on
-          todiste, ei uusi myyntilause.
+          Coverin ylareunassa on sama asiakaslogonauha kuin etusivulla:
+          ensimmainen asia joka nousee heron paalle on todiste, ei uusi
+          myyntilause.
+
+          LUKUKAISTA EI KUULU TANNE. Luvut (toteutetut projektit,
+          katselukerrat, keskim. toimitusaika) ovat koko yrityksen lukuja
+          ja painottuvat videotuotantoon, joten verkkosivusivulla ne
+          vastasivat kysymykseen jota kukaan ei ollut tehnyt. Sivun omat
+          luvut ovat Tulokset-osiossa, jossa ne on sidottu siihen mita
+          tama palvelu tekee.
 
           Murupolku poistui virrasta kokonaan. Se oli 33px korkea rivi
           heron ylapuolella, ja pinnatun heron kanssa se olisi jaanyt
@@ -87,12 +80,6 @@ export default function Verkkosivut() {
           <MetalBackdrop />
           <Logos />
 
-          <section style={{ padding: "64px 0 20px" }}>
-            <div className="wrap">
-              <StatBand stats={STATS} />
-            </div>
-          </section>
-
           <Ongelma />
           <Sisalto />
           <Toteutustapa />
@@ -102,7 +89,6 @@ export default function Verkkosivut() {
           <Asiakkaat />
           <Hinnoittelu />
           <Kenelle />
-          <Alueet />
           <Ukk />
           {/* YKSI CTA KAHDEN SIJAAN. Sivun lopussa oli <Loppu />, jonka
               ainoa nappi osoitti takaisin samaan lomakkeeseen muutaman
@@ -118,10 +104,17 @@ export default function Verkkosivut() {
         </div>
       </div>
 
+      {/* SAMA FOOTERI KUIN MUILLA ALASIVUILLA. Talla sivulla oli oma
+          nelja palstaa levea footeri, jossa kaksi palstaa oli taman sivun
+          omia ankkurilinkkeja. Se on eri footeri kuin etusivulla ja
+          lyhytvideosivulla, eli kolme sivua paattyi kolmeen eri tapaan.
+          Ankkurilinkit ovat myos turhia: ne vievat samalle sivulle jonka
+          lukija juuri vieritti lapi. */}
       <Footer
-        intro="Lyhytvideot, verkkosivut ja graafinen ilme. Espoo ja Helsinki, koko Suomi. Yrityksille jotka haluavat kasvaa."
-        columns={VERKKOSIVUT_FOOTER}
-        base="© 2026 WS Media Oy · Espoo · Y-tunnus 3615084-4"
+        intro="Lyhytvideot, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
+        columns={SUBPAGE_FOOTER}
+        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
+        brandHeading="h2"
       />
 
       <SiteEffects />

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import DemoVideo from "./DemoVideo";
+
 /**
  * Heron selainnayttamo: sivusto rakentuu skeleton-riveina, PageSpeed-mittari
  * laskee ylos ja hakutuloskortti nousee sijalle 1.
@@ -116,18 +118,25 @@ export default function HeroBrowserStage() {
                 <small>PAGESPEED</small>
               </i>
             </div>
-            <div className="sk sk1 sk-kick" />
-            <div className="sk sk2 sk-h" />
-            <div className="sk sk3 sk-h short" />
-            <div className="sk sk4 sk-btns">
-              <span className="sk-btn" />
-              <span className="sk-btn o" />
-            </div>
-            <div className="sk sk5 sk-cards">
-              <span className="sk-card" />
-              <span className="sk-card" />
-              <span className="sk-card" />
-            </div>
+            {/* OIKEA TOTEUTETTU SIVUSTO, EI SKELETON-RIVEJA.
+                Skeleton oli abstrakti kuva sivustosta: harmaita palkkeja
+                jotka esittavat sisaltoa jota ei ole. Se kertoo lukijalle
+                mita sivu tekee, mutta ei todista etta olemme tehneet
+                yhtaan. Sama video pyorii etusivun Palvelut-osiossa, joten
+                alasivu nayttaa saman tyon samalla tavalla.
+
+                Toisto on sidottu nakyvyyteen ja preload odottaa
+                nakyvyytta, joten hero ei maksa videon latausta ennen kuin
+                se on ruudulla. prefers-reduced-motion jattaa
+                poster-kuvan. Ks. DemoVideo. */}
+            <DemoVideo
+              className="bvid"
+              webm="/laaksolahti-demo.webm"
+              mp4="/laaksolahti-demo.mp4"
+              poster="/laaksolahti-poster.jpg"
+              preload="metadata"
+              label="Laaksolahden Sähkön verkkosivusto, WS Median toteuttama"
+            />
           </div>
         </div>
 
