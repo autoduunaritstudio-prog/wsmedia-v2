@@ -12,6 +12,11 @@ export type FaqItem = {
   q: string;
   answer: ReactNode;
   schema: string;
+  /** Auki heti. Vain kolmelle yleisimmalle kysymykselle: accordionin
+      haitta on etta piilotettu sisalto jaa huomaamatta, ja juuri nama
+      kolme ovat ne joita jokainen kysyy. Loput saavat accordionin
+      tilansaaston. */
+  open?: boolean;
 };
 
 export type FaqGroup = {
@@ -25,6 +30,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Paljonko lyhytvideotuotanto maksaa?",
+        open: true,
         answer: (
           <>
             Jatkuva lyhytvideotuotanto alkaa meillä [HINTA] eurosta kuukaudessa, ja hinta määräytyy
@@ -51,6 +57,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Kuinka nopeasti saan valmiit videot?",
+        open: true,
         answer: (
           <>
             Toimitamme videot tyypillisesti [X] arkipäivän kuluessa kuvauspäivästä. Kiireellisessä
@@ -95,7 +102,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
         q: "Missä kuvaukset tehdään?",
         answer: (
           <>
-            Lähtökohtaisesti sinun omissa tiloissasi — se on nopeinta ja näyttää aidoimmalta.
+            Lähtökohtaisesti sinun omissa tiloissasi, se on nopeinta ja näyttää aidoimmalta.
             Kuvaamme päivittäin Espoossa ja Helsingissä, ja kuvauspäivät onnistuvat sovitusti myös
             muualla Suomessa. Tarvittaessa käytämme erillistä kuvauspaikkaa tai studiota.
           </>
@@ -135,6 +142,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Kuka omistaa valmiit videot?",
+        open: true,
         answer: (
           <>
             Sinä. Saat täydet käyttöoikeudet sekä valmiisiin videoihin että raakamateriaaliin, ja
@@ -220,7 +228,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
             syntyvät useimmiten silloin, kun ostaja hakee palvelua Googlesta. Siksi
             hakukoneoptimointi kuuluu samaan kokonaisuuteen: optimoimme{" "}
             <SmartLink href="/verkkosivut">verkkosivut</SmartLink> niille hauille, joita asiakkaasi oikeasti
-            tekevät. Hakukoneoptimoinnille tulee oma sivunsa lähiaikoina — sillä välin kysy siitä{" "}
+            tekevät. Hakukoneoptimoinnille tulee oma sivunsa lähiaikoina, ja sillä välin kysy siitä{" "}
             <a href="#tarjous">tarjouspyynnön</a> yhteydessä.
           </>
         ),

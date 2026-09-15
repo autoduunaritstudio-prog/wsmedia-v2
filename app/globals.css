@@ -2128,6 +2128,105 @@ section { padding: var(--space-section) 0 }
 .plan.pop .btn:hover { background: #f0f0f2; box-shadow: none }
 .pricenote { text-align: center; font-size: var(--text-label-sm); color: var(--grey); margin-top: 26px }
 
+/* ==================================================================
+   HINTAKORTIN KAKSI MITTARIA (.plan-viz)
+   ==================================================================
+   Maara ja kanavat ovat ne kaksi asiaa joiden takia paketteja
+   oikeasti vertaillaan. Tekstina ne ovat kolmen kortin sisalla
+   kolmella eri rivilla, jolloin vertailu vaatii lukemista; kuvana ne
+   ovat samalla korkeudella jokaisessa kortissa ja vertailu tapahtuu
+   yhdella silmayksella. Siksi mittarit ovat ENNEN hintaa: jarjestys
+   on tunnista itsesi, katso mita saat, katso mita maksaa. */
+.plan-viz {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 9px;
+  margin: 0 0 22px;
+  padding: 16px 0 18px;
+  border-top: 1px solid rgba(0,0,0,.07);
+  border-bottom: 1px solid rgba(0,0,0,.07);
+}
+.page-dark .plan-viz { border-color: rgba(255,255,255,.10) }
+.page-dark .plan.pop .plan-viz { border-color: rgba(255,255,255,.16) }
+
+/* Kolme askelta, ei yksi palkki per video: videoiden todellinen maara
+   on viela auki, ja yksi palkki per video lupaisi luvun jota ei ole
+   paatetty. Askelmat kertovat jarjestyksen, eivat maaraa. */
+.plan-meter { display: flex; align-items: flex-end; gap: 4px; height: 26px }
+.plan-meter i {
+  display: block; width: 9px; border-radius: 3px;
+  background: currentColor; opacity: .18;
+  transition: opacity .3s, height .3s;
+}
+.plan-meter i:nth-child(1) { height: 12px }
+.plan-meter i:nth-child(2) { height: 19px }
+.plan-meter i:nth-child(3) { height: 26px }
+.plan-meter[data-lv="1"] i:nth-child(1),
+.plan-meter[data-lv="2"] i:nth-child(-n+2),
+.plan-meter[data-lv="3"] i { opacity: 1 }
+.page-dark .plan-meter i { color: var(--blue) }
+.page-dark .plan.pop .plan-meter i { color: #6fecff }
+
+/* Alustatunnukset: mukana olevat taydella, muut samalla himmennyksella
+   kuin mittarin tyhjat askeleet. Poisjattaminen olisi ollut toinen
+   vaihtoehto, mutta silloin korttien tunnusrivit olisivat eri
+   levyisia eivatka ne asettuisi vertailtavaksi riviksi. */
+.plan-marks { display: flex; align-items: center; gap: 8px }
+.plan-marks svg { width: 19px; height: 19px; opacity: .18; flex: none }
+.plan-marks svg.on { opacity: 1 }
+.plan-marks em {
+  font-style: normal; font-size: 11px; font-weight: var(--weight-bold);
+  letter-spacing: .02em; line-height: 19px; padding: 0 6px; border-radius: 5px;
+  background: currentColor; color: inherit;
+}
+.page-dark .plan-marks { color: #f5f5f7 }
+.page-dark .plan-marks em { background: rgba(255,255,255,.14) }
+.plan-viz s {
+  grid-column: 1 / -1; text-decoration: none;
+  font-size: var(--text-label-sm); line-height: 1.4;
+}
+.page-dark .plan-viz s { color: #8f98aa }
+.page-dark .plan.pop .plan-viz s { color: #a8b0c0 }
+
+/* "Kaikki edellinen + ..." tekee portaan nakyvaksi. Ilman sita jokainen
+   kortti lukee omana listanaan ja lukija vertailee rivi riviltä
+   loytaakseen eron, joka on koko ajan sama: edellinen plus jotain. */
+.page-dark .plan-lisaa {
+  margin: 20px 0 -10px; font-size: var(--text-label-sm);
+  letter-spacing: .01em; color: #8f98aa;
+}
+.page-dark .plan.pop .plan-lisaa { color: #a8b0c0 }
+
+/* Perustelu tarran alle: tarra kertoo etta joku muu on valinnut taman,
+   perustelu kertoo kenelle se sopii. Jalkimmainen kestaa skeptisen
+   katseen, edellinen ei. */
+.page-dark .plan-peruste {
+  margin: 0 0 18px; padding-left: 13px;
+  border-left: 2px solid rgb(111 236 255 / .5);
+  font-size: var(--text-label-sm); line-height: 1.45; color: #a8b0c0;
+}
+
+/* SUOSITUIN NOUSEE FYYSISESTI, EI VAIN VARILLA. Tumman sivun paalla
+   .plan.popin var(--ink) -pohja (#1d1d1f) on vain aavistuksen vaaleampi
+   kuin sivun #060b14, joten pelkka vari ei riittanyt erottamaan sita.
+   Nosto, reunaviiva ja varjo tekevat siita kortin joka on lahempana
+   lukijaa - sama keino kuin referenssikorttien kaaressa. */
+.page-dark .plan.pop {
+  translate: 0 -14px;
+  border: 1px solid rgb(111 236 255 / .28);
+  box-shadow: 0 30px 70px -34px rgba(0,0,0,.85);
+}
+/* EI margin-bottomia noston kanssa. Ruudukko venyttaa kortit samaan
+   korkeuteen, joten margin lyhensi keskikorttia 14px ja nosto siirsi
+   sita viela 14px: mitattuna alareunojen ero oli 28px eika 0. Nosto
+   yksin siirtaa kortin kokonaan, mika on juuri se ilme jota haettiin. */
+@media (max-width: 820px) {
+  /* Yhdessa palstassa nosto olisi vain irrallinen hyppy rivissa. */
+  .page-dark .plan.pop { translate: none }
+}
+
 .fcard { max-width: 620px; margin: 0 auto; padding: var(--space-card-form); border-radius: 24px }
 @media (max-width: 640px) { .fcard { padding: var(--space-card-form-mobile) } }
 .fcard label { display: block; font-size: var(--text-label-sm); font-weight: var(--weight-semibold); margin: 20px 0 8px }
@@ -3112,6 +3211,146 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
   color: var(--grey); margin: 36px 0 0; padding-bottom: 8px; border-bottom: 1px solid var(--hair);
 }
 .faqgroup:first-child { margin-top: 0 }
+
+/* ==================================================================
+   UKK KAHTEEN PALSTAAN (.faq2)
+   ==================================================================
+   Yhdessa palstassa osio oli 1521px, eli puolitoista ruutua pelkkia
+   kysymysotsikoita. Palstajako on RYHMITTAIN: CSS-columns olisi
+   katkonut yksittaisen kysymyksen palstan vaihtuessa, jolloin kysymys
+   olisi jaanyt yhteen palstaan ja vastaus toiseen.
+
+   align-items: start on valttamaton. Ilman sita ruudukko venyttaisi
+   molemmat ryhmat saman rivin korkeimman mittaan, jolloin lyhyemman
+   ryhman viimeisen kysymyksen alaviivan ja seuraavan ryhman valiin
+   jaisi tyhja kaista. */
+.faq2 {
+  max-width: 1080px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 56px; row-gap: 40px;
+  align-items: start;
+}
+@media (max-width: 860px) { .faq2 { grid-template-columns: minmax(0, 1fr); row-gap: 30px } }
+/* Ryhmaotsikko on jokaisen palstan ensimmainen rivi, joten sen oma
+   ylamarginaali ei enaa erota ryhmia vaan tyontaisi ne eri korkeuksille. */
+.faq2 .faqgroup { margin-top: 0 }
+/* Ryhmatunnus antaa nelja ankkuria joiden avulla oikean ryhman loytaa
+   ilman etta otsikkoa lukee. Viiva eika tayttö: nelja tayttömuotoa
+   olisi kilpaillut kysymysten kanssa, ohut viiva ei. */
+.faq2 .faqgroup { display: flex; align-items: center; gap: 9px }
+.faqicon { width: 15px; height: 15px; flex: none; opacity: .8 }
+
+.page-dark .faq2 .faqgroup { color: #8f98aa; border-color: rgba(255,255,255,.14) }
+.page-dark .faq2 details { border-color: rgba(255,255,255,.10) }
+.page-dark .faq2 summary { color: #f5f5f7 }
+.page-dark .faq2 summary:hover { color: rgb(111 236 255) }
+.page-dark .faq2 .a { color: #b9c0cf }
+.page-dark .faq2 .a a { color: rgb(111 236 255) }
+
+/* Avattu kysymys saa oman pintansa. Ilman sita avatun ja suljetun ero
+   on pelkka tekstin ilmestyminen, ja pitkassa listassa lukija menettaa
+   kohdan josta han oli avannut. */
+.page-dark .faq2 details[open] {
+  background: rgba(255,255,255,.035);
+  border-radius: 10px;
+  margin-inline: -14px;
+  padding-inline: 14px;
+}
+.page-dark .faq2 details[open] summary { color: rgb(111 236 255) }
+
+/* Viimeinen este ennen yhteydenottoa. UKK:n loppuun asti lukenut
+   epäröi viela, ja hanelle kynnys on matalampi kuin lomake. */
+.page-dark .faqmore {
+  margin: 34px 0 -10px; text-align: center;
+  font-size: var(--text-label-sm); color: #8f98aa;
+}
+
+/* ==================================================================
+   KENELLE SOPII (.fit2)
+   ==================================================================
+   Kaksi listaa vierekkain ei viela ole itsesegmentointia. Muutokset:
+   molemmat puolet saavat oman pinnan (ne ovat kaksi vaihtoehtoa, eivat
+   yksi lista kahdessa osassa), merkit ovat neutraaleja (nuoli, ei
+   punaista rastia) ja "ei sovi" -puolen suositus on omana rivinaan
+   jotta se lukee neuvona eika varauksena. */
+/* .page-palvelu .fit on (0,2,0) ja asettaa 1fr 1fr -jaon seka
+   ylareunan hiusviivan, joten yliajon on oltava vahintaan yhta
+   painava. Laatikoilla on nyt oma pintansa, joten osion ylaviiva
+   olisi kolmas raja samassa kohdassa. */
+.page-palvelu .fit2 {
+  display: grid; grid-template-columns: 1.25fr 1fr;
+  gap: 22px; align-items: start; border-top: 0;
+}
+@media (max-width: 860px) {
+  .page-palvelu .fit2 { grid-template-columns: minmax(0, 1fr) }
+  .page-palvelu .fit2 .fitbox + .fitbox { border-top: 1px solid rgba(255,255,255,.08) }
+}
+.page-dark .fit2 .fitbox {
+  padding: 26px 28px 28px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+}
+/* Ei-puoli on hillitympi: se ei ole virhe vaan toinen reitti, ja
+   vahvempi pinta olisi tehnyt siita osion paaviestin. */
+.page-dark .fit2 .fitbox.no { background: rgba(255,255,255,.02) }
+.page-dark .fit2 .fitbox h3 {
+  display: flex; align-items: center; gap: 11px;
+  font-size: var(--text-body-lg); font-weight: var(--weight-semibold);
+  color: #f5f5f7; margin: 0 0 18px;
+}
+.fitmark {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+}
+.fitmark svg { width: 14px; height: 14px }
+.page-dark .fitbox.yes .fitmark { background: rgb(111 236 255 / .16); color: rgb(111 236 255) }
+.page-dark .fitbox.no .fitmark { background: rgba(255,255,255,.08); color: #8f98aa }
+.page-dark .fit2 .fitbox li {
+  list-style: none; padding: 11px 0 11px 0;
+  border-top: 1px solid rgba(255,255,255,.07);
+  color: #b9c0cf; line-height: 1.5;
+}
+.page-dark .fit2 .fitbox li:first-of-type { border-top: 0; padding-top: 0 }
+.page-dark .fit2 .fitbox a { color: rgb(111 236 255); text-decoration: none }
+/* Suositus omalle rivilleen ja omalla varillaan: sama kappale luki
+   varauksena, erillinen rivi lukee neuvona. */
+.page-dark .fit2 .fitbox.no li b {
+  display: block; margin-top: 7px;
+  font-size: var(--text-label-sm); font-weight: var(--weight-regular);
+  color: rgb(111 236 255);
+}
+
+/* ==================================================================
+   TOIMINTA-ALUE VYOHYKKEINA (.zones)
+   ==================================================================
+   Palkki levenee vyohykkeittain, joten etaisyys nakyy ennen kuin
+   yhtaan sanaa on luettu. Kaupungit ovat yha linkkeja paikallista
+   hakua varten, mutta ne ovat nyt vyohykkeensa sisalla eivatka
+   yhtena kahdentoista sirun rivina. */
+.zones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; align-items: start }
+@media (max-width: 900px) { .zones { grid-template-columns: minmax(0, 1fr) } }
+.page-dark .zone {
+  padding: 24px 24px 22px; border-radius: 18px;
+  background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.08);
+}
+.zone-bar { display: block; height: 3px; border-radius: 2px; margin-bottom: 18px }
+.zone-bar[data-lv="1"] { width: 34%; background: rgb(111 236 255) }
+.zone-bar[data-lv="2"] { width: 62%; background: rgb(111 236 255 / .72) }
+.zone-bar[data-lv="3"] { width: 100%; background: rgb(111 236 255 / .45) }
+.page-dark .zone h3 {
+  font-size: var(--text-body-lg); font-weight: var(--weight-semibold);
+  color: #f5f5f7; margin: 0 0 8px;
+}
+.page-dark .zone p { font-size: var(--text-label-sm); line-height: 1.55; color: #98a1b3; margin: 0 0 16px }
+.zone-cities { display: flex; flex-wrap: wrap; gap: 7px }
+.page-dark .zone-cities a {
+  font-size: var(--text-label-sm); text-decoration: none;
+  padding: 6px 12px; border-radius: 980px;
+  background: rgba(255,255,255,.06); color: #dfe3ea;
+  transition: background .2s, color .2s;
+}
+.page-dark .zone-cities a:hover { background: rgb(111 236 255 / .16); color: rgb(111 236 255) }
 .page-palvelu .prose { max-width: 68ch; margin: 0 auto }
 .page-palvelu .prose h3 { font-size: var(--text-title-sm); font-weight: var(--weight-semibold); margin: 30px 0 10px }
 .page-palvelu .prose h3:first-child { margin-top: 0 }
@@ -3119,6 +3358,74 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 .page-palvelu .prose strong { color: var(--ink); font-weight: var(--weight-semibold) }
 .page-palvelu .prose a { color: var(--blue); text-decoration: none }
 .page-palvelu .prose a:hover { text-decoration: underline }
+
+/* ==================================================================
+   SIVUN POHJAN SEO-TEKSTI (.seosec / .seoprose / .seomore)
+   ==================================================================
+   Tama on se osio jonka konvertoiva kavija ohittaa. Se ei siis kilpaile
+   konversiosta, ja siksi se saa nayttaa eri asialta kuin myyntisivu:
+   kapeampi mitta, vaimeampi vari, oma erottava ylareuna. Teksti on
+   kuitenkin pakko olla sivulla, joten sita ei piiloteta vaan
+   PORRASTETAAN. */
+.seosec { position: relative }
+.page-dark .seosec::before {
+  content: "";
+  position: absolute; left: 50%; translate: -50% 0; top: 0;
+  width: min(1080px, 88vw); height: 1px;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0) 0%, rgba(255,255,255,.14) 30%,
+    rgba(255,255,255,.14) 70%, rgba(255,255,255,0) 100%);
+}
+/* 62ch eika 68ch: pienempi aste mahtuu samalle rivipituudelle
+   useammalla merkilla, joten mitta on kavennettava jotta rivi pysyy
+   luettavassa 60-75 merkin haarukassa. */
+.page-dark .seoprose { max-width: 62ch }
+.page-dark .seoprose p { font-size: var(--text-body); color: #98a1b3; line-height: 1.75 }
+.page-dark .seoprose strong { color: #dfe3ea }
+.page-dark .seoprose h3 {
+  font-size: var(--text-body-lg); color: #f5f5f7;
+  margin: 34px 0 10px; letter-spacing: -0.008em;
+}
+.page-dark .seoprose h3:first-child { margin-top: 0 }
+.page-dark .seoprose a { color: rgb(111 236 255) }
+
+/* Paatelmalaatikko. Ainoa kohta jonka lukija voi ottaa mukaansa jos
+   han lukee osiosta vain yhden asian, joten se saa oman pintansa. */
+.page-dark .seonote {
+  margin: 26px 0; padding: 18px 20px;
+  border-left: 2px solid rgb(111 236 255 / .5);
+  background: rgba(255,255,255,.04);
+  border-radius: 0 12px 12px 0;
+  color: #c2c8d4 !important;
+}
+
+/* JATKO, EI ALKUA.
+   EI HAIVYTYSTA. Kokeiltu ja poistettu: haivytys kertoo "teksti on
+   katkaistu kesken", ja se on oikea merkki vain silloin kun nakyva osa
+   todella katkeaa kesken kappaleen. Tassa nakyva osa paattyy kokonaisen
+   lohkon loppuun, joten haivytys olisi peittanyt luettavaa tekstia
+   antamatta mitaan tietoa jota nappi ei jo kerro. */
+.seomore { margin-top: 8px }
+.seomore summary {
+  display: inline-flex; align-items: center; gap: 9px;
+  cursor: pointer; list-style: none;
+  margin-top: 10px; padding: 10px 20px;
+  border-radius: 980px; border: 1px solid rgba(255,255,255,.22);
+  font-size: var(--text-label-sm); font-weight: var(--weight-medium);
+  color: #dfe3ea; transition: background .2s, border-color .2s;
+}
+.seomore summary::-webkit-details-marker { display: none }
+.seomore summary:hover { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.4) }
+/* Nuoli kaantyy auki-tilassa: sama merkki kertoo seka toiminnon etta
+   tilan, jolloin tekstia ei tarvitse vaihtaa kahdeksi eri lauseeksi. */
+.seomore summary::after {
+  content: "";
+  width: 7px; height: 7px; margin-top: -3px;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  rotate: 45deg; transition: rotate .25s, margin-top .25s;
+}
+.seomore[open] summary::after { rotate: -135deg; margin-top: 2px }
+.seomore > h3:first-of-type { margin-top: 30px }
 .page-palvelu .postrows { border-top: 1px solid var(--hair) }
 .page-palvelu .postrows a {
   display: grid; grid-template-columns: 118px 1fr auto; gap: 20px; align-items: baseline;
