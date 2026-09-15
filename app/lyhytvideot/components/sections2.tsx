@@ -1,7 +1,7 @@
+import Image from "next/image";
+
 import PlatformMark from "../../components/PlatformMark";
 import SmartLink from "../../components/SmartLink";
-
-import Cta from "./Cta";
 
 import type { CSSProperties } from "react";
 import { FAQ_GROUPS } from "../faq-data";
@@ -163,23 +163,24 @@ export function Hinnoittelu() {
 
 /* ============ KENELLE ============ */
 /**
- * KAKSI LISTAA EI OLE VIELA ITSESEGMENTOINTIA.
+ * LASIKORTIT POIS.
  *
- * Osio oli kaksi tavallista bullet-listaa, joista oikeanpuoleinen
- * lukui puutelistana. Itsesegmentoinnin hyoty ei ole liidien maara
- * vaan niiden LAATU: kun vaarat kavijat tunnistavat itsensa ja
- * poistuvat, myyntikitka vahenee. Se toimii vain jos "ei sovi" -puoli
- * on rehellinen, eli jos siina lukee mihin kavijan kannattaa mennä
- * sen sijaan.
+ * Kaksi saman levyista, saman korkuista lasikorttia rinnakkain on se
+ * yksittainen asia joka saa tumman osion nayttamaan generoidulta, ja
+ * backdrop-filter on lisaksi tummalla pohjalla luettavuuden suurin
+ * vihollinen: teksti kelluu sumealla pinnalla jolla ei ole omaa
+ * kontrastia.
  *
- * SIKSI JOKAISELLA EI-KOHDALLA ON SUOSITUS. Ilman sita puoli lukee
- * varoituksena ja sivu nayttaa siltä etta se yrittaa karsia asiakkaita
- * ilman syyta. Suosituksen kanssa sama lause lukee neuvona, ja neuvo
- * on se mika rakentaa luottamusta silloinkin kun kauppaa ei synny.
+ * TILALLE JAETUT RAJAT. Yksi ruudukko, jonka solut erottaa yksi
+ * hiusviiva. Ei pyoristyksia, ei taustoja, ei sumennusta. Luettavuus
+ * ei enaa nojaa korttien reunoihin vaan ruudukkoon, ja tumma tausta
+ * lakkaa olemasta ongelma koska teksti on suoraan sivun pohjalla.
  *
- * MERKIT OVAT NEUTRAALEJA. Punainen rasti tekisi toisesta puolesta
- * virheen. Nuoli kertoo saman asian - tama vie muualle - ilman etta se
- * arvottaa kavijaa.
+ * EPASYMMETRIA ON TARKOITUS. Symmetria on toinen syy generoituun
+ * ilmeeseen. "Sopii" saa 1,4-kertaisen leveyden ja taydet varit,
+ * "ei sovi" kapeamman palstan ja himmennyksen - ei harmaamman varin
+ * vaan pienemman opasiteetin, jolloin se lukee saman perheen
+ * jasenena eika toisen luokan tekstina.
  */
 const SOPII = [
   "Yrityksesi ei näy siellä missä asiakkaat viettävät aikansa",
@@ -191,11 +192,11 @@ const SOPII = [
 const EI_SOVI = [
   {
     tilanne: "Etsit yhtä yksittäistä videota etkä jatkuvaa tuotantoa",
-    suositus: "Kysy projektihinta, se on tähän järkevämpi kuin kuukausipaketti",
+    suositus: "Kysy projektihinta, se on tähän järkevämpi",
   },
   {
     tilanne: "Odotat tuloksia jo ensimmäisestä kuukaudesta",
-    suositus: "Käänne tulee tyypillisesti [X] kuukauden kohdalla, nopeampaan tarvitaan mainontaa",
+    suositus: "Käänne tulee tyypillisesti [X] kuukauden kohdalla",
   },
 ];
 
@@ -206,36 +207,22 @@ export function Kenelle() {
         <div className="shead rv" data-par="0.03">
           <h2>Kenelle lyhytvideotuotanto sopii?</h2>
         </div>
-        <div className="fit fit2 rv">
-          <div className="fitbox yes">
-            <h3>
-              <span className="fitmark" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4.5 12.6l5 5L19.5 6.5" />
-                </svg>
-              </span>
-              Sopii sinulle, jos
-            </h3>
+        <div className="ledger rv">
+          <div className="ledger-col">
+            <h3>Sopii sinulle, jos</h3>
             <ul>
               {SOPII.map((t) => (
                 <li key={t}>{t}</li>
               ))}
               <li>
                 Haluat saman kumppanin hoitavan myös{" "}
-                <SmartLink href="/verkkosivut">verkkosivut</SmartLink>
-                , hakukoneoptimoinnin ja Meta-mainonnan
+                <SmartLink href="/verkkosivut">verkkosivut</SmartLink>, hakukoneoptimoinnin ja
+                Meta-mainonnan
               </li>
             </ul>
           </div>
-          <div className="fitbox no">
-            <h3>
-              <span className="fitmark" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 12h15M13 6l6 6-6 6" />
-                </svg>
-              </span>
-              Ei ehkä vielä, jos
-            </h3>
+          <div className="ledger-col ledger-soft">
+            <h3>Älä osta tätä, jos</h3>
             <ul>
               {EI_SOVI.map((e) => (
                 <li key={e.tilanne}>
@@ -253,79 +240,75 @@ export function Kenelle() {
 
 /* ============ PAIKKAKUNNAT ============ */
 /**
- * KAUPUNKILISTA ON SEKA LUKIJALLE ETTA GOOGLELLE HEIKOIN MUOTO.
- * Kahdentoista kaupungin sirulista vastasi kysymykseen "missa
- * toimitte" pakottamalla lukijan etsimaan oman kaupunkinsa rivi
- * riviltä, eika se kertonut sita mita B2B-ostaja oikeasti kysyy:
- * tuletteko meille ja mita se maksaa.
+ * KOLME LAATIKKOA POIS, TILALLE HAKEMISTO.
  *
- * VYOHYKKEET VASTAAVAT SIIHEN KYSYMYKSEEN. Sama kaksitoista linkkia
- * ovat yha sivulla paikallista hakua varten, mutta ne ovat nyt
- * jarjestetty etaisyyden mukaan ja jokainen vyohyke kertoo miten se
- * kaytannossa toimii. Kaupunkien nimet tulevat sivulle luonnollisessa
- * yhteydessa eivatka avainsanaluettelona.
+ * Kolme rinnakkaista laatikkoa on sama generoitu muoto kuin kaksi
+ * lasikorttia. Hakemisto ratkaisee kaksi asiaa kerralla: kaupunki on
+ * oma rivinsa, joten oman kaupungin loytaa silmailemalla, ja rivin
+ * oikeassa reunassa on metatieto joka kertoo mita se kaytannossa
+ * tarkoittaa. Juuri metatietosarake tekee listasta hakemiston; ilman
+ * sita se on yha pelkka linkkilista.
  *
- * EI KARTTAA. Kartta olisi ollut vahvin visuaali, mutta yksinkertaistettu
- * Suomen kartta pitaisi piirtaa itse, ja silloin sivulla olisi
- * maantiedetta jota kukaan ei ole tarkistanut. Palkki kertoo saman
- * jarjestyksen ilman etta se vaittaa mitaan rajoista.
- *
- * EI KEKSITTYJA MATKAKULUJA. Tutkimus suositteli hintavyohykkeita
- * ("alle 2 h: ei matkakuluja"), mutta niita lukuja ei ole paatetty.
- * Vyohykkeet kertovat siksi toimintatavan eivatka hintaa.
+ * VASEN PALSTA ON STICKY. Oikea palsta on pidempi kuin vasen, joten
+ * otsikko jaa paikalleen kun hakemisto vierii ohi eika osion vasen
+ * puoli jaa tyhjaksi. Ehto: yhdellakaan esivanhemmalla ei saa olla
+ * overflow: hidden, tai sticky lakkaa toimimasta aanettomasti.
  */
 const SLUGS: Record<string, string> = { Jyväskylä: "jyvaskyla" };
 const slug = (city: string) => SLUGS[city] ?? city.toLowerCase();
 
-const VYOHYKKEET = [
-  {
-    lv: 1,
-    nimi: "Pääkaupunkiseutu",
-    miten: "Kuvaamme täällä päivittäin, ja kuvauspäivä järjestyy yleensä saman viikon sisällä.",
-    cities: ["Espoo", "Helsinki", "Vantaa"],
-  },
-  {
-    lv: 2,
-    nimi: "Etelä- ja Länsi-Suomi",
-    miten: "Päivän ajomatkan päässä. Kuvauspäivät sovitaan etukäteen ja yhdistetään yleensä samalle reissulle.",
-    cities: ["Tampere", "Turku", "Lahti", "Pori"],
-  },
-  {
-    lv: 3,
-    nimi: "Muu Suomi",
-    miten: "Kuvauspäivät sovitusti. Käsikirjoitus, editointi ja julkaisu toimivat etänä minne tahansa.",
-    cities: ["Oulu", "Jyväskylä", "Kuopio", "Joensuu", "Vaasa"],
-  },
+const PAIKAT = [
+  { c: "Espoo", meta: "Toimipiste" },
+  { c: "Helsinki", meta: "Kuvauksia viikoittain" },
+  { c: "Vantaa", meta: "Kuvauksia viikoittain" },
+  { c: "Tampere", meta: "Päivän ajomatka" },
+  { c: "Turku", meta: "Päivän ajomatka" },
+  { c: "Lahti", meta: "Päivän ajomatka" },
+  { c: "Pori", meta: "Päivän ajomatka" },
+  { c: "Jyväskylä", meta: "Sovitusti" },
+  { c: "Kuopio", meta: "Sovitusti" },
+  { c: "Oulu", meta: "Sovitusti" },
+  { c: "Joensuu", meta: "Sovitusti" },
+  { c: "Vaasa", meta: "Sovitusti" },
 ];
 
 export function Alueet() {
   return (
     <section id="alueet" style={{ paddingTop: "20px" }}>
       <div className="wrap">
-        <div className="shead rv" data-par="0.03">
-          <h2>Lyhytvideotuotantoa Espoosta koko Suomeen</h2>
-          <p className="sub">
-            Toimipisteemme on Espoossa. Mitä kauempana olet, sitä enemmän kuvauspäivä vaatii
-            sopimista, mutta mikään näistä ei ole este.
-          </p>
-        </div>
-        <div className="zones stagger">
-          {VYOHYKKEET.map((z, n) => (
-            <div className="zone rv" key={z.nimi} style={i(n)}>
-              {/* Palkki levenee vyohykkeittain: etaisyys nakyy ennen
-                  kuin yhtaan sanaa on luettu. */}
-              <span className="zone-bar" data-lv={z.lv} aria-hidden="true" />
-              <h3>{z.nimi}</h3>
-              <p>{z.miten}</p>
-              <div className="zone-cities">
-                {z.cities.map((c) => (
-                  <SmartLink href={`/lyhytvideot/${slug(c)}`} key={c}>
-                    {c}
-                  </SmartLink>
-                ))}
-              </div>
+        <div className="dir rv">
+          <div className="dir-side">
+            {/* VALOKUVA ENNEN OTSIKKOA, EI SEN VIERESSA. Osion vaite on
+                paikka, ja paikka on ainoa asia jota tekstilista ei voi
+                todistaa: kaupunkien nimet ovat vain nimia kunnes joku
+                on niissa kameran kanssa. Kuva on sticky-palstan sisalla,
+                joten se seuraa otsikkoa eika jaa hakemiston ylaosaan. */}
+            <div className="dir-shot">
+              <Image
+                src="/referenssit/ydr-autohuolto-case.webp"
+                alt="Kuvauspäivä asiakkaan tiloissa"
+                width={1000}
+                height={563}
+                sizes="(max-width: 900px) 100vw, 400px"
+              />
             </div>
-          ))}
+            <h2>Lyhytvideotuotantoa Espoosta koko Suomeen</h2>
+            <p>
+              Toimipisteemme on Espoossa ja kuvaamme päivittäin pääkaupunkiseudulla. Mitä kauempana
+              olet, sitä enemmän kuvauspäivä vaatii sopimista, mutta mikään näistä ei ole este.
+            </p>
+            <p className="dir-note">
+              Käsikirjoitus, editointi ja julkaisu toimivat etänä minne tahansa Suomessa.
+            </p>
+          </div>
+          <div className="dir-list">
+            {PAIKAT.map((p) => (
+              <SmartLink href={`/lyhytvideot/${slug(p.c)}`} key={p.c}>
+                <span>{p.c}</span>
+                <s>{p.meta}</s>
+              </SmartLink>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -334,71 +317,69 @@ export function Alueet() {
 
 /* ============ UKK ============ */
 /**
- * UKK-ryhman tunnus. Avain on ryhman NIMI eika indeksi: indeksiin
- * sidottuna ryhmien jarjestyksen vaihtaminen olisi jattanyt ikonit
- * paikoilleen ja parit olisivat menneet ristiin. Sama ansa on osunut
- * talla sivulla jo kerran korttien grafiikoissa.
+ * STICKY-PALSTA JA NATIIVI EKSKLUSIIVINEN HAITARI.
+ *
+ * KAKSI ONGELMAA YHDELLA RAKENTEELLA. Kysymyslista on kapea ja pitka,
+ * jolloin osion vasen puoli jaa tyhjaksi - ja juuri tyhja puoli on se
+ * mika lukee keskeneraisena. Sticky-palsta tayttaa sen sisallolla joka
+ * on jo olemassa: otsikko, yksi lause ja yhteydenottonosto. Samalla
+ * konversio siirtyy UKK:n SISALLE, eli siihen kohtaan jossa viimeinen
+ * este poistuu.
+ *
+ * name-ATTRIBUUTTI TEKEE HAITARISTA EKSKLUSIIVISEN ILMAN JS:AA. Kun
+ * kaikilla details-elementeilla on sama name, selain sulkee edellisen
+ * kun seuraava avataan. Lista pysyy hallitun mittaisena, nappaimisto ja
+ * ruudunlukija toimivat itsestaan, ja suljettu sisalto loytyy yha
+ * selaimen omalla haulla. Ei yhtaan riviä tilanhallintaa.
+ *
+ * KYSYMYKSIA KARSITTIIN 17 -> 10. Seitseman kysymysta vastasi asiaan
+ * joka on jo sanottu muualla sivulla (tekstitykset, kanavaversiot,
+ * verkkosivut, hakukoneoptimointi), ja pitka lista lukee itsessaan
+ * epavarmuutena: mita enemman kysymyksia, sita enemman selittelya.
  */
-const RYHMAIKONI: Record<string, string> = {
-  "Hinta, määrä ja aikataulu": "M3 7h18M7 3v4M6 12h7M6 16h4",
-  "Kuvaus ja tuotanto": "M3 7.5h11v9H3zM14 11l7-3.5v9L14 13z",
-  "Sopimus ja omistajuus": "M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h4",
-  "Yhteistyö käytännössä": "M4 5h16v11H9l-5 4z",
-};
-
-function FaqIkoni({ label }: { label: string }) {
-  const d = RYHMAIKONI[label];
-  if (!d) return null;
-  return (
-    <svg
-      className="faqicon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d={d} />
-    </svg>
-  );
-}
+const UKK_KYSYMYKSET = [
+  "Paljonko lyhytvideotuotanto maksaa?",
+  "Kuinka nopeasti saan valmiit videot?",
+  "Kuka omistaa valmiit videot?",
+  "Kuinka monta lyhytvideota kannattaa julkaista kuukaudessa?",
+  "Kuinka nopeasti lyhytvideot tuottavat tulosta?",
+  "Meillä ei ole ketään kameran eteen. Mitä teemme?",
+  "Missä kuvaukset tehdään?",
+  "Kuinka paljon aikaani menee yhteistyöhön?",
+  "Onko pakko sitoutua pitkäksi aikaa?",
+  "Voitteko hoitaa myös julkaisun ja Meta-mainonnan?",
+];
 
 export function Ukk() {
+  const kaikki = FAQ_GROUPS.flatMap((g) => g.items);
+  const nakyvat = UKK_KYSYMYKSET.map((q) => kaikki.find((it) => it.q === q)).filter(
+    (it): it is NonNullable<typeof it> => Boolean(it),
+  );
+
   return (
     <section id="ukk" style={{ paddingTop: "20px" }}>
       <div className="wrap">
-        <div className="shead center rv" data-par="0.03">
-          <h2>Usein kysytyt kysymykset lyhytvideotuotannosta</h2>
-        </div>
-        {/* KAKSI PALSTAA, RYHMA KERRALLAAN. Osio oli 1521px korkea
-            yhdessa palstassa. Palstajako tehdaan RYHMITTAIN eika
-            CSS-columnsilla: columns katkoo yksittaisen kysymyksen
-            palstan vaihtuessa, jolloin kysymys jaa yhteen palstaan ja
-            vastaus toiseen. Ryhma kerrallaan kysymys pysyy aina
-            vastauksensa vieressa. */}
-        <div className="faq faq2 rv">
-          {FAQ_GROUPS.map((group) => (
-            <div className="faqcol" key={group.label}>
-              <p className="faqgroup">
-                <FaqIkoni label={group.label} />
-                {group.label}
-              </p>
-              {group.items.map((item) => (
-                <details key={item.q} open={item.open}>
-                  <summary>{item.q}</summary>
-                  <div className="a">{item.answer}</div>
-                </details>
-              ))}
+        <div className="qa rv">
+          <div className="qa-side">
+            <h2>Usein kysyttyä</h2>
+            <p>
+              Alla kymmenen kysymystä, jotka tulevat lähes jokaisessa aloituspalaverissa. Loput
+              käydään läpi puhelussa.
+            </p>
+            <div className="qa-ask">
+              <span>Etkö löytänyt vastausta?</span>
+              <a href="#tarjous">Kysy suoraan</a>
             </div>
-          ))}
+          </div>
+          <div className="qa-list">
+            {nakyvat.map((item, n) => (
+              <details key={item.q} name="ukk" open={n === 0}>
+                <summary>{item.q}</summary>
+                <div className="a">{item.answer}</div>
+              </details>
+            ))}
+          </div>
         </div>
-        <p className="faqmore rv">Etkö löytänyt vastausta? Kysy suoraan, vastaamme samana päivänä.</p>
-        {/* Vastavakysymyksien jalkeen takaisin matalaan kynnykseen: se
-            joka lukee UKK:n loppuun asti epäröi vielä, joten hanelle
-            tarjotaan kartoitus eika tarjouspyyntoa. */}
-        <Cta kind="kartoitus" center />
       </div>
     </section>
   );

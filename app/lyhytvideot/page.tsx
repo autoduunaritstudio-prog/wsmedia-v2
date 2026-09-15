@@ -1,4 +1,5 @@
 
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 
 import NetBackdrop from "../components/NetBackdrop";
@@ -13,14 +14,7 @@ import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import Hero from "./components/Hero";
 import { Alustat, Kokonaisuus, Miksi, Prosessi, Tulokset } from "./components/sections";
-import {
-  Alueet,
-  Blogi,
-  Hinnoittelu,
-  Kaytannossa,
-  Kenelle,
-  Ukk,
-} from "./components/sections2";
+import { Alueet, Hinnoittelu, Kenelle, Ukk } from "./components/sections2";
 import { structuredData } from "./structured-data";
 
 const TITLE = "Lyhytvideotuotanto yrityksille | TikTok, Reels & Shorts | WS Media";
@@ -71,6 +65,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport = { themeColor: "#ffffff" };
+
+const i = (n: number) => ({ "--i": n }) as CSSProperties;
 
 /* SAMAT LUVUT KUIN ETUSIVUN REFERENSSIOSIOSSA (app/page.tsx STATS).
    Nama ovat yrityksen lukuja, eivat taman sivun lukuja, joten kahta eri
@@ -147,8 +143,6 @@ export default function Lyhytvideot() {
           <Kenelle />
           <Alueet />
           <Ukk />
-          <Kaytannossa />
-          <Blogi />
 
           {/* YKSI CTA KAHDEN SIJAAN. Sivulla oli aiemmin lomakeosio ja heti
           sen perassa .final-lohko, jonka ainoa nappi osoitti takaisin
@@ -169,6 +163,26 @@ export default function Lyhytvideot() {
                   Vastaamme 24 tunnin sisällä ja kerromme suoraan mitä ehdotamme ja mitä se maksaa.
                 </p>
               </div>
+              {/* MITA LAHETYKSEN JALKEEN TAPAHTUU. Lomakkeen viereen ei
+                  kuulu lisaa myyntia vaan se mita nappi tekee: kynnys
+                  ei ole napin vari vaan epavarmuus siita mihin
+                  sitoutuu. Kolme askelta samalla hiusviivakielella kuin
+                  osion ylapuolella - ei kortteja, ei taustoja. */}
+              <ol className="next3 rv stagger">
+                <li className="rv" style={i(0)}>
+                  <b>24 h</b>
+                  <span>Luemme viestin ja vastaamme sähköpostilla arkipäivän sisällä.</span>
+                </li>
+                <li className="rv" style={i(1)}>
+                  <b>30 min</b>
+                  <span>Puhelu tai etäpalaveri: tavoite, kanavat ja kuvausten käytäntö.</span>
+                </li>
+                <li className="rv" style={i(2)}>
+                  <b>Tarjous</b>
+                  <span>Kirjallinen ehdotus hintoineen. Ei sitoumuksia ennen hyväksyntää.</span>
+                </li>
+              </ol>
+
               <div className="ctasplit">
                 <TeamPlaceholder />
                 <BudgetForm
