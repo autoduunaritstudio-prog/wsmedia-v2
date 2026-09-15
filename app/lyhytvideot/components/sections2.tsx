@@ -162,8 +162,6 @@ export function Hinnoittelu() {
 }
 
 /* ============ KENELLE ============ */
-const LINK_STYLE = { color: "var(--blue)", textDecoration: "none" };
-
 /**
  * KAKSI LISTAA EI OLE VIELA ITSESEGMENTOINTIA.
  *
@@ -224,9 +222,7 @@ export function Kenelle() {
               ))}
               <li>
                 Haluat saman kumppanin hoitavan myös{" "}
-                <SmartLink href="/verkkosivut" style={LINK_STYLE}>
-                  verkkosivut
-                </SmartLink>
+                <SmartLink href="/verkkosivut">verkkosivut</SmartLink>
                 , hakukoneoptimoinnin ja Meta-mainonnan
               </li>
             </ul>

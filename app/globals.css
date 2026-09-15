@@ -5298,7 +5298,18 @@ html.rv-ready .gsurf-van.rv:not(.on) { opacity: .42; transform: translateX(38%) 
 
 /* TUMMA SIVUPOHJA. Vain varit vaihtuvat, ei rakenne: kaikki mitat,
    valit ja asettelut ovat samat kuin vaalealla sivulla. */
-.page-dark { background: #060b14; color: #e6e9f0 }
+/* SIVUSTON HARMAA UUDELLEEN TUMMALLE POHJALLE.
+   var(--grey) = #616166 on mitoitettu valkoiselle taustalle. Tumman
+   sivun pinnoilla se antaa mitattuna 3,2-4,0:1, eli alle AA-rajan
+   (4,5:1). Se ei ollut yksittainen bugi vaan sama juurisyy kymmenessa
+   eri kohdassa: heron alaotsikko, hintakorttien kuvaus ja hintayksikko,
+   blogilistan tunnisteet ja nuoli, puhelinmockupien kuvatekstit.
+
+   Muuttujan uudelleenmaarittely korjaa ne kaikki yhdella rivilla.
+   Yksittaiset yliajot olisivat korjanneet ne kohdat jotka satuin
+   huomaamaan, ja jattaneet loput - juuri niin kavi ensimmaisella
+   kierroksella, jolloin kynnys oli 3:1 ja nama jaivat alle. */
+.page-dark { background: #060b14; color: #e6e9f0; --grey: #98a1b3 }
 .page-dark h1, .page-dark h2, .page-dark h3, .page-dark h4 { color: #f5f5f7 }
 .page-dark .sub, .page-dark p { color: #b9c0cf }
 .page-dark .kick { color: #6fecff }
@@ -6074,8 +6085,11 @@ html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { 
    on mitoitettu vaalealle pohjalle. Tumman nauhan paalla molemmat
    katoavat, joten vari ja reuna kaannetaan - sama korjaus kuin heron
    toissijaisessa napissa. */
-.page-dark .cta-row .btn.alt { color: #f5f5f7; border-color: rgba(255,255,255,.42) }
-.page-dark .cta-row .btn.alt:hover { background: rgba(255,255,255,.10) }
+/* Koskee KAIKKIA toissijaisia nappeja tumman sivun paalla, ei vain
+   kehoterivia: sama vika oli hintakorttien napeissa (mitattuna 3,7:1).
+   var(--blue) = #007c8f ja var(--hair) on mitoitettu vaalealle. */
+.page-dark .btn.alt { color: #f5f5f7; border-color: rgba(255,255,255,.42) }
+.page-dark .btn.alt:hover { background: rgba(255,255,255,.10) }
 
 /* OTSIKKOLOHKO OIKEAAN REUNAAN.
    max-width jaa voimaan, joten rivipituus ei muutu - vain lohkon
