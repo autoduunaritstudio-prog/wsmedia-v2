@@ -17,7 +17,7 @@ export function Nakyvyys() {
           </div>
           <p className="sub">
             Osa hauista päättyy yhä hakutuloslistaan, osa tekoälyn koostamaan valmiiseen vastaukseen.
-            Sama työ ratkaisee molemmissa — mutta vain jos sisältö on rakennettu niin, että kone
+            Sama työ ratkaisee molemmissa, mutta vain jos sisältö on rakennettu niin, että kone
             löytää siitä vastauksen.
           </p>
         </div>
@@ -32,7 +32,7 @@ export function Nakyvyys() {
             </p>
             <ul>
               {[
-                "Sijoitus ratkaisee klikkauksen — ensimmäisen sivun ulkopuolelle ei juuri eksytä",
+                "Sijoitus ratkaisee klikkauksen, ensimmäisen sivun ulkopuolelle ei juuri eksytä",
                 "Näkyvyys ei lopu siihen päivään, kun mainosbudjetti loppuu",
                 "Yksi hyvin tehty sivu voi sijoittua kymmenillä hakusanoilla",
                 "Tulos kertyy kumulatiivisesti kuukausi kuukaudelta",
@@ -103,10 +103,10 @@ const PANELS: { id: string; label: string; h: string; p: string; rows: Row[] }[]
     rows: [
       ["Avainsanatutkimus", "Hakuvolyymit, kilpailutaso ja ostoaikomus jokaiselle hakusanalle"],
       ["Kilpailija-analyysi", "Mitkä sivut rankkaavat nyt, millä sisällöllä ja mitä niistä puuttuu"],
-      ["Sivukohtainen kohdistus", "Yksi sivu, yksi pääavainsana — omat sivut eivät kilpaile keskenään"],
+      ["Sivukohtainen kohdistus", "Yksi sivu, yksi pääavainsana, omat sivut eivät kilpaile keskenään"],
       ["Sisällön optimointi", "Otsikot, väliotsikot, leipätekstit ja kuvien alt-tekstit"],
       ["Uusi sisältö", "Palvelusivut, kaupunkisivut ja blogiartikkelit julkaisuvalmiina"],
-      ["Vastausmuotoinen sisältö", "Kysymys ja suora vastaus — sama muoto toimii FAQ-tuloksissa ja tekoälyvastauksissa"],
+      ["Vastausmuotoinen sisältö", "Kysymys ja suora vastaus, sama muoto toimii FAQ-tuloksissa ja tekoälyvastauksissa"],
     ],
   },
   {
@@ -128,7 +128,7 @@ const PANELS: { id: string; label: string; h: string; p: string; rows: Row[] }[]
     h: "Näkyvyys tekoälyhauissa",
     p: "Yhä useampi haku päättyy tekoälyn koostamaan vastaukseen. Sama tekninen ja sisällöllinen pohja ratkaisee sielläkin, mutta painotukset ovat hieman eri.",
     rows: [
-      ["Selkeä, lainattava rakenne", "Kysymys, suora vastaus ja perustelu — ei markkinointipuhetta vastauksen ympärillä"],
+      ["Selkeä, lainattava rakenne", "Kysymys, suora vastaus ja perustelu, ei markkinointipuhetta vastauksen ympärillä"],
       ["Strukturoitu data", "Kone lukee merkinnöistä mitä palvelua tarjoat, missä ja millä hinnalla"],
       ["Tarkistettavat faktat", "Hinnat, aikataulut ja toimitusehdot sivulla, ei pelkästään puhelimessa"],
       ["Auktoriteetti ja maininnat", "Mitä useammin sivustosi mainitaan luotettavissa lähteissä, sitä todennäköisemmin se päätyy vastaukseen"],
@@ -181,7 +181,7 @@ export function Sisalto() {
 /* ---------- Aikajänne ---------- */
 const ROAD = [
   ["Kuukausi 1", "Kartoitus ja perusta", "Auditointi, avainsanatutkimus ja kilpailija-analyysi. Tekniset virheet korjataan ja mittaus laitetaan kuntoon. Näkyvyydessä ei vielä tapahdu mitään."],
-  ["Kuukaudet 2–3", "Ensimmäiset liikahdukset", "Optimoidut sivut alkavat nousta pitkän hännän hauilla. Search Consolessa näyttökerrat kasvavat ennen klikkauksia — suunta näkyy ennen tuloksia."],
+  ["Kuukaudet 2–3", "Ensimmäiset liikahdukset", "Optimoidut sivut alkavat nousta pitkän hännän hauilla. Search Consolessa näyttökerrat kasvavat ennen klikkauksia, suunta näkyy ennen tuloksia."],
   ["Kuukaudet 4–6", "Liikenne kääntyy", "Sijoitukset tärkeimmillä hakusanoilla paranevat ja orgaaninen liikenne kasvaa. Ensimmäiset hakukoneen kautta tulleet yhteydenotot ovat tässä vaiheessa tyypillisiä."],
   ["Kuukaudet 6–12", "Vaikutus liiketoiminnassa", "Kilpaillummat hakusanat nousevat ja kertynyt sisältö alkaa tuottaa itsestään. Tässä vaiheessa työn tuotto on mitattavissa euroina, ei kävijöinä."],
 ];
@@ -216,7 +216,7 @@ export function Aikataulu() {
           sivusto on lähtiessä. Vähemmän kilpailluilla hakusanoilla tuloksia tulee nopeammin,
           kovimmilla nousu vie enemmän aikaa.{" "}
           <strong>Emme lupaa sijaa yksi emmekä tiettyä prosenttia.</strong> Sovimme mittarit
-          etukäteen ja raportoimme ne kuukausittain — myös silloin kun luvut eivät miellytä.
+          etukäteen ja raportoimme ne kuukausittain, myös silloin kun luvut eivät miellytä.
         </p>
       </div>
     </section>
@@ -255,7 +255,7 @@ export function Paikallinen() {
             <ul className="locl">
               {[
                 "Google-yritysprofiili kuntoon: kategoriat, palvelut, aukioloajat ja kuvat",
-                "Karttatulokset eli Local Pack — kolme ensimmäistä saa valtaosan klikkauksista",
+                "Karttatulokset eli Local Pack, kolme ensimmäistä saa valtaosan klikkauksista",
                 "NAP-tiedot: nimi, osoite ja puhelinnumero täsmälleen samoina kaikkialla",
                 "Arvostelut ja systemaattinen tapa pyytää niitä tyytyväisiltä asiakkailta",
                 "Oma sivu jokaiselle paikkakunnalle, jossa palvelette",
@@ -313,7 +313,7 @@ export function Paikallinen() {
 
             <p className="lead" style={{ marginTop: "24px", fontSize: "var(--text-body)" }}>
               <strong>Kaupunkisivut eivät maksa kappaleittain.</strong> Rakennamme ne yhdestä
-              pohjasta, joten viisi tai viisikymmentä paikkakuntaa maksaa saman verran — ja jokainen
+              pohjasta, joten viisi tai viisikymmentä paikkakuntaa maksaa saman verran, ja jokainen
               niistä on oma rankattava sivunsa omalla hakusanallaan.
             </p>
 

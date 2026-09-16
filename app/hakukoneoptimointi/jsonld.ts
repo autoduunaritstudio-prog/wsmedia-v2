@@ -57,7 +57,7 @@ const BASE_GRAPH = [
       "@id": "https://wsmedia.fi/hakukoneoptimointi#sivu",
       "url": "https://wsmedia.fi/hakukoneoptimointi",
       "name": "Hakukoneoptimointi yritykselle | SEO-palvelut ja hinta | WS Media",
-      "description": "Hakukoneoptimointi yritykselle: tekninen SEO, sisältö, auktoriteetti ja paikallinen näkyvyys — ja näkyvyys myös tekoälyhauissa. Kuukausipaketit alkaen 390 €/kk.",
+      "description": "Hakukoneoptimointi yritykselle: tekninen SEO, sisältö, auktoriteetti ja paikallinen näkyvyys, ja näkyvyys myös tekoälyhauissa. Kuukausipaketit alkaen 390 €/kk.",
       "inLanguage": "fi-FI",
       "isPartOf": {
         "@id": "https://wsmedia.fi/#organisaatio"

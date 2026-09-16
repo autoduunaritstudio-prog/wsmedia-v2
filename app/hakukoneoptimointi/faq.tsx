@@ -65,8 +65,8 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Voinko tehdä hakukoneoptimoinnin itse?",
-        a: "Voit, ja pienellä sivustolla se on täysin realistista. Perusasiat — otsikot, metatiedot, sivurakenne ja Google-yritysprofiili — oppii viikossa. Ulkoistamisen etu ei ole salatieto vaan se, että työ jatkuu myös kiireisenä kuukautena, jolloin oma tekeminen tyypillisesti katkeaa.",
-        plain: "Voit, ja pienellä sivustolla se on täysin realistista. Perusasiat — otsikot, metatiedot, sivurakenne ja Google-yritysprofiili — oppii viikossa. Ulkoistamisen etu ei ole salatieto vaan se, että työ jatkuu myös kiireisenä kuukautena, jolloin oma tekeminen tyypillisesti katkeaa.",
+        a: "Voit, ja pienellä sivustolla se on täysin realistista. Perusasiat, otsikot, metatiedot, sivurakenne ja Google-yritysprofiili, oppii viikossa. Ulkoistamisen etu ei ole salatieto vaan se, että työ jatkuu myös kiireisenä kuukautena, jolloin oma tekeminen tyypillisesti katkeaa.",
+        plain: "Voit, ja pienellä sivustolla se on täysin realistista. Perusasiat, otsikot, metatiedot, sivurakenne ja Google-yritysprofiili, oppii viikossa. Ulkoistamisen etu ei ole salatieto vaan se, että työ jatkuu myös kiireisenä kuukautena, jolloin oma tekeminen tyypillisesti katkeaa.",
       },
       {
         q: "Teettekö myös verkkokaupan hakukoneoptimointia?",
@@ -102,12 +102,12 @@ export const FAQ_GROUPS: FaqGroup[] = [
         q: "Miten hakukoneoptimointi huomioidaan verkkosivu-uudistuksessa?",
         a: (
       <>
-        {"Uudistus on se hetki, jossa kertynyt näkyvyys joko säilyy tai katoaa. Vanhat osoitteet ohjataan uusiin, sivurakenne suunnitellaan hakusanojen pohjalta ja metatiedot siirretään hallitusti. Tämä tehdään ennen julkaisua eikä sen jälkeen — jälkikäteen korjaaminen maksaa moninkertaisesti. Lue lisää "}
+        {"Uudistus on se hetki, jossa kertynyt näkyvyys joko säilyy tai katoaa. Vanhat osoitteet ohjataan uusiin, sivurakenne suunnitellaan hakusanojen pohjalta ja metatiedot siirretään hallitusti. Tämä tehdään ennen julkaisua eikä sen jälkeen, jälkikäteen korjaaminen maksaa moninkertaisesti. Lue lisää "}
         <SmartLink href="/verkkosivut">verkkosivujen toteutuksesta</SmartLink>
         {"."}
       </>
     ),
-        plain: "Uudistus on se hetki, jossa kertynyt näkyvyys joko säilyy tai katoaa. Vanhat osoitteet ohjataan uusiin, sivurakenne suunnitellaan hakusanojen pohjalta ja metatiedot siirretään hallitusti. Tämä tehdään ennen julkaisua eikä sen jälkeen — jälkikäteen korjaaminen maksaa moninkertaisesti. Lue lisää verkkosivujen toteutuksesta.",
+        plain: "Uudistus on se hetki, jossa kertynyt näkyvyys joko säilyy tai katoaa. Vanhat osoitteet ohjataan uusiin, sivurakenne suunnitellaan hakusanojen pohjalta ja metatiedot siirretään hallitusti. Tämä tehdään ennen julkaisua eikä sen jälkeen, jälkikäteen korjaaminen maksaa moninkertaisesti. Lue lisää verkkosivujen toteutuksesta.",
       },
       {
         q: "Teettekö myös verkkosivut ja lyhytvideot?",

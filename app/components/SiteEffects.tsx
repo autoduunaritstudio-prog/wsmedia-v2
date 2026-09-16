@@ -170,7 +170,14 @@ export default function SiteEffects() {
     // Logonauha vierii navin paalle (nav on z-index 50, cover 2), jolloin
     // logot ja nav-elementit menevat paallekkain. Kaista piilottaa logon ja
     // valikkopainikkeen ohituksensa ajaksi.
-    const stripBand = document.querySelector<HTMLElement>(".logostrip");
+    /* Sama kaista alasivuilla: SEO-sivulla heron jalkeen tuleva
+       avainsananauha on tasan sama tilanne kuin etusivun logonauha,
+       eli tumma kaista joka vierii navin ali. Ilman tata logo ja
+       valikkopainike istuvat nauhan sanojen paalla juuri silla
+       hetkella kun nauha liikkuu, ja se nayttaa tormaykselta.
+       Valitsin on lista: etusivulla ensimmainen osuu, alasivulla
+       toinen, eika kummallakaan ole molempia. */
+    const stripBand = document.querySelector<HTMLElement>(".logostrip, .seo-tapeband");
     // Suunnat saadetaan erikseen: piiloutuminen halutaan hyvissa ajoin
     // ennen kosketusta, palautuminen heti kun kaista on ohi.
     //
@@ -915,6 +922,40 @@ export default function SiteEffects() {
       frames.add(requestAnimationFrame(tick));
     };
 
+    /* ---------- PINON KORKEUS ----------
+     * position: sticky; bottom: 0 EI TARTU jos elementti on nakymaa
+     * korkeampi. Mitattuna: 1300px korkea laatikko 906px nakymassa
+     * vieri kokonaan ohi ilman etta offsettia sovellettiin kertaakaan.
+     * Se ei ole bugi vaan seuraus siita, etta bottom-rajoitusta ei voi
+     * tayttaa ilman etta ylareuna vuotaa - ja selain jattaa silloin
+     * siirtaman tekematta.
+     *
+     * Sama asia saadaan topilla, mutta vain jos offset tietaa
+     * elementin korkeuden: top = nakyman korkeus - elementin korkeus.
+     * Negatiivisena se tarkoittaa "tartu vasta kun alareuna on
+     * nakyman alareunassa", eli tasan sen mita bottom: 0:n piti tehda.
+     *
+     * Korkeus ei ole vakio: se muuttuu fontin latauksesta, kuvien
+     * latauksesta ja ikkunan koosta. ResizeObserver kattaa sisallon,
+     * window-resize nakyman. Luku kirjoitetaan elementin omaan
+     * muuttujaan, jolloin CSS hoitaa loput eika taalla lasketa
+     * yhtaan sijaintia. */
+    const pinoAlla = Array.from(
+      document.querySelectorAll<HTMLElement>(".pino > :first-child"),
+    );
+    let pinoRo: ResizeObserver | null = null;
+    const measurePino = () => {
+      pinoAlla.forEach((el) => {
+        el.style.setProperty("--pino-h", `${Math.round(el.offsetHeight)}px`);
+      });
+    };
+    if (pinoAlla.length) {
+      measurePino();
+      pinoRo = new ResizeObserver(measurePino);
+      pinoAlla.forEach((el) => pinoRo?.observe(el));
+      window.addEventListener("resize", measurePino, { passive: true, signal });
+    }
+
     const io2 = new IntersectionObserver(
       (es) => {
         es.forEach((e) => {
@@ -938,6 +979,7 @@ export default function SiteEffects() {
       if (rvTimer !== undefined) window.clearTimeout(rvTimer);
       root.classList.remove("rv-ready");
       metalRo.disconnect();
+      pinoRo?.disconnect();
       refRo?.disconnect();
       ac.abort();
       heroRo?.disconnect();

@@ -21,17 +21,17 @@ type Scene = { q: string; d: string; a: string };
 const SCENES: Scene[] = [
   {
     q: "kattoremontti espoo",
-    d: "Kattoremontit Espoossa — hinta, aikataulu ja maksuton kartoitus",
+    d: "Kattoremontit Espoossa, hinta, aikataulu ja maksuton kartoitus",
     a: "Espoossa kattoremontteja tekee useita yrityksiä. Hinta määräytyy katon koon ja materiaalin mukaan, ja kartoitus on tyypillisesti maksuton.",
   },
   {
     q: "tilitoimisto helsinki",
-    d: "Tilitoimisto Helsingissä — kirjanpito, palkanlaskenta ja veroneuvonta",
+    d: "Tilitoimisto Helsingissä, kirjanpito, palkanlaskenta ja veroneuvonta",
     a: "Helsingin alueen tilitoimistot hoitavat kirjanpidon, palkanlaskennan ja veroneuvonnan. Hinnoittelu perustuu yleensä tositemäärään.",
   },
   {
     q: "sähköasentaja vantaa",
-    d: "Sähköasentaja Vantaalla — asennukset, vikakorjaukset ja urakat",
+    d: "Sähköasentaja Vantaalla, asennukset, vikakorjaukset ja urakat",
     a: "Vantaalla toimivat sähköasentajat tekevät asennuksia, vikakorjauksia ja urakoita. Kannattaa varmistaa pätevyys ja pyytää kirjallinen tarjous.",
   },
 ];
@@ -192,7 +192,7 @@ export default function SearchDemo({ variant = "full" }: Props) {
             <span className="rk">1</span>
             <span className="ln">
               <b>yrityksesi.fi</b>
-              <i id="sdesc">{desc || "Palvelu paikkakunnalla — hinnat, aikataulu ja yhteydenotto"}</i>
+              <i id="sdesc">{desc || "Palvelu paikkakunnalla, hinnat, aikataulu ja yhteydenotto"}</i>
             </span>
           </div>
         )}
@@ -219,7 +219,7 @@ export default function SearchDemo({ variant = "full" }: Props) {
             </span>
             <span className="ln">
               <b>yrityksesi.fi</b>
-              <i id="sdesc">{desc || "Palvelu paikkakunnalla — hinnat, aikataulu ja yhteydenotto"}</i>
+              <i id="sdesc">{desc || "Palvelu paikkakunnalla, hinnat, aikataulu ja yhteydenotto"}</i>
             </span>
           </div>
         )}

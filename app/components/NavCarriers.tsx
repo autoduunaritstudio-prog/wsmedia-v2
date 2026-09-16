@@ -161,7 +161,11 @@ export default function NavCarriers() {
 
     const logo = nav.querySelector<HTMLElement>(".logo");
     const toggle = nav.querySelector<HTMLElement>(".navtoggle");
-    const strip = document.querySelector<HTMLElement>(".logostrip");
+    /* Nauha on etusivulla .logostrip ja SEO-sivulla .seo-tapeband.
+       Molemmat ovat sama asia hahmojen kannalta: tumma kaista joka
+       vierii navin ali ja josta luetaan pelkka rect. Valitsin on
+       lista, eika kummallakaan sivulla ole molempia. */
+    const strip = document.querySelector<HTMLElement>(".logostrip, .seo-tapeband");
     if (!logo || !toggle || !strip) return;
     // Toisen vyohykkeen lahteet. Puuttuvat alasivuilla - silloin u2 jaa
     // nollaan eika mikaan muu kayttaydy toisin.

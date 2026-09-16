@@ -42,7 +42,7 @@ export function Hinnoittelu() {
           <p className="sub">
             Kolme tasoa, kiinteä kuukausihinta ja maksuton kartoitus ennen aloitusta. Suomessa
             tuloksiin tähtäävä hakukoneoptimointi asettuu tyypillisesti 400–2 000 euroon
-            kuukaudessa — tässä on meidän tasomme siitä haarukasta.
+            kuukaudessa, tässä on meidän tasomme siitä haarukasta.
           </p>
         </div>
 
@@ -119,7 +119,7 @@ export function Kenelle() {
             <h3>Kannattaa, jos</h3>
             <ul>
               {[
-                "Asiakkaasi etsivät palveluasi Googlesta — toimialallasi on hakuvolyymia",
+                "Asiakkaasi etsivät palveluasi Googlesta, toimialallasi on hakuvolyymia",
                 "Yhden asiakkaan arvo on satoja tai tuhansia euroja, ei muutamaa kymppiä",
                 "Kestät kolmesta kuuteen kuukautta ilman näkyviä tuloksia",
                 "Sivustosi on teknisesti kunnossa tai olet valmis laittamaan sen kuntoon",
@@ -133,9 +133,9 @@ export function Kenelle() {
             <h3>Ei kannata, jos</h3>
             <ul>
               {[
-                "Tarvitset asiakkaita ensi viikolla — silloin oikea kanava on maksettu mainonta",
+                "Tarvitset asiakkaita ensi viikolla, silloin oikea kanava on maksettu mainonta",
                 "Toimialaasi ei haeta: hakumäärät ovat lähellä nollaa alueellasi",
-                "Sivustolla on konversio-ongelma — lisää liikennettä ei korjaa sitä",
+                "Sivustolla on konversio-ongelma, lisää liikennettä ei korjaa sitä",
                 "Liiketoimintamalli tai kohderyhmä on vielä auki",
                 "Odotat takuuta sijasta yksi. Sellaista ei voi antaa kukaan.",
               ].map((x) => (
@@ -207,7 +207,7 @@ export function Taustaa() {
             Kertaluonteinen optimointi on järkevä aloitus silloin, kun sivustoa ei ole koskaan
             optimoitu: tekniset virheet korjataan, metatiedot laitetaan kuntoon ja tärkeimmät sivut
             kohdistetaan oikeille hakusanoille. Sen jälkeen tilanne kuitenkin muuttuu ilman että sinä
-            teet mitään — kilpailijat julkaisevat uutta sisältöä, Google päivittää algoritmiaan ja
+            teet mitään, kilpailijat julkaisevat uutta sisältöä, Google päivittää algoritmiaan ja
             hakukäyttäytyminen muuttuu.
           </p>
           <p>
@@ -235,7 +235,7 @@ export function Taustaa() {
             markkinointikanava, jonka arvo kasvaa ajan myötä sen sijaan että se kuluisi loppuun.
             Mainoksesta maksetaan joka kerta uudestaan, mutta kerran kirjoitettu ja hyvin sijoittuva
             palvelusivu tuo yhteydenottoja kuukaudesta toiseen ilman lisäkustannusta. Juuri siksi työ
-            kannattaa aloittaa niistä hakusanoista, joilla on selvä ostoaikomus — ei niistä, joilla
+            kannattaa aloittaa niistä hakusanoista, joilla on selvä ostoaikomus, ei niistä, joilla
             on suurin hakuvolyymi.
           </p>
 
@@ -250,7 +250,7 @@ export function Taustaa() {
             Hyvä uutinen on, että sama työ palvelee molempia. Selkeä sivurakenne, strukturoitu data,
             tarkistettavat faktat ja sisältö joka vastaa kysymykseen suoraan ovat juuri niitä
             asioita, jotka auttavat sekä hakukonetta että kieltä käsittelevää mallia löytämään
-            vastauksen. Tätä ei tarvitse ostaa erillisenä palveluna — se on tapa tehdä sama työ
+            vastauksen. Tätä ei tarvitse ostaa erillisenä palveluna, se on tapa tehdä sama työ
             ajatellen kahta lukijaa.
           </p>
         </div>
@@ -261,9 +261,9 @@ export function Taustaa() {
 
 /* ---------- Blogi ---------- */
 const POSTS = [
-  ["Hintaopas", "Hakukoneoptimoinnin hinta — mistä kuukausihinta oikeasti muodostuu"],
+  ["Hintaopas", "Hakukoneoptimoinnin hinta, mistä kuukausihinta oikeasti muodostuu"],
   ["Paikallinen SEO", "Google-yritysprofiili kuntoon: näin nouset karttatuloksiin"],
-  ["Tekoälyhaku", "Näkyvyys tekoälyn vastauksissa — mitä se vaatii sivustolta"],
+  ["Tekoälyhaku", "Näkyvyys tekoälyn vastauksissa, mitä se vaatii sivustolta"],
   ["Tekninen SEO", "Avainsanatutkimus askel askeleelta pienyrittäjälle"],
 ];
 
@@ -302,7 +302,7 @@ export function Tarjous() {
           <h2>Katsotaan ensin, kannattaako se</h2>
           <p className="sub">
             Käymme läpi sivustosi nykytilan, toimialasi hakuvolyymit ja kilpailutilanteen. Saat
-            suoran näkemyksen siitä, kannattaako hakukoneoptimointi juuri sinun tapauksessasi — myös
+            suoran näkemyksen siitä, kannattaako hakukoneoptimointi juuri sinun tapauksessasi, myös
             silloin kun vastaus on ei.
           </p>
         </div>
