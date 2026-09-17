@@ -12085,7 +12085,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    --piirrosta. Porrastus --i:n kautta ja kerroin 1.55: aiemmin
    kerroin oli 2.6 ja liike oli ohi ennen kuin kortti oli kunnolla
    ruudussa. */
-.page-lyhytvideot .lv-k { --p2: clamp(0, calc((var(--piirto, 1) - var(--i) * .07) * 1.18), 1) }
+.page-lyhytvideot .lv-k { --p2: clamp(0, calc((var(--piirto, 1) - var(--i) * .1) * 1.43), 1) }
 .page-lyhytvideot .lv-k .wp-line,
 .page-lyhytvideot .lv-k .wp-line2,
 .page-lyhytvideot .lv-k .wp-line3 {
@@ -12281,19 +12281,11 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    kerroksessa: ne eivat vieri sivun mukana vaan sivu kulkee niiden
    ohi, jolloin sama kuvio nayttaa joka osiossa hieman erilaiselta
    ilman etta kuviota tarvitsee vaihtaa. */
-.page-lyhytvideot .netbd:not(.netbd-cover)::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(38% 26% at 14% 22%, rgba(111,236,255,.14), transparent 70%),
-    radial-gradient(30% 22% at 86% 54%, rgba(0,124,143,.16), transparent 72%),
-    radial-gradient(44% 30% at 42% 88%, rgba(111,236,255,.10), transparent 74%);
-}
-.page-lyhytvideot .netbd-cover::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(34% 24% at 78% 18%, rgba(111,236,255,.12), transparent 70%),
-    radial-gradient(40% 28% at 20% 72%, rgba(0,124,143,.14), transparent 72%);
-}
+/* KUMOTTU. Ks. tiedoston lopusta "VALO KULKEE OSION MUKANA": nama
+   valot olivat KIINTEASSA kerroksessa, joten ne pysyivat samassa
+   kohtaa ruutua koko vierityksen ajan. Tausta liikkui, valo ei, ja
+   siita syntyi juuri se kuollut vaikutelma jota niilla piti korjata.
+   Valo kuuluu osioon, ei nakymaan. */
 
 /* Heron kelluvat alustamerkit kirkkaammiksi: ne olivat niin vaimeat
    ettei niita erottanut verkostosta. */
@@ -12673,4 +12665,114 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   .page-lyhytvideot .lv-k .wp-line,
   .page-lyhytvideot .lv-k .wp-line2,
   .page-lyhytvideot .lv-k .wp-line3 { clip-path: none }
+}
+
+/* ==================================================================
+   KAAVION VARI TULEE KORTILTA, EI SIVULTA
+   ==================================================================
+   Kaikki nelja kaaviota maalattiin sivun sinisella, ja samalla katosi
+   se mika niissa oli alun perin: kaksi kayräkorttia ovat magentaa.
+   Vari palautetaan, mutta se ei voi olla enaa kiinteä arvo kahdessa
+   luokassa, koska kortin muutkin osat (hehku, kortin oma valo,
+   ylaviiva) seuraavat samaa varia. Siksi kortilla on kaksi lukua:
+
+     --kaavio    viivan vari
+     --kaaviohi  hehkun vari, kirkkaampi kuin viiva
+
+   Magenta #d81b83 on tehty valkoiselle pohjalle. Viiva sailyttaa sen
+   sellaisenaan, mutta hehku on kirkkaampi magenta: tumma pohja syo
+   pehmean varjon nakyvista, ja hehku on juuri se osa joka tekee
+   viivasta elavan. Yhdella arvolla tata ei voi hoitaa - se oli sama
+   virhe kuin aiemmin paneelin opacityssa, jonka piti palvella yhta
+   aikaa luettavuutta ja nakyvyytta. */
+.page-lyhytvideot .lv-k { --kaavio: #6fecff; --kaaviohi: 111,236,255 }
+.page-lyhytvideot .lv-k:nth-child(1),
+.page-lyhytvideot .lv-k:nth-child(4) { --kaavio: #d81b83; --kaaviohi: 255,86,175 }
+
+.page-lyhytvideot .lv-k .wp-line { stroke: var(--kaavio) }
+.page-lyhytvideot .lv-k .wp-line3 { stroke: var(--kaavio) }
+.page-lyhytvideot .lv-k .wp-to i.k3 { background: var(--kaavio) }
+.page-lyhytvideot .lv-k .wp-mid { color: var(--kaavio) }
+.page-lyhytvideot .lv-k .wp-cols u {
+  background: linear-gradient(180deg, rgba(var(--kaaviohi),.95), rgba(var(--kaaviohi),.22));
+}
+.page-lyhytvideot .lv-k .wp-line,
+.page-lyhytvideot .lv-k .wp-line3 {
+  filter:
+    drop-shadow(0 0 calc(var(--p2) * 3px) rgba(var(--kaaviohi),.95))
+    drop-shadow(0 0 calc(var(--p2) * 9px) rgba(var(--kaaviohi),.75))
+    drop-shadow(0 0 calc(var(--p2) * 24px) rgba(var(--kaaviohi),.45));
+}
+.page-lyhytvideot .lv-k .wp-cols u {
+  filter:
+    drop-shadow(0 0 calc(var(--p2) * 6px) rgba(var(--kaaviohi),.7))
+    drop-shadow(0 0 calc(var(--p2) * 20px) rgba(var(--kaaviohi),.35));
+}
+.page-lyhytvideot .lv-taus::before {
+  background: radial-gradient(closest-side, rgba(var(--kaaviohi),.42), rgba(var(--kaaviohi),.14) 56%, transparent 78%);
+}
+.page-lyhytvideot .lv-k {
+  box-shadow:
+    0 0 calc(var(--p2) * 70px) calc(var(--p2) * -8px) rgba(var(--kaaviohi),.34),
+    0 0 calc(var(--p2) * 20px) rgba(var(--kaaviohi),.12);
+}
+.page-lyhytvideot .lv-k.nelja-k::before {
+  background: linear-gradient(90deg, var(--kaavio), rgba(var(--kaaviohi),0) 88%);
+  box-shadow: 0 0 calc(var(--p2) * 16px) rgba(var(--kaaviohi),.6);
+}
+/* Ruudukon ulkovalo jaa sinisena: se on kortiston yhteinen valo eika
+   yhden kortin oma, ja kahden varin sekoitus samassa kajossa lukisi
+   likana. */
+
+/* ==================================================================
+   ALARIVIN KAAVIOT VALMIIKSI ENNEN KUIN PEITE TULEE PAALLE
+   ==================================================================
+   MITATTU: #miksi on pinotussa vierityksessa, ja seuraava osio nousee
+   sen paalle. Alarivin korttien pohja on nakyvissa vierityskohtaan
+   2149 asti, mutta niiden kaaviot olivat valmiit vasta 2374:ssa. Ero
+   on 225px, ja juuri sen matkan peite oli jo syonyt kortin
+   alakaistan - eli sen kohdan jossa kaavio on.
+
+   Syy oli mittaustavassa: jokainen kortti mittasi oman sijaintinsa,
+   joten alarivi alkoi vasta kun ylarivi oli jo lopussa. Nyt KOKO
+   KORTISTO on yksi mittari (data-hehku ruudukolla) ja kortit
+   porrastetaan sen sisalla --i:lla. data-hehkun arvo 0,75 lyhentaa
+   matkan niin, etta viimeinenkin kortti on valmis noin 2066:ssa eli
+   83px ennen kuin peite koskee siihen. */
+
+/* ==================================================================
+   VALO KULKEE OSION MUKANA
+   ==================================================================
+   Taustan valonlahteet olivat kiinteassa kerroksessa (.netbd::after),
+   joka on position: fixed. Ne siis pysyivat samassa kohtaa RUUTUA
+   koko vierityksen ajan riippumatta siita mika osio niiden kohdalla
+   oli. Valo joka ei liiku mihinkaan ei lue valona vaan kalvona.
+
+   SEO-sivulla sama asia on tehty toisin: valo on OSION omalla
+   pseudoelementilla (.page-hakukoneoptimointi #sisalto::before), eli
+   se on osion sisalla ja kulkee sen mukana. Kun osio nousee peitteena
+   edellisen paalle, valo nousee sen mukana, ja juuri siita syntyy se
+   vaikutelma etta tausta elaa.
+
+   Sama tanne. Kaksi valoa per osio, eri kohdissa parillisissa ja
+   parittomissa, jotta peräkkaiset osiot eivat ole toistensa
+   kopioita. Vaalea hinnoitteluosio jaa ulkopuolelle: sininen kajo
+   valkoisella pohjalla lukisi likana. */
+.page-lyhytvideot .seo-sec:not(.valo):not(.kuvapohja)::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(52% 38% at 84% 8%, rgba(111,236,255,.16), transparent 68%),
+    radial-gradient(46% 34% at 8% 94%, rgba(0,124,143,.20), transparent 70%);
+}
+.page-lyhytvideot .seo-sec:not(.valo):not(.kuvapohja):nth-of-type(even)::before {
+  background:
+    radial-gradient(48% 36% at 12% 10%, rgba(111,236,255,.13), transparent 68%),
+    radial-gradient(44% 32% at 90% 88%, rgba(0,124,143,.18), transparent 70%);
+}
+/* Coverin oma pohja saa saman kohtelun: se on sivun pisin yhtenainen
+   pinta, ja ilman valoa sen alku ja loppu nayttavat samalta. */
+.page-lyhytvideot .cover > .netbd-clip ~ .seo-sec:first-of-type::before {
+  background:
+    radial-gradient(56% 40% at 76% 4%, rgba(111,236,255,.18), transparent 68%),
+    radial-gradient(40% 30% at 14% 92%, rgba(0,124,143,.16), transparent 70%);
 }

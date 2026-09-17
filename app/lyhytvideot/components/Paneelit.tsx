@@ -169,10 +169,11 @@ export /**
  * kehyksettoman etta liian lahella kolmannen kortin palkkeja - kaksi
  * vierekkaista korttia lukivat saman kuvan kahtena kappaleena.
  *
- * Nyt kortti sanoo asiansa kahdella kayrällä: harmaa on nayttokerrat
- * ja sininen se mita niista seuraa. Sininen kulkee harmaan alapuolella
- * ja nousee sen mukana, mika on tasan kortin vaite - nayttokerrat ovat
- * valitavoite ja mitattava asia on alempi kayrä.
+ * Nyt kortti sanoo asiansa kahdella kayrällä: harmaa on lahtotilanne
+ * ja sininen se mihin sisalto vie. SININEN ON YLEMPANA. Vari kertoo
+ * tassa kortissa ajan eika mittaria - harmaa on ennen meita, sininen
+ * meidan jaljiltamme - joten alempi sininen lukisi lupauksena etta
+ * tulos pienenee.
  *
  * Ero ensimmaiseen korttiin on VARI JA PARI, ei muoto: siella yksi
  * magenta kayrä, taalla harmaa ja sininen pari. Kaksi samanlaista
@@ -188,17 +189,21 @@ function FunnelPanel() {
       <div className="wp-strip">
         <svg className="wp-chart" viewBox="0 0 300 60" preserveAspectRatio="none" focusable="false">
           <path className="wp-grid" d="M0 5H300M0 31H300M0 57H300" />
-          {/* Ylempi: nayttokerrat. */}
+          {/* Ylempi kayrä on SININEN ja alempi harmaa, ei toisin pain.
+              Vari kertoo tassa kortissa ajan eika mittaria: harmaa on
+              lahtotilanne ennen meita ja sininen se mihin sisalto vie.
+              Jos sininen olisi alempana, kuva sanoisi etta meidan
+              jaljiltamme tulos on pienempi. */}
           <path
-            className="wp-line2"
+            className="wp-line3"
             d="M0 47 25 44 50 45 75 38 100 34 125 36 150 28 175 22 200 25 225 16 250 11 275 13 300 6"
           
             pathLength={1}
           />
-          {/* Alempi: yhteydenotot. Seuraa samaa nousua mutta jaa
-              alemmas - suhde on se mita kortti kuvaa, ei etaisyys. */}
+          {/* Alempi: lahtotilanne. Nousee loivasti mutta jaa alemmas,
+              eli ero on se mita kortti kuvaa, ei etaisyys. */}
           <path
-            className="wp-line3"
+            className="wp-line2"
             d="M0 55 25 54 50 54 75 51 100 50 125 51 150 47 175 44 200 45 225 40 250 37 275 38 300 33"
           
             pathLength={1}
@@ -206,11 +211,11 @@ function FunnelPanel() {
         </svg>
         <span className="wp-from">
           <i className="k2" />
-          Näyttökerrat
+          Ennen
         </span>
         <span className="wp-to">
           <i className="k3" />
-          Yhteydenotot
+          Videoiden jälkeen
         </span>
       </div>
     </div>

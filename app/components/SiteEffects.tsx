@@ -137,7 +137,7 @@ export default function SiteEffects() {
      * elementti maalataan, joten sticky ei vaikuta siihen mitenkaan.
      * Sijainti mitataan kerran ja resizessa, ei kehyksessa. */
     const hehkuEls = Array.from(document.querySelectorAll<HTMLElement>("[data-hehku]"));
-    const hehkuY = new WeakMap<HTMLElement, { y: number; h: number }>();
+    const hehkuY = new WeakMap<HTMLElement, { y: number; h: number; k: number }>();
     const mittaaHehku = () => {
       for (const el of hehkuEls) {
         let y = 0;
@@ -146,7 +146,16 @@ export default function SiteEffects() {
           y += n.offsetTop;
           n = n.offsetParent as HTMLElement | null;
         }
-        hehkuY.set(el, { y, h: el.offsetHeight });
+        /* data-hehkun ARVO on matkan kerroin. Oletus 1.
+           Sita tarvitaan siksi, etta elementin oma korkeus ei kerro
+           milloin sen pitaa olla valmis: pinotussa vierityksessa
+           seuraava osio nousee kortiston paalle jo ennen kuin
+           kortisto on lopussa, ja mitattuna se peitti alarivin
+           kaaviot 400px ennen kuin ne olivat piirtyneet. Kerroin
+           lyhentaa matkan sen mukaan milloin kohde on VIELA
+           nakyvissa, ei sen mukaan kuinka pitka se on. */
+        const k = Number(el.dataset.hehku);
+        hehkuY.set(el, { y, h: el.offsetHeight, k: Number.isFinite(k) && k > 0 ? k : 1 });
       }
     };
     mittaaHehku();
@@ -440,7 +449,7 @@ export default function SiteEffects() {
         for (const el of hehkuEls) {
           const m = hehkuY.get(el);
           if (!m) continue;
-          const matka = Math.max(vh * 0.62 + m.h * 0.35, 1);
+          const matka = Math.max((vh * 0.62 + m.h * 0.35) * m.k, 1);
           const kuljettu = sc + vh - m.y;
           el.style.setProperty("--piirto", Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3));
         }
