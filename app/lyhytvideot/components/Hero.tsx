@@ -32,9 +32,15 @@ export default function Hero() {
             Shorts. Strategia, käsikirjoitus, kuvaus ja editointi yhdeltä tiimiltä, kiinteällä
             kuukausihinnalla.
           </p>
+          {/* YKSI PAAKEHOTUS KOKO SIVULLE. Sivulla oli kolme eri nimea
+              samalle lomakkeelle: "Pyyda tarjous", "Varaa maksuton
+              kartoitus" ja "Ota yhteytta". Kartoitus on niista pienin
+              sitoumus ja sivu lupaa sen muutenkin, joten se on
+              paakehotus kaikkialla. "Pyyda tarjous" jaa hinnastoon,
+              jossa lukija on jo valitsemassa pakettia. */}
           <div className="heroctas li d4">
             <a className="btn mag" href="#tarjous">
-              Pyydä tarjous
+              Varaa maksuton kartoitus
             </a>
             <a className="tlink" href="#hinnoittelu">
               Katso lyhytvideopaketit

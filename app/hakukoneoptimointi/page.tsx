@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
+import Palkki from "../components/Palkki";
 import SiteEffects from "../components/SiteEffects";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 
 import Hero from "./components/Hero";
-import { Juova, Laatta, Vaite } from "../components/Maasto";
+import { Laatta, Vaite } from "../components/Maasto";
 import Suotimet from "./components/Suotimet";
 import Nakyvyys from "./components/Nakyvyys";
 import Sisalto from "./components/Sisalto";
@@ -20,7 +21,7 @@ import {
   Tarjous,
   Ukk,
 } from "./components/sections";
-import Palkki from "./components/Palkki";
+
 import Tape from "./components/Tape";
 import { buildJsonLd } from "./jsonld";
 
@@ -190,7 +191,6 @@ export default function Hakukoneoptimointi() {
       </div>
       <Kenelle />
 
-      <Juova />
 
       <Ukk />
       {/* Taustaa ja Blogi ovat pois toistaiseksi: Taustaa oli

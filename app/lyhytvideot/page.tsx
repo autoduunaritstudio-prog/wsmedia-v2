@@ -3,18 +3,29 @@ import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 
 import NetBackdrop from "../components/NetBackdrop";
-import BudgetForm from "../components/BudgetForm";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
+import Palkki from "../components/Palkki";
 import SiteEffects from "../components/SiteEffects";
 import Logos from "../components/Logos";
 import StatBand from "../components/StatBand";
-import TeamPlaceholder from "../components/TeamPlaceholder";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import Hero from "./components/Hero";
-import { Alustat, Kokonaisuus, Miksi, Prosessi, Tulokset } from "./components/sections";
-import { Alueet, Hinnoittelu, Kenelle, Ukk } from "./components/sections2";
+import { Kaytannossa } from "./components/sections2";
+import {
+  Alustat,
+  Jakso,
+  Hinnoittelu,
+  Kenelle,
+  Kokonaisuus,
+  Miksi,
+  Prosessi,
+  Tarjous,
+  Tulokset,
+  Ukk,
+} from "./components/wsx";
+import { Laatta, Vaite } from "../components/Maasto";
 import { structuredData } from "./structured-data";
 
 const TITLE = "Lyhytvideotuotanto yrityksille | TikTok, Reels & Shorts | WS Media";
@@ -85,9 +96,16 @@ const STATS = [
 
 export default function Lyhytvideot() {
   return (
-    <div className="page-palvelu page-lyhytvideot page-dark">
-      {/* Vaalea metallitausta vaihtui elavaan verkostoon; ks. NetBackdrop. */}
+    <div className="page-palvelu page-lyhytvideot wsx">
+      {/* SIVUTASON VERKOSTO. Tama on se kerros joka renderoi myos
+          NetMarksit, eli herossa kelluvat Instagram-, TikTok- ja
+          YouTube-merkit. Se jai pois kun sivu siirtyi wsx-ilmeeseen,
+          ja sen mukana heron oma liike. mount="fixed" on oletus. */}
       <NetBackdrop />
+
+      {/* RAE. Sama kiintea rakeinen kalvo kuin kahdella muulla
+          palvelusivulla: tasainen digitaalinen pinta lukee tyhjana. */}
+      <div className="rae" aria-hidden="true" />
       <div id="prog" />
 
       <Nav
@@ -98,102 +116,80 @@ export default function Lyhytvideot() {
         logoHref="/"
       />
 
-      {/* PINNATTU HERO JA PEITTAVA COVER, sama periaate kuin etusivulla:
-          hero jaa kiinni nakyman ylareunaan ja cover liukuu sen paalle
-          natiivilla sticky-kaytoksella. Pari ja sen cover ovat saman
-          kaareen lapsia - se on ehto jonka rikkominen kaataa pinnauksen.
-
-          Coverin ylareunassa on sama asiakaslogonauha kuin etusivulla:
-          se on ensimmainen asia joka nousee heron paalle, eli mockupien
-          jalkeen tulee heti todiste siita kenelle niita on tehty.
-
-          OMA LUOKKA, ei .stickyzone: se on etusivun luokka, ja sen
-          saannot sitovat heron vaiheistuksen HeroScrubin --st1..3
-          -muuttujiin. Talla sivulla scrubia ei ole, joten h1 olisi
-          jaanyt varasyottoon opacity: 0 eli nakymattomaksi. */}
       <div className="stickysub">
         <Hero />
         <div className="cover">
-          {/* Sama verkosto kuin herossa, tummana. Cover on
-              lapinakymaton, joten heron takana oleva kerros ei nay sen
-              lapi - kuvio on toistettava taalla omana kerroksenaan. */}
           <NetBackdrop mount="cover" />
           <Logos />
 
-          <section style={{ padding: "64px 0 20px" }}>
-            <div className="wrap">
-              {/* Numerorullaus paalle: luvut ovat nyt oikeita, ja
-                  referenssiosiossa etusivulla ne rullaavat samoin. */}
+          <section className="seo-sec" style={{ padding: "56px 0 12px" }}>
+            <div className="swrap">
               <StatBand stats={STATS} />
             </div>
           </section>
 
-          <Miksi />
-          {/* Kolme kuvanauhaa perakkain: Kanavat, Prosessi ja
-              Kokonaisuus. Sama rakenne toistuu, ja juuri toisto tekee
-              osioiden vaihdoista rytmin sen sijaan etta jokainen olisi
-              oma keksintonsa. Jarjestys on myos sisallon jarjestys:
-              missa nakya, miten se tehdaan, mita siita kokonaisuutena
-              saa. */}
-          <Alustat />
-          <Prosessi />
-          <Kokonaisuus />
-          <Tulokset />
-          <Hinnoittelu />
-          <Kenelle />
-          <Alueet />
-          <Ukk />
+          {/* PINOT, NELJAS VERSIO.
+              Kanavat nousee coverina Algoritmi-hengahdyksen paalle.
+              Kanavat ja Tehtya tyota ovat SAMAN kaareen sisalla, eli
+              niilla on yksi pohja ja yksi katkeamaton kuvio: aiemmin
+              molemmilla oli oma verkostokerroksensa omalla
+              pistekentallaan, ja kuviointi katkesi niiden valissa.
+              Sama kaare Prosessille ja Kokonaisuudelle. */}
+          <div className="pino">
+            <Miksi />
 
-          {/* YKSI CTA KAHDEN SIJAAN. Sivulla oli aiemmin lomakeosio ja heti
-          sen perassa .final-lohko, jonka ainoa nappi osoitti takaisin
-          samaan lomakkeeseen muutaman sadan pikselin paahan. Nyt
-          paatosotsikko ja lomake ovat samassa osiossa, ja rakenne on sama
-          kuin etusivun CTA:ssa: kuva vasemmalla, lomake oikealla.
+            <div className="pino">
+              <Vaite
+                kuva="/lyhytvideot/kuvaaminen.webp"
+                alla="Uusi tili voi tavoittaa saman yleisön kuin vakiintunut brändi. Se on pienen yrityksen etu."
+              >
+                Algoritmi jakaa sisältöä kiinnostuksen, ei <b><i>seuraajamäärän mukaan.</i></b>
+              </Vaite>
 
-          id="tarjous" sailyy, koska navin CTA, heron nappi ja sivun
-          sisaiset linkit osoittavat siihen. .wrap eika .wrap-n: kahdelle
-          palstalle 820px ei riita. */}
-          <section id="tarjous" style={{ paddingTop: "20px" }}>
-            <div className="wrap">
-              <div className="shead center rv" data-par="0.03">
-                <h2>
-                  Valmis aloittamaan <span className="accent">lyhytvideotuotannon?</span>
-                </h2>
-                <p className="sub">
-                  Vastaamme 24 tunnin sisällä ja kerromme suoraan mitä ehdotamme ja mitä se maksaa.
-                </p>
-              </div>
-              {/* MITA LAHETYKSEN JALKEEN TAPAHTUU. Lomakkeen viereen ei
-                  kuulu lisaa myyntia vaan se mita nappi tekee: kynnys
-                  ei ole napin vari vaan epavarmuus siita mihin
-                  sitoutuu. Kolme askelta samalla hiusviivakielella kuin
-                  osion ylapuolella - ei kortteja, ei taustoja. */}
-              <ol className="next3 rv stagger">
-                <li className="rv" style={i(0)}>
-                  <b>24 h</b>
-                  <span>Luemme viestin ja vastaamme sähköpostilla arkipäivän sisällä.</span>
-                </li>
-                <li className="rv" style={i(1)}>
-                  <b>30 min</b>
-                  <span>Puhelu tai etäpalaveri: tavoite, kanavat ja kuvausten käytäntö.</span>
-                </li>
-                <li className="rv" style={i(2)}>
-                  <b>Tarjous</b>
-                  <span>Kirjallinen ehdotus hintoineen. Ei sitoumuksia ennen hyväksyntää.</span>
-                </li>
-              </ol>
+              <div className="pino">
+                <Jakso>
+                  <Alustat />
+                  <Tulokset />
+                </Jakso>
 
-              <div className="ctasplit">
-                <TeamPlaceholder />
-                <BudgetForm
-                  budgetLabel="Budjetti kuukaudessa"
-                  messageLabel="Mitä tavoittelet lyhytvideoilla?"
-                  note="Ei sitoumuksia."
-                  tilt="-y"
-                />
+                <div className="pino">
+                  <Laatta kuva="/lyhytvideot/kuvauspaiva.webp" korkeus="taysi">
+                    <p className="laatta-kick">Kuvauspäivä</p>
+                    <p className="laatta-lause suuri">
+                      Yksi päivä, <b><i>useita kanavia.</i></b>
+                    </p>
+                    <p className="laatta-alla">
+                      Samasta kuvauspäivästä syntyy sisältö TikTokiin, Reelsiin, Shortsiin ja
+                      LinkedIniin. Tuotantokustannus jakautuu monelle kanavalle.
+                    </p>
+                  </Laatta>
+
+                  <div className="pino">
+                    <Jakso>
+                      <Prosessi />
+                      <Kokonaisuus />
+                    </Jakso>
+
+                    <div className="pino">
+                      <Vaite
+                        kuva="/lyhytvideot/ovi.webp"
+                        alla="Ohjaamme katsojan verkkosivuille, yhteydenottolomakkeelle tai myymälään, ja mittaamme mitä siitä seuraa."
+                      >
+                        Näyttökerrat ovat <b><i>välitavoite.</i></b>
+                      </Vaite>
+
+                      <Hinnoittelu />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </section>
+          </div>
+
+          <Kenelle />
+          <Ukk />
+          <Kaytannossa />
+          <Tarjous />
         </div>
       </div>
 
@@ -204,6 +200,7 @@ export default function Lyhytvideot() {
         brandHeading="h2"
       />
 
+      <Palkki />
       <SiteEffects />
 
       <script

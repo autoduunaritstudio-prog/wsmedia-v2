@@ -9,6 +9,9 @@ import { useEffect, useRef, useState } from "react";
  * sellaisina kuin ovat. Pysyva konversiopolku tehdaan siksi omana
  * kerroksenaan sivun alareunaan.
  *
+ * Jaettu kaikille palvelusivuille. Tehtiin ensin SEO-sivulle, jossa
+ * mitattiin 17,4 nakymaa ilman yhtaan nappia.
+ *
  * Palkki ei ole nakyvissa koko ajan. Se tulee esiin vasta kun hero on
  * vieritetty ohi (heron omat napit ovat silloin jo poissa) ja katoaa
  * kun Tarjous-osio tulee nakymaan (silloin lomake on jo ruudulla eika
@@ -26,16 +29,31 @@ export default function Palkki() {
   useEffect(() => {
     const paivita = () => setNayta(ohi.current && !lomake.current);
 
-    const hero = document.querySelector(".seo-hero");
+    /* MITATTU VIKA: alasivuilla hero on position: sticky, joten se ei
+       poistu nakymasta koskaan. "Hero on ohi" -ehto ei siis voinut
+       tayttya ja palkki jai nakymattomiin koko sivun ajaksi.
+
+       Ehto luetaan nyt COVERISTA: kun peittava kerros on noussut
+       nakyman puolivaliin, hero on katsottu ja sen omat napit ovat
+       poissa. Sivulla jolla coveria ei ole (SEO-sivu) kaytetaan
+       heroa kuten ennenkin, ja silloin se ei ole pinnattu. */
+    const hero =
+      document.querySelector(".stickysub > .cover") ??
+      document.querySelector(".seo-hero") ??
+      document.querySelector("header");
     const tarjous = document.querySelector("#tarjous");
     if (!hero || !tarjous) return;
 
+    /* Coverilla ehto on kaanteinen: se ON nakymassa kun hero on ohi.
+       rootMargin -50% siirtaa rajan nakyman puolivaliin, jolloin
+       palkki tulee vasta kun cover on todella peittanyt heron. */
+    const coverina = hero.classList.contains("cover");
     const a = new IntersectionObserver(
       ([e]) => {
-        ohi.current = !e.isIntersecting;
+        ohi.current = coverina ? e.isIntersecting : !e.isIntersecting;
         paivita();
       },
-      { threshold: 0 },
+      { threshold: 0, rootMargin: coverina ? "-50% 0px 0px 0px" : "0px" },
     );
     const b = new IntersectionObserver(
       ([e]) => {

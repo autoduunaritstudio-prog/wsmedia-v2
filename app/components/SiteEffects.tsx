@@ -121,6 +121,36 @@ export default function SiteEffects() {
        Opt-in data-attribuutilla, jotta kirjoituksia tulee vain niille
        elementeille jotka sita oikeasti kayttavat. */
     const rvsEls = Array.from(document.querySelectorAll<HTMLElement>("[data-rvs]"));
+
+    /* HEHKU: ETENEMA JOKA EI VOI JAATYA.
+     *
+     * --rvp lasketaan getBoundingClientRect():sta, ja se on oikea
+     * mittari osiolle joka vierii normaalisti. Pinon osiot ovat
+     * position: sticky, ja PINNATUN elementin rect ei muutu
+     * vieritettaessa: sen lapsilla --rvp jaatyy siihen arvoon joka
+     * silla oli pinnautumishetkella. Juuri siksi korttien kaaviot
+     * eivat liikkuneet, ja siksi myos natiivi view()-aikajana jai
+     * samaan ansaan: se mittaa saman pinnatun laatikon.
+     *
+     * Tama mittari lukee elementin ASETTELUSIJAINNIN dokumentissa
+     * (offsetTop-ketju). Se on layout-arvo eika riipu siita mihin
+     * elementti maalataan, joten sticky ei vaikuta siihen mitenkaan.
+     * Sijainti mitataan kerran ja resizessa, ei kehyksessa. */
+    const hehkuEls = Array.from(document.querySelectorAll<HTMLElement>("[data-hehku]"));
+    const hehkuY = new WeakMap<HTMLElement, { y: number; h: number }>();
+    const mittaaHehku = () => {
+      for (const el of hehkuEls) {
+        let y = 0;
+        let n: HTMLElement | null = el;
+        while (n) {
+          y += n.offsetTop;
+          n = n.offsetParent as HTMLElement | null;
+        }
+        hehkuY.set(el, { y, h: el.offsetHeight });
+      }
+    };
+    mittaaHehku();
+    window.addEventListener("resize", mittaaHehku, { passive: true });
     const TILT_MAX = 19;         // puhelinparin sivuttaiskulma
     // Selainmockup ja tapahtumakortti ovat isoja pintoja, joilla sama 19
     // astetta nayttaa liialliselta. Niille oma, hillitympi sivuttaiskulma
@@ -403,6 +433,18 @@ export default function SiteEffects() {
           const span = Math.max(vh * (1 - RVS_END) + r.height / 2, 1);
           return Math.min(Math.max((vh - r.top) / span, 0), 1);
         });
+        /* Hehkun etenema. Nolla kun elementin YLAREUNA on nakyman
+           alareunassa, yksi kun se on noussut kolmanneksen nakymasta
+           ylospain: liike tapahtuu silloin kun elementti on
+           katsottavassa kohdassa, ei ruudun alalaidassa. */
+        for (const el of hehkuEls) {
+          const m = hehkuY.get(el);
+          if (!m) continue;
+          const matka = Math.max(vh * 0.62 + m.h * 0.35, 1);
+          const kuljettu = sc + vh - m.y;
+          el.style.setProperty("--piirto", Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3));
+        }
+
         rvsEls.forEach((el, i) => {
           el.style.setProperty("--rvp", rvsP[i].toFixed(3));
           // PALAUTUVA "OSIO ON ESILLA" -TILA. Tarvitaan koska CSS ei osaa

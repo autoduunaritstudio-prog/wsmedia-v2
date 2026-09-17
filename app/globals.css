@@ -8945,17 +8945,9 @@ html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { 
       tyota eika lue. Sen sisalto oli kuitenkin perinyt tumman teeman
       tekstivarit, eli valkoista valkoisella. Lomake saa nyt omat
       vaaleat arvonsa samalla tavalla kuin .valo-osio. */
-.wsx .fcard {
-  --seo-ink: #11151a; --seo-ink-2: #4a5560;
-  --seo-rule: rgba(17,21,26,.16); --seo-rule-soft: rgba(17,21,26,.09);
-  --blue: #00697a;
-  color: #11151a;
-  border-radius: 20px;
-  box-shadow: 0 50px 90px -40px rgba(0,0,0,.9);
-}
+/* Ks. yllä: sama paatos purettu myos taalta. */
 .wsx .fcard label, .wsx .fcard legend, .wsx .fcard p, .wsx .fcard span,
 .wsx .fcard h3, .wsx .fcard b, .wsx .fcard small { color: inherit }
-.wsx .fcard input, .wsx .fcard textarea, .wsx .fcard select { color: #11151a }
 
 /* ---------- FOOTERI: SAMA KUIN ETUSIVULLA ---------- */
 /* MITATTU: footerissa oli 20 kontrastivirhetta, otsikot 1,14:1 ja
@@ -10403,7 +10395,13 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    Nyt saanto on siella missa sen olisi pitanyt olla alun perinkin:
    pinon jokainen paalle nouseva osa saa umpinaisen pohjan, ja
    poikkeukset (vaalea osio, kuvapohjainen osio) kumoavat sen itse. */
-.wsx .pino > :first-child ~ * { background: #0b0f14 }
+/* MITATTU: pinon peittava osio sai kiintean #0b0f14:n, joka voitti
+   sen oman savyn. Siksi Prosessi (data-tone="2", eli #101822) ja sen
+   naapuri nayttivat tasan samalta pohjalta: savy oli maaritelty mutta
+   ei koskaan voimassa. Pohja tulee nyt osion omasta --secbg:sta ja
+   varasyottona sivun pohjavari, eli peittavyys sailyy mutta savy
+   paasee lapi. */
+.wsx .pino > :first-child ~ * { background: var(--secbg, #0b0f14) }
 .wsx .pino > :first-child ~ .valo,
 .wsx .pino > :first-child ~ * .valo { background: #fafafc }
 .wsx .pino > :first-child ~ .kuvapohja { background: #070c12 }
@@ -10587,13 +10585,49 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 /* ---------- LOMAKE ON VAALEA SAAREKE ----------
    Sama ratkaisu ja sama perustelu kuin SEO-sivulla: kentat joihin
    kirjoitetaan luetaan vaalealla nopeammin. */
+/* LOMAKEKORTTI = ETUSIVUN KORTTI, MITATTUNA SIELTA.
+   Kortti on VALKOINEN myos tummalla sivulla, koska se on sama
+   kaluste kuin etusivulla ja kayttaja pyysi sen samanlaisena.
+
+   Vika ei ollutkaan kortin varissa vaan siina, etta kortti peri
+   tumman sivun VAALEAT tekstivarit: valkoinen teksti valkoisella
+   kortilla, ja kenttien reuna yhta nakymaton. Kortti saa nyt
+   etusivun omat arvot kokonaisuudessaan, suoraan mitattuina:
+
+     kortti   #fff, reuna #e8e8ed, varjo 0 24px 60px -24px rgba(29,29,31,.16)
+     kentta   #fff, reuna #e8e8ed
+     teksti   #1d1d1f,  nimike #1d1d1f
+
+   Mitattu kontrasti kortilla: teksti 15,9:1, kentan reuna erottuu
+   kortista samalla erolla kuin etusivulla. */
 .wsx .fcard {
-  --seo-ink: #11151a; --seo-ink-2: #4a5560;
-  --seo-rule: rgba(17,21,26,.16); --seo-rule-soft: rgba(17,21,26,.09);
-  --blue: #00697a;
-  color: #11151a; border-radius: 20px;
-  box-shadow: 0 50px 90px -40px rgba(0,0,0,.9);
+  --ink: #1d1d1f; --grey: #616166; --hair: #e8e8ed; --blue: #007c8f;
+  --seo-ink: #1d1d1f; --seo-ink-2: #616166;
+  --seo-rule: #e8e8ed; --seo-rule-soft: #f0f0f4;
+  background: #fff;
+  border: 1px solid #e8e8ed;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px -24px rgba(29,29,31,.16);
+  backdrop-filter: none;
+  color: #1d1d1f;
 }
+.wsx .fcard label, .wsx .fcard legend { color: #1d1d1f }
+.wsx .fcard input,
+.wsx .fcard textarea,
+.wsx .fcard select {
+  background: #fff;
+  border: 1px solid #e8e8ed;
+  color: #1d1d1f;
+}
+.wsx .fcard input::placeholder,
+.wsx .fcard textarea::placeholder { color: #8a8a90 }
+.wsx .fcard input:focus,
+.wsx .fcard textarea:focus,
+.wsx .fcard select:focus {
+  border-color: #007c8f; outline: none;
+  box-shadow: 0 0 0 3.5px rgba(0,197,227,.16);
+}
+.wsx .fcard .note, .wsx .fcard small { color: #616166 }
 
 /* MITATTU: sivustokartan osoitteet katkesivat kesken sanan
    ("/verkkokaupp a") koska artefaktin palsta on 340px ja rivilla oli
@@ -11608,4 +11642,1035 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 }
 @media (prefers-reduced-motion: reduce) {
   .cta-palkki { transition: opacity .01s linear; translate: none }
+}
+
+/* ==================================================================
+   LYHYTVIDEOT: page-dark -> wsx
+   ==================================================================
+   Sivu oli sivuston ainoa alasivu vanhalla page-dark-pohjalla. Kun
+   juuriluokka vaihtui .wsx:aan, 83 tekstia putosi kontrastisuhteeseen
+   3,41:1. Syy on yksi ja sama: page-dark yliajoi sivuston VAALEAN
+   teeman muuttujat (--ink #1d1d1f, --grey #616166) tummiksi, ja .wsx
+   ei tee sita, koska sen oma kalusto kayttaa --seo-ink-muuttujia.
+   Vanha kalusto (hero, lukupalkki, kaaviopaneelit) jai siis lukemaan
+   vaaleat arvot tummalta pohjalta.
+
+   Muuttujat osoitetaan wsx:n omiin arvoihin yhdessa paikassa sen
+   sijaan etta page-dark otettaisiin takaisin: se toisi mukanaan noin
+   90 saantoa jotka on kirjoitettu toiselle kuvakielelle.
+
+   Mitattu wsx:n pohjalla #0b0f14:
+     --ink  #f4f7fa  17,4:1
+     --grey #a9b8c6   9,1:1 */
+.page-lyhytvideot.wsx {
+  --ink: var(--seo-ink);
+  --grey: var(--seo-ink-2);
+  --hair: var(--seo-rule-soft);
+}
+
+/* Vaalea osio joutuu asettamaan saman parin uudelleen. Mukautetut
+   muuttujat ratkeavat siina elementissa jossa ne on ILMOITETTU, ei
+   siina jossa niita kaytetaan: juuressa --ink laskettiin juuren omalla
+   --seo-inkilla (#f4f7fa) ja peri sen literaalina .valoon, jolloin
+   valkoinen teksti maalautui #fafafc:lle eli 1,15:1. */
+.page-lyhytvideot .valo {
+  --ink: var(--seo-ink);
+  --grey: var(--seo-ink-2);
+  --hair: var(--seo-rule-soft);
+}
+
+/* Coverin pohja on sivuston yhteinen vaalea var(--bg). Se on oikein
+   etusivulla, jossa cover on vaalea, mutta talla sivulla se tarkoitti
+   valkoista pohjaa tumman sivun sisalla: lukupalkin luvut ja heron
+   lipukkeet mittautuivat 1,08:1. Sama korjaus kuin verkkosivuilla. */
+.page-lyhytvideot .stickysub > .cover { background: #0b0f14 }
+
+
+/* Sama footeri myos Lyhytvideoille. Sivu vaihtoi page-darkista
+   wsx:aan, joten se menetti .page-dark footer -saannot.
+   Arvot ovat samat kuin SEO-sivulla. */
+/* ---------- FOOTERI: SAMA KUIN ETUSIVULLA ---------- */
+/* MITATTU: footerissa oli 20 kontrastivirhetta, otsikot 1,14:1 ja
+   linkit 3,12:1. Syy: footerin oma pohja on vaalea (rgba(245,245,247,.85))
+   mutta se on .wsx:n sisalla, joten sen teksti peri tumman teeman
+   VAALEAT tekstivarit. Vaaleaa vaalealla.
+   Korjaus ei ole tehda footerista vaaleaa saareketta vaan tehda siita
+   sama kuin etusivulla: etusivun footeri on tumma (#060b14). Nyt kun
+   koko sivu on tumma, vaalea footeri olisi ollut myos vaara kuva.
+   Arvot on kopioitu suoraan .page-dark footer -saannoista. */
+.page-lyhytvideot footer {
+  background: #060b14;
+  border-top-color: rgba(255,255,255,.12);
+  color: #b9c0cf;
+}
+.page-lyhytvideot footer .foot-top,
+.page-lyhytvideot footer .foot-base,
+.page-lyhytvideot footer hr { border-color: rgba(255,255,255,.12) }
+.page-lyhytvideot footer a,
+.page-lyhytvideot footer address { color: #b9c0cf }
+.page-lyhytvideot footer a:hover { color: #f5f5f7 }
+/* Nama kolme perivat var(--ink):n, joka on mitoitettu vaalealle. */
+.page-lyhytvideot footer .footer-mark,
+.page-lyhytvideot footer .foot-brand > :not(p):not(ul),
+.page-lyhytvideot footer .foot-col h4,
+.page-lyhytvideot footer h2,
+.page-lyhytvideot footer h4 { color: #f5f5f7 }
+.page-lyhytvideot footer .foot-social a {
+  color: #b9c0cf; border-color: rgba(255,255,255,.18);
+}
+.page-lyhytvideot footer .foot-social a:hover {
+  color: #f5f5f7; border-color: rgba(255,255,255,.4);
+}
+
+/* Kaksi vaaleaa saareketta tumman sivun sisalla.
+
+   1. .statband on valkoinen 45 %:n lasilevy. Se oli oikein silloin kun
+      cover oli vaalea; nyt se on tumman pohjan paalla ja sen teksti
+      mittautui 2,10:1. Levy tummenee, ei teksti: luku on sivun
+      ensimmainen todiste eika se saa olla haaleampi kuin muu sivu.
+
+   2. .chip-f on selaimen lipuke, eli se ESITTAA jotain vaaleaa. Sama
+      saanto kuin verkkosivujen nayttamolla: jos elementti esittaa
+      vaaleaa pintaa, se on vaalea myos tummalla sivulla ja sen
+      sisalto sen mukaan. Aiemmin se peri tumman teeman valkoiset
+      tekstivarit valkoiselle pohjalle, 1,36:1. */
+.page-lyhytvideot .statband {
+  background: rgba(255,255,255,.045);
+  border-color: var(--seo-rule-soft);
+}
+.page-lyhytvideot .stickysub > .hero .chip-f,
+.page-lyhytvideot .chip-f {
+  --ink: #11151a; --grey: #4a5560;
+  color: #11151a;
+}
+.page-lyhytvideot .chip-f b,
+.page-lyhytvideot .chip-f span,
+.page-lyhytvideot .chip-f small { color: #11151a }
+.page-lyhytvideot .chip-f small { color: #4a5560 }
+.page-lyhytvideot .chip-f em { background: rgba(0,105,122,.12); color: #00697a }
+
+/* ---------- LYHYTVIDEOT: KORJAUSKIERROS ---------- */
+
+/* Logonauha. Sama yksi saanto kuin verkkosivuilla: sivu vaihtoi
+   page-darkista wsx:aan ja menetti .page-dark .logostrip img.ink
+   -saannon, joten mustat viivalogot jaivat mustiksi tummalle
+   pohjalle. Varilliset logot jaavat rauhaan, tiedostokohtaisesti. */
+.page-lyhytvideot .logostrip img.ink { filter: invert(1) }
+
+/* Referenssiruudukko osion omaan mittaan. Viisi korttia 1120
+   pikselissa on sama mitta kuin etusivulla, ja kortit mahtuvat. */
+.page-lyhytvideot .lv-refs { max-width: 1120px; margin: 48px auto 0 }
+
+/* Korostettu sana otsikossa. .mark on taytetty laatikko, ja se
+   katkesi kahdelle riville: laatikon tausta paattyi kesken sanan.
+   Korostus tehdaan varilla, jolloin rivinvaihto ei nay lainkaan. */
+.wsx .korosta { color: var(--seo-hi); white-space: nowrap }
+@media (max-width: 720px) { .wsx .korosta { white-space: normal } }
+
+/* ---------- PYSTYKISKO ----------
+   Osion nimi sivussa pystyssa ja viiva joka tayttyy osion edetessa.
+   Pinnattu, joten se seuraa lukijaa osion lapi.
+
+   Vasempaan reunaan mahtuu: .swrap on min(1320px, 92vw), joten
+   1728 pikselin nakymassa reunaan jaa (1728 - 1320) / 2 = 204px.
+   Kisko vie 34px ja jattaa 40px ilmaa palstaan.
+
+   Alle 1240px reunavara loppuu ja kisko piilotetaan: se on
+   lisatieto, ei sisaltoa. */
+.wsx .seo-sec { position: relative }
+.wsx .pystykisko {
+  position: absolute; left: max(calc((100% - min(1320px, 92vw)) / 2 - 74px), 18px);
+  top: 0; bottom: 0; width: 34px; z-index: 2; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center;
+}
+.wsx .pystykisko > * { position: sticky; top: calc(var(--nav-top) + 96px) }
+.wsx .pk-viiva {
+  width: 1px; height: 84px; background: var(--seo-rule);
+  position: relative; flex: none;
+}
+/* Tayttyva osa. scaleY eika height: skaalaus ei pakota
+   uudelleenasettelua. */
+.wsx .pk-viiva::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, var(--seo-hi), rgba(111,236,255,.25));
+  transform-origin: 50% 0; scale: 1 var(--rvp, 1);
+}
+.wsx .pk-teksti {
+  margin-top: 14px; writing-mode: vertical-rl;
+  font-family: var(--seo-mono); font-size: 11px; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--seo-ink) calc(28% + var(--rvp, 1) * 46%), transparent);
+  white-space: nowrap;
+}
+@media (max-width: 1240px) { .wsx .pystykisko { display: none } }
+@media (prefers-reduced-motion: reduce) {
+  .wsx .pk-viiva::after { scale: 1 1 }
+}
+
+
+/* ---------- KANAVAKORTIT ----------
+   Alustan tunnus on kortin tunniste eika kuvitus: se on iso, omissa
+   vareissaan ja kortin ylareunassa omalla kaistallaan. Kaista saa
+   alustan oman savyn hyvin vaimeana, jolloin kolme korttia eroaa
+   toisistaan ilman etta sivun varimaailma hajoaa. */
+.wsx .kanava { padding-top: 0; overflow: hidden }
+.wsx .kanava-merkki {
+  margin: 0 -26px 22px; padding: 22px 26px;
+  border-bottom: 1px solid var(--seo-rule);
+  display: flex; align-items: center;
+}
+.wsx .kanava-merkki svg { width: 34px; height: 34px }
+.wsx .kanava-tiktok .kanava-merkki { background: rgba(37,244,238,.08) }
+.wsx .kanava-instagram .kanava-merkki { background: rgba(225,48,108,.08) }
+.wsx .kanava-youtube .kanava-merkki { background: rgba(255,0,51,.08) }
+@media (min-width: 901px) {
+  .page-lyhytvideot #alustat .duo2 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .page-lyhytvideot #alustat .duo2-col {
+    border: 1px solid var(--seo-rule); border-radius: 18px;
+    padding: 0 26px 26px; background: rgba(255,255,255,.022);
+  }
+  .page-lyhytvideot #alustat .duo2-col + .duo2-col { border-left-width: 1px; padding-left: 26px }
+}
+
+/* ---------- MISSA KUVAAMME ----------
+   Osio oli tavallisen korkuinen kuvapohjaosio, jossa oli otsikko,
+   kappale ja kaupunkilinkkien rivi. Kun linkit poistuivat, jaljelle
+   jai kolme riviä tekstia taysleveän valokuvan paalle: se lukee
+   valiotsikkona eika osiona.
+
+   Osio saa nyt oman korkeutensa ja teksti asettuu sen alaosaan, eli
+   se on sama kalusto kuin taysleveä kuvalaatta. Valokuva saa tilaa
+   olla valokuva. */
+.page-lyhytvideot #alueet {
+  min-height: 78svh; display: grid; align-content: end;
+  padding-bottom: clamp(56px, 8vh, 96px);
+}
+.page-lyhytvideot #alueet .pohjakuva { object-position: 50% 42% }
+.page-lyhytvideot #alueet .loc { grid-template-columns: minmax(0, 1fr) }
+.page-lyhytvideot #alueet .seo-lead { max-width: 58ch }
+/* Tummennus alareunasta, jotta teksti ei ole kuvan kirkkauden
+   varassa. Sama gradientti kuin taydella kuvalaatalla. */
+.page-lyhytvideot #alueet::before {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(180deg, rgba(6,10,14,0) 28%, rgba(6,10,14,.72) 62%, rgba(6,10,14,.94) 100%);
+}
+.page-lyhytvideot #alueet > .swrap { position: relative; z-index: 1 }
+
+
+
+/* ==================================================================
+   HERO TUMMAKSI KUTEN KAHDELLA MUULLA PALVELUSIVULLA
+   ==================================================================
+   Taman sivun hero oli tarkoituksella VAALEA tumman sivun paalla: se
+   teki coverin liu'usta nakyvan tapahtuman. Ratkaisu oli oikea silloin
+   kun sivu oli yksin, mutta nyt palvelusivuja on nelja ja kahdella
+   muulla hero on tumma. Vaalea hero luki tassa joukossa virheena.
+
+   Vaalea kuvakieli purettiin kolmesta paikasta kerralla:
+     1. verkostokerroksen vaaleat varit ja #f4fafb-pohja
+     2. hehkun ja vinjetin kaanto vaaleaksi
+     3. kuplien vaalea lasi
+   Tekstivarit tulivat .page-dark-saannoista, jotka poistuivat jo
+   luokan vaihdossa, ja ne olivat syy siihen etta hero luki
+   nurinpain: vaalea kuvio ja vaalea teksti samassa ruudussa.
+
+   Coverin ja heron raja ei silti katoa: cover saa oman ylareunan
+   viivansa ja varjonsa, eli tapahtuma nakyy ilman varimuutosta. */
+.page-lyhytvideot .netbd:not(.netbd-cover) {
+  --net-rgb: 111,236,255;
+  --net-dot: rgba(111,236,255,.42);
+  --net-grid: rgba(255,255,255,.05);
+  background-color: #0b0f14;
+}
+.page-lyhytvideot .netbd:not(.netbd-cover) .netbd-glow {
+  background:
+    radial-gradient(58% 48% at 50% 38%, rgba(0,124,143,.22), transparent 70%),
+    radial-gradient(120% 100% at 50% 50%, transparent 40%, rgba(4,7,11,.86) 100%);
+}
+.page-lyhytvideot .stickysub > .hero { color: var(--seo-ink) }
+.page-lyhytvideot .stickysub > .hero h1,
+.page-lyhytvideot .stickysub > .hero h2 { color: var(--seo-ink) }
+.page-lyhytvideot .stickysub > .hero p,
+.page-lyhytvideot .stickysub > .hero .sub { color: var(--seo-ink-2) }
+.page-lyhytvideot .stickysub > .hero .accent,
+.page-lyhytvideot .stickysub > .hero .tlink,
+.page-lyhytvideot .stickysub > .hero .kick { color: var(--seo-hi) }
+/* Kuplat ovat yha vaalea lasi: ne esittavat sovelluksen
+   kayttoliittymaa, ja sellainen on vaalea myos tummalla sivulla.
+   Sama saanto kuin verkkosivujen nayttamolla. */
+.page-lyhytvideot .stickysub > .hero .chip-f {
+  background: rgba(255,255,255,.92);
+  border-color: rgba(0,0,0,.08);
+  box-shadow: 0 18px 44px -16px rgba(0,0,0,.6);
+}
+/* Coverin raja nakyviin ilman varinvaihtoa. */
+.page-lyhytvideot .stickysub > .cover {
+  border-top: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 -50px 90px -20px rgba(0,0,0,.9);
+}
+
+
+
+/* Prosessin paattava rivi: missa kuvataan. Oma osionsa ennen, nyt
+   yksi hiusviivalla erotettu rivi janan alla. */
+.wsx .missa {
+  margin-top: 52px; padding-top: 26px;
+  border-top: 1px solid var(--seo-rule-soft);
+  display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 0 48px;
+}
+.wsx .missa-kick {
+  margin: 0; font-family: var(--seo-mono); font-size: 11.5px; font-weight: 600;
+  letter-spacing: .13em; text-transform: uppercase; color: var(--seo-hi);
+}
+.wsx .missa-p { margin: 0; font-size: 16.5px; line-height: 1.6; color: var(--seo-ink-2); max-width: 66ch }
+@media (max-width: 860px) {
+  .wsx .missa { grid-template-columns: minmax(0, 1fr); gap: 12px }
+}
+
+/* ==================================================================
+   MIKSI-KORTIT: KAAVIOPANEELI TAUSTAKSI
+   ==================================================================
+   MITATTU VIKA, ja se oli kahdessa omassa saannossani jotka kumosivat
+   toisensa. Paneelikerros oli position: absolute, mutta sen jalkeen
+   kirjoitettu ".lv-k > * { position: relative }" osui SIIHENKIN,
+   koska paneeli on kortin suora lapsi. Yhta suuri tarkkuus, myohempi
+   voitti, ja paneeli putosi takaisin virtaan.
+
+   Seuraus oli tasan se mita kortissa nakyi: paneeli vei 228px
+   virrasta, numero, otsikko ja leipateksti tyontyivat sen alle, ja
+   kortin oma overflow: hidden leikkasi ne pois. Kortissa nakyi siis
+   vain kaavio ja numero, eika yhtaan luettavaa.
+
+   Korjaus ei ole uusi z-index vaan se, ettei tekstia nosteta
+   kokoelmasaannolla. Paneeli saa oman kerroksensa nimella, teksti
+   omansa, eika kumpikaan voi enaa osua toiseen.
+
+   Kortti mitoittuu TEKSTIN mukaan. Paneeli on alakaistalla, jossa
+   tekstia ei ole, ja sen paalla on liuku joka takaa etta teksti on
+   luettava riippumatta siita mihin kayrä sattuu osumaan. */
+.page-lyhytvideot .lv-k {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; flex-direction: column;
+  min-height: 330px;
+}
+/* KERROS 1: kaavio. Alakaistalla, kortin takana. */
+.page-lyhytvideot .lv-taus {
+  position: absolute; left: 0; right: 0; bottom: 0; top: auto;
+  height: 58%; z-index: 0; opacity: .85; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 46%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 46%);
+}
+.page-lyhytvideot .lv-taus .whypanel { position: absolute; inset: 0 }
+/* KERROS 2: liuku, joka takaa tekstin pohjan. */
+.page-lyhytvideot .lv-k::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, #0b0f14 0%, rgba(11,15,20,.92) 34%, rgba(11,15,20,.45) 62%, rgba(11,15,20,0) 100%);
+}
+/* KERROS 3: teksti. Nimetty valitsin, ei "> *": juuri se
+   kokoelmasaanto rikkoi paneelin. */
+.page-lyhytvideot .lv-k > .nelja-n,
+.page-lyhytvideot .lv-k > h3,
+.page-lyhytvideot .lv-k > p { position: relative; z-index: 2 }
+/* Leipateksti kortin ylaosaan, kaaviolle jaa alalaita. */
+.page-lyhytvideot .lv-k > p { margin-bottom: auto }
+.page-lyhytvideot .lv-k > .nelja-n { margin-bottom: 14px }
+
+/* ---------- PORTAAT ----------
+   Kolme taysleveää riviä: rooli isona hiljaisena sanana vasemmalla,
+   selitys oikealla, hiusviiva valissa. Ei numeroita eika yhdistavaa
+   viivaa, koska juuri ne tekivat osiosta Prosessin aikajanan
+   kaksoiskappaleen.
+
+   Rooli on iso mutta vaimea: se antaa riville tunnisteen ilman etta
+   se kilpailee otsikon kanssa. Koko tulee palstasta eika nakymasta,
+   joten pisin sana (BRANDIARVO) ei voi vuotaa selityksen alle. */
+.wsx .portaat { margin-top: 52px; container-type: inline-size }
+.wsx .porras-rivi {
+  display: grid; grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+  gap: 0 56px; padding: 40px 0;
+  border-top: 1px solid var(--seo-rule-soft);
+  align-items: start;
+}
+.wsx .porras-rivi:first-child { border-top: 0; padding-top: 0 }
+.wsx .porras-rivi:last-child { padding-bottom: 0 }
+.wsx .porras-rooli {
+  margin: 0; font-size: clamp(22px, 5.4cqi, 44px); font-weight: 600;
+  letter-spacing: -.02em; line-height: 1.05; text-transform: uppercase;
+  /* MITATTU: 26 % antoi 1,09:1 eli sana oli kaytannossa nakymatta.
+     Se ei ole koriste vaan se nimeaa rivin, joten sen on oltava
+     luettava. 40 % antaa 3,6:1, mika ylittaa ison tekstin rajan 3:1
+     ja jattaa sanan silti otsikkoa hiljaisemmaksi. */
+  color: color-mix(in srgb, var(--seo-ink) 40%, transparent);
+  text-wrap: balance;
+}
+.wsx .porras-teksti { min-width: 0 }
+.wsx .porras-rivi h3 {
+  font-size: clamp(21px, 1.8vw, 28px); font-weight: 600; letter-spacing: -.018em;
+  line-height: 1.2; margin: 0 0 12px; color: var(--seo-ink);
+}
+.wsx .porras-rivi .seo-body { max-width: 62ch }
+.wsx .porras-rivi .tlink { margin-top: 14px; display: inline-block }
+@media (max-width: 860px) {
+  .wsx .porras-rivi { grid-template-columns: minmax(0, 1fr); gap: 14px }
+}
+
+/* ==================================================================
+   KOKORUUDUN VALIKKO ON SAMA JOKA SIVULLA
+   ==================================================================
+   Valikko on sivuston kromia, ei sivun sisustusta: se avautuu joka
+   sivulta ja sen pitaa nayttaa joka kerta samalta. Siksi se ei peri
+   sivun teemaa lainkaan vaan asettaa omat varinsa, jotka ovat
+   etusivun omat.
+
+   MITATTU VIKA jonka tama korjaa: levy on var(--bg) eli valkoinen,
+   mutta tekstit perivat wsx-sivun VAALEAT tekstivarit, jolloin
+   valikko oli valkoista valkoisella. Korjasin sen ensin tekemalla
+   levysta tumman, mutta silloin valikko naytti eri silta eri
+   sivuilla. Oikea korjaus on paain vastoin: levy jaa vaaleaksi ja
+   tekstit palautetaan tummiksi.
+
+   Arvot ovat sivuston omista muuttujista (--ink, --grey, --blue),
+   jotka wsx-juuri on uudelleenmaaritellyt; siksi ne kirjoitetaan
+   tahan kiinteina, samoina kuin etusivulla. */
+.wsx .fsnav-scrim { background: #fff }
+.wsx .fsnav { --ink: #1d1d1f; --grey: #616166; --blue: #007c8f; color: #1d1d1f }
+.wsx .fsnav-links a { color: #1d1d1f }
+.wsx .fsnav-links a:hover,
+.wsx .fsnav-links a:focus-visible,
+.wsx .fsnav-links a[aria-current="page"] { color: #007c8f }
+.wsx .fsnav-sub, .wsx .fsnav-side, .wsx .fsnav-side a { color: #616166 }
+.wsx .fsnav-side a:hover { color: #1d1d1f }
+.wsx .fsnav-top .navtoggle { color: #1d1d1f }
+
+/* ---------- OSION SELITE ILMAN TOISTOA ----------
+   Osion nimi luki kahdesti: pystykiskossa sivussa ja vaakarivilla
+   otsikon ylapuolella, ja vaakarivilla oli lisaksi oma pieni
+   nurkkamerkkinsa. Sama sana kahdesti samassa nakymassa on virhe.
+
+   Vaakarivi jaa pois kokonaan ja sen ainoa oma tieto, osion selite,
+   jaa yhdelle riville ilman nimea ja ilman merkkia. */
+.wsx .seo-selite {
+  font-family: var(--seo-mono);
+  font-size: 12.5px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--seo-ink-2);
+  margin: 0 0 26px;
+}
+
+/* Pystykiskon viiva poistettiin: se piirtyi auki ja jai sitten
+   paikalleen, eli se oli liike jolla ei ollut loppua. Nimi riittaa,
+   ja sen kirkkaus kertoo etenemisen jo itsessaan. */
+.wsx .pystykisko { justify-content: flex-start; padding-top: 0 }
+.wsx .pk-teksti { margin-top: 0 }
+
+/* ---------- KAAVIO PIIRTYY VIERITTAESSA ----------
+   Paneelit olivat valmiita kuvia kortin pohjalla. Nyt ne piirtyvat:
+   kayrä vetaytyy auki vasemmalta oikealle ja palkit kasvavat
+   pohjasta, kortin OMAN --rvp:n mukaan. Jokainen kortti saa siis
+   liikkeensa silloin kun se itse tulee nakyviin, eika neljä korttia
+   ala yhta aikaa.
+
+   pathLength=1 tekee piirtymisesta yksikotonta, joten polkujen
+   todellisia pituuksia ei tarvitse mitata. Viive --i:n kautta
+   porrastaa kaaviot samalla tavalla kuin muutkin sarjat sivulla. */
+/* PIIRTYMINEN SARJASSA, EI YHTA AIKAA.
+   Kortilla oli oma --rvp, jolloin kaikki nelja kaaviota piirtyivat
+   kortin omalla matkalla eli kaytannossa yhta aikaa ja niin nopeasti
+   ettei liiketta ehtinyt nahda. Nyt luku tulee OSION --rvp:sta ja
+   jokainen kortti saa --i:n kautta oman viiveensa: kaaviot piirtyvat
+   perakkain koko osion matkan ajan. */
+/* Kortin oma etenema johdetaan SiteEffectsin kirjoittamasta
+   --piirrosta. Porrastus --i:n kautta ja kerroin 1.55: aiemmin
+   kerroin oli 2.6 ja liike oli ohi ennen kuin kortti oli kunnolla
+   ruudussa. */
+.page-lyhytvideot .lv-k { --p2: clamp(0, calc((var(--piirto, 1) - var(--i) * .07) * 1.18), 1) }
+.page-lyhytvideot .lv-k .wp-line,
+.page-lyhytvideot .lv-k .wp-line2,
+.page-lyhytvideot .lv-k .wp-line3 {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--p2));
+}
+/* Palkit kasvavat pohjasta. transform-box: fill-box antaa jokaiselle
+   palkille oman origon, muuten ne skaalautuisivat koko SVG:n
+   nollapisteesta. */
+.page-lyhytvideot .lv-k .wp-cols rect {
+  transform-box: fill-box; transform-origin: 50% 100%;
+  scale: 1 var(--p2);
+}
+/* Kirkkaus seuraa samaa lukua: kaavio syttyy kun se piirtyy. */
+.page-lyhytvideot .lv-taus {
+  opacity: calc(.18 + var(--p2) * .72);
+}
+/* Luku ja selite kaavion ylanurkassa tulevat perassa. */
+.page-lyhytvideot .lv-k .wp-tile,
+.page-lyhytvideot .lv-k .wp-from,
+.page-lyhytvideot .lv-k .wp-to,
+.page-lyhytvideot .lv-k .wp-mark {
+  opacity: clamp(0, calc((var(--rvp, 1) - .42) * 3), 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-lyhytvideot .lv-k { --piirto: 1 }
+  .page-lyhytvideot .lv-k .wp-tile,
+  .page-lyhytvideot .lv-k .wp-from,
+  .page-lyhytvideot .lv-k .wp-to,
+  .page-lyhytvideot .lv-k .wp-mark { opacity: 1 }
+}
+
+/* ---------- KOKONAISUUDEN RIVIMERKIT ----------
+   Rivit olivat pelkkaa typografiaa, ja osio luki tyhjana muun sivun
+   rinnalla. Merkki nayttaa sen mekaniikan josta rivi puhuu ja
+   piirtyy rivin oman --rvp:n mukaan. */
+.wsx .porras-vasen { display: grid; gap: 18px; align-content: start }
+.wsx .porras-merkki { display: block; width: min(100%, 168px) }
+.wsx .porras-merkki svg { width: 100%; height: auto; display: block }
+.wsx .porras-rivi { --piirto: clamp(0, calc((var(--rvp, 1) - .1) * 2), 1) }
+.wsx .km-viiva {
+  stroke: var(--seo-hi); stroke-width: 1.6; fill: none; opacity: .55;
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--p2));
+}
+.wsx .km-viiva.km-kirkas { opacity: 1; stroke-width: 2 }
+.wsx .km-piste { fill: var(--seo-hi); opacity: calc(var(--piirto) * .8) }
+.wsx .km-tayte { fill: var(--seo-hi); opacity: .5 }
+.wsx .km-tayte.km-himmea { fill: var(--seo-ink); opacity: calc(var(--piirto) * .18) }
+.wsx .km-tayte.km-kirkas { fill: var(--seo-hi); opacity: calc(var(--piirto) * .85) }
+.wsx .km-kehys { stroke: var(--seo-hi); stroke-width: 1.4; fill: none; opacity: calc(var(--piirto) * .9) }
+.wsx .km-osoitin { fill: var(--seo-ink); opacity: calc(var(--piirto) * .9) }
+@media (prefers-reduced-motion: reduce) { .wsx .porras-rivi { --piirto: 1 } }
+@media (max-width: 860px) { .wsx .porras-merkki { width: 140px } }
+
+/* ==================================================================
+   LYHYTVIDEOT: SAMA TAUSTA KUIN SEO-SIVULLA
+   ==================================================================
+   SEO-sivulla ja verkkosivuilla osioiden verkostokerroksesta on
+   otettu RUUDUKKO pois ja jaljelle jatetty pelkka elava verkosto
+   vaimeana, sen paalla pyorea vinjetti. Sen kommentti sanoo syyn:
+   suoraa viivageometriaa oli sivulla jo liikaa. Talla sivulla
+   ruudukko oli yha paalla ja taysella voimalla, ja juuri se ero
+   nakyi: sama kuvio mutta levottomampi.
+
+   Sama kasittely tanne, seka osioiden kerroksiin etta heron omaan. */
+.page-lyhytvideot .netbd {
+  background-image: none;
+  --net-rgb: 111,236,255;
+  --net-dot: rgba(180,245,255,.5);
+}
+.page-lyhytvideot .netbd-cover { opacity: .46 }
+.page-lyhytvideot .netbd-cover .netbd-glow {
+  background: radial-gradient(120% 90% at 50% 45%, transparent 32%, #0e141b 100%);
+}
+.page-lyhytvideot .netbd:not(.netbd-cover) {
+  background-color: #0b0f14; opacity: .62;
+}
+.page-lyhytvideot .netbd:not(.netbd-cover) .netbd-glow {
+  background: radial-gradient(110% 86% at 50% 42%, transparent 30%, #0b0f14 100%);
+}
+
+/* ---------- KOROSTUSHEHKU ----------
+   SEO-sivun ilme nojaa siihen, etta muutama yksityiskohta on
+   selvasti kirkkaampi kuin ymparistonsa. Talla sivulla kaikki oli
+   samalla tasolla, jolloin mikaan ei noussut esiin.
+
+   Hehku annetaan kolmelle: kaavion kirkkaalle kayralle, kortin
+   ylaviivalle ja rivimerkin paaelementeille. Se on drop-shadow eika
+   box-shadow, koska kohteet ovat SVG-polkuja: box-shadow piirtyisi
+   laatikon ymparille, drop-shadow seuraa muotoa. */
+.page-lyhytvideot .lv-k .wp-line3,
+.page-lyhytvideot .lv-k .wp-line {
+  filter: drop-shadow(0 0 calc(var(--p2) * 7px) rgba(111,236,255,.55));
+}
+.page-lyhytvideot .lv-k .wp-cols rect {
+  filter: drop-shadow(0 0 calc(var(--p2) * 6px) rgba(111,236,255,.35));
+}
+/* Kortin ylaviiva syttyy samalla luvulla kuin kaavio. */
+.page-lyhytvideot .lv-k::before {
+  box-shadow: 0 0 calc(var(--p2) * 14px) rgba(111,236,255,.5);
+}
+.wsx .km-viiva.km-kirkas,
+.wsx .km-kehys.km-vahva {
+  filter: drop-shadow(0 0 calc(var(--p2) * 6px) rgba(111,236,255,.5));
+}
+
+/* ---------- KOKONAISUUDEN MERKIT, TARKENNUKSET ---------- */
+/* Toistuva jalki: kolme haalistuvaa muotoa joista kasvaa yksi
+   terava. Ne tulevat nakyviin perakkain, jolloin toisto nakyy
+   liikkeena eika pelkkana paallekkaisyytena. */
+.wsx .km-jalki { fill: none; stroke: var(--seo-hi); stroke-width: 1.4 }
+.wsx .km-jalki.j1 { opacity: calc(clamp(0, calc(var(--piirto) * 3), 1) * .16) }
+.wsx .km-jalki.j2 { opacity: calc(clamp(0, calc((var(--piirto) - .2) * 3), 1) * .26) }
+.wsx .km-jalki.j3 { opacity: calc(clamp(0, calc((var(--piirto) - .4) * 3), 1) * .4) }
+.wsx .km-kehys.km-vahva { stroke-width: 1.8; opacity: calc(var(--piirto) * 1) }
+
+/* Roolisana saa saman hehkun kuin merkit: se on rivin tunniste, ja
+   nyt se myos nayttaa silta. Vari kirkastuu etenemisen mukana. */
+.wsx .porras-rooli {
+  /* Lahtoarvo 28 % antoi 2,12:1 eli sana oli lukukelvoton ennen kuin
+     rivi oli paljastunut. Reveal saa vaimentaa, ei piilottaa: 44 %
+     on 3,2:1 eli ison tekstin rajan yli jo lahtiessa, ja se kirkastuu
+     84 %:iin kun rivi tulee nakyviin. */
+  color: color-mix(in srgb, var(--seo-hi) calc(44% + var(--piirto) * 40%), transparent);
+  text-shadow: 0 0 calc(var(--piirto) * 22px) rgba(111,236,255,.28);
+  transition: none;
+}
+
+/* ==================================================================
+   KAAVIOIDEN PIIRTYMINEN: NATIIVI VIERITYSAIKAJANA
+   ==================================================================
+   Kolmas yritys, ja kaksi edellista epaonnistuivat samasta syysta.
+
+   Liike oli sidottu --rvp:hen, jonka SiteEffects kirjoittaa
+   elementin sijainnista joka kehyksessa. Se toimii osiossa joka
+   vierii normaalisti, mutta Miksi-osio on pinon ensimmainen lapsi
+   eli position: sticky. Pinnatun elementin getBoundingClientRect()
+   EI MUUTU vieritettaessa, joten --rvp jaatyy siihen arvoon joka
+   silla oli pinnautumishetkella, ja kaaviot jaavat siihen asentoon.
+   Juuri siksi kayttaja ei nahnyt liiketta lainkaan.
+
+   Natiivi view()-aikajana mittaa elementin sijainnin SCROLLPORTISSA
+   eika sen rectista, joten sticky ei vaikuta siihen mitenkaan. Se ei
+   myoskaan tarvitse yhtaan riviä JS:aa eika aja mitaan paasaikeessa.
+
+   @property on pakollinen: ilman rekisterointia mukautettu muuttuja
+   on selaimelle merkkijono eika luku, eika sita voi interpoloida.
+   Silloin keyframe hyppaisi 0:sta 1:een puolivalissa. */
+@property --piirto {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+@keyframes lv-piirtyy {
+  from { --piirto: 0 }
+  to { --piirto: 1 }
+}
+
+/* view()-aikajana kokeiltiin ja poistettiin: se mittaa elementin
+   sijainnin scrollportissa, eli tasan saman pinnatun laatikon jonka
+   rect on jaatynyt. Sama ansa, eri rajapinta. Etenema tulee nyt
+   SiteEffectsista asettelusijainnin perusteella, ks. data-hehku. */
+@media (prefers-reduced-motion: reduce) {
+  .page-lyhytvideot .lv-k, .wsx .porras-rivi { --piirto: 1 }
+}
+
+/* ---------- KAHDEN OSION YHTEINEN JAKSO ----------
+   Kaare kantaa pohjan ja kuvion, osiot sen sisalla ovat lapinakyvia.
+   Yksi pistekentta kahden osion yli, eli kuviointi ei katkea niiden
+   valissa eivatka ne irtoa toisistaan vieritettaessa. */
+.wsx .jakso-pari {
+  position: relative; isolation: isolate;
+  background: #0e141b;
+}
+.wsx .jakso-pari > .netbd-clip { z-index: -1 }
+.wsx .jakso-pari > .seo-sec { background: transparent }
+/* Osioiden valinen raja jaa hiusviivaksi, ei varinvaihdoksi. */
+.wsx .jakso-pari > .seo-sec + .seo-sec { border-top: 1px solid var(--seo-rule-soft) }
+
+/* Kenelle ja UKK: raja pois. Ne ovat kaksi lapinakyvaa osiota samalla
+   pohjalla, joten viiva niiden valissa ei erota mitaan, se vain
+   piirtaa poikkiviivan sivun yli. */
+.page-lyhytvideot #kenelle + .seo-sec,
+.page-lyhytvideot #ukk { border-top: 0 }
+
+/* ---------- TAUSTAN VALONLAHTEET ----------
+   Tausta oli tasainen: sama kuvio samalla kirkkaudella ylhaalta
+   alas. SEO-sivulla sivu heraa eloon siita, etta muutamassa
+   kohdassa on selvasti kirkkaampi piste jonka ohi vieritetaan.
+
+   Kolme valoa eri korkeuksilla ja eri sivuilla, kiinteassa
+   kerroksessa: ne eivat vieri sivun mukana vaan sivu kulkee niiden
+   ohi, jolloin sama kuvio nayttaa joka osiossa hieman erilaiselta
+   ilman etta kuviota tarvitsee vaihtaa. */
+.page-lyhytvideot .netbd:not(.netbd-cover)::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(38% 26% at 14% 22%, rgba(111,236,255,.14), transparent 70%),
+    radial-gradient(30% 22% at 86% 54%, rgba(0,124,143,.16), transparent 72%),
+    radial-gradient(44% 30% at 42% 88%, rgba(111,236,255,.10), transparent 74%);
+}
+.page-lyhytvideot .netbd-cover::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(34% 24% at 78% 18%, rgba(111,236,255,.12), transparent 70%),
+    radial-gradient(40% 28% at 20% 72%, rgba(0,124,143,.14), transparent 72%);
+}
+
+/* Heron kelluvat alustamerkit kirkkaammiksi: ne olivat niin vaimeat
+   ettei niita erottanut verkostosta. */
+.page-lyhytvideot .netbd { --net-mark: #6fecff }
+.page-lyhytvideot .netmarks .nm {
+  /* Merkin oma opacity tulee inline-tyylista (syvyys), joten sita ei
+     korvata vaan sen paalle annetaan hehku ja kirkkaampi vari. */
+  filter: drop-shadow(0 0 14px rgba(111,236,255,.5)) brightness(1.45);
+}
+
+/* Aiempi tumma lomakekortti poistettiin kokonaan. Se oli vaara
+   tulkinta: kayttaja pyysi etusivun kortin, ei tummaa versiota
+   siita. Kortin arvot ovat nyt yhdessa paikassa, ks. LOMAKEKORTTI =
+   ETUSIVUN KORTTI edempana tassa tiedostossa. */
+
+/* Kortti ei saa peittaa vasemman palstan tekstia. .loc on kahden
+   palstan ruudukko, ja kortilla oli negatiivinen marginaali jolla se
+   kurotti palstan yli. Palstat erotetaan sen sijaan valilla. */
+.page-lyhytvideot #tarjous .loc {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
+  gap: 56px;
+  align-items: start;
+}
+.page-lyhytvideot #tarjous .fcard { margin: 0 }
+@media (max-width: 900px) {
+  .page-lyhytvideot #tarjous .loc { grid-template-columns: minmax(0, 1fr); gap: 40px }
+}
+
+/* Kenttien teksti, reuna ja nimike jaivat yha vaaleiksi arvoikseen,
+   koska --ink ja --hair ratkeavat siina elementissa jossa ne on
+   ILMOITETTU. Annetaan varit suoraan, sivukohtaisella tarkkuudella
+   jonka ohi ei mene mikaan aiempi saanto.
+
+   Mitattu kenttapohjalla rgba(11,15,20,.72) osion #0e141b paalla:
+     teksti  #f4f7fa  15,8:1
+     nimike  #f4f7fa  16,4:1
+     reuna   rgba(255,255,255,.24) erottuu pohjasta selvasti */
+
+
+
+
+/* Kokonaisuuden merkkien uudet osat. Kehat ja pylvaat tulevat
+   nakyviin perakkain, jolloin laajeneminen ja kasvu nakyvat
+   liikkeena eivatka valmiina kuvana. */
+.wsx .km-keha { fill: none; stroke: var(--seo-hi); stroke-width: 1.3 }
+.wsx .km-keha.k1 { opacity: calc(clamp(0, calc((var(--piirto) - .15) * 4), 1) * .5) }
+.wsx .km-keha.k2 { opacity: calc(clamp(0, calc((var(--piirto) - .35) * 4), 1) * .3) }
+.wsx .km-keha.k3 { opacity: calc(clamp(0, calc((var(--piirto) - .55) * 4), 1) * .18) }
+.wsx .km-pylvas {
+  fill: var(--seo-hi);
+  transform-box: fill-box; transform-origin: 50% 100%;
+}
+.wsx .km-pylvas.p1 { opacity: .4; scale: 1 clamp(0, calc(var(--piirto) * 4), 1) }
+.wsx .km-pylvas.p2 { opacity: .55; scale: 1 clamp(0, calc((var(--piirto) - .14) * 4), 1) }
+.wsx .km-pylvas.p3 { opacity: .72; scale: 1 clamp(0, calc((var(--piirto) - .28) * 4), 1) }
+.wsx .km-pylvas.p4 { opacity: .9; scale: 1 clamp(0, calc((var(--piirto) - .42) * 4), 1) }
+.wsx .porras-merkki { width: min(100%, 186px) }
+
+/* ==================================================================
+   KORTIN OMA VALO TAUSTAAN
+   ==================================================================
+   Taustan valonlahteet olivat kiinteita pisteita: ne olivat aina
+   samassa kohtaa riippumatta siita mita sivulla tapahtui. Valo joka
+   ei tule mistaan ei ole valo vaan liuku.
+
+   Nyt jokainen kortti on oma valonlahteensa. Kun sen kaavio piirtyy,
+   kortin takaa levia pehmea hehku taustakuviointiin: kasvava palkki
+   ja piirtyva kayrä valaisevat ymparistonsa. Sama tapa on napissa ja
+   rivimerkeissa, joten sivulla on yksi selitys sille mista valo
+   tulee. */
+/* KUMOTTU, ja syy on mitattu. Hehku kirjoitettiin tanne samalle
+   ::after-pseudolle jolla oli jo tehtava: se oli kortin tekstin
+   pohjaliuku (rivi ~11968). Sama valitsin, sama tarkkuus, myohempi
+   voitti - eli hehku ei tullut liuun lisaksi vaan sen TILALLE, ja
+   teksti jai kaavion paalle ilman pohjaa.
+
+   Hehku on nyt omalla kerroksellaan .lv-taus::before, ja kortin
+   kehyshohde tulee box-shadowlla. Kumpikaan ei enaa ole tekemisissa
+   tekstin pohjaliuun kanssa. Katso tiedoston lopusta.
+   Kortin oma pohja jaa lapinakyvaksi, jotta valo nakyy sen lapi. */
+.page-lyhytvideot .lv-k { background: rgba(11,15,20,.55) }
+
+/* Nappi valaisee samalla tavalla kun se tulee nakyviin. */
+.page-lyhytvideot .btn.mag,
+.page-lyhytvideot .cta-palkki .btn {
+  box-shadow: 0 0 34px -6px rgba(111,236,255,.5), 0 0 0 0 rgba(111,236,255,0);
+}
+.page-lyhytvideot .btn.mag:hover,
+.page-lyhytvideot .cta-palkki .btn:hover {
+  box-shadow: 0 0 46px -4px rgba(111,236,255,.7);
+}
+
+/* Rivimerkki valaisee oman rivinsa taustan. */
+.wsx .porras-merkki { position: relative }
+.wsx .porras-merkki::after {
+  content: ""; position: absolute; inset: -30% -18%;
+  border-radius: 50%; z-index: -1; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(111,236,255,.22), transparent 70%);
+  filter: blur(22px); opacity: var(--piirto, 0);
+}
+
+/* Kanavat ja Tehtya tyota: raja pois. Ne ovat yksi jakso, ja
+   hiusviiva niiden valissa piirtaa juuri sen katkon jota ei haluta. */
+.wsx .jakso-pari > .seo-sec + .seo-sec { border-top: 0 }
+
+/* Heron kelluvat merkit selvasti kirkkaammiksi. Jokainen sailyttaa
+   oman syvyytensa (inline-opacity), mutta hehku ja kirkkaus tulevat
+   paalle, joten taso-ero sailyy ja merkit erottuvat verkostosta. */
+.page-lyhytvideot .netmarks .nm {
+  filter: drop-shadow(0 0 18px rgba(111,236,255,.85))
+          drop-shadow(0 0 6px rgba(111,236,255,.6))
+          brightness(2.1) saturate(1.2);
+}
+
+/* Brandiarvon kaksi kayrää: ylempi jaa, alempi palaa pohjaan. Alempi
+   on vaimea ja katkoviivainen, jotta se luetaan vertailukohtana eika
+   toisena lupauksena. */
+.wsx .km-akseli { stroke: var(--seo-rule); stroke-width: 1 }
+.wsx .km-viiva.km-laskeva {
+  stroke: var(--seo-ink-2); opacity: .32; stroke-width: 1.4;
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--piirto));
+  filter: none;
+}
+
+/* ==================================================================
+   MIKSI-KORTTIEN KAAVIOT: NE PIIRTYIVAT, MUTTA NIITA EI VOINUT NAHDA
+   ==================================================================
+   Kaavioiden piti piirtya, hohtaa ja valaista taustaa. Mekanismi oli
+   kunnossa jo aiemmin, mutta ruudulla ei nakynyt mitaan. Syy ei ollut
+   animaatiossa vaan siina mita animoitiin. Kolme mitattua vikaa,
+   kaikki omia:
+
+   1) KAAVIOT OLIVAT MUSTIA TUMMALLA POHJALLA. Paneelien varit tulevat
+      etusivulta, jossa pohja on valkoinen: .wp-grid rgba(0,0,0,.14),
+      .wp-line2 rgba(0,0,0,.28), .wp-mark rgba(0,0,0,.34),
+      akselitekstit #8a8a90. Pohja on talla sivulla #0b0f14. Musta
+      mustan paalla ei ole himmea vaan nakymaton.
+
+   2) LAPINAKYVYYS KERROTTIIN KOLMESTI. .whypanel opacity .8, sen oma
+      maski .42 koko ylaosassa, ja .lv-taus opacity enintaan .9. Tulo
+      on .8 x .42 x .9 = 0,30. Kirkkaimmillaan kaavio piirtyi siis
+      kolmasosateholla.
+
+   3) KOLMANNEN KORTIN PYLVAAT EIVAT ANIMOITUNEET LAINKAAN. Saanto
+      kirjoitettiin muotoon ".wp-cols rect", mutta pylvaat ovat
+      HTML:aa: .wp-cols > s > u. Valitsin ei osunut mihinkaan, joten
+      pylvaat olivat aina taydessa mitassaan ja ilman hehkua.
+
+   Lisaksi kaksi ajoitusvikaa: .wp-tile ja .nelja-k::before lukivat
+   --rvp:ta, joka on tassa osiossa jaassa (osio on position: sticky,
+   jolloin getBoundingClientRect palauttaa saman arvon koko pinnin
+   ajan). Ne kytketaan samaan --piirtoon kuin kaaviot. */
+
+/* ---------- 1. Yksi lapinakyvyys, ei kolmea ---------- */
+.page-lyhytvideot .lv-k .whypanel {
+  opacity: 1;
+  color: var(--seo-ink);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+/* Tekstin luettavuuden hoitaa kortin oma pohjaliuku (.lv-k::after),
+   joten paneelin ei tarvitse enaa himmentaa itseaan sen vuoksi. */
+.page-lyhytvideot .lv-taus { opacity: calc(.26 + var(--p2) * .74) }
+
+/* ---------- 2. Tumma maalaus ---------- */
+.page-lyhytvideot .lv-k .wp-grid { stroke: rgba(111,236,255,.18) }
+.page-lyhytvideot .lv-k .wp-ruled {
+  background-image: linear-gradient(rgba(111,236,255,.18) 1px, transparent 1px);
+}
+.page-lyhytvideot .lv-k .wp-mark { stroke: rgba(169,184,198,.38) }
+.page-lyhytvideot .lv-k .wp-from,
+.page-lyhytvideot .lv-k .wp-to,
+.page-lyhytvideot .lv-k .wp-axis4 { color: rgba(169,184,198,.66) }
+.page-lyhytvideot .lv-k .wp-mid { color: var(--seo-hi) }
+.page-lyhytvideot .lv-k .wp-tile span { color: rgba(169,184,198,.72) }
+.page-lyhytvideot .lv-k .wp-tile b { color: var(--seo-ink) }
+/* Kayrät sivun omalla sinisella ja selvasti paksumpina: 1,8 -> 2,6.
+   Vertailukayrä (.wp-line2, nayttokerrat) jaa vaimeaksi, koska kortin
+   vaite on alempi kayrä eika ylempi. */
+.page-lyhytvideot .lv-k .wp-line { stroke: var(--seo-hi); stroke-width: 2.6 }
+.page-lyhytvideot .lv-k .wp-line3 { stroke: var(--seo-hi); stroke-width: 2.4 }
+.page-lyhytvideot .lv-k .wp-line2 { stroke: rgba(169,184,198,.45); stroke-width: 1.8 }
+.page-lyhytvideot .lv-k .wp-cols u {
+  background: linear-gradient(180deg, rgba(111,236,255,.95), rgba(111,236,255,.22));
+}
+.page-lyhytvideot .lv-k .wp-from i.k2 { background: rgba(169,184,198,.45) }
+.page-lyhytvideot .lv-k .wp-to i.k3 { background: var(--seo-hi) }
+
+/* ---------- 3. Pylvaat kasvavat oikeasti ----------
+   Oikea valitsin on u, ei rect. transform-origin pohjaan, jotta
+   pylvas kasvaa alhaalta eika kutistu keskelta. */
+.page-lyhytvideot .lv-k .wp-cols u {
+  transform-origin: 50% 100%;
+  scale: 1 var(--p2);
+  filter: drop-shadow(0 0 calc(var(--p2) * 10px) rgba(111,236,255,.5));
+}
+
+/* ---------- 4. Hehku, joka nakyy ----------
+   drop-shadow seuraa polun muotoa. Kaksi kerrosta: tiukka ydin ja
+   leveampi kajo, jolloin viiva nayttaa itse hohtavalta eika siita
+   etta sen taakse olisi laitettu lamppu. */
+.page-lyhytvideot .lv-k .wp-line,
+.page-lyhytvideot .lv-k .wp-line3 {
+  filter:
+    drop-shadow(0 0 calc(var(--p2) * 5px) rgba(111,236,255,.9))
+    drop-shadow(0 0 calc(var(--p2) * 16px) rgba(111,236,255,.45));
+}
+
+/* ---------- 5. Kortti valonlahteena ----------
+   Kaksi erillista valoa, koska ne tekevat eri asian:
+   - .lv-taus::before on kaavion oma kajo kortin sisalla. Kortin pohja
+     on lapinakyva (rgba .55), joten valo osuu myos sen lapi nakyvaan
+     taustakuviointiin.
+   - box-shadow kortilla itsellaan levittaa valon kortin ULKOPUOLELLE.
+     box-shadow ei kuulu elementin sisaltoon, joten kortin oma
+     overflow: hidden ei leikkaa sita; juuri siihen aiempi
+     ::after-hehku jai kiinni. */
+.page-lyhytvideot .lv-taus::before {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  left: -6%; right: -6%; bottom: -24%; height: 120%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(111,236,255,.34), rgba(111,236,255,.10) 58%, transparent 78%);
+  filter: blur(30px);
+  opacity: var(--p2, 0);
+}
+.page-lyhytvideot .lv-taus .whypanel { z-index: 1 }
+.page-lyhytvideot .lv-k {
+  box-shadow:
+    0 0 calc(var(--p2) * 60px) calc(var(--p2) * -6px) rgba(111,236,255,.30),
+    0 0 calc(var(--p2) * 18px) rgba(111,236,255,.10);
+}
+
+/* ---------- 6. Ajoitus samasta luvusta ----------
+   --rvp on jaassa sticky-osiossa, --piirto ei ole. */
+.page-lyhytvideot .lv-k .wp-tile,
+.page-lyhytvideot .lv-k .wp-from,
+.page-lyhytvideot .lv-k .wp-to,
+.page-lyhytvideot .lv-k .wp-mid,
+.page-lyhytvideot .lv-k .wp-axis4,
+.page-lyhytvideot .lv-k .wp-mark {
+  opacity: clamp(0, calc((var(--p2) - .3) * 2.6), 1);
+}
+.page-lyhytvideot .lv-k.nelja-k::before {
+  scale: clamp(0, calc((var(--piirto, 1) - var(--i) * .1) * 3.2), 1) 1;
+  box-shadow: 0 0 calc(var(--p2) * 16px) rgba(111,236,255,.6);
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-lyhytvideot .lv-k .wp-tile,
+  .page-lyhytvideot .lv-k .wp-from,
+  .page-lyhytvideot .lv-k .wp-to,
+  .page-lyhytvideot .lv-k .wp-mid,
+  .page-lyhytvideot .lv-k .wp-axis4,
+  .page-lyhytvideot .lv-k .wp-mark { opacity: 1 }
+  .page-lyhytvideot .lv-k .wp-cols u { scale: 1 1 }
+  .page-lyhytvideot .lv-k.nelja-k::before { scale: 1 1 }
+}
+
+/* ---------- 7. Valo myos korttiruudukon ulkopuolelle ----------
+   Korttien oma box-shadow ei paase ruudukosta ulos: .nelja on
+   overflow: hidden, koska sen pyoristetyt kulmat leikataan siina.
+   Siksi ULOIN valo annetaan ruudukolle itselleen. Sen box-shadow
+   piirtyy .neljan oman laatikon ulkopuolelle, eika sita leikkaa
+   mikaan.
+
+   Ruudukko saa oman data-hehkunsa, joten se lukee samaa --piirtoa
+   kuin kortit eika jaatynytta --rvp:ta. */
+.page-lyhytvideot .nelja {
+  box-shadow:
+    0 0 calc(var(--piirto, 0) * 120px) calc(var(--piirto, 0) * -24px) rgba(111,236,255,.26),
+    0 0 calc(var(--piirto, 0) * 40px) calc(var(--piirto, 0) * -8px) rgba(111,236,255,.16);
+}
+/* Kortin oma reunahehku jaa, mutta se on ruudukon sisainen: se
+   valaisee naapurikortin reunan ja kahden pikselin hiusvalin. */
+.page-lyhytvideot .lv-k {
+  box-shadow:
+    0 0 calc(var(--p2) * 70px) calc(var(--p2) * -8px) rgba(111,236,255,.34),
+    0 0 calc(var(--p2) * 20px) rgba(111,236,255,.12);
+}
+/* Kaavion hehku vahvemmaksi: kolme kerrosta, tiukka ydin ja kaksi
+   leveampaa kajoa. Yksi leveä kerros levisi niin ohueksi ettei se
+   erottunut kortin pohjasta lainkaan. */
+.page-lyhytvideot .lv-k .wp-line,
+.page-lyhytvideot .lv-k .wp-line3 {
+  filter:
+    drop-shadow(0 0 calc(var(--p2) * 3px) rgba(180,245,255,.95))
+    drop-shadow(0 0 calc(var(--p2) * 9px) rgba(111,236,255,.7))
+    drop-shadow(0 0 calc(var(--p2) * 24px) rgba(111,236,255,.4));
+}
+.page-lyhytvideot .lv-k .wp-cols u {
+  filter:
+    drop-shadow(0 0 calc(var(--p2) * 6px) rgba(111,236,255,.7))
+    drop-shadow(0 0 calc(var(--p2) * 20px) rgba(111,236,255,.35));
+}
+.page-lyhytvideot .lv-taus::before {
+  background: radial-gradient(closest-side, rgba(111,236,255,.42), rgba(111,236,255,.14) 56%, transparent 78%);
+}
+
+/* ---------- 8. PIIRTO ILMAN HAAMUPATKAA ----------
+   MITATTU VIKA. Piirto tehtiin tavalla stroke-dasharray: 1 +
+   stroke-dashoffset: 1 - p. Ruudulla nakyi kuitenkin KAKSI patkaa:
+   alusta piirtynyt osa ja erillinen palanen polun lopussa. Syy on
+   siina etta dasharrayn yksi arvo monistuu pariksi (viiva 1, vali 1)
+   ja pathLength skaalaa molemmat polun todelliseen mittaan, jolloin
+   kuvio jatkuu polun lopun yli.
+
+   Sama asia hoituu ilman offsetia: viivan pituus ON etenema ja vali
+   on koko polku. Toista jaksoa ei voi tulla, koska se alkaisi vasta
+   polun lopun jalkeen.
+
+   Lisaksi: .km-viiva luki --p2:ta, jota ei ole olemassa muualla kuin
+   .lv-k:ssa. Maarittelematon muuttuja teki koko arvosta kelvottoman,
+   jolloin selain kaytti alkuarvoa 0 eli piirsi viivan aina taytena.
+   Rivimerkkien viivat eivat siis animoituneet lainkaan. */
+.page-lyhytvideot .lv-k .wp-line,
+.page-lyhytvideot .lv-k .wp-line2,
+.page-lyhytvideot .lv-k .wp-line3 {
+  stroke-dasharray: var(--p2) 1;
+  stroke-dashoffset: 0;
+}
+.wsx .km-viiva {
+  stroke-dasharray: var(--piirto, 1) 1;
+  stroke-dashoffset: 0;
+}
+.wsx .km-viiva.km-laskeva {
+  stroke-dasharray: var(--piirto, 1) 1;
+  stroke-dashoffset: 0;
+}
+
+/* ==================================================================
+   TARJOUSOSION OTSIKKO EI SAA MENNA LOMAKKEEN PAALLE
+   ==================================================================
+   MITATTU: .loc-ruudukon vasen palsta on 575px, mutta otsikon pisin
+   sana ("lyhytvideotuotannon?") on 72px:n koossa 687px. Yksi sana ei
+   voi katketa, joten se vuotaa 112px palstansa yli ja menee lomake-
+   kortin alle, joka alkaa 880px:sta. Kortti peitti siis otsikon
+   lopun.
+
+   Koko sidotaan PALSTAAN eika nakymaan: cqi mittaa sen laatikon
+   leveyden, jossa otsikko oikeasti on. Nakymaan sidottu vw ei voi
+   tietaa mitaan palstajaosta, ja juuri siita virhe syntyi. */
+.wsx #tarjous .loc > div:first-child { container-type: inline-size }
+.wsx #tarjous .seo-h2 {
+  font-size: clamp(30px, 9.4cqi, 62px);
+  hyphens: auto;
+}
+
+/* ==================================================================
+   PIIRTO TEHDAAN RAJAUKSELLA, EI KATKOVIIVALLA
+   ==================================================================
+   MITATTU SYY sille, miksi kayran loppuun ilmestyi irrallinen patka
+   silloinkin kun dasharray oli muotoa "p 1" eli viiva p ja vali 1.
+   Mitatut luvut: dasharray laskettuna calc(0.739px), 1px, pathLength
+   1, polun pituus kayttoyksikoissa 301 ja ruudulla 583.
+
+   Kaaviot venytetaan preserveAspectRatio="none":lla ja viivoilla on
+   vector-effect: non-scaling-stroke. Silloin Chrome laskee katkokuvion
+   RUUDUN yksikoissa (583) mutta skaalaa pathLengthin KAYTTOyksikoilla
+   (301). Viiva on siis 0,739 x 301 = 222 ruutuyksikkoa ja vali
+   1 x 301 = 301, jolloin seuraava jakso alkaa kohdasta 523 - ja 583:n
+   mittaiselle polulle mahtuu viela toinen patka. Tasan se nakyi.
+
+   Kuvion pidentaminen ei korjaa tata, koska suhde 583/301 muuttuu
+   nakyman leveyden mukana: samat luvut, jotka poistavat haamun
+   levealla nakymalla, lopettaisivat piirron kesken kapealla.
+
+   Rajaus ei koske viivan pituutta lainkaan vaan sita, kuinka leveä
+   osa kaaviosta nakyy. Se on geometriaa eika pituusmittausta, joten
+   mittakaava ei voi vaikuttaa siihen. */
+.page-lyhytvideot .lv-k .wp-line,
+.page-lyhytvideot .lv-k .wp-line2,
+.page-lyhytvideot .lv-k .wp-line3 {
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+  clip-path: inset(-40% calc((1 - var(--p2)) * 100%) -40% -2%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-lyhytvideot .lv-k .wp-line,
+  .page-lyhytvideot .lv-k .wp-line2,
+  .page-lyhytvideot .lv-k .wp-line3 { clip-path: none }
 }

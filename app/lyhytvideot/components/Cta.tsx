@@ -56,9 +56,13 @@ export default function Cta({
       <a className="btn mag" href="#tarjous">
         {a.label}
       </a>
+      {/* "Ota yhteytta" poistettiin. Sivulla oli kolme eri paakehotusta
+          rinnakkain, ja kolmas oli niista epamaarain: se ei kerro mita
+          tapahtuu eika mihin sitoutuu. Toinen reitti on nyt sama
+          sahkopostilinkki mutta se sanoo mihin se menee. */}
       {secondary ? (
         <a className="btn alt" href={`mailto:${CONTACT.email}`}>
-          Ota yhteyttä
+          Kysy sähköpostilla
         </a>
       ) : null}
       <span>{a.note}</span>

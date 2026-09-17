@@ -100,3 +100,24 @@ export function Vaite({
     </section>
   );
 }
+
+/**
+ * PYSTYKISKO: osion nimi sivussa pystyssa, ja sen vieressa viiva joka
+ * tayttyy osion edetessa.
+ *
+ * Tama on sama idea kuin Verkkosivut-alasivun heron mittakisko, mutta
+ * osiokohtaisena: pieni tekninen merkinta sivun reunassa, joka kertoo
+ * missa kohtaa ollaan ja etta sivu etenee. Se on pinnattu, joten se
+ * seuraa lukijaa osion lapi eika vilahda ohi.
+ *
+ * Etenema tulee --rvp:sta, jonka SiteEffects kirjoittaa osion omasta
+ * sijainnista nakymassa. Sama luku kuin janalla ja kehotusviivoilla,
+ * eli sivulla on yksi tapa sanoa "tama etenee".
+ */
+export function Pystykisko({ teksti }: { teksti: string }) {
+  return (
+    <div className="pystykisko" data-rvs="" aria-hidden="true">
+      <span className="pk-teksti">{teksti}</span>
+    </div>
+  );
+}

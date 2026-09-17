@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Logos from "../components/Logos";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
+import Palkki from "../components/Palkki";
 import SiteEffects from "../components/SiteEffects";
 import { OVERLAY_NAV, SUBPAGE_FOOTER } from "../components/site-data";
 
@@ -156,6 +157,7 @@ export default function Verkkosivut() {
         brandHeading="h2"
       />
 
+      <Palkki />
       <SiteEffects />
     </div>
   );

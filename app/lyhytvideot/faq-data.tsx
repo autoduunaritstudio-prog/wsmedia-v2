@@ -210,15 +210,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
         q: "Voitteko hoitaa myös julkaisun ja Meta-mainonnan?",
         answer: (
           <>
-            Voimme. Julkaisu ja aikataulutus sisältyvät sovittuihin paketteihin, ja parhaiten
-            orgaanisesti toimineet videot viedään Facebook- ja Instagram-mainonnaksi. Tämä on
-            mainoseuron kannalta tehokkain järjestys: sisältö on jo todistettu yleisöllä ennen kuin
-            siihen laitetaan budjettia. Mainonnan hallinnointi hinnoitellaan erikseen
-            kanavakohtaisesti, mainosbudjetin päälle.
+            Voimme. Julkaisu ja aikataulutus sisältyvät sovittuihin paketteihin. Mainonnan
+            hallinnointi hinnoitellaan erikseen kanavakohtaisesti, mainosbudjetin päälle, ja
+            mainosbudjetin määrää aina asiakas itse.
           </>
         ),
         schema:
-          "Voimme. Julkaisu ja aikataulutus sisältyvät sovittuihin paketteihin, ja parhaiten orgaanisesti toimineet videot viedään Facebook- ja Instagram-mainonnaksi. Tämä on mainoseuron kannalta tehokkain järjestys: sisältö on jo todistettu yleisöllä ennen kuin siihen laitetaan budjettia. Mainonnan hallinnointi hinnoitellaan erikseen kanavakohtaisesti, mainosbudjetin päälle.",
+          "Voimme. Julkaisu ja aikataulutus sisältyvät sovittuihin paketteihin. Mainonnan hallinnointi hinnoitellaan erikseen kanavakohtaisesti, mainosbudjetin päälle, ja mainosbudjetin määrää aina asiakas itse.",
       },
       {
         q: "Teettekö myös hakukoneoptimointia?",
