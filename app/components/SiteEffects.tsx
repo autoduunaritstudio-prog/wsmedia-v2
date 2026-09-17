@@ -160,6 +160,23 @@ export default function SiteEffects() {
     };
     mittaaHehku();
     window.addEventListener("resize", mittaaHehku, { passive: true });
+    /* MITTAUS ON UUSITTAVA KUN ASETTELU MUUTTUU, EI VAIN KUN IKKUNA
+       MUUTTUU. Mitattuna kortisto oli dokumentissa kohdassa 2355,
+       mutta --piirto oli nolla viela kohdassa 2192 eli sielta missa
+       sen olisi pitanyt olla jo yksi. Syy: sijainti mitattiin kerran
+       efektin kaynnistyessa, ja sen jalkeen sivun ylaosa muuttui
+       (kuvat, fontit, laiskasti ladatut videot). Mittaus jai siis
+       vanhan asettelun mukaiseksi, ja koko piirto laskettiin vaarasta
+       kohdasta.
+
+       ResizeObserver bodylla havaitsee tasan tuon: sivun korkeuden
+       muutoksen. Se on eri asia kuin resize-tapahtuma, joka kertoo
+       vain ikkunasta. */
+    let ro: ResizeObserver | null = null;
+    if (hehkuEls.length && typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => mittaaHehku());
+      ro.observe(document.body);
+    }
     const TILT_MAX = 19;         // puhelinparin sivuttaiskulma
     // Selainmockup ja tapahtumakortti ovat isoja pintoja, joilla sama 19
     // astetta nayttaa liialliselta. Niille oma, hillitympi sivuttaiskulma
@@ -1074,6 +1091,7 @@ export default function SiteEffects() {
       refRo?.disconnect();
       ac.abort();
       heroRo?.disconnect();
+      ro?.disconnect();
       io.disconnect();
       io2.disconnect();
       lightsIo?.disconnect();

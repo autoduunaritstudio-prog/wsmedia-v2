@@ -12758,21 +12758,117 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    parittomissa, jotta peräkkaiset osiot eivat ole toistensa
    kopioita. Vaalea hinnoitteluosio jaa ulkopuolelle: sininen kajo
    valkoisella pohjalla lukisi likana. */
+/* KUMOTTU tassa muodossa. Valo oli oikea ajatus mutta se PIIRSI
+   OSIOIDEN RAJAT NAKYVIIN: kerros oli inset: 0 eli tasan osion
+   mittainen, ja kun valopiste oli 8 %:n tai 94 %:n korkeudella, kajo
+   oli kirkkaimmillaan juuri siina kohdassa jossa kerros loppuu.
+   Kahden osion rajalle syntyi siis kirkas puoli ja tumma puoli
+   vierekkain, eli vaakaviiva joka veti sivun poikki. Ks. tiedoston
+   lopusta "VALO EI SAA KOSKEA OSION REUNAAN". */
+
+/* ==================================================================
+   VALO EI SAA KOSKEA OSION REUNAAN
+   ==================================================================
+   MITATTU VIKA. Valokerros oli inset: 0 eli tasan osion mittainen, ja
+   valopisteet olivat 8 %:n ja 94 %:n korkeudella. Kajo oli siis
+   kirkkaimmillaan tasan siina kohdassa jossa kerros loppuu, ja kahden
+   osion rajalle tuli kirkas puoli ja tumma puoli vierekkain. Se ei
+   lue valona vaan viivana, ja juuri sen viivan sivulla nyt nakee.
+
+   Kaksi korjausta yhdessa:
+
+   1) MASKI. Kerros haipyy nollaan omaan ylareunaansa ja alareunaansa,
+      joten valo EI VOI olla kirkas rajalla riippumatta siita mihin
+      valopiste sattuu. Tama on ehto eika saato: ilman sita jokainen
+      uusi valopisteen paikka voi tuoda rajan takaisin.
+
+   2) VALOPISTEET KESKELLE. Ne siirtyvat korkeussuunnassa alueelle
+      28..72 %, jolloin kajo mahtuu kokonaan maskin sisaan eika maski
+      leikkaa siita puolta pois.
+
+   Parillinen ja pariton osio saavat valon eri puolelle, jotta
+   perakkaiset osiot eivat ole toistensa kopioita. */
 .page-lyhytvideot .seo-sec:not(.valo):not(.kuvapohja)::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(52% 38% at 84% 8%, rgba(111,236,255,.16), transparent 68%),
-    radial-gradient(46% 34% at 8% 94%, rgba(0,124,143,.20), transparent 70%);
+    radial-gradient(54% 34% at 82% 30%, rgba(111,236,255,.13), transparent 70%),
+    radial-gradient(48% 30% at 10% 72%, rgba(0,124,143,.15), transparent 72%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
 }
 .page-lyhytvideot .seo-sec:not(.valo):not(.kuvapohja):nth-of-type(even)::before {
   background:
-    radial-gradient(48% 36% at 12% 10%, rgba(111,236,255,.13), transparent 68%),
-    radial-gradient(44% 32% at 90% 88%, rgba(0,124,143,.18), transparent 70%);
+    radial-gradient(50% 32% at 14% 32%, rgba(111,236,255,.11), transparent 70%),
+    radial-gradient(46% 30% at 88% 70%, rgba(0,124,143,.14), transparent 72%);
 }
-/* Coverin oma pohja saa saman kohtelun: se on sivun pisin yhtenainen
-   pinta, ja ilman valoa sen alku ja loppu nayttavat samalta. */
-.page-lyhytvideot .cover > .netbd-clip ~ .seo-sec:first-of-type::before {
+
+/* ---------- KAHDEN OSION JAKSO ON YKSI PINTA ----------
+   Kanavat ja Tehtya tyota ovat saman kaareen sisalla nimenomaan
+   siksi, ettei niiden valilla olisi katkoa. Kaksi erillista valoa
+   olisi tehnyt sinne katkon takaisin, vaikka kumpikin haipyisi
+   reunaansa. Valo annetaan siis KAAREELLE, jolloin se kulkee
+   molempien osioiden yli yhtena pintana. */
+/* Tarkkuus on laskettu eika arvattu: ylla oleva valitsin on
+   (0,4,1), koska :not():n sisalla olevat luokat lasketaan mukaan.
+   Pelkka .jakso-pari > .seo-sec::before olisi (0,3,1) eli havinnyt,
+   ja jakson osiot olisivat pitaneet oman valonsa. */
+.page-lyhytvideot .jakso-pari > .seo-sec:not(.valo):not(.kuvapohja)::before { content: none }
+.page-lyhytvideot .jakso-pari::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(56% 40% at 76% 4%, rgba(111,236,255,.18), transparent 68%),
-    radial-gradient(40% 30% at 14% 92%, rgba(0,124,143,.16), transparent 70%);
+    radial-gradient(46% 22% at 84% 24%, rgba(111,236,255,.13), transparent 70%),
+    radial-gradient(42% 20% at 10% 74%, rgba(0,124,143,.15), transparent 72%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+}
+
+/* ==================================================================
+   HEHKU TAKAISIN MITTAAN
+   ==================================================================
+   Hehkua nostettiin siksi, ettei kaavioita nahnyt lainkaan. Se oli
+   oikea suunta mutta liian pitkalle vietyna: nyt kajo tayttaa kortin
+   alaosan ja vuotaa kortiston ulkopuolelle niin, etta valo on
+   voimakkaampi kuin se viiva josta sen pitaisi tulla.
+
+   Hehkun tarkoitus on kertoa etta VIIVA hohtaa, ei etta kortin takana
+   on lamppu. Siksi jaljelle jaa tiukka ydin ja yksi kapea kajo, ja
+   leveat kerrokset jaavat pois. Sama periaate kaikkialle: valo saa
+   nakya, mutta kohteen on oltava kirkkaampi kuin sen kajo. */
+.page-lyhytvideot .lv-k .wp-line,
+.page-lyhytvideot .lv-k .wp-line3 {
+  filter:
+    drop-shadow(0 0 calc(var(--p2) * 2px) rgba(var(--kaaviohi),.6))
+    drop-shadow(0 0 calc(var(--p2) * 7px) rgba(var(--kaaviohi),.26));
+}
+.page-lyhytvideot .lv-k .wp-cols u {
+  filter: drop-shadow(0 0 calc(var(--p2) * 5px) rgba(var(--kaaviohi),.3));
+}
+/* Kortin oma valo taustaan: nakyva mutta ei hallitseva. */
+.page-lyhytvideot .lv-taus::before {
+  background: radial-gradient(closest-side, rgba(var(--kaaviohi),.13), rgba(var(--kaaviohi),.04) 58%, transparent 78%);
+}
+/* Kortin reunahehku pois lahes kokonaan. Se oli se osa joka teki
+   kortistosta yhtenaisen valomeren: nelja korttia, joilla on 70px:n
+   kajo, valaisevat toistensa reunat ja kahden pikselin hiusvalit. */
+.page-lyhytvideot .lv-k {
+  box-shadow: 0 0 calc(var(--p2) * 22px) calc(var(--p2) * -12px) rgba(var(--kaaviohi),.16);
+}
+.page-lyhytvideot .nelja {
+  box-shadow: 0 0 calc(var(--piirto, 0) * 70px) calc(var(--piirto, 0) * -34px) rgba(111,236,255,.13);
+}
+.page-lyhytvideot .lv-k.nelja-k::before {
+  box-shadow: 0 0 calc(var(--p2) * 7px) rgba(var(--kaaviohi),.3);
+}
+/* Napit: kajo oli leveampi kuin nappi itse. */
+.page-lyhytvideot .btn.mag,
+.page-lyhytvideot .cta-palkki .btn {
+  box-shadow: 0 0 20px -10px rgba(111,236,255,.45);
+}
+.page-lyhytvideot .btn.mag:hover,
+.page-lyhytvideot .cta-palkki .btn:hover {
+  box-shadow: 0 0 26px -8px rgba(111,236,255,.6);
+}
+/* Rivimerkin oma kajo samaan mittaan. */
+.wsx .porras-merkki::after {
+  background: radial-gradient(closest-side, rgba(111,236,255,.12), transparent 70%);
 }
