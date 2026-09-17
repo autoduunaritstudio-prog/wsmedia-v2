@@ -212,7 +212,13 @@ export default function SiteEffects() {
     // Itse liike on natiivia sticky-kaytosta. Taalla lasketaan vain kaksi
     // asiaa: heron sticky-top (jotta yli viewportin korkuinen hero ehtii
     // nakyviin ennen pinnausta) ja tummennuksen voimakkuus.
-    const hero = document.querySelector<HTMLElement>(".stickyzone > .hero");
+    /* Etusivulla kaare on .stickyzone, alasivuilla .stickysub. Valitsin
+       osui vain ensimmaiseen, joten alasivun hero ei saanut --hero-s:aa
+       eika --hero-q:ta lainkaan: skrubbaus ei ollut hidas tai vaimea,
+       sita ei ollut ollenkaan. */
+    const hero = document.querySelector<HTMLElement>(
+      ".stickyzone > .hero, .stickysub > .hero",
+    );
     const cover = document.querySelector<HTMLElement>(".cover");
     let heroRo: ResizeObserver | null = null;
 
@@ -479,7 +485,13 @@ export default function SiteEffects() {
         const p = -mbRect.top;
         // Eteneminen koko kuvioalueella, ei coverin korkeudella: kerros
         // ulottuu nyt footeriin asti ja liikkeen on jakauduttava sille.
-        const mbProg = Math.min(Math.max(p / Math.max(mbRect.height - vh, 1), 0), 1);
+        /* Nimittajan pohjaksi yksi nakyma. Etusivulla kerros on
+           noin 6400px, joten arvo ei muutu. Alasivun hinnasto-osiossa
+           kerros on 987px ja vanha nimittaja olisi ollut 81px: valo
+           olisi kayttanyt koko ratansa 81 pikselin vierityksessa ja
+           nayttanyt vilkkumiselta. Nyt rata jakautuu vahintaan yhden
+           nakyman matkalle. */
+        const mbProg = Math.min(Math.max(p / Math.max(mbRect.height - vh, vh), 0), 1);
 
         // KIRKKAAN ALUEEN SEURANTA. Tama on rakenteellinen luettavuus-
         // korjaus eika koriste: kuvion vaalein kohta pidetaan aina siina
@@ -625,6 +637,34 @@ export default function SiteEffects() {
       }
 
       if (hero && cover) {
+        /* HERON OMA SKRUBBAUSETENEMA, ennen coveria.
+         *
+         * --hero-q kertoo kuinka pitkalle COVER on noussut, eli se on
+         * nollassa niin kauan kuin heroa katsotaan. Sille ei voi
+         * ajoittaa mitaan mika tapahtuu heron AIKANA.
+         *
+         * --hero-s on sama mittaus toisesta paasta: kuinka pitkalle
+         * heron oma pinnattu matka on kuljettu. Heron virtauslaatikko
+         * on nakymaa korkeampi, ja se erotus ON se matka jonka ajan
+         * hero seisoo paikallaan. Nollasta ykkoseen sen yli, ja cover
+         * alkaa nousta vasta kun luku on jo yksi.
+         *
+         * Mitta luetaan kaareen ylareunasta eika heron omasta
+         * rectista: pinnattu elementti ei liiku, joten sen oma rect
+         * on vakio koko matkan ajan. */
+        const wrap = hero.parentElement;
+        if (wrap) {
+          /* Kaksi nakymaa pois, ei yhta: viimeinen nakyma on coverin
+           nousumatka, jonka ajan hero on yha pinnattuna mutta
+           skrubbauksen on jo oltava valmis. */
+          const matka = Math.max(hero.offsetHeight - vh * 2, 1);
+          const kuljettu = -wrap.getBoundingClientRect().top;
+          hero.style.setProperty(
+            "--hero-s",
+            Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(4),
+          );
+        }
+
         const p = Math.min(Math.max(1 - cover.getBoundingClientRect().top / vh, 0), 1);
         // RAAKA q HeroScrubille: 0 kun coverin ylareuna on nakyman
         // alareunassa, 1 kun cover peittaa heron. Sama mittaus kuin ennen,

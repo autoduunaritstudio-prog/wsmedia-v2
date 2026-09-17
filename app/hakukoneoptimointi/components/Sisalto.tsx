@@ -2,6 +2,7 @@ import NetBackdrop from "../../components/NetBackdrop";
 import { Hakutulos, Koodi, Linkkiprofiili } from "./Artefaktit";
 import { Maininnat } from "./Grafiikat";
 import Ikoni from "./Ikoni";
+import Kehotus from "./Kehotus";
 import type { IkoniNimi } from "./Ikoni";
 
 /**
@@ -80,7 +81,9 @@ const PANEELIT: {
       ["Linkkiprofiilin analyysi", "Nykyiset linkit, niiden laatu ja mahdolliset haitalliset linkit"],
       ["Ansaitut maininnat", "Toimialamediat, yhteistyökumppanit, hakemistot ja paikalliset lähteet"],
       ["Sisältö, joka kerää linkkejä", "Oppaat ja vertailut, joihin muut viittaavat omasta aloitteestaan"],
-      ["Yritystiedot ja NAP-tiedot", "Nimi, osoite ja puhelinnumero täsmälleen samoina kaikkialla verkossa"],
+      /* NAP-rivi poistettiin: 80 % sanatarkka paallekkaisyys Paikallinen-
+         osion listan kanssa, ja yhteystietojen yhdenmukaisuus on
+         paikallisen nakyvyyden asia eika linkkiprofiilin. */
       ["Ei ostettuja linkkejä", "Epäilyttävistä lähteistä ostetut linkit voivat johtaa Googlen rangaistustoimiin"],
     ],
   },
@@ -91,8 +94,12 @@ const PANEELIT: {
     h: "Näkyvyys tekoälyhauissa",
     p: "Yhä useampi haku päättyy tekoälyn koostamaan vastaukseen. Sama tekninen ja sisällöllinen pohja ratkaisee sielläkin, mutta painotukset ovat hieman eri.",
     rows: [
+      /* "Strukturoitu data: kone lukee merkinnoista mita palvelua tarjoat,
+         missa ja milla hinnalla" poistettiin: sama lause on sanatarkasti
+         taman saman osion koodiartefaktin selitteessa (mitattu 57 %
+         sanatarkkaa paallekkaisyytta), ja se rivi on jo Teknisen SEO:n
+         paneelissa Schema.org-merkintoina. */
       ["Selkeä, lainattava rakenne", "Kysymys, suora vastaus ja perustelu, ei markkinointipuhetta vastauksen ympärillä"],
-      ["Strukturoitu data", "Kone lukee merkinnöistä mitä palvelua tarjoat, missä ja millä hinnalla"],
       ["Tarkistettavat faktat", "Hinnat, aikataulut ja toimitusehdot sivulla, ei pelkästään puhelimessa"],
       ["Auktoriteetti ja maininnat", "Mitä useammin sivustosi mainitaan luotettavissa lähteissä, sitä todennäköisemmin se päätyy vastaukseen"],
       ["Seuranta", "Seuraamme, mainitaanko yrityksesi vastauksissa toimialasi tärkeimmillä kysymyksillä"],
@@ -187,6 +194,11 @@ export default function Sisalto() {
             </article>
           ))}
         </div>
+
+        <Kehotus kick="Neljä työtä, yksi tiimi">
+          Kartoituksessa käymme läpi, mikä näistä neljästä on sinun sivustollasi
+          pahiten kesken ja mistä kannattaa aloittaa.
+        </Kehotus>
       </div>
     </section>
   );

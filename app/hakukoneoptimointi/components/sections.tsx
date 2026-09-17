@@ -3,7 +3,8 @@ import SmartLink from "../../components/SmartLink";
 import { FAQ_GROUPS } from "../faq";
 
 import Ikoni from "./Ikoni";
-import { Kaiku } from "./Maasto";
+import Kehotus from "./Kehotus";
+import { Kaiku } from "../../components/Maasto";
 
 import type { ReactNode } from "react";
 
@@ -87,12 +88,16 @@ export function Aikataulu() {
           </div>
         </div>
 
+        {/* Kappaleen toinen puolisko ("Emme lupaa sijaa yksi ... raportoimme
+            kuukausittain") poistettiin: Mittarit-osio on kokonaisuudessaan
+            juuri se lupaus ja se alkaa kahden osion paasta. Sama vaite oli
+            sivulla viidesti, ja tama oli niista se jolla ei ole omaa
+            hakusanapintaa. Jaljelle jaa se mita vain tama kappale sanoo,
+            eli mista aikataulu riippuu. */}
         <p className="seo-body jana-note">
           Aikataulu riippuu kahdesta asiasta: kuinka kilpailtu toimialasi on ja missä kunnossa
           sivusto on lähtiessä. Vähemmän kilpailluilla hakusanoilla tuloksia tulee nopeammin,
-          kovimmilla nousu vie enemmän aikaa.{" "}
-          <strong>Emme lupaa sijaa yksi emmekä tiettyä prosenttia.</strong> Sovimme mittarit
-          etukäteen ja raportoimme ne kuukausittain, myös silloin kun luvut eivät miellytä.
+          kovimmilla nousu vie enemmän aikaa.
         </p>
       </div>
     </section>
@@ -168,7 +173,6 @@ export function Paikallinen() {
                 "Karttatulokset eli Local Pack, kolme ensimmäistä saa valtaosan klikkauksista",
                 "NAP-tiedot: nimi, osoite ja puhelinnumero täsmälleen samoina kaikkialla",
                 "Arvostelut ja systemaattinen tapa pyytää niitä tyytyväisiltä asiakkailta",
-                "Oma sivu jokaiselle paikkakunnalle, jossa palvelette",
               ].map((x) => (
                 <li key={x}>{x}</li>
               ))}
@@ -230,6 +234,11 @@ export function Paikallinen() {
             </div>
           </div>
         </div>
+
+        <Kehotus kick="Palvelu + paikkakunta">
+          Katsotaan kartoituksessa, millä hauilla sinun alueellasi oikeasti etsitään
+          ja ketkä niissä nyt näkyvät.
+        </Kehotus>
       </div>
     </section>
   );
@@ -313,16 +322,12 @@ export function Mittarit() {
           </table>
         </div>
 
-        <div className="seo-tags porras rv">
-          {[
-            "Raportti kuukausittain",
-            "Strategiapuhelu sovitusti",
-            "Pääsy kaikkiin työkaluihin",
-            "Ei mystisiä laskuja ilman raporttia",
-          ].map((x) => (
-            <span key={x}>{x}</span>
-          ))}
-        </div>
+        {/* Nelja tunnistetta poistettiin. "Raportti kuukausittain" ja
+            "Strategiapuhelu sovitusti" ovat hinnastotaulukon omia riveja
+            tasokohtaisesti tarkempina, "Paasy kaikkiin tyokaluihin" on
+            sanatarkasti taman osion ingressissa ja "Ei mystisia laskuja
+            ilman raporttia" sanoo saman kuin osion otsikko. Nelja rivia
+            joista yksikaan ei kertonut mitaan uutta. */}
       </div>
     </section>
   );
@@ -479,6 +484,13 @@ export function Kenelle() {
             </ul>
           </div>
         </div>
+
+        {/* Osio sanoo itse "sanomme sen kartoituksessa", mutta sita ei
+            paassyt mistaan pyytamaan. Nyt paasee. */}
+        <Kehotus kick="Kumpi palsta on sinun?">
+          Jos et ole varma, kysy. Sanomme kartoituksessa suoraan myös silloin,
+          kun vastaus on ettei tämä kannata.
+        </Kehotus>
       </div>
     </section>
   );

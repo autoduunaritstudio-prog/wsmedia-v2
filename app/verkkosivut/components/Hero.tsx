@@ -1,23 +1,26 @@
 import HeroBrowserStage from "../../components/HeroBrowserStage";
 import WordSwap from "../../components/WordSwap";
 
+import Rakentuu, { Mittakisko } from "./Rakentuu";
+
 /**
- * VERKKOSIVUJEN HERO, SAMA RUNKO KUIN ETUSIVULLA JA LYHYTVIDEOSIVULLA.
+ * VERKKOSIVUJEN HERO.
  *
- * Kaksi palstaa: teksti vasemmalle, selainnayttamo oikealle. Aiemmin
- * otsikko, teksti ja nayttamo olivat pinossa, jolloin nayttamo jai
- * mitattuna taitteen alle eika ensimmaisessa ruudussa nakynyt yhtaan
- * todistetta siita mita sivu myy. Rinnakkain lupaus ja naytto ovat
- * samassa silmayksessa.
+ * Otsikko ja leipateksti olivat ylhaalla keskella ja nayttamo niiden
+ * alla, jolloin ensimmainen ruutu oli pelkkaa tekstia ja todiste jai
+ * taitteen alle. Nyt teksti on VASEMMALLA sivussa ja nayttamo
+ * oikealla, eli lupaus ja naytto ovat samassa silmayksessa. Sama
+ * vasen reuna kuin muulla sivulla, joten hero ei ole enaa sivun ainoa
+ * keskitetty kohta.
  *
- * ERO ETUSIVUUN ON TARKOITUKSELLINEN JA YHDENSUUNTAINEN. Etusivun hero
- * on tumma ja videopohjainen, tama on vaalea ja metallikuvion paalla.
- * Alasivu ei saa olla etusivua nayttavampi, mutta sen on luettava saman
- * sivuston sivuna: sama rakenne, sama typografia, sama logonauha ja
- * sama lukukaista coverin ylaosassa.
+ * NAYTTAMO ON TIIVIS. Se oli lahes koko ruudun korkuinen ja tayttyi
+ * omilla kuplillaan: latausaika, toimitusaika ja hakutulossijoitus
+ * kelluivat sen ympärilla. Ne sanoivat saman minka kolme riviä
+ * tekstia sanoo paremmin heti vieressa, ja ne peittivat itse
+ * mockupin. Yksi lipuke jaa: PageSpeed-pistemittari, koska se on
+ * ainoa joka kertoo jotain mita teksti ei kerro.
  *
- * Vain ensimmainen lause renderoityy palvelimella, jotta H1 pysyy
- * hakukoneelle yhtena lauseena.
+ * TAUSTA RAKENTUU VIERITTAESSA. Ks. Rakentuu.tsx.
  */
 const WORDS = [
   "löytyvät Googlesta.",
@@ -28,8 +31,10 @@ const WORDS = [
 
 export default function Hero() {
   return (
-    <header className="hero">
+    <header className="hero vs-hero">
+      <Rakentuu />
       <div className="wrap hero-split">
+        <Mittakisko />
         <div className="hero-copy">
           <h1 className="li d2">
             Verkkosivut yritykselle, jotka

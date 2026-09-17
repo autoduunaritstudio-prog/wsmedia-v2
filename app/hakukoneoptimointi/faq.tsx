@@ -28,11 +28,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
         a: "Perusta-taso jatkuu kuukausi kerrallaan yhden kuukauden irtisanomisajalla. Kasvu- ja Täysi-tasoilla vähimmäiskesto on kuusi kuukautta, koska lyhyemmässä ajassa työ ei ehdi tuottaa mitään mitattavaa. Kuuden kuukauden jälkeen yhteistyö jatkuu niin kauan kuin se tuottaa.",
         plain: "Perusta-taso jatkuu kuukausi kerrallaan yhden kuukauden irtisanomisajalla. Kasvu- ja Täysi-tasoilla vähimmäiskesto on kuusi kuukautta, koska lyhyemmässä ajassa työ ei ehdi tuottaa mitään mitattavaa. Kuuden kuukauden jälkeen yhteistyö jatkuu niin kauan kuin se tuottaa.",
       },
-      {
-        q: "Onko aloitusmaksua?",
-        a: "Ei ole. Kartoitus ja alustava auditointi ovat maksuttomia eikä aloituksesta veloiteta erikseen. Ensimmäisen kuukauden työ painottuu auditointiin, avainsanatutkimukseen ja teknisiin korjauksiin.",
-        plain: "Ei ole. Kartoitus ja alustava auditointi ovat maksuttomia eikä aloituksesta veloiteta erikseen. Ensimmäisen kuukauden työ painottuu auditointiin, avainsanatutkimukseen ja teknisiin korjauksiin.",
-      },
+      /* "Onko aloitusmaksua?" poistettiin. Vastaus oli sanatarkasti
+         hinnaston loppukappaleessa ("Ei aloitusmaksua eika piilokuluja.
+         Kartoitus ja alustava auditointi ovat maksuttomia"), eika
+         kysymyksella ole omaa hakusanapintaa: kukaan ei hae sanalla
+         "onko aloitusmaksua". Aloitusmaksuttomuus sanotaan sivulla yha
+         kolmesti, hinnaston kickissa, sen ingressissa ja sen
+         loppukappaleessa. */
       {
         q: "Kannattaako valita halvin SEO-tarjous?",
         a: "Halvin ja kannattavin ovat harvoin sama asia. Hyvin matalalla kuukausihinnalla ei ehdi tehdä juuri muuta kuin seurata sijoituksia ja lähettää raportti. Pahimmillaan edullinen työ tulee kalliiksi kahdesti: ensin maksat työstä joka ei tuota, sitten työstä jolla se korjataan.",
@@ -45,8 +47,8 @@ export const FAQ_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Mitä hakukoneoptimointi käytännössä sisältää?",
-        a: "Neljää rinnakkaista työtä: teknistä hakukoneoptimointia, sisältöä ja avainsanoja, auktoriteetin rakentamista sekä paikallista näkyvyyttä. Lisäksi optimoimme sisällön niin, että se toimii myös tekoälyhakujen vastauksissa. Painotus vaihtelee sen mukaan, missä kunnossa sivusto on lähtiessä.",
-        plain: "Neljää rinnakkaista työtä: teknistä hakukoneoptimointia, sisältöä ja avainsanoja, auktoriteetin rakentamista sekä paikallista näkyvyyttä. Lisäksi optimoimme sisällön niin, että se toimii myös tekoälyhakujen vastauksissa. Painotus vaihtelee sen mukaan, missä kunnossa sivusto on lähtiessä.",
+        a: "Teknistä hakukoneoptimointia, sisältöä ja avainsanoja, auktoriteetin rakentamista sekä paikallista näkyvyyttä, ja nämä neljä tehdään rinnakkain eikä peräkkäin. Painotus riippuu siitä, missä kunnossa sivusto on lähtiessä: teknisesti rikkinäisellä sivustolla ensimmäiset kuukaudet ovat korjaamista, kunnossa olevalla päästään heti sisältöön.",
+        plain: "Teknistä hakukoneoptimointia, sisältöä ja avainsanoja, auktoriteetin rakentamista sekä paikallista näkyvyyttä, ja nämä neljä tehdään rinnakkain eikä peräkkäin. Painotus riippuu siitä, missä kunnossa sivusto on lähtiessä: teknisesti rikkinäisellä sivustolla ensimmäiset kuukaudet ovat korjaamista, kunnossa olevalla päästään heti sisältöön.",
       },
       {
         q: "Mikä on avainsanatutkimus?",
@@ -80,8 +82,8 @@ export const FAQ_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Kuinka nopeasti hakukoneoptimointi tuo tuloksia?",
-        a: "Ensimmäiset merkit näkyvät tyypillisesti 3–6 kuukauden kuluttua ja selvä vaikutus liiketoiminnassa 6–12 kuukauden kohdalla. Suunta näkyy kuitenkin ennen tuloksia: näyttökerrat hakutuloksissa kasvavat ennen kuin klikkaukset ja yhteydenotot kasvavat.",
-        plain: "Ensimmäiset merkit näkyvät tyypillisesti 3–6 kuukauden kuluttua ja selvä vaikutus liiketoiminnassa 6–12 kuukauden kohdalla. Suunta näkyy kuitenkin ennen tuloksia: näyttökerrat hakutuloksissa kasvavat ennen kuin klikkaukset ja yhteydenotot kasvavat.",
+        a: "Ensimmäiset merkit näkyvät tyypillisesti 3–6 kuukauden kuluttua ja selvä vaikutus liiketoiminnassa 6–12 kuukauden kohdalla. Nopeuteen vaikuttavat eniten toimialan kilpailutilanne ja sivuston lähtökunto.",
+        plain: "Ensimmäiset merkit näkyvät tyypillisesti 3–6 kuukauden kuluttua ja selvä vaikutus liiketoiminnassa 6–12 kuukauden kohdalla. Nopeuteen vaikuttavat eniten toimialan kilpailutilanne ja sivuston lähtökunto.",
       },
       {
         q: "Voitteko luvata Googlen ykkössijan?",
@@ -90,13 +92,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Miten hakukoneoptimointia mitataan ja raportoidaan?",
-        a: "Seuraamme kuutta mittaria: sijoituksia sovituilla hakusanoilla, näyttökertoja ja klikkiprosenttia, orgaanista liikennettä, yhteydenottoja, indeksoitujen sivujen ja teknisten virheiden määrää sekä mainintoja tekoälyvastauksissa. Raportti tulee sähköpostiin sovitussa syklissä ja saat pääsyn samoihin työkaluihin, joista luvut tulevat.",
-        plain: "Seuraamme kuutta mittaria: sijoituksia sovituilla hakusanoilla, näyttökertoja ja klikkiprosenttia, orgaanista liikennettä, yhteydenottoja, indeksoitujen sivujen ja teknisten virheiden määrää sekä mainintoja tekoälyvastauksissa. Raportti tulee sähköpostiin sovitussa syklissä ja saat pääsyn samoihin työkaluihin, joista luvut tulevat.",
+        a: "Mittarit sovitaan ennen aloitusta ja raportti tulee sähköpostiin sovitussa syklissä. Saat myös pääsyn samoihin työkaluihin, Search Consoleen ja Analyticsiin, joista luvut tulevat, joten voit tarkistaa jokaisen luvun itse. Seurattavat hakusanat sovitaan yhdessä etukäteen, joten raportti mittaa niitä hakuja joilla yrityksesi haluaa näkyä.",
+        plain: "Mittarit sovitaan ennen aloitusta ja raportti tulee sähköpostiin sovitussa syklissä. Saat myös pääsyn samoihin työkaluihin, Search Consoleen ja Analyticsiin, joista luvut tulevat, joten voit tarkistaa jokaisen luvun itse. Seurattavat hakusanat sovitaan yhdessä etukäteen, joten raportti mittaa niitä hakuja joilla yrityksesi haluaa näkyä.",
       },
       {
         q: "Mitä tekoälyhakunäkyvyys tarkoittaa käytännössä?",
-        a: "Yhä useampi haku päättyy tekoälyn koostamaan vastaukseen, joka mainitsee lähteensä. Käytännön työ on pitkälti samaa kuin tavallinen hakukoneoptimointi: selkeä rakenne, strukturoitu data ja sisältö joka vastaa kysymykseen suoraan. Erona on se, ettei tavoitteena ole sijoitus vaan se, että sisältösi on riittävän täsmällistä lainattavaksi. Emme voi luvata mainintoja, mutta seuraamme niitä.",
-        plain: "Yhä useampi haku päättyy tekoälyn koostamaan vastaukseen, joka mainitsee lähteensä. Käytännön työ on pitkälti samaa kuin tavallinen hakukoneoptimointi: selkeä rakenne, strukturoitu data ja sisältö joka vastaa kysymykseen suoraan. Erona on se, ettei tavoitteena ole sijoitus vaan se, että sisältösi on riittävän täsmällistä lainattavaksi. Emme voi luvata mainintoja, mutta seuraamme niitä.",
+        a: "Tavoite on eri kuin hakutuloksissa: ei sijoitus vaan se, että sisältösi on riittävän täsmällistä ja tarkistettavaa lainattavaksi. Käytännössä se tarkoittaa hintojen, aikataulujen ja toimitusehtojen kirjoittamista sivulle eikä vain kertomista puhelimessa. Emme voi luvata mainintoja, mutta seuraamme niitä toimialasi tärkeimmillä kysymyksillä.",
+        plain: "Tavoite on eri kuin hakutuloksissa: ei sijoitus vaan se, että sisältösi on riittävän täsmällistä ja tarkistettavaa lainattavaksi. Käytännössä se tarkoittaa hintojen, aikataulujen ja toimitusehtojen kirjoittamista sivulle eikä vain kertomista puhelimessa. Emme voi luvata mainintoja, mutta seuraamme niitä toimialasi tärkeimmillä kysymyksillä.",
       },
       {
         q: "Miten hakukoneoptimointi huomioidaan verkkosivu-uudistuksessa?",

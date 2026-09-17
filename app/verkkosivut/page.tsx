@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import Logos from "../components/Logos";
-import MetalBackdrop from "../components/MetalBackdrop";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 import SiteEffects from "../components/SiteEffects";
@@ -9,8 +8,18 @@ import { OVERLAY_NAV, SUBPAGE_FOOTER } from "../components/site-data";
 
 import Hero from "./components/Hero";
 import { buildJsonLd } from "./jsonld";
-import { Asiakkaat, Nakyvyys, Ongelma, Prosessi, Sisalto, Toteutustapa } from "./sections";
-import { Hinnoittelu, Kenelle, Tarjous, Tulokset, Ukk } from "./sections2";
+import { Laatta, Vaite } from "../components/Maasto";
+import {
+  Hinnoittelu,
+  Kenelle,
+  Nakyvyys,
+  Ongelma,
+  Prosessi,
+  Sisalto,
+  Tarjous,
+  Toteutustapa,
+  Ukk,
+} from "./components/sections";
 
 export const metadata: Metadata = {
   title: "Verkkosivut yritykselle | Kotisivujen suunnittelu ja toteutus | WS Media",
@@ -31,18 +40,24 @@ export const metadata: Metadata = {
 
 export default function Verkkosivut() {
   return (
-    <div className="page-palvelu page-verkkosivut">
+    <div className="page-palvelu page-verkkosivut wsx">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd()) }}
       />
 
-      {/* ETUSIVUN TAUSTAKUVIO, EI OMAA. Sivu kaytti aiemmin
-          <Backdrop variant="simple" />:a, joka ei esiinny etusivulla
-          lainkaan, joten alasivu luki eri sivustona. Metallikuvio on
-          etusivun tunnus ja se tuodaan tanne sellaisenaan: sama kuvio,
-          sama kirkas aukko keskella, sama SiteEffectsin ohjaama liike. */}
-      <MetalBackdrop />
+      {/* SAMA KUVAKIELI KUIN HAKUKONEOPTIMOINTISIVULLA, EI SAMA SIVU.
+          .wsx on sivuston kuvakielen nimiavaruus: rae, ylisuuret
+          aariviivasanat, taysleveat valokuvat, pinottu vieritys ja
+          porrastuvat rivit tulevat sielta molemmille sivuille samasta
+          toteutuksesta. Ero tehdaan rytmilla, kuva-aiheilla ja
+          artefakteilla, ei tyylilla.
+
+          Metallikuvio poistui. Se oli vaalealle pohjalle piirretty
+          kuvio, ja tumma sivu tekee siita likaisen harmaan verkon
+          jonka lapi valokuvat eivat lue. Sivun pohja on nyt
+          yhtenainen ja valo tulee kuvista. */}
+      <div className="rae" aria-hidden="true" />
       <div id="prog" />
 
       <Nav
@@ -53,63 +68,87 @@ export default function Verkkosivut() {
         logoHref="/"
       />
 
-      {/* PINNATTU HERO JA PEITTAVA COVER, sama periaate kuin etusivulla ja
-          lyhytvideosivulla. Hero jaa kiinni nakyman ylareunaan ja cover
-          liukuu sen paalle natiivilla sticky-kaytoksella. Pari ja sen
-          cover ovat saman kaareen lapsia, se on ehto jonka rikkominen
-          kaataa pinnauksen.
+      {/* PINNATTU HERO JA PEITTAVA COVER, sama tekniikka kuin
+          etusivulla. Hero jaa kiinni nakyman ylareunaan, sen tausta
+          rakentuu vierityksen mukana loppuun asti, ja vasta sen
+          jalkeen cover liukuu sen paalle. Pari ja sen cover ovat saman
+          kaareen lapsia: se on ehto jonka rikkominen kaataa
+          pinnauksen aanettomasti.
 
-          Coverin ylareunassa on sama asiakaslogonauha kuin etusivulla:
-          ensimmainen asia joka nousee heron paalle on todiste, ei uusi
-          myyntilause.
-
-          LUKUKAISTA EI KUULU TANNE. Luvut (toteutetut projektit,
-          katselukerrat, keskim. toimitusaika) ovat koko yrityksen lukuja
-          ja painottuvat videotuotantoon, joten verkkosivusivulla ne
-          vastasivat kysymykseen jota kukaan ei ollut tehnyt. Sivun omat
-          luvut ovat Tulokset-osiossa, jossa ne on sidottu siihen mita
-          tama palvelu tekee.
-
-          Murupolku poistui virrasta kokonaan. Se oli 33px korkea rivi
-          heron ylapuolella, ja pinnatun heron kanssa se olisi jaanyt
-          navin ja heron valiin omaksi kaistakseen. BreadcrumbList-
-          merkinta sailyy jsonld.ts:ssa, eli hakukone saa polun yha. */}
+          Coverin ylareunassa on asiakaslogonauha: ensimmainen asia
+          joka nousee heron paalle on todiste, ei uusi myyntilause. */}
       <div className="stickysub">
         <Hero />
         <div className="cover">
-          <MetalBackdrop />
           <Logos />
 
-          <Ongelma />
-          <Sisalto />
-          <Toteutustapa />
-          <Nakyvyys />
-          <Prosessi />
-          <Tulokset />
-          <Asiakkaat />
-          <Hinnoittelu />
-          <Kenelle />
-          <Ukk />
-          {/* YKSI CTA KAHDEN SIJAAN. Sivun lopussa oli <Loppu />, jonka
-              ainoa nappi osoitti takaisin samaan lomakkeeseen muutaman
-              sadan pikselin paahan. Kaksi pyyntoa samaan kohteeseen on
-              pelkkaa valinnan vaivaa, joten paatosotsikko ja lomake ovat
-              nyt samassa osiossa, kuten lyhytvideosivulla.
+      {/* ENSIMMAINEN PINO. Tuttu tilanne jaa alle, hengahdys nousee sen
+          paalle ja palvelun sisalto nousee hengahdyksen paalle.
+          Lause on osion omasta tekstista sanatarkasti: se on jo sivun
+          terävin virke, mutta se oli haudattuna neljannen kortin
+          leipatekstiin. */}
+      <div className="pino">
+        <Ongelma />
 
-              Blogi ja Taustaa ovat pois toistaiseksi. Blogissa ei ole
-              viela tarpeeksi sisaltoa, ja Taustaa oli 1059px hakukonetta
-              varten kirjoitettua toistoa asioista jotka sivu on jo
-              sanonut. Molempien koodi sailyy sections2.tsx:ssa. */}
-          <Tarjous />
+        <div className="pino">
+          <Vaite
+            kuva="/verkkosivut/tila.webp"
+            alla="Vanhentunut ulkoasu on asiakkaalle vihje siitä, miten muutkin asiat mahdollisesti hoidetaan."
+          >
+            Moni yritys on selvästi parempi kuin miltä se <b><i>verkossa näyttää.</i></b>
+          </Vaite>
+
+          <div className="pino">
+            <Sisalto />
+
+            {/* Toinen pino. Kuva on kasi piirtamassa rautalankamallia
+                lampun alla, eli se mita ensimmainen tapaaminen on.
+                Lause on prosessin ensimmaisesta askeleesta. */}
+            <div className="pino">
+              {/* Kick "Prosessi" pois: osion nimi on jo sivukiskossa
+                  heti taman alla, ja hengahdyksen lause ei tarvitse
+                  otsikkoa kertoakseen mista se on. */}
+              <Laatta kuva="/verkkosivut/kartoitus.webp" korkeus="taysi">
+                <p className="laatta-lause suuri">
+                  Et tarvitse mitään <b><i>valmiiksi.</i></b>
+                </p>
+                <p className="laatta-alla">
+                  Käymme läpi mitä yritys tekee, kenelle ja millä hauilla asiakkaat etsivät
+                  palvelua. Sisältö, tekstit ja rakenne suunnitellaan yhdessä kartoituksessa.
+                </p>
+              </Laatta>
+
+              <Toteutustapa />
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* SAMA FOOTERI KUIN MUILLA ALASIVUILLA. Talla sivulla oli oma
-          nelja palstaa levea footeri, jossa kaksi palstaa oli taman sivun
-          omia ankkurilinkkeja. Se on eri footeri kuin etusivulla ja
-          lyhytvideosivulla, eli kolme sivua paattyi kolmeen eri tapaan.
-          Ankkurilinkit ovat myos turhia: ne vievat samalle sivulle jonka
-          lukija juuri vieritti lapi. */}
+      <Nakyvyys />
+      <Prosessi />
+
+      {/* KOLMAS PINO. Tulokset-osio poistettiin: sen luvut olivat
+          lupauksia joiden takana ei ole yhtaan mitattua asiakastyota,
+          ja sivulla on jo kaksi kohtaa jotka sanovat saman ilman
+          numeroa. Hengahdys jaa alle ja hinnasto nousee sen paalle,
+          eli pino on nyt kaksiosainen kuten kaksi muutakin. */}
+      <div className="pino">
+        <Vaite
+          kuva="/verkkosivut/naytto.webp"
+          alla="Kiinteä hinta ennen aloitusta. Näet mitä hintaan sisältyy, ei piilokuluja eikä aloitusmaksuja."
+        >
+          Emme kilpaile hinnalla vaan sillä, että sivusto <b><i>löytyy ja myy.</i></b>
+        </Vaite>
+
+        <Hinnoittelu />
+      </div>
+
+      <Kenelle />
+      <Ukk />
+      <Tarjous />
+        </div>
+      </div>
+
       <Footer
         intro="Lyhytvideot, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}

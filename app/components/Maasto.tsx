@@ -70,3 +70,33 @@ export function Kaiku({ sana, puoli = "oik" }: { sana: string; puoli?: "oik" | "
     </span>
   );
 }
+
+/**
+ * VAITE: yksi lause taytena nakymana, valokuva taustalla tai ilman.
+ * Hengahdys kahden raskaan osion valissa. Siirretty tanne SEO-sivun
+ * omasta tiedostosta, koska se on kuvakielen osa eika yhden sivun.
+ */
+export function Vaite({
+  children,
+  alla,
+  kuva,
+  kuvaAlt,
+}: {
+  children: ReactNode;
+  alla?: string;
+  /* Valokuva lauseen takana. Lause tyhjalla pohjalla on vaite, lause
+     kuvan paalla on hetki. Kaikki vaiteet eivat saa kuvaa: jos ne
+     saisivat, keino kuluisi loppuun kolmannella kerralla. */
+  kuva?: string;
+  kuvaAlt?: string;
+}) {
+  return (
+    <section className={kuva ? "vaite kuvallinen" : "vaite"} data-rvs="">
+      {kuva ? <img src={kuva} alt={kuvaAlt ?? ""} aria-hidden={!kuvaAlt} data-par="0.028" /> : null}
+      <div className="swrap">
+        <p className="vaite-teksti">{children}</p>
+        {alla ? <p className="vaite-alla">{alla}</p> : null}
+      </div>
+    </section>
+  );
+}

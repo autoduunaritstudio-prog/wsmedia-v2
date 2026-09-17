@@ -5,9 +5,9 @@ import Nav from "../components/Nav";
 import SiteEffects from "../components/SiteEffects";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
-import { Vaite } from "./components/Artefaktit";
+
 import Hero from "./components/Hero";
-import { Juova, Laatta } from "./components/Maasto";
+import { Juova, Laatta, Vaite } from "../components/Maasto";
 import Suotimet from "./components/Suotimet";
 import Nakyvyys from "./components/Nakyvyys";
 import Sisalto from "./components/Sisalto";
@@ -20,6 +20,7 @@ import {
   Tarjous,
   Ukk,
 } from "./components/sections";
+import Palkki from "./components/Palkki";
 import Tape from "./components/Tape";
 import { buildJsonLd } from "./jsonld";
 
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
 
 export default function Hakukoneoptimointi() {
   return (
-    <div className="page-palvelu page-hakukoneoptimointi seo26">
+    <div className="page-palvelu page-hakukoneoptimointi wsx">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd()) }}
@@ -125,13 +126,29 @@ export default function Hakukoneoptimointi() {
           <div className="pino">
             <Sisalto />
 
+            {/* PAIKALLINEN SIIRTYI TAHAN.
+                Se oli sivulla vasta Aikataulun jalkeen, eli viides osa
+                samasta palvelusta oli erotettu neljasta muusta kahdella
+                osiolla. Samalla Palvelun sisallon oma ingressi lupasi
+                "nelja rinnakkaista tyota", vaikka sivu myy viitta.
+
+                Siirto korjaa kaksi asiaa yhdella liikkeella: kaikki
+                "mita teemme" on nyt yhtena lohkona, ja Aikataulu ja
+                Mittarit paatyvat vierekkain. Ne ovat luonteva pari,
+                milloin tama nakyy ja mista sen tietaa.
+
+                Kaare sailyttaa kahden lapsen saannon: alle jaava osio
+                ja sen paalle nouseva kaare. */}
             <div className="pino">
-              {/* Sivun rehellisin lause ei ole tekstiosio vaan
-                  taysleveä kuva, jonka paalla se on. Kuvassa on
-                  ihminen tyossaan aamulla, eli tasan se jota lause
-                  koskee: hakukoneoptimointi ei tuota tulosta
-                  paivassa, koska tyo on oikeaa tyota. */}
-              <Laatta kuva="/hakukoneoptimointi/paja.webp" korkeus="taysi">
+              <Paikallinen />
+
+              <div className="pino">
+                {/* Sivun rehellisin lause ei ole tekstiosio vaan
+                    taysleveä kuva, jonka paalla se on. Kuvassa on
+                    ihminen tyossaan aamulla, eli tasan se jota lause
+                    koskee: hakukoneoptimointi ei tuota tulosta
+                    paivassa, koska tyo on oikeaa tyota. */}
+                <Laatta kuva="/hakukoneoptimointi/paja.webp" korkeus="taysi">
                 <p className="laatta-kick">Aikataulu</p>
                 <p className="laatta-lause">
                   Kukaan ei voi luvata <b><i>päivämäärää.</i></b>
@@ -142,13 +159,12 @@ export default function Hakukoneoptimointi() {
                 </p>
               </Laatta>
 
-              <Aikataulu />
+                <Aikataulu />
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <Paikallinen />
 
       {/* Sama pino toisen kerran: Mittarit jaa alle, hengahdys nousee
           sen paalle, ja hinnasto nousee hengahdyksen paalle. */}
@@ -199,6 +215,7 @@ export default function Hakukoneoptimointi() {
         brandHeading="h2"
       />
 
+      <Palkki />
       <SiteEffects />
     </div>
   );
