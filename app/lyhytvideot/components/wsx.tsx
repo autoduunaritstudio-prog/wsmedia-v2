@@ -80,7 +80,7 @@ export function Miksi() {
 
         {/* Kaaviopaneeli on kortin tausta eika sen kuvitus: jokainen
             nayttaa sen ilmion josta kortin oma otsikko puhuu. */}
-        <ol className="nelja" data-rvs="" data-hehku="0.75">
+        <ol className="nelja" data-rvs="" data-hehku="1">
           {REASONS.map((r, k) => (
             <li className="nelja-k lv-k" key={r.h} style={n(k)}>
               <div className="lv-taus" aria-hidden="true">

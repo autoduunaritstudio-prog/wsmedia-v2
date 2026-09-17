@@ -12085,7 +12085,19 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    --piirrosta. Porrastus --i:n kautta ja kerroin 1.55: aiemmin
    kerroin oli 2.6 ja liike oli ohi ennen kuin kortti oli kunnolla
    ruudussa. */
-.page-lyhytvideot .lv-k { --p2: clamp(0, calc((var(--piirto, 1) - var(--i) * .1) * 1.43), 1) }
+/* PIIRTO ALKAA VASTA KUN KORTTI ON KATSOTTAVASSA KOHDASSA.
+   Aiemmin se alkoi heti kun kortiston ylareuna koski nakyman
+   alareunaa, eli silloin kun kortteja ei viela katsonut kukaan, ja
+   oli ohi ennen kuin ne olivat kunnolla ruudulla. Nyt luvussa on
+   lahtokynnys .33 ja ikkuna on lyhyempi (kerroin 4), joten piirto
+   tapahtuu siina kohtaa kun kortisto tayttaa nakyman.
+
+   Mitatut kohdat (nakyma 868, kortisto 2363, korkeus 664):
+     kortti 1  1749 -> 1942
+     kortti 4  1888 -> 2081
+   Peite koskee alarivin kaaviokaistaan vasta 2157:ssa, joten
+   viimeinenkin kortti ehtii valmiiksi 76px ennen sita. */
+.page-lyhytvideot .lv-k { --p2: clamp(0, calc((var(--piirto, 1) - .33 - var(--i) * .06) * 4), 1) }
 .page-lyhytvideot .lv-k .wp-line,
 .page-lyhytvideot .lv-k .wp-line2,
 .page-lyhytvideot .lv-k .wp-line3 {
@@ -12528,8 +12540,10 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .page-lyhytvideot .lv-k .wp-mark {
   opacity: clamp(0, calc((var(--p2) - .3) * 2.6), 1);
 }
+/* Ylaviiva lahtee hieman kaaviota ennen: se on merkki siita etta
+   kortti heraa, ei kaavion kopio. */
 .page-lyhytvideot .lv-k.nelja-k::before {
-  scale: clamp(0, calc((var(--piirto, 1) - var(--i) * .1) * 3.2), 1) 1;
+  scale: clamp(0, calc((var(--piirto, 1) - .29 - var(--i) * .06) * 4.4), 1) 1;
   box-shadow: 0 0 calc(var(--p2) * 16px) rgba(111,236,255,.6);
 }
 @media (prefers-reduced-motion: reduce) {
@@ -12788,18 +12802,44 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 
    Parillinen ja pariton osio saavat valon eri puolelle, jotta
    perakkaiset osiot eivat ole toistensa kopioita. */
+/* VALO LIIKKUU OSION SISALLA. --valo on SiteEffectsin kirjoittama
+   luku 0..1: kuinka pitkalle osio on kulkenut nakyman lapi. Kerros
+   liikkuu jo osion mukana, mutta ilman tata valo olisi siina aina
+   samassa kohtaa, eli se olisi kuvio eika valo. Nyt valopiste vaeltaa
+   osion sisalla samalla kun osio vierii, ja kajo laajenee ohituksen
+   aikana.
+
+   Liikerata pidetaan 24..54 %:ssa ja 78..54 %:ssa korkeussuunnassa,
+   eli kokonaan maskin lapinakyvan alueen (18..82 %) sisalla. Muuten
+   liike toisi takaisin sen mita maskilla juuri korjattiin: kirkkaan
+   kohdan osion reunaan. */
 .page-lyhytvideot .seo-sec:not(.valo):not(.kuvapohja)::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  --v: var(--valo, .5);
   background:
-    radial-gradient(54% 34% at 82% 30%, rgba(111,236,255,.13), transparent 70%),
-    radial-gradient(48% 30% at 10% 72%, rgba(0,124,143,.15), transparent 72%);
+    radial-gradient(
+      calc(46% + var(--v) * 16%) calc(28% + var(--v) * 10%)
+      at calc(86% - var(--v) * 22%) calc(24% + var(--v) * 30%),
+      rgba(111,236,255,.13), transparent 70%),
+    radial-gradient(
+      calc(42% + var(--v) * 12%) calc(26% + var(--v) * 8%)
+      at calc(8% + var(--v) * 20%) calc(78% - var(--v) * 24%),
+      rgba(0,124,143,.15), transparent 72%);
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
   mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
 }
+/* Parillinen osio saa valon eri puolelle ja vastakkaiseen suuntaan
+   kulkevana, jotta perakkaiset osiot eivat ole toistensa kopioita. */
 .page-lyhytvideot .seo-sec:not(.valo):not(.kuvapohja):nth-of-type(even)::before {
   background:
-    radial-gradient(50% 32% at 14% 32%, rgba(111,236,255,.11), transparent 70%),
-    radial-gradient(46% 30% at 88% 70%, rgba(0,124,143,.14), transparent 72%);
+    radial-gradient(
+      calc(44% + var(--v) * 14%) calc(26% + var(--v) * 10%)
+      at calc(12% + var(--v) * 24%) calc(26% + var(--v) * 28%),
+      rgba(111,236,255,.11), transparent 70%),
+    radial-gradient(
+      calc(40% + var(--v) * 12%) calc(24% + var(--v) * 8%)
+      at calc(90% - var(--v) * 22%) calc(76% - var(--v) * 22%),
+      rgba(0,124,143,.14), transparent 72%);
 }
 
 /* ---------- KAHDEN OSION JAKSO ON YKSI PINTA ----------
@@ -12815,9 +12855,16 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .page-lyhytvideot .jakso-pari > .seo-sec:not(.valo):not(.kuvapohja)::before { content: none }
 .page-lyhytvideot .jakso-pari::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  --v: var(--valo, .5);
   background:
-    radial-gradient(46% 22% at 84% 24%, rgba(111,236,255,.13), transparent 70%),
-    radial-gradient(42% 20% at 10% 74%, rgba(0,124,143,.15), transparent 72%);
+    radial-gradient(
+      calc(40% + var(--v) * 14%) calc(18% + var(--v) * 8%)
+      at calc(86% - var(--v) * 20%) calc(20% + var(--v) * 26%),
+      rgba(111,236,255,.13), transparent 70%),
+    radial-gradient(
+      calc(38% + var(--v) * 12%) calc(17% + var(--v) * 7%)
+      at calc(10% + var(--v) * 18%) calc(80% - var(--v) * 24%),
+      rgba(0,124,143,.15), transparent 72%);
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
   mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
 }

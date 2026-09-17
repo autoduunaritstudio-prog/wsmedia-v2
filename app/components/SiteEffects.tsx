@@ -172,9 +172,45 @@ export default function SiteEffects() {
        ResizeObserver bodylla havaitsee tasan tuon: sivun korkeuden
        muutoksen. Se on eri asia kuin resize-tapahtuma, joka kertoo
        vain ikkunasta. */
+
+    /* VALOKERROSTEN OMA ETENEMA.
+       Taustan valot ovat osioiden omissa kerroksissa, joten ne
+       kulkevat osion mukana. Se ei kuitenkaan viela tarkoita etta
+       valo elaisi: kerros liikkuu, mutta valo on siina aina samassa
+       kohtaa. --valo kertoo kuinka pitkalle osio on kulkenut nakyman
+       lapi, ja valopiste ajetaan sen mukaan, jolloin valo siirtyy
+       osion sisalla samalla kun osio siirtyy ruudulla.
+
+       Mittaus on layout-pohjainen samasta syysta kuin hehkulla:
+       osiot ovat pinotussa vierityksessa, ja pinnatun elementin
+       getBoundingClientRect jaatyy pinnin ajaksi. offsetTop ei.
+
+       Nolla kun osion ylareuna koskee nakyman alareunaa, yksi kun sen
+       alareuna on noussut nakyman ylareunan yli. */
+    const valoEls = Array.from(
+      document.querySelectorAll<HTMLElement>(".wsx .seo-sec, .wsx .jakso-pari")
+    );
+    const valoY = new WeakMap<HTMLElement, { y: number; h: number }>();
+    const mittaaValo = () => {
+      for (const el of valoEls) {
+        let y = 0;
+        let n: HTMLElement | null = el;
+        while (n) {
+          y += n.offsetTop;
+          n = n.offsetParent as HTMLElement | null;
+        }
+        valoY.set(el, { y, h: el.offsetHeight });
+      }
+    };
+    mittaaValo();
+    window.addEventListener("resize", mittaaValo, { passive: true });
+
     let ro: ResizeObserver | null = null;
-    if (hehkuEls.length && typeof ResizeObserver !== "undefined") {
-      ro = new ResizeObserver(() => mittaaHehku());
+    if ((hehkuEls.length || valoEls.length) && typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => {
+        mittaaHehku();
+        mittaaValo();
+      });
       ro.observe(document.body);
     }
     const TILT_MAX = 19;         // puhelinparin sivuttaiskulma
@@ -469,6 +505,14 @@ export default function SiteEffects() {
           const matka = Math.max((vh * 0.62 + m.h * 0.35) * m.k, 1);
           const kuljettu = sc + vh - m.y;
           el.style.setProperty("--piirto", Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3));
+        }
+
+        for (const el of valoEls) {
+          const m = valoY.get(el);
+          if (!m) continue;
+          const matka = Math.max(m.h + vh, 1);
+          const kuljettu = sc + vh - m.y;
+          el.style.setProperty("--valo", Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3));
         }
 
         rvsEls.forEach((el, i) => {
