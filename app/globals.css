@@ -13470,3 +13470,93 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   .wsx .nelja-yla { grid-template-columns: 34px minmax(0, 1fr); gap: 13px }
   .wsx .nelja-ik { width: 34px; height: 34px; padding: 7px; border-radius: 10px }
 }
+
+
+/* ---------- YKSI POHJAVARI KOKO COVERISSA ----------
+   Coverin ylareunassa nakyi vaaleampi nauha logonauhan kohdalla.
+   Syy: cover on #0b0f14 ja sen paalle nouseva ketju alkaa
+   .jakso-parilla, jonka oma pohja on #0e141b. Kolmen yksikon ero on
+   pieni, mutta se osuu vaakasuoraan rajaan jonka molemmilla puolilla
+   on tasainen pinta, ja silloin silma lukee sen nauhana.
+
+   Kaari saa saman pohjan kuin cover ja kuin ketjun muut peittajat
+   (.pino > :first-child ~ * on jo #0b0f14), jolloin koko cover on
+   yhta varia ja ero osioiden valilla tulee valosta. */
+.page-verkkosivut .jakso-pari { background: #0b0f14 }
+
+/* ---------- 3. ALARIVIN VASEN PALSTA OLI SISENNETTY ----------
+   MITATTU: ylarivin vasen kortti alkoi kohdasta 405px ilman
+   vasenta reunaa, alarivin vasen kortti samasta kohdasta mutta
+   56px:n vasemmalla tayteella JA pystyviivalla. Rivit eivat siis
+   olleet samassa ruudukossa.
+
+   Syy on .kaksi > * + * (rivi 7821): "jokainen ensimmaisen jalkeen".
+   Se on kirjoitettu Kenelle-osiolle, jossa palstoja on kaksi ja rivi
+   yksi. Neljan kortin ruudukossa kolmas kortti on uuden rivin
+   ENSIMMAINEN mutta silti "ensimmaisen jalkeen", joten se sai
+   viereisen palstan kohtelun.
+
+   #miksi maarittelee palstat jo pariteetilla (nth-child even/odd),
+   joten korjaus on nollata parittomilta se mita yleissaanto antoi.
+   Yleissaantoa ei kosketa, koska se on oikein siella minne se on
+   kirjoitettu. */
+@media (min-width: 761px) {
+  .page-verkkosivut #miksi .kaksi > div:nth-child(odd) {
+    padding-left: 0; border-left: 0;
+  }
+}
+
+
+/* ---------- PALVELUN SISALLON RIVIMERKIT ----------
+   Merkit muodostavat vasempaan reunaan oman kiskonsa, joten selite
+   sisennetaan tasan merkin leveydella: ilman sisennysta rivi olisi
+   porras eika lohko. */
+.wsx .hs-merkein dt {
+  display: grid; grid-template-columns: 22px minmax(0, 1fr);
+  gap: 12px; align-items: center;
+}
+.wsx .hs-ik {
+  width: 22px; height: 22px; display: block;
+  fill: none; stroke: var(--seo-hi); stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+  opacity: .72;
+}
+.wsx .hs-merkein dd { padding-left: 34px }
+@media (max-width: 600px) {
+  .wsx .hs-merkein dt { grid-template-columns: 20px minmax(0, 1fr); gap: 10px }
+  .wsx .hs-ik { width: 20px; height: 20px }
+  .wsx .hs-merkein dd { padding-left: 30px }
+}
+
+/* ---------- NAKYVYYDEN KORTTIEN KUVIOT ----------
+   Kortti oli merkki, otsikko ja kaksi riviä leipaa. Se on luettava
+   mutta se ei nayta mitaan, ja neljä samanlaista peräkkain lukee
+   listana. Kuvio piirtaa sen mekaniikan josta rivi puhuu.
+
+   VAIMEA ON EHTO, EI SAATO. Kuvio on kortin pohjalla otsikon ja
+   leipatekstin alapuolella; jos se olisi yhta kirkas, se kilpailisi
+   niiden kanssa ja kortista tulisi kaavio jossa on tekstia. Mitattuna
+   pohjaviivat ovat .16 ja kirkkain osa .85 samasta syaanista.
+
+   PIIRTYMINEN --rvp:sta, samasta luvusta kuin kortin ylaviiva ja
+   samalla --i-viiveella, joten kortti ja sen kuvio ovat yksi liike
+   eivatka kaksi. clip-path eika stroke-dasharray: viewBox venytetaan
+   leveyssuunnassa, jolloin dash-pituudet laskettaisiin eri
+   mittakaavassa kuin ne on kirjoitettu. */
+.wsx .nelja-kuvio {
+  display: block; width: 100%; max-width: 232px; height: auto;
+  margin-top: 22px;
+  overflow: visible; fill: none;
+  stroke-linecap: round; stroke-linejoin: round;
+  clip-path: inset(-20% calc((1 - clamp(0, calc((var(--rvp, 1) - var(--i) * .1) * 2.6), 1)) * 102%) -20% -2%);
+}
+.wsx .nelja-kuvio .kv-rata { stroke: rgba(111,236,255,.16); stroke-width: 1 }
+.wsx .nelja-kuvio .kv-palkki { stroke: rgba(111,236,255,.42); stroke-width: 3 }
+.wsx .nelja-kuvio .kv-laatikko { stroke: rgba(111,236,255,.3); stroke-width: 1 }
+.wsx .nelja-kuvio .kv-kayra { stroke: rgba(111,236,255,.85); stroke-width: 2 }
+.wsx .nelja-kuvio .kv-piste { fill: var(--seo-hi); stroke: none; opacity: .9 }
+.wsx .nelja-kuvio .kv-palkki.kv-kirkas { stroke: rgba(111,236,255,.85) }
+.wsx .nelja-kuvio .kv-laatikko.kv-kirkas { stroke: rgba(111,236,255,.7) }
+@media (prefers-reduced-motion: reduce) {
+  .wsx .nelja-kuvio { clip-path: none }
+}

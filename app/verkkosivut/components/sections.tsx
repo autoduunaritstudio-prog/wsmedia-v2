@@ -11,12 +11,14 @@ import {
   FIGS,
   FLIST,
   ICONS,
+  INCLUDE_ICONS,
   INCLUDES,
   OPTIONS,
   PLANS,
   PROBLEMS,
   REFCHIPS,
   SEO_ICONS,
+  SEO_KUVIOT,
   SEO_POINTS,
   SOPII,
   STEPS,
@@ -121,10 +123,22 @@ export function Sisalto() {
                   <Puu />
                 </div>
               </div>
-              <dl className="hs-rows porras rv">
-                {INCLUDES.map(([h, p]) => (
+              {/* MERKKI JOKAISELLE RIVILLE. Kahdeksan riviä oli
+                  kahdeksan samanlaista tekstipakettia perakkain, eika
+                  mikaan auttanut silmaa loytamaan etsimaansa. Merkki
+                  antaa riville oman siluettinsa, jolloin listaa voi
+                  silmailla lukematta jokaista otsikkoa. Selite
+                  sisennetaan merkin leveydella, jolloin merkeista
+                  syntyy vasempaan reunaan oma kisko. */}
+              <dl className="hs-rows hs-merkein porras rv">
+                {INCLUDES.map(([h, p], i) => (
                   <div key={h}>
-                    <dt>{h}</dt>
+                    <dt>
+                      <svg className="hs-ik" viewBox="0 0 24 24" aria-hidden="true">
+                        {INCLUDE_ICONS[i]}
+                      </svg>
+                      <span>{h}</span>
+                    </dt>
                     <dd>{p}</dd>
                   </div>
                 ))}
@@ -211,6 +225,14 @@ export function Nakyvyys() {
                 <h3>{h}</h3>
               </div>
               <p>{p}</p>
+              {/* KUVIO KORTIN POHJALLE. Merkki kertoo mista kohta
+                  puhuu mutta ei nayta mitaan; kuvio piirtaa sen
+                  mekaniikan josta rivi puhuu. Se on selvasti tekstia
+                  vaimeampi, koska sen tehtava on antaa kortille pohja
+                  ja syvyys eika kilpailla otsikon kanssa. */}
+              <svg className="nelja-kuvio" viewBox="0 0 100 36" aria-hidden="true">
+                {SEO_KUVIOT[i]}
+              </svg>
             </li>
           ))}
         </ol>

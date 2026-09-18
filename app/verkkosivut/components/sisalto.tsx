@@ -180,6 +180,118 @@ export const SEO_ICONS: ReactNode[] = [
   </>,
 ];
 
+/* ---------- PALVELUN SISALLON MERKIT ----------
+   Kahdeksan riviä oli kahdeksan samanlaista tekstipakettia: lihava
+   rivi ja sen alla kaksi riviä leipaa, kahdeksan kertaa perakkain.
+   Lista oli luettava mutta yksitoikkoinen, eika mikaan auttanut
+   silmaa loytamaan etsimaansa riviä.
+
+   Merkki on hakuapu, ei koriste. Se antaa jokaiselle riville oman
+   siluettinsa, jolloin listaa voi silmailla ilman etta jokainen
+   otsikko on luettava. Sama piirtotapa kuin muualla sivulla: 24:n
+   ruudukko, 1,6px viiva, ei tayttoa.
+
+   Jarjestys on sama kuin INCLUDESin, ja se on ehto: erillinen taulu
+   ajautuisi erilleen ensimmaisessa muutoksessa. */
+export const INCLUDE_ICONS: ReactNode[] = [
+  /* sivurakenne: juuri ja kolme alasivua */
+  <>
+    <rect x="9.5" y="2.6" width="5" height="4" rx="1.2" key="a" />
+    <rect x="2.6" y="17.4" width="5" height="4" rx="1.2" key="b" />
+    <rect x="9.5" y="17.4" width="5" height="4" rx="1.2" key="c" />
+    <rect x="16.4" y="17.4" width="5" height="4" rx="1.2" key="d" />
+    <path d="M12 6.6v5.4M5.1 17.4V12h13.8v5.4M12 12v5.4" key="e" />
+  </>,
+  /* ulkoasu: varilaikku ja sivellin */
+  <>
+    <path d="M3.4 13.6a8.6 8.6 0 1 1 8.6 8.6c-1.4 0-1.9-1-1.2-1.8.8-.9.3-2-.9-2H7.4a4 4 0 0 1-4-4.8z" key="a" />
+    <circle cx="8" cy="8.6" r="1.1" key="b" />
+    <circle cx="13" cy="6.4" r="1.1" key="c" />
+    <circle cx="17.2" cy="10.4" r="1.1" key="d" />
+  </>,
+  /* tekstit: kyna ja rivit */
+  <>
+    <path d="M4 5.4h9M4 9.4h7M4 13.4h5" key="a" />
+    <path d="M19.8 9.2 13 16v3h3l6.8-6.8z" key="b" />
+    <path d="M17.6 11.4l2.4 2.4" key="c" />
+  </>,
+  /* tekninen SEO: suurennuslasi ja rattaan hammas */
+  <>
+    <circle cx="10.6" cy="10.6" r="6.2" key="a" />
+    <path d="M15 15l5.4 5.4" key="b" />
+    <path d="M10.6 7.8v5.6M7.8 10.6h5.6" key="c" />
+  </>,
+  /* responsiivisuus: puhelin ja tyopoyta */
+  <>
+    <rect x="2.6" y="4.4" width="12" height="10" rx="1.6" key="a" />
+    <path d="M6.2 18.2h5" key="b" />
+    <path d="M8.6 14.4v3.8" key="c" />
+    <rect x="16.4" y="9.4" width="5" height="11.2" rx="1.4" key="d" />
+  </>,
+  /* lomake: kentta ja osoitin */
+  <>
+    <rect x="3" y="5" width="18" height="11" rx="2" key="a" />
+    <path d="M6.6 9h7M6.6 12.2h4" key="b" />
+    <path d="M14.8 13.6l5.6 3.2-2.6.9-1 2.6z" key="c" />
+  </>,
+  /* analytiikka: pylvaat ja kayra */
+  <>
+    <path d="M3.4 20.4h17.2" key="a" />
+    <path d="M6.6 20.4v-4.6M11 20.4V11M15.4 20.4v-6.8M19.8 20.4V6.4" key="b" />
+  </>,
+  /* verkkotunnus ja SSL: pallo ja lukko */
+  <>
+    <circle cx="10.4" cy="10.4" r="7" key="a" />
+    <path d="M3.4 10.4h14M10.4 3.4c3.4 3.6 3.4 10.4 0 14-3.4-3.6-3.4-10.4 0-14z" key="b" />
+    <rect x="14.6" y="15.2" width="7" height="5.6" rx="1.4" key="c" />
+    <path d="M16.4 15.2v-1.6a1.7 1.7 0 0 1 3.4 0v1.6" key="d" />
+  </>,
+];
+
+/* ---------- NAKYVYYDEN KORTTIEN KUVIOT ----------
+   Merkki kertoo mista kohta puhuu, mutta se ei nayta mitaan. Kortin
+   pohjalle tulee pieni kuvio joka piirtaa sen mekaniikan josta rivi
+   puhuu: latausjono, sivupuu, hakutuloslista, palaava kayra.
+
+   Kuvio piirtyy --rvp:n mukaan samoin kuin kortin ylaviiva, ja se on
+   selvasti tekstia vaimeampi: sen tehtava on antaa kortille pohja ja
+   syvyys, ei kilpailla otsikon kanssa. clip-path eika stroke-dash,
+   koska dash-laskenta menee vaarin kun viiva on non-scaling ja
+   viewBox venytetaan. */
+export const SEO_KUVIOT: ReactNode[] = [
+  /* latausjono: nelja pyyntoa, ylin pisin */
+  <>
+    <path className="kv-rata" d="M2 6h96M2 14h96M2 22h96M2 30h96" key="a" />
+    <path className="kv-palkki" d="M2 6h74" key="b" />
+    <path className="kv-palkki" d="M2 14h46" key="c" />
+    <path className="kv-palkki" d="M2 22h27" key="d" />
+    <path className="kv-palkki kv-kirkas" d="M2 30h13" key="e" />
+  </>,
+  /* sivupuu: juuri ja kolme alasivua */
+  <>
+    <path className="kv-rata" d="M50 8v9H14v6M50 17v6M50 17h36v6" key="a" />
+    <rect className="kv-laatikko kv-kirkas" x="38" y="2" width="24" height="7" rx="2" key="b" />
+    <rect className="kv-laatikko" x="4" y="23" width="20" height="7" rx="2" key="c" />
+    <rect className="kv-laatikko" x="40" y="23" width="20" height="7" rx="2" key="d" />
+    <rect className="kv-laatikko" x="76" y="23" width="20" height="7" rx="2" key="e" />
+  </>,
+  /* hakutuloslista: ylin osuma korostettuna */
+  <>
+    <rect className="kv-laatikko kv-kirkas" x="2" y="2" width="96" height="10" rx="2" key="a" />
+    <path className="kv-palkki kv-kirkas" d="M8 7h34" key="b" />
+    <rect className="kv-laatikko" x="2" y="15" width="96" height="8" rx="2" key="c" />
+    <path className="kv-palkki" d="M8 19h26" key="d" />
+    <rect className="kv-laatikko" x="2" y="26" width="96" height="8" rx="2" key="e" />
+    <path className="kv-palkki" d="M8 30h30" key="f" />
+  </>,
+  /* kayttajakokemus: kavija jaa sivulle eika palaa */
+  <>
+    <path className="kv-rata" d="M2 30h96" key="a" />
+    <path className="kv-kayra kv-kirkas" d="M2 30C16 30 22 22 34 19s18 2 30-4 22-9 32-11" key="b" />
+    <circle className="kv-piste" cx="98" cy="4" r="3" key="c" />
+  </>,
+];
+
 export const SEO_POINTS = [
   ["Nopeat latausajat", "Google mittaa sivuston nopeutta oikeilta käyttäjiltä. Hidas sivu ei ainoastaan menetä kävijää, se menettää myös sijoituksia, ja mobiilissa ero on suurin."],
   ["Selkeä sivurakenne ja sisäinen linkitys", "Sivut linkittyvät toisiinsa niin, että Google löytää ne kaikki ja ymmärtää minkä palvelun alle mikin kuuluu. Ilman linkitystä yksittäinen sivu jää irralleen, vaikka se olisi kirjoitettu hyvin."],
