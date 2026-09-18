@@ -13346,16 +13346,101 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    littaa kehyksen tasaiseksi renkaaksi; valo ylareunassa ja varjo
    alareunassa tekevat siita pyorean, ja juuri pyoreys on se mika
    lukee metallina. Sivujen sisavarjot syvenevat samasta syysta. */
-.stickysub .stage .phone {
-  --ph-radius: 37px;
-  --ph-bezel: 5.5px;
-  --ph-notch-top: 12px;
-  box-shadow:
-    var(--ph-drop),
-    inset 0 0 0 var(--ph-bezel) #2e2e34,
-    inset 0 2px 0 0 rgba(255,255,255,.3),
-    inset 0 -2.5px 0 0 rgba(0,0,0,.62),
-    inset 3px 0 5px -1px rgba(0,0,0,.55),
-    inset -3px 0 5px -1px rgba(0,0,0,.55),
-    var(--ph-rim);
+/* KESKIMMAINEN PALAUTETAAN. Paksunnos oli kirjoitettu koko
+   .stickysub .stage .phone -joukolle, mika osui myos keskimmaiseen,
+   ja se oli jo valmiiksi oikeassa suhteessa. Sama valitsin vei lisaksi
+   reunimmaisilta niiden oman Android-sateen ja -reunuksen, koska tama
+   lohko on lahteessa myohemmin ja voitti ne aanettomasti. Nyt
+   paksunnos on vain siella minne se oli tarkoitettu. */
+.stickysub .stage .p2, .stickysub .stage .p3 {
+  --ph-radius: 26px;
+  --ph-bezel: 4px;
 }
+
+/* ---------- REUNIMMAISTEN SYVYYS ----------
+   Laite on tahan asti ollut nolla millimetria paksu. Kaannos
+   Y-akselin ympari paljastaa kyljen, mutta kylkea ei ollut, joten
+   kaannos luki litteana korttina eika esineena.
+
+   PAKSUUS ON LASKETTU. Laite on 224px levea ja vastaa noin 71
+   millimetria, eli mittakaava on 3,15 px/mm. Puhelimen paksuus on
+   noin 8mm eli 25px, ja 14 asteen kaannoksessa siita nakyy
+   sin(14) * 25 = 6,1px. Siita tulee neljan kaistan porras.
+
+   KAISTAT BOX-SHADOWNA, EI ELEMENTTEINA. overflow: hidden leikkaisi
+   elementin, ja ulkovarjo ei ole leikkauksen alainen. Samalla kaistat
+   seuraavat kulmasadetta itsestaan, mika on koko illuusion ehto:
+   suora kaista pyoristetyn rungon vieressa nakyisi heti irrallisena.
+   Kaistat tummenevat ulospain, koska kylki kaartuu poispain valosta. */
+.stickysub .stage .p2, .stickysub .stage .p3 {
+  /* .scr leikkaa ruudun sisallon omalla overflow: hiddenillaan, joten
+     rungon oma leikkaus ei ole tarpeen - ja se on poistettava, jotta
+     sivunapit voivat olla rungon ulkopuolella. flat samalla, koska
+     preserve-3d ilman leikkausta muuttaisi lasten piirtojarjestysta
+     ilman etta yksikaan niista on Z-akselilla. */
+  overflow: visible;
+  transform-style: flat;
+  --ph-syvyys: 6px;
+}
+.stickysub .stage .p2 {
+  box-shadow:
+    -2px 0 0 0 #3a3a42,
+    -4px 0 0 0 #2a2a31,
+    -5px 0 0 0 #1c1c22,
+    -6px 0 0 0 #121217,
+    inset 0 0 0 var(--ph-bezel) #2e2e34,
+    inset 0 2px 0 0 rgba(255,255,255,.28),
+    inset 0 -2px 0 0 rgba(0,0,0,.6),
+    inset 3px 0 5px -1px rgba(0,0,0,.5),
+    var(--ph-drop);
+}
+.stickysub .stage .p3 {
+  box-shadow:
+    2px 0 0 0 #3a3a42,
+    4px 0 0 0 #2a2a31,
+    5px 0 0 0 #1c1c22,
+    6px 0 0 0 #121217,
+    inset 0 0 0 var(--ph-bezel) #2e2e34,
+    inset 0 2px 0 0 rgba(255,255,255,.28),
+    inset 0 -2px 0 0 rgba(0,0,0,.6),
+    inset -3px 0 5px -1px rgba(0,0,0,.5),
+    var(--ph-drop);
+}
+
+/* ---------- SIVUNAPIT ----------
+   Napit ovat kyljessa, joten ne nakyvat vain silla puolella joka on
+   kaantynyt katsojaa kohti: .p2:lla vasen, .p3:lla oikea. Suoraan
+   edesta katsottuna (keskimmainen) niita ei piirreta lainkaan, koska
+   silloin ne olisivat kaksi tikkua rungon reunassa.
+
+   Mitat samasta mittakaavasta kuin paksuus: aanenvoimakkuuskeinu noin
+   17mm eli 54px, virtanappi noin 10mm eli 32px, ja molemmat noin
+   1,5mm leveita. Napit istuvat kyljen kaistalle eivatka leiju sen
+   ulkopuolella. */
+.phone .ph-napit { display: none }
+.stickysub .stage .p2 .ph-napit,
+.stickysub .stage .p3 .ph-napit {
+  display: block; position: absolute; top: 0; bottom: 0; width: 0; z-index: 7;
+}
+.stickysub .stage .p2 .ph-napit { left: 0 }
+.stickysub .stage .p3 .ph-napit { right: 0 }
+.stickysub .stage .p2 .ph-napit b,
+.stickysub .stage .p2 .ph-napit s,
+.stickysub .stage .p3 .ph-napit b,
+.stickysub .stage .p3 .ph-napit s {
+  position: absolute; display: block; width: 5px; border-radius: 2px;
+}
+.stickysub .stage .p2 .ph-napit b,
+.stickysub .stage .p2 .ph-napit s {
+  left: calc(var(--ph-syvyys) * -1);
+  background: linear-gradient(90deg, #4c4c57, #23232a);
+}
+.stickysub .stage .p3 .ph-napit b,
+.stickysub .stage .p3 .ph-napit s {
+  right: calc(var(--ph-syvyys) * -1);
+  background: linear-gradient(270deg, #4c4c57, #23232a);
+}
+.stickysub .stage .p2 .ph-napit b,
+.stickysub .stage .p3 .ph-napit b { top: 21%; height: 54px }
+.stickysub .stage .p2 .ph-napit s,
+.stickysub .stage .p3 .ph-napit s { top: calc(21% + 72px); height: 32px }

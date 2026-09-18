@@ -128,6 +128,15 @@ export default function PhoneReel({
 
   return (
     <div className={`phone ${className}`} data-depth={depth}>
+      {/* SIVUNAPIT. Piirretaan .scr:n ULKOPUOLELLE, koska ne ovat
+          laitteen kyljessa eivatka ruudulla. Oletuksena CSS piilottaa
+          ne: ne lukevat vain silloin kun laite on kaannetty niin etta
+          kylki nakyy, ja suoraan edesta katsottuna ne olisivat vain
+          kaksi tikkua rungon reunassa. */}
+      <i className="ph-napit" aria-hidden="true">
+        <b />
+        <s />
+      </i>
       <div className="scr">
         <video
           ref={vid}
