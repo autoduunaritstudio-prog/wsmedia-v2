@@ -13261,3 +13261,59 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .wsx .seo-sec.kuvapohja > .pohjakuva + ::before {
   background: linear-gradient(180deg, rgba(0,124,143,.13), rgba(0,60,80,.17));
 }
+
+
+/* ==================================================================
+   PROSESSIN JANA: TAYTTO KOSKETTAA JAKSOJA
+   ==================================================================
+   Jana tayttyi vierityksen mukaan, mutta se oli oma kuvansa: palkki
+   liikkui ylhaalla ja jaksot seisoivat alhaalla, eika mikaan kertonut
+   etta ne ovat sama asia. Nyt taytto nostaa jakson kohdatessaan sen ja
+   laskee sen takaisin mentyaan ohi, jolloin palkki lukee osoittimena
+   eika koristeena.
+
+   Kolme mitoitettua lukua:
+
+   ALKU .18. Taytto lahti liikkeelle heti kun osion ylareuna kavi
+   nakyviin, eli ennen kuin jaksoja oli edes luettu. Nyt se lahtee
+   vasta kun osio on katsottavassa kohdassa. Kerroin 1,45 vie tayton
+   ykkoseen kohdassa .87, joten viimeinenkin jakso ehtii saada
+   kosketuksensa ennen kuin osio on ohi.
+
+   KOHTA (2i+1)/8. Nelja tasalevyista palstaa, joten jakson keskikohta
+   on tasan siina. Mitattuna 28px valit siirtavat todellisia
+   keskikohtia alle sadasosan, mika on pienempi kuin kosketuksen oma
+   leveys.
+
+   LEVEYS 8. Kosketus ulottuu .125 molempiin suuntiin eli tasan
+   puolivaliin naapuriin. Kaksi jaksoa ei siis ole koskaan ylhaalla
+   yhta aikaa, ja juuri se tekee liikkeesta kulkevan eika hengittavan.
+
+   Ei box-shadowia. Se on maalausominaisuus, ja sen paivittaminen
+   vierityksessa on jo kerran saanut taman sivuston valkkymaan
+   Chromessa. Nosto on translate eli komposiittia, ja korostus tulee
+   variarvoista. */
+@media (min-width: 901px) {
+  .page-lyhytvideot #prosessi .jana {
+    --veto: clamp(0, calc((var(--rvp, 1) - .18) * 1.45), 1);
+  }
+  .page-lyhytvideot #prosessi .jana-akseli i { scale: var(--veto, 1) 1 }
+  .page-lyhytvideot #prosessi .jakso {
+    --kohta: calc((var(--i, 0) * 2 + 1) / 8);
+    /* abs() ei ole kaikissa selaimissa joissa muu tama sivu toimii.
+       max(a, -a) on sama luku ilman tukiehtoa. */
+    --et: max(calc(var(--veto, 1) - var(--kohta)), calc(var(--kohta) - var(--veto, 1)));
+    --osuma: clamp(0, calc(1 - var(--et) * 8), 1);
+    translate: 0 calc(var(--osuma) * -9px);
+    border-left-color: color-mix(in srgb, var(--blue) calc(var(--osuma) * 100%), var(--seo-rule));
+  }
+  .page-lyhytvideot #prosessi .jakso h3 {
+    color: color-mix(in srgb, var(--seo-hi) calc(var(--osuma, 0) * 100%), var(--seo-ink));
+  }
+}
+/* Ilman JS:aa ja vahennetylla liikkeella --rvp on 1, jolloin taytto on
+   taysi. Silloin viimeinen jakso jaisi pysyvasti ylos, mika ei ole
+   kosketus vaan virhe. */
+@media (prefers-reduced-motion: reduce) {
+  .page-lyhytvideot #prosessi .jakso { --osuma: 0; translate: none }
+}

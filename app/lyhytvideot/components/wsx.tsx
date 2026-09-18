@@ -228,8 +228,13 @@ export function Prosessi() {
           </div>
           <div className="jana-jaksot porras rv">
             {STEPS.map((s, k) => (
+              /* Ei numerointia. Jana kertoo jarjestyksen ja sijainnin
+                 tarkemmin kuin numero: numero sanoo "kolmas", jana
+                 nayttaa MISSA kolmas on ja kuinka pitka se on. Kaksi
+                 kertojaa samasta asiasta vie tilan siita mita vain
+                 toinen niista osaa sanoa. Muilla sivuilla .jakso-kk
+                 jaa, koska siella se on kesto eika jarjestysluku. */
               <div className="jakso" key={s.h} style={n(k)}>
-                <p className="jakso-kk">{String(k + 1).padStart(2, "0")}</p>
                 <h3>{s.h}</h3>
                 <p className="jakso-p">{s.p}</p>
               </div>
