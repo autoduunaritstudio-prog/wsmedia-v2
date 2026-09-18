@@ -120,7 +120,7 @@ function Tahdisto() {
 /* ---------- 1. Miksi ---------- */
 export function Miksi() {
   return (
-    <section className="seo-sec" id="miksi">
+    <section className="seo-sec" id="miksi" data-kiinni="">
       <Pystykisko teksti="Miksi lyhytvideot" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Neljä syytä, mikä tahansa riittää</p>

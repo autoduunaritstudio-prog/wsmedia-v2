@@ -205,11 +205,42 @@ export default function SiteEffects() {
     mittaaValo();
     window.addEventListener("resize", mittaaValo, { passive: true });
 
+    /* PINNIIN PYSAHTYVA ETENEMA.
+       --piirto jatkaa kasvuaan myos sen jalkeen kun osio on jaanyt
+       kiinni pinoon, koska se mittaa vieritysta eika osion paikkaa
+       ruudulla. Silloin osio seisoo paikallaan mutta sen sisalla oleva
+       liike jatkuu, ja se lukeutuu automaattisena animaationa eika
+       vierityksen ohjaamana.
+
+       --kiinni kulkee nollasta yhteen tasan siihen asti kun osion
+       alareuna koskettaa nakyman alareunaa, eli hetkeen jolloin
+       position: sticky; bottom: 0 tarttuu. Sen jalkeen se on yksi ja
+       liike seisoo samoin kuin osio.
+
+       Mittaus on layout-pohjainen samasta syysta kuin muillakin:
+       pinnatun elementin getBoundingClientRect jaatyy, offsetTop ei. */
+    const kiinniEls = Array.from(document.querySelectorAll<HTMLElement>("[data-kiinni]"));
+    const kiinniY = new WeakMap<HTMLElement, { y: number; h: number }>();
+    const mittaaKiinni = () => {
+      for (const el of kiinniEls) {
+        let y = 0;
+        let n: HTMLElement | null = el;
+        while (n) {
+          y += n.offsetTop;
+          n = n.offsetParent as HTMLElement | null;
+        }
+        kiinniY.set(el, { y, h: el.offsetHeight });
+      }
+    };
+    mittaaKiinni();
+    window.addEventListener("resize", mittaaKiinni, { passive: true });
+
     let ro: ResizeObserver | null = null;
-    if ((hehkuEls.length || valoEls.length) && typeof ResizeObserver !== "undefined") {
+    if ((hehkuEls.length || valoEls.length || kiinniEls.length) && typeof ResizeObserver !== "undefined") {
       ro = new ResizeObserver(() => {
         mittaaHehku();
         mittaaValo();
+        mittaaKiinni();
       });
       ro.observe(document.body);
     }
@@ -513,6 +544,17 @@ export default function SiteEffects() {
           const matka = Math.max(m.h + vh, 1);
           const kuljettu = sc + vh - m.y;
           el.style.setProperty("--valo", Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3));
+        }
+
+        /* Nolla kun osion ylareuna koskee nakyman alareunaa, yksi kun
+           sen alareuna koskee samaa reunaa eli kun pino tarttuu. */
+        for (const el of kiinniEls) {
+          const m = kiinniY.get(el);
+          if (!m) continue;
+          el.style.setProperty(
+            "--kiinni",
+            Math.min(Math.max((sc + vh - m.y) / Math.max(m.h, 1), 0), 1).toFixed(3)
+          );
         }
 
         rvsEls.forEach((el, i) => {

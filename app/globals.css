@@ -12103,6 +12103,14 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    vasta kun kortit ovat katsottavassa kohdassa, ja viimeinenkin on
    valmis 137px ennen kuin peite koskee siihen. */
 .page-lyhytvideot .lv-k { --p2: clamp(0, calc((var(--piirto, 1) - .46 - var(--i) * .065) * 4.2), 1) }
+/* YLARIVI ALKAA AIEMMIN KUIN ALARIVI, EI MYOHEMMIN.
+   Porrastus --i:n mukaan olettaa etta kortit tulevat nakyviin
+   perakkain. Nelikossa ne eivat tule: ylarivi on jo luettavalla
+   korkeudella silloin kun alarivi on viela nakyman alapuolella, joten
+   yhteinen alkukohta myohastyttaa juuri ne kaksi jotka katsoja ehtii
+   katsoa pisimpaan. Alarivin ajoitus on mitattu oikeaksi, joten sita
+   ei kosketa, ja ylarivi siirretaan .12 aikaisemmaksi. */
+.page-lyhytvideot .lv-k:nth-child(-n + 2) { --p2: clamp(0, calc((var(--piirto, 1) - .34 - var(--i) * .065) * 4.2), 1) }
 .page-lyhytvideot .lv-k .wp-line,
 .page-lyhytvideot .lv-k .wp-line2,
 .page-lyhytvideot .lv-k .wp-line3 {
@@ -13045,7 +13053,13 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   container-type: inline-size;
   /* Kierroksia koko matkalla. --piirto on 0..1, joten 1,5 tarkoittaa
      puoltatoista kierrosta siina ajassa kun osio kulkee nakyman lapi. */
-  --kierto: calc(var(--piirto, 0) * 1.5);
+  /* --kiinni EIKA --piirto: --piirto jatkaa kasvuaan senkin jalkeen
+     kun osio on jaanyt kiinni pinoon, jolloin osio seisoo mutta rata
+     pyorii, ja pyoriminen jota mikaan nakyva ei seuraa lukeutuu
+     automaattisena animaationa. --kiinni on yksi tasan silla hetkella
+     kun sticky tarttuu, joten rata pysahtyy samaan aikaan kuin osio.
+     Mitattuna rata ehtii 1,35 kierrosta ennen pysahdysta. */
+  --kierto: calc(var(--kiinni, 0) * 1.5);
 }
 @media (max-width: 1000px) { .tahdisto { max-width: 340px } }
 
@@ -13140,3 +13154,64 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 }
 
 
+
+
+/* ==================================================================
+   KIRKKAUS
+   ==================================================================
+   Tumma sivu oli rakennettu yksi elementti kerrallaan, ja jokainen
+   vaimennus oli omassa kohdassaan perusteltu: valokuva vaimennettiin
+   jottei se riitele grafiikan kanssa, sivutekstia laskettiin jottei
+   se kilpaile otsikon kanssa, savyosio tummennettiin jotta ero
+   naapuriin nakyy. Yhdessa ne summautuivat: koko sivu painui alas ja
+   valokuvat jaivat harmaiksi laatoiksi.
+
+   Tama lohko nostaa pohjatason kerralla. Se on viimeisena tiedostossa
+   ja voittaa aiemmat arvot, joten yhtaan aiempaa perustelua ei
+   tarvitse purkaa: ne jaavat luettaviksi siihen mihin ne kuuluvat.
+   ================================================================== */
+
+/* ---------- 1. VALOKUVAT ----------
+   brightness(.86) oli se yksittainen luku joka teki eniten: se vei
+   kuvasta 14 prosenttia ennen kuin yksikaan kalvo oli edes piirtynyt.
+   Kontrastin nosto oli osa samaa vaimennusta ja se puree nyt
+   vastakkaiseen suuntaan, joten se lasketaan lahelle ykkosta.
+   Kyllaisyys nousee .62 -> .72: kuva saa olla varillinen, kunhan se
+   ei ole varikkaampi kuin sivun oma paletti. */
+.wsx .laatta > img,
+.wsx .juova img,
+.wsx .vaite.kuvallinen > img,
+.wsx .seo-sec.kuvapohja > .pohjakuva,
+.wsx .lava-tausta img {
+  filter: saturate(.72) contrast(1.02) brightness(1.04);
+}
+/* Lapinakyvyys oli toinen puoli samaa vaimennusta: kuva sekoittui
+   pohjavariin eli #0b0f14:aan, joka on lahes musta. Kalvot jotka
+   pitavat tekstin luettavana ovat omina kerroksinaan eivatka riipu
+   tasta, joten nosto ei syo luettavuutta. */
+.wsx .juova img { opacity: .94 }
+.wsx .vaite.kuvallinen > img { opacity: .9 }
+.wsx .seo-sec.kuvapohja > .pohjakuva { opacity: 1 }
+.wsx .kuva.himmea img { filter: saturate(1.04) contrast(1.02) brightness(1.08) }
+/* Tritoni on piirretty kahteen variin, joten sen tummin paa on sivun
+   pohjavari. Kirkastus tehdaan kuvalle eika sekoitussuhteelle, jolloin
+   savy sailyy. */
+.wsx .kuva.duo img { filter: url(#seo-tritoni) brightness(1.12); opacity: .96 }
+
+/* ---------- 2. SIVUTEKSTI ----------
+   #a9b8c6 antoi 9,1:1. Se on hyvin yli vaatimuksen, ja se marginaali
+   kaytetaan nyt kirkkauteen: #bcc8d4 on 11,3:1 samalla pohjalla. */
+.wsx { --seo-ink-2: #bcc8d4; --seo-rule-soft: rgba(255,255,255,.12) }
+.page-dark { --grey: #a8b2c4 }
+.page-dark .sub, .page-dark p { color: #ccd2de }
+.page-dark .seoprose p { color: #aab3c4 }
+
+/* ---------- 3. SAVYOSIOT ----------
+   Ero naapuriosioon syntyy savysta eika kirkkaudesta, joten koko
+   portaikon voi nostaa yhta paljon ilman etta yksikaan raja katoaa.
+   Kolme yksikkoa per kanava riittaa: osiot erottuvat edelleen
+   toisistaan, mutta yksikaan niista ei ole enaa mustaa tummempi. */
+.wsx [data-tone="1"] { --secbg: #111923; background: #111923 }
+.wsx [data-tone="2"] { --secbg: #141d28; background: #141d28 }
+.wsx [data-tone="3"] { --secbg: #10171f; background: #10171f }
+.wsx [data-tone="ink"] { --secbg: #080d12; background: #080d12 }
