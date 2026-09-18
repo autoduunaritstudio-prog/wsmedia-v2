@@ -37,7 +37,19 @@ export default function Palkki() {
        nakyman puolivaliin, hero on katsottu ja sen omat napit ovat
        poissa. Sivulla jolla coveria ei ole (SEO-sivu) kaytetaan
        heroa kuten ennenkin, ja silloin se ei ole pinnattu. */
+    /* ALKUKOHTA VOIDAAN MERKITA SIVULLA. Coverista luettu ehto tuo
+       palkin heti kun peittava kerros on noussut nakyman puolivaliin,
+       eli kaytannossa heti heron jalkeen. Lyhytvideot-sivulla se on
+       liian aikaisin: kavija on silloin vasta ensimmaisessa osiossa
+       eika ole nahnyt viela yhtaan perustetta.
+
+       Jos sivulla on [data-palkki-alku], palkki tulee vasta kun se osio
+       on noussut nakyman puolivaliin. Ehto on sama molemmissa
+       tapauksissa (elementti on nakymassa), joten haaroja ei tule
+       kahta. */
+    const merkitty = document.querySelector("[data-palkki-alku]");
     const hero =
+      merkitty ??
       document.querySelector(".stickysub > .cover") ??
       document.querySelector(".seo-hero") ??
       document.querySelector("header");
@@ -47,7 +59,7 @@ export default function Palkki() {
     /* Coverilla ehto on kaanteinen: se ON nakymassa kun hero on ohi.
        rootMargin -50% siirtaa rajan nakyman puolivaliin, jolloin
        palkki tulee vasta kun cover on todella peittanyt heron. */
-    const coverina = hero.classList.contains("cover");
+    const coverina = !!merkitty || hero.classList.contains("cover");
     const a = new IntersectionObserver(
       ([e]) => {
         ohi.current = coverina ? e.isIntersecting : !e.isIntersecting;

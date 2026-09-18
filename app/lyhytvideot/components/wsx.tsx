@@ -93,29 +93,34 @@ function Tahdisto() {
   return (
     <div className="tahdisto" data-hehku="0.9" aria-hidden="true">
       <svg className="tahdisto-verkko" viewBox="0 0 200 200" fill="none" focusable="false">
-        {/* Solmuja yhdistavat viivat. Ne piirtyvat vierityksen mukana. */}
-        <path className="th-linja" d="M62 58 L100 96" pathLength={1} style={{ "--i": 0 } as CSSProperties} />
-        <path className="th-linja" d="M56 138 L100 96" pathLength={1} style={{ "--i": 1 } as CSSProperties} />
-        <path className="th-linja" d="M146 142 L100 96" pathLength={1} style={{ "--i": 2 } as CSSProperties} />
-        {/* Verkosto jatkuu kuvan ulkopuolelle: tahdisto on osa taustaa,
-            ei siihen liimattu laatikko. */}
-        <path className="th-linja th-vaimea" d="M62 58 L8 24" pathLength={1} style={{ "--i": 3 } as CSSProperties} />
-        <path className="th-linja th-vaimea" d="M146 142 L196 178" pathLength={1} style={{ "--i": 4 } as CSSProperties} />
-        <path className="th-linja th-vaimea" d="M56 138 L14 186" pathLength={1} style={{ "--i": 5 } as CSSProperties} />
-        <path className="th-linja th-vaimea" d="M62 58 L146 142" pathLength={1} style={{ "--i": 6 } as CSSProperties} />
-        <circle className="th-piste" cx="8" cy="24" r="2" />
-        <circle className="th-piste" cx="196" cy="178" r="2" />
-        <circle className="th-piste" cx="14" cy="186" r="2" />
+        {/* Kolme sadetta keskuksesta. Solmut ovat symmetrisesti:
+            kaksi ylhaalla peilikuvina (52,52 ja 148,52) ja yksi
+            alhaalla keskella (100,158). */}
+        <path className="th-linja" d="M52 52 L100 100" pathLength={1} style={{ "--i": 0 } as CSSProperties} />
+        <path className="th-linja" d="M148 52 L100 100" pathLength={1} style={{ "--i": 1 } as CSSProperties} />
+        <path className="th-linja" d="M100 158 L100 100" pathLength={1} style={{ "--i": 2 } as CSSProperties} />
+        {/* Verkosto jatkuu kuvan ulkopuolelle, myos peilaten, jottei
+            tahdisto lue siihen liimattuna laatikkona. */}
+        <path className="th-linja th-vaimea" d="M52 52 L10 14" pathLength={1} style={{ "--i": 3 } as CSSProperties} />
+        <path className="th-linja th-vaimea" d="M148 52 L190 14" pathLength={1} style={{ "--i": 3 } as CSSProperties} />
+        <path className="th-linja th-vaimea" d="M100 158 L100 196" pathLength={1} style={{ "--i": 4 } as CSSProperties} />
+        <path className="th-linja th-vaimea" d="M52 52 L148 52" pathLength={1} style={{ "--i": 5 } as CSSProperties} />
+        <circle className="th-piste" cx="10" cy="14" r="2" />
+        <circle className="th-piste" cx="190" cy="14" r="2" />
+        <circle className="th-piste" cx="100" cy="196" r="2" />
       </svg>
 
+      {/* SYVYYS TULEE KOOSTA JA KIRKKAUDESTA, EI SIJAINNISTA. Paikat
+          ovat symmetriset, mutta kolme samankokoista ja yhta kirkasta
+          tunnusta lukisi tasona, ei tilana. */}
       <span className="th-solmu th-ig" style={{ "--i": 0 } as CSSProperties}>
         <PlatformMark id="instagram" />
       </span>
-      <span className="th-solmu th-tt" style={{ "--i": 1 } as CSSProperties}>
-        <PlatformMark id="tiktok" />
-      </span>
-      <span className="th-solmu th-yt" style={{ "--i": 2 } as CSSProperties}>
+      <span className="th-solmu th-yt" style={{ "--i": 1 } as CSSProperties}>
         <PlatformMark id="youtube" />
+      </span>
+      <span className="th-solmu th-tt" style={{ "--i": 2 } as CSSProperties}>
+        <PlatformMark id="tiktok" />
       </span>
       <span className="th-ws">
         <LogoMark />
@@ -148,7 +153,7 @@ export function Miksi() {
 
         {/* Kaaviopaneeli on kortin tausta eika sen kuvitus: jokainen
             nayttaa sen ilmion josta kortin oma otsikko puhuu. */}
-        <ol className="nelja" data-rvs="" data-hehku="1">
+        <ol className="nelja" data-rvs="" data-hehku="1.36">
           {REASONS.map((r, k) => (
             <li className="nelja-k lv-k" key={r.h} style={n(k)}>
               <div className="lv-taus" aria-hidden="true">

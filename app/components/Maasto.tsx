@@ -81,6 +81,7 @@ export function Vaite({
   alla,
   kuva,
   kuvaAlt,
+  palkkiAlkaa,
 }: {
   children: ReactNode;
   alla?: string;
@@ -89,9 +90,16 @@ export function Vaite({
      saisivat, keino kuluisi loppuun kolmannella kerralla. */
   kuva?: string;
   kuvaAlt?: string;
+  /* Kehotuspalkki alkaa tasta osiosta. Ks. Palkki.tsx: palkki ei enaa
+     ala coverin noususta vaan siita osiosta joka on merkitty tallä. */
+  palkkiAlkaa?: boolean;
 }) {
   return (
-    <section className={kuva ? "vaite kuvallinen" : "vaite"} data-rvs="">
+    <section
+      className={kuva ? "vaite kuvallinen" : "vaite"}
+      data-rvs=""
+      {...(palkkiAlkaa ? { "data-palkki-alku": "" } : null)}
+    >
       {/* loading="lazy" puuttui, ja se maksoi eniten koko sivun
           latauksessa: molemmat vaitteet ovat taysleveita 1728px:n
           valokuvia (54 kB + 104 kB) ja ne latautuivat heti, vaikka

@@ -12086,18 +12086,23 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    kerroin oli 2.6 ja liike oli ohi ennen kuin kortti oli kunnolla
    ruudussa. */
 /* PIIRTO ALKAA VASTA KUN KORTTI ON KATSOTTAVASSA KOHDASSA.
-   Aiemmin se alkoi heti kun kortiston ylareuna koski nakyman
-   alareunaa, eli silloin kun kortteja ei viela katsonut kukaan, ja
-   oli ohi ennen kuin ne olivat kunnolla ruudulla. Nyt luvussa on
-   lahtokynnys .33 ja ikkuna on lyhyempi (kerroin 4), joten piirto
-   tapahtuu siina kohtaa kun kortisto tayttaa nakyman.
+   Kolmas mitoitus, ja kaksi ensimmaista olivat liian aikaisia.
 
-   Mitatut kohdat (nakyma 868, kortisto 2363, korkeus 664):
-     kortti 1  1749 -> 1942
-     kortti 4  1888 -> 2081
-   Peite koskee alarivin kaaviokaistaan vasta 2157:ssa, joten
-   viimeinenkin kortti ehtii valmiiksi 76px ennen sita. */
-.page-lyhytvideot .lv-k { --p2: clamp(0, calc((var(--piirto, 1) - .33 - var(--i) * .06) * 4), 1) }
+   ONGELMA EI OLLUT KYNNYS VAAN MITTA. --piirto saavutti ykkosen
+   kohdassa 1901, eli koko piirto oli pakko mahduttaa valille
+   1130..1901 riippumatta kynnyksesta. Peite koskee alarivin
+   kaaviokaistaan vasta kohdassa 2205, joten 300px kaytettavissa
+   olevaa matkaa jai kayttamatta. data-hehkun kerroin 1,36 venyttaa
+   mitan niin, etta ykkonen osuu kohtaan 2180 - vasta silloin kynnys
+   voi olla myohempi.
+
+   Mitatut kohdat (nakyma 868, kortisto 1998, korkeus 664):
+     kortti 1  1613 -> 1863
+     kortti 4  1818 -> 2068
+   Kortisto tulee nakyman puolivaliin kohdassa 1564, eli piirto alkaa
+   vasta kun kortit ovat katsottavassa kohdassa, ja viimeinenkin on
+   valmis 137px ennen kuin peite koskee siihen. */
+.page-lyhytvideot .lv-k { --p2: clamp(0, calc((var(--piirto, 1) - .46 - var(--i) * .065) * 4.2), 1) }
 .page-lyhytvideot .lv-k .wp-line,
 .page-lyhytvideot .lv-k .wp-line2,
 .page-lyhytvideot .lv-k .wp-line3 {
@@ -12543,7 +12548,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 /* Ylaviiva lahtee hieman kaaviota ennen: se on merkki siita etta
    kortti heraa, ei kaavion kopio. */
 .page-lyhytvideot .lv-k.nelja-k::before {
-  scale: clamp(0, calc((var(--piirto, 1) - .29 - var(--i) * .06) * 4.4), 1) 1;
+  scale: clamp(0, calc((var(--piirto, 1) - .42 - var(--i) * .065) * 4.6), 1) 1;
   box-shadow: 0 0 calc(var(--p2) * 16px) rgba(111,236,255,.6);
 }
 @media (prefers-reduced-motion: reduce) {
@@ -13055,29 +13060,47 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   opacity: calc(clamp(0, calc((var(--piirto, 1) - .5) * 3), 1) * .45);
 }
 
-/* Solmu on neonkehys, ei taytetty laatta: taustan verkosto jaa nakyviin
-   sen lapi, jolloin merkki on verkossa eika sen paalla. */
+/* SOLMU ON PELKKA TUNNUS, EI KEHYSTA.
+   Ensimmaisessa versiossa jokaisen merkin ympari piirrettiin neonkehys.
+   Se oli ylimaarainen: Instagramin tunnus ON pyoristetty nelio ja
+   YouTube Shortsin oma kapseli, eli kehys piirsi saman muodon kahdesti
+   sisakkain. Mallissa kehysta ei ole - siina nakyy tunnus ja sen hehku.
+
+   SYVYYS TULEE KOOSTA JA KIRKKAUDESTA. Paikat ovat symmetriset (kaksi
+   ylhaalla peilikuvina, yksi alhaalla keskella), joten jos myos koko ja
+   kirkkaus olisivat samat, kolmikko lukisi tasona eika tilana. Nyt
+   lahin on suurin ja kirkkain, kaukaisin pienin ja vaimein, ja hehkun
+   sade seuraa samaa jarjestysta: kaukainen kohde ei hehku yhta
+   voimakkaasti. */
 .tahdisto .th-solmu {
-  position: absolute; display: grid; place-items: center;
-  width: 21%; aspect-ratio: 1 / 1;
-  border: 1px solid rgba(111,236,255,.55); border-radius: 22%;
-  background: rgba(8,14,20,.55);
+  position: absolute; display: block;
   color: var(--seo-hi);
-  box-shadow: 0 0 22px -6px rgba(111,236,255,.5), inset 0 0 18px -10px rgba(111,236,255,.7);
-  /* Sama porrastettu ilmestyminen kuin viivoilla, yhden askeleen
-     jaljessa: viiva saapuu solmuun ja solmu syttyy. */
-  opacity: clamp(0, calc((var(--piirto, 1) - .18 - var(--i) * .07) * 3), 1);
+  opacity: calc(
+    clamp(0, calc((var(--piirto, 1) - .18 - var(--i) * .07) * 3), 1) * var(--syvyys, 1)
+  );
   scale: calc(.86 + clamp(0, calc((var(--piirto, 1) - .18 - var(--i) * .07) * 3), 1) * .14);
 }
 .tahdisto .th-solmu svg {
-  width: 52%; height: auto;
-  filter: drop-shadow(0 0 6px rgba(111,236,255,.7));
+  width: 100%; height: auto; display: block;
+  filter:
+    drop-shadow(0 0 calc(var(--hehku, 8px) * .35) rgba(180,245,255,.85))
+    drop-shadow(0 0 var(--hehku, 8px) rgba(111,236,255,.65));
 }
-/* Sijainnit vastaavat viivojen paatepisteita: 62/58, 56/138, 146/142
-   kahdestasadasta, miinus puolet solmun koosta (21 % / 2). */
-.tahdisto .th-ig { left: 20.5%; top: 18.5% }
-.tahdisto .th-tt { left: 17.5%; top: 58.5% }
-.tahdisto .th-yt { left: 62.5%; top: 60.5% }
+/* Sijainnit: solmun keskipiste osuu viivan paatepisteeseen, eli
+   vasen reuna on keskipiste miinus puolet leveydesta. Luvut ovat
+   viewBoxin 0..200 koordinaatteja kahdellasadalla jaettuna. */
+.tahdisto .th-ig {           /* keskipiste 52,52 -> 26 % / 26 % */
+  --syvyys: 1; --hehku: 16px;
+  width: 21%; left: 15.5%; top: 15.5%;
+}
+.tahdisto .th-yt {           /* keskipiste 148,52 -> 74 % / 26 % */
+  --syvyys: .72; --hehku: 10px;
+  width: 16%; left: 66%; top: 18%;
+}
+.tahdisto .th-tt {           /* keskipiste 100,158 -> 50 % / 79 % */
+  --syvyys: .86; --hehku: 13px;
+  width: 18.5%; left: 40.75%; top: 69.75%;
+}
 
 /* Keskus. Tunnus ja sanamerkki allekkain kuten tunnuksessa muutenkin. */
 .tahdisto .th-ws {

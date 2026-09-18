@@ -139,7 +139,9 @@ export default function Lyhytvideot() {
             <Miksi />
 
             <div className="pino">
+              {/* Kehotuspalkki alkaa tasta. Ks. Palkki.tsx. */}
               <Vaite
+                palkkiAlkaa
                 kuva="/lyhytvideot/kuvaaminen.webp"
                 alla="Uusi tili voi tavoittaa saman yleisön kuin vakiintunut brändi. Se on pienen yrityksen etu."
               >
