@@ -13683,3 +13683,43 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 /* Kohde saa fokuksen mutta ei fokusrengasta: rengas otsikon ympärilla
    nayttaisi vialta, ja fokus itse on se mika linkin tekee. */
 #paasisalto:focus { outline: none }
+
+/* ---------- PYSTYKAIKU VASEMPAAN REUNAAN (vain #kenelle) ----------
+   Ylisuuri aariviivasana oli oikeassa reunassa, ja siella se oli
+   pahimmillaan puoliksi ruudun ulkopuolella eika liittynyt mihinkaan:
+   sivun oma suunta, kisko ja otsikot ovat kaikki vasemmassa reunassa.
+
+   Sana siirtyy vasempaan marginaaliin ja isonee. Se EI ala ruudun
+   reunasta vaan sen ulkopuolelta (left: -4vw), ja juuri se tekee siita
+   yksityiskohdan eika otsikon: nakyviin jaa pala kirjaimia, ei luettava
+   sana. Lukija nakee tekstuurin, ja se joka pysahtyy huomaa etta se on
+   osion nimi.
+
+   MITAT LASKETTU, EI ARVATTU. Pystyteksti on 0,76 kertaa fonttikoko
+   levea (mitattu: 114px kun koko on 150px). Suurimmalla koolla 200px
+   palsta on siis 152px, ja kun se alkaa -62px:sta (4vw @ 1561px), se
+   paattyy 90px:aan. Sivukisko alkaa 225px:sta, joten valia jaa 135px
+   eivatka ne kosketa toisiaan.
+
+   ALARAJA 1200px. Sita kapeammalla .swrapin vasen marginaali kutistuu
+   niin, etta kisko ja kaiku olisivat paallekkain. Silloin jaa voimaan
+   aiempi oikean reunan saanto.
+
+   VAIN KENELLE TOISTAISEKSI. Jos tama toimii, sama saanto yleistetaan
+   pudottamalla #kenelle pois valitsimesta. Id-valitsin voittaa
+   tarkkuudessa aiemmat .page-verkkosivut .kaiku -saannot, joten
+   jarjestyksella tassa tiedostossa ei ole valia. */
+@media (min-width: 1200px) {
+  .page-verkkosivut #kenelle .kaiku,
+  .page-verkkosivut #kenelle .kaiku.oik,
+  .page-verkkosivut #kenelle .kaiku.vas {
+    writing-mode: vertical-rl;
+    left: -4vw; right: auto; top: 6%; bottom: auto;
+    font-size: clamp(120px, 12vw, 200px);
+    letter-spacing: -.02em;
+    /* Vaimeampi kuin oikean reunan kaiku (.11), koska tama on
+       lahempana luettavaa tekstia. */
+    -webkit-text-stroke: 1px rgba(111,236,255,.1);
+    text-stroke: 1px rgba(111,236,255,.1);
+  }
+}
