@@ -70,11 +70,16 @@ export const PROBLEMS = [
   },
 ];
 
+/* KOLME LUKUA, EI NELJAA.
+   Nelja oli "63 % kavijoista saapuu mobiililaitteella". Se on
+   markkinatieto eika WS Median mittari, mutta se seisoi rivissa jossa
+   muut kolme ovat lupauksia, joten lukija luki senkin lupauksena.
+   Luku poistui, ja rivin sarakemaara tulee nyt lasten maarasta
+   (grid-auto-flow: column) eika kiinteasta neljasta. */
 export const BSTATS = [
   { n: "2–4", p: "viikkoa suunnittelusta julkaisuun" },
   { n: "90+/100", p: "PageSpeed-tavoite mobiilissa" },
   { n: "24 h", p: "vastaus tarjouspyyntöön" },
-  { n: "63 %", p: "kävijöistä saapuu mobiililaitteella" },
 ];
 
 /* ---------- Palvelun sisältö ---------- */
@@ -86,7 +91,7 @@ export const INCLUDES = [
   ["Responsiivinen ja mobiilioptimoitu toteutus", "Sivusto suunnitellaan mobiili edellä ja testataan puhelimella, tabletilla ja työpöydällä ennen kuin se menee live-tilaan."],
   ["Lomakkeet ja yhteydenottopolut", "Yhteydenotto- ja tarjouspyyntölomakkeet, soittopainikkeet ja selkeät CTA-napit siellä, missä kävijä on valmis toimimaan."],
   ["Analytiikka ja mittaus", "Google Analytics ja Search Console asennettuna, jotta näet mistä kävijät tulevat ja mikä sivu tuottaa yhteydenottoja."],
-  ["Verkkotunnus, palvelintila ja SSL-suojaus", "Hoidamme verkkotunnuksen, palvelintilan ja SSL-suojauksen puolestasi. Verkkotunnus rekisteröidään sinun yrityksesi nimiin."],
+  ["Verkkotunnus, palvelintila ja SSL-suojaus", "Hoidamme verkkotunnuksen, palvelintilan ja SSL-suojauksen puolestasi, ja ensimmäinen vuosi sisältyy projektihintaan. Verkkotunnus rekisteröidään sinun yrityksesi nimiin."],
 ];
 
 /* ---------- Toteutustapa ---------- */

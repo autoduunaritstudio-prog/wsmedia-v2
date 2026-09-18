@@ -10434,8 +10434,11 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 /* ---------- LUKURIVI ----------
    Luku on osion suurin asia otsikon jalkeen, koska luku ON se mita
    riviltä luetaan. Selite jaa pieneksi mutta ei alle 15px:n. */
+/* Sarakemaara tulee LASTEN MAARASTA. Kiintea repeat(4) jatti rivin
+   oikean neljanneksen tyhjaksi heti kun lukuja oli kolme, ja tyhja
+   sarake reunassa lukee puuttuvana tietona eika valjyytena. */
 .wsx .luvut {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
   gap: 0 32px; margin-top: 64px; border-top: 1px solid var(--seo-rule); padding-top: 28px;
 }
 .wsx .luvut > div { display: grid; gap: 6px; align-content: start }
@@ -10445,14 +10448,14 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 }
 .wsx .luvut span { font-size: 15.5px; line-height: 1.5; color: var(--seo-ink-2) }
 .wsx .luvut em { font-style: normal; font-size: 14.5px; line-height: 1.5; color: var(--seo-ink-2); opacity: .8 }
-.wsx .luvut.isot { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 56px }
+.wsx .luvut.isot { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 56px }
 .wsx .luvut.isot b { font-size: clamp(34px, 4.4vw, 62px) }
 .wsx .luvut.isot span { font-size: 17px; color: var(--seo-ink); font-weight: 600 }
 @media (max-width: 900px) {
-  .wsx .luvut, .wsx .luvut.isot { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px }
+  .wsx .luvut, .wsx .luvut.isot { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px }
 }
 @media (max-width: 560px) {
-  .wsx .luvut, .wsx .luvut.isot { grid-template-columns: minmax(0, 1fr) }
+  .wsx .luvut, .wsx .luvut.isot { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr) }
 }
 
 /* ---------- KAHDEN PALSTAN OTSIKKORIVI ---------- */
