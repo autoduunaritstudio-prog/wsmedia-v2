@@ -16,6 +16,7 @@ import {
   PLANS,
   PROBLEMS,
   REFCHIPS,
+  SEO_ICONS,
   SEO_POINTS,
   SOPII,
   STEPS,
@@ -184,18 +185,31 @@ export function Nakyvyys() {
           Hakukoneoptimoinnin perusta rakennetaan sivustoon sisään, ei päälle jälkikäteen.
         </p>
 
-        {/* NELJA KOHTAA, EI NELJA RIVIA.
-            Rivilista oli sama kalusto kuin Palvelun sisallossa, joten
-            osio luki saman osion jatkona eika omana asianaan. Neljalle
-            kohdalle on oma muotonsa: kaksi kertaa kaksi, iso numero
-            ja viiva joka vetaytyy auki vierityksen mukana. Viivan
-            etenema on --rvp, sama luku jolla janakin taytyy, ja
-            jokainen kohta saa siita oman viiveensa --i:n kautta. */}
-        <ol className="nelja" data-rvs="">
+        {/* NUMEROT POIS, MERKKI TILALLE.
+            01-04 lupasi jarjestyksen jota ei ole: nama nelja ovat
+            rinnakkaisia keinoja, eivat askelia, ja numero sanoi
+            painokkaimmin juuri sen mika kohdassa on vahiten tietoa.
+            Ruudukko sanoo rinnakkaisuuden jo itse.
+
+            Tilalle tulee kohdan oma merkki. Merkit olivat valmiina
+            sisalto.tsx:ssa (SEO_ICONS) mutta niita ei ollut kytketty
+            mihinkaan. Merkki on kehystetty, eli se eroaa Tuttu tilanne
+            -osion paljaista merkeista: sama kuvakieli, eri asema.
+
+            Merkki ja otsikko samalla rivilla, ei allekkain. Iso numero
+            vei oman rivinsa ja tyonsi leipatekstin alas, jolloin kortti
+            oli korkeampi kuin sen sisalto. Viiva ylareunassa jaa: sen
+            etenema on --rvp, sama luku jolla prosessin jana taytyy, ja
+            --i antaa jokaiselle kohdalle oman viiveensa. */}
+        <ol className="nelja nelja-ikoni" data-rvs="">
           {SEO_POINTS.map(([h, p], i) => (
             <li className="nelja-k" key={h} style={{ "--i": i } as CSSProperties}>
-              <b className="nelja-n">{String(i + 1).padStart(2, "0")}</b>
-              <h3>{h}</h3>
+              <div className="nelja-yla">
+                <svg className="nelja-ik" viewBox="0 0 24 24" aria-hidden="true">
+                  {SEO_ICONS[i]}
+                </svg>
+                <h3>{h}</h3>
+              </div>
               <p>{p}</p>
             </li>
           ))}

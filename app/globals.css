@@ -13440,3 +13440,33 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .stickysub .stage .p3 .ph-napit b { top: 21%; height: 54px }
 .stickysub .stage .p2 .ph-napit s,
 .stickysub .stage .p3 .ph-napit s { top: calc(21% + 72px); height: 32px }
+
+
+/* ---------- NAKYVYYDEN KORTIT: MERKKI, EI NUMEROA ----------
+   01-04 lupasi jarjestyksen jota nailla neljalla ei ole. Ne ovat
+   rinnakkaisia keinoja, ja ruudukko sanoo sen jo itse, joten numero
+   toisti rakenteen ja painotti kortin vahiten tietavaa osaa.
+
+   Merkki ja otsikko samalle riville. Numero vei oman rivinsa ja
+   tyonsi leipatekstin alas, jolloin kortti oli korkeampi kuin sen
+   sisalto. Kehys merkin ymparilla erottaa nama Tuttu tilanne -osion
+   paljaista merkeista: sama kuvakieli, eri asema. */
+.wsx .nelja-ikoni .nelja-k { padding: 30px 32px 32px }
+.wsx .nelja-yla {
+  display: grid; grid-template-columns: 40px minmax(0, 1fr);
+  gap: 16px; align-items: center; margin-bottom: 16px;
+}
+.wsx .nelja-ik {
+  width: 40px; height: 40px; box-sizing: border-box; padding: 8px;
+  border-radius: 12px; border: 1px solid var(--seo-rule);
+  background: rgba(111,236,255,.07);
+  fill: none; stroke: var(--seo-hi); stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.wsx .nelja-ikoni .nelja-k h3 { margin: 0 }
+.wsx .nelja-ikoni .nelja-k p { max-width: 52ch }
+@media (max-width: 600px) {
+  .wsx .nelja-ikoni .nelja-k { padding: 26px 24px 28px }
+  .wsx .nelja-yla { grid-template-columns: 34px minmax(0, 1fr); gap: 13px }
+  .wsx .nelja-ik { width: 34px; height: 34px; padding: 7px; border-radius: 10px }
+}
