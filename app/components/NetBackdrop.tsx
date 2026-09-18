@@ -74,11 +74,17 @@ type P = { x: number; y: number; vx: number; vy: number };
  */
 type Props = {
   mount?: "fixed" | "cover";
-  /** Kelluvat alustamerkit myos coverissa. Oletuksena vain herossa. */
+  /**
+   * Kelluvat alustamerkit. Maarittelematta: herossa kylla, coverissa
+   * ei. true lisaa ne myos coveriin, false poistaa ne myos herosta.
+   * Jalkimmainen on Verkkosivut-alasivua varten: sama tausta, mutta
+   * Instagram- ja TikTok-tunnukset sivulla joka myy verkkosivuja
+   * eivat ole kuviota vaan vaara lupaus.
+   */
   merkit?: boolean;
 };
 
-export default function NetBackdrop({ mount = "fixed", merkit = false }: Props) {
+export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -339,7 +345,11 @@ export default function NetBackdrop({ mount = "fixed", merkit = false }: Props) 
           Vain herossa. Merkkien paikat on mitattu heron tyhjista
           kaistoista; coverissa samat kohdat ovat leipatekstin ja
           korttien alla, jolloin ne lukisivat likana tekstin takana. */}
-      {mount === "fixed" ? <NetMarks /> : merkit ? <NetMarks variantti="jakso" /> : null}
+      {mount === "fixed" ? (
+        merkit === false ? null : <NetMarks />
+      ) : merkit ? (
+        <NetMarks variantti="jakso" />
+      ) : null}
     </div>
   );
 

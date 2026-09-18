@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import NetBackdrop from "../components/NetBackdrop";
 import Logos from "../components/Logos";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
@@ -58,6 +59,13 @@ export default function Verkkosivut() {
           kuvio, ja tumma sivu tekee siita likaisen harmaan verkon
           jonka lapi valokuvat eivat lue. Sivun pohja on nyt
           yhtenainen ja valo tulee kuvista. */}
+      {/* SIVUTASON VERKOSTO. Sama kerros ja sama paikka kuin
+          Lyhytvideot-alasivulla: yksi verkosto koko sivulle, ei viitta
+          osiokohtaista. Osiokohtaiset kerrokset alkoivat ja loppuivat
+          osion mukana, joten kuvio katkesi jokaisella rajalla, ja ne
+          osiot joilla kerrosta ei ollut lukivat tyhjina. */}
+      <NetBackdrop merkit={false} />
+
       <div className="rae" aria-hidden="true" />
       <div id="prog" />
 
@@ -81,6 +89,7 @@ export default function Verkkosivut() {
       <div className="stickysub">
         <Hero />
         <div className="cover">
+          <NetBackdrop mount="cover" />
           <Logos />
 
       {/* ENSIMMAINEN PINO. Tuttu tilanne jaa alle, hengahdys nousee sen

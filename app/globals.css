@@ -11091,34 +11091,23 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   .page-verkkosivut .stickysub > .vs-hero .hero-split { align-items: center; min-height: 62svh }
 }
 
-/* ---------- ELAVA VERKOSTO KOLMESSA OSIOSSA ----------
-   Tasainen vari luki perusvarina, ja pitka osio tasaisella pohjalla
-   ei kerro etta sivu etenee. Verkosto on sama kuin Lyhytvideot-
-   alasivulla, mutta ilman ruudukkoa: suoraa viivageometriaa on
-   sivulla jo kisko ja palstojen pystyviivat, eika kolmas ruudukko
-   toisi mitaan. */
-.page-verkkosivut #miksi,
-.page-verkkosivut #sisalto,
-.page-verkkosivut #toteutustapa { position: relative; isolation: isolate }
-.page-verkkosivut #miksi > .netbd-clip,
-.page-verkkosivut #sisalto > .netbd-clip,
-.page-verkkosivut #toteutustapa > .netbd-clip { z-index: -1 }
-.page-verkkosivut #miksi .netbd,
-.page-verkkosivut #sisalto .netbd,
-.page-verkkosivut #toteutustapa .netbd {
-  background-image: none; background-color: transparent;
-  --net-rgb: 111,236,255;
-  --net-dot: rgba(180,245,255,.5);
-  opacity: .42;
-}
-.page-verkkosivut #miksi .netbd-glow,
-.page-verkkosivut #sisalto .netbd-glow,
-.page-verkkosivut #toteutustapa .netbd-glow {
-  background: radial-gradient(120% 90% at 50% 45%, transparent 32%, #0b0f14 100%);
-}
-/* Savypohja peittaisi verkoston, joten se poistuu naista kolmesta.
-   Syvyys tulee nyt verkostosta eika varista. */
-.page-verkkosivut #miksi, .page-verkkosivut #toteutustapa { background: #0b0f14 }
+/* ---------- VERKOSTO ON SIVUN KERROS, EI OSION ----------
+   Tassa oli viisi osiokohtaista verkostokerrosta ja kolmelle niista
+   oma saato. Kaksi vikaa seurasi siita suoraan:
+
+   1. Kerros alkoi ja loppui osion mukana, joten kuvio katkesi
+      jokaisella rajalla eika jatkunut sivun lapi.
+   2. Kaksi viidesta jai ilman saatoa, joten ne pitivat .netbd:n omat
+      oletukset: ruudukon ja tummemman pohjavarin. Nakyvyys-osiossa
+      nakyi ristikko ja Prosessi oli muuta sivua tummempi, eivatka
+      kumpikaan olleet kenenkaan paatos vaan sen seuraus mita
+      unohtui yliajaa.
+
+   Nyt verkosto on sivutason kerros samoin kuin Lyhytvideot-
+   alasivulla: yksi kiintea ja yksi coverin mittainen. Osioiden ero
+   syntyy liikkuvasta valosta, joka on yhteinen molemmille sivuille.
+   Savypohjat (data-tone) poistuivat samalla: tasainen vari peitti
+   verkoston ja sai vierekkaiset osiot nayttamaan eri sivuilta. */
 
 /* ---------- HENGAHDYKSEN SUURI LAUSE ----------
    Kartoituslause on sivun kayton kannalta tarkein: se poistaa
@@ -12182,19 +12171,23 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    nakyi: sama kuvio mutta levottomampi.
 
    Sama kasittely tanne, seka osioiden kerroksiin etta heron omaan. */
-.page-lyhytvideot .netbd {
+/* Sama kasittely verkkosivuilla. Se oli siella ennen kirjoitettu
+   kolmelle osiolle nimeltä, joten kaksi viidesta jai ilman ja piti
+   ruudukon. Nyt saato on kerroksella eika osiolla, jolloin uusi osio
+   ei voi jaada ulkopuolelle. */
+:is(.page-lyhytvideot, .page-verkkosivut) .netbd {
   background-image: none;
   --net-rgb: 111,236,255;
   --net-dot: rgba(180,245,255,.5);
 }
-.page-lyhytvideot .netbd-cover { opacity: .46 }
-.page-lyhytvideot .netbd-cover .netbd-glow {
+:is(.page-lyhytvideot, .page-verkkosivut) .netbd-cover { opacity: .46 }
+:is(.page-lyhytvideot, .page-verkkosivut) .netbd-cover .netbd-glow {
   background: radial-gradient(120% 90% at 50% 45%, transparent 32%, #0e141b 100%);
 }
-.page-lyhytvideot .netbd:not(.netbd-cover) {
+:is(.page-lyhytvideot, .page-verkkosivut) .netbd:not(.netbd-cover) {
   background-color: #0b0f14; opacity: .62;
 }
-.page-lyhytvideot .netbd:not(.netbd-cover) .netbd-glow {
+:is(.page-lyhytvideot, .page-verkkosivut) .netbd:not(.netbd-cover) .netbd-glow {
   background: radial-gradient(110% 86% at 50% 42%, transparent 30%, #0b0f14 100%);
 }
 
@@ -12832,7 +12825,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    eli kokonaan maskin lapinakyvan alueen (18..82 %) sisalla. Muuten
    liike toisi takaisin sen mita maskilla juuri korjattiin: kirkkaan
    kohdan osion reunaan. */
-.page-lyhytvideot .seo-sec:not(.valo):not(.kuvapohja)::before {
+:is(.page-lyhytvideot, .page-verkkosivut) .seo-sec:not(.valo):not(.kuvapohja)::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   --v: var(--valo, .5);
   background:
@@ -12849,7 +12842,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 }
 /* Parillinen osio saa valon eri puolelle ja vastakkaiseen suuntaan
    kulkevana, jotta perakkaiset osiot eivat ole toistensa kopioita. */
-.page-lyhytvideot .seo-sec:not(.valo):not(.kuvapohja):nth-of-type(even)::before {
+:is(.page-lyhytvideot, .page-verkkosivut) .seo-sec:not(.valo):not(.kuvapohja):nth-of-type(even)::before {
   background:
     radial-gradient(
       calc(44% + var(--v) * 14%) calc(26% + var(--v) * 10%)
@@ -12871,8 +12864,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    (0,4,1), koska :not():n sisalla olevat luokat lasketaan mukaan.
    Pelkka .jakso-pari > .seo-sec::before olisi (0,3,1) eli havinnyt,
    ja jakson osiot olisivat pitaneet oman valonsa. */
-.page-lyhytvideot .jakso-pari > .seo-sec:not(.valo):not(.kuvapohja)::before { content: none }
-.page-lyhytvideot .jakso-pari::before {
+:is(.page-lyhytvideot, .page-verkkosivut) .jakso-pari > .seo-sec:not(.valo):not(.kuvapohja)::before { content: none }
+:is(.page-lyhytvideot, .page-verkkosivut) .jakso-pari::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   --v: var(--valo, .5);
   background:

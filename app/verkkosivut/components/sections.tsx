@@ -1,7 +1,6 @@
 import type { CSSProperties } from "react";
 import BudgetForm from "../../components/BudgetForm";
 import MetalBackdrop from "../../components/MetalBackdrop";
-import NetBackdrop from "../../components/NetBackdrop";
 import { Kaiku } from "../../components/Maasto";
 import { FAQ_GROUPS } from "../faq";
 
@@ -48,12 +47,7 @@ function Ikoni({ nimi }: { nimi: string }) {
 /* ---------- Tuttu tilanne ---------- */
 export function Ongelma() {
   return (
-    <section className="seo-sec" id="miksi" data-tone="1">
-      {/* ELAVA TAUSTA. Sama verkosto kuin Lyhytvideot-alasivulla,
-          mount="cover" eli pinnattu kerros joka rajautuu TAHAN
-          osioon. Tasainen vari luki perusvarina, ja pitka osio
-          tasaisella pohjalla ei kerro etta sivu etenee. */}
-      <NetBackdrop mount="cover" />
+    <section className="seo-sec" id="miksi">
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Tuttu tilanne</span>
@@ -96,11 +90,6 @@ export function Ongelma() {
 export function Sisalto() {
   return (
     <section className="seo-sec" id="sisalto">
-      {/* ELAVA TAUSTA. Sama verkosto kuin Lyhytvideot-alasivulla,
-          mount="cover" eli pinnattu kerros joka rajautuu TAHAN
-          osioon. Tasainen vari luki perusvarina, ja pitka osio
-          tasaisella pohjalla ei kerro etta sivu etenee. */}
-      <NetBackdrop mount="cover" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Palvelun sisältö</span>
@@ -150,12 +139,7 @@ export function Sisalto() {
 /* ---------- Toteutustapa ---------- */
 export function Toteutustapa() {
   return (
-    <section className="seo-sec" id="toteutustapa" data-tone="2">
-      {/* ELAVA TAUSTA. Sama verkosto kuin Lyhytvideot-alasivulla,
-          mount="cover" eli pinnattu kerros joka rajautuu TAHAN
-          osioon. Tasainen vari luki perusvarina, ja pitka osio
-          tasaisella pohjalla ei kerro etta sivu etenee. */}
-      <NetBackdrop mount="cover" />
+    <section className="seo-sec" id="toteutustapa">
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Toteutustapa</span>
@@ -189,11 +173,7 @@ export function Toteutustapa() {
 /* ---------- Nakyvyys ---------- */
 export function Nakyvyys() {
   return (
-    <section className="seo-sec" id="hakukoneoptimointi" data-tone="1">
-      {/* Sama elava verkosto kuin Toteutustavassa. Osio oli sivun
-          ainoa jossa ei ollut taustalla mitaan, ja se nakyi: neljan
-          rivin lista tasaisella pohjalla ei kerro etta sivu etenee. */}
-      <NetBackdrop mount="cover" />
+    <section className="seo-sec" id="hakukoneoptimointi">
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Näkyvyys</span>
@@ -228,9 +208,7 @@ export function Nakyvyys() {
 /* ---------- Prosessi ---------- */
 export function Prosessi() {
   return (
-    <section className="seo-sec" id="prosessi" data-tone="ink">
-      {/* Sama elava verkosto kuin Toteutustavassa ja Nakyvyydessa. */}
-      <NetBackdrop mount="cover" />
+    <section className="seo-sec" id="prosessi">
       <Kaiku sana="2–4 VK" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
@@ -355,7 +333,7 @@ export function Hinnoittelu() {
 /* ---------- Kenelle ---------- */
 export function Kenelle() {
   return (
-    <section className="seo-sec" id="kenelle" data-tone="ink">
+    <section className="seo-sec" id="kenelle">
       <Kaiku sana="KENELLE" puoli="vas" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
