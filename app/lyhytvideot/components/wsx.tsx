@@ -52,10 +52,15 @@ const n = (k: number) => ({ "--i": k }) as CSSProperties;
  * Kaare ottaa pohjan ja kuvion itselleen, ja osiot sen sisalla ovat
  * lapinakyvia: yksi kentta, yksi katkeamaton kuvio kahden osion yli.
  */
-export function Jakso({ children }: { children: ReactNode }) {
+export function Jakso({ children, merkit }: { children: ReactNode; merkit?: boolean }) {
   return (
     <div className="jakso-pari">
-      <NetBackdrop mount="cover" />
+      {/* Merkit jatkuvat jakson yli: kaare on yksi, joten molemmat osiot
+          jakavat saman kerroksen eivatka merkit katkea niiden valissa.
+          Vain Kanavat + Tehtya tyota saa ne: Prosessi ja Kokonaisuus
+          puhuvat aikajanan ja rivimerkkien kielta, ja alustatunnukset
+          niiden taustalla olisivat kolmas kuvakieli samassa jaksossa. */}
+      <NetBackdrop mount="cover" merkit={merkit} />
       {children}
     </div>
   );

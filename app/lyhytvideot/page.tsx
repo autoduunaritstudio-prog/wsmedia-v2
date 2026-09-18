@@ -147,7 +147,7 @@ export default function Lyhytvideot() {
               </Vaite>
 
               <div className="pino">
-                <Jakso>
+                <Jakso merkit>
                   <Alustat />
                   <Tulokset />
                 </Jakso>

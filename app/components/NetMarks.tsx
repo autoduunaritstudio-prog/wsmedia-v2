@@ -91,10 +91,40 @@ const MARKS: Mark[] = [
   { k: "j", x: 93.5, y: 62, s: 38, o: 0.58, z: 0.55, t: 14, d: -2, h: 0.75, kind: "tt" },
 ];
 
-export default function NetMarks() {
+/* JAKSON MERKIT ovat eri joukko kuin heron, eivat sama joukko
+   himmennettyna.
+
+   SYY ON MITATTU ASETTELUSTA, ei maun mukaan. Heron merkit sijaitsevat
+   heron tyhjissa kaistoissa: ylakaistassa (y 2..7 %) ja keskella
+   (x 21..72 %). Jaksossa tasan ne kohdat ovat otsikon, leipatekstin ja
+   korttien paalla - Kanavat-osiossa .swrap alkaa x 225px:sta ja kortit
+   ulottuvat 1335px:aan asti 1728px:n nakymassa. Heron joukko olisi siis
+   piirtynyt suoraan tekstin lapi.
+
+   Vapaat kaistat ovat reunoissa: vasen 0..12 % ja oikea 79..100 %.
+   Kuusi merkkia, koska kymmenen kahdessa kapeassa kaistassa lukisi
+   nauhana eika kelluvina kappaleina.
+
+   LAPINAKYVYYDET OVAT MATALAMMAT KUIN HEROSSA (0,20..0,40 vs 0,45..0,86)
+   ja koot pienemmat. Hero on nakyma jossa merkit ovat aihe; jakso on
+   osio jossa aihe on teksti, ja yhta kirkkaat merkit kilpailisivat sen
+   kanssa. Syvyysjarjestys sailyy samalla tavalla. */
+const JAKSO_MARKS: Mark[] = [
+  // Vasen reuna
+  { k: "ja", x: 2.4, y: 14, s: 40, o: 0.34, z: 0.8, t: 15, d: -2, h: 0.5, kind: "ig" },
+  { k: "jb", x: 5.2, y: 41, s: 30, o: 0.26, z: 0.56, t: 18, d: -9, h: -0.6, kind: "tt" },
+  { k: "jc", x: 1.4, y: 72, s: 34, o: 0.3, z: 0.66, t: 13, d: -5, h: 0.35, kind: "yt" },
+  // Oikea reuna
+  { k: "jd", x: 92.5, y: 22, s: 34, o: 0.3, z: 0.68, t: 16, d: -7, h: -0.45, kind: "tt" },
+  { k: "je", x: 87.5, y: 52, s: 26, o: 0.2, z: 0.46, t: 19, d: -12, h: 0.7, kind: "ig" },
+  { k: "jf", x: 94.5, y: 81, s: 38, o: 0.4, z: 0.88, t: 12, d: -3, h: -0.3, kind: "yt" },
+];
+
+export default function NetMarks({ variantti = "hero" }: { variantti?: "hero" | "jakso" }) {
+  const joukko = variantti === "jakso" ? JAKSO_MARKS : MARKS;
   return (
-    <div className="netmarks" aria-hidden="true">
-      {MARKS.map((m) => (
+    <div className={variantti === "jakso" ? "netmarks netmarks-jakso" : "netmarks"} aria-hidden="true">
+      {joukko.map((m) => (
         <span
           key={m.k}
           className={"nm nm-" + m.kind}

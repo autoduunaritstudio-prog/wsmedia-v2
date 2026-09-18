@@ -12976,3 +12976,19 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 /* Kehotuksen ylaviiva jaa: se erottaa osion sisallon ja kehotuksen,
    eli silla on tehtava. Palstojen valinen pystyviiva jaa samasta
    syysta. */
+
+/* ---------- JAKSON KELLUVAT ALUSTAMERKIT ----------
+   Kanavat ja Tehtya tyota ovat saman kaareen sisalla, joten yksi
+   merkkikerros kulkee molempien yli eivatka merkit katkea niiden
+   valissa.
+
+   HEHKU ON HEIKOMPI KUIN HEROSSA. Heron arvot (2 px ydin, 10 px ja
+   26 px kajo, brightness 1,12) on tehty nakymaan jossa merkit ovat
+   aihe. Tassa aihe on teksti, ja sama hehku nostaisi taustan
+   kilpailemaan sen kanssa. Merkki saa nakya, mutta sen on jaatava
+   taustaksi. */
+.page-lyhytvideot .netmarks-jakso .nm {
+  filter:
+    drop-shadow(0 0 6px rgba(111,236,255,.45))
+    drop-shadow(0 0 16px rgba(111,236,255,.22));
+}

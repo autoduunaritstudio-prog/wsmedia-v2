@@ -72,9 +72,13 @@ type P = { x: number; y: number; vx: number; vy: number };
  *          Fixed-lapsi ei rajaudu vanhempaansa vaan olisi nakynyt myos
  *          heron kohdalla, kahtena kuviona paallekkain.
  */
-type Props = { mount?: "fixed" | "cover" };
+type Props = {
+  mount?: "fixed" | "cover";
+  /** Kelluvat alustamerkit myos coverissa. Oletuksena vain herossa. */
+  merkit?: boolean;
+};
 
-export default function NetBackdrop({ mount = "fixed" }: Props) {
+export default function NetBackdrop({ mount = "fixed", merkit = false }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -335,7 +339,7 @@ export default function NetBackdrop({ mount = "fixed" }: Props) {
           Vain herossa. Merkkien paikat on mitattu heron tyhjista
           kaistoista; coverissa samat kohdat ovat leipatekstin ja
           korttien alla, jolloin ne lukisivat likana tekstin takana. */}
-      {mount === "fixed" ? <NetMarks /> : null}
+      {mount === "fixed" ? <NetMarks /> : merkit ? <NetMarks variantti="jakso" /> : null}
     </div>
   );
 
