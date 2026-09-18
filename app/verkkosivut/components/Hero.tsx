@@ -1,6 +1,6 @@
-import HeroBrowserStage from "../../components/HeroBrowserStage";
 import WordSwap from "../../components/WordSwap";
 
+import HeroFilm from "./HeroFilm";
 import Rakentuu, { Mittakisko } from "./Rakentuu";
 
 /**
@@ -21,6 +21,17 @@ import Rakentuu, { Mittakisko } from "./Rakentuu";
  * ainoa joka kertoo jotain mita teksti ei kerro.
  *
  * TAUSTA RAKENTUU VIERITTAESSA. Ks. Rakentuu.tsx.
+ *
+ * NAYTTAMON TILALLA ON ELOKUVA. HeroBrowserStage oli staattinen
+ * selainmockup oikeassa palstassa. Sen tilalla on nyt koko heron
+ * kokoinen vierityselokuva (HeroFilm): kamera peruuttaa koodinaytolta
+ * laajaan tyopoytakuvaan ja valojuovat rakentavat verkkosivun
+ * elementti kerrallaan. Mockup naytti valmiin sivun, elokuva nayttaa
+ * sen syntymisen, ja se on sama asia kuin mita sivu myy.
+ *
+ * Teksti, WordSwap, napit ja luottamusrivi jaavat DOM-overlayksi
+ * elokuvan paalle: ne ovat sivun sisaltoa, eivat kuvaa, ja ne on
+ * luettava myos ilman JS:aa ja ruudunlukijalla.
  */
 const WORDS = [
   "löytyvät Googlesta.",
@@ -32,6 +43,7 @@ const WORDS = [
 export default function Hero() {
   return (
     <header className="hero vs-hero">
+      <HeroFilm />
       <Rakentuu />
       <div className="wrap hero-split">
         <Mittakisko />
@@ -77,8 +89,6 @@ export default function Hero() {
             </span>
           </p>
         </div>
-
-        <HeroBrowserStage />
       </div>
     </header>
   );

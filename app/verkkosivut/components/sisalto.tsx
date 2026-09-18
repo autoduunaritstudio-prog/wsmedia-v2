@@ -267,9 +267,12 @@ export const SEO_KUVIOT: ReactNode[] = [
     <path className="kv-palkki" d="M2 22h27" key="d" />
     <path className="kv-palkki" d="M2 30h13" key="e" />
   </>,
-  /* sivupuu: juuri ja kolme alasivua */
+  /* sivupuu: juuri ja kolme alasivua.
+     pathLength=1 tekee viivan piirtymisesta mitan riippumattoman:
+     stroke-dasharray voidaan kirjoittaa nollan ja ykkosen valilla
+     eika viivan todellisina pituuksina. */
   <>
-    <path className="kv-rata" d="M50 8v9H14v6M50 17v6M50 17h36v6" key="a" />
+    <path className="kv-rata" d="M50 8v9H14v6M50 17v6M50 17h36v6" pathLength={1} key="a" />
     <rect className="kv-laatikko kv-kirkas" x="38" y="2" width="24" height="7" rx="2" key="b" />
     <rect className="kv-laatikko" x="4" y="23" width="20" height="7" rx="2" key="c" />
     <rect className="kv-laatikko" x="40" y="23" width="20" height="7" rx="2" key="d" />
@@ -285,14 +288,19 @@ export const SEO_KUVIOT: ReactNode[] = [
     <circle className="kv-laatikko kv-kirkas" cx="11" cy="7.5" r="3.4" key="b" />
     <path className="kv-palkki kv-kirkas" d="M13.6 10.1l2.4 2.4" key="c" />
     <path className="kv-palkki kv-kirkas" d="M21 7.5h29" key="d" />
-    <path className="kv-rata" d="M8 20h46M8 27h36M8 34h52" key="e" />
+    <path className="kv-rata" d="M8 20h46M8 27h36M8 34h52" pathLength={1} key="e" />
     <path className="kv-palkki" d="M8 27h36" key="f" />
     <path className="kv-osoitin" d="M2 27h2.4" key="g" />
   </>,
   /* kayttajakokemus: kavija jaa sivulle eika palaa */
   <>
     <path className="kv-rata" d="M2 30h96" key="a" />
-    <path className="kv-kayra kv-kirkas" d="M2 30C16 30 22 22 34 19s18 2 30-4 22-9 32-11" key="b" />
+    <path
+      className="kv-kayra kv-kirkas"
+      d="M2 30C16 30 22 22 34 19s18 2 30-4 22-9 32-11"
+      pathLength={1}
+      key="b"
+    />
     <circle className="kv-piste" cx="98" cy="4" r="3" key="c" />
   </>,
 ];

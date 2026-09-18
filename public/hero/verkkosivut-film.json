@@ -1,0 +1,10 @@
+{
+  "rev": "v1",
+  "src": "/hero/verkkosivut-film-v1.mp4",
+  "frames": 193,
+  "fps": 24,
+  "width": 1920,
+  "height": 1080,
+  "gop": 12,
+  "bytes": 2302991
+}

@@ -9428,6 +9428,7 @@ html.rv-ready .wsx .kohoa:not(.on) { opacity: 0; transform: scale(.955) translat
   .wsx .laatta > img, .wsx .vaite.kuvallinen > img,
   .wsx .seo-sec.kuvapohja > .pohjakuva, .wsx .lava-tausta img,
   .wsx .juova img, .wsx .kaiku { scale: 1; translate: none !important }
+  .wsx .kaiku { animation: none !important }
   .wsx .juova img { width: 100%; margin-left: 0 }
   .wsx .porras > *, .wsx .kohoa { opacity: 1 !important; transform: none !important }
   .wsx .laatta[data-rvs] .laatta-kick,
@@ -13609,11 +13610,162 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   --veto2: clamp(0, calc((var(--piirto, 1) - var(--i) * .16) * 1.92), 1);
 }
 .page-verkkosivut #hakukoneoptimointi .nelja-k::before { scale: var(--veto2) 1 }
-.page-verkkosivut #hakukoneoptimointi .nelja-kuvio {
-  clip-path: inset(-20% calc((1 - var(--veto2)) * 102%) -20% -2%);
-}
 @media (prefers-reduced-motion: reduce) {
   .page-verkkosivut #hakukoneoptimointi .nelja-k { --veto2: 1 }
+}
+
+/* ---------- NAKYVYYDEN MERKIT LAMPOISENA ----------
+   Merkki on kortin tunnus, kuvio sen pohja. Kun molemmat olivat samaa
+   syaania, kortti oli yhta vari-ilmiota ylhaalta alas. Lampoinen
+   merkki erottaa ne toisistaan: merkki kertoo mista puhutaan, syaani
+   kuvio nayttaa mekaniikan. Sama --lampo kuin Palvelun sisallon
+   merkeissa ja Tuttu tilanne -osiossa, eli sivun toinen brandivari
+   eika uusi vari. */
+.page-verkkosivut #hakukoneoptimointi .nelja-ik {
+  stroke: var(--lampo);
+  border-color: rgba(232,165,74,.22);
+  background: rgba(232,165,74,.07);
+}
+
+/* ---------- KAIUN KEVYT HOHTO ----------
+   Aariviiva on yksi 1,5px:n viiva tummalla pohjalla, eli se on
+   piirros ilman massaa. Pehmea varjo samassa varissa antaa sille
+   valoa ilman etta viiva itse levenee: kaksi kerrosta, lahi ja
+   kauko, jolloin hohto ei ole rengas vaan hame.
+
+   Mitoitus on tarkoituksella niukka (.22 ja .12 alfaa), koska sana
+   on tekstin vieressa: sen tehtava on hohtaa sen verran etta silma
+   huomaa sen olevan valoa eika vain viiva. */
+.page-verkkosivut .seo-sec .kaiku.vas,
+.page-verkkosivut .seo-sec .kaiku.oik {
+  filter: drop-shadow(0 0 6px rgba(111,236,255,.22))
+          drop-shadow(0 0 22px rgba(111,236,255,.12));
+}
+
+/* ---------- JOKAINEN KUVIO PIIRTYY OMALLA TAVALLAAN ----------
+
+   Ensin kaikki nelja paljastui samalla vasemmalta oikealle kulkevalla
+   clip-path-pyyhkaisylla. Se on yksi liike neljalle eri asialle, eli
+   kuvion sisallolla ei ole mitaan tekemista sen kanssa miten se tulee
+   esiin, ja pyyhkaisy nakyy juuri silta mita se on: maskilta.
+
+   Nyt jokainen kuvio tekee sen mita se esittaa:
+     1. latausjono  palkit kasvavat vasemmalta perakkain, ylin ensin
+     2. sivupuu     viivat piirtyvat juuresta, laatikot ilmestyvat
+                    perassa yksi kerrallaan
+     3. hakukentta  kentta ilmestyy, hakusana "kirjoitetaan",
+                    ehdotukset tulevat rivi kerrallaan
+     4. kayra       viiva piirtyy vasemmalta ja paatepiste ilmestyy
+                    vasta kun viiva on perilla
+
+   Ajuri on sama --veto2 kuin ennenkin (0..1, --piirtoon sidottu,
+   kortin oma viive --i:sta), joten piirto on yha vierityksen ohjaama
+   ja jaa nakyviin. Jokainen osa saa siita oman osuutensa --vN:lla:
+   kerroin 3.4 tarkoittaa etta yksi osa piirtyy noin 30 %:ssa koko
+   matkasta, ja vahennys porrastaa alut.
+
+   Piirtoon kaytetaan stroke-dashoffsetia (pathLength=1, joten arvot
+   ovat nollan ja ykkosen valilla riippumatta viivan todellisesta
+   pituudesta), scaleX:aa ja opacitya, ei clip-pathia: maski paljastaa
+   valmiin kuvan, nama piirtavat sen.
+
+   TAYTTA PYSAHDYSTA EI OLE. Jokaisessa kuviossa on lisaksi yksi hidas
+   ikuinen liike (palkin kirkkaus, juuren hehku, kirjoituskohdistin,
+   paatepisteen syke). Se kaytta eri ominaisuutta kuin piirto, jolloin
+   ne eivat kumoa toisiaan. */
+.page-verkkosivut #hakukoneoptimointi .nelja-kuvio {
+  --v1: clamp(0, calc(var(--veto2, 1) * 3.4), 1);
+  --v2: clamp(0, calc((var(--veto2, 1) - .16) * 3.4), 1);
+  --v3: clamp(0, calc((var(--veto2, 1) - .30) * 3.4), 1);
+  --v4: clamp(0, calc((var(--veto2, 1) - .44) * 3.4), 1);
+  --v5: clamp(0, calc((var(--veto2, 1) - .58) * 3.4), 1);
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-kuvio * {
+  transform-box: fill-box;
+}
+
+/* 1. LATAUSJONO. Palkit kasvavat vasemmasta reunasta, ylin ensin.
+      transform-origin: left kayttaa fill-boxia, eli palkin omaa
+      alkupistetta, ei SVG:n origoa. */
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(1) .kv-palkki {
+  transform-origin: left center;
+}
+/* nth-of-type laskee ELEMENTTITYYPIN, ei luokan: ensimmainen path on
+   pohjaviivasto, joten palkit ovat path 2-5. */
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(1) .kv-palkki:nth-of-type(2) { transform: scaleX(var(--v1)) }
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(1) .kv-palkki:nth-of-type(3) { transform: scaleX(var(--v2)) }
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(1) .kv-palkki:nth-of-type(4) { transform: scaleX(var(--v3)) }
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(1) .kv-palkki:nth-of-type(5) { transform: scaleX(var(--v4)) }
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(1) .kv-palkki.kv-kirkas {
+  animation: kv-hohto 4.2s ease-in-out infinite alternate;
+}
+
+/* 2. SIVUPUU. Viivat piirtyvat juuresta haaroihin, laatikot tulevat
+      perassa. Juuri on ensimmainen, koska rakenne alkaa siita. */
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(2) .kv-rata {
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--v2));
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(2) .kv-laatikko {
+  transform-origin: center; transform: scale(calc(.6 + var(--v1) * .4));
+  opacity: var(--v1);
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(2) .kv-laatikko:nth-of-type(2) {
+  transform: scale(calc(.6 + var(--v3) * .4)); opacity: var(--v3);
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(2) .kv-laatikko:nth-of-type(3) {
+  transform: scale(calc(.6 + var(--v4) * .4)); opacity: var(--v4);
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(2) .kv-laatikko:nth-of-type(4) {
+  transform: scale(calc(.6 + var(--v5) * .4)); opacity: var(--v5);
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(2) .kv-laatikko.kv-kirkas {
+  animation: kv-hohto 5.4s ease-in-out infinite alternate;
+}
+
+/* 3. HAKUKENTTA. Kentta ensin, sitten hakusana kirjoitetaan, sitten
+      ehdotukset rivi kerrallaan ja viimeisena valinta. */
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(3) .kv-laatikko,
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(3) .kv-palkki.kv-kirkas:nth-of-type(1) {
+  opacity: var(--v1);
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(3) .kv-palkki.kv-kirkas:nth-of-type(2) {
+  transform-origin: left center; transform: scaleX(var(--v2));
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(3) .kv-rata {
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--v3));
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(3) .kv-palkki:not(.kv-kirkas) {
+  transform-origin: left center; transform: scaleX(var(--v4));
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(3) .kv-osoitin {
+  opacity: var(--v5);
+  animation: kv-kohdistin 1.4s steps(1, end) infinite;
+}
+
+/* 4. KAYRA. Viiva piirtyy vasemmalta ja paatepiste ilmestyy vasta kun
+      viiva on perilla, eli piste on kayran seuraus eika koriste. */
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(4) .kv-rata {
+  transform-origin: left center; transform: scaleX(var(--v1));
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(4) .kv-kayra {
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--v2));
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k:nth-child(4) .kv-piste {
+  opacity: calc(var(--v4) * .9); transform-origin: center;
+  animation: kv-syke 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes kv-hohto { from { opacity: .62 } to { opacity: 1 } }
+@keyframes kv-kohdistin { 0%, 55% { visibility: visible } 56%, 100% { visibility: hidden } }
+@keyframes kv-syke { from { scale: .82 } to { scale: 1.12 } }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-verkkosivut #hakukoneoptimointi .nelja-kuvio * {
+    animation: none !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1;
+  }
 }
 
 
@@ -13709,17 +13861,264 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    pudottamalla #kenelle pois valitsimesta. Id-valitsin voittaa
    tarkkuudessa aiemmat .page-verkkosivut .kaiku -saannot, joten
    jarjestyksella tassa tiedostossa ei ole valia. */
+/* Hengityksen matka on 16px pystyyn ja 8px sivuun, ja yksi puolikas
+   kierros kestaa noin 15s. Se on tarkoituksella hitaampi kuin mikaan
+   mita silma seuraa: sana ei liiku, se elaa. Mitattuna jokainen sana
+   on vahintaan 40px irti seka nakyman reunasta etta sisallosta, joten
+   liike mahtuu valiin kummassakin paassa eika synnyta vaakavieritysta. */
+@keyframes kaiku-elo {
+  from { translate: -4px -8px }
+  to   { translate: 4px 8px }
+}
+
+/* ---------- UKK JA CTA SAMAAN MITTAAN KUIN LYHYTVIDEOILLA ----------
+
+   Mitattu molemmilta sivuilta samalla 1230px:n leveydella:
+   lyhytvideoiden .qa2 on 1020px levea ja sarakkeet 379/569, talla
+   sivulla 864px ja 316/475. Ero on tasan kiskon sarake: tallä sivulla
+   .swrap on ruudukko 112px + 44px ennen sisaltoa, lyhytvideoilla
+   kiskoa ei ole lainkaan. Sama koski CTA:n otsikkoa (44,4px vs
+   37,6px): .seo-h2 skaalautuu sailion leveydesta, joten kapeampi
+   sailio pienensi otsikon.
+
+   Naissa kahdessa osiossa kisko on nyt muutenkin tyhja: UKK:n oma sana
+   on kaiussa ja CTA:sta sana poistettiin. Siksi ne saavat koko
+   .swrapin leveyden, jolloin mittasuhteet ovat samat kuin
+   lyhytvideoilla. */
+@media (min-width: 901px) {
+  .page-verkkosivut #ukk > .swrap,
+  .page-verkkosivut #tarjous > .swrap { display: block }
+  .page-verkkosivut #ukk > .swrap > .seo-ord,
+  .page-verkkosivut #tarjous > .swrap > .seo-ord { display: none }
+}
+/* UKK:n kaiku menettaa samalla kiskon puskurin, joten se mitoitetaan
+   .swrapin ULKOPUOLELLE jaavasta marginaalista samoin kuin oikean
+   reunan sanat. Ilman tata se olisi 1230px:n leveydella sisallon
+   paalla. */
 @media (min-width: 1200px) {
-  .page-verkkosivut #kenelle .kaiku,
-  .page-verkkosivut #kenelle .kaiku.oik,
-  .page-verkkosivut #kenelle .kaiku.vas {
-    writing-mode: vertical-rl;
-    left: -4vw; right: auto; top: 6%; bottom: auto;
-    font-size: clamp(120px, 12vw, 200px);
-    letter-spacing: -.02em;
-    /* Vaimeampi kuin oikean reunan kaiku (.11), koska tama on
-       lahempana luettavaa tekstia. */
-    -webkit-text-stroke: 1px rgba(111,236,255,.1);
-    text-stroke: 1px rgba(111,236,255,.1);
+  .page-verkkosivut #ukk .kaiku.vas {
+    --marg: calc((100vw - min(1320px, 92vw)) / 2);
+    left: calc(var(--marg) * .12 + 6px); right: auto;
+    font-size: min(140px, calc(var(--marg) * .9),
+                   calc(74vh / (var(--kirjaimet, 7) * .67)));
   }
+}
+
+/* ---------- PYSTYKAIKU, OSION OMA SANA REUNASSA ----------
+
+   Jokaisen osion oma sana kulkee pystyssa reunassa, ja puoli vaihtuu
+   osiosta toiseen: oikea, vasen, oikea, vasen. Puolen paattaa
+   komponentin puoli-arvo, ei tama tiedosto, joten osioiden jarjestyksen
+   muuttaminen ei riko vuorottelua CSS:ssa. CTA jaa ilman: se on sivun
+   paatepiste eika osio muiden joukossa.
+
+   KUUSI ASIAA ON MITATTU, EI ARVATTU:
+
+   1. FONTTI. Sivun fontissa N:n ja K:n vinoviiva on oma paallekkainen
+      muotonsa. Taytettyna se ei nay, mutta pelkkana aariviivana noiden
+      muotojen leikkauskohdat piirtyvat kirjaimen SISALLE
+      ylimaaraisina kulmina. Testattu ruudulla viidella fontilla ja
+      kolmella lihavuudella: jokainen jarjestelmafontin variantti teki
+      saman, Helvetica Neue, Arial ja Avenir piirtyivat puhtaina. Kyse
+      on fontin rakenteesta, ei paksuudesta eika valistyksesta.
+
+   2. KOKO TULEE KIRJAINMAARASTA. Sanan on mahduttava nakymaan
+      kokonaan, muuten viimeinen kirjain jaa ruudun ulkopuolelle eika
+      sita naa missaan vaiheessa. Pystysanan korkeus on mitattuna noin
+      0,67 x fonttikoko x kirjainmaara (KENELLE 7 kirjainta 140px:n
+      koolla = 672px, PROSESSI 8 kirjainta 118px:lla = 625px). Siksi
+      koko lasketaan kaavasta eika kirjoiteta kasin: komponentti antaa
+      --kirjaimet, ja pidempi sana saa itsestaan pienemman koon.
+
+   3. VALISTYS. Negatiivinen valistys tyontaa pystysuunnassa
+      glyyfilaatikot paallekkain ja aariviivat leikkaavat toisensa.
+      Positiivinen erottaa ne.
+
+   4. LIIKE ON ELAMISTA, EI PALJASTUSTA. Ensin sana liukui 150px
+      reunasta sisaan ja kirkastui nollasta: se oli niin tiukasti
+      vierityksessa kiinni etta silma seurasi sita eika sivua. Nyt
+      sana on aina paikallaan ja tayteen kirkkauteensa piirrettyna, ja
+      vieritys vain huojuttaa sita 24px koko sen matkan ajan nakyman
+      lapi. Sama periaate kuin taustakuvioinnissa: liike on olemassa
+      koko ajan, mutta se ei ole tapahtuma. Mittari on --valo (0 kun
+      osion ylareuna koskee nakyman alareunaa, 1 kun alareuna on
+      noussut ylareunan yli) eika --piirto, joka pysahtyy yhteen
+      kesken osion.
+
+   5. PARALLAKSIN OMA VAAKASIIRTO POIS. Se on jopa 22px kumpaankin
+      suuntaan, ja huojunnan paalle se veisi sanan reunan yli.
+      Liikkeen maara pidetaan yhdessa paikassa.
+
+   6. VASEN JA OIKEA EIVAT OLE SYMMETRISIA. Vasemmalla sanan vieressa
+      on kiskon sarake (112px + 44px) ennen luettavaa tekstia,
+      oikealla ei ole mitaan: sisalto loppuu .swrapin reunaan. Siksi
+      vasen saa kiinteat 40px ja oikea laskee kokonsa ja etaisyytensa
+      siita tilasta joka .swrapin (min(1320px, 92vw)) oikealle
+      puolelle oikeasti jaa. Nain oikea kutistuu kapealla naytolla
+      itsestaan eika mene koskaan sisallon paalle.
+
+   ALARAJA 1200px. Sita kapeammalla .swrapin marginaalit kutistuvat
+   niin, etta sanalle ei jaa omaa tilaa kummallakaan puolella.
+   Silloin jaa voimaan aiempi oikean reunan saanto. */
+@media (min-width: 1200px) {
+  .page-verkkosivut .seo-sec .kaiku.vas,
+  .page-verkkosivut .seo-sec .kaiku.oik {
+    writing-mode: vertical-rl;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: .03em;
+    /* line-height maarittaa pystysuunnassa RIVIN LEVEYDEN. Perusarvo
+       .76 on vaakatekstia varten, ja pystyssa se tekee rivilaatikosta
+       glyyfia kapeamman: kirjaimet piirtyvat laatikon yli, ja mitattuna
+       sivulle tuli 17px vaakavieritysta jota ei nakynyt missaan. */
+    line-height: 1;
+    top: 50%; bottom: auto;
+    -webkit-text-stroke: 1.5px rgba(111,236,255,.22);
+    text-stroke: 1.5px rgba(111,236,255,.22);
+    /* OMA HENGITYS. Vieritys antaa sanalle suunnan, mutta paikallaan
+       seisova sivu jaisi kuolleeksi. Tama hidas kello kulkee koko ajan
+       ja vieritys tulee sen paalle: kaksi eri kanavaa, translate ja
+       transform, jolloin ne eivat kumoa toisiaan.
+
+       Kesto lasketaan kirjainmaarasta, jolloin jokainen sana kulkee
+       omaa tahtiaan eivatka reunat liiku yhtena rivistona.
+
+       Animaatio voittaa cascadessa parallaksin JS:n kirjoittaman
+       inline-translaten, joten tama korvaa aiemman
+       translate: none !important -saannon. !important olisi
+       painanut animaation alleen. */
+    animation: kaiku-elo calc(9s + var(--kirjaimet, 7) * .8s)
+               ease-in-out infinite alternate;
+  }
+  /* Vasen: kiinteat 40px seinasta. rotate(180) kaantaa lukusuunnan
+     alhaalta ylos, sama kuin kiskossa, ja samalla paikalliset akselit:
+     positiivinen translateX vie ruudulla vasemmalle. */
+  .page-verkkosivut .seo-sec .kaiku.vas {
+    left: 40px; right: auto;
+    font-size: min(140px, 8.5vw, calc(74vh / (var(--kirjaimet, 7) * .67)));
+    transform: translateY(-50%) rotate(180deg)
+               translateX(calc((var(--valo, .5) - .5) * 24px));
+  }
+  /* Oikea: koko ja etaisyys .swrapin oikealle puolelle jaavasta
+     marginaalista. Liike on vasemman peilikuva, jolloin reunat
+     hengittavat yhdessa eivatka kulje rinnakkain. */
+  /* OIKEA LUKEE YLHAALTA ALAS. Vasen kaanto (rotate 180) on kiskon
+     suunta ja se kuuluu vasempaan reunaan. Oikeassa reunassa sama
+     kaanto veisi sanan alkamaan alhaalta, mika lukee vastakarvaan kun
+     silma tulee sivun oikealta puolelta: T ylhaalla, E alhaalla.
+     Ilman kaantoa myos paikalliset akselit ovat normaalit, joten
+     liikkeen etumerkit ovat tassa painvastoin kuin vasemmalla. */
+  .page-verkkosivut .seo-sec .kaiku.oik {
+    --marg: calc((100vw - min(1320px, 92vw)) / 2);
+    /* +6px: hengitys vie sanaa 4px oikealle aariasennossaan, ja
+       mitattuna 24px:n etaisyydella se synnytti 4px vaakavierityksen.
+       28px riitti nollaan, joten varaa jaa. */
+    right: calc(var(--marg) * .12 + 6px); left: auto;
+    font-size: min(140px, calc(var(--marg) * .9),
+                   calc(74vh / (var(--kirjaimet, 7) * .67)));
+    transform: translateY(-50%)
+               translateX(calc((var(--valo, .5) - .5) * 24px));
+  }
+  /* Kiskon pieni valkoinen sana ja jattikaiku ovat sama sana samassa
+     osiossa. Toinen on toistoa, ja isompi on se joka tuo syvyyden.
+     Kiskon oma pystyviiva jaa: se on osion merkki, ei sana. */
+  .page-verkkosivut .seo-sec:has(> .kaiku) > .swrap > .seo-ord > span,
+  .page-verkkosivut .seo-sec:has(> .kaiku) > .swrap > .seo-ord > i { display: none }
+  /* YLOS-ANKKUROINTI. Korkeassa osiossa (Tuttu tilanne 1130px,
+     Toteutustapa 1584px) keskitetty sana on satoja pikseleita sen
+     alapuolella mihin lukija katsoo kun osio alkaa, eli se nakyy vasta
+     kun osio on jo luettu. Ylos-ankkuroitu sana alkaa osion omasta
+     ylareunasta. 96px riittaa: se on osion oman ylapehmusteen verran,
+     jolloin sana alkaa samalta korkeudelta kuin osion sisalto eika
+     ylita osion rajaa. Logonauhaan se ei osu, koska ylos-sanat ovat
+     oikealla ja nauhan omat osat ovat vasemmalla (logo) ja
+     valikkonapissa (oikea reuna 1435px), kun sana alkaa 1579px:sta. */
+  .page-verkkosivut .seo-sec .kaiku.vas.ylos,
+  .page-verkkosivut .seo-sec .kaiku.oik.ylos { top: 96px; bottom: auto }
+  .page-verkkosivut .seo-sec .kaiku.vas.ylos {
+    transform: rotate(180deg) translateX(calc((var(--valo, .5) - .5) * 24px));
+  }
+  .page-verkkosivut .seo-sec .kaiku.oik.ylos {
+    transform: translateX(calc((var(--valo, .5) - .5) * 24px));
+  }
+}
+
+/* ==================================================================
+   VERKKOSIVUT-HERON VIERITYSELOKUVA
+   ==================================================================
+   Sama tekniikka kuin etusivulla, mutta taman heron geometria on eri:
+   etusivulla hero on yhden nakyman korkuinen laatikko ja sen alla on
+   .hero-spacer, talla sivulla hero on 310svh korkea laatikko jonka
+   SISALLA sisalto on pinnattu (.wrap) ja jonka paalle cover nousee
+   -100svh:n marginaalilla.
+
+   Elokuvakerros kayttaa siis samaa kuviota kuin .rakentuu: pinnattu,
+   yhden nakyman korkuinen, ja negatiivinen alamarginaali ottaa sen
+   pois virtauksesta. Nain se pysyy ruudulla koko heron vyohykkeen ajan
+   eika vieri pois ensimmaisen nakyman jalkeen.
+
+   STICKY TOP = min(0, vh - korkeus) TOTEUTUU RAKENTEESTA: jokainen
+   taman heron pinnattu kerros on tasan 100svh korkea, joten lauseke on
+   0 eika negatiivista arvoa tarvita. Jos jokin kerros joskus kasvaa
+   nakymaa korkeammaksi, SiteEffectsin --hero-sticky-top on valmiina.
+
+   JARJESTYS. Elokuva on DOM:ssa ensimmainen ja rautalanka sen jalkeen,
+   joten rautalanka piirtyy elokuvan paalle ja teksti (.wrap, z-index 2)
+   molempien paalle. */
+.page-verkkosivut .vs-hero-media {
+  position: sticky; top: 0; left: 0; inset-block-end: auto; inset-inline-end: auto;
+  width: 100%; height: 100svh; margin-bottom: -100svh;
+  z-index: 0; overflow: hidden;
+  background: #06090c;
+}
+/* LUETTAVUUSKERROS.
+   Elokuvan loppupuolella oikea naytto on kuvan kirkkain kohta ja
+   otsikko on vasemmalla. Koko kuvan yli vedetty tummennus veisi
+   elokuvalta juuri sen mita se on tanne tuomassa, joten tummennus on
+   vasemmasta reunasta lahteva ja se sammuu ennen kuvan oikeaa
+   kolmannesta. Ylareunan oma ohut tummennus on navia varten.
+
+   VOIMAKKUUS ON MITATTU, EI ARVATTU. Menetelma: tekstielementtien
+   laatikot luettiin elavasta DOMista (nakyma 1728x868), jokaiselle
+   laskettiin sama cover-crop-muunnos jota piirtokoodi kayttaa
+   (s = max(vw/1920, vh/1080), keskitetty siirto), laatikko
+   projisoitiin takaisin freimin pikselikoordinaateiksi, ja alueelta
+   haettiin KIRKKAIN pikseli - ei keskiarvo. Siita ratkaistiin pienin
+   alfa jolla WCAG-kontrasti scrimin lapi on >= 4,5:1. Lapikaynti: joka
+   kahdeksas ruutu (25 kpl 193:sta) ja nelja nakymaa (1728x868,
+   1512x850, 1440x900, 1280x800).
+
+     elementti    vari       sitova tausta     pienin alfa
+     h1           #f4f7fa    (218,255,255)     0,57
+     .heroctas    #f4f7fa    (218,255,252)     0,57
+     .sub         #b9c6d4    (219,253,255)     0,70
+     .herotrust   #b9c6d4    (233,255,255)     0,70
+
+   0,70 EI OLE YLIMITOITUS. Vaatimus on sama jokaisella 25 mitatulla
+   ruudulla (0,68-0,70), eli tekstin alla on kirkas kohta koko elokuvan
+   ajan: alussa koodinaytto ja lopussa valojuovat. Se ei siis ole
+   yhden ruudun huippu jota voisi vaimentaa ajastuksella.
+
+   VAAKARAJAUS. Teksti ulottuu 57 %:iin leveydesta, joten taysi arvo
+   pidetaan 58 %:iin ja se sammuu 82 %:iin mennessa. Elokuvan oikea
+   kolmannes - se naytto johon sivu rakentuu - jaa koskematta. */
+.page-verkkosivut .vs-hero-scrim {
+  position: absolute; inset: 0; display: block; pointer-events: none;
+  background:
+    linear-gradient(97deg,
+      rgba(6,9,12,var(--vs-scrim, .7)) 0%,
+      rgba(6,9,12,var(--vs-scrim, .7)) 58%,
+      rgba(6,9,12,calc(var(--vs-scrim, .7) * .45)) 70%,
+      rgba(6,9,12,0) 82%),
+    linear-gradient(180deg, rgba(6,9,12,.42) 0%, rgba(6,9,12,0) 22%);
+}
+/* Cover peittaa heron, joten sen on oltava vahintaan heron korkuinen.
+   Arvo mitataan ja pakotetaan HeroFilm.tsx:ssa (--vs-cover-min), koska
+   molemmat korkeudet syntyvat sisallosta eika ehtoa voi kirjoittaa
+   CSS:aan. */
+.page-verkkosivut .stickysub > .cover { min-height: var(--vs-cover-min, 0px) }
+@media (max-width: 979px) {
+  /* Kapealla naytolla ei skrubata: elokuvaa ei ladata lainkaan ja
+     nakyviin jaa poster. Kerros on silti sama. */
+  .page-verkkosivut .vs-hero-media canvas { display: none }
 }

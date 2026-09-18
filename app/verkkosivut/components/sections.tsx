@@ -51,6 +51,7 @@ function Ikoni({ nimi }: { nimi: string }) {
 export function Ongelma() {
   return (
     <section className="seo-sec" id="miksi">
+      <Kaiku sana="TILANNE" puoli="oik" kohta="ylos" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Tuttu tilanne</span>
@@ -93,6 +94,7 @@ export function Ongelma() {
 export function Sisalto() {
   return (
     <section className="seo-sec" id="sisalto">
+      <Kaiku sana="SISÄLTÖ" puoli="vas" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Palvelun sisältö</span>
@@ -155,6 +157,7 @@ export function Sisalto() {
 export function Toteutustapa() {
   return (
     <section className="seo-sec" id="toteutustapa">
+      <Kaiku sana="TOTEUTUS" puoli="oik" kohta="ylos" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Toteutustapa</span>
@@ -189,6 +192,7 @@ export function Toteutustapa() {
 export function Nakyvyys() {
   return (
     <section className="seo-sec" id="hakukoneoptimointi">
+      <Kaiku sana="NÄKYVYYS" puoli="vas" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Näkyvyys</span>
@@ -248,7 +252,7 @@ export function Nakyvyys() {
 export function Prosessi() {
   return (
     <section className="seo-sec" id="prosessi">
-      <Kaiku sana="2–4 VK" />
+      <Kaiku sana="PROSESSI" puoli="oik" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Prosessi</span>
@@ -339,7 +343,6 @@ export function Hinnoittelu() {
       <MetalBackdrop inSection />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
-          <span>Hinnoittelu</span>
           <i>Kiinteä hinta, ei aloitusmaksua</i>
         </div>
         <h2 className="seo-h2 rv">Paljonko verkkosivut maksavat yritykselle?</h2>
@@ -416,7 +419,7 @@ export function Ukk() {
 
   return (
     <section className="seo-sec" id="ukk">
-      <Kaiku sana="KYSY" />
+      <Kaiku sana="FAQ" puoli="vas" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Usein kysyttyä</span>
@@ -462,7 +465,6 @@ export function Tarjous() {
       />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
-          <span>Tarjous</span>
         </div>
         <div className="loc">
           <div>

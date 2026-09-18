@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 /**
  * MAASTO: sivun visuaalisen kielen kolme rakennuspalikkaa.
@@ -63,9 +63,29 @@ export function Juova() {
  * aria-hidden koska sana toistaa jo nakyvan otsikon sisallon.
  * Ruudunlukija lukisi sen toiseen kertaan ilman mitaan lisaarvoa.
  */
-export function Kaiku({ sana, puoli = "oik" }: { sana: string; puoli?: "oik" | "vas" }) {
+export function Kaiku({
+  sana,
+  puoli = "oik",
+  kohta = "keski",
+}: {
+  sana: string;
+  puoli?: "oik" | "vas";
+  /* Pystysana keskittyy oletuksena osioon. Korkeassa osiossa keskikohta
+     on kaukana siita mihin lukija katsoo kun osio alkaa, joten sana voi
+     ankkuroitua osion ylareunaan. */
+  kohta?: "keski" | "ylos";
+}) {
+  /* Kirjainmaara ulos CSS:lle. Pystysana mitoittaa itsensa sen ja
+     nakyman korkeuden mukaan, jolloin pitka sana saa pienemman koon
+     eika valu ruudun ulkopuolelle. */
+  const kirjaimet = sana.replace(/\s/g, "").length;
   return (
-    <span className={`kaiku ${puoli}`} aria-hidden="true" data-parx="0.03">
+    <span
+      className={`kaiku ${puoli}${kohta === "ylos" ? " ylos" : ""}`}
+      aria-hidden="true"
+      data-parx="0.03"
+      style={{ "--kirjaimet": kirjaimet } as CSSProperties}
+    >
       {sana}
     </span>
   );
