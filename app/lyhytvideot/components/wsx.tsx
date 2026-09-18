@@ -1,5 +1,4 @@
 import BudgetForm from "../../components/BudgetForm";
-import NetBackdrop from "../../components/NetBackdrop";
 import MetalBackdrop from "../../components/MetalBackdrop";
 import SmartLink from "../../components/SmartLink";
 import { RefGrid } from "../../components/RefCards";
@@ -13,7 +12,7 @@ import { PANEELIT } from "./Paneelit";
 import { EI_SOVI, KETJU, PLANS, PLATFORMS, REASONS, SOPII, STEPS } from "./sisalto";
 import { FAQ_GROUPS } from "../faq-data";
 
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties } from "react";
 
 /* ==================================================================
    LYHYTVIDEOT .wsx-KUVAKIELELLA
@@ -42,30 +41,10 @@ import type { CSSProperties, ReactNode } from "react";
 
 const n = (k: number) => ({ "--i": k }) as CSSProperties;
 
-/**
- * KAHDEN OSION YHTEINEN TAUSTA.
- *
- * Peittava osio tarvitsee umpinaisen pohjan, ja jokaisella omalla
- * NetBackdropilla on oma satunnainen pistekentta. Kaksi perakkaista
- * osiota omilla kerroksillaan nayttivat siksi silta etta kuviointi
- * katkeaa niiden valissa ja ne irtoavat toisistaan.
- *
- * Kaare ottaa pohjan ja kuvion itselleen, ja osiot sen sisalla ovat
- * lapinakyvia: yksi kentta, yksi katkeamaton kuvio kahden osion yli.
- */
-export function Jakso({ children, merkit }: { children: ReactNode; merkit?: boolean }) {
-  return (
-    <div className="jakso-pari">
-      {/* Merkit jatkuvat jakson yli: kaare on yksi, joten molemmat osiot
-          jakavat saman kerroksen eivatka merkit katkea niiden valissa.
-          Vain Kanavat + Tehtya tyota saa ne: Prosessi ja Kokonaisuus
-          puhuvat aikajanan ja rivimerkkien kielta, ja alustatunnukset
-          niiden taustalla olisivat kolmas kuvakieli samassa jaksossa. */}
-      <NetBackdrop mount="cover" merkit={merkit} />
-      {children}
-    </div>
-  );
-}
+/* Jakso on siirretty app/components/Jakso.tsx:aan, koska sama kaare
+   on nyt myos Verkkosivut-alasivulla. Uudelleenvienti pitaa taman
+   tiedoston tuonnit ennallaan. */
+export { default as Jakso } from "../../components/Jakso";
 
 
 

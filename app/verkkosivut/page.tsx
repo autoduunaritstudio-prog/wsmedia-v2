@@ -8,6 +8,7 @@ import Palkki from "../components/Palkki";
 import SiteEffects from "../components/SiteEffects";
 import { OVERLAY_NAV, SUBPAGE_FOOTER } from "../components/site-data";
 
+import Jakso from "../components/Jakso";
 import Hero from "./components/Hero";
 import { buildJsonLd } from "./jsonld";
 import { Laatta, Vaite } from "../components/Maasto";
@@ -92,12 +93,35 @@ export default function Verkkosivut() {
           <NetBackdrop mount="cover" />
           <Logos />
 
-      {/* ENSIMMAINEN PINO. Tuttu tilanne jaa alle, hengahdys nousee sen
-          paalle ja palvelun sisalto nousee hengahdyksen paalle.
-          Lause oli aiemmin neljannen kortin leipatekstissa SANATARKASTI
-          samassa muodossa, eli sivu sanoi saman kahdesti kolmen
-          ruudun valein. Nyt lause on vain taalla ja kortti jatkaa
-          siita eteenpain. */}
+      {/* YKSI PEITTOKETJU, HENGAHDYS JOKA TOINEN VAIHE.
+          =============================================================
+          Ennen: ketju katkesi kahdesti. Nakyvyys ja Prosessi olivat
+          pinon ULKOPUOLELLA eli tavallisessa virtauksessa, joten osa
+          osioista nousi edellisen paalle ja osa ei. Sama sivu teki
+          kahta eri asiaa, ja juuri se lukee hajonneena.
+
+          Mitattuna (nakyma 868px) hengahdysten valit olivat:
+            hengahdys -> hengahdys   4102px = 4,7 nakymaa
+            hengahdys -> hengahdys   1560px = 1,8 nakymaa
+            hengahdys -> loppu       3799px = 4,4 nakymaa
+          Eli kaksi lahes viiden nakyman umpinaista jaksoa ja niiden
+          valissa kohta jossa kaksi hengahdysta oli lahes kiinni
+          toisissaan, valissa vain 0,8 nakyman Prosessi.
+
+          Nyt: 1,3 / 1,8 / 3,0 / 1,8 / 2,3 nakymaa. Kaksi keinoa:
+
+          1. KAIKKI SAMASSA KETJUSSA. Jokainen vaihe nousee edellisen
+             paalle Hinnoitteluun asti, ja hanta (UKK, Tarjous) on
+             tavallista virtausta. Sama rakenne kuin Lyhytvideoilla.
+
+          2. JAKSO ON YKSI VAIHE. Prosessi on 692px eli 0,8 nakymaa.
+             Yksin kahden hengahdyksen valissa se lukee vahingolta.
+             Kaareessa Kenellen kanssa se on yksi vaihe, ja sama
+             temppu pitaa Toteutustavan ja Nakyvyyden yhdessa.
+
+          Kenelle siirtyi hannasta ketjuun myos sisallon takia: se
+          rajaa kenelle tama sopii, ja rajaus ennen hintaa on
+          rehellisempi jarjestys kuin hinta ennen rajausta. */}
       <div className="pino">
         <Ongelma />
 
@@ -112,51 +136,69 @@ export default function Verkkosivut() {
           <div className="pino">
             <Sisalto />
 
-            <Toteutustapa />
+            <div className="pino">
+              {/* UUSI HENGAHDYS. Sisallon ja Toteutustavan valissa ei
+                  ollut mitaan, ja niiden jalkeen tuli viela Nakyvyys:
+                  kolme umpinaista osiota perakkain. Kuva on kasityo
+                  tyopoydalla oikean tyokalun kanssa, eli tasan se mika
+                  erottaa kasin koodatun valmiista pohjasta. Aihe on
+                  kuvan oikealla puolella, joten teksti menee vasemmalle
+                  kuten .vaite sen muutenkin asettaa. */}
+              <Vaite
+                kuva="/verkkosivut/kasityo.webp"
+                alla="Valmis pohja on nopein tapa aloittaa, käsin koodattu on kevyempi ylläpitää ja nopeampi käyttää. Kumpi kannattaa, riippuu alasta ja aikataulusta."
+              >
+                Sama sivusto voidaan tehdä <b><i>kahdella eri tavalla.</i></b>
+              </Vaite>
+
+              <div className="pino">
+                <Jakso>
+                  <Toteutustapa />
+                  <Nakyvyys />
+                </Jakso>
+
+                <div className="pino">
+                  {/* Kuva on kasi piirtamassa rautalankamallia lampun
+                      alla ja lause on prosessin ensimmaisesta
+                      askeleesta, joten hengahdys on sen osion edessa
+                      josta se puhuu. Kick "Prosessi" jaa pois: osion
+                      nimi on sivukiskossa heti taman alla. */}
+                  <Laatta kuva="/verkkosivut/kartoitus.webp" korkeus="taysi">
+                    <p className="laatta-lause suuri">
+                      Et tarvitse mitään <b><i>valmiiksi.</i></b>
+                    </p>
+                    <p className="laatta-alla">
+                      Tekstit, kuvat ja rakenne ovat osa toteutusta, eivät sen edellytys.
+                    </p>
+                  </Laatta>
+
+                  <div className="pino">
+                    <Jakso>
+                      <Prosessi />
+                      <Kenelle />
+                    </Jakso>
+
+                    {/* Tulokset-osio poistettiin aiemmin: sen luvut
+                        olivat lupauksia joiden takana ei ole yhtaan
+                        mitattua asiakastyota. */}
+                    <div className="pino">
+                      <Vaite
+                        kuva="/verkkosivut/naytto.webp"
+                        alla="Hinta päätetään ennen kuin työ alkaa, eikä se perustu arvioon käytetyistä tunneista vaan sivumäärään ja sisällön laajuuteen."
+                      >
+                        Emme kilpaile hinnalla vaan sillä, että sivusto <b><i>löytyy ja myy.</i></b>
+                      </Vaite>
+
+                      <Hinnoittelu />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <Nakyvyys />
-
-      {/* HENGAHDYS SIIRTYI PROSESSIN ETEEN.
-          Kuva on kasi piirtamassa rautalankamallia lampun alla ja
-          lause on prosessin ensimmaisesta askeleesta, mutta molemmat
-          olivat kolme osiota ennen Prosessia, Sisallon ja
-          Toteutustavan valissa. Hengahdys kertoo mita seuraavaksi
-          tulee, joten se kuuluu sen osion eteen josta se puhuu.
-          Kick "Prosessi" jaa pois: osion nimi on sivukiskossa heti
-          taman alla. */}
-      <div className="pino">
-        <Laatta kuva="/verkkosivut/kartoitus.webp" korkeus="taysi">
-          <p className="laatta-lause suuri">
-            Et tarvitse mitään <b><i>valmiiksi.</i></b>
-          </p>
-          <p className="laatta-alla">
-            Tekstit, kuvat ja rakenne ovat osa toteutusta, eivät sen edellytys.
-          </p>
-        </Laatta>
-
-        <Prosessi />
-      </div>
-
-      {/* KOLMAS PINO. Tulokset-osio poistettiin: sen luvut olivat
-          lupauksia joiden takana ei ole yhtaan mitattua asiakastyota,
-          ja sivulla on jo kaksi kohtaa jotka sanovat saman ilman
-          numeroa. Hengahdys jaa alle ja hinnasto nousee sen paalle,
-          eli pino on nyt kaksiosainen kuten kaksi muutakin. */}
-      <div className="pino">
-        <Vaite
-          kuva="/verkkosivut/naytto.webp"
-          alla="Hinta päätetään ennen kuin työ alkaa, eikä se perustu arvioon käytetyistä tunneista vaan sivumäärään ja sisällön laajuuteen."
-        >
-          Emme kilpaile hinnalla vaan sillä, että sivusto <b><i>löytyy ja myy.</i></b>
-        </Vaite>
-
-        <Hinnoittelu />
-      </div>
-
-      <Kenelle />
       <Ukk />
       <Tarjous />
         </div>
