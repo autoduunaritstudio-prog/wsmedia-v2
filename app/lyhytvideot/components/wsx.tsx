@@ -5,6 +5,7 @@ import SmartLink from "../../components/SmartLink";
 import { RefGrid } from "../../components/RefCards";
 import Kehotus from "../../hakukoneoptimointi/components/Kehotus";
 import PlatformMark from "../../components/PlatformMark";
+import { LogoMark } from "../../components/Logo";
 
 import { Pystykisko } from "../../components/Maasto";
 
@@ -67,6 +68,63 @@ export function Jakso({ children, merkit }: { children: ReactNode; merkit?: bool
 }
 
 
+
+/* ---------- ALUSTATAHDISTO ----------
+   Miksi-osion otsikko ja ingressi vievat vasemman palstan, ja oikea
+   puoli oli tyhjaa: mitattuna 1728px:n nakymassa otsikko paattyy
+   939px:aan ja .swrap jatkuu 1336px:aan asti, eli lahes 400px seisoi
+   kaytttamatta. Tahan tulee se mista osio puhuu - kolme alustaa ja WS
+   Media niiden keskella, samassa verkostossa kuin sivun tausta.
+
+   YKSI KUVA, EI KOLMEA IRRALLISTA TUNNUSTA. Merkit ovat solmuja ja
+   viivat yhdistavat ne keskukseen: juuri se on osion vaite, etta sama
+   kuvauspaiva palvelee kaikkia kolmea kanavaa. Kolme tunnusta vierekkain
+   olisi ollut logorivi eika kuva.
+
+   VARIT SIVUN OMASTA KIELESTA, ei alustojen. tone="line" perii
+   currentColorin, joten kaikki neljä ovat samaa syaania ja hehkuvat
+   samalla tavalla. Alustojen omat varit ovat kanavakorteissa, joissa ne
+   erottavat kolme vaihtoehtoa toisistaan; tassa kuvan aihe on se etta
+   ne ovat sama asia.
+
+   Piirto tulee --piirrosta eika --rvp:sta, koska #miksi on pinotussa
+   vierityksessa ja pinnatun elementin rect jaatyy. */
+function Tahdisto() {
+  return (
+    <div className="tahdisto" data-hehku="0.9" aria-hidden="true">
+      <svg className="tahdisto-verkko" viewBox="0 0 200 200" fill="none" focusable="false">
+        {/* Solmuja yhdistavat viivat. Ne piirtyvat vierityksen mukana. */}
+        <path className="th-linja" d="M62 58 L100 96" pathLength={1} style={{ "--i": 0 } as CSSProperties} />
+        <path className="th-linja" d="M56 138 L100 96" pathLength={1} style={{ "--i": 1 } as CSSProperties} />
+        <path className="th-linja" d="M146 142 L100 96" pathLength={1} style={{ "--i": 2 } as CSSProperties} />
+        {/* Verkosto jatkuu kuvan ulkopuolelle: tahdisto on osa taustaa,
+            ei siihen liimattu laatikko. */}
+        <path className="th-linja th-vaimea" d="M62 58 L8 24" pathLength={1} style={{ "--i": 3 } as CSSProperties} />
+        <path className="th-linja th-vaimea" d="M146 142 L196 178" pathLength={1} style={{ "--i": 4 } as CSSProperties} />
+        <path className="th-linja th-vaimea" d="M56 138 L14 186" pathLength={1} style={{ "--i": 5 } as CSSProperties} />
+        <path className="th-linja th-vaimea" d="M62 58 L146 142" pathLength={1} style={{ "--i": 6 } as CSSProperties} />
+        <circle className="th-piste" cx="8" cy="24" r="2" />
+        <circle className="th-piste" cx="196" cy="178" r="2" />
+        <circle className="th-piste" cx="14" cy="186" r="2" />
+      </svg>
+
+      <span className="th-solmu th-ig" style={{ "--i": 0 } as CSSProperties}>
+        <PlatformMark id="instagram" />
+      </span>
+      <span className="th-solmu th-tt" style={{ "--i": 1 } as CSSProperties}>
+        <PlatformMark id="tiktok" />
+      </span>
+      <span className="th-solmu th-yt" style={{ "--i": 2 } as CSSProperties}>
+        <PlatformMark id="youtube" />
+      </span>
+      <span className="th-ws">
+        <LogoMark />
+        <b>MEDIA</b>
+      </span>
+    </div>
+  );
+}
+
 /* ---------- 1. Miksi ---------- */
 export function Miksi() {
   return (
@@ -74,14 +132,19 @@ export function Miksi() {
       <Pystykisko teksti="Miksi lyhytvideot" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Neljä syytä, mikä tahansa riittää</p>
-        <h2 className="seo-h2 rv">
-          Lyhytvideot ovat pk-yrityksen kustannustehokkain tapa tulla löydetyksi.
-        </h2>
-        <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          TikTokissa, Instagram Reelsissä ja YouTube Shortsissa näkyvyys ei enää seuraa
-          seuraajamäärää vaan sisällön laatua. Se on pienen yrityksen etu, jos sisältö on tehty
-          oikein.
-        </p>
+        <div className="miksi-ylaosa">
+          <div>
+            <h2 className="seo-h2 rv">
+              Lyhytvideot ovat pk-yrityksen kustannustehokkain tapa tulla löydetyksi.
+            </h2>
+            <p className="seo-lead rv" style={{ marginTop: "26px" }}>
+              TikTokissa, Instagram Reelsissä ja YouTube Shortsissa näkyvyys ei enää seuraa
+              seuraajamäärää vaan sisällön laatua. Se on pienen yrityksen etu, jos sisältö on tehty
+              oikein.
+            </p>
+          </div>
+          <Tahdisto />
+        </div>
 
         {/* Kaaviopaneeli on kortin tausta eika sen kuvitus: jokainen
             nayttaa sen ilmion josta kortin oma otsikko puhuu. */}

@@ -12992,3 +12992,110 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
     drop-shadow(0 0 6px rgba(111,236,255,.45))
     drop-shadow(0 0 16px rgba(111,236,255,.22));
 }
+
+/* ==================================================================
+   MIKSI-OSION ALUSTATAHDISTO
+   ==================================================================
+   MITATTU TYHJA: 1728px:n nakymassa osion otsikko paattyy 939px:aan ja
+   .swrap jatkuu 1336px:aan, eli oikealla seisoi lahes 400px kaytttamatta
+   samalla kun vasen palsta kantoi kaiken. Tahdisto tayttaa sen silla
+   mista osio puhuu.
+
+   PALSTAJAKO ON 1,15 / 1. Otsikko on nelirivinen ja ingressi kolme
+   rivia, joten vasen tarvitsee enemman; tasajako olisi katkaissut
+   otsikon viisirivisksi. Alle 1000px:n palstat menevat allekkain ja
+   tahdisto keskittyy - kapealla naytolla kaksi palstaa olisi kaksi
+   liian kapeaa palstaa. */
+.wsx .miksi-ylaosa {
+  display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 20px 56px; align-items: center; margin-top: 26px;
+}
+@media (max-width: 1000px) {
+  .wsx .miksi-ylaosa { grid-template-columns: minmax(0, 1fr); gap: 44px }
+}
+/* OTSIKON KOKO SIDOTAAN PALSTAAN, EI NAKYMAAN.
+   MITATTU: palsta kapeni 1230px:sta 624px:aan, mutta .seo-h2 on
+   nakymaan sidottu ja pysyi 72px:ssa. Pisin sana "kustannustehokkain"
+   on siina koossa noin 700px, eli se ei mahtunut palstaan ja katkesi
+   keskelta sanaa muotoon "kustannustehokkai / n tapa".
+
+   cqi mittaa sen laatikon leveyden jossa otsikko oikeasti on, joten
+   sama virhe ei voi palata jos palstajako muuttuu. Sama korjaus kuin
+   tarjousosion otsikossa, ja samasta syysta. */
+.wsx .miksi-ylaosa > div:first-child { container-type: inline-size }
+.wsx .miksi-ylaosa .seo-h2 { font-size: clamp(30px, 9cqi, 66px); hyphens: auto }
+
+/* Nelio, jonka sisalla solmut ovat prosenttikoordinaateissa samassa
+   ruudukossa kuin viivojen viewBox 0 0 200 200. Yksi ruudukko
+   molemmille: kaksi erillista olisi ajautunut erilleen ensimmaisessa
+   muutoksessa. */
+.tahdisto {
+  position: relative; width: 100%; max-width: 460px; aspect-ratio: 1 / 1;
+  margin-inline: auto; color: var(--seo-hi);
+}
+@media (max-width: 1000px) { .tahdisto { max-width: 340px } }
+
+.tahdisto-verkko { position: absolute; inset: 0; width: 100%; height: 100% }
+/* Viiva piirtyy vierityksen mukana. Porrastus --i:lla, jotta kolme
+   sadetta ei ilmesty yhtena laattana.
+
+   dasharray "p 1" eika dashoffset: pathLength on 1, joten vali 1 on koko
+   polun mittainen eika toista jaksoa voi tulla. Ks. sama ratkaisu
+   kaaviokayrissa, joissa vanha offset-tapa jatti polun loppuun
+   irrallisen patkan. */
+.tahdisto .th-linja {
+  --p: clamp(0, calc((var(--piirto, 1) - var(--i) * .07) * 2.2), 1);
+  stroke: var(--seo-hi); stroke-width: 1; fill: none;
+  stroke-dasharray: var(--p) 1;
+  opacity: .5;
+}
+.tahdisto .th-linja.th-vaimea { opacity: .2 }
+.tahdisto .th-piste {
+  fill: var(--seo-hi);
+  opacity: calc(clamp(0, calc((var(--piirto, 1) - .5) * 3), 1) * .45);
+}
+
+/* Solmu on neonkehys, ei taytetty laatta: taustan verkosto jaa nakyviin
+   sen lapi, jolloin merkki on verkossa eika sen paalla. */
+.tahdisto .th-solmu {
+  position: absolute; display: grid; place-items: center;
+  width: 21%; aspect-ratio: 1 / 1;
+  border: 1px solid rgba(111,236,255,.55); border-radius: 22%;
+  background: rgba(8,14,20,.55);
+  color: var(--seo-hi);
+  box-shadow: 0 0 22px -6px rgba(111,236,255,.5), inset 0 0 18px -10px rgba(111,236,255,.7);
+  /* Sama porrastettu ilmestyminen kuin viivoilla, yhden askeleen
+     jaljessa: viiva saapuu solmuun ja solmu syttyy. */
+  opacity: clamp(0, calc((var(--piirto, 1) - .18 - var(--i) * .07) * 3), 1);
+  scale: calc(.86 + clamp(0, calc((var(--piirto, 1) - .18 - var(--i) * .07) * 3), 1) * .14);
+}
+.tahdisto .th-solmu svg {
+  width: 52%; height: auto;
+  filter: drop-shadow(0 0 6px rgba(111,236,255,.7));
+}
+/* Sijainnit vastaavat viivojen paatepisteita: 62/58, 56/138, 146/142
+   kahdestasadasta, miinus puolet solmun koosta (21 % / 2). */
+.tahdisto .th-ig { left: 20.5%; top: 18.5% }
+.tahdisto .th-tt { left: 17.5%; top: 58.5% }
+.tahdisto .th-yt { left: 62.5%; top: 60.5% }
+
+/* Keskus. Tunnus ja sanamerkki allekkain kuten tunnuksessa muutenkin. */
+.tahdisto .th-ws {
+  position: absolute; left: 50%; top: 48%; translate: -50% -50%;
+  display: grid; justify-items: center; gap: 6px;
+  color: var(--seo-hi);
+  opacity: clamp(0, calc((var(--piirto, 1) - .34) * 3), 1);
+}
+.tahdisto .th-ws svg {
+  width: clamp(72px, 15cqw, 104px); height: auto;
+  filter: drop-shadow(0 0 10px rgba(111,236,255,.75)) drop-shadow(0 0 26px rgba(111,236,255,.35));
+}
+.tahdisto .th-ws b {
+  font-family: var(--seo-mono); font-size: 12px; font-weight: 500;
+  letter-spacing: .42em; text-indent: .42em; color: var(--seo-hi);
+  text-shadow: 0 0 10px rgba(111,236,255,.6);
+}
+@media (max-width: 1000px) { .tahdisto .th-ws svg { width: 76px } }
+@media (prefers-reduced-motion: reduce) {
+  .tahdisto { --piirto: 1 }
+}
