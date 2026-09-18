@@ -13189,13 +13189,13 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .wsx .vaite.kuvallinen > img,
 .wsx .seo-sec.kuvapohja > .pohjakuva,
 .wsx .lava-tausta img {
-  filter: saturate(.72) contrast(1.02) brightness(1.04);
+  filter: saturate(.85) contrast(.96) brightness(1.32);
 }
 /* Lapinakyvyys oli toinen puoli samaa vaimennusta: kuva sekoittui
    pohjavariin eli #0b0f14:aan, joka on lahes musta. Kalvot jotka
    pitavat tekstin luettavana ovat omina kerroksinaan eivatka riipu
    tasta, joten nosto ei syo luettavuutta. */
-.wsx .juova img { opacity: .94 }
+.wsx .juova img { opacity: 1 }
 .wsx .vaite.kuvallinen > img { opacity: .9 }
 .wsx .seo-sec.kuvapohja > .pohjakuva { opacity: 1 }
 .wsx .kuva.himmea img { filter: saturate(1.04) contrast(1.02) brightness(1.08) }
@@ -13221,3 +13221,43 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .wsx [data-tone="2"] { --secbg: #141d28; background: #141d28 }
 .wsx [data-tone="3"] { --secbg: #10171f; background: #10171f }
 .wsx [data-tone="ink"] { --secbg: #080d12; background: #080d12 }
+
+
+/* ---------- 4. KALVOT ----------
+   Ensimmainen kirkastuskierros nosti kuvaa mutta ei sita mika oli sen
+   paalla, ja kuva jai edelleen tummaksi. Mitattuna: kuvan oma
+   keskikirkkaus nousi 55 -> 68, mutta sen paalla oli viela kalvo joka
+   vei .92 pohjavaria. Nyt kuva 55 -> 75 ja kalvot kevenevat.
+
+   Kalvoja ei poisteta vaan kevennetaan, ja jokaisen VAHVA PAA jaa
+   paikalleen. Ne ovat siella tekstin takia: se pää jossa teksti on
+   pysyy, ja se pää jossa on pelkkaa kuvaa avautuu. Tekstien omat
+   tummennukset (.laatta-teksti::before) ovat eri kerroksia eivatka
+   riipu naista lainkaan. */
+.wsx .vaite.kuvallinen::before {
+  background: linear-gradient(90deg, rgba(6,10,14,.9) 0%, rgba(6,10,14,.5) 58%, rgba(6,10,14,.12) 100%);
+}
+.wsx .lava-tausta::after {
+  background:
+    linear-gradient(90deg, rgba(6,10,14,.92) 0%, rgba(6,10,14,.55) 46%, rgba(6,10,14,.28) 100%),
+    linear-gradient(180deg, rgba(6,10,14,.8) 0%, rgba(6,10,14,.12) 34%, rgba(6,10,14,.82) 100%);
+}
+.wsx .seo-sec.kuvapohja::before {
+  background:
+    linear-gradient(90deg, rgba(7,12,18,.9) 0%, rgba(7,12,18,.55) 46%, rgba(7,12,18,.25) 100%),
+    linear-gradient(180deg, rgba(7,12,18,.8) 0%, rgba(7,12,18,.1) 40%, rgba(7,12,18,.85) 100%);
+}
+/* Laatan reunahaivytys alkoi syoda kuvaa jo 26 prosentin kohdalla.
+   Pysakit ulommas: haivytys on siella siksi ettei kuva ala viivaan,
+   ja siihen riittaa kapeampi kaista. */
+.wsx .laatta::after {
+  background: linear-gradient(180deg, #060a0e 0%, rgba(6,10,14,0) 19%, rgba(6,10,14,0) 72%, #060a0e 100%);
+}
+/* Syaani kalvo on mix-blend-mode: overlay, ja overlay TUMMENTAA sen
+   mika on jo tummaa. Juuri siksi se puri eniten niissa kuvissa jotka
+   olivat valmiiksi tummia. Sitova tehtava sailyy pienemmallakin
+   voimalla. */
+.wsx .laatta::before,
+.wsx .seo-sec.kuvapohja > .pohjakuva + ::before {
+  background: linear-gradient(180deg, rgba(0,124,143,.13), rgba(0,60,80,.17));
+}
