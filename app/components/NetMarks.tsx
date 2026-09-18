@@ -69,20 +69,26 @@ const TRAVEL_X = 70;
 /* Kymmenen merkkia kolmessa kaistassa. Kokojakauma on tarkoituksella
    epatasainen: kaksi isoa, kolme keskikokoista ja viisi pienta.
    Tasakokoinen joukko olisi lukenut ruudukkona, ei syvyytena. */
+/* LAPINAKYVYYDET NOSTETTU. Merkit olivat 0,23..0,50, ja tumman
+   verkoston paalla se oli liian vahan: ne lukivat osana verkostoa
+   eivatka omina kappaleinaan. Nyt 0,45..0,86, mutta SYVYYSJARJESTYS
+   ON SAMA - kaukainen merkki on yha vaimeampi kuin lahella oleva,
+   joten parallaksi ei litisty. Koko nousi samassa suhteessa noin
+   10 %, koska kirkkaampi mutta yhta pieni merkki lukee tahrana. */
 const MARKS: Mark[] = [
   // Vasen reuna
-  { k: "a", x: 3.6, y: 22, s: 54, o: 0.5, z: 0.95, t: 11, d: -1, h: 0.6, kind: "ig" },
-  { k: "b", x: 1.6, y: 45, s: 40, o: 0.38, z: 0.7, t: 16, d: -6, h: -0.5, kind: "yt" },
-  { k: "c", x: 5.0, y: 66, s: 34, o: 0.34, z: 0.58, t: 13, d: -5, h: -0.8, kind: "tt" },
-  { k: "d", x: 1.2, y: 86, s: 28, o: 0.26, z: 0.44, t: 18, d: -11, h: 0.4, kind: "ig" },
+  { k: "a", x: 3.6, y: 22, s: 60, o: 0.86, z: 0.95, t: 11, d: -1, h: 0.6, kind: "ig" },
+  { k: "b", x: 1.6, y: 45, s: 44, o: 0.68, z: 0.7, t: 16, d: -6, h: -0.5, kind: "yt" },
+  { k: "c", x: 5.0, y: 66, s: 38, o: 0.62, z: 0.58, t: 13, d: -5, h: -0.8, kind: "tt" },
+  { k: "d", x: 1.2, y: 86, s: 31, o: 0.5, z: 0.44, t: 18, d: -11, h: 0.4, kind: "ig" },
   // Ylakaista
-  { k: "e", x: 21, y: 4, s: 30, o: 0.28, z: 0.5, t: 15, d: -3, h: 0.55, kind: "tt" },
-  { k: "f", x: 37, y: 6, s: 30, o: 0.27, z: 0.48, t: 17, d: -8, h: -0.45, kind: "yt" },
-  { k: "g", x: 55, y: 2.5, s: 26, o: 0.24, z: 0.4, t: 19, d: -13, h: 0.3, kind: "ig" },
-  { k: "h", x: 72, y: 7, s: 26, o: 0.23, z: 0.38, t: 14, d: -9, h: -0.65, kind: "tt" },
+  { k: "e", x: 21, y: 4, s: 33, o: 0.54, z: 0.5, t: 15, d: -3, h: 0.55, kind: "tt" },
+  { k: "f", x: 37, y: 6, s: 33, o: 0.52, z: 0.48, t: 17, d: -8, h: -0.45, kind: "yt" },
+  { k: "g", x: 55, y: 2.5, s: 29, o: 0.47, z: 0.4, t: 19, d: -13, h: 0.3, kind: "ig" },
+  { k: "h", x: 72, y: 7, s: 29, o: 0.45, z: 0.38, t: 14, d: -9, h: -0.65, kind: "tt" },
   // Alakaista ja oikea reuna
-  { k: "i", x: 45, y: 82, s: 46, o: 0.42, z: 0.85, t: 12, d: -4, h: 0.35, kind: "ig" },
-  { k: "j", x: 93.5, y: 62, s: 34, o: 0.3, z: 0.55, t: 14, d: -2, h: 0.75, kind: "tt" },
+  { k: "i", x: 45, y: 82, s: 50, o: 0.76, z: 0.85, t: 12, d: -4, h: 0.35, kind: "ig" },
+  { k: "j", x: 93.5, y: 62, s: 38, o: 0.58, z: 0.55, t: 14, d: -2, h: 0.75, kind: "tt" },
 ];
 
 export default function NetMarks() {

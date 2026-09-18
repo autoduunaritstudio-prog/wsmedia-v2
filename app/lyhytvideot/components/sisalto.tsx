@@ -17,7 +17,7 @@ export const REASONS = [
   {
     art: "funnel",
     h: "Sisältö, joka tekee myös kauppaa",
-    p: "Näyttökerrat ovat välitavoite. Ohjaamme katsojan verkkosivuille, yhteydenottolomakkeelle tai myymälään, ja mittaamme mitä siitä seuraa.",
+    p: "Näyttökerrat ovat välitavoite. Ohjaamme katsojan verkkosivuille, yhteydenottolomakkeelle tai myymälään ja mittaamme, mitä siitä seuraa.",
   },
   {
     art: "reach",
@@ -31,7 +31,7 @@ export const PLATFORMS = [
     href: "/lyhytvideot/tiktok",
     mark: "tiktok" as const,
     h: "TikTok-videot yritykselle",
-    p: "Nopein kanava tavoittaa uusi yleisö nollasta. Toimii, kun sisältö on aitoa, rytmikästä ja puhuu katsojan kielellä, ei mainospuhetta.",
+    p: "Nopein kanava uuden yleisön tavoittamiseen nollasta. Toimii, kun sisältö on aitoa ja rytmikästä ja puhuu katsojan kielellä, ei mainospuhetta.",
     link: "TikTok-videotuotanto",
   },
   {
@@ -45,7 +45,7 @@ export const PLATFORMS = [
     href: "/lyhytvideot/youtube-shorts",
     mark: "youtube" as const,
     h: "YouTube Shorts yritykselle",
-    p: "Shorts tuo uudet katsojat kanavalle ja pidemmät videot syventävät asiantuntijuutta. Sisältö löytyy myös haulla vielä kuukausien päästä.",
+    p: "Shorts tuo uudet katsojat kanavalle, ja pidemmät videot syventävät asiantuntijuutta. Sisältö löytyy myös haulla vielä kuukausien päästä.",
     link: "Shorts-tuotanto",
   },
 ];
@@ -54,7 +54,7 @@ export const KETJU = [
   {
     over: "Brändiarvo",
     h: "Lyhytvideot",
-    p: "Orgaaninen näkyvyys TikTokissa, Reelsissä ja Shortsissa. Ihmiset oppivat kuka olet ja mitä teet jo ennen kuin heillä on tarve.",
+    p: "Orgaaninen näkyvyys TikTokissa, Reelsissä ja Shortsissa. Ihmiset oppivat, kuka olet ja mitä teet, jo ennen kuin heillä on tarve.",
   },
   {
     over: "Kysyntä",
@@ -71,7 +71,7 @@ export const KETJU = [
 export const STEPS = [
   {
     h: "Aloituspalaveri",
-    p: "Käydään läpi tavoitteet, kohderyhmä ja kanavat. Saat konkreettisen sisältösuunnitelman ja hinnan ennen kuin mitään sovitaan.",
+    p: "Käydään läpi tavoitteet, kohderyhmä ja kanavat. Saat konkreettisen sisältösuunnitelman ja hinnan, ennen kuin mitään sovitaan.",
   },
   {
     h: "Ideointi ja käsikirjoitus",

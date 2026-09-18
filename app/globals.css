@@ -12919,3 +12919,60 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .wsx .porras-merkki::after {
   background: radial-gradient(closest-side, rgba(111,236,255,.12), transparent 70%);
 }
+
+/* ==================================================================
+   HERON ALUSTAMERKIT EROON VERKOSTOSTA
+   ==================================================================
+   Merkit olivat samaa varia ja lahes samaa kirkkautta kuin verkoston
+   omat viivat, joten ne lukivat verkoston osana. Lapinakyvyys
+   nostettiin komponentissa (0,23..0,50 -> 0,45..0,86) ja hehku
+   rakennetaan tassa kolmesta kerroksesta: tiukka valkoinen ydin antaa
+   viivalle reunan, kaksi syaania kerrosta kajon.
+
+   brightness 2,1 tiputettiin 1,12:een. MITATTU RUUDULTA: korkeammilla
+   luvuilla #6fecff puskeutui lahes valkoiseksi, jolloin merkki nakyi
+   kylla mutta ei enaa kuulunut sivun varimaailmaan. Kirkkaus tulee nyt
+   lapinakyvyydesta ja hehkusta, ei varin pesemisesta. */
+.page-lyhytvideot .netmarks .nm {
+  filter:
+    drop-shadow(0 0 2px rgba(220,250,255,.9))
+    drop-shadow(0 0 10px rgba(111,236,255,.8))
+    drop-shadow(0 0 26px rgba(111,236,255,.45))
+    brightness(1.12) saturate(1.25);
+}
+
+/* ==================================================================
+   KENELLE-OSIO: VIIVOJA OLI LIIKAA
+   ==================================================================
+   LASKETTU: osiossa oli 1440px:n leveydella 14 hiusviivaa. Listan
+   ylareuna (2), jokaisen kohdan alareuna (4 + 2), palstojen valinen
+   pystyviiva (1), kohtien omat merkkiviivat (6) ja kehotuksen
+   ylaviiva (1). Kaksi vierekkaista listaa, joissa jokainen rivi on
+   erotettu viivalla, ei ole taulukko vaan ruudukkopaperi.
+
+   Rivien omat viivat pois. Ne eivat erota mitaan: rivit ovat jo
+   erillaan valilla ja jokaisella on oma merkkinsa. Palstojen valinen
+   pystyviiva JAA, koska se erottaa kaksi vastakkaista listaa, eli se
+   on ainoa viiva jolla on tehtava. */
+/* VIIVOJA TULI KAHDESTA SAANNOSTA, EI YHDESTA. Ensimmainen yritys
+   poisti vain .seo-spec-listan border-bottomin, ja ruudulla viivat
+   olivat yha paikallaan. Syy: sama li osuu MOLEMPIIN saantoihin,
+   koska merkinta on .kaksi > div > ul.seo-spec > li. .seo-spec antaa
+   alaviivan ja .kaksi antaa ylaviivan. Toisen poistaminen jattaa
+   toisen voimaan. */
+.page-lyhytvideot #kenelle .seo-spec,
+.page-lyhytvideot #kenelle .kaksi ul { border-top: 0 }
+.page-lyhytvideot #kenelle .seo-spec li,
+.page-lyhytvideot #kenelle .kaksi li {
+  border-top: 0;
+  border-bottom: 0;
+  padding: 9px 0;
+}
+/* Vali kasvaa sen verran kuin viiva vei, jottei lista tiivisty
+   luettelopatkaksi. */
+.page-lyhytvideot #kenelle .seo-spec li + li,
+.page-lyhytvideot #kenelle .kaksi li + li { padding-top: 13px }
+.page-lyhytvideot #kenelle .kaksi-kick { margin-bottom: 18px }
+/* Kehotuksen ylaviiva jaa: se erottaa osion sisallon ja kehotuksen,
+   eli silla on tehtava. Palstojen valinen pystyviiva jaa samasta
+   syysta. */

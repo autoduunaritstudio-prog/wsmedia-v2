@@ -257,9 +257,25 @@ export default function NetBackdrop({ mount = "fixed" }: Props) {
        vieritetty yli nakyman korkeuden, ja cover ei ole viela tullut
        kun ollaan sen alapuolella. Raja on sama molemmille, joten
        kaistaa jossa kumpikaan ei kay ei ole. */
+    /* MITATTU: ehto kirjoitettiin kahdelle kankaalle, mutta niita on
+       nyt NELJA. Lyhytvideot-sivulla on sivutason kerros, coverin
+       kerros ja kaksi jakson kerrosta, ja kolme jalkimmaista ovat
+       kaikki mount="cover". Vanha ehto "on vieritetty yli nakyman"
+       oli tosi niille kaikille yhta aikaa, eli kolme kangasta
+       pyori rinnakkain koko loppusivun ajan. Yksi kangas tekee
+       kehyksessa n(n-1)/2 parivertailua 130 pisteella eli noin 8400,
+       joten kolme kangasta on 25 000 turhaa vertailua kehyksessa.
+
+       Coverin kerros EI ole fixed vaan sticky absoluuttisen
+       .netbd-clipin sisalla, ja se laatikko on tavallinen osion
+       mittainen laatikko. Sen nakyvyyden voi siis lukea suoraan
+       IntersectionObserverilla. Vain fixed-kerros tarvitsee
+       vierityksesta luetun ehdon, koska se leikkaa nakyman aina, myos
+       taysin peitettyna. */
+    let inView = mount !== "cover";
     const shouldRun = () => {
-      const past = window.scrollY > window.innerHeight * 1.05;
-      return mount === "cover" ? past : !past;
+      if (mount === "cover") return inView;
+      return window.scrollY <= window.innerHeight * 1.05;
     };
     let awake = true;
     const setAwake = () => {
@@ -274,6 +290,24 @@ export default function NetBackdrop({ mount = "fixed" }: Props) {
         raf = requestAnimationFrame(frame);
       }
     };
+    let io: IntersectionObserver | null = null;
+    if (mount === "cover" && typeof IntersectionObserver !== "undefined") {
+      /* Kaare, ei kangas: kangas on sticky ja pysyy nakymassa vaikka
+         sen oma osio olisi jo ohitettu. Kaare on osion mittainen. */
+      const kaare = ref.current?.closest(".netbd-clip") ?? ref.current?.parentElement;
+      if (kaare) {
+        io = new IntersectionObserver(
+          (entries) => {
+            inView = entries.some((e) => e.isIntersecting);
+            setAwake();
+          },
+          { rootMargin: "20% 0px" },
+        );
+        io.observe(kaare);
+      } else {
+        inView = true;
+      }
+    }
     const onVis = () => setAwake();
     window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("scroll", setAwake, { passive: true });
@@ -281,6 +315,7 @@ export default function NetBackdrop({ mount = "fixed" }: Props) {
     setAwake();
     return () => {
       cancelAnimationFrame(raf);
+      io?.disconnect();
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", setAwake);
       document.removeEventListener("visibilitychange", onVis);

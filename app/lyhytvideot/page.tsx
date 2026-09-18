@@ -173,7 +173,7 @@ export default function Lyhytvideot() {
                     <div className="pino">
                       <Vaite
                         kuva="/lyhytvideot/ovi.webp"
-                        alla="Ohjaamme katsojan verkkosivuille, yhteydenottolomakkeelle tai myymälään, ja mittaamme mitä siitä seuraa."
+                        alla="Ohjaamme katsojan verkkosivuille, yhteydenottolomakkeelle tai myymälään ja mittaamme, mitä siitä seuraa."
                       >
                         Näyttökerrat ovat <b><i>välitavoite.</i></b>
                       </Vaite>

@@ -84,7 +84,7 @@ export default function Hero() {
         <div className="chip-f cf3">
           <em>★</em>
           <span>
-            5 / 5<small>Asiakastyytyväisyys</small>
+            4,8 / 5<small>Asiakastyytyväisyys</small>
           </span>
         </div>
         <PhoneReel

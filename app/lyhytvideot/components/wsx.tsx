@@ -74,7 +74,7 @@ export function Miksi() {
         </h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
           TikTokissa, Instagram Reelsissä ja YouTube Shortsissa näkyvyys ei enää seuraa
-          seuraajamäärää vaan sisällön laatua. Se on pienen yrityksen etu: jos sisältö on tehty
+          seuraajamäärää vaan sisällön laatua. Se on pienen yrityksen etu, jos sisältö on tehty
           oikein.
         </p>
 
@@ -113,7 +113,7 @@ export function Alustat() {
             tavoittaa, ja ratkaiseva tekija on kasikirjoitus. */}
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
           Vastaus on yleensä kaikki kolme, ja sama video toimii niissä kaikissa. Ratkaiseva ero ei
-          ole alusta vaan käsikirjoitus: se päättää pysähtyykö katsoja. Kanavat eroavat siinä,
+          ole alusta vaan käsikirjoitus: se päättää, pysähtyykö katsoja. Kanavat eroavat siinä,
           kenet niistä tavoittaa.
         </p>
 
@@ -141,7 +141,7 @@ export function Alustat() {
             oma kehotus on parempi: se on siina kohdassa jossa lukija
             on juuri saanut vastauksen. */}
         <Kehotus kick="Kaikki kolme, yhdestä kuvauksesta">
-          Kartoituksessa katsotaan mitkä kanavat sinun asiakkaasi oikeasti käyttävät ja mitä
+          Kartoituksessa katsotaan, mitkä kanavat sinun asiakkaasi oikeasti käyttävät ja mitä
           niihin kannattaa tehdä.
         </Kehotus>
       </div>
@@ -188,7 +188,7 @@ export function Prosessi() {
         </div>
 
         <Kehotus kick="Et tarvitse käsikirjoitusta valmiiksi">
-          Kartoituksessa käymme läpi mitä yritys tekee ja kenelle, ja rakennamme ensimmäisen
+          Kartoituksessa käymme läpi, mitä yritys tekee ja kenelle, ja rakennamme ensimmäisen
           kuukauden sisällöt sen pohjalta.
         </Kehotus>
       </div>
@@ -417,7 +417,7 @@ export function Kenelle() {
         </div>
 
         <Kehotus kick="Kumpi palsta on sinun?">
-          Jos et ole varma, kysy. Sanomme kartoituksessa suoraan myös silloin, kun vastaus on
+          Jos et ole varma, kysy. Sanomme kartoituksessa suoraan myös silloin, kun vastaus on,
           ettei tämä kannata.
         </Kehotus>
       </div>
@@ -477,7 +477,7 @@ export function Tarjous() {
               Valmis aloittamaan <span className="korosta">lyhytvideotuotannon?</span>
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-              Vastaamme 24 tunnin sisällä ja kerromme suoraan mitä ehdotamme ja mitä se maksaa.
+              Vastaamme 24 tunnin sisällä ja kerromme suoraan, mitä ehdotamme ja mitä se maksaa.
             </p>
             <ol className="askel porras rv">
               <li>

@@ -92,7 +92,21 @@ export function Vaite({
 }) {
   return (
     <section className={kuva ? "vaite kuvallinen" : "vaite"} data-rvs="">
-      {kuva ? <img src={kuva} alt={kuvaAlt ?? ""} aria-hidden={!kuvaAlt} data-par="0.028" /> : null}
+      {/* loading="lazy" puuttui, ja se maksoi eniten koko sivun
+          latauksessa: molemmat vaitteet ovat taysleveita 1728px:n
+          valokuvia (54 kB + 104 kB) ja ne latautuivat heti, vaikka
+          kumpikaan ei ole lahellakaan taitetta. Laatta ja tarjous-
+          osion pohjakuva olivat jo laiskoja, vaite ei. */}
+      {kuva ? (
+        <img
+          src={kuva}
+          alt={kuvaAlt ?? ""}
+          aria-hidden={!kuvaAlt}
+          loading="lazy"
+          decoding="async"
+          data-par="0.028"
+        />
+      ) : null}
       <div className="swrap">
         <p className="vaite-teksti">{children}</p>
         {alla ? <p className="vaite-alla">{alla}</p> : null}

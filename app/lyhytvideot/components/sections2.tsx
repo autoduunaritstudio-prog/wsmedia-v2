@@ -428,7 +428,7 @@ export function Kaytannossa() {
             suunnittelua, kuvaamista ja editointia sosiaalisen median kanaviin. Käytännössä kyse on
             jatkuvasta tuotannosta: yksittäinen video ei muuta mitään, mutta säännöllinen
             julkaisutahti kerryttää katseluaikaa, ja katseluaika on se signaali, jonka perusteella
-            TikTokin, Instagram Reelsin ja YouTube Shortsin algoritmit päättävät kenelle sisältö
+            TikTokin, Instagram Reelsin ja YouTube Shortsin algoritmit päättävät, kenelle sisältö
             näytetään.
           </p>
           <p>
@@ -443,7 +443,7 @@ export function Kaytannossa() {
           <h3>Mikä lyhytvideossa ratkaisee?</h3>
           <p>
             Kolme asiaa toistuu jokaisessa videossa, joka toimii. <strong>Koukku</strong> eli
-            ensimmäiset kolme sekuntia, joiden aikana katsoja päättää jatkaako.{" "}
+            ensimmäiset kolme sekuntia, joiden aikana katsoja päättää, jatkaako.{" "}
             <strong>Rytmi</strong> eli leikkauspisteet, jotka pitävät katseen ruudussa loppuun asti.{" "}
             <strong>Selkeä lopetus</strong> eli se, mitä katsojan halutaan tekevän, sanottuna ääneen.
             Tekniikka, valo ja ääni ovat perusedellytyksiä, mutta ne eivät yksin pelasta videota,
@@ -463,7 +463,7 @@ export function Kaytannossa() {
               että aika pitää julkaisutahtia yllä kuukaudesta toiseen. Käytännössä juuri tahti on se,
               mikä katkeaa ensimmäisenä kiireisenä kuukautena, ja katkennut tahti nollaa kertyneen
               näkyvyyden nopeammin kuin sen rakentaminen kesti. Ulkoistamisen todellinen hyöty ei ole
-              pelkkä tuotannon laatu vaan se, että sisältöä syntyy myös silloin kun yrityksellä on
+              pelkkä tuotannon laatu vaan se, että sisältöä syntyy myös silloin, kun yrityksellä on
               kiire.
             </p>
 

@@ -226,7 +226,8 @@ export const FAQ_GROUPS: FaqGroup[] = [
             syntyvät useimmiten silloin, kun ostaja hakee palvelua Googlesta. Siksi
             hakukoneoptimointi kuuluu samaan kokonaisuuteen: optimoimme{" "}
             <SmartLink href="/verkkosivut">verkkosivut</SmartLink> niille hauille, joita asiakkaasi oikeasti
-            tekevät. Hakukoneoptimoinnille tulee oma sivunsa lähiaikoina, ja sillä välin kysy siitä{" "}
+            tekevät. Lue lisää{" "}
+            <SmartLink href="/hakukoneoptimointi">hakukoneoptimoinnista</SmartLink> tai kysy siitä{" "}
             <a href="#tarjous">tarjouspyynnön</a> yhteydessä.
           </>
         ),
