@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
+import { Film } from "./film-codec";
+import { FILM } from "./film-tiedot";
 import { LogoMark } from "./Logo";
 
 /**
@@ -60,7 +62,7 @@ const SETS = {
      nopeampi purkaa - varasarja on olemassa vain Safari 16.3:a
      vanhemmille, jotka eivat tunne muotoa lainkaan.
      Koko sarja: 5,3 MB vs 7,9 MB. */
-  d: { dir: "/hero/d/", n: 151, avifDir: "/hero/da/" },
+  d: { dir: "/hero/d/", n: 151 },
   /* Kapealla naytolla ei scrubata, joten sarjaa ei ole - vain poster.
      n: 1 pitaa kaiken muun koodin ennallaan (imgs, settled, K, nearest)
      ilman erillista mobiilihaaraa. */
@@ -68,38 +70,18 @@ const SETS = {
 };
 const WIDE = "(min-width: 980px)";
 const DPR_MAX = 2;
-/* Yhtaaikaisten ruutulatausten maara load-tapahtuman jalkeen. */
-const CONC = 5;
 /* LATAUSRUUDUN AIKAKATKAISU. 12 s laskettuna latauksen alusta. Se on
    varaventtiili, ei normaali reitti: RELEASE_AT tayttyy jokaisella
    mitatulla profiililla selvasti aiemmin. Katkaisun jalkeen scrubbaus
    toimii silla mita on ladattu (nearest-resident) ja loput tulevat
    taustalla. */
 const LOAD_TIMEOUT = 12000;
-/* VAPAUTUSKYNNYS. Kerros ei odota koko sarjaa vaan yhtenaista etuliitetta
-   RELEASE_AT asti; loput ladataan taustalla samalla lataajalla.
+/* VAPAUTUSKYNNYS POISTETTU. Se oli 60 ruudun yhtenainen etuliite
+   151:n sarjasta, eli noin 1,98 MB - kerros odotti juuri niin monta
+   ruutua etta scrubbaus ei kuluta niita loppuun ennen kuin loput ovat
+   tulleet. Koko elokuva on 1,94 MB, joten sama odotus antaa nyt kaikki
+   151 ruutua eika 60:ta, ja kynnys on tarpeeton. */
 
-   LUVUT LASKETTU UUDELLEEN kun sarja kaksinkertaistui 76 -> 151 ruutuun.
-   Kulutus kaksinkertaistui, koska sama vieritysmatka kayttaa nyt kaksi
-   kertaa enemman ruutuja; tuotto kasvoi vain hieman, koska keskimaarainen
-   ruutu keveni 58 kt -> 51,6 kt.
-
-   Rauhallinen ensikatselu on n. 400 px/s, mika on vh 700:lla 38,3
-   ruutua/s (oli 19,1) ja vh 600:lla 44,6 ruutua/s. Tuotto CONC 5:lla:
-   kuitu 112, tyypillinen 4G 28,7 ja hidas 4G 9,9 ruutua/s.
-
-   Tyypillisella 4G:lla vajetta kertyy 9,6 ruutua sekunnissa sen 3,92 s
-   ajan jonka matka kestaa, eli 38 ruutua; vh 600:lla 53. 60 kattaa
-   molemmat. Kuidulla tuotto ylittaa kulutuksen jo ilman etuliitetta,
-   joten kynnys maksaa siella 0,54 s.
-
-   HITAALLE 4G:LLE EI ENAA OLE KYNNYSTA JOKA RIITTAISI: vaje olisi 111
-   ruutua eli kaksi kolmasosaa koko sarjasta, ja sen odottaminen olisi
-   pahempi haitta kuin itse puute. Siella - kuten trackpadin
-   heilautuksessakin - piirtyy nearest-resident. Se heikentyi vahemman
-   kuin luvut antavat ymmartaa: kun ruudut ovat kaksi kertaa tiheammassa,
-   yksi puuttuva ruutu on puolet pienempi hyppy kuin ennen. */
-const RELEASE_AT = 60;
 /* Scroll-vihje piiloon heti kun liike alkaa. Sama kynnys molempiin
    suuntiin, joten vihje palaa kun kayttaja palaa alkuun. */
 const HINT_P = 0.02;
@@ -161,29 +143,11 @@ const smoothstep = (a: number, b: number, x: number) => {
 const frameSrc = (dir: string, i: number, ext = "webp") =>
   `${dir}${String(i + 1).padStart(3, "0")}.${ext}`;
 
-/* AVIF-TUKI SELVITETAAN KERRAN, ILMAN VERKKOPYYNTOA.
-   1x1-kuva data-URLina: dekoodaus on paikallinen, joten vastaus tulee
-   yhden tai kahden kehyksen sisalla eika se voi hidastaa ensimmaista
-   ruutua verkon yli. Tulos valimuistitetaan moduulitasolla, joten
-   uudelleenmountissa ei tehda uutta koetta.
+/* AVIF-KOE POISTETTU. Se ratkaisi kumpi KUVASARJA haetaan, ja
+   kuvasarjoja ei enaa ole: koko elokuva on yksi mp4 joka puretaan
+   WebCodecsilla. Ruutu 0 jai webppina, koska se on <picture>-elementin
+   LCP-kuva - se on ainoa jaljella oleva kuvatiedosto. */
 
-   img.decode() eika onload: Chrome ja Safari laukaisevat onloadin myos
-   muodolle jota ne eivat osaa purkaa, jolloin koe antaisi vaaran
-   positiivisen. decode() hylkaa lupauksen jos purku ei onnistu. */
-const AVIF_PROBE =
-  "data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAEAAAABAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQAMAAAAABNjb2xybmNseAACAAIABoAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEDQgMgkQAAAAB8dSLfI=";
-let avifOk: Promise<boolean> | null = null;
-const supportsAvif = () => {
-  if (!avifOk) {
-    avifOk = new Promise<boolean>((res) => {
-      const img = new Image();
-      img.onload = () => img.decode().then(() => res(true), () => res(false));
-      img.onerror = () => res(false);
-      img.src = AVIF_PROBE;
-    });
-  }
-  return avifOk;
-};
 export default function HeroScrub() {
   const ref = useRef<HTMLCanvasElement>(null);
   const load = useRef<HTMLDivElement>(null);
@@ -212,22 +176,24 @@ export default function HeroScrub() {
        valimuistissa siina vaiheessa kun sarja alkaa. Sama tiedosto eri
        muodossa olisi uusi lataus keskella LCP:ta. Yhden ruudun 16 kt:n
        ero ei ole minkaan arvoinen sen rinnalla. */
-    const avifDir = "avifDir" in set ? (set as { avifDir: string }).avifDir : null;
-    let useAvif = false;
-    const srcFor = (i: number) =>
-      useAvif && avifDir && i > 0 ? frameSrc(avifDir, i, "avif") : frameSrc(set.dir, i);
-
+    /* imgs sisaltaa enaa YHDEN kuvan: ruudun 0. Se on <picture>-
+       elementin LCP-kuva ja siksi jo selaimen valimuistissa, ja se on
+       se mika kankaalla nakyy siihen asti kunnes elokuva on purettu -
+       ja se mika jaa nakyviin jos WebCodecsia ei ole. */
     const imgs: (HTMLImageElement | null)[] = new Array(set.n).fill(null);
-    // RATKENNEET, ei ladatut: epaonnistunut pyynto merkitaan myos, jotta
-    // yksi 404 ei pysayta etuliitetta eika jata kerrosta odottamaan
-    // aikakatkaisuun asti. imgs[i] jaa silloin nulliksi ja nearest()
-    // ohittaa sen.
-    const settled: boolean[] = new Array(set.n).fill(false);
-    // Pisin yhtenainen etuliite ratkenneista. Vapautus nojaa juuri
-    // etuliitteeseen eika lukumaaraan: scrubbaus kuluttaa ruudut
-    // jarjestyksessa, joten aukkoinen joukko ei kata matkan alkua.
-    let ready = 0;
-    const K = Math.min(RELEASE_AT, set.n);
+    /** Elokuva. null = ei tuettu, ei viela ladattu, tai lataus kaatui. */
+    let film: Film | null = null;
+    /* LATAUKSEN ETENEMA 0..1. Kuvasarjan aikaan tama oli "pisin
+       yhtenainen etuliite ladatuista ruuduista", koska scrubbaus kulutti
+       ruudut jarjestyksessa ja aukkoinen joukko ei kattanut matkan alkua.
+       Yhdella tiedostolla kysymys on yksinkertaisempi: kuinka suuri osa
+       tavuista on tullut.
+
+       MITTA ON SAMA KUIN ENNEN, vaikka luku laskettiin toisin. Vanha
+       kynnys oli 60 ruutua avif-sarjasta eli noin 1,98 MB, ja koko
+       elokuva on 1,94 MB. Odotus ei siis pitene, mutta sen jalkeen
+       kaytossa on 151 ruutua eika 60. */
+    let osuus = 0;
     let shownKey = "";
     let raf = 0;
     let stopped = false;
@@ -258,11 +224,11 @@ export default function HeroScrub() {
     // loytaa aina lahimman; tasatilanteessa pienempi indeksi voittaa.
     // Ruutu 0 ladataan ennen kaikkea muuta, joten palautus on residentti.
     const nearest = (i: number) => {
-      if (imgs[i]) return i;
-      for (let d = 1; d < set.n; d++) {
-        if (i - d >= 0 && imgs[i - d]) return i - d;
-        if (i + d < set.n && imgs[i + d]) return i + d;
+      if (film?.valmis) {
+        const j = film.lahin(i);
+        if (j >= 0) return j;
       }
+      // Ennen elokuvaa (ja ilman WebCodecsia) kaytossa on vain ruutu 0.
       return 0;
     };
 
@@ -270,10 +236,18 @@ export default function HeroScrub() {
     // onnistuneen drawImagen jalkeen. Pelkka ready-laskuri kertoo etta
     // ruudut on ladattu, ei sita etta yksikaan olisi piirretty.
     let painted = false;
-    const blit = (img: HTMLImageElement, alpha: number) => {
-      const s = Math.max(cv.width / img.naturalWidth, cv.height / img.naturalHeight);
-      const dw = img.naturalWidth * s;
-      const dh = img.naturalHeight * s;
+    /* VideoFrame ja HTMLImageElement ilmoittavat mittansa eri nimilla.
+       Ilman tata sama rajauslasku olisi kahtena kappaleena, ja juuri
+       sellainen pari ajautuu erilleen. */
+    const mitat = (x: CanvasImageSource) =>
+      x instanceof HTMLImageElement
+        ? { w: x.naturalWidth, h: x.naturalHeight }
+        : { w: (x as VideoFrame).displayWidth, h: (x as VideoFrame).displayHeight };
+    const blit = (img: CanvasImageSource, alpha: number) => {
+      const m = mitat(img);
+      const s = Math.max(cv.width / m.w, cv.height / m.h);
+      const dw = m.w * s;
+      const dh = m.h * s;
       ctx.globalAlpha = alpha;
       ctx.drawImage(img, (cv.width - dw) / 2, (cv.height - dh) / 2, dw, dh);
       ctx.globalAlpha = 1;
@@ -301,20 +275,25 @@ export default function HeroScrub() {
      * lisaruudut olisivat maksaneet 3,8 MB.
      */
     const BLEND_STEPS = 24;
+    /** Ruutu i piirrettavana: elokuvasta jos on, muuten ruutu 0. */
+    const kuva = (i: number): CanvasImageSource | null =>
+      (film?.valmis ? film.hae(i) : null) ?? (i === 0 ? imgs[0] : null);
     const paint = (fi: number) => {
       const i0 = Math.min(Math.floor(fi), set.n - 1);
       const a = nearest(i0);
       const bi = i0 + 1;
-      // Sekoitetaan VAIN jos seuraava ruutu on oikeasti ladattu ja pohja
+      // Sekoitetaan VAIN jos seuraava ruutu on oikeasti purettuna ja pohja
       // osui haettuun indeksiin. Jos nearest jouduttiin hakemaan kauempaa,
       // valissa ei ole mitaan jarkevaa sekoitettavaa.
-      const canBlend = a === i0 && bi < set.n && !!imgs[bi];
+      const bKuva = bi < set.n ? kuva(bi) : null;
+      const canBlend = a === i0 && !!bKuva;
       const q = canBlend ? Math.round((fi - i0) * BLEND_STEPS) / BLEND_STEPS : 0;
+      const aKuva = kuva(a);
       const key = `${a}|${q}`;
-      if (!imgs[a] || key === shownKey) return;
+      if (!aKuva || key === shownKey) return;
       shownKey = key;
-      blit(imgs[a]!, 1);
-      if (q > 0) blit(imgs[bi]!, q);
+      blit(aKuva, 1);
+      if (q > 0 && bKuva) blit(bKuva, q);
       if (!painted && cv.width > 0 && cv.height > 0) {
         painted = true;
         // Vapautus on voinut jaada odottamaan tata; yritetaan uudelleen.
@@ -322,25 +301,21 @@ export default function HeroScrub() {
       }
     };
 
-    const fetchFrame = (i: number) =>
+    /* RUUTU 0. Sama tiedosto kuin <picture>-elementin LCP-kuva, joten
+       tama on kaytannossa valimuistiosuma eika uusi lataus. */
+    const haeRuutu0 = () =>
       new Promise<void>((done) => {
         const img = new Image();
         img.decoding = "async";
-        const fin = () => {
-          // Epaonnistunutkin pyynto kasvattaa laskuria: muuten palkki
-          // jaisi jumiin ja kerros odottaisi aikakatkaisuun asti ruutua
-          // joka ei koskaan tule.
-          settled[i] = true;
-          while (ready < set.n && settled[ready]) ready++;
-          tick();
+        // Epaonnistunutkin pyynto ratkaisee lupauksen: muuten elokuvan
+        // lataus ei kaynnistyisi lainkaan ja kerros odottaisi
+        // aikakatkaisuun asti kuvaa joka ei koskaan tule.
+        img.onload = () => {
+          imgs[0] = img;
           done();
         };
-        img.onload = () => {
-          imgs[i] = img;
-          fin();
-        };
-        img.onerror = fin;
-        img.src = srcFor(i);
+        img.onerror = () => done();
+        img.src = frameSrc(set.dir, 0);
       });
 
     // Kaikki kerrokset ovat puhtaita funktioita p:sta ja q:sta. Kirjoitus
@@ -415,8 +390,8 @@ export default function HeroScrub() {
     // jolla vapautus tehdaan - ja tayttyy tasan silla hetkella kun
     // kerros haipyy.
     const tick = () => {
-      load.current?.style.setProperty("--hero-load-p", `${Math.min(ready / K, 1) * 100}%`);
-      if (ready >= K) release();
+      load.current?.style.setProperty("--hero-load-p", `${Math.min(osuus, 1) * 100}%`);
+      if (osuus >= 1) release();
     };
 
     // Reduced motion: ei scrubia eika sarjan latausta, vain viimeinen
@@ -441,79 +416,72 @@ export default function HeroScrub() {
     if (!window.location.hash) window.scrollTo(0, 0);
 
     size();
-    // Muotokoe kaynnistetaan heti, rinnan ruudun 0 haun kanssa: se on
-    // paikallinen dekoodaus, joten se on valmis ennen kuin verkosta on
-    // ehtinyt tulla mitaan.
-    void supportsAvif();
-    fetchFrame(0).then(() => {
+    haeRuutu0().then(() => {
       if (stopped) return;
       size();
       paint(0);
-      // LOPPUSARJAN KAYNNISTYS. Ruutu 0 on SAMA tiedosto kuin
-      // LCP-<img> (ks. <picture> alempana), joten sen valmistuminen on
-      // tasmalleen se hetki jolloin LCP on haettu eika loppusarja voi
-      // enaa kilpailla siita. rest() on idempotentti (started-lippu),
-      // joten tama ei ole ristiriidassa varaventtiilien kanssa.
+      // ELOKUVAN LATAUS ALKAA VASTA TASTA. Ruutu 0 on SAMA tiedosto kuin
+      // LCP-<img>, joten sen valmistuminen on tasmalleen se hetki jolloin
+      // LCP on haettu eika elokuva voi enaa kilpailla siita kaistasta.
       //
-      // MIKSI EI window.load YKSIN. Se oli aiemmin AINOA laukaisija, ja
-      // se odottaa koko sivun aliresursseja. Mitattuna: Chromiumissa
-      // window.load 188 ms, WebKitissa 3193 ms (116 pyyntoa / 4503 kt).
-      // Ruudut latautuivat WebKitissa vasta 3200 ms kohdalla ja lukko
-      // aukesi 3241 ms - eli 3,2 sekunnin viiveesta 48 ms oli itse
-      // latausta ja loput pelkkaa odotusta. Lupaus ei voi myoskaan
-      // "mennä ohi" niin kuin kuuntelija joka ehditaan kiinnittaa
-      // vasta tapahtuman jalkeen.
-      rest();
+      // MIKSI EI window.load. Se odottaa koko sivun aliresursseja.
+      // Mitattuna: Chromiumissa window.load 188 ms, WebKitissa 3193 ms
+      // (116 pyyntoa / 4503 kt), ja ruudut latautuivat WebKitissa vasta
+      // 3200 ms kohdalla - 3,2 sekunnin viiveesta 48 ms oli latausta ja
+      // loput odotusta. Lupaus ei myoskaan voi "menna ohi" niin kuin
+      // kuuntelija joka ehditaan kiinnittaa vasta tapahtuman jalkeen.
+      void kaynnista();
     });
 
-    const idle = (cb: () => void) =>
-      typeof requestIdleCallback === "function"
-        ? requestIdleCallback(() => cb())
-        : window.setTimeout(cb, 1);
-
-    // CONC 5: tehollinen aika ruutua kohti on RTT/5 + koko/kaista, eli
-    // kaistan asettama lattia on saavutettavissa. Isompi maara vain
-    // pilkkoisi kaistan pienempiin osiin.
     let started = false;
-    const rest = async () => {
+    const kaynnista = async () => {
       if (started) return;
       started = true;
-      // Kapealla naytolla ei haeta yhtaan ruutua. Vapautus on pakotettava:
-      // ready jaisi nollaan eika kynnys tayttyisi koskaan, jolloin
-      // latauskerros odottaisi LOAD_TIMEOUTin loppuun.
+      /* KAPEALLA NAYTOLLA EI PURETA MITAAN. Elokuva olisi siella pelkka
+         kustannus: 100vh:n spacerilla koko animaatio on ohi yhdella
+         peukalon vedolla, ja <picture>-elementin poster on jo ladattu.
+         Vapautus on pakotettava, koska osuus jaisi nollaan. */
       if (!wide) {
         release(true);
         return;
       }
-      // Muototuki ratkaistaan ennen ensimmaista hakua. Koe on
-      // data-URL-dekoodaus eli paikallinen, joten odotus on kehyksen
-      // luokkaa eika verkkopyynto - ja se on jo kaynnistynyt ruudun 0
-      // haun rinnalla.
-      useAvif = await supportsAvif();
-      if (stopped) return;
+      /* ILMAN WebCodecsia EI OLE VARASARJAA. Se olisi juuri se 13 MB
+         kuollutta painolastia joka tasta poistettiin. Nakyviin jaa ruutu
+         0 ja tekstien vaiheistus ajetaan normaalisti, eli osio ei ole
+         rikki vaan liikkumaton. Chrome 94+, Safari 16.4+ ja Firefox
+         130+ tukevat, joten tama on kapea kaista. */
+      if (!Film.tuettu()) {
+        release(true);
+        return;
+      }
       // KAYTTAJAA EI JATETA JUMIIN. Kello kaynnistyy vasta kun lataus
-      // oikeasti alkaa, jottei hidas load-tapahtuma syo varaa.
+      // oikeasti alkaa, jottei hidas ensimmainen ruutu syo varaa.
       timer = window.setTimeout(() => release(true), LOAD_TIMEOUT);
-      let next = 1;
-      let active = 0;
-      const pump = () => {
-        if (stopped) return;
-        while (active < CONC && next < set.n) {
-          const i = next++;
-          active++;
-          fetchFrame(i).then(() => {
-            active--;
-            idle(pump);
-          });
+      const f = new Film();
+      try {
+        await f.lataa(
+          { src: FILM.src, frames: FILM.frames, width: FILM.width, height: FILM.height },
+          (e) => {
+            osuus = e;
+            tick();
+          },
+        );
+        if (stopped) {
+          f.vapauta();
+          return;
         }
-      };
-      idle(pump);
+        film = f;
+        osuus = 1;
+        shownKey = "";
+        paint(progress() * (set.n - 1));
+        tick();
+      } catch {
+        // Verkkovirhe tai odottamaton tiedostorakenne: ruutu 0 jaa
+        // nakyviin ja lukko avataan, jottei kavija jaa odottamaan.
+        f.vapauta();
+        release(true);
+      }
     };
-    // VARAVENTTIILIT, eivat paapolku. Jaavat paikalleen sen varalta
-    // ettei ruutu 0 lataudu lainkaan (verkkovirhe): silloin lataus
-    // kaynnistyy silti eika sivu jaa latausruutuun LOAD_TIMEOUTiin asti.
-    if (document.readyState === "complete") rest();
-    else window.addEventListener("load", rest, { once: true });
 
     /* SYOTTEEN TASOITUS.
      *
@@ -553,7 +521,20 @@ export default function HeroScrub() {
       // Liukuluku, ei pyoristys: paint sekoittaa murto-osan mukaan.
       // Kapealla naytolla canvasille ei piirreta mitaan: alla oleva
       // poster jaa nakyviin. Vaiheistus ajetaan silti.
-      if (wide) paint(ps * (set.n - 1));
+      if (wide) {
+        const fi = ps * (set.n - 1);
+        /* MOOTTORI LUKEE ASENNON TASSA RUUDUSSA, ei scroll-tapahtumasta.
+           Tapahtumia ei tule tasan yhta ruutua kohti, joten tapahtumasta
+           paivitetty kohde olisi osassa ruutuja vanha ja osassa kahdesti
+           uusi. Jarjestys on kiintea: aseta kohde, syota purkajalle,
+           piirra, vapauta ikkunan ulkopuoliset. */
+        if (film?.valmis) {
+          film.aseta(fi);
+          film.tayta();
+        }
+        paint(fi);
+        film?.siivoa();
+      }
       schedule(ps);
     };
     raf = requestAnimationFrame(frame);
@@ -565,7 +546,9 @@ export default function HeroScrub() {
       document.documentElement.classList.remove("hero-locked");
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
-      window.removeEventListener("load", rest);
+      /* VideoFrame on GPU-muistia eika roskienkeruu vapauta sita:
+         ilman tata purettu ikkuna jaisi elamaan navigoinnin yli. */
+      film?.vapauta();
     };
   }, []);
 
