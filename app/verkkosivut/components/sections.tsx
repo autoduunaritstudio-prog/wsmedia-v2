@@ -215,7 +215,10 @@ export function Nakyvyys() {
             oli korkeampi kuin sen sisalto. Viiva ylareunassa jaa: sen
             etenema on --rvp, sama luku jolla prosessin jana taytyy, ja
             --i antaa jokaiselle kohdalle oman viiveensa. */}
-        <ol className="nelja nelja-ikoni" data-rvs="">
+        {/* data-hehku ON NOPEUSSAADIN, ks. globals.css. --rvp:n matka on
+            aina noin yksi nakyma, joten piirto olisi ohi kauan ennen
+            kuin osio on. */}
+        <ol className="nelja nelja-ikoni" data-rvs="" data-hehku="1.3">
           {SEO_POINTS.map(([h, p], i) => (
             <li className="nelja-k" key={h} style={{ "--i": i } as CSSProperties}>
               <div className="nelja-yla">
@@ -480,13 +483,21 @@ export function Tarjous() {
             </ol>
           </div>
 
+          {/* SAMA KORTTI KUIN LYHYTVIDEOILLA. Budjettiliukuri pois:
+              se oli kortin korkein yksittainen osa, ja budjetin
+              kysyminen ennen kuin kavija tietaa mita han on ostamassa
+              karsii yhteydenottoja. Hinnat ovat sivulla jo omana
+              osionaan, joten kysymys ei kerro meille mitaan jota
+              lukija ei olisi juuri lukenut.
+
+              Kaksi kenttaa jaa: nykyiset verkkosivut ja millainen
+              sivusto on mielessa. Kaanto -y kuten Lyhytvideoilla. */}
           <BudgetForm
-            budgetLabel="Projektin budjetti"
-            messageLabel="Millainen sivusto on mielessä? Uudet sivut, uudistus vai verkkokauppa?"
+            showBudget={false}
+            messageLabel="Millainen sivusto on mielessä?"
             extraField={{ id: "nyk", label: "Nykyiset verkkosivut (jos on)", placeholder: "esimerkki.fi" }}
-            min={500}
-            max={20000}
-            initial={3000}
+            note="Ei sitoumuksia."
+            tilt="-y"
           />
         </div>
       </div>

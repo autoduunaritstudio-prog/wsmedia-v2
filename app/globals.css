@@ -13560,3 +13560,105 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 @media (prefers-reduced-motion: reduce) {
   .wsx .nelja-kuvio { clip-path: none }
 }
+
+/* ---------- KOROSTUS ON VARI, EI VIIVA ----------
+   .mark oli viiva sanan alla. Viiva on linkin merkki, ja otsikossa
+   oleva alleviivattu sana lupaa siksi jotain johon voi klikata.
+   Sama korostus tulee varista ilman tuota lupausta, ja se on myos
+   sama keino kuin sivun muissa otsikoissa (<b><i> hengahdyksissa). */
+.page-verkkosivut .mark {
+  background: none; background-image: none; box-shadow: none;
+  padding: 0; color: var(--seo-hi);
+}
+.page-verkkosivut .valo .mark { color: #00697a }
+
+/* ---------- PALVELUN SISALLON MERKIT: LAMMIN VARI ----------
+   Syaani on talla sivulla NAKYVYYDEN vari: Nakyvyys-korttien merkit,
+   niiden kuviot ja koodatun puolen palkit ovat kaikki sita. Kun
+   Palvelun sisallon merkit olivat samaa syaania, kolme perakkaista
+   osiota kaytti yhta ja samaa aksenttia eika mikaan erottunut.
+
+   Lampoinen on sivun toinen brandivari (--lampo). Se on tassa
+   riittavan pieni ja vaimea ettei se sekoitu Tuttu tilanne -osion
+   isompiin lampoisiin merkkeihin kolme nakymaa aiemmin. */
+.page-verkkosivut .hs-merkein .hs-ik { stroke: var(--lampo); opacity: .8 }
+
+/* Hakukuvion osoitin: valitun ehdotuksen merkki rivin vasemmassa
+   reunassa. Oma luokkansa, koska se on ainoa lampoinen viiva
+   syaanissa kuviossa. */
+.wsx .nelja-kuvio .kv-osoitin { stroke: var(--seo-hi); stroke-width: 3 }
+
+
+/* ---------- NAKYVYYS: PIIRTO KESTAA KOKO OSION ----------
+   Kortit ja kuviot ilmestyivat --rvp:sta, jonka matka on aina noin
+   yksi nakyman korkeus. Neljä korttia oli siis piirretty valmiiksi
+   ennen kuin osiota oli ehtinyt lukea, ja loppumatkan ne vain
+   seisoivat. Se on ilmestys, ei piirtyminen.
+
+   Ajuri vaihtuu --piirtoon, jonka matka tulee data-hehkusta.
+   MITATTU (nakyma 812px): ruudukko on dokumentissa kohdassa 7935 ja
+   609px korkea, joten hehkun perusmatka on 716px. Peittava hengahdys
+   alkaa nousta kohdassa 8130. Arvo 1,3 antaa matkaksi 931px, jolloin
+   piirto on tasan yksi kohdassa 8046 eli noin 80px ennen kuin peite
+   koskee osioon.
+
+   Kortit porrastetaan saman luvun sisalla --i:lla: jokainen alkaa
+   .16 myohemmin kuin edellinen ja viimeinen paattyy tasan ykkoseen.
+   Piirto jaa nakyviin, koska --piirto ei palaa takaisin. */
+.page-verkkosivut #hakukoneoptimointi .nelja-k {
+  --veto2: clamp(0, calc((var(--piirto, 1) - var(--i) * .16) * 1.92), 1);
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k::before { scale: var(--veto2) 1 }
+.page-verkkosivut #hakukoneoptimointi .nelja-kuvio {
+  clip-path: inset(-20% calc((1 - var(--veto2)) * 102%) -20% -2%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-verkkosivut #hakukoneoptimointi .nelja-k { --veto2: 1 }
+}
+
+
+/* ---------- KETJUN ENSIMMAINEN KAARI ON LAPINAKYVA ----------
+   Coverin ylareunassa nakyi yha raja vaikka varit oli jo yhdenmukaistettu.
+   Vari ei ollutkaan se ero: kaarella oli OMA verkostokerroksensa, jolla
+   on oma satunnainen pistekenttansa ja oma vinjettinsa, ja kaaren
+   umpinainen pohja peitti sivutason kerroksen. Kaistan ylapuolella
+   nakyi siis sivun kuvio ja alapuolella kaaren oma, eli kaksi eri
+   taustaa peräkkain.
+
+   Ketjun ensimmainen kaari ei peita mitaan, joten se ei tarvitse
+   umpinaista pohjaa. Kun se on lapinakyva ja ilman omaa kerrosta,
+   sivutason verkosto jatkuu logonauhasta Palvelun sisaltoon yhtena
+   kuviona. Peittavat kaaret pitavat omansa, koska ne peittavat. */
+.wsx .jakso-avoin { background: transparent }
+
+/* Peittavien kaarten vinjetti paattyi variin #0e141b, joka ei ole
+   taman sivun pohjavari. Reunoilla se nakyi kehyksena kaaren oman
+   pohjan (#0b0f14) paalla. */
+.page-verkkosivut .jakso-pari .netbd-glow {
+  background: radial-gradient(120% 90% at 50% 45%, transparent 32%, #0b0f14 100%);
+}
+
+/* ---------- HERO: OTSIKKO TAKAISIN MITTAAN ----------
+   MITATTU: heron h1 oli 48,5px ja heti sen alla olevan osion h2 72px.
+   Sivun ENSIMMAINEN otsikko oli siis kolmanneksen pienempi kuin
+   toinen, ja hero luki alaotsikkona.
+
+   Koko on sidottu palstaan (cqi), joten se ei nouse ilman etta palsta
+   levenee. Molemmat siis: palsta 606 -> 745px ja koko 8cqi -> 9,4cqi,
+   jolloin h1 on noin 70px eli samaa luokkaa kuin osioiden otsikot.
+
+   Nayttamo kapenee saman verran. Se ei ole menetys vaan se mika
+   tilan antaa: mockup on todiste, ei aihe, ja 420px riittaa
+   selainkehykseen jonka sisalto on joka tapauksessa pienennettya. */
+@media (min-width: 981px) {
+  .page-verkkosivut .hero-split { grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr) }
+  .page-verkkosivut .hero-copy { max-width: 46rem }
+  .page-verkkosivut .stickysub .hero-copy h1 { font-size: clamp(28px, 9.4cqi, 74px) }
+  .page-verkkosivut .hero h1 { font-size: clamp(28px, 9.4cqi, 74px) }
+}
+
+/* Tarjouksen otsikko tavutti sanan keskelta ("verkkosi-vuista"), koska
+   .seo-h2:lla on hyphens: auto ja palsta on tassa kapea. Tavutus on
+   oikein leipatekstissa mutta ei 60px:n otsikossa, jossa katkoviiva on
+   yhta iso kuin kirjaimet. Rivi saa katketa vain valilyonnista. */
+.page-verkkosivut #tarjous .seo-h2 { hyphens: manual; text-wrap: balance }

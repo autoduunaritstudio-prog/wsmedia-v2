@@ -262,10 +262,10 @@ export const SEO_KUVIOT: ReactNode[] = [
   /* latausjono: nelja pyyntoa, ylin pisin */
   <>
     <path className="kv-rata" d="M2 6h96M2 14h96M2 22h96M2 30h96" key="a" />
-    <path className="kv-palkki" d="M2 6h74" key="b" />
+    <path className="kv-palkki kv-kirkas" d="M2 6h74" key="b" />
     <path className="kv-palkki" d="M2 14h46" key="c" />
     <path className="kv-palkki" d="M2 22h27" key="d" />
-    <path className="kv-palkki kv-kirkas" d="M2 30h13" key="e" />
+    <path className="kv-palkki" d="M2 30h13" key="e" />
   </>,
   /* sivupuu: juuri ja kolme alasivua */
   <>
@@ -275,14 +275,19 @@ export const SEO_KUVIOT: ReactNode[] = [
     <rect className="kv-laatikko" x="40" y="23" width="20" height="7" rx="2" key="d" />
     <rect className="kv-laatikko" x="76" y="23" width="20" height="7" rx="2" key="e" />
   </>,
-  /* hakutuloslista: ylin osuma korostettuna */
+  /* HAKUKENTTA JA SANAT. Hakutuloslista oli liian lahella samaa
+     kuvaa kuin sivupuu sen vieressa: kolme laatikkoa allekkain
+     molemmissa. Tama kohta ei muutenkaan puhu tuloslistasta vaan
+     siita mita kayttaja KIRJOITTAA, joten kuviossa on hakukentta ja
+     sen alla kolme ehdotusta, keskimmainen valittuna. */
   <>
-    <rect className="kv-laatikko kv-kirkas" x="2" y="2" width="96" height="10" rx="2" key="a" />
-    <path className="kv-palkki kv-kirkas" d="M8 7h34" key="b" />
-    <rect className="kv-laatikko" x="2" y="15" width="96" height="8" rx="2" key="c" />
-    <path className="kv-palkki" d="M8 19h26" key="d" />
-    <rect className="kv-laatikko" x="2" y="26" width="96" height="8" rx="2" key="e" />
-    <path className="kv-palkki" d="M8 30h30" key="f" />
+    <rect className="kv-laatikko kv-kirkas" x="2" y="2" width="96" height="11" rx="5.5" key="a" />
+    <circle className="kv-laatikko kv-kirkas" cx="11" cy="7.5" r="3.4" key="b" />
+    <path className="kv-palkki kv-kirkas" d="M13.6 10.1l2.4 2.4" key="c" />
+    <path className="kv-palkki kv-kirkas" d="M21 7.5h29" key="d" />
+    <path className="kv-rata" d="M8 20h46M8 27h36M8 34h52" key="e" />
+    <path className="kv-palkki" d="M8 27h36" key="f" />
+    <path className="kv-osoitin" d="M2 27h2.4" key="g" />
   </>,
   /* kayttajakokemus: kavija jaa sivulle eika palaa */
   <>

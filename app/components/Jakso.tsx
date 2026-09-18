@@ -21,12 +21,30 @@ import NetBackdrop from "./NetBackdrop";
  * Jaettu komponentti, koska sama kaare on nyt kahdella alasivulla:
  * kopio olisi eronnut alkuperaisesta ensimmaisessa korjauksessa.
  */
-export default function Jakso({ children, merkit }: { children: ReactNode; merkit?: boolean }) {
+/**
+ * omaPohja: kaaren oma umpinainen pohja ja verkostokerros.
+ *
+ * Peittava kaari TARVITSEE sen: ilman umpinaista pohjaa se ei peita
+ * alla olevaa. Ketjun ENSIMMAINEN kaari ei peita mitaan, ja silloin
+ * oma pohja on haitta: se katkaisee sivutason verkoston, ja kaaren
+ * ylapuolelle jaava kaista (logonauha) nayttaa eri taustalta kuin
+ * kaari itse, vaikka varit olisivat samat. Silloin omaPohja={false}
+ * ja sivutason kerros nakyy lapi yhtenaisena.
+ */
+export default function Jakso({
+  children,
+  merkit,
+  omaPohja = true,
+}: {
+  children: ReactNode;
+  merkit?: boolean;
+  omaPohja?: boolean;
+}) {
   return (
-    <div className="jakso-pari">
+    <div className={omaPohja ? "jakso-pari" : "jakso-pari jakso-avoin"}>
       {/* Merkit jatkuvat jakson yli: kaare on yksi, joten molemmat osiot
           jakavat saman kerroksen eivatka merkit katkea niiden valissa. */}
-      <NetBackdrop mount="cover" merkit={merkit} />
+      {omaPohja ? <NetBackdrop mount="cover" merkit={merkit} /> : null}
       {children}
     </div>
   );

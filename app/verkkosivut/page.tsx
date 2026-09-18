@@ -134,23 +134,33 @@ export default function Verkkosivut() {
             ovat lapinakyvia, joten Tuttu tilanteen tausta jatkuu
             katkeamatta Palvelun sisaltoon. Hiusviiva niiden valista on
             myos pois. Ensimmainen cover on siis vasta hengahdys. */}
-        <Jakso>
+        <Jakso omaPohja={false}>
           <Ongelma />
           <Sisalto />
         </Jakso>
 
         <div className="pino">
           {/* SIVUN ENSIMMAINEN COVER JA AINOA HENGAHDYS ENNEN
-              PROSESSIA. Kuva on ruutu jolla sivustoa kirjoitetaan, ja
-              lause sanoo tasan sen: valmis pohja kootaan, raataloity
-              kirjoitetaan. Se on myos seuraavan osion kysymys.
-              Vasen kolmannes on tummaa siluettia, joten valkoinen
-              teksti asettuu siihen ilman omaa kalvoa. */}
+              PROSESSIA.
+
+              KUVA VAIHTUI KOLMANNEN KERRAN. koodi.webp on tyopoyta
+              jolla on ruutu JA kahvikuppi, ja kuppi on kuvan lahin ja
+              kirkkain kappale, joten se vei aiheen: lause puhui
+              sivuston tekemisesta ja kuva luki kahvilana. Rajaus ei
+              auta, koska cover jattaa vaakasuunnassa vain 15 %
+              varaa, ja zoomaus pudottaa kupin mutta samalla ruudun.
+              Sama tiedosto on lisaksi jo Tarjous-osion pohjana, eli
+              sama kuva olisi ollut sivulla kahdesti.
+
+              Nyt kuvassa piirretaan sivun rautalankamallia kynalla, ja
+              lause sanoo tasan sen: valmispohjassa sivu valitaan,
+              raataloidyssa se piirretaan. Se on myos seuraavan osion
+              kysymys. */}
           <Vaite
-            kuva="/verkkosivut/koodi.webp"
-            alla="Kokoaminen on nopeampaa, kirjoittaminen kevyempää ylläpitää ja nopeampaa käyttää. Kumpi kannattaa, riippuu alasta ja aikataulusta."
+            kuva="/verkkosivut/luonnos.webp"
+            alla="Valitseminen on nopeampaa, piirtäminen antaa sivun jonka rakenne on päätetty eikä peritty. Kumpi kannattaa, riippuu alasta ja aikataulusta."
           >
-            Valmis pohja kootaan. Räätälöity <b><i>kirjoitetaan.</i></b>
+            Valmispohjassa sivu valitaan. Räätälöidyssä se <b><i>piirretään.</i></b>
           </Vaite>
 
           <div className="pino">

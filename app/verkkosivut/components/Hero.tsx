@@ -36,8 +36,16 @@ export default function Hero() {
       <div className="wrap hero-split">
         <Mittakisko />
         <div className="hero-copy">
+          {/* KAKSI TAITTOA, EI YKSI. Otsikko nousi 48,5px:sta 69px:aan,
+              ja silloin "Verkkosivut yritykselle, jotka" vaatii 890px
+              mutta palsta on 736px. Yhdella taitolla rivi katkesi
+              itsestaan ja "jotka" jai yksin omalle rivilleen. Taitto
+              kirjoitetaan siis auki: kaksi tasapainoista riviä ja
+              vaihtuva lause omanaan. */}
           <h1 className="li d2">
-            Verkkosivut yritykselle, jotka
+            Verkkosivut
+            <br />
+            yritykselle, jotka
             <br />
             <WordSwap words={WORDS} deferToClient />
           </h1>
