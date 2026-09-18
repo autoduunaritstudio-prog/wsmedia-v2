@@ -1,4 +1,5 @@
 import { FAQ_GROUPS } from "./faq";
+import { UKK_KYSYMYKSET } from "./components/sisalto";
 
 /**
  * Rakenteellinen data. FAQPage rakennetaan samasta FAQ_GROUPS-datasta kuin
@@ -177,13 +178,22 @@ export function buildJsonLd() {
       {
         "@type": "FAQPage",
         "@id": "https://wsmedia.fi/verkkosivut#ukk",
-        mainEntity: FAQ_GROUPS.flatMap((g) =>
-          g.items.map((it) => ({
+        /* VAIN SIVULLA NAKYVAT KYSYMYKSET.
+           faq.tsx:ssa on 16 kysymysta, sivulla nakyy 10. Merkinta
+           rakennettiin kaikista, eli kuusi kysymysta luvattiin
+           hakutulokseen ilman etta niiden vastausta on sivulla. Se on
+           tasan se, minka Googlen ohje FAQPagesta kieltaa, ja
+           seuraamus ei ole varoitus vaan merkinnan sivuuttaminen.
+           Lahde on nyt sama lista joka ohjaa nakyvaa osiota. */
+        mainEntity: UKK_KYSYMYKSET.map((q) =>
+          FAQ_GROUPS.flatMap((g) => g.items).find((it) => it.q === q),
+        )
+          .filter((it): it is NonNullable<typeof it> => Boolean(it))
+          .map((it) => ({
             "@type": "Question",
             name: it.q,
             acceptedAnswer: { "@type": "Answer", text: it.plain },
           })),
-        ),
       },
     ],
   };

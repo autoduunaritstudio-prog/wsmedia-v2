@@ -66,7 +66,7 @@ export const PROBLEMS = [
   {
     ic: "ilme",
     h: "Ilme ei vastaa sitä, mitä yritys oikeasti on",
-    p: "Moni yritys on selvästi parempi kuin miltä se verkossa näyttää. Vanhentunut ulkoasu on asiakkaalle vihje siitä, miten muutkin asiat mahdollisesti hoidetaan.",
+    p: "Vanhentunut ulkoasu on asiakkaalle vihje siitä, miten muutkin asiat mahdollisesti hoidetaan. Päätelmä on epäreilu, mutta se syntyy muutamassa sekunnissa.",
   },
 ];
 
@@ -177,7 +177,7 @@ export const SEO_ICONS: ReactNode[] = [
 
 export const SEO_POINTS = [
   ["Nopeat latausajat", "Google mittaa sivuston nopeutta oikeilta käyttäjiltä. Hidas sivu ei ainoastaan menetä kävijää, se menettää myös sijoituksia, ja mobiilissa ero on suurin."],
-  ["Selkeä sivurakenne ja sisäinen linkitys", "Jokaiselle palvelulle oma alasivunsa. Näin sivusto voi näkyä useilla eri hauilla sen sijaan, että kaikki puristetaan yhdelle etusivulle."],
+  ["Selkeä sivurakenne ja sisäinen linkitys", "Sivut linkittyvät toisiinsa niin, että Google löytää ne kaikki ja ymmärtää minkä palvelun alle mikin kuuluu. Ilman linkitystä yksittäinen sivu jää irralleen, vaikka se olisi kirjoitettu hyvin."],
   ["Optimoitu sisältö ja oikeat hakusanat", "Tekstit kirjoitetaan niillä sanoilla, joilla asiakkaat oikeasti hakevat. Otsikot, metatiedot ja sisältö vastaavat siihen kysymykseen, joka hakuun johti."],
   ["Hyvä käyttäjäkokemus", "Google seuraa, jääkö kävijä sivulle vai palaako hän hakutuloksiin. Selkeä rakenne, luettava teksti ja toimiva mobiilinäkymä pitävät kävijän sivulla."],
 ];
@@ -291,12 +291,12 @@ export const SOPII = [
   "Yritykselläsi on useampi palvelu, joilla jokaisella on oma asiakaskuntansa",
   "Haluat näkyä Googlessa palveluhauilla, et vain yrityksen nimellä",
   "Nykyinen sivusto on hidas, vanhentunut tai sitä ei voi päivittää itse",
-  "Haluat kiinteän hinnan ja tietää etukäteen mitä siihen sisältyy",
+  "Haluat kiinteän hinnan ja tiedon siitä, mitä siihen sisältyy",
   "Toivot, että tekstit, kuvat ja tekniikka hoituvat samalta tiimiltä",
 ];
 
 export const EI_SOVI: [string, string][] = [
-  ["Etsit halvinta mahdollista sivustoa", "Emme kilpaile hinnalla vaan sillä, että sivusto löytyy ja myy"],
+  ["Etsit halvinta mahdollista sivustoa", "Halvin vaihtoehto on aina valmispohja, ja siitä maksetaan myöhemmin näkyvyydessä"],
   ["Haluat rakentaa sivut itse", "Tarvitset silloin alustan ja mallipohjan, et toteuttajaa"],
   ["Palvelusi tai kohderyhmäsi on vielä auki", "Kannattaa ensin päättää mitä myyt ja kenelle"],
   ["Odotat Google-sijoituksia muutamassa viikossa", "Tekninen pohja on valmis heti, sijoitukset kertyvät kuukausissa"],

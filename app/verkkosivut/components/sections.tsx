@@ -387,8 +387,8 @@ export function Ukk() {
           <div className="qa2-side">
             <h2 className="seo-h2 rv">Usein kysytyt kysymykset verkkosivuista</h2>
             <p className="seo-lead rv" style={{ marginTop: "22px" }}>
-              Hinta, aikataulu, omistajuus ja ylläpito. Nämä kymmenen tulevat vastaan lähes joka
-              projektissa.
+              Hinta, aikataulu, omistajuus ja ylläpito. Nämä kysytään useimmin, ja vastaus on
+              sama myös puhelimessa.
             </p>
             <div className="qa2-ask">
               <span>Etkö löytänyt vastausta?</span>

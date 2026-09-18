@@ -94,16 +94,17 @@ export default function Verkkosivut() {
 
       {/* ENSIMMAINEN PINO. Tuttu tilanne jaa alle, hengahdys nousee sen
           paalle ja palvelun sisalto nousee hengahdyksen paalle.
-          Lause on osion omasta tekstista sanatarkasti: se on jo sivun
-          terävin virke, mutta se oli haudattuna neljannen kortin
-          leipatekstiin. */}
+          Lause oli aiemmin neljannen kortin leipatekstissa SANATARKASTI
+          samassa muodossa, eli sivu sanoi saman kahdesti kolmen
+          ruudun valein. Nyt lause on vain taalla ja kortti jatkaa
+          siita eteenpain. */}
       <div className="pino">
         <Ongelma />
 
         <div className="pino">
           <Vaite
             kuva="/verkkosivut/tila.webp"
-            alla="Vanhentunut ulkoasu on asiakkaalle vihje siitä, miten muutkin asiat mahdollisesti hoidetaan."
+            alla="Sivusto on useimmiten ensimmäinen kohtaaminen, ja se tapahtuu ennen kuin kukaan ehtii kertoa mitään."
           >
             Moni yritys on selvästi parempi kuin miltä se <b><i>verkossa näyttää.</i></b>
           </Vaite>
@@ -111,31 +112,33 @@ export default function Verkkosivut() {
           <div className="pino">
             <Sisalto />
 
-            {/* Toinen pino. Kuva on kasi piirtamassa rautalankamallia
-                lampun alla, eli se mita ensimmainen tapaaminen on.
-                Lause on prosessin ensimmaisesta askeleesta. */}
-            <div className="pino">
-              {/* Kick "Prosessi" pois: osion nimi on jo sivukiskossa
-                  heti taman alla, ja hengahdyksen lause ei tarvitse
-                  otsikkoa kertoakseen mista se on. */}
-              <Laatta kuva="/verkkosivut/kartoitus.webp" korkeus="taysi">
-                <p className="laatta-lause suuri">
-                  Et tarvitse mitään <b><i>valmiiksi.</i></b>
-                </p>
-                <p className="laatta-alla">
-                  Käymme läpi mitä yritys tekee, kenelle ja millä hauilla asiakkaat etsivät
-                  palvelua. Sisältö, tekstit ja rakenne suunnitellaan yhdessä kartoituksessa.
-                </p>
-              </Laatta>
-
-              <Toteutustapa />
-            </div>
+            <Toteutustapa />
           </div>
         </div>
       </div>
 
       <Nakyvyys />
-      <Prosessi />
+
+      {/* HENGAHDYS SIIRTYI PROSESSIN ETEEN.
+          Kuva on kasi piirtamassa rautalankamallia lampun alla ja
+          lause on prosessin ensimmaisesta askeleesta, mutta molemmat
+          olivat kolme osiota ennen Prosessia, Sisallon ja
+          Toteutustavan valissa. Hengahdys kertoo mita seuraavaksi
+          tulee, joten se kuuluu sen osion eteen josta se puhuu.
+          Kick "Prosessi" jaa pois: osion nimi on sivukiskossa heti
+          taman alla. */}
+      <div className="pino">
+        <Laatta kuva="/verkkosivut/kartoitus.webp" korkeus="taysi">
+          <p className="laatta-lause suuri">
+            Et tarvitse mitään <b><i>valmiiksi.</i></b>
+          </p>
+          <p className="laatta-alla">
+            Tekstit, kuvat ja rakenne ovat osa toteutusta, eivät sen edellytys.
+          </p>
+        </Laatta>
+
+        <Prosessi />
+      </div>
 
       {/* KOLMAS PINO. Tulokset-osio poistettiin: sen luvut olivat
           lupauksia joiden takana ei ole yhtaan mitattua asiakastyota,
@@ -145,7 +148,7 @@ export default function Verkkosivut() {
       <div className="pino">
         <Vaite
           kuva="/verkkosivut/naytto.webp"
-          alla="Kiinteä hinta ennen aloitusta. Näet mitä hintaan sisältyy, ei piilokuluja eikä aloitusmaksuja."
+          alla="Hinta päätetään ennen kuin työ alkaa, eikä se perustu arvioon käytetyistä tunneista vaan sivumäärään ja sisällön laajuuteen."
         >
           Emme kilpaile hinnalla vaan sillä, että sivusto <b><i>löytyy ja myy.</i></b>
         </Vaite>
