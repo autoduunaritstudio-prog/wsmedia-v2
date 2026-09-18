@@ -26,27 +26,25 @@ export const REASONS = [
   },
 ];
 
+/* LINKIT POISTETTIIN: /lyhytvideot/tiktok, /instagram-reels ja
+   /youtube-shorts palauttivat kaikki 404:n. Alasivuja ei ole tehty,
+   joten sivun kolme "lue lisaa" -linkkia veivat virhesivulle. Teksti
+   jaa paikalleen; href palaa kun sivut on kirjoitettu. */
 export const PLATFORMS = [
   {
-    href: "/lyhytvideot/tiktok",
     mark: "tiktok" as const,
     h: "TikTok-videot yritykselle",
     p: "Nopein kanava uuden yleisön tavoittamiseen nollasta. Toimii, kun sisältö on aitoa ja rytmikästä ja puhuu katsojan kielellä, ei mainospuhetta.",
-    link: "TikTok-videotuotanto",
   },
   {
-    href: "/lyhytvideot/instagram-reels",
     mark: "instagram" as const,
     h: "Instagram Reels yritykselle",
     p: "Laajin ikäjakauma ja vahvin ostopolku Suomessa. Reels tuo uudet katsojat, feed ja tarinat hoitavat luottamuksen rakentamisen.",
-    link: "Reels-tuotanto",
   },
   {
-    href: "/lyhytvideot/youtube-shorts",
     mark: "youtube" as const,
     h: "YouTube Shorts yritykselle",
     p: "Shorts tuo uudet katsojat kanavalle, ja pidemmät videot syventävät asiantuntijuutta. Sisältö löytyy myös haulla vielä kuukausien päästä.",
-    link: "Shorts-tuotanto",
   },
 ];
 

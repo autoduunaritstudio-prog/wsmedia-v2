@@ -42,10 +42,10 @@ export default function Hero() {
               itsestaan ja "jotka" jai yksin omalle rivilleen. Taitto
               kirjoitetaan siis auki: kaksi tasapainoista riviä ja
               vaihtuva lause omanaan. */}
-          <h1 className="li d2">
-            Verkkosivut
+          <h1 className="li d2" id="paasisalto" tabIndex={-1}>
+            Verkkosivut{" "}
             <br />
-            yritykselle, jotka
+            yritykselle, jotka{" "}
             <br />
             <WordSwap words={WORDS} deferToClient />
           </h1>

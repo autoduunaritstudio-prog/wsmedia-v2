@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Instrument_Sans } from "next/font/google";
 import "./globals.css";
 
+import { SIVUSTO } from "./sivusto";
+
 import Analytics from "./components/consent/Analytics";
 import CookieBanner from "./components/consent/CookieBanner";
 
@@ -24,6 +26,10 @@ const instrument = Instrument_Sans({
  * rinnalle.
  */
 export const metadata: Metadata = {
+  /* metadataBase puuttui. Ilman sita Next ei muuta generoidun
+     jakokuvan suhteellista polkua absoluuttiseksi, ja og:image on
+     oltava absoluuttinen jotta jakopalvelut lukevat sen. */
+  metadataBase: new URL(SIVUSTO),
   title: "WS Media, etusivu",
   description:
     "Lyhytvideot, verkkosivut ja graafinen ilme samalta tiimiltä. Kiinteä hinta, ei pitkiä sopimuksia.",

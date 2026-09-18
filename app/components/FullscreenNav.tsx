@@ -32,6 +32,16 @@ type Props = {
   logoHref?: string;
   /** "/" alasivuilla, jotta valikon #-ankkurit osoittavat etusivulle. */
   anchorBase?: string;
+  /**
+   * Ohituslinkin kohde, esim. "#paasisalto". Kun annettu, navin eteen
+   * piirtyy linkki joka nakyy vasta nappaimistofokuksessa.
+   *
+   * Valinnainen eika oletus, koska linkki joka osoittaa olemattomaan
+   * ankkuriin on huonompi kuin ei linkkia lainkaan: nappaimistokayttaja
+   * painaa sita ja mitaan ei tapahdu. Sivu, joka antaa taman, antaa
+   * myos kohteen.
+   */
+  ohitaKohde?: string;
 };
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
@@ -42,6 +52,7 @@ export default function FullscreenNav({
   ctaLabel,
   logoHref,
   anchorBase = "",
+  ohitaKohde,
 }: Props) {
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -116,6 +127,11 @@ export default function FullscreenNav({
 
   return (
     <>
+      {ohitaKohde ? (
+        <a className="ohita" href={ohitaKohde}>
+          Siirry sisältöön
+        </a>
+      ) : null}
       <nav id="nav" aria-label="Ylävalikko">
         <div className="navin">
           {/* KOKEILU, poistettavissa talta yhdelta rivilta. Ks. NavCarriers.tsx. */}
@@ -227,12 +243,14 @@ export default function FullscreenNav({
             <div className="fsnav-side">
               <address className="fsnav-contact">
                 <span className="fsnav-rule" aria-hidden="true" />
-                <b>{CONTACT.company}</b>
-                {CONTACT.street}
+                {/* Valilyonnit ennen <br />:aa: ilman niita osoite luetaan
+                    yhtena merkkijonona "WS Media OyKuusiniementie...". */}
+                <b>{CONTACT.company}</b>{" "}
+                {CONTACT.street}{" "}
                 <br />
-                {CONTACT.city}
+                {CONTACT.city}{" "}
                 <br />
-                <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+                <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>{" "}
                 <br />
                 <small>Y-tunnus {CONTACT.businessId}</small>
               </address>

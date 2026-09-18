@@ -73,6 +73,7 @@ export default function Verkkosivut() {
       <Nav
         anchorBase="/"
         links={OVERLAY_NAV}
+        ohitaKohde="#paasisalto"
         ctaHref="#tarjous"
         ctaLabel="Pyydä tarjous"
         logoHref="/"

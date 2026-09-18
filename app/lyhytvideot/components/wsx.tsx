@@ -158,7 +158,7 @@ export function Alustat() {
 
         <div className="duo2" style={{ marginTop: "48px" }}>
           {PLATFORMS.map((p) => (
-            <div className={`duo2-col kanava kanava-${p.mark} rv`} key={p.href}>
+            <div className={`duo2-col kanava kanava-${p.mark} rv`} key={p.mark}>
               <p className="kanava-merkki">
                 {/* tone="brand" eli alustan omat varit. Harmaat
                     viivalogot lukivat koristeena; varillisina ne
@@ -168,9 +168,6 @@ export function Alustat() {
               </p>
               <h3>{p.h}</h3>
               <p className="seo-body">{p.p}</p>
-              <SmartLink href={p.href} className="tlink">
-                {p.link}
-              </SmartLink>
             </div>
           ))}
         </div>

@@ -22,8 +22,8 @@ export default function Hero() {
           napin yhdella silmayksella ja naytteet niiden vieressa. */}
       <div className="wrap hero-split">
         <div className="hero-copy">
-          <h1 className="li d2">
-            Lyhytvideot yrityksille, jotka
+          <h1 className="li d2" id="paasisalto" tabIndex={-1}>
+            Lyhytvideot yrityksille, jotka{" "}
             <br />
             <WordSwap words={WORDS} deferToClient />
           </h1>

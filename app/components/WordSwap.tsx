@@ -42,8 +42,29 @@ export default function WordSwap({ words, deferToClient = false }: Props) {
   return (
     <span className="swapclip">
       <span className="swap" id="swap">
+        {/* NAKYMATTOMAT VAIHTOEHDOT PIILOON RUUDUNLUKIJALTA.
+            Kaikki neljä vaihtoehtoa ovat samassa ruudukkoruudussa,
+            jotta laatikko ei hypi vaihdon aikana. Ilman aria-hiddenia
+            ruudunlukija lukee h1:n muodossa "Lyhytvideot yrityksille,
+            jotka algoritmi nostaa pysayttavat skrollauksen tuovat
+            yhteydenottoja katsotaan loppuun", eli sivun tarkein rivi
+            on nelja lausetta perakkain.
+
+            HUOM: tama EI muuta textContentia eika siis sita mita
+            tekstia poimiva lukija nakee. Siihen aria-hidden ei pysty.
+            Palvelimen HTML sisaltaa vain ensimmaisen vaihtoehdon
+            (deferToClient), ja loput kolme ovat selaimessa
+            opacity: 0, joten renderoiva indeksoija kasittelee ne
+            piilotettuna tekstina kuten minka tahansa vaihtajan.
+
+            Lahtevaa ei piiloteta kesken haivytyksen: se on viela
+            nakyvissa. */}
         {visible.map((w, i) => (
-          <span key={w} className={i === active ? "act" : i === leaving ? "out" : ""}>
+          <span
+            key={w}
+            className={i === active ? "act" : i === leaving ? "out" : ""}
+            aria-hidden={i === active || i === leaving ? undefined : true}
+          >
             {w}
           </span>
         ))}

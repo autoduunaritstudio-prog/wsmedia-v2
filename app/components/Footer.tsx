@@ -22,6 +22,10 @@ type Props = {
   columns: FooterColumn[];
   base: string;
   /** Mockupit eroavat: etusivulla brandiotsikko on h4, alasivulla h2. */
+  /* Palvelusivut antoivat brandiotsikolle tason h2, mutta sarakkeiden
+     omat otsikot ovat h4. Hyppy h2:sta h4:aan jattaa yhden tason
+     valiin, eli ruudunlukijan otsikkolistassa on aukko. Kun brandi on
+     h2, sarakkeet ovat h3. */
   brandHeading?: "h2" | "h4";
 };
 
@@ -37,6 +41,7 @@ type Props = {
  */
 export default function Footer({ intro, columns, base, brandHeading = "h4" }: Props) {
   const Brand = brandHeading;
+  const Sarake = brandHeading === "h2" ? "h3" : "h4";
   return (
     <footer>
       <div className="wrap">
@@ -60,7 +65,7 @@ export default function Footer({ intro, columns, base, brandHeading = "h4" }: Pr
 
           {columns.map((col) => (
             <div className="foot-col" key={col.title}>
-              <h4>{col.title}</h4>
+              <Sarake>{col.title}</Sarake>
               {col.links.map((l) =>
                 "action" in l ? (
                   <CookieSettingsButton key={l.label} label={l.label} />
@@ -74,11 +79,16 @@ export default function Footer({ intro, columns, base, brandHeading = "h4" }: Pr
           ))}
 
           <div className="foot-col">
-            <h4>Yhteystiedot</h4>
+            <Sarake>Yhteystiedot</Sarake>
             <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
             <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>
+            {/* Valilyonti ennen <br />:aa. Ilman sita pelkkaa tekstia
+                poimiva lukija saa "Kuusiniementie 8 A 302710 Espoo":
+                selain nayttaa rivinvaihdon, mutta textContentissa
+                merkkeja ei erota mikaan. Osoite on juuri se tieto joka
+                halutaan koneelle oikein. */}
             <address>
-              {CONTACT.street}
+              {CONTACT.street}{" "}
               <br />
               {CONTACT.city}
             </address>

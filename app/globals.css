@@ -13662,3 +13662,24 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    oikein leipatekstissa mutta ei 60px:n otsikossa, jossa katkoviiva on
    yhta iso kuin kirjaimet. Rivi saa katketa vain valilyonnista. */
 .page-verkkosivut #tarjous .seo-h2 { hyphens: manual; text-wrap: balance }
+
+/* ---------- OHITUSLINKKI ----------
+   Nappaimistolla sivu alkoi logosta ja valikkonapista, ja niiden lapi
+   oli mentava joka kerta. Linkki on ensimmainen fokusoitava elementti
+   ja nakyy vain fokusoituna: hiirella sita ei ole olemassa.
+
+   Se ei ole piilotettu opacityllä tai display: nonella, koska
+   kumpikaan ei ole fokusoitavissa. Sijainti nakyman ulkopuolella
+   sailyttaa elementin, ja fokus tuo sen takaisin. */
+.ohita {
+  position: fixed; top: 0; left: 50%; translate: -50% -140%;
+  z-index: 200; padding: 12px 22px; border-radius: 0 0 12px 12px;
+  background: #0b0f14; color: #f4f7fa; text-decoration: none;
+  font-size: 15px; font-weight: 600;
+  border: 1px solid rgba(111,236,255,.5); border-top: 0;
+  transition: translate .18s ease;
+}
+.ohita:focus-visible { translate: -50% 0 }
+/* Kohde saa fokuksen mutta ei fokusrengasta: rengas otsikon ympärilla
+   nayttaisi vialta, ja fokus itse on se mika linkin tekee. */
+#paasisalto:focus { outline: none }

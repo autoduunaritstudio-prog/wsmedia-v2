@@ -27,7 +27,7 @@ export default function Hero() {
             opacity 0 poistaisi sen LCP-ehdokkaista latushetkella. */}
         <div className="wrap heroh1">
           <h1>
-            Sisältöä, joka
+            Sisältöä, joka{" "}
             <br />
             <WordSwap words={WORDS} />
           </h1>

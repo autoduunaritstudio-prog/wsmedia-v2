@@ -29,9 +29,15 @@ import { Laatta, Vaite } from "../components/Maasto";
 import { structuredData } from "./structured-data";
 
 const TITLE = "Lyhytvideotuotanto yrityksille | TikTok, Reels & Shorts | WS Media";
+/* 220 merkkia oli selvasti pidempi kuin hakutuloksessa nakyva osuus,
+   joten loppu katkesi: "Espoo, Helsinki ja koko Suomi" ei nakynyt
+   kenellekaan. 155 merkkia mahtuu, ja tarkein jaa alkuun. */
 const DESCRIPTION =
-  "Lyhytvideotuotanto yrityksille avaimet käteen: strategia, käsikirjoitus, kuvaus ja editointi TikTokiin, Instagram Reelsiin ja YouTube Shortsiin. Kiinteä kuukausihinta, ei pitkiä sopimuksia. Espoo, Helsinki ja koko Suomi.";
-const OG_IMAGE = "https://wsmedia.fi/og/lyhytvideotuotanto-yrityksille.jpg";
+  "Lyhytvideot yrityksille avaimet käteen: käsikirjoitus, kuvaus ja editointi TikTokiin, Reelsiin ja Shortsiin. Kiinteä kuukausihinta, ei pitkiä sopimuksia.";
+/* OG_IMAGE poistui. Se osoitti tiedostoon jota ei ole olemassa, eli
+   jaettu linkki nayttaa rikkinaisen kuvan sijasta ei mitaan. Kuva
+   generoidaan nyt kaannoksessa, ks. app/og-kuva.tsx ja taman kansion
+   opengraph-image.tsx: Next liittaa sen metadataan itse. */
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -53,21 +59,12 @@ export const metadata: Metadata = {
     title: TITLE,
     description:
       "Lyhytvideot yrityksille avaimet käteen: strategia, käsikirjoitus, kuvaus ja editointi. Kiinteä kuukausihinta, ei pitkiä sopimuksia.",
-    images: [
-      {
-        url: OG_IMAGE,
-        width: 1200,
-        height: 630,
-        alt: "WS Media – lyhytvideotuotanto yrityksille TikTokiin, Instagram Reelsiin ja YouTube Shortsiin",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Lyhytvideotuotanto yrityksille | WS Media",
     description:
       "TikTok, Instagram Reels ja YouTube Shorts avaimet käteen. Kiinteä kuukausihinta, ei pitkiä sopimuksia.",
-    images: [OG_IMAGE],
   },
   other: {
     "geo.region": "FI-18",
@@ -90,7 +87,10 @@ const i = (n: number) => ({ "--i": n }) as CSSProperties;
 const STATS = [
   { value: "150+", label: "toteutettua projektia" },
   { value: "5\u00A0000\u00A0000+", label: "katselukertaa yhteensä" },
-  { value: "8", label: "arkipäivää keskim. toimitusaika" },
+  /* Oli 8 arkipaivaa, kun heron lipuke samassa nakymassa sanoi
+     "Toimitettu 7 paivassa". Kaksi lukua samasta asiasta yhdella
+     ruudulla lukee virheena, ja lukija uskoo kumman tahansa. */
+  { value: "7", label: "päivää keskim. toimitusaika" },
   { value: "4,8/5", label: "keskiarvosana asiakkailta" },
 ];
 
@@ -111,6 +111,7 @@ export default function Lyhytvideot() {
       <Nav
         anchorBase="/"
         links={OVERLAY_NAV}
+        ohitaKohde="#paasisalto"
         ctaHref="#tarjous"
         ctaLabel="Pyydä tarjous"
         logoHref="/"
