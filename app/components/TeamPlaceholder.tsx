@@ -12,7 +12,12 @@
  */
 export default function TeamPlaceholder() {
   return (
-    <div className="ctashot" aria-hidden="true">
+    /* Scroll-kaanto peilikuvana lomakkeelle: lomake on "-y" eli sen
+       oikea reuna tulee katsojaa kohti, tama on "y" eli sen vasen reuna
+       tulee. Sama profiili "card" eli sama kulma, joten pari kaantyy
+       yhtena aukeamana eika kahtena eri voimakkuudella liikkuvana
+       laattana. */
+    <div className="ctashot" data-tilt="y" data-tilt-profile="card" aria-hidden="true">
       <svg viewBox="0 0 300 380" preserveAspectRatio="xMidYMax meet">
         {[
           { x: 80, s: 0.94 },

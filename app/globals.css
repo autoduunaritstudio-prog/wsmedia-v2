@@ -2269,6 +2269,12 @@ section { padding: var(--space-section) 0 }
    --tilt-rotin, jolloin elementin oma perusmuunnos sailyy ja ilman
    JS:aa fallback on 0 astetta. */
 .ctasplit .fcard[data-tilt] { transform: perspective(1200px) var(--tilt-rot, rotateY(0deg)) }
+/* Sama ketju kortille. Perspektiivi on kummallakin omansa eika
+   yhteinen .ctasplitilla: yhteinen perspektiivi katsoisi molempia
+   samasta pisteesta, jolloin oikeanpuoleinen nayttaisi kaantyvan
+   enemman vaikka kulma on sama. Oma perspektiivi tekee kaannoista
+   keskenaan samanlaiset, ja juuri se on peilikuvan ehto. */
+.ctasplit .ctashot[data-tilt] { transform: perspective(1200px) var(--tilt-rot, rotateY(0deg)) }
 @media (max-width: 900px) {
   /* Yhdella palstalla kuva menee lomakkeen ALLE: lomake on osion
      tarkoitus, eika sita saa tyontaa ruudun alareunaan kuvituksella. */
