@@ -123,70 +123,75 @@ export default function Verkkosivut() {
           rajaa kenelle tama sopii, ja rajaus ennen hintaa on
           rehellisempi jarjestys kuin hinta ennen rajausta. */}
       <div className="pino">
-        <Ongelma />
+        {/* TUTTU TILANNE JA PALVELUN SISALTO OVAT YKSI VAIHE.
+            Sisalto nousi aiemmin coverina Tuttu tilanteen paalle,
+            vaikka se ei ole vastaus vaan saman ajatuksen jatko:
+            ensin mika on vialla, sitten mita palvelu sisaltaa. Kaksi
+            peittovaihetta peräkkain sanoi etta nama ovat eri asioita.
+
+            Kaareessa ne ovat yksi pinta ja yksi kuvio: jakso-pari
+            ottaa pohjan ja verkoston itselleen ja osiot sen sisalla
+            ovat lapinakyvia, joten Tuttu tilanteen tausta jatkuu
+            katkeamatta Palvelun sisaltoon. Hiusviiva niiden valista on
+            myos pois. Ensimmainen cover on siis vasta hengahdys. */}
+        <Jakso>
+          <Ongelma />
+          <Sisalto />
+        </Jakso>
 
         <div className="pino">
-          <Sisalto />
+          {/* SIVUN ENSIMMAINEN COVER JA AINOA HENGAHDYS ENNEN
+              PROSESSIA. Kuva on ruutu jolla sivustoa kirjoitetaan, ja
+              lause sanoo tasan sen: valmis pohja kootaan, raataloity
+              kirjoitetaan. Se on myos seuraavan osion kysymys.
+              Vasen kolmannes on tummaa siluettia, joten valkoinen
+              teksti asettuu siihen ilman omaa kalvoa. */}
+          <Vaite
+            kuva="/verkkosivut/koodi.webp"
+            alla="Kokoaminen on nopeampaa, kirjoittaminen kevyempää ylläpitää ja nopeampaa käyttää. Kumpi kannattaa, riippuu alasta ja aikataulusta."
+          >
+            Valmis pohja kootaan. Räätälöity <b><i>kirjoitetaan.</i></b>
+          </Vaite>
 
           <div className="pino">
-            {/* SIVUN AINOA HENGAHDYS ENNEN PROSESSIA.
-                Tuttu tilanne -hengahdys poistui: sen lause oli jo
-                osion neljannessa kortissa, eika kahden ensimmaisen
-                osion valiin tarvita pysahdysta. Sivu alkaa siis
-                ongelmalla ja jatkuu suoraan siihen mita palvelu
-                sisaltaa.
-
-                Kuva on tyopoyta ja ruutu jolla sivustoa tehdaan, eli
-                se mita seuraava osio vertailee. Vasen kolmannes on
-                tummaa siluettia, joten valkoinen teksti asettuu siihen
-                ilman omaa kalvoa. */}
-            <Vaite
-              kuva="/verkkosivut/koodi.webp"
-              alla="Valmis pohja on nopein tapa aloittaa, käsin koodattu on kevyempi ylläpitää ja nopeampi käyttää. Kumpi kannattaa, riippuu alasta ja aikataulusta."
-            >
-              Sama sivusto voidaan tehdä <b><i>kahdella eri tavalla.</i></b>
-            </Vaite>
+            <Jakso>
+              <Toteutustapa />
+              <Nakyvyys />
+            </Jakso>
 
             <div className="pino">
-              <Jakso>
-                <Toteutustapa />
-                <Nakyvyys />
-              </Jakso>
+              {/* Kuva on kaksi ihmista poydan aaressa ja tyhja arkki
+                  niiden valissa, ja lause on prosessin ensimmaisesta
+                  askeleesta, joten hengahdys on sen osion edessa
+                  josta se puhuu. Kick "Prosessi" jaa pois: osion
+                  nimi on sivukiskossa heti taman alla. */}
+              <Laatta kuva="/verkkosivut/kartoitus.webp" korkeus="taysi">
+                <p className="laatta-lause suuri">
+                  Et tarvitse mitään <b><i>valmiiksi.</i></b>
+                </p>
+                <p className="laatta-alla">
+                  Tekstit, kuvat ja rakenne ovat osa toteutusta, eivät sen edellytys.
+                </p>
+              </Laatta>
 
               <div className="pino">
-                {/* Kuva on kaksi ihmista poydan aaressa ja tyhja arkki
-                    niiden valissa, ja lause on prosessin ensimmaisesta
-                    askeleesta, joten hengahdys on sen osion edessa
-                    josta se puhuu. Kick "Prosessi" jaa pois: osion
-                    nimi on sivukiskossa heti taman alla. */}
-                <Laatta kuva="/verkkosivut/kartoitus.webp" korkeus="taysi">
-                  <p className="laatta-lause suuri">
-                    Et tarvitse mitään <b><i>valmiiksi.</i></b>
-                  </p>
-                  <p className="laatta-alla">
-                    Tekstit, kuvat ja rakenne ovat osa toteutusta, eivät sen edellytys.
-                  </p>
-                </Laatta>
+                <Jakso>
+                  <Prosessi />
+                  <Kenelle />
+                </Jakso>
 
+                {/* Tulokset-osio poistettiin aiemmin: sen luvut
+                    olivat lupauksia joiden takana ei ole yhtaan
+                    mitattua asiakastyota. */}
                 <div className="pino">
-                  <Jakso>
-                    <Prosessi />
-                    <Kenelle />
-                  </Jakso>
+                  <Vaite
+                    kuva="/verkkosivut/naytto.webp"
+                    alla="Hinta päätetään ennen kuin työ alkaa, eikä se perustu arvioon käytetyistä tunneista vaan sivumäärään ja sisällön laajuuteen."
+                  >
+                    Emme kilpaile hinnalla vaan sillä, että sivusto <b><i>löytyy ja myy.</i></b>
+                  </Vaite>
 
-                  {/* Tulokset-osio poistettiin aiemmin: sen luvut
-                      olivat lupauksia joiden takana ei ole yhtaan
-                      mitattua asiakastyota. */}
-                  <div className="pino">
-                    <Vaite
-                      kuva="/verkkosivut/naytto.webp"
-                      alla="Hinta päätetään ennen kuin työ alkaa, eikä se perustu arvioon käytetyistä tunneista vaan sivumäärään ja sisällön laajuuteen."
-                    >
-                      Emme kilpaile hinnalla vaan sillä, että sivusto <b><i>löytyy ja myy.</i></b>
-                    </Vaite>
-
-                    <Hinnoittelu />
-                  </div>
+                  <Hinnoittelu />
                 </div>
               </div>
             </div>
