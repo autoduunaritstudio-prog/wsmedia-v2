@@ -13037,80 +13037,89 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .tahdisto {
   position: relative; width: 100%; max-width: 460px; aspect-ratio: 1 / 1;
   margin-inline: auto; color: var(--seo-hi);
+  /* Oma pinoamiskonteksti, jotta radan takapuoli voi mennä tunnuksen
+     taakse ilman etta se katoaa koko sivun taakse. */
+  isolation: isolate;
+  /* Rata mitoitetaan KAAREEN eika elementteihin: translaten prosentit
+     tarkoittaisivat elementin omaa kokoa, ei radan sadetta. */
+  container-type: inline-size;
+  /* Kierroksia koko matkalla. --piirto on 0..1, joten 1,5 tarkoittaa
+     puoltatoista kierrosta siina ajassa kun osio kulkee nakyman lapi. */
+  --kierto: calc(var(--piirto, 0) * 1.5);
 }
 @media (max-width: 1000px) { .tahdisto { max-width: 340px } }
 
-.tahdisto-verkko { position: absolute; inset: 0; width: 100%; height: 100% }
-/* Viiva piirtyy vierityksen mukana. Porrastus --i:lla, jotta kolme
-   sadetta ei ilmesty yhtena laattana.
+/* ---------- RATA ----------
+   VIIVAT POISTETTIIN. Ne piirsivat kiintean kuvion, ja kiintea kuvio ja
+   liikkuva rata ovat kaksi eri ideaa samassa kuvassa: viiva vaitti etta
+   solmu on siina, ja seuraavassa hetkessa solmu oli muualla.
 
-   dasharray "p 1" eika dashoffset: pathLength on 1, joten vali 1 on koko
-   polun mittainen eika toista jaksoa voi tulla. Ks. sama ratkaisu
-   kaaviokayrissa, joissa vanha offset-tapa jatti polun loppuun
-   irrallisen patkan. */
-.tahdisto .th-linja {
-  --p: clamp(0, calc((var(--piirto, 1) - var(--i) * .07) * 2.2), 1);
-  stroke: var(--seo-hi); stroke-width: 1; fill: none;
-  stroke-dasharray: var(--p) 1;
-  opacity: .5;
-}
-.tahdisto .th-linja.th-vaimea { opacity: .2 }
-.tahdisto .th-piste {
-  fill: var(--seo-hi);
-  opacity: calc(clamp(0, calc((var(--piirto, 1) - .5) * 3), 1) * .45);
-}
+   SYVYYS TULEE RADALTA, EI ARVOSTA. Aiemmin jokaisella tunnuksella oli
+   oma kiintea kokonsa ja kirkkautensa. Nyt sama luku - sin(kulma) -
+   ohjaa kolmea asiaa yhta aikaa: kokoa, kirkkautta ja sita kummalla
+   puolella tunnusta solmu piirtyy. Radan takapuolella oleva on
+   pienempi, vaimeampi JA tunnuksen takana, eli kolme vihjetta samasta
+   asiasta samaan suuntaan.
 
-/* SOLMU ON PELKKA TUNNUS, EI KEHYSTA.
-   Ensimmaisessa versiossa jokaisen merkin ympari piirrettiin neonkehys.
-   Se oli ylimaarainen: Instagramin tunnus ON pyoristetty nelio ja
-   YouTube Shortsin oma kapseli, eli kehys piirsi saman muodon kahdesti
-   sisakkain. Mallissa kehysta ei ole - siina nakyy tunnus ja sen hehku.
-
-   SYVYYS TULEE KOOSTA JA KIRKKAUDESTA. Paikat ovat symmetriset (kaksi
-   ylhaalla peilikuvina, yksi alhaalla keskella), joten jos myos koko ja
-   kirkkaus olisivat samat, kolmikko lukisi tasona eika tilana. Nyt
-   lahin on suurin ja kirkkain, kaukaisin pienin ja vaimein, ja hehkun
-   sade seuraa samaa jarjestysta: kaukainen kohde ei hehku yhta
-   voimakkaasti. */
+   Ellipsi eika ympyra: pystysade on alle puolet vaakasateesta, ja juuri
+   se litistys lukee perspektiivina. Tasasateinen ympyra olisi lukenut
+   tasona jolla kappaleet liikkuvat, ei radalla jolla ne kiertavat. */
 .tahdisto .th-solmu {
-  position: absolute; display: block;
-  color: var(--seo-hi);
-  opacity: calc(
-    clamp(0, calc((var(--piirto, 1) - .18 - var(--i) * .07) * 3), 1) * var(--syvyys, 1)
-  );
-  scale: calc(.86 + clamp(0, calc((var(--piirto, 1) - .18 - var(--i) * .07) * 3), 1) * .14);
+  position: absolute; left: 50%; top: 50%; display: block;
+  width: 17%;
+  /* Kulma: oma kolmannes kierroksesta plus yhteinen etenema. */
+  --a: calc((var(--kierto) + var(--i) / 3) * 1turn);
+  /* 0 = radan takana, 1 = edessa. */
+  --syvyys: calc((sin(var(--a)) + 1) / 2);
+  /* PYSTYSADE ON LASKETTU, EI ARVATTU. Tunnus on 20cqi leveä ja noin
+     16cqi korkea, solmu 17cqi, joten radan lahimmassa kohdassa
+     tarvitaan vahintaan (16 + 17) / 2 = 16,5cqi ettei solmu peita
+     tunnusta. 22cqi jattaa siihen valia. Ensimmainen arvo 14cqi oli
+     alle tuon rajan, ja YouTube ajoi tunnuksen paalle joka kierroksella.
+     Vaakasade on selvasti suurempi, ja juuri se litistys lukee
+     perspektiivina: tasasateinen ympyra olisi lukenut tasona jolla
+     kappaleet liikkuvat, ei radalla jolla ne kiertavat. */
+  --rx: 34cqi;
+  --ry: 22cqi;
+  translate:
+    calc(cos(var(--a)) * var(--rx) - 50%)
+    calc(sin(var(--a)) * var(--ry) - 50%);
+  scale: calc(.66 + var(--syvyys) * .5);
+  /* Ilmestyminen on erillaan syvyydesta: ensimmainen kerroin tuo
+     solmun nakyviin osion alussa, toinen hoitaa radan oman vaihtelun. */
+  opacity: calc(clamp(0, calc(var(--piirto, 1) * 8), 1) * (.4 + var(--syvyys) * .6));
+  /* Takapuoli tunnuksen taakse. round palauttaa -1, 0 tai 1, ja
+     tunnuksen z-index on 2. */
+  z-index: 1;
+  z-index: calc(2 + round(nearest, sin(var(--a)), 1));
+  /* Varit ovat alustojen omat, joten hehku ei voi olla syaani: se
+     varjaisi kolme eri tunnusta samaksi. Tumma varjo erottaa ne
+     taustasta vaikuttamatta variin. */
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.6));
 }
-.tahdisto .th-solmu svg {
-  width: 100%; height: auto; display: block;
-  filter:
-    drop-shadow(0 0 calc(var(--hehku, 8px) * .35) rgba(180,245,255,.85))
-    drop-shadow(0 0 var(--hehku, 8px) rgba(111,236,255,.65));
-}
-/* Sijainnit: solmun keskipiste osuu viivan paatepisteeseen, eli
-   vasen reuna on keskipiste miinus puolet leveydesta. Luvut ovat
-   viewBoxin 0..200 koordinaatteja kahdellasadalla jaettuna. */
-.tahdisto .th-ig {           /* keskipiste 52,52 -> 26 % / 26 % */
-  --syvyys: 1; --hehku: 16px;
-  width: 21%; left: 15.5%; top: 15.5%;
-}
-.tahdisto .th-yt {           /* keskipiste 148,52 -> 74 % / 26 % */
-  --syvyys: .72; --hehku: 10px;
-  width: 16%; left: 66%; top: 18%;
-}
-.tahdisto .th-tt {           /* keskipiste 100,158 -> 50 % / 79 % */
-  --syvyys: .86; --hehku: 13px;
-  width: 18.5%; left: 40.75%; top: 69.75%;
+.tahdisto .th-solmu svg { width: 100%; height: auto; display: block }
+
+/* Ilman trigonometriaa rata ei voi toimia. Silloin solmut asetetaan
+   kiinteasti kolmioon, jolloin kuva on paikallaan mutta ehja. */
+@supports not (translate: calc(cos(45deg) * 10px)) {
+  .tahdisto .th-solmu { translate: -50% -50%; scale: 1; z-index: 1 }
+  .tahdisto .th-ig { left: 26%; top: 26% }
+  .tahdisto .th-yt { left: 74%; top: 26% }
+  .tahdisto .th-tt { left: 50%; top: 79% }
 }
 
-/* Keskus. Tunnus ja sanamerkki allekkain kuten tunnuksessa muutenkin. */
+/* ---------- KESKUS ----------
+   Tunnus ja sanamerkki allekkain kuten tunnuksessa muutenkin. z-index 2
+   on radan keskiarvo: solmu on sen takana kun sin < 0 ja edessa kun
+   sin > 0. */
 .tahdisto .th-ws {
-  position: absolute; left: 50%; top: 48%; translate: -50% -50%;
-  display: grid; justify-items: center; gap: 6px;
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+  display: grid; justify-items: center; gap: 6px; z-index: 2;
   color: var(--seo-hi);
-  opacity: clamp(0, calc((var(--piirto, 1) - .34) * 3), 1);
+  opacity: clamp(0, calc(var(--piirto, 1) * 8), 1);
 }
 .tahdisto .th-ws svg {
-  width: clamp(72px, 15cqw, 104px); height: auto;
+  width: 20cqi; height: auto;
   filter: drop-shadow(0 0 10px rgba(111,236,255,.75)) drop-shadow(0 0 26px rgba(111,236,255,.35));
 }
 .tahdisto .th-ws b {
@@ -13118,7 +13127,16 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   letter-spacing: .42em; text-indent: .42em; color: var(--seo-hi);
   text-shadow: 0 0 10px rgba(111,236,255,.6);
 }
-@media (max-width: 1000px) { .tahdisto .th-ws svg { width: 76px } }
+@media (max-width: 1000px) { .tahdisto .th-ws b { font-size: 10px } }
+/* Liike tulee vierityksesta eika ajastimesta, joten se ei ole
+   automaattista liiketta. Rata jaa silti paikalleen kun kayttaja on
+   pyytanyt vahemman liiketta: kolme kappaletta jotka vaihtavat paikkaa
+   vieritettaessa on juuri sita mita asetuksella vältetään. */
 @media (prefers-reduced-motion: reduce) {
-  .tahdisto { --piirto: 1 }
+  .tahdisto .th-solmu {
+    --a: calc(var(--i) / 3 * 1turn);
+    opacity: calc(.4 + var(--syvyys) * .6);
+  }
 }
+
+

@@ -91,36 +91,23 @@ export function Jakso({ children, merkit }: { children: ReactNode; merkit?: bool
    vierityksessa ja pinnatun elementin rect jaatyy. */
 function Tahdisto() {
   return (
-    <div className="tahdisto" data-hehku="0.9" aria-hidden="true">
-      <svg className="tahdisto-verkko" viewBox="0 0 200 200" fill="none" focusable="false">
-        {/* Kolme sadetta keskuksesta. Solmut ovat symmetrisesti:
-            kaksi ylhaalla peilikuvina (52,52 ja 148,52) ja yksi
-            alhaalla keskella (100,158). */}
-        <path className="th-linja" d="M52 52 L100 100" pathLength={1} style={{ "--i": 0 } as CSSProperties} />
-        <path className="th-linja" d="M148 52 L100 100" pathLength={1} style={{ "--i": 1 } as CSSProperties} />
-        <path className="th-linja" d="M100 158 L100 100" pathLength={1} style={{ "--i": 2 } as CSSProperties} />
-        {/* Verkosto jatkuu kuvan ulkopuolelle, myos peilaten, jottei
-            tahdisto lue siihen liimattuna laatikkona. */}
-        <path className="th-linja th-vaimea" d="M52 52 L10 14" pathLength={1} style={{ "--i": 3 } as CSSProperties} />
-        <path className="th-linja th-vaimea" d="M148 52 L190 14" pathLength={1} style={{ "--i": 3 } as CSSProperties} />
-        <path className="th-linja th-vaimea" d="M100 158 L100 196" pathLength={1} style={{ "--i": 4 } as CSSProperties} />
-        <path className="th-linja th-vaimea" d="M52 52 L148 52" pathLength={1} style={{ "--i": 5 } as CSSProperties} />
-        <circle className="th-piste" cx="10" cy="14" r="2" />
-        <circle className="th-piste" cx="190" cy="14" r="2" />
-        <circle className="th-piste" cx="100" cy="196" r="2" />
-      </svg>
+    <div className="tahdisto" data-hehku="2.6" aria-hidden="true">
+      {/* Kolme alustaa kiertavat WS Median tunnusta. Kierto tulee
+          vierityksesta, ei ajastimesta: se etenee kun kayttaja vierittaa
+          ja pysahtyy kun han pysahtyy, kuten kaikki muukin liike talla
+          sivulla.
 
-      {/* SYVYYS TULEE KOOSTA JA KIRKKAUDESTA, EI SIJAINNISTA. Paikat
-          ovat symmetriset, mutta kolme samankokoista ja yhta kirkasta
-          tunnusta lukisi tasona, ei tilana. */}
+          --i antaa jokaiselle kolmanneksen kierroksesta, joten ne ovat
+          radalla aina 120 asteen valein riippumatta siita missa kohtaa
+          kierto on. */}
       <span className="th-solmu th-ig" style={{ "--i": 0 } as CSSProperties}>
-        <PlatformMark id="instagram" />
+        <PlatformMark id="instagram" tone="brand" />
       </span>
-      <span className="th-solmu th-yt" style={{ "--i": 1 } as CSSProperties}>
-        <PlatformMark id="youtube" />
+      <span className="th-solmu th-tt" style={{ "--i": 1 } as CSSProperties}>
+        <PlatformMark id="tiktok" tone="brand" />
       </span>
-      <span className="th-solmu th-tt" style={{ "--i": 2 } as CSSProperties}>
-        <PlatformMark id="tiktok" />
+      <span className="th-solmu th-yt" style={{ "--i": 2 } as CSSProperties}>
+        <PlatformMark id="youtube" tone="brand" />
       </span>
       <span className="th-ws">
         <LogoMark />
