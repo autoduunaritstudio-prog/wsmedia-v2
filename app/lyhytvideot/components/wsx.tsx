@@ -222,7 +222,11 @@ export function Prosessi() {
           kuluu noin [X] tuntia kuukaudessa.
         </p>
 
-        <div className="jana" data-rvs="">
+        {/* data-hehku ON NOPEUSSAADIN. --rvp:n matka on kiinnitetty
+            nakyman korkeuteen, joten sita ei voi hidastaa; --piirto
+            lukee saman liikkeen mutta data-hehkun arvo kertoo matkan.
+            1,9 tarkoittaa etta taytto kulkee 800 pikselia eika 400. */}
+        <div className="jana" data-rvs="" data-hehku="1.9">
           <div className="jana-akseli" aria-hidden="true">
             <i />
           </div>

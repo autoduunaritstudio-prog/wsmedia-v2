@@ -13294,8 +13294,20 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    Chromessa. Nosto on translate eli komposiittia, ja korostus tulee
    variarvoista. */
 @media (min-width: 901px) {
+  /* AJURI ON --piirto, EI --rvp. --rvp:n matka on aina noin yksi
+     nakyman korkeus, joten sita voi siirtaa mutta ei venyttaa: kerroin
+     alle ykkosen jattaisi tayton kesken. --piirto lukee saman liikkeen
+     mutta sen matka tulee data-hehkun arvosta, joten nopeus on
+     saadettava luku.
+
+     Mitattuna: jana on 211px korkea ja nakyma 868px, joten hehkun
+     perusmatka on 612px ja arvolla 1,9 se on 1163px. Vakiot .10 ja
+     1,45 vievat tayton nollasta ykkoseen valilla 7350...8150, eli
+     800 pikselia. Ennen se oli 400. Loppukohta on mitattu siita missa
+     jana on viela nakyvissa: sen ylareuna ylittaa nakyman ylareunan
+     kohdassa 8316. */
   .page-lyhytvideot #prosessi .jana {
-    --veto: clamp(0, calc((var(--rvp, 1) - .18) * 1.45), 1);
+    --veto: clamp(0, calc((var(--piirto, 1) - .10) * 1.45), 1);
   }
   .page-lyhytvideot #prosessi .jana-akseli i { scale: var(--veto, 1) 1 }
   .page-lyhytvideot #prosessi .jakso {
@@ -13316,4 +13328,34 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    kosketus vaan virhe. */
 @media (prefers-reduced-motion: reduce) {
   .page-lyhytvideot #prosessi .jakso { --osuma: 0; translate: none }
+}
+
+
+/* ---------- HERON PUHELIMET: PAKSUMPI RUNKO ----------
+   3,5px kehys 224px levealla laitteella vastaa noin 1,1 millimetria
+   oikeassa puhelimessa. Sellaista ei ole olemassa, ja juuri siksi
+   mockup luki piirroksena: se oli ruutu jonka ympari oli viiva, ei
+   laite jolla on runko. Oikea suhde on noin 2mm eli 5,5px tassa koossa.
+
+   Sade kasvaa samassa suhteessa (34 -> 37), muuten paksumpi kehys
+   nayttaisi kulmikkaammalta: ruudun sade on aina ulkosade miinus
+   kehys, ja jos ulkosade ei kasva, ruudun kulma teravoityy kehyksen
+   kasvaessa.
+
+   Reunavalot vahvistuvat samassa suhteessa. Pelkka leveyden kasvatus
+   littaa kehyksen tasaiseksi renkaaksi; valo ylareunassa ja varjo
+   alareunassa tekevat siita pyorean, ja juuri pyoreys on se mika
+   lukee metallina. Sivujen sisavarjot syvenevat samasta syysta. */
+.stickysub .stage .phone {
+  --ph-radius: 37px;
+  --ph-bezel: 5.5px;
+  --ph-notch-top: 12px;
+  box-shadow:
+    var(--ph-drop),
+    inset 0 0 0 var(--ph-bezel) #2e2e34,
+    inset 0 2px 0 0 rgba(255,255,255,.3),
+    inset 0 -2.5px 0 0 rgba(0,0,0,.62),
+    inset 3px 0 5px -1px rgba(0,0,0,.55),
+    inset -3px 0 5px -1px rgba(0,0,0,.55),
+    var(--ph-rim);
 }
