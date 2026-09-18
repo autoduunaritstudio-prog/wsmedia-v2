@@ -10818,7 +10818,11 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 
    Syaani ei muutu miksikaan, eika amberia kayteta koskaan tekstina
    pienessa koossa: sen tehtava on merkita puoli, ei kantaa sisaltoa. */
-.page-verkkosivut { --lampo: #e8a54a; --lampo-h: rgba(232,165,74,.5) }
+/* Lampoinen brandivari oli maaritelty vain Verkkosivut-alasivulle.
+   Se on sivuston toinen brandivari eika yhden sivun saato, ja
+   Lyhytvideot kayttaa sita nyt samalla logiikalla, joten se nousee
+   molemmille. */
+:is(.page-verkkosivut, .page-lyhytvideot) { --lampo: #e8a54a; --lampo-h: rgba(232,165,74,.5) }
 
 /* Ongelmakorttien ikoni on ongelman puoli, siis lammin. */
 .page-verkkosivut #miksi .vs-ikoni { stroke: var(--lampo) }
@@ -11339,14 +11343,14 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    3. Kuvio alkaa ja loppuu haivytykseen: vaalean osion raja tummaa
       vasten on jo varinvaihtoraja, eika se kaipaa toista teravaa
       reunaa sen paalle. */
-.page-verkkosivut #hinnoittelu { position: relative; isolation: isolate; overflow: hidden }
-.page-verkkosivut #hinnoittelu > .metalbd {
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu { position: relative; isolation: isolate; overflow: hidden }
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu > .metalbd {
   position: absolute; inset: 0; z-index: 0; height: 100%;
   --metalbd-opacity: .5;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 calc(100% - 140px), transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 calc(100% - 140px), transparent 100%);
 }
-.page-verkkosivut #hinnoittelu > .swrap { position: relative; z-index: 2 }
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu > .swrap { position: relative; z-index: 2 }
 
 /* ==================================================================
    LOGONAUHA: TASAN SAMA KUIN LYHYTVIDEOT-ALASIVULLA
@@ -13786,7 +13790,14 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 /* Peittavien kaarten vinjetti paattyi variin #0e141b, joka ei ole
    taman sivun pohjavari. Reunoilla se nakyi kehyksena kaaren oman
    pohjan (#0b0f14) paalla. */
-.page-verkkosivut .jakso-pari .netbd-glow {
+/* Sama koskee JOKAISTA taman sivun peittavaa kerrosta, ei vain
+   jakso-pareja: hinnastolla on oma kerroksensa (se on pinossa yksin),
+   ja sen vinjetti paattyi oletusvariin #0e141b. Mitattuna sivun muut
+   kerrokset paattyvat variin #0b0f14, joten hinnaston reunoilla oli
+   kolme savyaskelta vaaleampi kehys - kaksi taustaa jotka ovat
+   "visuaalisesti samat mutta eri". */
+.page-verkkosivut .jakso-pari .netbd-glow,
+.page-verkkosivut .netbd-cover .netbd-glow {
   background: radial-gradient(120% 90% at 50% 45%, transparent 32%, #0b0f14 100%);
 }
 
@@ -13961,8 +13972,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    niin, etta sanalle ei jaa omaa tilaa kummallakaan puolella.
    Silloin jaa voimaan aiempi oikean reunan saanto. */
 @media (min-width: 1200px) {
-  .page-verkkosivut .seo-sec .kaiku.vas,
-  .page-verkkosivut .seo-sec .kaiku.oik {
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec .kaiku.vas,
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec .kaiku.oik {
     writing-mode: vertical-rl;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 700;
@@ -13993,7 +14004,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   /* Vasen: kiinteat 40px seinasta. rotate(180) kaantaa lukusuunnan
      alhaalta ylos, sama kuin kiskossa, ja samalla paikalliset akselit:
      positiivinen translateX vie ruudulla vasemmalle. */
-  .page-verkkosivut .seo-sec .kaiku.vas {
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec .kaiku.vas {
     left: 40px; right: auto;
     font-size: min(140px, 8.5vw, calc(74vh / (var(--kirjaimet, 7) * .67)));
     transform: translateY(-50%) rotate(180deg)
@@ -14008,7 +14019,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
      silma tulee sivun oikealta puolelta: T ylhaalla, E alhaalla.
      Ilman kaantoa myos paikalliset akselit ovat normaalit, joten
      liikkeen etumerkit ovat tassa painvastoin kuin vasemmalla. */
-  .page-verkkosivut .seo-sec .kaiku.oik {
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec .kaiku.oik {
     --marg: calc((100vw - min(1320px, 92vw)) / 2);
     /* +6px: hengitys vie sanaa 4px oikealle aariasennossaan, ja
        mitattuna 24px:n etaisyydella se synnytti 4px vaakavierityksen.
@@ -14022,8 +14033,12 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   /* Kiskon pieni valkoinen sana ja jattikaiku ovat sama sana samassa
      osiossa. Toinen on toistoa, ja isompi on se joka tuo syvyyden.
      Kiskon oma pystyviiva jaa: se on osion merkki, ei sana. */
-  .page-verkkosivut .seo-sec:has(> .kaiku) > .swrap > .seo-ord > span,
-  .page-verkkosivut .seo-sec:has(> .kaiku) > .swrap > .seo-ord > i { display: none }
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec:has(> .kaiku) > .swrap > .seo-ord > span,
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec:has(> .kaiku) > .swrap > .seo-ord > i { display: none }
+  /* Lyhytvideoilla osion nimi on pystykiskossa, ei kiskotekstissa.
+     Sama saanto: sama sana kahdesti samassa reunassa on toistoa, ja
+     isompi on se joka tuo syvyyden. Kiskon viiva jaa. */
+  .page-lyhytvideot .seo-sec:has(> .kaiku) .pk-teksti { display: none }
   /* YLOS-ANKKUROINTI. Korkeassa osiossa (Tuttu tilanne 1130px,
      Toteutustapa 1584px) keskitetty sana on satoja pikseleita sen
      alapuolella mihin lukija katsoo kun osio alkaa, eli se nakyy vasta
@@ -14033,12 +14048,12 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
      ylita osion rajaa. Logonauhaan se ei osu, koska ylos-sanat ovat
      oikealla ja nauhan omat osat ovat vasemmalla (logo) ja
      valikkonapissa (oikea reuna 1435px), kun sana alkaa 1579px:sta. */
-  .page-verkkosivut .seo-sec .kaiku.vas.ylos,
-  .page-verkkosivut .seo-sec .kaiku.oik.ylos { top: 96px; bottom: auto }
-  .page-verkkosivut .seo-sec .kaiku.vas.ylos {
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec .kaiku.vas.ylos,
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec .kaiku.oik.ylos { top: 96px; bottom: auto }
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec .kaiku.vas.ylos {
     transform: rotate(180deg) translateX(calc((var(--valo, .5) - .5) * 24px));
   }
-  .page-verkkosivut .seo-sec .kaiku.oik.ylos {
+  :is(.page-verkkosivut, .page-lyhytvideot) .seo-sec .kaiku.oik.ylos {
     transform: translateX(calc((var(--valo, .5) - .5) * 24px));
   }
 }
@@ -14078,37 +14093,55 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    vasemmasta reunasta lahteva ja se sammuu ennen kuvan oikeaa
    kolmannesta. Ylareunan oma ohut tummennus on navia varten.
 
-   VOIMAKKUUS ON MITATTU, EI ARVATTU. Menetelma: tekstielementtien
-   laatikot luettiin elavasta DOMista (nakyma 1728x868), jokaiselle
-   laskettiin sama cover-crop-muunnos jota piirtokoodi kayttaa
-   (s = max(vw/1920, vh/1080), keskitetty siirto), laatikko
-   projisoitiin takaisin freimin pikselikoordinaateiksi, ja alueelta
-   haettiin KIRKKAIN pikseli - ei keskiarvo. Siita ratkaistiin pienin
-   alfa jolla WCAG-kontrasti scrimin lapi on >= 4,5:1. Lapikaynti: joka
-   kahdeksas ruutu (25 kpl 193:sta) ja nelja nakymaa (1728x868,
-   1512x850, 1440x900, 1280x800).
+   VOIMAKKUUS ON MITATTU, EI ARVATTU, JA MITATTU UUDELLEEN KUN
+   ELOKUVA KIRKASTETTIIN JA ASETTELU MUUTTUI.
 
-     elementti    vari       sitova tausta     pienin alfa
-     h1           #f4f7fa    (218,255,255)     0,57
-     .heroctas    #f4f7fa    (218,255,252)     0,57
-     .sub         #b9c6d4    (219,253,255)     0,70
-     .herotrust   #b9c6d4    (233,255,255)     0,70
+   Menetelma: tekstin TODELLISET aarirajat luettiin elavasta DOMista
+   (ei elementtien laatikot: otsikon palsta on 880px mutta pisin rivi
+   1041px:aan asti, ja luottamusrivin teksti loppuu 784px:aan).
+   Jokaiselle laskettiin sama cover-crop-muunnos jota piirtokoodi
+   kayttaa (s = max(vw/1920, vh/1080), keskitetty siirto), alue
+   projisoitiin takaisin freimin pikselikoordinaateiksi, ja jokaiselle
+   PIKSELILLE laskettiin kontrasti scrimin lapi - ei alueen
+   keskiarvosta vaan pahimmasta pikselista. Scrimin alfa vaihtelee
+   vaakasuunnassa, joten se laskettiin sarakekohtaisesti samasta
+   gradientista joka on alla. Lapikaynti: joka kahdeksas ruutu (25 kpl
+   193:sta) ja nelja nakymaa (1728x868, 1512x850, 1440x900, 1280x800).
 
-   0,70 EI OLE YLIMITOITUS. Vaatimus on sama jokaisella 25 mitatulla
-   ruudulla (0,68-0,70), eli tekstin alla on kirkas kohta koko elokuvan
-   ajan: alussa koodinaytto ja lopussa valojuovat. Se ei siis ole
-   yhden ruudun huippu jota voisi vaimentaa ajastuksella.
+     elementti    vari       pienin kontrasti   sitova tausta
+     h1           #f4f7fa    6,73:1             (165,255,255)
+     .heroctas    #f4f7fa    8,33:1             (228,253,255)
+     .sub         #b9c6d4    5,08:1             (239,255,255)
+     .herotrust   #b9c6d4    5,17:1             (218,255,255)
 
-   VAAKARAJAUS. Teksti ulottuu 57 %:iin leveydesta, joten taysi arvo
-   pidetaan 58 %:iin ja se sammuu 82 %:iin mennessa. Elokuvan oikea
-   kolmannes - se naytto johon sivu rakentuu - jaa koskematta. */
+   Kaikki yli 4,5:1 eli WCAG AA tayttyy. Arvolla 0,70 pienin oli
+   4,53:1, eli se olisi riittanyt mutta ilman varaa; 0,73 antaa
+   puolen yksikon marginaalin ilman etta ero nakyy.
+
+   VAAKARAJAUS. Teksti ulottuu 60 %:iin leveydesta, joten taysi arvo
+   pidetaan 58 %:iin ja loppu jaa gradientin varaan (70 %:ssa 0,45x,
+   82 %:ssa nolla) - juuri siksi kontrasti laskettiin sarakkeittain.
+   Elokuvan oikea kolmannes, se naytto johon sivu rakentuu, jaa
+   koskematta. */
 .page-verkkosivut .vs-hero-scrim {
   position: absolute; inset: 0; display: block; pointer-events: none;
   background:
+    /* REUNAVINJETTI. Tumman alueen jaannoskohina on tiheimmillaan
+       kuvan reunoilla ja alalaidassa (poyta ja varjot), eli tasan
+       siella missa katse ei ole. Reunojen tummennus vie sen nakyvista
+       ilman etta kuvan keskiosa - naytto johon sivu rakentuu -
+       tummuu lainkaan: keskipiste on 38 %:n korkeudella ja tummennus
+       alkaa vasta 46 %:n etaisyydelta siita.
+
+       Tama on kolmas kerros samaa tyota: kohina poistetaan ennen
+       savya, bitit ohjataan tummiin alueisiin (aq-mode 3) ja se mika
+       jaa jaljelle painetaan reunoilla pimeaan. */
+    radial-gradient(132% 112% at 50% 38%,
+      rgba(4,7,11,0) 46%, rgba(4,7,11,.30) 78%, rgba(4,7,11,.52) 100%),
     linear-gradient(97deg,
-      rgba(6,9,12,var(--vs-scrim, .7)) 0%,
-      rgba(6,9,12,var(--vs-scrim, .7)) 58%,
-      rgba(6,9,12,calc(var(--vs-scrim, .7) * .45)) 70%,
+      rgba(6,9,12,var(--vs-scrim, .65)) 0%,
+      rgba(6,9,12,var(--vs-scrim, .65)) 58%,
+      rgba(6,9,12,calc(var(--vs-scrim, .65) * .45)) 70%,
       rgba(6,9,12,0) 82%),
     linear-gradient(180deg, rgba(6,9,12,.42) 0%, rgba(6,9,12,0) 22%);
 }
@@ -14122,3 +14155,393 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
      nakyviin jaa poster. Kerros on silti sama. */
   .page-verkkosivut .vs-hero-media canvas { display: none }
 }
+
+/* ---------- HERON ASETTELU, KUN NAYTTAMO ON POISSA ----------
+   Hero oli kaksipalstainen, koska oikeassa palstassa oli selainmockup.
+   Elokuva on koko heron kokoinen tausta, joten palstajako ei enaa jaa
+   tilaa kenellekaan: se vain piti tekstin 736 pikselissa ja jatti
+   oikean puolen tyhjaksi ruudukkosarakkeeksi.
+
+   Yksi palsta, leveampi mitta ja isompi otsikko. Mitattu 1728px:n
+   nakymalla: "yritykselle, jotka" on 69px:n koolla 474px ja kasvaa
+   82px:aan suhteessa 82/69, eli 563px; pisin yksirivinen vaihtuva
+   lause "latautuvat sekunnissa." on 667 -> 793px. Molemmat mahtuvat
+   880px:n palstaan, joten kasin kirjoitetut rivinvaihdot pitavat
+   edelleen paikkansa. Pisin lause "muuttavat kavijat
+   yhteydenotoiksi." taittuu kahdelle riville niin kuin ennenkin.
+
+   LUOTTAMUSRIVI NAKYMAN POHJAAN. Se on kolme lyhytta faktaa eika osa
+   lukuparia otsikko-leipa-nappi, ja pohjaan ankkuroituna se kehystaa
+   elokuvan alareunan ja jattaa tekstiryhman ymparille ilmaa. Wrap on
+   position: sticky eli oma sijoituskonteksti, joten absoluuttinen
+   alareuna on tasan nakyman alareuna. */
+@media (min-width: 981px) {
+  /* HUOM: .wrap ja .hero-split ovat SAMA elementti (class="wrap
+     hero-split"), joten ruudukko puretaan tassa eika erikseen. */
+  .page-verkkosivut .stickysub > .vs-hero .hero-copy {
+    max-width: min(880px, 62vw);
+    padding-top: 0;
+
+  }
+  .page-verkkosivut .stickysub > .vs-hero .hero-copy h1 {
+    font-size: clamp(44px, 4.9vw, 82px);
+    line-height: 1.02;
+    letter-spacing: -.025em;
+  }
+  .page-verkkosivut .stickysub > .vs-hero .hero-copy .sub {
+    max-width: 52ch; margin-top: 30px;
+  }
+  .page-verkkosivut .stickysub > .vs-hero .hero-copy .heroctas { margin-top: 36px }
+  /* LEIPATEKSTI. 22px oli sivuston oma ingressikoko silloin kun otsikko
+     oli 69px. Otsikko on nyt 82px, ja ingressi pysyy luettavuuden
+     vakiovalilla 20-24px kun se seuraa perassa: 23px. */
+  .page-verkkosivut .stickysub > .vs-hero .hero-copy .sub {
+    font-size: 23px;
+    /* VAALEAMPI TEKSTI ON HALVEMPI KUIN TUMMEMPI KUVA. Scrimin
+       vaadittu voimakkuus tulee TUMMIMMASTA tekstivarista: #b9c6d4
+       vaati 0,73:n, jotta kontrasti pysyi yli 4,5:1:n. Kun leipateksti
+       nostetaan lahelle otsikon kirkkautta, sama vaatimus tayttyy
+       selvasti pienemmalla tummennuksella, ja hero kirkastuu ilman
+       etta luettavuudesta tingitaan. Mitattu 25 ruudulta ja neljalta
+       nakymalta: #e8eef5 + scrim 0,65 antaa pienimmaksi 5,06:1. */
+    color: #e8eef5;
+  }
+  /* LUOTTAMUSRIVI. 12,5px on alle sen mita pitkalla lukuetaisyydella
+     luetaan vaivatta, ja rivi on nyt yksin nakyman pohjalla eika
+     tekstiryhman sisalla, jolloin se luki lahes lukukelvottomana
+     alaviitteena. 15,5px on sivuston oma pienin leipakoko (sama kuin
+     .seo-spec li s), ei uusi arvo. */
+
+  /* Tekstiryhma pystykeskitetaan ilman luottamusriviä, koska se ei ole
+     enaa ryhmassa: sen paikka on pohjassa. */
+  .page-verkkosivut .stickysub > .vs-hero > .wrap {
+    display: flex; flex-direction: column; justify-content: center;
+    /* TEKSTI IRTOSI TAUSTASTA ENNEN KUIN COVER PEITTI SEN.
+       Wrap oli 888px eli nakymaa korkeampi, joten sen sticky-matka
+       loppui 888px ennen heron loppua: mitattuna teksti alkoi nousta
+       kohdassa 1564 kun elokuvakerros pysyi paikallaan kohtaan 2453
+       asti. Silmalle se on tekstin irtoaminen kuvasta.
+
+       Sama ratkaisu kuin elokuvakerroksella: tasan nakyman korkeus ja
+       negatiivinen alamarginaali, jolloin laatikko on virtauksessa
+       nolla ja sticky-matka ulottuu heron loppuun. Molemmat kerrokset
+       irtoavat siis samalla hetkella, ja silloin cover on jo peittanyt
+       heron kokonaan. */
+    height: 100svh; min-height: 0; margin-bottom: -100svh;
+    /* align-items periytyi .hero-splitin ruudukkosaannosta arvona
+       center, ja pystysuuntaisessa flexissa se kutistaa lapsen
+       leveyden sisallon mukaan: tekstipalsta romahti nollaan ja
+       otsikko taittui kirjain kerrallaan. */
+    align-items: stretch;
+    gap: 0;
+  }
+}
+
+/* ---------- HINNASTO TUMMALLA POHJALLA ----------
+   Osio oli vaalea (.valo) ja korttien varit oli kirjoitettu sita
+   vasten: pohja rgba(17,21,26,.03) eli musta 3 %:n peitolla. Tummalla
+   pohjalla sama arvo on nakymaton, joten kortit olisivat olleet
+   pelkkia ohuita reunaviivoja.
+
+   Kortit on nyt tehty tummaa vasten: pohja on valkoinen pienella
+   peitolla, reuna kirkkaampi kuin osion muut viivat, ja suositeltu
+   kortti erottuu syaanilla reunalla ja omalla pohjallaan eika
+   varjolla - varjo ei nay tummalla.
+
+   HIERARKIA SELVAKSI. Kortissa on viisi asiaa (nimi, hinta, kenelle,
+   sisalto, nappi) ja ne olivat kaikki samalla etaisyydella toisistaan.
+   Hinta on se jota tullaan katsomaan, joten se saa oman tilansa ja
+   koon, ja lista erotetaan siita viivalla. */
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti {
+  background: rgba(255,255,255,.035);
+  border-color: rgba(255,255,255,.14);
+  border-radius: 20px;
+  padding: 32px 28px 30px;
+  gap: 12px;
+}
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti.hl {
+  border-color: rgba(111,236,255,.55);
+  background: rgba(111,236,255,.07);
+  box-shadow: none;
+}
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti-merkki {
+  background: var(--seo-hi); color: #06171c;
+}
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti h3 {
+  font-size: 17px; letter-spacing: .01em; color: var(--seo-ink-2);
+  text-transform: uppercase; font-weight: 600;
+}
+/* Hinta on kortin polttopiste: sama luku oli 15px:n otsikon kanssa
+   lahes samassa koossa, joten kortti luki listana jossa on numero. */
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti .hinta-n {
+  font-size: clamp(34px, 3.2vw, 46px); line-height: 1.05;
+  letter-spacing: -.03em; color: var(--seo-ink); margin-top: 2px;
+}
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti .hinta-n small {
+  font-size: 14px; letter-spacing: 0; color: var(--seo-ink-2);
+}
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti.hl .hinta-n { color: var(--seo-hi) }
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti .hinta-f {
+  color: var(--seo-ink-2); margin-bottom: 4px;
+}
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti .seo-spec {
+  border-top-color: rgba(255,255,255,.12); padding-top: 4px;
+}
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti .seo-spec li { padding: 10px 0 }
+:is(.page-verkkosivut, .page-lyhytvideot) #hinnoittelu .paketti .btn { margin-top: 10px }
+
+
+/* ---------- KOKO SIVUN POHJA YLOS ----------
+   Pohja oli #0b0f14 eli (11,15,20). Se on sivuston tumma perusvari,
+   mutta tallä sivulla kaikki kuvat ja kuviot ovat viileita ja
+   vaimeita, jolloin pohja luki mustana eika tummansinisena.
+
+   Uusi arvo #111823 on (17,24,35): kuusi askelta punaisessa, yhdeksan
+   vihreassa ja viisitoista sinisessa, eli samalla hieman sinisempi.
+   Tekstivarit kestavat sen: #f4f7fa on uudella pohjalla 16,1:1 ja
+   #a9b8c6 8,4:1, eli molemmat selvasti yli AA:n.
+
+   KAIKKI VIISI PAIKKAA SAMALLA KERRALLA. Pohja on kirjoitettu viiteen
+   kohtaan (sivun oma tausta, verkostokerroksen pohja, pinon peittavien
+   osioiden pohja, niiden vinjetin loppuvari ja heron cover). Jos yksi
+   jaa jalkeen, tulos on tasan se vika joka juuri korjattiin: kaksi
+   taustaa jotka ovat "visuaalisesti samat mutta eri". */
+.page-verkkosivut { background: #111823 }
+.page-verkkosivut .netbd { background-color: #111823 }
+.page-verkkosivut .pino > :first-child ~ * { background: var(--secbg, #111823) }
+.page-verkkosivut .stickysub > .cover { background: #111823 }
+/* YKSI TAUSTA, EI KAHTA SAMANNAKOISTA.
+   Peittavan osion oma kerros oli kaikin tavoin samaa kuviota kuin
+   sivutason kerros, mutta EI samassa voimakkuudessa: mitattuna
+   .netbd-cover on opacity .46 ja sivutason .netbd .62, ja vinjetti oli
+   eri kokoinen (120% 90% at 50% 45% vastaan 110% 86% at 50% 42%).
+   Kaksi vierekkaista aluetta joissa sama kuvio on eri kirkkaudessa
+   lukee rajana, ja juuri se raja nakyi hinnaston ja UKK:n valissa.
+
+   Molemmat arvot ovat nyt samat kuin sivutason kerroksella, jolloin
+   kuvio jatkuu katkeamatta herosta CTA:han. */
+.page-verkkosivut .netbd-cover { opacity: .62 }
+.page-verkkosivut .jakso-pari .netbd-glow,
+.page-verkkosivut .netbd-cover .netbd-glow {
+  background: radial-gradient(110% 86% at 50% 42%, transparent 30%, #111823 100%);
+}
+/* Verkostokerroksen pohja ja sen vinjetti on maaritelty aiemmin
+   tarkemmalla valitsimella (:is(...) .netbd:not(.netbd-cover)), joten
+   pelkka .page-verkkosivut .netbd ei riita: mitattuna kerros jai
+   arvoon rgb(11,15,20) kun kaikki muu oli jo rgb(17,24,35), eli
+   sivulle jai tasan se yksi tumma kaista jonka takia tama tehtiin.
+   Ruudukkoa ei nosteta, koska talla sivulla background-image on none:
+   verkosto on pelkkia pisteita ja viivoja. */
+.page-verkkosivut .netbd:not(.netbd-cover) { background-color: #111823 }
+.page-verkkosivut .netbd:not(.netbd-cover) .netbd-glow {
+  background: radial-gradient(110% 86% at 50% 42%, transparent 30%, #111823 100%);
+}
+
+
+/* ---------- LUETTAVUUS: TEKSTIKOOT SIELLA MISSA TILAA ON ----------
+   Sivun otsikot ja kortit olivat kohdallaan, mutta osa leipatekstista
+   oli mitoitettu ahtaampaan asetteluun kuin missa se nyt on: Prosessin
+   kuvaukset 15,5px viiden sarakkeen rivissa, Palvelun sisallon
+   selitteet 17px ja Nakyvyyden korttien leipa 16,5px. Palstoissa on
+   tilaa, joten koot nousevat yhden askeleen. Rivinkorkeus nousee
+   mukana, muuten nostettu koko vain tiivistaa rivivalin.
+
+   Nostot ovat maltillisia (noin 8-10 %), koska nama ovat leipatekstia
+   otsikoiden alla: jos ne nousevat enemman, ne alkavat kilpailla
+   otsikon kanssa ja osion hierarkia katoaa. */
+:is(.page-verkkosivut, .page-lyhytvideot) .seo-lead { font-size: 22px; line-height: 1.62 }
+.page-verkkosivut #sisalto .hs-merkein dt { font-size: 18.5px; line-height: 1.45 }
+.page-verkkosivut #sisalto .hs-merkein dd { font-size: 18px; line-height: 1.62 }
+.page-verkkosivut #hakukoneoptimointi .nelja-k h3 { font-size: 25px }
+.page-verkkosivut #hakukoneoptimointi .nelja-k p { font-size: 18px; line-height: 1.62 }
+/* Prosessin sarake on 171px levea, joten koko nostetaan sen mukaan:
+   16,5px antaa noin 24 merkkia riville, mika on viiden sarakkeen
+   rivissa luettava mitta. Pisin sana "hakukoneoptimointi" on tassa
+   koossa noin 150px eli mahtuu sarakkeeseen. */
+:is(.page-verkkosivut, .page-lyhytvideot) #prosessi .jakso-p { font-size: 17px; line-height: 1.6 }
+:is(.page-verkkosivut, .page-lyhytvideot) #prosessi .jakso-kk { font-size: 12.5px }
+:is(.page-verkkosivut, .page-lyhytvideot) #prosessi .jana-jaksot h3 { font-size: 23px }
+:is(.page-verkkosivut, .page-lyhytvideot) #kenelle .seo-spec li { font-size: 18.5px; line-height: 1.5 }
+:is(.page-verkkosivut, .page-lyhytvideot) #kenelle .seo-spec li s { font-size: 16.5px; line-height: 1.55 }
+/* HENGAHDYKSISSA TILAA ON ENITEN. Lause on jo iso, mutta sen alla
+   oleva tarkennus oli 17,5-21px keskella tyhjaa nakymaa. Molemmat
+   nousevat: lause 8 %, tarkennus 21-23px. */
+:is(.page-verkkosivut, .page-lyhytvideot) .laatta-lause { font-size: clamp(38px, 6.1vw, 90px) }
+:is(.page-verkkosivut, .page-lyhytvideot) .laatta-alla { font-size: 21px; line-height: 1.6 }
+:is(.page-verkkosivut, .page-lyhytvideot) .vaite-alla { font-size: clamp(18px, 1.7vw, 23px); line-height: 1.6 }
+/* Suuri-variantti ja sen tarkennus on maaritelty tarkemmilla
+   valitsimilla (.wsx .laatta-lause.suuri, .wsx .laatta.taysi
+   .laatta-lause.suuri + .laatta-alla), joten ne eivat perineet ylla
+   olevia nostoja. Sama nosto tassa niiden omalla tarkkuudella. */
+/* .wsx .laatta.taysi .laatta-lause on nelja luokkaa, joten se voitti
+   kolmen luokan yrityksen: taysleveassa laatassa koko tuli sielta.
+   Tama on viisi luokkaa. */
+:is(.page-verkkosivut, .page-lyhytvideot) .laatta.taysi .laatta-lause.suuri { font-size: clamp(46px, 8.6vw, 130px) }
+:is(.page-verkkosivut, .page-lyhytvideot) .laatta.taysi .laatta-lause { font-size: clamp(40px, 7.6vw, 118px) }
+:is(.page-verkkosivut, .page-lyhytvideot) .laatta.taysi .laatta-lause.suuri + .laatta-alla,
+:is(.page-verkkosivut, .page-lyhytvideot) .laatta.taysi .laatta-alla {
+  font-size: 21px; line-height: 1.6;
+}
+
+/* ---------- VIIVOJA VAHEMMAKSI: SISALTO JA KENELLE ----------
+   Sama korjaus kuin Lyhytvideoiden Kenelle-osiossa, ja sama ansa:
+   listarivi osuu KAHTEEN saantoon. .seo-spec antaa alaviivan ja
+   .kaksi antaa ylaviivan, joten vain toisen poistaminen jattaa
+   toisen voimaan - mitattuna riveilla oli seka ylä- etta alaviiva,
+   eli vierekkaiset rivit piirsivat kaksi viivaa vierekkain.
+
+   MITA JAA. Palstojen valinen pystyviiva ja palstan oma ylaviiva
+   jaavat: ne erottavat kaksi eri listaa toisistaan, eli niilla on
+   tehtava. Rivien valiset viivat eivat erota mitaan - rivit ovat jo
+   erillaan omalla merkillaan ja valilyonnilla. Vali kasvaa sen verran
+   kuin viiva vei, jottei lista tiivisty luettelopatkaksi. */
+.page-verkkosivut #kenelle .kaksi { border-top: 0 }
+.page-verkkosivut #kenelle .seo-spec li,
+.page-verkkosivut #kenelle .kaksi li {
+  border-top: 0; border-bottom: 0; padding: 10px 0;
+}
+.page-verkkosivut #kenelle .seo-spec li + li,
+.page-verkkosivut #kenelle .kaksi li + li { padding-top: 14px }
+
+/* PALVELUN SISALTO SAA TUTTU TILANTEEN VIIVAKIELEN.
+   Osiot ovat rakenteeltaan samat: kaksi palstaa, joissa on
+   nimi-ja-selite -lohkoja (Tuttu tilanne 2x2, Palvelun sisalto 2x4).
+   Tuttu tilanteessa viiva ei ole rivien erotin vaan lohkon MERKKI:
+   jokaisen lohkon ylla on lyhyt lampoinen viiva, ja harmaata kaytetaan
+   vain rakenteeseen (lohkon ylareuna ja palstojen valinen pystyviiva).
+   Sama tassa: alaviivat pois, lampoinen ylaviiva jokaiselle lohkolle,
+   26px ilmaa viivan ja tekstin valiin kuten Tuttu tilanteessa. */
+.page-verkkosivut #sisalto .hs-rows > div {
+  border-bottom: 0;
+  border-top: 1px solid rgba(232,165,74,.5);
+  padding: 26px 0 0;
+}
+/* TEKSTIT SAMAAN MITTAAN, JOTTA RUUDUKKO ON SYMMETRINEN.
+   Palstakokeilu (column-count) poisti tyhjat valit mutta rikkoi
+   symmetrian: lohkot eivat enaa olleet toistensa kanssa samassa
+   linjassa. Ruudukko palautettiin, ja ongelma korjattiin siita
+   paasta josta se syntyi - tekstien pituudesta. Selitteet olivat
+   114-202 merkkia, eli pisin oli lahes kaksi kertaa lyhyin, ja
+   ruudukko pakottaa vierekkaiset lohkot pisimman mukaan. Nyt ne ovat
+   114-129 merkkia, joten rivit ovat lahes tasakorkeat ilman etta
+   mitaan venytetaan. */
+@media (min-width: 861px) {
+  .page-verkkosivut #sisalto .hs-rows { column-gap: 0; row-gap: 40px }
+  .page-verkkosivut #sisalto .hs-rows > div:nth-child(odd) { padding-right: 48px }
+  .page-verkkosivut #sisalto .hs-rows > div:nth-child(even) {
+    padding-left: 48px; border-left: 1px solid var(--seo-rule);
+  }
+}
+
+/* KENELLE: SAMA PERIAATE, ERI MITTAKAAVA.
+   Tassa lohkoja on kaksi ja kummassakin viisi riviä, joten lampoinen
+   viiva jokaisen RIVIN ylle olisi kymmenen viivaa - juuri se mika
+   osiosta poistettiin. Merkki tulee siksi palstan tasolle: kummankin
+   listan ylla on lyhyt viiva palstan omassa varissa (vasen syaani,
+   oikea lampoinen, samat varit kuin niiden omissa merkeissa), ja
+   harmaa jaa vain palstojen valiin. */
+.page-verkkosivut #kenelle .kaksi > div:first-child .seo-spec {
+  border-top-color: rgba(111,236,255,.5);
+}
+.page-verkkosivut #kenelle .kaksi > div:last-child .seo-spec {
+  border-top-color: rgba(232,165,74,.5);
+}
+
+/* NAKYVYYDEN NELJAS KUVIO: PAATEPISTE LEIKKAANTUI.
+   Kayran paatepiste on kohdassa cx 98, r 3, eli se ulottuu
+   koordinaattiin 101 kun piirtoalue on 100 leveä. Pohjasaannon
+   clip-path (inset ... 0% ... ) leikkasi sen tasan kankaan reunasta,
+   jolloin pisteesta jai puolikuu. Rajaus oli olemassa vanhaa
+   pyyhkaisypaljastusta varten, ja se on tallä sivulla korvattu
+   kuviokohtaisilla animaatioilla, joten se voi mennä kokonaan. */
+.page-verkkosivut #hakukoneoptimointi .nelja-kuvio { clip-path: none }
+
+/* ---------- SIVUSTOKARTTA KULKEE TEKSTIN MUKANA ----------
+   Osio on kaksipalstainen: vasemmalla otsikko, ingressi ja
+   sivustokartta-artefakti, oikealla kahdeksan sisaltolohkoa. Mitattuna
+   vasen palsta on 635px ja oikea 1390px, eli vasemman alle jai 755px
+   tyhjaa - artefakti oli lukijan silmissa ohi jo ennen kuin puolet
+   lohkoista oli luettu.
+
+   Artefakti pinnataan, jolloin se kulkee mukana ja on nakyvissa
+   viimeiselle riville asti. Kaksi asiaa tarvitaan yhdessa:
+   palsta venytetaan ruudukon korkeuteen (align-self: stretch),
+   koska ruudukko on align-items: start eika pinnatulla elementilla
+   ole muuten matkaa, ja artefakti saa position: sticky.
+
+   Ylareunan arvo on navin korkeus + 96px, sama mitta jota osion oma
+   sisalto kayttaa. Artefakti on 455px korkea, joten 116 + 96 + 455 =
+   667px eli se mahtuu 868px:n nakymaan kokonaan. */
+@media (min-width: 861px) {
+  .page-verkkosivut #sisalto .osa-yla > .osa-teksti { align-self: stretch }
+  .page-verkkosivut #sisalto .osa-gfx {
+    position: sticky;
+    top: calc(var(--nav-top) + 96px);
+  }
+}
+
+/* ---------- LYHYTVIDEOT: SAMAT SAANNOT KUIN VERKKOSIVUILLA ----------
+   Ingressit olivat 21px, muun sivuston kanssa samassa mitassa kuin
+   Verkkosivut-alasivu ennen nostoa. Sama askel tanne, jotta sivut
+   lukevat samalla aanella. Prosessin kuvaukset ovat talla sivulla jo
+   17px (sarake on 266px eika 171px), joten ne jaavat ennalleen. */
+
+
+/* Kokonaisuus-osion roolimerkit lampoisella. Sama peruste kuin
+   Verkkosivujen Nakyvyys-korteissa: merkki kertoo mista puhutaan ja
+   syaani jaa sille mika nayttaa mekaniikan, jolloin osio ei ole yhta
+   variilmiota ylhaalta alas. Brandiarvo, Kysynta ja Liidit ovat juuri
+   ne kolme kohtaa joissa merkki kantaa koko rivin. */
+.page-lyhytvideot #kokonaisuus .porras-merkki { color: var(--lampo) }
+/* Rooli ja rivimerkin hehku on kirjoitettu syaanilla color-mixina
+   (kirkkaus seuraa --piirtoa), joten pelkka varin vaihto ei riita:
+   sama lauseke lampoisella, muuten rivin paljastus menettaisi
+   kirkastumisensa. */
+.page-lyhytvideot #kokonaisuus .porras-rooli {
+  color: color-mix(in srgb, var(--lampo) calc(44% + var(--piirto) * 40%), transparent);
+  text-shadow: 0 0 calc(var(--piirto) * 22px) rgba(232,165,74,.28);
+}
+.page-lyhytvideot #kokonaisuus .porras-merkki::after {
+  background: radial-gradient(closest-side, rgba(232,165,74,.22), transparent 70%);
+}
+/* Laatta-tarkennus on maaritelty kuuden luokan valitsimella
+   (.wsx .laatta.taysi .laatta-lause.suuri + .laatta-alla), joten
+   yleinen nosto ei koskenut sita talla sivulla. */
+.page-lyhytvideot .laatta.taysi .laatta-lause.suuri + .laatta-alla,
+.page-lyhytvideot .laatta.taysi .laatta-alla { font-size: 21px; line-height: 1.6 }
+
+/* ---------- LYHYTVIDEOT: HERO JA KAKSI OSIOTA ISOMMIKSI ----------
+   Heron otsikko oli 63px ja tekstipalsta 770px levea. Puhelinrivi
+   alkaa 1004px:sta, eli palstan ja mockupien valiin jaa 76px - sita
+   ei kaytetä, koska palstan leventaminen kaventaisi puhelinsaraketta.
+   Koko nostetaan sen sijaan niin paljon kuin nykyiseen palstaan
+   mahtuu: pisin vaihtuva lause "pysayttavat skrollauksen." on 692px
+   63px:n koolla, eli 770px:n palstaan mahtuu 70px. Se on katto. */
+/* Rajoittaja on cqi-kerroin, ei katto: 8,2cqi antoi 63,1px, joten
+   pelkka katon nosto ei muuttanut mitaan. 8,9cqi antaa 68,5px,
+   jolloin pisin vaihtuva lause on 692 x 68,5/63,1 = 751px eli 19px
+   palstaa kapeampi. 9,1cqi olisi antanut 70px ja 768px, mika on
+   palstan mitta kahden pikselin tarkkuudella - liian tiukka. */
+.page-lyhytvideot .stickysub .hero-copy h1 { font-size: clamp(30px, 8.9cqi, 70px) }
+.page-lyhytvideot .stickysub .hero-copy .sub { font-size: 23px }
+
+/* MIKSI-OSION OTSIKKO EI SAA TAVUTTUA.
+   hyphens: auto katkoi sanat tavuviivalla keskelta: "pk-yri-tyksen"
+   luki kolmena palana, ja rivin lopussa oli kaksi tavuviivaa
+   perakkain. Otsikko on lyhyt ja palsta 685px, joten se taittuu
+   luettavasti ilman tavutusta. text-wrap: balance jakaa rivit
+   tasapituisiksi sen sijaan etta viimeiselle jaisi yksi sana. */
+.page-lyhytvideot #miksi h2,
+.page-lyhytvideot .seo-h2 {
+  hyphens: manual;
+  -webkit-hyphens: manual;
+  text-wrap: balance;
+}
+/* Sama palsta kestaa suuremman koon kun tavutus ei enaa katko sanoja:
+   pisin sana "kustannustehokkain" on 66px:n koolla noin 620px eli
+   mahtuu 685px:n palstaan. */
+.page-lyhytvideot #miksi h2 { font-size: 66px }
+
+/* Kanavakorteissa on tilaa: sarake on 344px ja teksti oli 28/19px. */
+.page-lyhytvideot #alustat .duo2-col h3 { font-size: 30px }
+.page-lyhytvideot #alustat .duo2-col .seo-body { font-size: 20px; line-height: 1.6 }

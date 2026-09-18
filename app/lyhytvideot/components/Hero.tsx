@@ -46,20 +46,6 @@ export default function Hero() {
               Katso lyhytvideopaketit
             </a>
           </div>
-          <p className="herotrust li d4">
-            <span>
-              <i />
-              Vastaamme 24 tunnissa
-            </span>
-            <span>
-              <i />
-              Ei pitkiä sopimuksia
-            </span>
-            <span>
-              <i />
-              Espoo · Helsinki · koko Suomi
-            </span>
-          </p>
         </div>
 
         <div

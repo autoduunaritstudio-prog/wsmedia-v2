@@ -1,12 +1,11 @@
 import BudgetForm from "../../components/BudgetForm";
-import MetalBackdrop from "../../components/MetalBackdrop";
 import SmartLink from "../../components/SmartLink";
 import { RefGrid } from "../../components/RefCards";
 import Kehotus from "../../hakukoneoptimointi/components/Kehotus";
 import PlatformMark from "../../components/PlatformMark";
 import { LogoMark } from "../../components/Logo";
 
-import { Pystykisko } from "../../components/Maasto";
+import { Kaiku, Pystykisko } from "../../components/Maasto";
 
 import { PANEELIT } from "./Paneelit";
 import { EI_SOVI, KETJU, PLANS, PLATFORMS, REASONS, SOPII, STEPS } from "./sisalto";
@@ -100,6 +99,7 @@ function Tahdisto() {
 export function Miksi() {
   return (
     <section className="seo-sec" id="miksi" data-kiinni="">
+      <Kaiku sana="MIKSI" puoli="oik" />
       <Pystykisko teksti="Miksi lyhytvideot" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Neljä syytä, mikä tahansa riittää</p>
@@ -140,6 +140,7 @@ export function Miksi() {
 export function Alustat() {
   return (
     <section className="seo-sec" id="alustat">
+      <Kaiku sana="KANAVAT" puoli="vas" />
       <Pystykisko teksti="Kanavat" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Kolme alustaa, yksi kuvauspäivä</p>
@@ -189,6 +190,7 @@ export function Alustat() {
 export function Prosessi() {
   return (
     <section className="seo-sec" id="prosessi">
+      <Kaiku sana="PROSESSI" puoli="vas" />
       <Pystykisko teksti="Prosessi" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Ensimmäisestä puhelusta julkaisuun</p>
@@ -330,6 +332,7 @@ const MERKIT = [
 export function Kokonaisuus() {
   return (
     <section className="seo-sec" id="kokonaisuus">
+      <Kaiku sana="BRÄNDI" puoli="oik" />
       <Pystykisko teksti="Kokonaisuus" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Kolme osaa, yksi ketju</p>
@@ -366,6 +369,7 @@ export function Kokonaisuus() {
 export function Tulokset() {
   return (
     <section className="seo-sec" id="tulokset">
+      <Kaiku sana="TYÖT" puoli="oik" />
       <Pystykisko teksti="Tehtyä työtä" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Asiakkaiden omilla tileillä</p>
@@ -387,8 +391,10 @@ export function Tulokset() {
 /* ---------- 7. Hinnoittelu ---------- */
 export function Hinnoittelu() {
   return (
-    <section className="seo-sec valo" id="hinnoittelu">
-      <MetalBackdrop inSection />
+    /* SAMA POHJA KUIN MUULLA SIVULLA, ks. Verkkosivut-alasivu. Vaalea
+       osio keskella tummaa ketjua tarkoitti etta yksi coveri nousi eri
+       varisena kuin kaikki muut. */
+    <section className="seo-sec" id="hinnoittelu">
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Kiinteä kuukausihinta · ei aloitusmaksua</p>
         <h2 className="seo-h2 rv">Paljonko lyhytvideotuotanto maksaa?</h2>
@@ -434,6 +440,7 @@ export function Kenelle() {
       {/* Savy pois. Umpinainen pohja peitti sivutason verkoston, joten
           osio luki eri maailmasta kuin sen naapuri UKK. Lapinakyvana
           molemmat nayttavat saman kuvion. */}
+      <Kaiku sana="KENELLE" puoli="vas" />
       <Pystykisko teksti="Kenelle" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Sanomme sen kartoituksessa</p>
@@ -475,6 +482,7 @@ export function Ukk() {
   const kaikki = FAQ_GROUPS.flatMap((g) => g.items);
   return (
     <section className="seo-sec" id="ukk">
+      <Kaiku sana="FAQ" puoli="oik" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">{kaikki.length} kysymystä</p>
         <div className="qa2">
@@ -549,7 +557,10 @@ export function Tarjous() {
             showBudget={false}
             messageLabel="Mitä tavoittelet lyhytvideoilla?"
             note="Ei sitoumuksia."
-            tilt="-y"
+            /* Kortti on oikeanpuoleinen lohko ja kaantyy kohti vasenta
+               tekstipalstaa: "y" tuo VASEMMAN reunan katsojaa kohti.
+               Aiempi "-y" kaansi sen poispain tekstista. */
+            tilt="y"
           />
         </div>
       </div>

@@ -202,16 +202,33 @@ export default function Verkkosivut() {
                     Emme kilpaile hinnalla vaan sillä, että sivusto <b><i>löytyy ja myy.</i></b>
                   </Vaite>
 
-                  <Hinnoittelu />
+                  {/* SIVUN HANTA ON YKSI PINTA.
+                      Hinnasto, usein kysytyt ja CTA olivat kolme eri
+                      taustaa peräkkain: hinnasto on pinon peittava
+                      vaihe ja saa umpinaisen pohjan, kun taas UKK ja
+                      CTA olivat pinon ULKOPUOLELLA sivutason
+                      kerroksen paalla. Kaksi kerrosta vierekkain
+                      tarkoittaa kahta eri kuviota, ja raja niiden
+                      valissa nakyy vaikka vari, voimakkuus ja kentta
+                      olisivat samat - kerrokset liikkuvat eri tahtiin,
+                      koska toinen on pinnattu osioonsa ja toinen
+                      nakymaan.
+
+                      Sama ratkaisu kuin Prosessilla ja Kenellella:
+                      YKSI kaare, yksi kerros, monta osiota sen sisalla.
+                      Kaikki kolme jakavat nyt saman kuvion, joten
+                      hinnastosta CTA:han ei ole yhtaan rajaa. */}
+                  <Jakso>
+                    <Hinnoittelu />
+                    <Ukk />
+                    <Tarjous />
+                  </Jakso>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <Ukk />
-      <Tarjous />
         </div>
       </div>
 

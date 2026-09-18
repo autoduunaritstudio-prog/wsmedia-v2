@@ -1,6 +1,5 @@
 import type { CSSProperties } from "react";
 import BudgetForm from "../../components/BudgetForm";
-import MetalBackdrop from "../../components/MetalBackdrop";
 import { Kaiku } from "../../components/Maasto";
 import { FAQ_GROUPS } from "../faq";
 
@@ -334,13 +333,14 @@ export function Asiakkaat() {
    ollut viivoja. */
 export function Hinnoittelu() {
   return (
-    <section className="seo-sec valo" id="hinnoittelu">
-      {/* ETUSIVUN OMA TAUSTA. Sama fasettikuvio ja sama vieritykseen
-          sidottu kirkas kohta kuin etusivulla, tumma variantti.
-          Hinnasto on sivun ainoa vaalea osio, kuten etusivunkin
-          taustan kirkas alue, joten kuvio tulee siihen samana
-          vaaleana versiona. */}
-      <MetalBackdrop inSection />
+    /* SAMA POHJA KUIN MUULLA SIVULLA.
+       Hinnasto oli sivun ainoa vaalea osio ja sillä oli oma
+       fasettikuvionsa. Peittavassa vierityksessa se tarkoitti etta
+       yksi coveri nousi eri varisena kuin kaikki muut: sivu vaihtoi
+       pohjan kesken ketjun ja palasi takaisin seuraavassa osiossa.
+       Nyt pohja jatkuu katkeamatta, ja hinnasto erottuu sillä mikä
+       sen kuuluukin erottaa: korteilla. */
+    <section className="seo-sec" id="hinnoittelu">
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <i>Kiinteä hinta, ei aloitusmaksua</i>
@@ -499,7 +499,10 @@ export function Tarjous() {
             messageLabel="Millainen sivusto on mielessä?"
             extraField={{ id: "nyk", label: "Nykyiset verkkosivut (jos on)", placeholder: "esimerkki.fi" }}
             note="Ei sitoumuksia."
-            tilt="-y"
+            /* Kortti on oikeanpuoleinen lohko ja kaantyy kohti vasenta
+               tekstipalstaa: "y" tuo VASEMMAN reunan katsojaa kohti.
+               Aiempi "-y" kaansi sen poispain tekstista. */
+            tilt="y"
           />
         </div>
       </div>

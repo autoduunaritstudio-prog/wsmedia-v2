@@ -1,7 +1,6 @@
 import WordSwap from "../../components/WordSwap";
 
 import HeroFilm from "./HeroFilm";
-import Rakentuu, { Mittakisko } from "./Rakentuu";
 
 /**
  * VERKKOSIVUJEN HERO.
@@ -20,7 +19,12 @@ import Rakentuu, { Mittakisko } from "./Rakentuu";
  * mockupin. Yksi lipuke jaa: PageSpeed-pistemittari, koska se on
  * ainoa joka kertoo jotain mita teksti ei kerro.
  *
- * TAUSTA RAKENTUU VIERITTAESSA. Ks. Rakentuu.tsx.
+ * YKSI VIERITYKSEEN SIDOTTU LIIKE, EI KAHTA. Herossa oli rautalanka-
+ * malli (Rakentuu) ja sen mittakisko, jotka rakensivat sivun
+ * vierityksen mukana. Kun elokuva tekee saman asian oikealla
+ * materiaalilla, kaksi vierityksen ohjaamaa animaatiota samassa
+ * nakymassa kilpailee keskenaan eika kumpaakaan ehdi katsoa.
+ * Rautalanka ja kisko poistuivat, elokuva jai.
  *
  * NAYTTAMON TILALLA ON ELOKUVA. HeroBrowserStage oli staattinen
  * selainmockup oikeassa palstassa. Sen tilalla on nyt koko heron
@@ -33,10 +37,16 @@ import Rakentuu, { Mittakisko } from "./Rakentuu";
  * elokuvan paalle: ne ovat sivun sisaltoa, eivat kuvaa, ja ne on
  * luettava myos ilman JS:aa ja ruudunlukijalla.
  */
+/* VAIHTUVAN RIVIN ON MAHDUTTAVA YHDELLE RIVILLE.
+   Kolme lausetta oli yhden rivin mittaisia ja neljas kahden, joten
+   otsikko hyppasi korkeutta kesken vaihdon. Mitattu 82px:n koolla
+   otsikon omalla fontilla: 720, 837, 1278 ja 600 pikselia, kun palsta
+   on 880. Vain kolmas ylitti, ja se lyheni samaa asiaa sanovaksi:
+   1278 -> 839. Nyt pisin on 839 eli 41px palstaa kapeampi. */
 const WORDS = [
   "löytyvät Googlesta.",
   "latautuvat sekunnissa.",
-  "muuttavat kävijät yhteydenotoiksi.",
+  "tuovat yhteydenottoja.",
   "kestävät vuosia.",
 ];
 
@@ -44,9 +54,7 @@ export default function Hero() {
   return (
     <header className="hero vs-hero">
       <HeroFilm />
-      <Rakentuu />
       <div className="wrap hero-split">
-        <Mittakisko />
         <div className="hero-copy">
           {/* KAKSI TAITTOA, EI YKSI. Otsikko nousi 48,5px:sta 69px:aan,
               ja silloin "Verkkosivut yritykselle, jotka" vaatii 890px
@@ -74,20 +82,6 @@ export default function Hero() {
               Katso mitä verkkosivut maksavat
             </a>
           </div>
-          <p className="herotrust li d4">
-            <span>
-              <i />
-              Kiinteä projektihinta, ei piilokuluja
-            </span>
-            <span>
-              <i />
-              Valmis 2–4 viikossa
-            </span>
-            <span>
-              <i />
-              Espoo · Helsinki · koko Suomi
-            </span>
-          </p>
         </div>
       </div>
     </header>

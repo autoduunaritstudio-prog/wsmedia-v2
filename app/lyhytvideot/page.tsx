@@ -181,18 +181,28 @@ export default function Lyhytvideot() {
                         Näyttökerrat ovat <b><i>välitavoite.</i></b>
                       </Vaite>
 
-                      <Hinnoittelu />
+                      {/* SIVUN HANTA ON YKSI PINTA, ks. Verkkosivut-alasivu.
+                          Hinnasto on pinon peittava vaihe ja saa umpinaisen
+                          pohjan, kun taas Kenelle, UKK, Kaytannossa ja CTA
+                          olivat pinon ULKOPUOLELLA sivutason kerroksen
+                          paalla. Vierekkaiset kerrokset ovat aina kaksi eri
+                          kuviota, koska toinen on pinnattu osioonsa ja
+                          toinen nakymaan, ja raja niiden valissa nakyy
+                          vaikka vari ja kentta olisivat samat. Yksi kaare,
+                          yksi kerros, viisi osiota sen sisalla. */}
+                      <Jakso>
+                        <Hinnoittelu />
+                        <Kenelle />
+                        <Ukk />
+                        <Kaytannossa />
+                        <Tarjous />
+                      </Jakso>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <Kenelle />
-          <Ukk />
-          <Kaytannossa />
-          <Tarjous />
         </div>
       </div>
 

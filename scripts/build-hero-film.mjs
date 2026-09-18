@@ -64,6 +64,42 @@ const SIVUT = {
   },
   verkkosivut: {
     lahde: "verkkosivut_hero_final.mp4",
+    /* SAVY LEIVOTAAN SISAAN, EI AJETA AJOAIKANA. Sama muunnos CSS- tai
+       SVG-suotimena canvasin paalla pakottaisi kompositoinnin suotimen
+       lapi joka ruudussa; Chromiumissa ero ei nay mittauksessa mutta
+       Safarissa se tokkii. Rakennusvaiheessa se ei maksa ajoaikana
+       mitaan.
+
+       KAYRA NOSTAA VARJOT JA KESKISAVYT, EI HUIPPUJA. Materiaali on
+       tummaa ja se luki mustana laikkuna; pelkka kirkkauden nosto
+       olisi nostanut myos kirkkaimmat pikselit, ja juuri ne
+       maarittavat kuinka paljon tekstin alla tarvitaan tummennusta.
+       Paatepiste 1/1 pitaa huiput paikallaan, jolloin scrimin mitattu
+       arvo kelpaa edelleen. */
+    /* KOHINANPOISTO ENNEN SAVYA, RAE SEN JALKEEN.
+       Jarjestys ei ole makuasia. Kayra nostaa varjot yli kaksinkertaisiksi,
+       ja se nostaa myos lahteen oman pakkauskohinan: tumma alue luki
+       pikselimossona. Kohinanpoisto on siksi ENNEN kayraa, jolloin se
+       kasittelee kohinan sen omassa tasossaan. Mitattu tumman alueen
+       rakeisuus (4x4-lohkon keskihajonta, pikselit alle 64):
+         lahde (lahes haviotön)   0,551
+         nykyinen crf 26          0,513   <- ei puhtaampi vaan sumeampi
+         crf 22 ilman suotimia    0,547
+         kohinanpoisto + crf 22   0,457   <- aidosti puhtaampi
+       Rae (c0s=1) lisataan VASTA savyn jalkeen: ilman sita nostetut
+       varjot ovat niin tasaisia etta niihin syntyy juovitusta, ja
+       juovitus on rumempi vika kuin se kohina joka juuri poistettiin.
+       Arvo 1 on dither, ei rae: sita ei nae, mutta se rikkoo juovan. */
+    savy:
+      "hqdn3d=3:2:8:8," +
+      "curves=all='0/0 0.18/0.35 0.42/0.65 0.72/0.89 1/1',eq=saturation=1.06:contrast=1.0",
+    /* CRF 26 -> 22 JA aq-mode 3. Tumma kuva on se tapaus jossa crf 26
+       nakyy: mitattuna se ei sailyttanyt lahteen rakeisuutta vaan
+       pyyhki sen pois, ja se on juuri se "mossoutuminen". aq-mode 3
+       jakaa bitit varianssin mukaan ja painottaa tummia alueita, eli
+       se vie lisabitit sinne missa vika on. Hinta: 2,79 -> 4,9 MB. */
+    crf: 22,
+    x264: "aq-mode=3:aq-strength=1.0",
     nimi: (rev) => `verkkosivut-film-${rev}.mp4`,
     manifesti: "public/hero/verkkosivut-film.json",
     ts: "app/components/film-tiedot-verkkosivut.ts",
@@ -82,7 +118,7 @@ const REV = "v1";
 const LAHDE = CFG.lahde;
 const ULOS_DIR = "public/hero";
 const NIMI = CFG.nimi(REV);
-const CRF = 26;
+const CRF = CFG.crf ?? 26;
 const GOP = 12;
 /* POSTERIN LAATU. 80 on alaraja: sisalto on tummaa ja tumman alueen
    porrastuminen nakyy webpissa ensimmaisena. Arvoa nostetaan kunnes
@@ -107,7 +143,9 @@ const ruutuja = Number(probe.nb_frames);
 mkdirSync(ULOS_DIR, { recursive: true });
 sh("ffmpeg", [
   "-v", "error", "-y", "-i", LAHDE,
+  ...(CFG.savy ? ["-vf", CFG.savy] : []),
   "-c:v", "libx264", "-crf", String(CRF), "-preset", "slow",
+  ...(CFG.x264 ? ["-x264-params", CFG.x264] : []),
   "-g", String(GOP), "-keyint_min", String(GOP), "-sc_threshold", "0",
   "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an",
   `${ULOS_DIR}/${NIMI}`,
@@ -136,7 +174,14 @@ if (CFG.poster) {
      kirjoitettu apufile jaa versionhallinnan nakoetaisyydelle ja sita
      joutuu siivoamaan kasin. */
   const ref = join(tmpdir(), "wsx-hero-ruutu0.png");
-  sh("ffmpeg", ["-v", "error", "-y", "-i", LAHDE, "-frames:v", "1", "-f", "image2", ref]);
+  /* Poster savytetaan SAMALLA ketjulla kuin elokuva. Jos se jaisi
+     savyttamatta, ensimmainen nakyma olisi tummempi kuin sita seuraava
+     ruutu ja vaihto nakyisi valahdyksena. */
+  sh("ffmpeg", [
+    "-v", "error", "-y", "-i", LAHDE,
+    ...(CFG.savy ? ["-vf", CFG.savy] : []),
+    "-frames:v", "1", "-f", "image2", ref,
+  ]);
   let valittu = null;
   for (const q of POSTER_Q) {
     sh("ffmpeg", ["-v", "error", "-y", "-i", ref, "-quality", String(q), `${ULOS_DIR}/${CFG.poster}`]);
