@@ -3,7 +3,7 @@ import BudgetForm from "../../components/BudgetForm";
 import { Kaiku } from "../../components/Maasto";
 import { FAQ_GROUPS } from "../faq";
 
-import { Puu, Vertailu } from "./Artefaktit";
+import { Puu } from "./Artefaktit";
 import {
   BSTATS,
   EI_SOVI,
@@ -60,8 +60,8 @@ export function Ongelma() {
           Verkkosivut ovat olemassa, mutta ne eivät <span className="mark">tuo asiakkaita.</span>
         </h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Nämä neljä tulevat vastaan lähes joka projektissa. Ne eivät ole järjestys eivätkä
-          prosessi: ne tapahtuvat yhtä aikaa, ja mikä tahansa niistä yksin riittää syyksi.
+          Nämä neljä syytä toistuvat lähes jokaisessa sivustouudistuksessa. Yksikin niistä
+          riittää siihen, että kotisivut eivät tuo yhteydenottoja.
         </p>
 
         <div className="kaksi porras rv" style={{ marginTop: "56px" }}>
@@ -160,7 +160,7 @@ export function Toteutustapa() {
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Toteutustapa</span>
-          <i>Kaksi tapaa, yksi mittaus</i>
+          <i>Kotisivut, räätälöity sivusto tai verkkokauppa</i>
         </div>
         <h2 className="seo-h2 rv">Perussivusto vai räätälöidyt verkkosivut?</h2>
 
@@ -177,10 +177,6 @@ export function Toteutustapa() {
               </ul>
             </div>
           ))}
-        </div>
-
-        <div className="kohoa rv" style={{ marginTop: "56px" }}>
-          <Vertailu />
         </div>
       </div>
     </section>
@@ -257,7 +253,7 @@ export function Prosessi() {
           <span>Prosessi</span>
           <i>Suunnittelusta julkaisuun</i>
         </div>
-        <h2 className="seo-h2 rv">Näin verkkosivuprojekti etenee</h2>
+        <h2 className="seo-h2 rv">Näin nettisivujen teko etenee</h2>
 
         <div className="jana" data-rvs="">
           <div className="jana-akseli" aria-hidden="true">
@@ -345,7 +341,7 @@ export function Hinnoittelu() {
         <div className="seo-ord" data-rvs="">
           <i>Kiinteä hinta, ei aloitusmaksua</i>
         </div>
-        <h2 className="seo-h2 rv">Paljonko verkkosivut maksavat yritykselle?</h2>
+        <h2 className="seo-h2 rv">Paljonko kotisivut maksavat yritykselle?</h2>
 
         <div className="paketit porras rv">
           {PLANS.map((p) => (
@@ -367,6 +363,14 @@ export function Hinnoittelu() {
             </div>
           ))}
         </div>
+        <p className="seo-body rv" style={{ marginTop: "32px" }}>
+          Ylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Verkkotunnus on yrityksesi nimissä. Hakukoneoptimoinnin jatkuva seuranta ja
+          parantaminen on erillinen palvelu, 290 €/kk + alv. Esimerkki toteutuksestamme:{" "}
+          <a href="https://laaksolahdensahko.fi" target="_blank" rel="noopener">
+            Laaksolahden Sähkö
+          </a>
+          .
+        </p>
       </div>
     </section>
   );
@@ -382,7 +386,7 @@ export function Kenelle() {
           <span>Kenelle</span>
           <i>Sanomme sen suoraan</i>
         </div>
-        <h2 className="seo-h2 rv">Kenelle verkkosivut kannattaa teettää meillä?</h2>
+        <h2 className="seo-h2 rv">Kenelle kotisivut kannattaa teettää meillä?</h2>
 
         <div className="kaksi porras rv" style={{ marginTop: "48px" }}>
           <div>
@@ -473,7 +477,8 @@ export function Tarjous() {
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
               Kerro lyhyesti mitä yritys tekee ja millainen sivusto on mielessä. Saat
-              kiinteähintaisen tarjouksen, eikä yhteydenotto sido sinua mihinkään.
+              kiinteähintaisen tarjouksen, eikä yhteydenotto sido sinua mihinkään. Teemme
+              kotisivuja Espoosta käsin koko Suomeen.
             </p>
             <ol className="askel porras rv">
               {FLIST.map(([h, s]) => (

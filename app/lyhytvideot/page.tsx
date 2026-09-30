@@ -39,7 +39,7 @@ const TITLE = "Lyhytvideot ja somevideot yrityksille | Espoo | WS Media";
    joten loppu katkesi: "Espoo, Helsinki ja koko Suomi" ei nakynyt
    kenellekaan. 155 merkkia mahtuu, ja tarkein jaa alkuun. */
 const DESCRIPTION =
-  "Somevideot ja lyhytvideot yrityksille TikTokiin, Reelsiin ja Shortsiin. Suunnittelu, kuvaus ja editointi kiinteään kuukausihintaan, ei pitkiä sopimuksia.";
+  "Lyhytvideot ja somevideot yritykselle: videotuotanto TikTokiin, Reelsiin ja Shortsiin alk. 1 500 €/kk + alv. Suunnittelu, kuvaus ja editointi.";
 /* OG_IMAGE poistui. Se osoitti tiedostoon jota ei ole olemassa, eli
    jaettu linkki nayttaa rikkinaisen kuvan sijasta ei mitaan. Kuva
    generoidaan nyt kaannoksessa, ks. app/og-kuva.tsx ja taman kansion
@@ -221,7 +221,11 @@ export default function Lyhytvideot() {
         brandHeading="h2"
       />
 
-      <Palkki />
+      <Palkki
+        otsikko="Maksuton kartoitus"
+        selite="Katsotaan, mitkä kanavat ja videot sopivat yrityksellesi. Ei sido mihinkään."
+        nappi="Pyydä kartoitus"
+      />
       <SiteEffects />
 
       <script

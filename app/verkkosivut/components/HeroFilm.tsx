@@ -112,7 +112,16 @@ export default function HeroFilm() {
     // naytolla 3x-puskuri maksaisi yli kaksinkertaisen tayttokaistan
     // ilman etta 1920px levea lahde tarjoaa lisadetaljia.
     const size = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, DPR_MAX);
+      /* Puskuri ei kasva yli lahteen tarkkuuden. Cover-rajauksessa
+         yksi CSS-pikseli vastaa 1/s lahteen pikselia (s = rajauksen
+         skaala dpr 1:lla). Sita suurempi puskuri vain venyttaa samaa
+         kuvaa canvasissa, ja kompositori venyttaisi sen yhta hyvin.
+         MITATTU 1.10.2026: 1716x914 dpr 2 -> puskuri 3432 x 1828 eli
+         6,3 Mpx joka kehys, lahde 1920 x 1080. Nyt 1,1 x css eli
+         noin 2 Mpx, sama kuva. */
+      const s1 = Math.max(cv.clientWidth / FILM.width, cv.clientHeight / FILM.height);
+      const lahdeDpr = s1 > 0 ? Math.max(1, 1 / s1) : DPR_MAX;
+      const dpr = Math.min(window.devicePixelRatio || 1, DPR_MAX, lahdeDpr);
       const w = Math.round(cv.clientWidth * dpr);
       const h = Math.round(cv.clientHeight * dpr);
       if (w > 0 && h > 0 && (cv.width !== w || cv.height !== h)) {

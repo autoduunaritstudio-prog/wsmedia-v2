@@ -21,7 +21,15 @@ import { useEffect, useRef, useState } from "react";
  * muuttuu kahdesti koko sivun matkalla, joten kehyskohtainen laskenta
  * olisi tuhansia turhia kutsuja.
  */
-export default function Palkki() {
+export default function Palkki({
+  otsikko = "Maksuton kartoitus",
+  selite = "Nykytila, hakuvolyymit ja kilpailutilanne. Ei sido mihinkään.",
+  nappi = "Pyydä kartoitus",
+}: {
+  otsikko?: string;
+  selite?: string;
+  nappi?: string;
+} = {}) {
   const [nayta, setNayta] = useState(false);
   const ohi = useRef(false);
   const lomake = useRef(false);
@@ -98,11 +106,11 @@ export default function Palkki() {
   return (
     <div className={nayta ? "cta-palkki nayta" : "cta-palkki"} aria-hidden={!nayta}>
       <p>
-        <b>Maksuton kartoitus</b>
-        <span>Nykytila, hakuvolyymit ja kilpailutilanne. Ei sido mihinkään.</span>
+        <b>{otsikko}</b>
+        <span>{selite}</span>
       </p>
       <a className="btn" href="#tarjous" tabIndex={nayta ? 0 : -1}>
-        Pyydä kartoitus
+        {nappi}
       </a>
     </div>
   );

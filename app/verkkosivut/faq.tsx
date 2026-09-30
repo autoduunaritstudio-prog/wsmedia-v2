@@ -15,14 +15,14 @@ export const FAQ_GROUPS: FaqGroup[] = [
     title: "Hinta ja aikataulu",
     items: [
       {
-        q: "Paljonko verkkosivut maksavat yritykselle?",
-        a: "Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista.",
-        plain: "Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista.",
+        q: "Paljonko kotisivut maksavat yritykselle?",
+        a: "Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista. Ylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus.",
+        plain: "Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista. Ylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus.",
       },
       {
         q: "Mitä verkkosivujen hinta sisältää?",
-        a: "Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Verkkotunnus, palvelintila ja SSL-suojaus sisältyvät ensimmäiseen vuoteen. Ei aloitusmaksuja eikä piilokuluja.",
-        plain: "Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Verkkotunnus, palvelintila ja SSL-suojaus sisältyvät ensimmäiseen vuoteen. Ei aloitusmaksuja eikä piilokuluja.",
+        a: "Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Ei aloitusmaksuja eikä piilokuluja. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 49 €/kk + alv.",
+        plain: "Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Ei aloitusmaksuja eikä piilokuluja. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 49 €/kk + alv.",
       },
       {
         q: "Kuinka nopeasti verkkosivut valmistuvat?",
@@ -31,8 +31,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Onko pakko sitoutua kuukausimaksuun?",
-        a: "Ei. Projektihinta on kertaluonteinen ja sivusto on sen jälkeen sinun. Ylläpito ja hakukoneoptimointi ovat erillinen kuukausipalvelu, jonka voi lopettaa kuukauden irtisanomisajalla.",
-        plain: "Ei. Projektihinta on kertaluonteinen ja sivusto on sen jälkeen sinun. Ylläpito ja hakukoneoptimointi ovat erillinen kuukausipalvelu, jonka voi lopettaa kuukauden irtisanomisajalla.",
+        a: "Projektihinta on kertaluonteinen, ja sivusto on sen jälkeen sinun. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 49 €/kk + alv ja jonka voi irtisanoa kuukauden irtisanomisajalla. Sivuston voi myös siirtää omalle palvelimellesi.",
+        plain: "Projektihinta on kertaluonteinen, ja sivusto on sen jälkeen sinun. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 49 €/kk + alv ja jonka voi irtisanoa kuukauden irtisanomisajalla. Sivuston voi myös siirtää omalle palvelimellesi.",
+      },
+      {
+        q: "Paljonko verkkosivujen ylläpito maksaa?",
+        a: "Perusylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, 290 €/kk + alv. Kun otat molemmat, saat ne yhteishintaan edullisemmin.",
+        plain: "Perusylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, 290 €/kk + alv. Kun otat molemmat, saat ne yhteishintaan edullisemmin.",
       },
       {
         q: "Miten hakukoneoptimointi vaikuttaa hintaan?",
@@ -50,9 +55,14 @@ export const FAQ_GROUPS: FaqGroup[] = [
         plain: "Perussivusto riittää, kun palveluita on muutama, tarpeet ovat tavanomaisia ja sivusto halutaan nopeasti verkkoon. Räätälöity kannattaa, kun nopeus ja erottuvuus ovat tärkeitä kilpaillulla alalla, tarvitset toiminnallisuuksia joita valmiit ratkaisut eivät kata, tai haluat minimoida jatkuvan ylläpidon ja tietoturvahuolet.",
       },
       {
-        q: "Käytättekö WordPressiä?",
-        a: "Käytämme silloin, kun asiakas haluaa päivittää sisältöä paljon itse ja valmis hallintanäkymä on siihen luontevin työkalu. Muuten koodaamme sivuston itse, koska kevyempi toteutus latautuu nopeammin, siinä on vähemmän päivitettävää ja pienempi hyökkäyspinta.",
-        plain: "Käytämme silloin, kun asiakas haluaa päivittää sisältöä paljon itse ja valmis hallintanäkymä on siihen luontevin työkalu. Muuten koodaamme sivuston itse, koska kevyempi toteutus latautuu nopeammin, siinä on vähemmän päivitettävää ja pienempi hyökkäyspinta.",
+        q: "Teettekö WordPress-kotisivut yritykselle?",
+        a: "Tarvittaessa. Ylläpidämme myös olemassa olevia WordPress-sivustoja, ja teemme uuden sivuston WordPress-pohjalle, jos haluat päivittää sisältöä paljon itse. Muuten koodaamme sivuston itse, koska kevyempi toteutus latautuu nopeammin ja siinä on vähemmän päivitettävää.",
+        plain: "Tarvittaessa. Ylläpidämme myös olemassa olevia WordPress-sivustoja, ja teemme uuden sivuston WordPress-pohjalle, jos haluat päivittää sisältöä paljon itse. Muuten koodaamme sivuston itse, koska kevyempi toteutus latautuu nopeammin ja siinä on vähemmän päivitettävää.",
+      },
+      {
+        q: "Mikä ero on kotisivuilla, nettisivuilla ja verkkosivuilla?",
+        a: "Ei mitään. Kaikki kolme tarkoittavat yrityksen omaa sivustoa. Kotisivut on sanoista vanhin, verkkosivut virallisin ja nettisivut arkisin. Hinnassa ja toteutuksessa ei ole eroa.",
+        plain: "Ei mitään. Kaikki kolme tarkoittavat yrityksen omaa sivustoa. Kotisivut on sanoista vanhin, verkkosivut virallisin ja nettisivut arkisin. Hinnassa ja toteutuksessa ei ole eroa.",
       },
       {
         q: "Voinko päivittää sisältöä itse?",

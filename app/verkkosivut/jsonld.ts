@@ -72,7 +72,7 @@ const BASE_GRAPH = [
       "@type": "WebPage",
       "@id": "https://wsmedia.fi/verkkosivut#sivu",
       "url": "https://wsmedia.fi/verkkosivut",
-      "name": "Verkkosivut yritykselle | Kotisivujen suunnittelu ja toteutus | WS Media",
+      "name": "Kotisivut yritykselle alk. 1 490 € | Espoo | WS Media",
       "description": "Verkkosivut yritykselle avaimet käteen: suunnittelu, tekstit, tekninen hakukoneoptimointi ja julkaisu. Nopeat ja mobiilioptimoidut kotisivut kiinteällä projektihinnalla.",
       "inLanguage": "fi-FI",
       "isPartOf": {
@@ -167,14 +167,28 @@ const BASE_GRAPH = [
           },
           {
             "@type": "Offer",
-            "name": "Ylläpito ja hakukoneoptimointi",
-            "description": "Jatkuva kuukausipalvelu: päivitykset ja tietoturva, palvelintila ja varmuuskopiot, sisältömuutokset, hakusanaseuranta ja kuukausiraportti sekä jatkuva sisällöntuotanto.",
+            "name": "Ylläpito",
+            "description": "Palvelintila, verkkotunnus ja SSL-suojaus kuukausimaksulla.",
             "priceCurrency": "EUR",
-            "price": "390",
+            "price": "49",
             "priceSpecification": {
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
-              "price": "390",
+              "price": "49",
+              "unitCode": "MON",
+              "valueAddedTaxIncluded": false
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Hakukoneoptimoinnin seuranta ja parantaminen",
+            "description": "Jatkuva kuukausipalvelu julkaisun jälkeen: hakusanojen seuranta ja sivuston parantaminen.",
+            "priceCurrency": "EUR",
+            "price": "290",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "priceCurrency": "EUR",
+              "price": "290",
               "unitCode": "MON",
               "valueAddedTaxIncluded": false
             }

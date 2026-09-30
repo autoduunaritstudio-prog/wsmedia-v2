@@ -14805,12 +14805,12 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    valo) tyhjan .osio-valo-elementin ensimmaiseksi lapseksi ja merkitsee
    osion data-valokerros-attribuutilla. Valo piirretaan elementtiin samoin
    arvoin kuin ::before, ja ::before sammuu. Ilman JS:aa ::before jaa. */
-.page-lyhytvideot [data-valokerros]::before { content: none !important }
-.page-lyhytvideot .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut) [data-valokerros]::before { content: none !important }
+:is(.page-lyhytvideot, .page-verkkosivut) .osio-valo {
   position: absolute; inset: 0; z-index: -1; pointer-events: none;
   will-change: transform;
 }
-.page-lyhytvideot .seo-sec > .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut) .seo-sec > .osio-valo {
   
   --v: var(--valo-q, var(--valo, .5));
   background:
@@ -14825,7 +14825,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
   mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
 }
-.page-lyhytvideot .seo-sec:nth-of-type(even) > .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut) .seo-sec:nth-of-type(even) > .osio-valo {
   background:
     radial-gradient(
       calc(44% + var(--v) * 14%) calc(26% + var(--v) * 10%)
@@ -14836,7 +14836,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
       at calc(90% - var(--v) * 22%) calc(76% - var(--v) * 22%),
       rgba(0,124,143,.14), transparent 72%);
 }
-.page-lyhytvideot .jakso-pari > .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut) .jakso-pari > .osio-valo {
   
   --v: var(--valo-q, var(--valo, .5));
   background:
@@ -14877,37 +14877,37 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    olisi reduced-motion-kayttajilla, joilta kellunta on pois. */
 .nm { will-change: transform }
 
-/* ---------- LYHYTVIDEOT: B-ROLL-OSIOIDEN TEKSTIT SULAVIKSI ----------
+/* ---------- LYHYTVIDEOT JA VERKKOSIVUT: B-ROLL-OSIOIDEN TEKSTIT SULAVIKSI ----------
    Vaitteen ja laatan tekstit seuraavat vieritysta (--rvp) suoraan, joten
    jokainen hiiren rullan askel siirsi niita kerralla ja liike tokki.
    Lyhyt siirtyma samoille ominaisuuksille pehmentaa askeleet: teksti
    liukuu kohti vierityksen maaraamaa paikkaa. opacity ja translate
    kulkevat kompositoinnissa, ja oma kerros (will-change) pitaa ne
    siella myos Safarissa. */
-.page-lyhytvideot .vaite[data-rvs] .vaite-teksti,
-.page-lyhytvideot .vaite[data-rvs] .vaite-alla,
-.page-lyhytvideot .vaite[data-rvs] .vaite-teksti b > i,
-.page-lyhytvideot .laatta[data-rvs] .laatta-kick,
-.page-lyhytvideot .laatta[data-rvs] .laatta-lause,
-.page-lyhytvideot .laatta[data-rvs] .laatta-alla,
-.page-lyhytvideot .laatta[data-rvs] .laatta-lause b > i {
+:is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-teksti,
+:is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-alla,
+:is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-teksti b > i,
+:is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-kick,
+:is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-lause,
+:is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-alla,
+:is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-lause b > i {
   will-change: opacity, translate;
   transition:
     opacity .55s cubic-bezier(.22,.61,.36,1),
     translate .55s cubic-bezier(.22,.61,.36,1);
 }
-.page-lyhytvideot .vaite[data-rvs] .swrap::after,
-.page-lyhytvideot .laatta .laatta-teksti .swrap::before {
+:is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .swrap::after,
+:is(.page-lyhytvideot, .page-verkkosivut) .laatta .laatta-teksti .swrap::before {
   transition: scale .55s cubic-bezier(.22,.61,.36,1);
 }
 @media (prefers-reduced-motion: reduce) {
-  .page-lyhytvideot .vaite[data-rvs] .vaite-teksti,
-  .page-lyhytvideot .vaite[data-rvs] .vaite-alla,
-  .page-lyhytvideot .vaite[data-rvs] .vaite-teksti b > i,
-  .page-lyhytvideot .laatta[data-rvs] .laatta-kick,
-  .page-lyhytvideot .laatta[data-rvs] .laatta-lause,
-  .page-lyhytvideot .laatta[data-rvs] .laatta-alla,
-  .page-lyhytvideot .laatta[data-rvs] .laatta-lause b > i { transition: none }
+  :is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-teksti,
+  :is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-alla,
+  :is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-teksti b > i,
+  :is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-kick,
+  :is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-lause,
+  :is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-alla,
+  :is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-lause b > i { transition: none }
 }
 
 /* ---------- LYHYTVIDEOT: OSIOIDEN VALIT TIIVIIMMIKSI ----------
@@ -14916,25 +14916,28 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    noin 170px tyhjaa. Nyt 8vh (64..96px). Miksi-osion ja heron alla
    olevan tilastonauhan omat vara-arvot pysyvat. */
 .page-lyhytvideot .seo-sec[id]:not(#miksi) { padding-block: clamp(64px, 8vh, 96px) }
+/* Sama tiivistys verkkosivut-sivulle. Siella Miksi-osiolla ei ole omaa
+   vara-arvoa, joten se tiivistyy muiden mukana. */
+.page-verkkosivut .seo-sec[id] { padding-block: clamp(64px, 8vh, 96px) }
 
-/* ---------- LYHYTVIDEOT: PYSYVA PALKKI AUKEAA NAPISTA ----------
+/* ---------- LYHYTVIDEOT JA VERKKOSIVUT: PYSYVA PALKKI AUKEAA NAPISTA ----------
    Palkissa nakyy vain nappi. Selite liukuu esiin napin vasemmalle
    puolelle kun hiiri osuu nappiin, ja pysyy auki niin kauan kuin hiiri
    on palkin paalla. Vain hiirella kaytettavilla naytoilla; kapealla
    naytolla palkki toimii kuten ennenkin. */
 @media (min-width: 721px) and (hover: hover) {
-  .page-lyhytvideot .cta-palkki {
+  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki {
     gap: 0; padding: 8px;
     transition:
       opacity .32s ease, translate .32s cubic-bezier(.2,.6,.2,1),
       gap .45s cubic-bezier(.22,.61,.36,1), padding .45s cubic-bezier(.22,.61,.36,1);
   }
-  .page-lyhytvideot .cta-palkki p {
+  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki p {
     max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap;
     transition: max-width .45s cubic-bezier(.22,.61,.36,1), opacity .3s ease;
   }
-  .page-lyhytvideot .cta-palkki:has(.btn:hover, .btn:focus-visible),
-  .page-lyhytvideot .cta-palkki.nayta:has(p:hover) { gap: 22px; padding-left: 22px }
-  .page-lyhytvideot .cta-palkki:has(.btn:hover, .btn:focus-visible) p,
-  .page-lyhytvideot .cta-palkki.nayta:has(p:hover) p { max-width: 460px; opacity: 1 }
+  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki:has(.btn:hover, .btn:focus-visible),
+  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki.nayta:has(p:hover) { gap: 22px; padding-left: 22px }
+  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki:has(.btn:hover, .btn:focus-visible) p,
+  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki.nayta:has(p:hover) p { max-width: 460px; opacity: 1 }
 }

@@ -63,14 +63,14 @@ export default function Hero() {
               kirjoitetaan siis auki: kaksi tasapainoista riviä ja
               vaihtuva lause omanaan. */}
           <h1 className="li d2" id="paasisalto" tabIndex={-1}>
-            Verkkosivut{" "}
+            Kotisivut{" "}
             <br />
             yritykselle, jotka{" "}
             <br />
             <WordSwap words={WORDS} deferToClient />
           </h1>
           <p className="sub li d3">
-            Verkkosivujen suunnittelu ja toteutus avaimet käteen: sivurakenne, tekstit, tekninen
+            Kotisivujen ja verkkosivujen suunnittelu ja toteutus avaimet käteen: sivurakenne, tekstit, tekninen
             hakukoneoptimointi ja julkaisu. Perussivustosta täysin räätälöityyn toteutukseen,
             kiinteällä projektihinnalla.
           </p>

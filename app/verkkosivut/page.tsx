@@ -25,9 +25,9 @@ import {
 } from "./components/sections";
 
 export const metadata: Metadata = {
-  title: "Verkkosivut yritykselle | Kotisivujen suunnittelu ja toteutus | WS Media",
+  title: "Kotisivut yritykselle alk. 1 490 € | Espoo | WS Media",
   description:
-    "Verkkosivut yritykselle avaimet käteen: suunnittelu, tekstit ja tekninen hakukoneoptimointi. Nopeat kotisivut kiinteällä projektihinnalla, ei piilokuluja. Espoo ja koko Suomi.",
+    "Kotisivut ja nettisivut yritykselle avaimet käteen: suunnittelu, tekstit ja hakukoneoptimointi. Kiinteä hinta alk. 1 490 € + alv, ylläpito 49 €/kk.",
   alternates: { canonical: "https://wsmedia.fi/verkkosivut" },
   robots: { index: true, follow: true },
   openGraph: {
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     locale: "fi_FI",
     siteName: "WS Media",
     url: "https://wsmedia.fi/verkkosivut",
-    title: "Verkkosivut yritykselle | Kotisivujen suunnittelu ja toteutus | WS Media",
+    title: "Kotisivut yritykselle alk. 1 490 € | Espoo | WS Media",
     description:
-      "Verkkosivut yritykselle avaimet käteen: suunnittelu, tekstit ja tekninen hakukoneoptimointi. Kiinteä projektihinta.",
+      "Kotisivut ja nettisivut yritykselle avaimet käteen: suunnittelu, tekstit ja hakukoneoptimointi. Kiinteä hinta alk. 1 490 € + alv, ylläpito 49 €/kk.",
   },
 };
 
@@ -154,14 +154,14 @@ export default function Verkkosivut() {
               sama kuva olisi ollut sivulla kahdesti.
 
               Nyt kuvassa piirretaan sivun rautalankamallia kynalla, ja
-              lause sanoo tasan sen: valmispohjassa sivu valitaan,
-              raataloidyssa se piirretaan. Se on myos seuraavan osion
-              kysymys. */}
+              lause sanoo sen: rakenne piirretaan ennen ulkoasua. */}
+          {/* Kehotuspalkki alkaa tasta, kuten lyhytvideosivulla. Ks. Palkki.tsx. */}
           <Vaite
+            palkkiAlkaa
             kuva="/verkkosivut/luonnos.webp"
-            alla="Valitseminen on nopeampaa, piirtäminen antaa sivun jonka rakenne on päätetty eikä peritty. Kumpi kannattaa, riippuu alasta ja aikataulusta."
+            alla="Kun rakenne on mietitty valmiiksi, jokaisella sivulla on selvä tehtävä: mitä kävijä etsii, mitä hän saa selville ja mistä hän ottaa yhteyttä."
           >
-            Valmispohjassa sivu valitaan. Räätälöidyssä se <b><i>piirretään.</i></b>
+            Sivun rakenne kannattaa <b><i>piirtää ennen ulkoasua.</i></b>
           </Vaite>
 
           <div className="pino">
@@ -197,9 +197,9 @@ export default function Verkkosivut() {
                 <div className="pino">
                   <Vaite
                     kuva="/verkkosivut/naytto.webp"
-                    alla="Hinta päätetään ennen kuin työ alkaa, eikä se perustu arvioon käytetyistä tunneista vaan sivumäärään ja sisällön laajuuteen."
+                    alla="Hinta perustuu sivumäärään ja sisällön laajuuteen, ei arvioon tunneista. Näet tarjouksesta, mitä siihen sisältyy."
                   >
-                    Emme kilpaile hinnalla vaan sillä, että sivusto <b><i>löytyy ja myy.</i></b>
+                    Verkkosivujen hinta sovitaan <b><i>ennen kuin työ alkaa.</i></b>
                   </Vaite>
 
                   {/* SIVUN HANTA ON YKSI PINTA.
@@ -239,7 +239,11 @@ export default function Verkkosivut() {
         brandHeading="h2"
       />
 
-      <Palkki />
+      <Palkki
+        otsikko="Kiinteähintainen tarjous"
+        selite="Kerro mitä yritys tekee, saat hinnan 24 tunnissa. Ei sido mihinkään."
+        nappi="Pyydä tarjous"
+      />
       <SiteEffects />
     </div>
   );

@@ -91,7 +91,7 @@ export const INCLUDES = [
   ["Responsiivinen ja mobiilioptimoitu toteutus", "Sivusto suunnitellaan mobiili edellä ja testataan puhelimella, tabletilla ja työpöydällä ennen kuin se menee live-tilaan."],
   ["Lomakkeet ja yhteydenottopolut", "Yhteydenotto- ja tarjouspyyntölomakkeet, soittopainikkeet ja selkeät CTA-napit siellä, missä kävijä on valmis toimimaan."],
   ["Analytiikka ja mittaus", "Google Analytics ja Search Console asennettuna, jotta näet mistä kävijät tulevat ja mikä sivu tuottaa yhteydenottoja."],
-  ["Verkkotunnus, palvelintila ja SSL-suojaus", "Hoidamme verkkotunnuksen, palvelintilan ja SSL-suojauksen. Ensimmäinen vuosi sisältyy hintaan, tunnus on yrityksesi nimissä."],
+  ["Verkkotunnus, palvelintila ja SSL-suojaus", "Hoidamme verkkotunnuksen, palvelintilan ja SSL-suojauksen ylläpitomaksulla 49 €/kk + alv. Verkkotunnus on yrityksesi nimissä."],
 ];
 
 /* ---------- Toteutustapa ---------- */
@@ -309,7 +309,7 @@ export const SEO_POINTS = [
   ["Nopeat latausajat", "Google mittaa sivuston nopeutta oikeilta käyttäjiltä. Hidas sivu ei ainoastaan menetä kävijää, se menettää myös sijoituksia, ja mobiilissa ero on suurin."],
   ["Selkeä sivurakenne ja sisäinen linkitys", "Sivut linkittyvät toisiinsa niin, että Google löytää ne kaikki ja ymmärtää minkä palvelun alle mikin kuuluu. Ilman linkitystä yksittäinen sivu jää irralleen, vaikka se olisi kirjoitettu hyvin."],
   ["Optimoitu sisältö ja oikeat hakusanat", "Tekstit kirjoitetaan niillä sanoilla, joilla asiakkaat oikeasti hakevat. Otsikot, metatiedot ja sisältö vastaavat siihen kysymykseen, joka hakuun johti."],
-  ["Hyvä käyttäjäkokemus", "Google seuraa, jääkö kävijä sivulle vai palaako hän hakutuloksiin. Selkeä rakenne, luettava teksti ja toimiva mobiilinäkymä pitävät kävijän sivulla."],
+  ["Hyvä käyttäjäkokemus", "Kävijä, joka ei löydä etsimäänsä, palaa hakutuloksiin ja valitsee seuraavan sivuston. Selkeä rakenne, luettava teksti ja toimiva mobiilinäkymä pitävät hänet sivulla."],
 ];
 
 /* SIVUSTOKARTTA OLI LUETTAVISSA VAIN SEN KIRJOITTAJALLE.
@@ -372,7 +372,7 @@ export const FIGS = [
 export const PLANS = [
   {
     h: "Startti",
-    for: "Yritykselle, joka tarvitsee uskottavat kotisivut nopeasti.",
+    for: "Pienyrittäjälle, joka tarvitsee uskottavat kotisivut nopeasti.",
     li: ["Etusivu ja 3 alasivua", "Ulkoasu ja tekstit valmiina", "Tekninen hakukoneoptimointi", "Yhteydenottolomake ja analytiikka", "Julkaisu 2 viikossa"],
     price: "1 490",
     unit: "€ + alv",
@@ -454,11 +454,13 @@ export const EI_SOVI: [string, string][] = [
  * Karsitut sailyvat faq.tsx:ssa, joten FAQPage-merkinta ei koydy.
  */
 export const UKK_KYSYMYKSET = [
-  "Paljonko verkkosivut maksavat yritykselle?",
+  "Paljonko kotisivut maksavat yritykselle?",
   "Mitä verkkosivujen hinta sisältää?",
   "Kuinka nopeasti verkkosivut valmistuvat?",
   "Onko pakko sitoutua kuukausimaksuun?",
-  "Käytättekö WordPressiä?",
+  "Paljonko verkkosivujen ylläpito maksaa?",
+  "Teettekö WordPress-kotisivut yritykselle?",
+  "Mikä ero on kotisivuilla, nettisivuilla ja verkkosivuilla?",
   "Voinko päivittää sisältöä itse?",
   "Kuka omistaa sivuston ja verkkotunnuksen?",
   "Pitääkö minulla olla valmiit tekstit ja kuvat?",

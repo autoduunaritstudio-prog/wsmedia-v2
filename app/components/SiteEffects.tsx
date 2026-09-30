@@ -197,7 +197,7 @@ export default function SiteEffects() {
     /* Valon oma kerros, ks. globals.css "OSION VALO OMANA ELEMENTTINAAN".
        Vain lyhytvideosivulla ja vain osioihin joiden ::before on valo. */
     const valoKerros = new WeakMap<HTMLElement, HTMLElement>();
-    if (document.querySelector(".page-lyhytvideot")) {
+    if (document.querySelector(".page-lyhytvideot, .page-verkkosivut")) {
       for (const el of valoEls) {
         const pse = getComputedStyle(el, "::before");
         if (pse.content === "none" || !pse.backgroundImage.includes("radial-gradient")) continue;
@@ -214,7 +214,10 @@ export default function SiteEffects() {
        kirjoitettiin silti koko osioon. */
     const valoQLukija = new WeakMap<HTMLElement, boolean>();
     for (const el of valoEls) {
-      valoQLukija.set(el, getComputedStyle(el, "::before").backgroundImage.includes("radial-gradient"));
+      // content: none tarkoittaa, ettei ::before piirry lainkaan (jakson
+      // sisalla valo on jaksolla, ei osiolla). Silloin lukijaa ei ole.
+      const pse = getComputedStyle(el, "::before");
+      valoQLukija.set(el, pse.content !== "none" && pse.backgroundImage.includes("radial-gradient"));
     }
     const valoY = new WeakMap<HTMLElement, { y: number; h: number }>();
     const mittaaValo = () => {
