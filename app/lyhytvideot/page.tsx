@@ -28,12 +28,18 @@ import {
 import { Laatta, Vaite } from "../components/Maasto";
 import { structuredData } from "./structured-data";
 
-const TITLE = "Lyhytvideotuotanto yrityksille | TikTok, Reels & Shorts | WS Media";
+/* HAKUSANAT 30.9.2026 (Google Ads Keyword Planner, Suomi): "lyhytvideot"
+   100-1 t./kk, "lyhytvideot yritykselle" 10-100 ja kilpailu suuri,
+   "somevideo", "somevideot" ja "somevideo hinta" 10-100 kukin.
+   "Somevideot" puuttui sivulta kokonaan, ja Espoo puuttui titlesta.
+   TikTok, Reels ja Shorts tuovat lahinna oppaita hakevia, joten ne
+   ovat H2:ssa eivatka titlessa. */
+const TITLE = "Lyhytvideot ja somevideot yrityksille | Espoo | WS Media";
 /* 220 merkkia oli selvasti pidempi kuin hakutuloksessa nakyva osuus,
    joten loppu katkesi: "Espoo, Helsinki ja koko Suomi" ei nakynyt
    kenellekaan. 155 merkkia mahtuu, ja tarkein jaa alkuun. */
 const DESCRIPTION =
-  "Lyhytvideot yrityksille avaimet käteen: käsikirjoitus, kuvaus ja editointi TikTokiin, Reelsiin ja Shortsiin. Kiinteä kuukausihinta, ei pitkiä sopimuksia.";
+  "Somevideot ja lyhytvideot yrityksille TikTokiin, Reelsiin ja Shortsiin. Suunnittelu, kuvaus ja editointi kiinteään kuukausihintaan, ei pitkiä sopimuksia.";
 /* OG_IMAGE poistui. Se osoitti tiedostoon jota ei ole olemassa, eli
    jaettu linkki nayttaa rikkinaisen kuvan sijasta ei mitaan. Kuva
    generoidaan nyt kaannoksessa, ks. app/og-kuva.tsx ja taman kansion
@@ -58,11 +64,11 @@ export const metadata: Metadata = {
     url: "https://wsmedia.fi/lyhytvideot",
     title: TITLE,
     description:
-      "Lyhytvideot yrityksille avaimet käteen: strategia, käsikirjoitus, kuvaus ja editointi. Kiinteä kuukausihinta, ei pitkiä sopimuksia.",
+      "Somevideot ja lyhytvideot yrityksille: suunnittelu, kuvaus ja editointi kiinteään kuukausihintaan. Kuvaukset Espoossa, Helsingissä ja Vantaalla.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lyhytvideotuotanto yrityksille | WS Media",
+    title: "Lyhytvideot ja somevideot yrityksille | WS Media",
     description:
       "TikTok, Instagram Reels ja YouTube Shorts avaimet käteen. Kiinteä kuukausihinta, ei pitkiä sopimuksia.",
   },
@@ -91,7 +97,9 @@ const STATS = [
      "Toimitettu 7 paivassa". Kaksi lukua samasta asiasta yhdella
      ruudulla lukee virheena, ja lukija uskoo kumman tahansa. */
   { value: "7", label: "päivää keskim. toimitusaika" },
-  { value: "4,8/5", label: "keskiarvosana asiakkailta" },
+  /* 4,8/5 poistettiin: arvosana oli suullista palautetta eika mitattu
+     luku. Tilalle YDR:n tulos, jonka Tuomas vahvisti 30.9.2026. */
+  { value: "1\u00A0000\u00A0000+", label: "katselukertaa yhdelle asiakkaalle 3 kk:ssa" },
 ];
 
 export default function Lyhytvideot() {
@@ -162,8 +170,8 @@ export default function Lyhytvideot() {
                       Yksi päivä, <b><i>useita kanavia.</i></b>
                     </p>
                     <p className="laatta-alla">
-                      Samasta kuvauspäivästä syntyy sisältö TikTokiin, Reelsiin, Shortsiin ja
-                      LinkedIniin. Tuotantokustannus jakautuu monelle kanavalle.
+                      Kuvaamme kerralla usean videon materiaalit, joten sinun ei tarvitse
+                      varata aikaa kuvauksiin joka viikko.
                     </p>
                   </Laatta>
 

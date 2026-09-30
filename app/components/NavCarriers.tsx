@@ -283,8 +283,17 @@ export default function NavCarriers() {
     let idle = true;
     const root = document.documentElement;
 
+    let lepoY = -1;
+    let lepoW = -1;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
+      /* Hahmot liikkuvat vierityksen mukaan. Kun ne ovat piilossa (idle)
+         eika sivu ole liikkunut, kehyksessa ei ole mitaan tehtavaa:
+         aiemmin se luki silti kolme elementin sijaintia joka kehys. */
+      const sy = window.scrollY;
+      if (idle && sy === lepoY && window.innerWidth === lepoW) return;
+      lepoY = sy;
+      lepoW = window.innerWidth;
       const r = strip.getBoundingClientRect();
 
       // Scroll-nopeus rectin muutoksesta: nauha liikkuu sivun mukana, joten

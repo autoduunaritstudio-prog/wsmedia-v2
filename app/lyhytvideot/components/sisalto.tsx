@@ -6,23 +6,23 @@
 export const REASONS = [
   {
     art: "hook",
-    h: "Ensimmäiset kolme sekuntia ratkaisevat",
-    p: "Koukku, rytmi ja leikkauspisteet määrittävät katseluajan. Rakennamme jokaisen videon aloituksen niin, että skrollaus pysähtyy.",
+    h: "Alku ratkaisee, katsotaanko video loppuun",
+    p: "Katsoja päättää muutamassa sekunnissa, jatkaako hän. Siksi jokainen käsikirjoitus alkaa siitä, mikä kiinnostaa sinun asiakastasi, eikä yrityksen esittelystä.",
   },
   {
     art: "channels",
     h: "Yksi kuvauspäivä, useita kanavia",
-    p: "Samasta kuvauspäivästä syntyy sisältö TikTokiin, Reelsiin, Shortsiin ja LinkedIniin. Tuotantokustannus jakautuu monelle kanavalle.",
+    p: "Samasta kuvauspäivästä syntyvät videot TikTokiin, Reelsiin, Shortsiin ja tarvittaessa LinkedIniin. Sama kuvauspäivä riittää kaikkiin kanaviin.",
   },
   {
     art: "funnel",
-    h: "Sisältö, joka tekee myös kauppaa",
-    p: "Näyttökerrat ovat välitavoite. Ohjaamme katsojan verkkosivuille, yhteydenottolomakkeelle tai myymälään ja mittaamme, mitä siitä seuraa.",
+    h: "Tavoite on yhteydenotto, ei pelkät katselut",
+    p: "Jokaisen videon lopussa sanotaan, mitä katsojan kannattaa tehdä seuraavaksi. Seuraamme katselujen lisäksi, tuleeko sivuillesi kävijöitä ja yhteydenottoja.",
   },
   {
     art: "reach",
-    h: "Orgaaninen näkyvyys ilman mainosbudjettia",
-    p: "Lyhytvideoiden algoritmi jakaa sisältöä kiinnostuksen, ei seuraajamäärän mukaan. Uusi tili voi tavoittaa saman yleisön kuin vakiintunut brändi.",
+    h: "Näkyvyyttä ilman mainosbudjettia",
+    p: "Somepalvelut näyttävät videoita myös ihmisille, jotka eivät vielä seuraa tiliäsi. Uuden tilin video voi levitä yhtä laajalle kuin tunnetun yrityksen.",
   },
 ];
 
@@ -34,35 +34,35 @@ export const PLATFORMS = [
   {
     mark: "tiktok" as const,
     h: "TikTok-videot yritykselle",
-    p: "Nopein kanava uuden yleisön tavoittamiseen nollasta. Toimii, kun sisältö on aitoa ja rytmikästä ja puhuu katsojan kielellä, ei mainospuhetta.",
+    p: "TikTokissa uusikin tili voi tavoittaa paljon katsojia, joten se sopii hyvin, kun somenäkyvyyttä vasta rakennetaan. Parhaiten toimii rento video, joka puhuu katsojan kielellä eikä kuulosta mainokselta.",
   },
   {
     mark: "instagram" as const,
     h: "Instagram Reels yritykselle",
-    p: "Laajin ikäjakauma ja vahvin ostopolku Suomessa. Reels tuo uudet katsojat, feed ja tarinat hoitavat luottamuksen rakentamisen.",
+    p: "Instagramia käyttävät kaikenikäiset, ja moni katsoo yrityksen tilin ennen kuin ottaa yhteyttä. Reels tuo uusia katsojia, ja tilin muut julkaisut kertovat, millainen yritys olet.",
   },
   {
     mark: "youtube" as const,
     h: "YouTube Shorts yritykselle",
-    p: "Shorts tuo uudet katsojat kanavalle, ja pidemmät videot syventävät asiantuntijuutta. Sisältö löytyy myös haulla vielä kuukausien päästä.",
+    p: "Shorts-videot löytyvät YouTuben ja Googlen hauista vielä kuukausien päästä. Ne tuovat kanavalle uusia katsojia, ja pidemmät videot kertovat osaamisestasi tarkemmin.",
   },
 ];
 
 export const KETJU = [
   {
-    over: "Brändiarvo",
+    over: "Tunnettuus",
     h: "Lyhytvideot",
-    p: "Orgaaninen näkyvyys TikTokissa, Reelsissä ja Shortsissa. Ihmiset oppivat, kuka olet ja mitä teet, jo ennen kuin heillä on tarve.",
+    p: "Näkyvyys TikTokissa, Reelsissä ja Shortsissa ilman mainoksia. Ihmiset oppivat, kuka olet ja mitä teet, jo ennen kuin he tarvitsevat palveluasi.",
   },
   {
     over: "Kysyntä",
     h: "Meta-mainonta",
-    p: "Parhaiten orgaanisesti toimineet videot viedään Facebook- ja Instagram-mainonnaksi. Sisältö on jo todistettu yleisöllä, joten mainoseuro menee toistoihin ja kohdennukseen.",
+    p: "Parhaiten toimineista videoista tehdään Facebook- ja Instagram-mainoksia. Mainosrahaa ei kulu kokeiluun, koska tiedät jo, mikä video kiinnostaa katsojia.",
   },
   {
-    over: "Liidit",
+    over: "Yhteydenotot",
     h: "Hakukoneoptimointi",
-    p: "Video luo kysynnän, hakukone korjaa sadon. Kun ostaja googlaa palveluasi, hakukoneoptimoitu sivusto vie hänet yhteydenottolomakkeelle. Tuottaa liikennettä myös silloin, kun videot eivät pyöri.",
+    p: "Kun videon nähnyt ihminen myöhemmin hakee palvelua Googlesta, hänen pitää löytää sinun sivusi eikä kilpailijan. Hakukoneoptimoitu sivusto tuo kävijöitä myös kuukausina, jolloin videoita ei julkaista.",
   },
 ];
 
@@ -77,11 +77,11 @@ export const STEPS = [
   },
   {
     h: "Kuvauspäivä",
-    p: "Kuvaamme sinun tiloissasi tai sovitussa paikassa. Yhdestä päivästä syntyy tyypillisesti [X] lyhytvideota.",
+    p: "Kuvaamme sinun tiloissasi tai sovitussa paikassa. Yhdestä kuvauspäivästä syntyvät koko kuukauden videot.",
   },
   {
     h: "Editointi ja julkaisu",
-    p: "Leikkaus, tekstitykset ja alustakohtainen optimointi. Julkaisemme sovitusti tai toimitamme videot julkaisuvalmiina.",
+    p: "Leikkaus, tekstitykset ja musiikki. Julkaisemme videot puolestasi tai toimitamme ne valmiina julkaistavaksi.",
   },
 ];
 
@@ -89,50 +89,56 @@ export const PLANS = [
   {
     tag: "",
     name: "Aloitus",
+    price: "1 500",
     lv: 1,
     /** Montako alustatunnusta korostetaan. */
     kanavia: 1,
     kanavaTeksti: "Yksi kanava valintasi mukaan",
     forWhom: "Yrityksille, jotka aloittavat lyhytvideotuotannon.",
     features: [
-      "[X] lyhytvideota kuukaudessa",
+      "4 lyhytvideota kuukaudessa",
+      "Esiintyjä videoille",
       "1 kuvauspäivä",
       "Käsikirjoitus, editointi ja tekstitys",
-      "Optimointi 1 kanavalle",
-      "Toimitus [X] arkipäivässä",
+      "Toimitus noin 7 päivässä kuvauksesta",
     ],
   },
   {
-    tag: "Suosituin",
-    name: "Jatkuva",
+    /* "Suosituin" poistettiin: vaite ilman lahdetta. Korostus jaa. */
+    tag: "",
+    name: "Ylläpito",
+    price: "2 200",
     lv: 2,
     kanavia: 3,
     kanavaTeksti: "TikTok, Reels ja Shorts",
-    forWhom: "Yrityksille, jotka haluavat jatkuvaa näkyvyyttä.",
+    forWhom: "Yrityksille, jotka haluavat koko Instagram-tilin hoidettuna.",
     peruste: "Yleisin valinta, kun tavoitteena on säännöllinen julkaisutahti.",
     lisaa: "Kaikki Aloitus-paketin sisältö, ja lisäksi:",
     features: [
-      "[X] lyhytvideota kuukaudessa",
-      "Monikanavainen optimointi",
-      "Esiintyjä sovittaessa",
-      "Julkaisu ja kuukausiraportti",
+      "Kaikki Aloitus-paketin sisältö",
+      "Tarinat eli stoorit",
+      "Karusellit ja kuvajulkaisut",
+      "Tilin ylläpito ja julkaisut puolestasi",
     ],
     pop: true,
   },
   {
     tag: "",
-    name: "Täysi näkyvyys",
+    name: "Räätälöity",
+    price: "",
     lv: 3,
     kanavia: 3,
     linkedin: true,
     kanavaTeksti: "TikTok, Reels, Shorts ja LinkedIn",
-    forWhom: "Yrityksille, jotka haluavat koko näkyvyyden kerralla.",
+    forWhom: "Yrityksille, jotka haluavat kasvattaa tiliä nopeammin.",
     lisaa: "Kaikki Jatkuva-paketin sisältö, ja lisäksi:",
     features: [
-      "[X] lyhytvideota kuukaudessa",
-      "[X] kuvauspäivää",
+      "Kaikki Ylläpito-paketin sisältö",
+      "Yhteisjulkaisukumppanien etsiminen",
+      "Koukkujen testaus: sama video eri aloituksilla",
+      "Videomäärä ja kuvauspäivät tarpeen mukaan",
       "Meta-mainonnan hallinnointi",
-      "Kuukausittainen strategiapalaveri",
+      "Kuukausittainen suunnittelupalaveri",
     ],
   },
 ];
@@ -140,8 +146,8 @@ export const PLANS = [
 export const SOPII = [
   "Yrityksesi ei näy siellä missä asiakkaat viettävät aikansa",
   "Somekanavat ovat olemassa, mutta sisältöä ei ehdi tehdä",
-  "Meta-mainonta on käynyt kalliiksi ja haluat orgaanista näkyvyyttä rinnalle",
-  "Videoita on tehty itse, mutta katseluajat jäävät lyhyiksi",
+  "Somemainonta on käynyt kalliiksi ja haluat näkyvyyttä myös ilman mainoksia",
+  "Videoita on tehty itse, mutta niitä katsotaan harvoin loppuun",
 ];
 
 export const EI_SOVI = [
@@ -151,7 +157,7 @@ export const EI_SOVI = [
   },
   {
     tilanne: "Odotat tuloksia jo ensimmäisestä kuukaudesta",
-    suositus: "Käänne tulee tyypillisesti [X] kuukauden kohdalla",
+    suositus: "Selvä muutos näkyy tyypillisesti toisen kuukauden aikana",
   },
 ];
 

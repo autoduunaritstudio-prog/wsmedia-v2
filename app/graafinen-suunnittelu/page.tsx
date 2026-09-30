@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
 
-import Backdrop from "../components/Backdrop";
 import Footer from "../components/Footer";
+import Jakso from "../components/Jakso";
+import Logos from "../components/Logos";
+import NetBackdrop from "../components/NetBackdrop";
 import Nav from "../components/Nav";
+import Palkki from "../components/Palkki";
 import SiteEffects from "../components/SiteEffects";
-import SmartLink from "../components/SmartLink";
+import { Vaite } from "../components/Maasto";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
-import Stage from "./Stage";
+import Hero from "./components/Hero";
 import { buildJsonLd } from "./jsonld";
-import { Miksi, Palvelut, Prosessi, Hinta, Tiedostot, Materiaalit } from "./sections";
-import { Kenelle, Alueet, Kaytannossa, Blogi, Tarjous, Loppu } from "./sections2";
+import { Materiaalit, Miksi, Palvelut, Prosessi, Tiedostot } from "./sections";
+import { Alueet, Hinta, Kaytannossa, Kenelle, Tarjous } from "./sections2";
 import { Ukk } from "./ukk";
 
 const TITLE = "Graafinen suunnittelu yritykselle | Yritysilme ja teippaukset | WS Media";
@@ -28,81 +31,142 @@ export const metadata: Metadata = {
     siteName: "WS Media",
     url: "https://wsmedia.fi/graafinen-suunnittelu",
     title: TITLE,
+    /* Ajatusviivat pois: ne paljastavat koneen kirjoittaman tekstin, ja
+       tama pätkä nakyy jaetussa linkissa sellaisenaan. */
     description:
-      "Logo, yritysilme ja graafinen ohjeisto — sekä käyntikortit, teippaukset ja kyltit valmiiksi asennettuna. Yksi tarjous, yksi lasku.",
+      "Logo, yritysilme ja graafinen ohjeisto sekä käyntikortit, teippaukset ja kyltit valmiiksi asennettuna. Yksi tarjous, yksi lasku.",
   },
 };
 
 export default function GraafinenSuunnittelu() {
   return (
-    <div className="page-palvelu page-graafinen-suunnittelu">
+    <div className="page-palvelu page-graafinen-suunnittelu wsx">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd()) }}
       />
 
-      <Backdrop variant="simple" />
+      {/* SIVUTASON VERKOSTO. Sama kerros ja sama paikka kuin kolmella
+          muulla palvelusivulla: yksi verkosto koko sivulle. Sivulla oli
+          aiemmin <Backdrop variant="simple" />, joka on vaalean ilmeen
+          pohja eika kuulu tahan kuvakieleen lainkaan. */}
+      <NetBackdrop merkit={false} />
+
+      {/* RAE. Sama kiintea rakeinen kalvo kuin muilla palvelusivuilla:
+          tasainen digitaalinen pinta lukee tyhjana. */}
+      <div className="rae" aria-hidden="true" />
       <div id="prog" />
+
       <Nav
         anchorBase="/"
         links={OVERLAY_NAV}
+        ohitaKohde="#paasisalto"
         ctaHref="#tarjous"
         ctaLabel="Pyydä tarjous"
         logoHref="/"
       />
 
-      <div className="wrap crumbs">
-        <nav aria-label="Murupolku">
-          <ol>
-            <li>
-              <SmartLink href="/">Etusivu</SmartLink>
-            </li>
-            <li>
-              <SmartLink href="/#palvelut">Palvelut</SmartLink>
-            </li>
-            <li aria-current="page">Graafinen suunnittelu</li>
-          </ol>
-        </nav>
+      {/* PINNATTU HERO JA PEITTAVA COVER, sama tekniikka kuin
+          Verkkosivuilla ja Lyhytvideoilla. Hero jaa kiinni nakyman
+          ylareunaan, ja vasta sen jalkeen cover liukuu sen paalle.
+          Pari ja sen cover ovat saman kaareen lapsia: se on ehto jonka
+          rikkominen kaataa pinnauksen aanettomasti.
+
+          Coverin ylareunassa on asiakaslogonauha: ensimmainen asia joka
+          nousee heron paalle on todiste, ei uusi myyntilause.
+
+          Murupolku poistui virrasta. Se oli 33px korkea rivi ylisuuren
+          otsikon ylapuolella, ja pinnatun heron kanssa se olisi jaanyt
+          coverin alle nakymattomiin. BreadcrumbList-merkinta sailyy
+          jsonld.ts:ssa. */}
+      <div className="stickysub">
+        <Hero />
+        <div className="cover">
+          <NetBackdrop mount="cover" />
+          <Logos />
+
+          {/* YKSI PEITTOKETJU, HENGAHDYS JOKA TOINEN VAIHE.
+              =======================================================
+              Sivu oli aiemmin kolmetoista perakkaista osiota
+              tavallisessa virtauksessa: ei peittoa, ei hengahdyksia ja
+              ei rytmia. Nyt sama rakenne kuin kolmella muulla
+              palvelusivulla.
+
+              JAKSO ON YKSI VAIHE. Miksi ja Palvelut ovat yhdessa
+              lupaus ja sen sisalto, Prosessi ja Aineistot ovat "miten
+              se tehdaan ja mita siita jaa kateen", Materiaalit ja
+              Toiminta-alue ovat molemmat toteutuksen reunaehtoja, ja
+              hanta Hinnasta Tarjoukseen on yksi pinta.
+
+              Hengahdyksissa ei ole valokuvaa, koska talle sivulle ei
+              ole yhtaan omaa kuvaa. Vaite toimii ilmankin, ks.
+              Maasto.tsx: "lause tyhjalla pohjalla on vaite". Kun kuvat
+              tulevat, ne lisataan naihin kolmeen kohtaan. */}
+          <div className="pino">
+            <Jakso omaPohja={false}>
+              <Miksi />
+              <Palvelut />
+            </Jakso>
+
+            <div className="pino">
+              <Vaite alla="Sama auto ohittaa saman ihmisen kymmeniä kertoja kuukaudessa, mutta vain jos hän tunnistaa sen samaksi yritykseksi joka näkyi hakutuloksissa.">
+                Tunnistettavuus on halvin tapa <b><i>moninkertaistaa</i></b> jo tehty markkinointi.
+              </Vaite>
+
+              <div className="pino">
+                <Jakso>
+                  <Prosessi />
+                  <Tiedostot />
+                </Jakso>
+
+                <div className="pino">
+                  <Vaite
+                    palkkiAlkaa
+                    alla="Teippaus tekee siitä mainospinnan, joka näkyy joka ajokilometrillä ilman erillistä mediabudjettia."
+                  >
+                    Pakettiauto ajaa joka tapauksessa. Se on mediatila, joka on <b><i>jo maksettu.</i></b>
+                  </Vaite>
+
+                  <div className="pino">
+                    <Jakso>
+                      <Materiaalit />
+                      <Alueet />
+                    </Jakso>
+
+                    <div className="pino">
+                      <Vaite alla="Kartoitus ja tarjous ovat maksuttomia eivätkä sido mihinkään.">
+                        Hinta riippuu siitä, montako <b><i>pintaa ilme kattaa.</i></b>
+                      </Vaite>
+
+                      {/* SIVUN HANTA ON YKSI PINTA, ks. kolme muuta
+                          palvelusivua. Vierekkaiset kerrokset ovat aina
+                          kaksi eri kuviota, ja raja niiden valissa
+                          nakyy vaikka vari olisi sama. Yksi kaare, yksi
+                          kerros, viisi osiota sen sisalla. */}
+                      <Jakso>
+                        <Hinta />
+                        <Kenelle />
+                        <Ukk />
+                        <Kaytannossa />
+                        <Tarjous />
+                      </Jakso>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <header className="hero">
-        <div className="wrap">
-        <p className="kick li d1">Graafinen suunnittelu yritykselle</p>
-        <h1 className="li d2" data-par="0.05">Yksi ilme. <span className="accent">Kaikki pinnat.</span></h1>
-        <p className="sub li d3" data-par="0.035">Suunnittelemme logon, värit ja koko yritysilmeen — ja viemme sen käyntikortista pakettiauton kylkeen asti. Sinä et etsi painotaloa etkä teippaajaa: saat yhden tarjouksen, yhden yhteyshenkilön ja yhden laskun.</p>
-        <div className="heroctas li d4" data-par="0.025">
-        <a className="btn mag" href="#tarjous">Pyydä tarjous</a>
-        <a className="tlink" href="#hinta">Laske arvio hinnasta</a>
-        </div>
-        <p className="herotrust li d4">
-        <span><i />Avaimet käteen: suunnittelu, materiaalit ja asennus</span>
-        <span><i />Saat alkuperäistiedostot ja täydet oikeudet</span>
-        <span><i />Koko Suomi</span>
-        </p>
-        </div>
-        <Stage />
-      </header>
-
-      <Miksi />
-      <Palvelut />
-      <Prosessi />
-      <Hinta />
-      <Tiedostot />
-      <Materiaalit />
-      <Kenelle />
-      <Alueet />
-      <Ukk />
-      <Kaytannossa />
-      <Blogi />
-      <Tarjous />
-      <Loppu />
-
       <Footer
-        intro="Graafinen suunnittelu, verkkosivut ja lyhytvideot. Espoo ja koko Suomi."
+        intro="Graafinen suunnittelu, verkkosivut ja lyhytvideot yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Espoo"
+        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
         brandHeading="h2"
       />
+
+      <Palkki />
       <SiteEffects />
     </div>
   );

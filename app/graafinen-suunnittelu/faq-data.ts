@@ -8,7 +8,7 @@ export type FaqItem = { group: string; q: string; a: string };
 export const FAQ: FaqItem[] = [
   {
     group: "Hinta ja laajuus",
-    q: "Paljonko graafinen suunnittelu maksaa?",
+    q: "Paljonko graafinen suunnittelu maksaa yritykselle?",
     a: "Hinta muodostuu käytännössä työtunneista: Suomessa kokeneen graafisen suunnittelijan tuntihinta on tyypillisesti 70–120 euroa. Meillä logo alkaa 690 eurosta ja yritysilme graafisine ohjeistoineen 1 490 eurosta. Painotuotteen suunnittelu alkaa 190 eurosta ja teippaukset avaimet käteen 590 eurosta. Kaikkiin hintoihin lisätään arvonlisävero 25,5 %.",
   },
   {
@@ -19,12 +19,12 @@ export const FAQ: FaqItem[] = [
   {
     group: "Hinta ja laajuus",
     q: "Paljonko logosuunnittelu maksaa?",
-    a: "Markkinoilla yksinkertainen tekstilogo on halvimmillaan alle kahdensadan euron ja kokonainen visuaalinen identiteetti nousee useaan tuhanteen. Meillä logo alkaa 690 eurosta. Ero halvimpaan syntyy siitä, että teemme useamman ehdotuksen, muutoskierrokset ja logopaketin kaikkiin käyttötarkoituksiin — myös teippaukseen ja painoon, joissa kuvatiedosto ei kelpaa.",
+    a: "Markkinoilla yksinkertainen tekstilogo on halvimmillaan alle kahdensadan euron ja kokonainen visuaalinen identiteetti nousee useaan tuhanteen. Meillä logo alkaa 690 eurosta. Ero halvimpaan syntyy siitä, että teemme useamman ehdotuksen, muutoskierrokset ja logopaketin kaikkiin käyttötarkoituksiin, myös teippaukseen ja painoon, joissa kuvatiedosto ei kelpaa.",
   },
   {
     group: "Hinta ja laajuus",
     q: "Mitä auton mainosteippaus maksaa?",
-    a: "Hinta riippuu laajuudesta. Markkinoilla pelkkä logoteippaus asettuu 200–500 euroon, osateippaus 400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 590 eurosta ja sisältää suunnittelun, materiaalit ja asennuksen — ei pelkkää asennusta valmiilla tiedostolla.",
+    a: "Hinta riippuu laajuudesta. Markkinoilla pelkkä logoteippaus asettuu 200–500 euroon, osateippaus 400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 590 eurosta ja sisältää suunnittelun, materiaalit ja asennuksen, ei pelkkää asennusta valmiilla tiedostolla.",
   },
   {
     group: "Hinta ja laajuus",
@@ -53,8 +53,8 @@ export const FAQ: FaqItem[] = [
   },
   {
     group: "Toteutus",
-    q: "Tarvitseeko minulla olla valmis logo?",
-    a: "Ei tarvitse. Suunnittelemme logon tarvittaessa alusta. Jos logo on olemassa vain kuvatiedostona, vektoroimme sen ensin — ilman vektorimuotoa logoa ei saa tulostettua teippikalvolle tai suurikokoiseen kylttiin terävänä.",
+    q: "Pitääkö minulla olla valmis logo?",
+    a: "Ei tarvitse. Suunnittelemme logon tarvittaessa alusta. Jos logo on olemassa vain kuvatiedostona, vektoroimme sen ensin, sillä ilman vektorimuotoa logoa ei saa tulostettua teippikalvolle tai suurikokoiseen kylttiin terävänä.",
   },
   {
     group: "Toteutus",
@@ -79,7 +79,7 @@ export const FAQ: FaqItem[] = [
   {
     group: "Kesto ja jatko",
     q: "Teettekö myös verkkosivut ja videot?",
-    a: "Kyllä. WS Media tekee graafisen suunnittelun lisäksi <a href=\"/verkkosivut\">verkkosivut</a>, <a href=\"/hakukoneoptimointi\">hakukoneoptimoinnin</a> ja <a href=\"/lyhytvideot\">lyhytvideot</a>. Kun sama tiimi tekee sekä digitaalisen että fyysisen ilmeen, yritys näyttää samalta verkossa, somessa ja kadulla — eikä samaa työtä tehdä kahteen kertaan.",
+    a: "Kyllä. WS Media tekee graafisen suunnittelun lisäksi verkkosivut, hakukoneoptimoinnin ja lyhytvideot. Kun sama tiimi tekee sekä digitaalisen että fyysisen ilmeen, yritys näyttää samalta verkossa, somessa ja kadulla, eikä samaa työtä tehdä kahteen kertaan.",
   },
 ];
 

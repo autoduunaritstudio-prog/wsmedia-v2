@@ -5,11 +5,16 @@ import WordSwap from "../../components/WordSwap";
  * Ensimmainen lause on H1:ssa jo palvelimella, loput lisataan selaimessa.
  * Nain H1 pysyy hakukoneelle yhtena lauseena, kuten mockup edellyttaa.
  */
+/* Ensimmainen sana on se, jonka Google lukee H1:sta. "Algoritmi
+   nostaa" oli alan sisaista kielta, ja "tuovat yhteydenottoja" lupasi
+   suoraan sita, minka sivun oma teksti (Kaytannossa) sanoo lyhytvideon
+   EI tekevan. Pisin sana saa olla enintaan "pysayttavat skrollauksen."
+   mittainen, ks. globals.css heron h1. */
 const WORDS = [
-  "algoritmi nostaa.",
-  "pysäyttävät skrollauksen.",
-  "tuovat yhteydenottoja.",
   "katsotaan loppuun.",
+  "näyttävät, mitä teette.",
+  "pysäyttävät selaajan.",
+  "tekevät teistä tutun.",
 ];
 
 export default function Hero() {
@@ -28,9 +33,9 @@ export default function Hero() {
             <WordSwap words={WORDS} deferToClient />
           </h1>
           <p className="sub li d3">
-            Avaimet käteen -lyhytvideotuotanto yrityksille: TikTok, Instagram Reels ja YouTube
-            Shorts. Strategia, käsikirjoitus, kuvaus ja editointi yhdeltä tiimiltä, kiinteällä
-            kuukausihinnalla.
+            Suunnittelemme, kuvaamme ja editoimme yrityksesi somevideot TikTokiin, Instagram
+            Reelsiin ja YouTube Shortsiin. Sinun ei tarvitse keksiä ideoita eikä osata editoida,
+            ja hinta on sama joka kuukausi.
           </p>
           {/* YKSI PAAKEHOTUS KOKO SIVULLE. Sivulla oli kolme eri nimea
               samalle lomakkeelle: "Pyyda tarjous", "Varaa maksuton
@@ -68,9 +73,9 @@ export default function Hero() {
           </span>
         </div>
         <div className="chip-f cf3">
-          <em>★</em>
+          <em>▲</em>
           <span>
-            4,8 / 5<small>Asiakastyytyväisyys</small>
+            1 milj.<small>katselua 3 kuukaudessa</small>
           </span>
         </div>
         <PhoneReel

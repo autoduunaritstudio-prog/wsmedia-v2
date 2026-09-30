@@ -424,8 +424,9 @@ export function Kaytannossa() {
         <div className="prose seoprose rv">
           <h3>Mitä lyhytvideotuotanto tarkoittaa käytännössä?</h3>
           <p>
-            Lyhytvideotuotanto yrityksille tarkoittaa alle minuutin pituisten pystyvideoiden
-            suunnittelua, kuvaamista ja editointia sosiaalisen median kanaviin. Käytännössä kyse on
+            Lyhytvideotuotanto eli somevideoiden tekeminen yritykselle tarkoittaa alle minuutin
+            pituisten pystyvideoiden suunnittelua, kuvaamista ja editointia sosiaalisen median
+            kanaviin. Käytännössä kyse on
             jatkuvasta tuotannosta: yksittäinen video ei muuta mitään, mutta säännöllinen
             julkaisutahti kerryttää katseluaikaa, ja katseluaika on se signaali, jonka perusteella
             TikTokin, Instagram Reelsin ja YouTube Shortsin algoritmit päättävät, kenelle sisältö
@@ -498,7 +499,8 @@ export function Kaytannossa() {
 
             <h3>Missä WS Media kuvaa ja mitä muuta se tekee?</h3>
             <p>
-              WS Media tuottaa lyhytvideot Espoosta ja kuvaa päivittäin pääkaupunkiseudulla. Koska
+              WS Media tuottaa lyhytvideot Espoosta ja kuvaa viikoittain Espoossa, Helsingissä ja
+              Vantaalla. Koska
               teemme myös <SmartLink href="/verkkosivut">verkkosivut</SmartLink>,{" "}
               <SmartLink href="/hakukoneoptimointi">hakukoneoptimoinnin</SmartLink>, Meta-mainonnan ja{" "}
               <SmartLink href="/graafinen-suunnittelu">graafisen suunnittelun</SmartLink>, sama

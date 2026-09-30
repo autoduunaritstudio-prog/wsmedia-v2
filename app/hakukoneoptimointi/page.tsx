@@ -7,6 +7,8 @@ import SiteEffects from "../components/SiteEffects";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 
+import Jakso from "../components/Jakso";
+import NetBackdrop from "../components/NetBackdrop";
 import Hero from "./components/Hero";
 import { Laatta, Vaite } from "../components/Maasto";
 import Suotimet from "./components/Suotimet";
@@ -56,6 +58,13 @@ export default function Hakukoneoptimointi() {
       {/* Tritonisuodin inline-SVG:na. Safari ei tue ulkoisesta
           tiedostosta viitattua suodinta HTML-elementeilla lainkaan. */}
       <Suotimet />
+
+      {/* SIVUTASON VERKOSTO. Sama kerros ja sama paikka kuin kahdella
+          muulla palvelusivulla: yksi verkosto koko sivulle. Ennen
+          talla sivulla ei ollut sivutason kerrosta lainkaan, vaan yksi
+          osio piti omaansa ja loput olivat paljaalla pohjalla - eli
+          kuvio alkoi ja loppui yhden osion mukana. */}
+      <NetBackdrop merkit={false} />
 
       {/* KATSOTTUNA: metallikuvio teki pohjasta likaisen harmaan.
           Etusivulla se toimii, koska siella sen paalla on tumma hero ja
@@ -111,6 +120,23 @@ export default function Hakukoneoptimointi() {
 
           EHTO JOKA RIKKOUTUU AANETTOMASTI: yhdellakaan esivanhemmalla
           ei saa olla overflow: hidden tai clip. */}
+      {/* YKSI PEITTOKETJU, HENGAHDYS JOKA TOINEN VAIHE.
+          =============================================================
+          Ennen: ketju katkesi kahdesti. Ensimmainen pino paattyi
+          Aikatauluun, toinen alkoi Mittareista, ja Kenelle, UKK seka
+          Tarjous olivat kokonaan pinon ULKOPUOLELLA. Sama sivu teki
+          kolmea eri asiaa perakkain, ja juuri se lukee hajonneena.
+
+          Nyt sama rakenne kuin Verkkosivuilla ja Lyhytvideoilla:
+          jokainen vaihe nousee edellisen paalle Tarjoukseen asti, ja
+          rytmi on raskas vaihe, hengahdys, raskas vaihe.
+
+          JAKSO ON YKSI VAIHE. Palvelun sisalto ja Paikallinen ovat
+          saman palvelun kuvaus, Aikataulu ja Mittarit ovat luonteva
+          pari (milloin tama nakyy ja mista sen tietaa), ja sivun hanta
+          Hinnoittelusta Tarjoukseen on yksi pinta. Kaari ottaa pohjan
+          ja verkoston itselleen, joten kuvio ei katkea osioiden
+          valissa. */}
       <div className="pino">
         <Nakyvyys />
 
@@ -119,88 +145,77 @@ export default function Hakukoneoptimointi() {
               ei mitaan luettavaa, tumma pohja. */}
           <Vaite
             kuva="/hakukoneoptimointi/kuitu.webp"
-            alla="Tekninen kunto, sisältö, auktoriteetti ja paikallinen näkyvyys. Neljä työtä, yksi tiimi, yksi lasku."
+            alla="Tekninen kunto, sisältö, auktoriteetti ja paikallinen näkyvyys. Yksikään niistä ei tuota tulosta yksin."
           >
             Hakukoneoptimointi ei ole <b><i>temppu.</i></b> Se on neljä työtä joita tehdään yhtä aikaa.
           </Vaite>
 
           <div className="pino">
-            <Sisalto />
-
-            {/* PAIKALLINEN SIIRTYI TAHAN.
+            {/* PAIKALLINEN ON OSA SAMAA KUVAUSTA.
                 Se oli sivulla vasta Aikataulun jalkeen, eli viides osa
-                samasta palvelusta oli erotettu neljasta muusta kahdella
-                osiolla. Samalla Palvelun sisallon oma ingressi lupasi
-                "nelja rinnakkaista tyota", vaikka sivu myy viitta.
-
-                Siirto korjaa kaksi asiaa yhdella liikkeella: kaikki
-                "mita teemme" on nyt yhtena lohkona, ja Aikataulu ja
-                Mittarit paatyvat vierekkain. Ne ovat luonteva pari,
-                milloin tama nakyy ja mista sen tietaa.
-
-                Kaare sailyttaa kahden lapsen saannon: alle jaava osio
-                ja sen paalle nouseva kaare. */}
-            <div className="pino">
+                samasta palvelusta oli erotettu neljasta muusta. Nyt se
+                on Palvelun sisallon kanssa samassa kaareessa, eli
+                kaikki "mita teemme" on yksi pinta ja yksi kuvio. */}
+            <Jakso>
+              <Sisalto />
               <Paikallinen />
+            </Jakso>
 
-              <div className="pino">
-                {/* Sivun rehellisin lause ei ole tekstiosio vaan
-                    taysleveä kuva, jonka paalla se on. Kuvassa on
-                    ihminen tyossaan aamulla, eli tasan se jota lause
-                    koskee: hakukoneoptimointi ei tuota tulosta
-                    paivassa, koska tyo on oikeaa tyota. */}
-                <Laatta kuva="/hakukoneoptimointi/paja.webp" korkeus="taysi">
+            <div className="pino">
+              {/* Sivun rehellisin lause ei ole tekstiosio vaan
+                  taysleveä kuva, jonka paalla se on. Kuvassa on
+                  ihminen tyossaan aamulla, eli tasan se jota lause
+                  koskee: hakukoneoptimointi ei tuota tulosta
+                  paivassa, koska tyo on oikeaa tyota. */}
+              <Laatta kuva="/hakukoneoptimointi/paja.webp" korkeus="taysi">
                 <p className="laatta-kick">Aikataulu</p>
                 <p className="laatta-lause">
                   Kukaan ei voi luvata <b><i>päivämäärää.</i></b>
                 </p>
                 <p className="laatta-alla">
-                  Emme lupaa sijaa yksi emmekä tiettyä prosenttia. Sovimme mittarit etukäteen ja
-                  raportoimme ne kuukausittain, myös silloin kun luvut eivät miellytä.
+                  Emme lupaa ykkössijaa emmekä tiettyä prosenttia. Kerromme mitä tapahtuu ja
+                  milloin, myös silloin kun luvut eivät miellytä.
                 </p>
               </Laatta>
 
-                <Aikataulu />
+              <div className="pino">
+                <Jakso>
+                  <Aikataulu />
+                  <Mittarit />
+                </Jakso>
+
+                <div className="pino">
+                  {/* KUVA VAIHTUI. Ensimmainen oli kasi poydalla, paperi ja
+                      kahvikuppi: tunnelmaltaan oikea mutta aiheeltaan vaara.
+                      Tama sivu myy Google-nakyvyytta, joten ostopaatoksen
+                      hetki on naytön aaressa eika poydan aaressa. */}
+                  <Vaite
+                    kuva="/hakukoneoptimointi/haku2.webp"
+                    alla="Kartoitus ja alustava auditointi ovat maksuttomia eivätkä sido mihinkään."
+                  >
+                    Näy siellä, missä <b><i>ostopäätös syntyy.</i></b>
+                  </Vaite>
+
+                  {/* SIVUN HANTA ON YKSI PINTA, ks. kaksi muuta
+                      palvelusivua. Hinnasto oli vaalea osio (.valo),
+                      Kenelle musta (data-tone="ink"), UKK sivun oma
+                      pohja ja Tarjous kuvapohja: neljä eri taustaa
+                      perakkain. Vierekkaiset kerrokset ovat aina kaksi
+                      eri kuviota, ja raja niiden valissa nakyy vaikka
+                      vari olisi sama. Yksi kaare, yksi kerros, neljä
+                      osiota sen sisalla. */}
+                  <Jakso>
+                    <Hinnoittelu />
+                    <Kenelle />
+                    <Ukk />
+                    <Tarjous />
+                  </Jakso>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Sama pino toisen kerran: Mittarit jaa alle, hengahdys nousee
-          sen paalle, ja hinnasto nousee hengahdyksen paalle. */}
-      <div className="pino">
-        <Mittarit />
-
-        <div className="pino">
-          {/* KUVA VAIHTUI. Ensimmainen oli kasi poydalla, paperi ja
-              kahvikuppi: tunnelmaltaan oikea mutta aiheeltaan vaara.
-              Tama sivu myy Google-nakyvyytta, joten ostopaatoksen
-              hetki on naytön aaressa eika poydan aaressa. Nyt kuvassa
-              on kasi nappaimistolla ja naytön kylma valo pimeassa
-              huoneessa. */}
-          <Vaite
-            kuva="/hakukoneoptimointi/haku2.webp"
-            alla="Kartoitus ja alustava auditointi ovat maksuttomia eivätkä sido mihinkään."
-          >
-            Näy siellä, missä <b><i>ostopäätös syntyy.</i></b>
-          </Vaite>
-
-          <Hinnoittelu />
-        </div>
-      </div>
-      <Kenelle />
-
-
-      <Ukk />
-      {/* Taustaa ja Blogi ovat pois toistaiseksi: Taustaa oli
-          hakukonetta varten kirjoitettua toistoa asioista jotka sivu on
-          jo sanonut, ja blogissa ei ole viela tarpeeksi sisaltoa.
-          Loppu-lohko poistui, koska sen ainoa nappi osoitti takaisin
-          samaan lomakkeeseen muutaman sadan pikselin paahan - sen
-          otsikko ja teksti ovat nyt Tarjous-osion sisalla. Kaikkien
-          koodi sailyy sections2.tsx:ssa. */}
-      <Tarjous />
 
       {/* MITATTU ETUSIVULTA. Etusivun footerissa on nelja lohkoa:
           brandi, Palvelut, Yritys ja Yhteystiedot. Talla sivulla oli

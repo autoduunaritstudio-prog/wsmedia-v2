@@ -31,7 +31,7 @@ export default function Stage() {
 
   return (
       <div
-          className="stage li d5"
+          className="gs-nayttamo li d5"
           data-par="-0.025"
           style={brandStyle} aria-label="Havainnekuva: sama yritysilme käyntikortissa, pakettiautossa, julkisivussa ja roll-upissa">
         <div className="pal" aria-hidden="true">
@@ -288,7 +288,7 @@ export default function Stage() {
             </div>
           </div>
         </div>
-        <p className="stagenote">Sama tunnus, samat värit, sama typografia — riippumatta siitä mihin pintaan se päätyy.</p>
+        <p className="stagenote">Sama tunnus, samat värit ja sama typografia, riippumatta siitä mihin pintaan se päätyy.</p>
       </div>
   );
 }

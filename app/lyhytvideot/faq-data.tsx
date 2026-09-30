@@ -33,53 +33,54 @@ export const FAQ_GROUPS: FaqGroup[] = [
         open: true,
         answer: (
           <>
-            Jatkuva lyhytvideotuotanto alkaa meillä [HINTA] eurosta kuukaudessa, ja hinta määräytyy
-            videoiden määrän, kuvauspäivien ja kanavien mukaan. Yksittäiset videot ja
-            kampanjatuotannot hinnoitellaan projekteina alkaen [HINTA] euroa. Kerro budjettisi{" "}
+            Jatkuva lyhytvideotuotanto alkaa 1 500 eurosta kuukaudessa + alv. Siihen sisältyy
+            neljä valmista videota esiintyjineen. Kun hoidamme myös Instagram-tilin tarinat,
+            karusellit ja kuvajulkaisut, hinta on 2 200 € kuukaudessa + alv. Yksittäiset videot ja
+            kampanjatuotannot hinnoitellaan projekteina. Kerro tavoitteesi{" "}
             <a href="#tarjous">tarjouslomakkeella</a>, niin rakennamme sen sisään mahtuvan
             suunnitelman.
           </>
         ),
         schema:
-          "Jatkuva lyhytvideotuotanto alkaa [HINTA] eurosta kuukaudessa, ja hinta määräytyy videoiden määrän, kuvauspäivien ja kanavien mukaan. Yksittäiset videot ja kampanjatuotannot hinnoitellaan projekteina alkaen [HINTA] euroa.",
+          "Jatkuva lyhytvideotuotanto alkaa 1 500 eurosta kuukaudessa + alv, ja siihen sisältyy neljä valmista videota esiintyjineen. Kun myös Instagram-tilin tarinat, karusellit ja kuvajulkaisut hoidetaan, hinta on 2 200 € kuukaudessa + alv. Yksittäiset videot ja kampanjatuotannot hinnoitellaan projekteina.",
       },
       {
         q: "Kuinka monta lyhytvideota kannattaa julkaista kuukaudessa?",
         answer: (
           <>
-            Algoritmit palkitsevat säännöllisyyttä. Käytännössä [X]–[X] videota kuukaudessa per
-            kanava on se taso, jolla tulokset alkavat kertyä. Harvempi julkaisutahti toimii, jos
+            Säännöllisyys ratkaisee enemmän kuin määrä. Neljä videota kuukaudessa eli noin yksi
+            viikossa on hyvä alku, ja sillä tahdilla tulokset alkavat kertyä. Harvempi julkaisutahti toimii, jos
             sisällöt ovat poikkeuksellisen vahvoja, mutta silloin kehitys on hitaampaa.
           </>
         ),
         schema:
-          "Algoritmit palkitsevat säännöllisyyttä. Käytännössä [X]–[X] videota kuukaudessa per kanava on se taso, jolla tulokset alkavat kertyä.",
+          "Säännöllisyys ratkaisee enemmän kuin määrä. Neljä videota kuukaudessa eli noin yksi viikossa on hyvä alku, ja sillä tahdilla tulokset alkavat kertyä.",
       },
       {
         q: "Kuinka nopeasti saan valmiit videot?",
         open: true,
         answer: (
           <>
-            Toimitamme videot tyypillisesti [X] arkipäivän kuluessa kuvauspäivästä. Kiireellisessä
-            tapauksessa nopein toimitus on [X] tuntia. Sisältösuunnitelman ja käsikirjoitukset saat
-            nähtäväksi jo ennen kuvauksia.
+            Valmiit videot tulevat keskimäärin noin 7 päivässä kuvauspäivästä. Sisältösuunnitelman
+            ja käsikirjoitukset saat nähtäväksi jo ennen kuvauksia.
           </>
         ),
         schema:
-          "Toimitamme videot tyypillisesti [X] arkipäivän kuluessa kuvauspäivästä. Kiireellisessä tapauksessa nopein toimitus on [X] tuntia.",
+          "Valmiit videot tulevat keskimäärin noin 7 päivässä kuvauspäivästä. Sisältösuunnitelman ja käsikirjoitukset saa nähtäväksi jo ennen kuvauksia.",
       },
       {
         q: "Kuinka nopeasti lyhytvideot tuottavat tulosta?",
         answer: (
           <>
             Ensimmäiset näyttökerrat tulevat heti, mutta luotettava kuva syntyy vasta useamman
-            kuukauden datasta. Tyypillisesti selvä käänne näkyy [X] kuukauden kohdalla, kun
+            kuukauden datasta. Esimerkiksi yhden asiakkaamme videot keräsivät miljoona
+            katselukertaa kolmessa kuukaudessa. Tyypillisesti selvä muutos näkyy toisen kuukauden aikana, kun
             kanavalle on kertynyt riittävästi julkaisuja ja tiedämme datan perusteella mitkä teemat
             toimivat.
           </>
         ),
         schema:
-          "Ensimmäiset näyttökerrat tulevat heti, mutta luotettava kuva syntyy vasta useamman kuukauden datasta. Tyypillisesti selvä käänne näkyy [X] kuukauden kohdalla.",
+          "Ensimmäiset näyttökerrat tulevat heti, mutta luotettava kuva syntyy vasta useamman kuukauden datasta. Tyypillisesti selvä muutos näkyy toisen kuukauden aikana.",
       },
     ],
   },
@@ -87,36 +88,49 @@ export const FAQ_GROUPS: FaqGroup[] = [
     label: "Kuvaus ja tuotanto",
     items: [
       {
+        q: "Kuinka pitkä somevideon pitää olla?",
+        answer: (
+          <>
+            Tekemämme videot ovat yleensä 15–60 sekuntia. Lyhyt video katsotaan todennäköisemmin loppuun, ja se
+            ratkaisee, kuinka monelle video näytetään. Pidempikin video toimii, kun aihe pitää
+            katsojan mukana, esimerkiksi ohje tai ennen ja jälkeen -video. Pituus päätetään
+            käsikirjoituksessa aiheen mukaan.
+          </>
+        ),
+        schema:
+          "Tekemämme videot ovat yleensä 15–60 sekuntia. Lyhyt video katsotaan todennäköisemmin loppuun, ja se ratkaisee, kuinka monelle video näytetään. Pidempikin video toimii, kun aihe pitää katsojan mukana, esimerkiksi ohje tai ennen ja jälkeen -video.",
+      },
+      {
         q: "Meillä ei ole ketään kameran eteen. Mitä teemme?",
         answer: (
           <>
-            Tämä on yleisin huoli, eikä se ole este. Voimme hankkia esiintyjän puolestasi, tai
+            Tämä on yleisin huoli, eikä se ole este. Pakettiin sisältyy esiintyjä, ja voimme myös
             rakentaa sisällöt ilman puhuvaa päätä: tuote-, prosessi- ja kulissien takaa -sisällöt,
             tekstivetoiset videot ja asiakastarinat toimivat monella toimialalla jopa paremmin.
           </>
         ),
         schema:
-          "Voimme hankkia esiintyjän puolestasi, tai rakentaa sisällöt ilman puhuvaa päätä: tuote-, prosessi- ja kulissien takaa -sisällöt, tekstivetoiset videot ja asiakastarinat toimivat monella toimialalla jopa paremmin.",
+          "Pakettiin sisältyy esiintyjä, ja voimme myös rakentaa sisällöt ilman puhuvaa päätä: tuote-, prosessi- ja kulissien takaa -sisällöt, tekstivetoiset videot ja asiakastarinat toimivat monella toimialalla jopa paremmin.",
       },
       {
         q: "Missä kuvaukset tehdään?",
         answer: (
           <>
             Lähtökohtaisesti sinun omissa tiloissasi, se on nopeinta ja näyttää aidoimmalta.
-            Kuvaamme päivittäin Espoossa ja Helsingissä, ja kuvauspäivät onnistuvat sovitusti myös
-            muualla Suomessa. Tarvittaessa käytämme erillistä kuvauspaikkaa tai studiota.
+            Kuvaamme viikoittain Espoossa, Helsingissä ja Vantaalla, ja kuvauspäivät onnistuvat
+            sovitusti myös muualla Suomessa. Tarvittaessa käytämme erillistä kuvauspaikkaa tai studiota.
           </>
         ),
         schema:
-          "Lähtökohtaisesti asiakkaan omissa tiloissa. Kuvaamme päivittäin Espoossa ja Helsingissä, ja kuvauspäivät onnistuvat sovitusti myös muualla Suomessa.",
+          "Lähtökohtaisesti asiakkaan omissa tiloissa. Kuvaamme viikoittain Espoossa, Helsingissä ja Vantaalla, ja kuvauspäivät onnistuvat sovitusti myös muualla Suomessa.",
       },
       {
         q: "Sisältyvätkö tekstitykset, musiikki ja grafiikat hintaan?",
         answer: (
           <>
             Kyllä. Tekstitykset, käyttöoikeudellinen taustamusiikki, äänisuunnittelu ja brändin
-            mukaiset grafiikat sisältyvät jokaiseen videoon. Erikseen hinnoitellaan vain esiintyjä,
-            maksetun mainonnan hallinnointi ja mahdolliset erikoistuotannot.
+            mukaiset grafiikat sisältyvät jokaiseen videoon. Esiintyjä kuuluu pakettiin. Erikseen
+            hinnoitellaan vain maksetun mainonnan hallinnointi ja mahdolliset erikoistuotannot.
           </>
         ),
         schema:
@@ -126,14 +140,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
         q: "Saanko samasta videosta versiot eri kanaviin?",
         answer: (
           <>
-            Saat. Leikkaamme jokaisesta sisällöstä alustakohtaiset versiot: kesto, kuvasuhde,
-            tekstityksen sijainti ja kansikuva optimoidaan erikseen TikTokille, Instagram Reelsille
-            ja YouTube Shortsille. Sama tiedosto kaikkiin kanaviin on yleisin syy siihen, miksi
-            näyttökerrat jäävät vajaiksi.
+            Saat. Sama video toimii TikTokissa, Instagram Reelsissä ja YouTube Shortsissa, koska
+            kaikki kolme käyttävät samaa pystykuvaa. Tarkistamme silti, ettei tekstitys jää minkään
+            sovelluksen painikkeiden alle, ja kirjoitamme jokaiseen kanavaan oman saatetekstin.
           </>
         ),
         schema:
-          "Saat. Leikkaamme jokaisesta sisällöstä alustakohtaiset versiot: kesto, kuvasuhde, tekstityksen sijainti ja kansikuva optimoidaan erikseen TikTokille, Instagram Reelsille ja YouTube Shortsille.",
+          "Saat. Sama video toimii TikTokissa, Instagram Reelsissä ja YouTube Shortsissa, koska kaikki kolme käyttävät samaa pystykuvaa. Tarkistamme silti, ettei tekstitys jää sovelluksen painikkeiden alle, ja kirjoitamme jokaiseen kanavaan oman saatetekstin.",
       },
     ],
   },
@@ -157,12 +170,12 @@ export const FAQ_GROUPS: FaqGroup[] = [
         q: "Kuinka paljon aikaani menee yhteistyöhön?",
         answer: (
           <>
-            Noin [X] tuntia kuukaudessa: kuvauspäivä ja lyhyt hyväksyntäkierros käsikirjoituksiin.
+            Korkeintaan 1–2 tuntia kuukaudessa: kuvauspäivä ja lyhyt hyväksyntäkierros käsikirjoituksiin.
             Ideointi, käsikirjoitus, editointi, tekstitys ja julkaisu hoituvat meiltä.
           </>
         ),
         schema:
-          "Noin [X] tuntia kuukaudessa: kuvauspäivä ja lyhyt hyväksyntäkierros käsikirjoituksiin. Ideointi, käsikirjoitus, editointi, tekstitys ja julkaisu hoituvat meiltä.",
+          "Korkeintaan 1–2 tuntia kuukaudessa: kuvauspäivä ja lyhyt hyväksyntäkierros käsikirjoituksiin. Ideointi, käsikirjoitus, editointi, tekstitys ja julkaisu hoituvat meiltä.",
       },
       {
         q: "Sopivatko lyhytvideot B2B-yritykselle?",
@@ -178,16 +191,29 @@ export const FAQ_GROUPS: FaqGroup[] = [
           "Sopivat. Asiantuntijasisällöt, usein kysyttyihin kysymyksiin vastaaminen ja asiakastarinat toimivat erityisen hyvin, ja LinkedInissä kilpailu videosisällöistä on yhä vähäisempää kuin TikTokissa.",
       },
       {
+        q: "Takaatteko katselukerrat?",
+        answer: (
+          <>
+            Emme. Kukaan ei voi rehellisesti luvata katselukertoja, koska somepalvelu päättää,
+            kenelle video näytetään. Lupaamme sen, mihin voimme vaikuttaa: sovitun julkaisutahdin,
+            huolella tehdyt käsikirjoitukset ja kuukausittaisen katsauksen siitä, mitkä videot
+            toimivat. Seuraavat videot tehdään niiden pohjalta.
+          </>
+        ),
+        schema:
+          "Emme. Kukaan ei voi rehellisesti luvata katselukertoja, koska somepalvelu päättää, kenelle video näytetään. Lupaamme sovitun julkaisutahdin, huolella tehdyt käsikirjoitukset ja kuukausittaisen katsauksen siitä, mitkä videot toimivat.",
+      },
+      {
         q: "Onko pakko sitoutua pitkäksi aikaa?",
         answer: (
           <>
             Ei. Sopimus jatkuu kuukausi kerrallaan ja irtisanomisaika on yksi kuukausi.
-            Suosittelemme kuitenkin varaamaan vähintään [X] kuukautta, koska lyhytvideoiden
+            Suosittelemme kuitenkin varaamaan vähintään 3 kuukautta, koska lyhytvideoiden
             tulokset kertyvät kumulatiivisesti.
           </>
         ),
         schema:
-          "Ei. Sopimus jatkuu kuukausi kerrallaan ja irtisanomisaika on yksi kuukausi. Suosittelemme kuitenkin varaamaan vähintään [X] kuukautta, koska lyhytvideoiden tulokset kertyvät kumulatiivisesti.",
+          "Ei. Sopimus jatkuu kuukausi kerrallaan ja irtisanomisaika on yksi kuukausi. Suosittelemme kuitenkin varaamaan vähintään 3 kuukautta, koska lyhytvideoiden tulokset kertyvät kumulatiivisesti.",
       },
     ],
   },
@@ -210,13 +236,14 @@ export const FAQ_GROUPS: FaqGroup[] = [
         q: "Voitteko hoitaa myös julkaisun ja Meta-mainonnan?",
         answer: (
           <>
-            Voimme. Julkaisu ja aikataulutus sisältyvät sovittuihin paketteihin. Mainonnan
+            Voimme. Julkaisu kuuluu Ylläpito-pakettiin tarinoiden, karusellien ja kuvajulkaisujen
+            kanssa. Mainonnan
             hallinnointi hinnoitellaan erikseen kanavakohtaisesti, mainosbudjetin päälle, ja
             mainosbudjetin määrää aina asiakas itse.
           </>
         ),
         schema:
-          "Voimme. Julkaisu ja aikataulutus sisältyvät sovittuihin paketteihin. Mainonnan hallinnointi hinnoitellaan erikseen kanavakohtaisesti, mainosbudjetin päälle, ja mainosbudjetin määrää aina asiakas itse.",
+          "Voimme. Julkaisu kuuluu Ylläpito-pakettiin tarinoiden, karusellien ja kuvajulkaisujen kanssa. Mainonnan hallinnointi hinnoitellaan erikseen kanavakohtaisesti, mainosbudjetin päälle, ja mainosbudjetin määrää aina asiakas itse.",
       },
       {
         q: "Teettekö myös hakukoneoptimointia?",

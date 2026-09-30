@@ -2,6 +2,8 @@
 
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
+import { seuraaPeittoa } from "./peitto";
+import { peilaaKankaalle } from "./videokangas";
 
 /**
  * REFERENSSIVIDEOKORTIT OMANA MODUULINAAN.
@@ -261,26 +263,39 @@ function useCardVideo(media: boolean, label: string) {
     // Kosketuspolulla sama tarkkailija vain PYSAYTTAA: ilman sita
     // napautettu video jaisi soimaan taustalle kun kortti vieritetaan
     // pois nakyvista.
+    // PEITTO: pinnattu kortti on "nakyvissa" myos silloin kun seuraava
+    // osio on noussut sen paalle, ks. peitto.ts.
+    let nakyy = false;
+    let peitossa = false;
+    const ohjaa = () => {
+      if (nakyy && !peitossa) {
+        if (auto) {
+          flushRewind(v);
+          v.play().catch(() => {});
+        }
+      } else {
+        // Kattely puretaan myos silloin kun elementti ei ollut soimassa:
+        // play() on voitu kutsua ilman etta 'playing' ehti laueta, ja
+        // sen kuittaus tulisi ruudun ulkopuolelta.
+        disarm();
+        if (!v.paused) pauseAndRewind(v);
+      }
+    };
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) {
-          if (auto) {
-            flushRewind(v);
-            v.play().catch(() => {});
-          }
-        } else {
-          // Kattely puretaan myos silloin kun elementti ei ollut soimassa:
-          // play() on voitu kutsua ilman etta 'playing' ehti laueta, ja
-          // sen kuittaus tulisi ruudun ulkopuolelta.
-          disarm();
-          if (!v.paused) pauseAndRewind(v);
-        }
+        nakyy = e.isIntersecting;
+        ohjaa();
       },
       auto ? { threshold: 0.25, rootMargin: "200px 0px" } : { threshold: 0 },
     );
     io.observe(a);
+    const irrotaPeitto = seuraaPeittoa(a, (x) => {
+      peitossa = x;
+      ohjaa();
+    });
 
     return () => {
+      irrotaPeitto();
       v.removeEventListener("playing", onPlaying);
       v.removeEventListener("pause", onPause);
       disarm();
@@ -340,6 +355,16 @@ function useCardVideo(media: boolean, label: string) {
 
 function RefCard({ c, i }: { c: RefItem; i: number }) {
   const { vid, art, playing, bind } = useCardVideo(Boolean(c.src), c.title);
+  const kangas = useRef<HTMLCanvasElement>(null);
+  /* Viisi rinnakkain soivaa videota lukitsi sivun 30 fps:iin, ks.
+     videokangas.ts. Video toistuu lapinakyvana ja kuva piirretaan
+     kankaalle. */
+  useEffect(() => {
+    const v = vid.current;
+    const k = kangas.current;
+    if (!v || !k || !c.src) return;
+    return peilaaKankaalle(v, k);
+  }, [vid, c.src]);
 
   return (
     <article
@@ -362,6 +387,15 @@ function RefCard({ c, i }: { c: RefItem; i: number }) {
       >
         {c.src ? <source src={c.src} type="video/mp4" /> : null}
       </video>
+      {c.src ? (
+        <canvas
+          ref={kangas}
+          className="refcard-vid refcard-kangas"
+          width={VW}
+          height={VH}
+          aria-hidden="true"
+        />
+      ) : null}
       {c.poster ? (
         /* POSTER OMANA KERROKSENAAN, ei poster-attribuuttina: attribuutti
            ladataan aina myos preload="none":n kanssa eika ole laiska, joten

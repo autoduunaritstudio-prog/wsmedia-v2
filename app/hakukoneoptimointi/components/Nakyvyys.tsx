@@ -1,4 +1,5 @@
 import Ikoni from "./Ikoni";
+import { Kaiku } from "../../components/Maasto";
 
 /**
  * SAMA KYSELY, KAKSI MAARANPAATA.
@@ -60,6 +61,7 @@ export default function Nakyvyys() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/hakukoneoptimointi/haku.webp" alt="" data-par="0.028" />
       </div>
+      <Kaiku sana="NÄKYVYYS" puoli="oik" kohta="ylos" />
       <div className="swrap lava-sisalto">
         <div className="seo-ord" data-rvs="">
           <span>Näkyvyys 2026</span>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { peilaaKankaalle } from "./videokangas";
 
 /**
  * PUHELINMOCKUP JOSSA ON AITO VIDEO JA INSTAGRAM REELS -KAYTTOLIITTYMA.
@@ -81,6 +82,21 @@ export default function PhoneReel({
   saves,
 }: Props) {
   const vid = useRef<HTMLVideoElement>(null);
+  const prg = useRef<HTMLElement>(null);
+  const kangas = useRef<HTMLCanvasElement>(null);
+  /* Videon kuva piirretaan kankaalle, ks. videokangas.ts: kolme
+     rinnakkain nakyvaa videota lukitsi sivun 30 fps:iin. */
+  useEffect(() => {
+    const v = vid.current;
+    const c = kangas.current;
+    if (!v || !c) return;
+    return peilaaKankaalle(v, c);
+  }, []);
+  /* SUORITUSKYKY 30.9.2026. Aiemmin tila p paivitettiin JOKA KEHYS
+     (setP rAF:ssa), eli kolme puhelinta renderoitiin Reactissa uudelleen
+     kolmesti kehyksessa niin kauan kuin videot pyorivat. Nyt Reactin tila
+     on vain porras (STEPS, 24 askelta), joka muuttuu 24 kertaa kierroksen
+     aikana, ja etenemapalkki kirjoitetaan suoraan DOMiin. */
   const [p, setP] = useState(0);
   const [playing, setPlaying] = useState(false);
 
@@ -88,36 +104,71 @@ export default function PhoneReel({
     const v = vid.current;
     if (!v) return;
     let raf = 0;
+    let porras = -1;
     const tick = () => {
       raf = requestAnimationFrame(tick);
       const d = v.duration;
-      if (d > 0) setP(Math.min(v.currentTime / d, 1));
+      if (!(d > 0)) return;
+      const q = Math.min(v.currentTime / d, 1);
+      const bar = prg.current;
+      if (bar) bar.style.transform = `scaleX(${q.toFixed(4)})`;
+      const n = Math.min(Math.floor(q * STEPS.length), STEPS.length);
+      if (n !== porras) {
+        porras = n;
+        setP(q);
+      }
+    };
+
+    /* PEITTO. Hero on pinnattu, ja cover nousee sen PAALLE. Pelkka
+       IntersectionObserver videon omalla laatikolla ei huomaa peittoa,
+       joten videot pyorivat koko sivun ajan coverin alla. MITATTU
+       1440x900: kolme pyorivaa piilovideota lukitsi koko sivun
+       vierityksen 30 fps:iin (ilman niita 64..119 fps). Peitto luetaan
+       coverista: kun sen ylareuna on noussut nakyman ylimpaan
+       neljannekseen, puhelimet ovat sen alla. */
+    let nakyy = false;
+    let peitossa = false;
+    const cover = v.closest(".stickysub")?.querySelector<HTMLElement>(":scope > .cover") ?? null;
+    const paivita = () => {
+      if (nakyy && !peitossa && !document.hidden) {
+        void v.play().then(
+          () => setPlaying(true),
+          () => setPlaying(false),
+        );
+        if (!raf) raf = requestAnimationFrame(tick);
+      } else {
+        v.pause();
+        setPlaying(false);
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
     };
     // Toisto vasta kun mockup on nakyvissa. Hero on sivun alussa, joten
     // tama laukeaa kaytannossa heti - mutta jos kayttaja saapuu
     // ankkurilinkilla keskelle sivua, video ei ala pyoria nakymattomissa.
     const io = new IntersectionObserver(
       (es) => {
-        for (const e of es) {
-          if (e.isIntersecting) {
-            void v.play().then(
-              () => setPlaying(true),
-              () => setPlaying(false),
-            );
-            if (!raf) raf = requestAnimationFrame(tick);
-          } else {
-            v.pause();
-            setPlaying(false);
-            cancelAnimationFrame(raf);
-            raf = 0;
-          }
-        }
+        nakyy = es.some((e) => e.isIntersecting);
+        paivita();
       },
       { threshold: 0.25 },
     );
     io.observe(v);
+    const ioPeitto = cover
+      ? new IntersectionObserver(
+          (es) => {
+            peitossa = es.some((e) => e.isIntersecting);
+            paivita();
+          },
+          { rootMargin: "0px 0px -75% 0px" },
+        )
+      : null;
+    if (cover && ioPeitto) ioPeitto.observe(cover);
+    document.addEventListener("visibilitychange", paivita);
     return () => {
       io.disconnect();
+      ioPeitto?.disconnect();
+      document.removeEventListener("visibilitychange", paivita);
       cancelAnimationFrame(raf);
     };
   }, []);
@@ -151,6 +202,18 @@ export default function PhoneReel({
         >
           <source src={src} type="video/mp4" />
         </video>
+        <canvas
+          ref={kangas}
+          className="ph-vid ph-kangas"
+          width={540}
+          height={960}
+          aria-hidden="true"
+          style={{
+            backgroundImage: `url(${poster})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
 
         {/* Tummennus ylos ja alas: IG:n oma kaytanto, ja se on tassa myos
             luettavuuden ehto - teksti on suoraan videokuvan paalla. */}
@@ -249,7 +312,7 @@ export default function PhoneReel({
           {/* Etenemapalkki on VIDEON oma aika, ei CSS-animaatio: palkki ja
               kuva eivat voi ajautua eri tahtiin. */}
           <div className="ig-prg">
-            <i style={{ transform: `scaleX(${p.toFixed(4)})` }} />
+            <i ref={prg} style={{ transform: `scaleX(${p.toFixed(4)})` }} />
           </div>
         </div>
       </div>

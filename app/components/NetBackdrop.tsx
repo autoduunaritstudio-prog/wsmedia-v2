@@ -42,6 +42,29 @@ const MAX_POINTS = 130;
 const LINK = 180; // px, viivan piirtoetaisyys
 const SPEED = 16; // px/s, ajelehtimisen huippunopeus
 const DPR_MAX = 1.5;
+/* Viivojen kirkkauskorit, ks. draw(). Jaettu kaikkien ilmentymien
+   kesken, koska piirto on synkroninen: kori tyhjennetaan heti. */
+const TASOT = 24;
+const kori: number[][] = Array.from({ length: TASOT + 1 }, () => []);
+
+/* SIVUN KORKEUS VALIMUISTISTA. progress() luki scrollHeightin JOKA
+   kehyksessa jokaisessa ilmentymassa, ja koska edellinen ilmentyma oli
+   juuri kirjoittanut --nsp:n, jokainen luku pakotti tyylin ja asettelun
+   uudelleenlaskennan kesken kehyksen. ResizeObserver kertoo kun korkeus
+   oikeasti muuttuu, ja silloin asettelu on jo valmis. */
+let sivunKorkeus = 0;
+let korkeusRo: ResizeObserver | null = null;
+const lueKorkeus = () => {
+  sivunKorkeus = document.documentElement.scrollHeight;
+};
+const seuraaKorkeutta = () => {
+  if (korkeusRo || typeof ResizeObserver === "undefined") return;
+  lueKorkeus();
+  korkeusRo = new ResizeObserver(lueKorkeus);
+  korkeusRo.observe(document.body);
+  korkeusRo.observe(document.documentElement);
+  window.addEventListener("resize", lueKorkeus, { passive: true });
+};
 /* Kuinka paljon kentta on nakymaa korkeampi. Tama on se matka jonka
    verkosto kulkee koko sivun vierityksen aikana, eli parallaksin
    liikevara. 900px on hieman yli yhden nakyman: liike on selvasti
@@ -176,6 +199,8 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
     // paasisivat eroon toisistaan huomaamatta. Luku tehdaan size():ssa
     // eli kerran per koon muutos, ei kehyskohtaisesti.
     let lineRgb = "111,236,255";
+    let tyylitRgb = "";
+    const tyylit: string[] = [];
     let dotColor = "rgba(180,245,255,.85)";
     const readColors = () => {
       const cs = getComputedStyle(cv.parentElement || cv);
@@ -214,8 +239,9 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
     /* Sivun etenema 0..1. Nimittajana koko vieritettava matka, joten
        verkosto kulkee tasan PAN_Y pikselia sivun alusta loppuun
        riippumatta siita kuinka pitka sivu on. */
+    seuraaKorkeutta();
     const progress = () => {
-      const span = document.documentElement.scrollHeight - window.innerHeight;
+      const span = (sivunKorkeus || document.documentElement.scrollHeight) - window.innerHeight;
       return span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
     };
     let sp = -1;
@@ -232,8 +258,12 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
        myos silloin kun sivu on paikallaan. */
     const host = cv.parentElement;
     let prevSp = -1;
+    /* --nsp kirjoitetaan vain kerrokseen jossa on alustamerkit: muissa
+       sita ei lue mikaan, mutta muutos joka kehys pakotti koko kerroksen
+       tyylit uudelleenlaskentaan. */
+    const tarvitseeSp = !!host?.querySelector(".netmarks");
     const pushSp = () => {
-      if (!host) return;
+      if (!host || !tarvitseeSp) return;
       const q = Math.round(sp * 1000) / 1000;
       if (q === prevSp) return;
       prevSp = q;
@@ -273,6 +303,12 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
       ctx.translate(ox, oy);
       // Viivat ensin, pisteet paalle.
       ctx.lineWidth = 1;
+      /* SUORITUSKYKY 30.9.2026: VIIVAT KORITETTUINA. Aiemmin jokainen
+         viiva oli oma beginPath + stroke ja oma strokeStyle-merkkijono,
+         eli satoja piirtokutsuja kehyksessa jokaisessa kerroksessa.
+         Nyt viivat jaetaan kirkkauden mukaan TASOT koriin ja jokainen
+         kori piirretaan yhdella kutsulla. Kirkkauden porras on 1/48
+         (0,02 lapinakyvyytta), mita silma ei erota. */
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
           const dx = px[i] - px[j];
@@ -282,19 +318,33 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
           // Kirkkaus etaisyyden mukaan: viiva syttyy ja sammuu
           // asteittain eika ilmesty valahtaen kynnyksella.
           const a = (1 - Math.sqrt(d2) / LINK) * 0.5;
-          ctx.strokeStyle = `rgba(${lineRgb},${a.toFixed(3)})`;
-          ctx.beginPath();
-          ctx.moveTo(px[i], py[i]);
-          ctx.lineTo(px[j], py[j]);
-          ctx.stroke();
+          const k = Math.min(TASOT, Math.max(1, Math.round(a * 2 * TASOT)));
+          kori[k].push(px[i], py[i], px[j], py[j]);
         }
       }
-      ctx.fillStyle = dotColor;
-      for (let i = 0; i < pts.length; i++) {
-        ctx.beginPath();
-        ctx.arc(px[i], py[i], 1.6, 0, Math.PI * 2);
-        ctx.fill();
+      if (tyylitRgb !== lineRgb) {
+        tyylitRgb = lineRgb;
+        for (let k = 1; k <= TASOT; k++) tyylit[k] = `rgba(${lineRgb},${(k / (2 * TASOT)).toFixed(3)})`;
       }
+      for (let k = 1; k <= TASOT; k++) {
+        const v = kori[k];
+        if (!v.length) continue;
+        ctx.strokeStyle = tyylit[k];
+        ctx.beginPath();
+        for (let m = 0; m < v.length; m += 4) {
+          ctx.moveTo(v[m], v[m + 1]);
+          ctx.lineTo(v[m + 2], v[m + 3]);
+        }
+        ctx.stroke();
+        v.length = 0;
+      }
+      ctx.fillStyle = dotColor;
+      ctx.beginPath();
+      for (let i = 0; i < pts.length; i++) {
+        ctx.moveTo(px[i] + 1.6, py[i]);
+        ctx.arc(px[i], py[i], 1.6, 0, Math.PI * 2);
+      }
+      ctx.fill();
       ctx.restore();
     };
 
@@ -314,6 +364,8 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
 
     let raf = 0;
     let prev = 0;
+    let edellinenKohde = -1;
+    let viimeksiPiirretty = 0;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       // dt katkaistaan: valilehden palatessa taukolta prev on vanha ja
@@ -326,17 +378,20 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
       if (sp < 0 || dt === 0) sp = target;
       else sp += (target - sp) * (1 - Math.exp(-dt / SCROLL_TAU));
       pushSp();
-      if (mount === "cover") {
-        const k = kaareRef;
-        if (k) {
-          const r = k.getBoundingClientRect();
-          const nyt = r.top <= 0 && r.bottom >= window.innerHeight;
-          if (nyt !== peittaa) {
-            peittaa = nyt;
-            kerroPeitosta(nyt ? 1 : -1);
-          }
-        }
-      }
+      /* Peiton laskenta (kaaren getBoundingClientRect joka kehys) poistettiin
+         30.9.2026: shouldRun() palauttaa sivutason kerrokselle aina true,
+         joten tieto ei ohjannut mitaan, mutta luku pakotti asettelun
+         laskennan kesken kehyksen jokaisessa peittavassa kerroksessa. */
+      /* LEPOTILA 30.9.2026. Kun sivu seisoo, verkosto ajelehtii vain
+         16 px sekunnissa, eli 120 Hz:n naytolla yksi kehys siirtaa
+         pistetta 0,13 px. Piirto joka kehys piti naytonohjaimen
+         taydessa tyossa (tuulettimet) ilman nakyvaa hyotya. Levossa
+         piirretaan 30 kertaa sekunnissa (0,5 px askel, nayttaa samalta),
+         vierittaessa joka kehys. */
+      const liikkuu = Math.abs(target - sp) > 1e-5 || target !== edellinenKohde;
+      edellinenKohde = target;
+      if (!liikkuu && now - viimeksiPiirretty < 32) return;
+      viimeksiPiirretty = now;
       /* Absoluuttinen aika, ei kertyma: ks. tyypin P kommentti. Sama
          luku jokaiselle ilmentymalle samassa kehyksessa. */
       draw(now / 1000);

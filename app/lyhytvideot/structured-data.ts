@@ -66,9 +66,9 @@ export const structuredData = {
       "@type": "WebPage",
       "@id": "https://wsmedia.fi/lyhytvideot#sivu",
       url: "https://wsmedia.fi/lyhytvideot",
-      name: "Lyhytvideotuotanto yrityksille | TikTok, Reels & Shorts | WS Media",
+      name: "Lyhytvideot ja somevideot yrityksille | Espoo | WS Media",
       description:
-        "Lyhytvideotuotanto yrityksille avaimet käteen: strategia, käsikirjoitus, kuvaus ja editointi TikTokiin, Instagram Reelsiin ja YouTube Shortsiin.",
+        "Somevideot ja lyhytvideot yrityksille: suunnittelu, kuvaus ja editointi TikTokiin, Instagram Reelsiin ja YouTube Shortsiin kiinteään kuukausihintaan.",
       inLanguage: "fi-FI",
       isPartOf: { "@id": ORG_ID },
       primaryImageOfPage: OG_IMAGE,
@@ -78,7 +78,7 @@ export const structuredData = {
       "@id": "https://wsmedia.fi/lyhytvideot#murupolku",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Etusivu", item: "https://wsmedia.fi/" },
-        { "@type": "ListItem", position: 2, name: "Palvelut", item: "https://wsmedia.fi/palvelut" },
+        { "@type": "ListItem", position: 2, name: "Palvelut", item: "https://wsmedia.fi/#palvelut" },
         {
           "@type": "ListItem",
           position: 3,
@@ -94,7 +94,7 @@ export const structuredData = {
       serviceType: "Lyhytvideotuotanto",
       url: "https://wsmedia.fi/lyhytvideot",
       description:
-        "Avaimet käteen -lyhytvideotuotanto yrityksille: lyhytvideostrategia, ideointi, käsikirjoitus, kuvaus, editointi, tekstitys ja alustakohtainen optimointi TikTokiin, Instagram Reelsiin, YouTube Shortsiin ja LinkedIniin.",
+        "Lyhytvideot ja somevideot yrityksille: suunnittelu, ideointi, käsikirjoitus, kuvaus, editointi, tekstitys ja julkaisu TikTokiin, Instagram Reelsiin, YouTube Shortsiin ja LinkedIniin.",
       provider: { "@id": ORG_ID },
       areaServed: { "@type": "Country", name: "Suomi" },
       audience: { "@type": "BusinessAudience", name: "Pk-yritykset" },
@@ -104,45 +104,39 @@ export const structuredData = {
         itemListElement: [
           {
             "@type": "Offer",
-            name: "[Paketti 1]",
+            name: "Aloitus",
             description:
-              "[X] lyhytvideota kuukaudessa, 1 kuvauspäivä, optimointi yhdelle kanavalle.",
+              "4 lyhytvideota kuukaudessa, esiintyjä, 1 kuvauspäivä, käsikirjoitus, editointi ja tekstitys.",
             priceCurrency: "EUR",
-            price: "[HINTA]",
+            price: "1500",
             priceSpecification: {
               "@type": "UnitPriceSpecification",
               priceCurrency: "EUR",
-              price: "[HINTA]",
+              price: "1500",
+              valueAddedTaxIncluded: false,
               unitCode: "MON",
             },
           },
           {
             "@type": "Offer",
-            name: "[Paketti 2]",
+            name: "Ylläpito",
             description:
-              "[X] lyhytvideota kuukaudessa, monikanavainen optimointi, julkaisu ja kuukausiraportti.",
+              "Aloitus-paketin sisältö sekä Instagram-tarinat, karusellit, kuvajulkaisut ja tilin ylläpito.",
             priceCurrency: "EUR",
-            price: "[HINTA]",
+            price: "2200",
             priceSpecification: {
               "@type": "UnitPriceSpecification",
               priceCurrency: "EUR",
-              price: "[HINTA]",
+              price: "2200",
+              valueAddedTaxIncluded: false,
               unitCode: "MON",
             },
           },
           {
             "@type": "Offer",
-            name: "[Paketti 3]",
+            name: "Räätälöity",
             description:
-              "[X] lyhytvideota kuukaudessa, useita kuvauspäiviä, TikTok, Reels, Shorts ja LinkedIn sekä maksetun mainonnan hallinnointi.",
-            priceCurrency: "EUR",
-            price: "[HINTA]",
-            priceSpecification: {
-              "@type": "UnitPriceSpecification",
-              priceCurrency: "EUR",
-              price: "[HINTA]",
-              unitCode: "MON",
-            },
+              "Ylläpito-paketin sisältö sekä yhteisjulkaisukumppanien etsiminen, koukkujen testaus, Meta-mainonnan hallinnointi ja videomäärä tarpeen mukaan. Hinta tarjouksen mukaan.",
           },
         ],
       },

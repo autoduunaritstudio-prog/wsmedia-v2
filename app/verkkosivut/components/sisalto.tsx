@@ -327,7 +327,7 @@ export const TREE = [
 
 /* ---------- Prosessi ---------- */
 export const STEPS = [
-  ["Kartoitus", "Käymme läpi mitä yritys tekee, kenelle ja millä hauilla asiakkaat etsivät palvelua. Et tarvitse mitään valmiiksi.", "noin 30 min"],
+  ["Kartoitus", "Käymme läpi mitä yritys tekee, kenelle ja millä hauilla asiakkaat etsivät palvelua.", "noin 30 min"],
   ["Rakenne ja hakusanat", "Päätämme mitkä sivut tehdään ja millä hakusanoilla kukin sivu pyrkii näkymään. Hyväksyt sivustokartan.", "2–3 päivää"],
   ["Suunnittelu", "Rakennamme ulkoasun ja näytämme sen sinulle. Kommentoit, me viilaamme, vasta sitten siirrytään toteutukseen.", "3–5 päivää"],
   ["Toteutus ja sisältö", "Koodaus, tekstit, kuvat, lomakkeet ja tekninen hakukoneoptimointi. Seuraat etenemistä demo-osoitteesta.", "1–2 viikkoa"],
@@ -461,7 +461,7 @@ export const UKK_KYSYMYKSET = [
   "Käytättekö WordPressiä?",
   "Voinko päivittää sisältöä itse?",
   "Kuka omistaa sivuston ja verkkotunnuksen?",
-  "Tarvitseeko minulla olla valmiit tekstit ja kuvat?",
+  "Pitääkö minulla olla valmiit tekstit ja kuvat?",
   "Voiko vanhat sivut uudistaa ilman että Google-näkyvyys katoaa?",
   "Teettekö myös verkkokaupan?",
 ];

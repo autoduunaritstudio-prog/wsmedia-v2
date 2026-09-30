@@ -1,9 +1,9 @@
-import NetBackdrop from "../../components/NetBackdrop";
 import { Hakutulos, Koodi, Linkkiprofiili } from "./Artefaktit";
 import { Maininnat } from "./Grafiikat";
 import Ikoni from "./Ikoni";
 import Kehotus from "./Kehotus";
 import type { IkoniNimi } from "./Ikoni";
+import { Kaiku } from "../../components/Maasto";
 
 /**
  * NELJA OSA-ALUETTA ALLEKKAIN.
@@ -92,14 +92,14 @@ const PANEELIT: {
     ikoni: "kone",
     label: "Tekoälyhakunäkyvyys",
     h: "Näkyvyys tekoälyhauissa",
-    p: "Yhä useampi haku päättyy tekoälyn koostamaan vastaukseen. Sama tekninen ja sisällöllinen pohja ratkaisee sielläkin, mutta painotukset ovat hieman eri.",
+    p: "Yhä useampi haku päättyy valmiiseen vastaukseen listan sijaan. Sama tekninen ja sisällöllinen pohja ratkaisee sielläkin, mutta painotukset ovat hieman eri.",
     rows: [
       /* "Strukturoitu data: kone lukee merkinnoista mita palvelua tarjoat,
          missa ja milla hinnalla" poistettiin: sama lause on sanatarkasti
          taman saman osion koodiartefaktin selitteessa (mitattu 57 %
          sanatarkkaa paallekkaisyytta), ja se rivi on jo Teknisen SEO:n
          paneelissa Schema.org-merkintoina. */
-      ["Selkeä, lainattava rakenne", "Kysymys, suora vastaus ja perustelu, ei markkinointipuhetta vastauksen ympärillä"],
+      ["Selkeä, lainattava rakenne", "Väliotsikko kysymyksenä ja vastaus heti sen alle, ei myyntipuhetta välissä"],
       ["Tarkistettavat faktat", "Hinnat, aikataulut ja toimitusehdot sivulla, ei pelkästään puhelimessa"],
       ["Auktoriteetti ja maininnat", "Mitä useammin sivustosi mainitaan luotettavissa lähteissä, sitä todennäköisemmin se päätyy vastaukseen"],
       ["Seuranta", "Seuraamme, mainitaanko yrityksesi vastauksissa toimialasi tärkeimmillä kysymyksillä"],
@@ -151,18 +151,16 @@ const ARTEFAKTIT = [
 export default function Sisalto() {
   return (
     <section className="seo-sec" id="sisalto">
-      {/* ELAVA TAUSTA. Osio on sivun pisin, ja pisin osio tasaisella
-          pohjalla lukee tympeana riippumatta siita mita sen paalla on:
-          mikaan ei kerro etta sivu etenee. Sama verkosto kuin
-          Lyhytvideot-alasivulla, mount="cover" eli pinnattu kerros
-          joka rajautuu TAHAN osioon eika seuraa koko sivua.
-          Ruudukko on otettu siita pois: suoraa viivageometriaa oli jo
-          liikaa, ja verkosto elaa ilman sitakin. */}
-      <NetBackdrop mount="cover" />
+      {/* OSION OMA VERKOSTOKERROS POISTUI. Osio on nyt Jakson sisalla
+          Paikallisen kanssa, ja kaari kantaa kerroksen molempien yli.
+          Oma kerros tarkoitti omaa pistekenttaa, eli kuviointi katkesi
+          tasan taman osion rajoilla - sama vika joka kahdella muulla
+          palvelusivulla jo korjattiin. */}
+      <Kaiku sana="SISÄLTÖ" puoli="vas" kohta="ylos" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Palvelun sisältö</span>
-          <i>Neljä rinnakkaista työtä</i>
+          <i>Neljä osa-aluetta</i>
         </div>
         <h2 className="seo-h2 rv">Mitä hakukoneoptimointi sisältää?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>

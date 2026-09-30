@@ -24,7 +24,9 @@ const STATS = [
   // valilyontia, joka olisi voinut katketa.
   { value: "5\u00A0000\u00A0000+", label: "katselukertaa yhteensä" },
   { value: "8", label: "arkipäivää keskim. toimitusaika" },
-  { value: "4,8/5", label: "keskiarvosana asiakkailta" },
+  /* 4,8/5 poistettiin: arvosana oli suullista palautetta eika mitattu
+     luku. Tilalle YDR:n tulos, jonka Tuomas vahvisti 30.9.2026. */
+  { value: "1\u00A0000\u00A0000+", label: "katselukertaa yhdelle asiakkaalle 3 kk:ssa" },
 ];
 
 export default function Home() {

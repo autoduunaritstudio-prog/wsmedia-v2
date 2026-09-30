@@ -14,7 +14,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
     title: "Hinta ja sitoutuminen",
     items: [
       {
-        q: "Paljonko hakukoneoptimointi maksaa?",
+        q: "Paljonko hakukoneoptimointi maksaa kuukaudessa?",
         a: "Meillä jatkuva hakukoneoptimointi maksaa 390–1 690 euroa kuukaudessa + alv 25,5 %. Suomessa tuloksiin tähtäävä työ asettuu tyypillisesti 400–2 000 euroon kuukaudessa, ja tätä selvästi halvemmilla paketeilla ostetaan käytännössä vain raportointia. Hintaan vaikuttavat eniten toimialan kilpailutilanne, sivuston lähtökunto ja tarvittavan uuden sisällön määrä.",
         plain: "Meillä jatkuva hakukoneoptimointi maksaa 390–1 690 euroa kuukaudessa + alv 25,5 %. Suomessa tuloksiin tähtäävä työ asettuu tyypillisesti 400–2 000 euroon kuukaudessa, ja tätä selvästi halvemmilla paketeilla ostetaan käytännössä vain raportointia. Hintaan vaikuttavat eniten toimialan kilpailutilanne, sivuston lähtökunto ja tarvittavan uuden sisällön määrä.",
       },

@@ -60,8 +60,8 @@ const JANA: { kk: string; leveys: number; h: string; p: string }[] = [
    vihdoin olla otsikkovari (13,19:1) eika pelkka taustapala. */
 export function Aikataulu() {
   return (
-    <section className="seo-sec" id="aikataulu" data-tone="ink">
-      <Kaiku sana="12 KK" puoli="oik" />
+    <section className="seo-sec" id="aikataulu">
+      <Kaiku sana="12 KK" puoli="vas" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Aikajänne</span>
@@ -69,8 +69,8 @@ export function Aikataulu() {
         </div>
         <h2 className="seo-h2 rv">Milloin hakukoneoptimointi alkaa näkyä?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Rehellinen vastaus on, ettei kukaan voi luvata päivämäärää. Tämä on kuitenkin se
-          järjestys, jossa asiat käytännössä tapahtuvat.
+          Tämä on se järjestys, jossa asiat käytännössä tapahtuvat. Kesto vaihtelee toimialan
+          mukaan, järjestys ei.
         </p>
 
         <div className="jana">
@@ -95,9 +95,9 @@ export function Aikataulu() {
             hakusanapintaa. Jaljelle jaa se mita vain tama kappale sanoo,
             eli mista aikataulu riippuu. */}
         <p className="seo-body jana-note">
-          Aikataulu riippuu kahdesta asiasta: kuinka kilpailtu toimialasi on ja missä kunnossa
-          sivusto on lähtiessä. Vähemmän kilpailluilla hakusanoilla tuloksia tulee nopeammin,
-          kovimmilla nousu vie enemmän aikaa.
+          Kaksi asiaa ratkaisee keston: toimialan kilpailutilanne ja se, kuinka paljon teknistä
+          korjaamista sivusto vaatii ennen kuin sisältötyö pääsee alkuun. Vähemmän kilpailluilla
+          hakusanoilla tuloksia tulee nopeammin, kovimmilla nousu vie enemmän aikaa.
         </p>
       </div>
     </section>
@@ -127,6 +127,7 @@ const KAUPUNGIT: [string, string][] = [
 export function Paikallinen() {
   return (
     <section className="seo-sec kuvapohja" id="paikallinen">
+      <Kaiku sana="PAIKALLINEN" puoli="oik" />
       {/* KATUKUVA POIS. Se oli taysleveä kuva heti osion alussa, ja
           sen ylapuolella oli viela toinen kuva: lukijalle se nayttti
           silta etta sama tausta toistuu kahdesti. Yksi kuva riittaa,
@@ -268,7 +269,7 @@ const MITTARIT: [string, string, string][] = [
 
 export function Mittarit() {
   return (
-    <section className="seo-sec ruudukko" id="mittarit">
+    <section className="seo-sec" id="mittarit">
       <Kaiku sana="LUVUT" puoli="oik" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
@@ -365,7 +366,7 @@ const RIVIT: { label: string; cells: [ReactNode, ReactNode, ReactNode] }[] = [
 
 export function Hinnoittelu() {
   return (
-    <section className="seo-sec valo" id="hinnoittelu">
+    <section className="seo-sec" id="hinnoittelu">
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Hinnoittelu</span>
@@ -373,9 +374,8 @@ export function Hinnoittelu() {
         </div>
         <h2 className="seo-h2 rv">Paljonko hakukoneoptimointi maksaa?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Kolme tasoa, kiinteä kuukausihinta ja maksuton kartoitus ennen aloitusta. Suomessa
-          tuloksiin tähtäävä hakukoneoptimointi asettuu tyypillisesti 400–2 000 euroon kuukaudessa,
-          tässä on meidän tasomme siitä haarukasta.
+          Kolme tasoa ja kiinteä kuukausihinta. Tasot eroavat siinä, kuinka paljon uutta sisältöä
+          kuukaudessa syntyy ja rakennetaanko myös auktoriteettia.
         </p>
 
         <table className="spec hinta porras rv">
@@ -423,9 +423,8 @@ export function Hinnoittelu() {
         </table>
 
         <p className="seo-body" style={{ marginTop: "28px", maxWidth: "80ch" }}>
-          Kaikki hinnat + alv 25,5 %. Ei aloitusmaksua eikä piilokuluja. Kartoitus ja alustava
-          auditointi ovat maksuttomia eivätkä sido mihinkään. Kuuden kuukauden vähimmäiskesto Kasvu-
-          ja Täysi-tasoilla ei ole myyntikikka: hakukoneoptimointi ei ehdi tuottaa mitään
+          Kaikki hinnat + alv 25,5 %. Ei aloitusmaksua eikä piilokuluja. Kuuden kuukauden
+          vähimmäiskesto Kasvu- ja Täysi-tasoilla ei ole myyntikikka: hakukoneoptimointi ei ehdi tuottaa mitään
           lyhyemmässä ajassa, emmekä halua laskuttaa työstä jota ei ehditä viedä maaliin.
         </p>
       </div>
@@ -441,12 +440,12 @@ export function Hinnoittelu() {
    hiusviivataulukko ei anna. */
 export function Kenelle() {
   return (
-    <section className="seo-sec" id="kenelle" data-tone="ink">
+    <section className="seo-sec" id="kenelle">
       <Kaiku sana="KENELLE" puoli="vas" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Rehellisesti</span>
-          <i>Sanomme sen kartoituksessa</i>
+          <i>Kaksi palstaa, suora vastaus</i>
         </div>
         <h2 className="seo-h2 rv">Hakukoneoptimointi ei kannata kaikille.</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
@@ -477,7 +476,7 @@ export function Kenelle() {
                 "Toimialaasi ei haeta: hakumäärät ovat lähellä nollaa alueellasi",
                 "Sivustolla on konversio-ongelma, lisää liikennettä ei korjaa sitä",
                 "Liiketoimintamalli tai kohderyhmä on vielä auki",
-                "Odotat takuuta sijasta yksi. Sellaista ei voi antaa kukaan.",
+                "Odotat takuuta ykkössijasta. Sellaista ei voi antaa kukaan.",
               ].map((x) => (
                 <li key={x}>{x}</li>
               ))}
@@ -488,7 +487,7 @@ export function Kenelle() {
         {/* Osio sanoo itse "sanomme sen kartoituksessa", mutta sita ei
             paassyt mistaan pyytamaan. Nyt paasee. */}
         <Kehotus kick="Kumpi palsta on sinun?">
-          Jos et ole varma, kysy. Sanomme kartoituksessa suoraan myös silloin,
+          Jos et ole varma, kysy. Vastaamme suoraan myös silloin,
           kun vastaus on ettei tämä kannata.
         </Kehotus>
       </div>
@@ -507,7 +506,7 @@ export function Ukk() {
   const kaikki = FAQ_GROUPS.flatMap((g) => g.items);
   return (
     <section className="seo-sec" id="ukk">
-      <Kaiku sana="KYSY" puoli="oik" />
+      <Kaiku sana="FAQ" puoli="oik" />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Usein kysyttyä</span>
@@ -566,7 +565,7 @@ export function Tarjous() {
         <div className="loc">
           <div>
             <h2 className="seo-h2 rv">
-              Näy siellä, missä <span className="mark">ostopäätös syntyy.</span>
+              Pyydä tarjous <span className="mark">hakukoneoptimoinnista.</span>
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
               Käymme läpi sivustosi nykytilan, toimialasi hakuvolyymit ja kilpailutilanteen. Saat
@@ -576,7 +575,7 @@ export function Tarjous() {
             <ol className="askel porras rv">
               <li>
                 <b>24 h</b>
-                <span>Luemme viestin ja vastaamme sähköpostilla arkipäivän sisällä.</span>
+                <span>Luemme viestin ja vastaamme sähköpostilla.</span>
               </li>
               <li>
                 <b>30 min</b>

@@ -102,16 +102,16 @@ export function Miksi() {
       <Kaiku sana="MIKSI" puoli="oik" />
       <Pystykisko teksti="Miksi lyhytvideot" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Neljä syytä, mikä tahansa riittää</p>
+        <p className="seo-selite" data-rvs="">Miksi somevideot kannattavat</p>
         <div className="miksi-ylaosa">
           <div>
             <h2 className="seo-h2 rv">
-              Lyhytvideot ovat pk-yrityksen kustannustehokkain tapa tulla löydetyksi.
+              Miksi lyhytvideot sopivat pienelle yritykselle?
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-              TikTokissa, Instagram Reelsissä ja YouTube Shortsissa näkyvyys ei enää seuraa
-              seuraajamäärää vaan sisällön laatua. Se on pienen yrityksen etu, jos sisältö on tehty
-              oikein.
+              Moni asiakkaasi selaa lyhytvideoita joka päivä. Kun yrityksesi video osuu hänen
+              eteensä ennen kuin hän tarvitsee palveluasi, olet se tuttu nimi silloin, kun tarve
+              tulee.
             </p>
           </div>
           <Tahdisto />
@@ -196,8 +196,8 @@ export function Prosessi() {
         <p className="seo-selite" data-rvs="">Ensimmäisestä puhelusta julkaisuun</p>
         <h2 className="seo-h2 rv">Näin lyhytvideotuotanto etenee.</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Ensimmäisestä puhelusta valmiisiin videoihin tyypillisesti [X] arkipäivää. Sinun aikaasi
-          kuluu noin [X] tuntia kuukaudessa.
+          Ensimmäisestä puhelusta valmiisiin videoihin kuluu tyypillisesti noin 10 päivää. Sinun
+          aikaasi kuluu korkeintaan 1–2 tuntia kuukaudessa.
         </p>
 
         {/* data-hehku ON NOPEUSSAADIN. --rvp:n matka on kiinnitetty
@@ -229,8 +229,9 @@ export function Prosessi() {
         <div className="missa rv">
           <p className="missa-kick">Missä kuvaamme</p>
           <p className="missa-p">
-            Kuvaamme päivittäin pääkaupunkiseudulla ja muualla Suomessa sopimuksen mukaan.
-            Käsikirjoitus, editointi ja julkaisu toimivat etänä minne tahansa Suomessa.
+            Kuvaamme viikoittain Espoossa, Helsingissä ja Vantaalla ja muualla Suomessa
+            sovitusti. Käsikirjoitus, editointi ja julkaisu hoituvat etänä, joten ne onnistuvat
+            minne tahansa.
           </p>
         </div>
 
@@ -335,8 +336,8 @@ export function Kokonaisuus() {
       <Kaiku sana="BRÄNDI" puoli="oik" />
       <Pystykisko teksti="Kokonaisuus" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Kolme osaa, yksi ketju</p>
-        <h2 className="seo-h2 rv">Lyhytvideo rakentaa brändin. Mainonta ja haku tuovat liidit.</h2>
+        <p className="seo-selite" data-rvs="">Video, mainonta ja haku yhdessä</p>
+        <h2 className="seo-h2 rv">Lyhytvideo tekee yrityksesi tutuksi. Mainonta ja Google-haku tuovat yhteydenotot.</h2>
 
         <div className="portaat porras rv">
           {KETJU.map((k, idx) => (
@@ -348,12 +349,12 @@ export function Kokonaisuus() {
               <div className="porras-teksti">
                 <h3>{k.h}</h3>
                 <p className="seo-body">{k.p}</p>
-                {idx > 0 ? (
-                  <SmartLink
-                    href={idx === 1 ? "/graafinen-suunnittelu" : "/hakukoneoptimointi"}
-                    className="tlink"
-                  >
-                    {idx === 1 ? "Graafinen suunnittelu" : "Hakukoneoptimointi"}
+                {/* Vain hakukoneoptimoinnin rivilla on oma sivu. Meta-mainonnan
+                    rivi linkitti aiemmin graafiseen suunnitteluun, joka ei
+                    ole sama palvelu. */}
+                {idx === 2 ? (
+                  <SmartLink href="/hakukoneoptimointi" className="tlink">
+                    Hakukoneoptimointi
                   </SmartLink>
                 ) : null}
               </div>
@@ -373,7 +374,7 @@ export function Tulokset() {
       <Pystykisko teksti="Tehtyä työtä" />
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Asiakkaiden omilla tileillä</p>
-        <h2 className="seo-h2 rv">Näytämme mieluummin kuin kerromme.</h2>
+        <h2 className="seo-h2 rv">Esimerkkejä tekemistämme somevideoista</h2>
 
         {/* Ruudukko oli .swrapin ULKOPUOLELLA, joten se levisi koko
             nakymaan: 1728px levea ruudukko ja 364 x 625 pikselin
@@ -397,9 +398,10 @@ export function Hinnoittelu() {
     <section className="seo-sec" id="hinnoittelu">
       <div className="swrap">
         <p className="seo-selite" data-rvs="">Kiinteä kuukausihinta · ei aloitusmaksua</p>
-        <h2 className="seo-h2 rv">Paljonko lyhytvideotuotanto maksaa?</h2>
+        <h2 className="seo-h2 rv">Paljonko somevideot ja lyhytvideot maksavat?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Kiinteä kuukausihinta, ei aloitusmaksuja eikä pitkiä sopimuksia. Irtisanominen kuukausi
+          Kiinteä kuukausihinta, ei aloitusmaksuja eikä pitkiä sopimuksia. Hintaan vaikuttavat
+          videoiden määrä, kuvauspäivät ja se, hoidammeko myös julkaisun. Irtisanominen kuukausi
           kerrallaan.
         </p>
 
@@ -409,7 +411,13 @@ export function Hinnoittelu() {
               {p.tag ? <em className="paketti-merkki">{p.tag}</em> : null}
               <h3>{p.name}</h3>
               <p className="hinta-n">
-                [HINTA] <small>€/kk + alv</small>
+                {p.price ? (
+                  <>
+                    {p.price} <small>€/kk + alv</small>
+                  </>
+                ) : (
+                  <small>Hinta tarpeen mukaan</small>
+                )}
               </p>
               <p className="hinta-f">{p.forWhom}</p>
               <ul className="seo-spec">
@@ -425,8 +433,8 @@ export function Hinnoittelu() {
         </div>
 
         <p className="seo-body" style={{ marginTop: "28px", maxWidth: "80ch" }}>
-          Yksittäiset lyhytvideot ja kampanjatuotannot hinnoitellaan projekteina alkaen [HINTA] €.
-          Kaikki hinnat + alv 25,5 %.
+          Yksittäiset lyhytvideot ja kampanjatuotannot hinnoitellaan projekteina. Kaikki hinnat
+          + alv 25,5 %.
         </p>
       </div>
     </section>
@@ -443,7 +451,7 @@ export function Kenelle() {
       <Kaiku sana="KENELLE" puoli="vas" />
       <Pystykisko teksti="Kenelle" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Sanomme sen kartoituksessa</p>
+        <p className="seo-selite" data-rvs="">Sopiiko tämä sinulle</p>
         <h2 className="seo-h2 rv">Kenelle lyhytvideotuotanto sopii?</h2>
 
         <div className="kaksi porras rv" style={{ marginTop: "48px" }}>
@@ -468,9 +476,9 @@ export function Kenelle() {
           </div>
         </div>
 
-        <Kehotus kick="Kumpi palsta on sinun?">
-          Jos et ole varma, kysy. Sanomme kartoituksessa suoraan myös silloin, kun vastaus on,
-          ettei tämä kannata.
+        <Kehotus kick="Etkö ole varma?">
+          Kysy meiltä. Sanomme suoraan myös silloin, jos lyhytvideot eivät ole sinulle oikea
+          ratkaisu.
         </Kehotus>
       </div>
     </section>
@@ -484,7 +492,7 @@ export function Ukk() {
     <section className="seo-sec" id="ukk">
       <Kaiku sana="FAQ" puoli="oik" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">{kaikki.length} kysymystä</p>
+        <p className="seo-selite" data-rvs="">Usein kysyttyä</p>
         <div className="qa2">
           <div className="qa2-side">
             <h2 className="seo-h2 rv">Usein kysytyt kysymykset lyhytvideotuotannosta</h2>
@@ -535,7 +543,7 @@ export function Tarjous() {
             <ol className="askel porras rv">
               <li>
                 <b>24 h</b>
-                <span>Luemme viestin ja vastaamme sähköpostilla arkipäivän sisällä.</span>
+                <span>Luemme viestin ja vastaamme sähköpostilla.</span>
               </li>
               <li>
                 <b>30 min</b>

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import { easeOutCubic, formatCount, parseCount } from "./count-format";
+import { tauotaPiilossa } from "./animaatiotauko";
 
 /**
  * Sivun skrolli- ja osoitinsidonnaiset efektit yhdessä paikassa.
@@ -19,6 +20,7 @@ export default function SiteEffects() {
   useEffect(() => {
     const ac = new AbortController();
     const { signal } = ac;
+    const puraTauko = tauotaPiilossa();
 
     /* PALJASTUKSEN OLETUS ON NAKYVA, ei piilotettu.
      *
@@ -458,6 +460,23 @@ export default function SiteEffects() {
       window.addEventListener("resize", measureHero, { passive: true, signal });
     }
 
+    /* LUVUT ENSIN, KIRJOITUKSET LOPUKSI. onScroll luki elementtien
+       sijainteja (getBoundingClientRect) ja kirjoitti CSS-muuttujia
+       vuorotellen, jolloin jokainen luku kirjoituksen jalkeen pakotti
+       selaimen laskemaan tyylit ja asettelun uudelleen kesken kehyksen.
+       Nyt kirjoitukset kerataan jonoon ja ajetaan kerralla funktion
+       lopussa. Arvot ja jarjestys ovat samat, joten liike ei muutu.
+       Mitattu 30.9.2026. */
+    const jono: (() => void)[] = [];
+    let kirjoitusVaihe = false;
+    const W = (f: () => void) => {
+      if (kirjoitusVaihe) jono.push(f);
+      else f();
+    };
+    const tyhjenna = () => {
+      for (let k = 0; k < jono.length; k++) jono[k]();
+      jono.length = 0;
+    };
     let ticking = false;
     // Paljastusjarjestelmalla oli OMA scroll-kuuntelija ja OMA rAF, joka
     // ajoi rect-lukunsa vasta taman funktion kirjoitusten jalkeen - eli
@@ -467,6 +486,7 @@ export default function SiteEffects() {
     let revealFn: (() => void) | null = null;
 
     const onScroll = () => {
+      kirjoitusVaihe = true;
       const vh = window.innerHeight;
       const h = document.documentElement;
       const sc = window.scrollY;
@@ -502,10 +522,10 @@ export default function SiteEffects() {
              kaksi erillista setPropertya samalle ominaisuudelle jattaisi
              vain jalkimmaisen voimaan. */
           const spx = parseFloat(el.dataset.parx ?? "0");
-          el.style.setProperty(
+          W(() => { el.style.setProperty(
             "translate",
             `${(-parMids[i] * spx).toFixed(1)}px ${(-parMids[i] * sp).toFixed(1)}px`,
-          );
+          ); });
         });
       }
 
@@ -535,7 +555,7 @@ export default function SiteEffects() {
           if (!m) continue;
           const matka = Math.max((vh * 0.62 + m.h * 0.35) * m.k, 1);
           const kuljettu = sc + vh - m.y;
-          el.style.setProperty("--piirto", Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3));
+          W(() => { el.style.setProperty("--piirto", Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3)); });
         }
 
         for (const el of valoEls) {
@@ -543,7 +563,17 @@ export default function SiteEffects() {
           if (!m) continue;
           const matka = Math.max(m.h + vh, 1);
           const kuljettu = sc + vh - m.y;
-          el.style.setProperty("--valo", Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3));
+          const valo = Math.min(Math.max(kuljettu / matka, 0), 1);
+          /* --valo-q on porrastettu (0,02) kopio osion taustavalolle. Valo
+             on osion koko korkuinen liukuvari maskeineen, ja sen jokainen
+             muutos maalasi koko pinnatun osion uudelleen joka kehys.
+             MITATTU 30.9.2026: Miksi-osion vieritys 60 -> 86 fps pelkalla
+             valon jaadytyksella. Porras siirtaa valoa alle 0,5 % kerrallaan
+             eika sita erota; pystykaiku kayttaa edelleen tarkkaa --valoa. */
+          W(() => {
+            el.style.setProperty("--valo", valo.toFixed(3));
+            el.style.setProperty("--valo-q", (Math.round(valo * 50) / 50).toFixed(2));
+          });
         }
 
         /* Nolla kun osion ylareuna koskee nakyman alareunaa, yksi kun
@@ -551,22 +581,25 @@ export default function SiteEffects() {
         for (const el of kiinniEls) {
           const m = kiinniY.get(el);
           if (!m) continue;
-          el.style.setProperty(
+          W(() => { el.style.setProperty(
             "--kiinni",
             Math.min(Math.max((sc + vh - m.y) / Math.max(m.h, 1), 0), 1).toFixed(3)
-          );
+          ); });
         }
 
         rvsEls.forEach((el, i) => {
-          el.style.setProperty("--rvp", rvsP[i].toFixed(3));
+          W(() => { el.style.setProperty("--rvp", rvsP[i].toFixed(3)); });
           // PALAUTUVA "OSIO ON ESILLA" -TILA. Tarvitaan koska CSS ei osaa
           // haarautua muuttujan ARVOSTA: animaatiota ei voi kaynnistaa
           // ehdolla var(--rvp) === 1. Luokka on siis sama tieto luettavassa
           // muodossa, ja se poistuu itsestaan kun etenema laskee alle
           // ykkosen. classList.add/remove jo oikeassa tilassa ei muuta
           // DOMTokenListia, joten tasta ei tule kehyskohtaista tyota.
-          if (rvsP[i] >= RVS_IN) el.classList.add("rvs-in");
-          else el.classList.remove("rvs-in");
+          /* Luokka vain kun tila vaihtuu: add/remove joka kehys oli joka
+             elementille attribuuttimuutos joka kehys. */
+          const onJo = el.classList.contains("rvs-in");
+          if (rvsP[i] >= RVS_IN) { if (!onJo) W(() => { el.classList.add("rvs-in"); }); }
+          else if (onJo) W(() => { el.classList.remove("rvs-in"); });
         });
       }
 
@@ -585,7 +618,7 @@ export default function SiteEffects() {
         // parhaiten katsottavissa ja suoristuu tullessaan nakyviin seka
         // poistuessaan.
         const t = Math.max(1 - Math.abs(d) / TILT_RANGE, 0);
-        el.style.setProperty("--tilt", t.toFixed(3));
+        W(() => { el.style.setProperty("--tilt", t.toFixed(3)); });
         // VARJOLLE PORRASTETTU ARVO. box-shadow'n sumennussade ja
         // siirtyma ovat maalausominaisuuksia: portaattomana ne maalaavat
         // ison sumennetun varjon uudelleen joka kehyksessa. Mitattuna
@@ -627,7 +660,7 @@ export default function SiteEffects() {
         // Positiivinen rotateX vie ylareunan poispain katsojasta. Sama t,
         // joten molemmat akselit ovat huipussaan yhta aikaa keskella.
         const back = mockup ? ` rotateX(${(t * TILT_BACK_MAX).toFixed(2)}deg)` : "";
-        el.style.setProperty("--tilt-rot", `${axis}(${main.toFixed(2)}deg)${back}`);
+        W(() => { el.style.setProperty("--tilt-rot", `${axis}(${main.toFixed(2)}deg)${back}`); });
         });
       }
 
@@ -663,8 +696,8 @@ export default function SiteEffects() {
           // kertaakaan matkan aikana - juuri se poistaa toistuvuuden.
           const gx = 56 + Math.sin(mbProg * Math.PI * 1.7) * 6;
           for (const el of mbLayers) {
-            el.style.setProperty("--mb-gy", `${gy.toFixed(1)}%`);
-            el.style.setProperty("--mb-gx", `${gx.toFixed(1)}%`);
+            W(() => { el.style.setProperty("--mb-gy", `${gy.toFixed(1)}%`); });
+            W(() => { el.style.setProperty("--mb-gx", `${gx.toFixed(1)}%`); });
           }
           // LIIKE background-positionilla, EI transformilla. Mika tahansa
           // kehyskohtainen transformi tolla nakymankokoisella kuviokerroksella
@@ -675,7 +708,7 @@ export default function SiteEffects() {
           // todistetusti turvallinen. 120/200 -> 300/200px, vara 432/270px.
           const bx = (mbProg * 300).toFixed(1);
           const by = (-mbProg * 200).toFixed(1);
-          for (const el of mbFacetsAll) el.style.backgroundPosition = `${bx}px ${by}px`;
+          for (const el of mbFacetsAll) W(() => { el.style.backgroundPosition = `${bx}px ${by}px`; });
           // Ryhmat kiertyvat VASTAKKAISIIN suuntiin ja eri vauhtia, jolloin
           // niiden leikkauspisteet vaeltavat ja fasettien rajat piirtyvat
           // sivun eri kohdissa eri tavalla. Kierto on SVG:n sisalla, joten
@@ -691,35 +724,35 @@ export default function SiteEffects() {
         // lohkojen KESKINAINEN asema muuttuu koko matkan ajan eika koko
         // kuvio vain siirry yhtena kappaleena.
         if (mbA) {
-          mbA.style.transform =
+          W(() => { mbA.style.transform =
             `translate3d(${(p * 0.09).toFixed(1)}px, ${(-p * 0.16).toFixed(1)}px, 0)` +
-            ` rotate(${(p * 0.02).toFixed(2)}deg)`;
+            ` rotate(${(p * 0.02).toFixed(2)}deg)`; });
         }
         if (mbB) {
-          mbB.style.transform =
+          W(() => { mbB.style.transform =
             `translate3d(${(-p * 0.14).toFixed(1)}px, ${(p * 0.07).toFixed(1)}px, 0)` +
-            ` rotate(${(-p * 0.011).toFixed(2)}deg)`;
+            ` rotate(${(-p * 0.011).toFixed(2)}deg)`; });
         }
         if (mbSweep) {
           // 1917px eika raitajakso 900px: 118 asteen kulmassa pystysiirtyma
           // vastaa kuvion jaksoa vasta kun se on jaettu cos(118°):lla.
           // Aiempi 420px ei osunut jaksoon lainkaan, joten kuvio HYPPASI
           // takaisin alkuun - juuri se nakyi toistona.
-          mbSweep.style.transform = `translate3d(0, ${(-(p * 0.3) % 1917).toFixed(1)}px, 0)`;
+          W(() => { mbSweep.style.transform = `translate3d(0, ${(-(p * 0.3) % 1917).toFixed(1)}px, 0)`; });
         }
       }
 
       if (bdGrid && bdRing && bdWave) {
         const gx = -((sc * 0.02) % 240);
         const gy = -((sc * 0.012) % 300);
-        bdGrid.style.transform = `translate(${gx.toFixed(1)}px, ${gy.toFixed(1)}px)`;
-        bdRing.style.transform = `translate(770px,110px) rotate(${(sc * 0.14).toFixed(1)}deg)`;
-        bdWave.style.transform = `translateX(${(-(sc * 0.05) % 660).toFixed(1)}px)`;
+        W(() => { bdGrid.style.transform = `translate(${gx.toFixed(1)}px, ${gy.toFixed(1)}px)`; });
+        W(() => { bdRing.style.transform = `translate(770px,110px) rotate(${(sc * 0.14).toFixed(1)}deg)`; });
+        W(() => { bdWave.style.transform = `translateX(${(-(sc * 0.05) % 660).toFixed(1)}px)`; });
         const drawT = (Math.sin(sc / 380) + 1) / 2;
         bdPaths.forEach((p, i) => {
           if (!p) return;
           const off = 100 - ((drawT * 100 - i * 6 + 600) % 100);
-          p.style.strokeDashoffset = off.toFixed(1);
+          W(() => { p.style.strokeDashoffset = off.toFixed(1); });
         });
       }
 
@@ -752,12 +785,12 @@ export default function SiteEffects() {
           Math.max((A - refCover.getBoundingClientRect().top) / (0.6 * A), 0),
           1,
         );
-        refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3));
+        W(() => { refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3)); });
         // Sama etenema myos .refsille omana muuttujanaan. RAAKA rp (0..1),
         // ei rp * REF_SCRIM_MAX: overlayn oma gradientti maaraa
         // voimakkuuden, ja muuttuja saataa vain sen etenemaa. Ei uutta
         // laskentaa - rp on jo tassa ja se on 0,000 tasan pin-hetkella.
-        refCover.style.setProperty("--refs-dim", rp.toFixed(3));
+        W(() => { refCover.style.setProperty("--refs-dim", rp.toFixed(3)); });
       }
 
 
@@ -772,7 +805,7 @@ export default function SiteEffects() {
       // kertaalleen, jottei aiempi arvo jaa elamaan.
       if (afterCover) {
         const v = (vh - afterCover.getBoundingClientRect().top) / (vh * COVER_FADE_SPAN);
-        afterCover.style.setProperty("--cover-fade", Math.min(Math.max(v, 0), 1).toFixed(3));
+        W(() => { afterCover.style.setProperty("--cover-fade", Math.min(Math.max(v, 0), 1).toFixed(3)); });
       }
 
       // Kolmas pari: Referenssien tummennus etenee kun .aftercover nousee
@@ -780,14 +813,14 @@ export default function SiteEffects() {
       if (refCover && afterCover) {
         const apRaw = 1 - afterCover.getBoundingClientRect().top / vh;
         const ap = Math.min(Math.max(apRaw, 0), 1);
-        refCover.style.setProperty("--refs-scrim", (ap * REF_SCRIM_MAX).toFixed(3));
+        W(() => { refCover.style.setProperty("--refs-scrim", (ap * REF_SCRIM_MAX).toFixed(3)); });
         // RAJAAMATON etenema NavCarriersille. Rajattu ap kyllastyy ykkoseen
         // heti kun .aftercover peittaa nakyman ylareunan, joten silla ei voi
         // ajoittaa mitaan sen jalkeen - ikkunan siirtaminen myohemmaksi
         // vaatii arvon joka jatkaa yli ykkosen. Negatiivisena se kertoo
         // kuinka kaukana .aftercover viela on, mika on Referenssien
         // keskijakson ainoa mitta. Ei uusi laskenta - sama rect, sama rivi.
-        refCover.style.setProperty("--refs-ap", apRaw.toFixed(3));
+        W(() => { refCover.style.setProperty("--refs-ap", apRaw.toFixed(3)); });
       }
 
       if (hero && cover) {
@@ -813,10 +846,10 @@ export default function SiteEffects() {
            skrubbauksen on jo oltava valmis. */
           const matka = Math.max(hero.offsetHeight - vh * 2, 1);
           const kuljettu = -wrap.getBoundingClientRect().top;
-          hero.style.setProperty(
+          W(() => { hero.style.setProperty(
             "--hero-s",
             Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(4),
-          );
+          ); });
         }
 
         const p = Math.min(Math.max(1 - cover.getBoundingClientRect().top / vh, 0), 1);
@@ -824,17 +857,19 @@ export default function SiteEffects() {
         // alareunassa, 1 kun cover peittaa heron. Sama mittaus kuin ennen,
         // vain ilman kerrointa - scrimin aikataulu on nyt HeroScrubissa,
         // jotta p:n ja q:n jaksot ovat yhdessa paikassa.
-        hero.style.setProperty("--hero-q", p.toFixed(4));
+        W(() => { hero.style.setProperty("--hero-q", p.toFixed(4)); });
       }
 
       if (strip && copyW > 0) {
         stripOff += (sc - lastSc) * LOGO_SPEED;
         const x = -(((stripOff % copyW) + copyW) % copyW);
-        strip.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`;
+        W(() => { strip.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`; });
       }
       lastSc = sc;
 
       navAndProgress(sc, h);
+      kirjoitusVaihe = false;
+      tyhjenna();
       ticking = false;
     };
 
@@ -845,7 +880,7 @@ export default function SiteEffects() {
     const navAndProgress = (sc: number, h: HTMLElement) => {
       if (!scrolled && sc > 14) scrolled = true;
       else if (scrolled && sc < 4) scrolled = false;
-      nav?.classList.toggle("scrolled", scrolled);
+      if (nav && nav.classList.contains("scrolled") !== scrolled) W(() => { nav.classList.toggle("scrolled", scrolled); });
 
       if (nav && stripBand) {
         const r = stripBand.getBoundingClientRect();
@@ -858,7 +893,7 @@ export default function SiteEffects() {
         // DOMia kosketaan vain kun tila oikeasti vaihtuu, ei joka tickilla.
         if (overlap !== navAway) {
           navAway = overlap;
-          nav.classList.toggle("nav-away", overlap);
+          W(() => { nav.classList.toggle("nav-away", overlap); });
         }
       }
 
@@ -867,7 +902,7 @@ export default function SiteEffects() {
         // kompositoritransformi, joten kehysta kohden ei tule asettelua,
         // maalausta eika rasterointia. Ks. #prog globals.css:ssa.
         const max = h.scrollHeight - window.innerHeight;
-        prog.style.transform = `scaleX(${(max > 0 ? sc / max : 0).toFixed(4)})`;
+        W(() => { prog.style.transform = `scaleX(${(max > 0 ? sc / max : 0).toFixed(4)})`; });
       }
     };
 
@@ -1029,20 +1064,24 @@ export default function SiteEffects() {
     const revealNow = () => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
+      const paljasta: HTMLElement[] = [];
       document.querySelectorAll<HTMLElement>(".rv:not(.on)").forEach((el) => {
         const r = el.getBoundingClientRect();
         const area = r.width * r.height;
         if (area <= 0) return;
         const ih = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
         const iw = Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0));
-        if ((ih * iw) / area >= 0.1) el.classList.add("on");
+        if ((ih * iw) / area >= 0.1) paljasta.push(el);
       });
+      // Luokat vasta kaikkien lukujen jalkeen: lisays keskella silmukkaa
+      // pakotti seuraavan getBoundingClientRectin laskemaan asettelun.
+      for (const el of paljasta) W(() => el.classList.add("on"));
       // TOISSIJAINEN todistepolku. Ensisijainen on havainnoijan
       // ensimmainen toimitus; tama kattaa sen epatodennakoisen
       // tilanteen jossa IO ei toimita mutta tama varmistus onnistuu.
       // Ei enaa ainoa ehto, joten se ei voi jaada tayttymatta siksi
       // ettei kayttaja vierita.
-      if (document.querySelector(".rv.on")) rvProven();
+      if (paljasta.length || document.querySelector(".rv.on")) rvProven();
     };
     revealNow();
     // HeroScrub ilmoittaa lukon purusta tapahtumalla, ei tuonnilla:
@@ -1176,6 +1215,7 @@ export default function SiteEffects() {
       pinoRo?.disconnect();
       refRo?.disconnect();
       ac.abort();
+      puraTauko();
       heroRo?.disconnect();
       ro?.disconnect();
       io.disconnect();

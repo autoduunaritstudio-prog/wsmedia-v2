@@ -75,7 +75,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
         plain: "Sinä. Verkkotunnus rekisteröidään yrityksesi nimiin ja saat sivustoon täydet oikeudet. Emme lukitse sivustoa omalle alustallemme.",
       },
       {
-        q: "Tarvitseeko minulla olla valmiit tekstit ja kuvat?",
+        q: "Pitääkö minulla olla valmiit tekstit ja kuvat?",
         a: "Ei tarvitse. Kirjoitamme tekstit puolestasi ja käsittelemme olemassa olevan kuvamateriaalin. Jos kuvia ei ole, voimme kuvata ne tai käyttää kuvapankkia, kuvaus hinnoitellaan erikseen.",
         plain: "Ei tarvitse. Kirjoitamme tekstit puolestasi ja käsittelemme olemassa olevan kuvamateriaalin. Jos kuvia ei ole, voimme kuvata ne tai käyttää kuvapankkia, kuvaus hinnoitellaan erikseen.",
       },

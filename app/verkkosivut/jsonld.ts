@@ -94,7 +94,7 @@ const BASE_GRAPH = [
           "@type": "ListItem",
           "position": 2,
           "name": "Palvelut",
-          "item": "https://wsmedia.fi/palvelut"
+          "item": "https://wsmedia.fi/#palvelut"
         },
         {
           "@type": "ListItem",

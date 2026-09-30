@@ -80,7 +80,7 @@ const BASE_GRAPH = [
           "@type": "ListItem",
           "position": 2,
           "name": "Palvelut",
-          "item": "https://wsmedia.fi/palvelut"
+          "item": "https://wsmedia.fi/#palvelut"
         },
         {
           "@type": "ListItem",
@@ -96,7 +96,7 @@ const BASE_GRAPH = [
       "name": "Graafinen suunnittelu yritykselle",
       "serviceType": "Graafinen suunnittelu ja yritysilme",
       "url": "https://wsmedia.fi/graafinen-suunnittelu",
-      "description": "Avaimet käteen -graafinen suunnittelu yrityksille: logosuunnittelu, yritysilme ja graafinen ohjeisto sekä ajoneuvoteippaukset, julkisivu- ja ikkunateippaukset, valomainokset ja painotuotteet. Suunnittelu tehdään talon sisällä, tuotanto ja asennus hankitaan alihankintana WS Median vastuulla — asiakas saa yhden tarjouksen ja yhden laskun.",
+      "description": "Avaimet käteen -graafinen suunnittelu yrityksille: logosuunnittelu, yritysilme ja graafinen ohjeisto sekä ajoneuvoteippaukset, julkisivu- ja ikkunateippaukset, valomainokset ja painotuotteet. Suunnittelu tehdään talon sisällä, tuotanto ja asennus hankitaan alihankintana WS Median vastuulla, ja asiakas saa yhden tarjouksen ja yhden laskun.",
       "provider": {
         "@id": "https://wsmedia.fi/#organisaatio"
       },
