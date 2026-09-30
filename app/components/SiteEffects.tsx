@@ -477,6 +477,26 @@ export default function SiteEffects() {
       for (let k = 0; k < jono.length; k++) jono[k]();
       jono.length = 0;
     };
+    /* PEITETYT VAIHEET PIILOON. Pinotussa vierityksessa jokainen ohitettu
+       vaihe jaa pinnattuna nakyman kohdalle seuraavan alle, eli ruudun
+       kohdalla on paallekkain useita koko nakyman kokoisia kerroksia.
+       Selain rasteroi ne kaikki, ja kun naytonohjaimen muisti tai aika
+       loppuu kesken vierityksen, ylimman kerroksen puuttuvat palat
+       nakyvat lapi: juuri se valkkyminen, jossa edellinen osio kuultaa
+       hinnaston lapi (kuvakaappaus 30.9.2026).
+
+       Kun kansi (pinon toinen lapsi, aina umpinainen pohja) on noussut
+       puoli nakymaa vaiheen ylareunan yli ja peittaa nakyman alareunaan
+       asti, vaihe ei voi nakya, ja se saa visibility: hidden. Puolen
+       nakyman vara antaa selaimelle aikaa piirtaa vaihe takaisin ennen
+       kuin kansi paljastaa siita pikseliakaan ylos vieritettaessa. */
+    const vaiheet = Array.from(document.querySelectorAll<HTMLElement>(".pino, .stickysub"))
+      .filter((p) => p.children.length >= 2)
+      .map((p) => ({
+        vaihe: p.firstElementChild as HTMLElement,
+        kansi: p.lastElementChild as HTMLElement,
+        piilossa: false,
+      }));
     let ticking = false;
     // Paljastusjarjestelmalla oli OMA scroll-kuuntelija ja OMA rAF, joka
     // ajoi rect-lukunsa vasta taman funktion kirjoitusten jalkeen - eli
@@ -864,6 +884,17 @@ export default function SiteEffects() {
         stripOff += (sc - lastSc) * LOGO_SPEED;
         const x = -(((stripOff % copyW) + copyW) % copyW);
         W(() => { strip.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`; });
+      }
+      for (const v of vaiheet) {
+        const k = v.kansi.getBoundingClientRect();
+        const piiloon = k.top <= -vh * 0.5 && k.bottom >= vh;
+        if (piiloon !== v.piilossa) {
+          v.piilossa = piiloon;
+          W(() => {
+            if (piiloon) v.vaihe.setAttribute("data-peitossa", "");
+            else v.vaihe.removeAttribute("data-peitossa");
+          });
+        }
       }
       lastSc = sc;
 
