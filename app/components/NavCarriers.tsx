@@ -285,6 +285,7 @@ export default function NavCarriers() {
 
     let lepoY = -1;
     let lepoW = -1;
+    let lepoPiirretty = false;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       /* Hahmot liikkuvat vierityksen mukaan. Kun ne ovat piilossa (idle)
@@ -292,6 +293,7 @@ export default function NavCarriers() {
          aiemmin se luki silti kolme elementin sijaintia joka kehys. */
       const sy = window.scrollY;
       if (idle && sy === lepoY && window.innerWidth === lepoW) return;
+      if (window.innerWidth !== lepoW) lepoPiirretty = false;
       lepoY = sy;
       lepoW = window.innerWidth;
       const r = strip.getBoundingClientRect();
@@ -352,6 +354,16 @@ export default function NavCarriers() {
           measure();
         }
       } else if (!idle) idle = true;
+      /* LEPOASENTO PIIRRETAAN KERRAN. Kun hahmot ovat kotona (u = 0),
+         kaikki niiden arvot ovat samat sivun joka kohdassa (todennettu
+         1.10.2026 vertaamalla SVG:n ja navin tilaa kymmenessa
+         vierityskohdassa). Silti koko kuva, noin 60 SVG-attribuuttia,
+         kirjoitettiin joka kehys koko sivun matkalla, ja Safari piirsi
+         ruudun kokoisen SVG:n uudelleen. */
+      if (idle) {
+        if (lepoPiirretty) return;
+        lepoPiirretty = true;
+      } else lepoPiirretty = false;
 
       // --- blendin lapi nakyva vari ---
       // #nav on mix-blend-mode: difference, joten renderoity savy on

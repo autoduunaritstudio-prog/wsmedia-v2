@@ -261,13 +261,29 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
     /* --nsp kirjoitetaan vain kerrokseen jossa on alustamerkit: muissa
        sita ei lue mikaan, mutta muutos joka kehys pakotti koko kerroksen
        tyylit uudelleenlaskentaan. */
-    const tarvitseeSp = !!host?.querySelector(".netmarks");
+    /* --nsp kirjoitetaan suoraan merkkikerrokseen, ei koko verkoston
+       kerrokseen: Safari maalaa muuttujan saaneen elementin uudelleen. */
+    const merkkiKerros = host?.querySelector<HTMLElement>(".netmarks") ?? null;
+    const tarvitseeSp = !!merkkiKerros;
+    const merkit = merkkiKerros
+      ? Array.from(merkkiKerros.querySelectorAll<HTMLElement>(".nm")).map((el) => ({
+          el,
+          nx: parseFloat(el.style.getPropertyValue("--nx")) || 0,
+          ny: parseFloat(el.style.getPropertyValue("--ny")) || 0,
+        }))
+      : [];
     const pushSp = () => {
       if (!host || !tarvitseeSp) return;
       const q = Math.round(sp * 1000) / 1000;
       if (q === prevSp) return;
       prevSp = q;
-      host.style.setProperty("--nsp", q.toFixed(3));
+      /* Suoraan jokaisen merkin transformiin eika --nsp-muuttujana:
+         Safarissa muuttujan muutos maksoi kehyksessa enemman kuin koko
+         verkoston piirto (mitattu 30.9.2026). Arvo on sama kuin CSS:n
+         calc(var(--nsp) * var(--nx) * 1px). */
+      for (const m of merkit) {
+        m.el.style.transform = `translate3d(${(q * m.nx).toFixed(2)}px, ${(q * m.ny).toFixed(2)}px, 0)`;
+      }
     };
 
     const draw = (t: number) => {
@@ -388,6 +404,14 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
          taydessa tyossa (tuulettimet) ilman nakyvaa hyotya. Levossa
          piirretaan 30 kertaa sekunnissa (0,5 px askel, nayttaa samalta),
          vierittaessa joka kehys. */
+      /* Kannen alla tai piilotetussa vaiheessa kangasta ei nay: ei piirtoa.
+         Tieto tulee SiteEffectsilta attribuuttina (ei asettelun lukua).
+         Kun kangas palaa nakyviin, se piirtyy samassa kehyksessa, ja
+         kentta on ajasta laskettu, joten se on heti oikeassa kohdassa. */
+      if (host && (host.hasAttribute("data-kangas-piilossa") || host.closest("[data-peitossa]"))) {
+        viimeksiPiirretty = 0;
+        return;
+      }
       const liikkuu = Math.abs(target - sp) > 1e-5 || target !== edellinenKohde;
       edellinenKohde = target;
       if (!liikkuu && now - viimeksiPiirretty < 32) return;

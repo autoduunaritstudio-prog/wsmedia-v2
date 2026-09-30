@@ -123,6 +123,7 @@ export default function SiteEffects() {
        Opt-in data-attribuutilla, jotta kirjoituksia tulee vain niille
        elementeille jotka sita oikeasti kayttavat. */
     const rvsEls = Array.from(document.querySelectorAll<HTMLElement>("[data-rvs]"));
+    const rvsJoukko = new Set<Element>(rvsEls);
 
     /* HEHKU: ETENEMA JOKA EI VOI JAATYA.
      *
@@ -139,6 +140,7 @@ export default function SiteEffects() {
      * elementti maalataan, joten sticky ei vaikuta siihen mitenkaan.
      * Sijainti mitataan kerran ja resizessa, ei kehyksessa. */
     const hehkuEls = Array.from(document.querySelectorAll<HTMLElement>("[data-hehku]"));
+    const hehkuJoukko = new Set<Element>(hehkuEls);
     const hehkuY = new WeakMap<HTMLElement, { y: number; h: number; k: number }>();
     const mittaaHehku = () => {
       for (const el of hehkuEls) {
@@ -192,6 +194,28 @@ export default function SiteEffects() {
     const valoEls = Array.from(
       document.querySelectorAll<HTMLElement>(".wsx .seo-sec, .wsx .jakso-pari")
     );
+    /* Valon oma kerros, ks. globals.css "OSION VALO OMANA ELEMENTTINAAN".
+       Vain lyhytvideosivulla ja vain osioihin joiden ::before on valo. */
+    const valoKerros = new WeakMap<HTMLElement, HTMLElement>();
+    if (document.querySelector(".page-lyhytvideot")) {
+      for (const el of valoEls) {
+        const pse = getComputedStyle(el, "::before");
+        if (pse.content === "none" || !pse.backgroundImage.includes("radial-gradient")) continue;
+        const k = document.createElement("span");
+        k.className = "osio-valo";
+        k.setAttribute("aria-hidden", "true");
+        el.prepend(k);
+        el.setAttribute("data-valokerros", "");
+        valoKerros.set(el, k);
+      }
+    }
+    /* --valo-q:ta lukee vain osion ::before-valo (tai sen kopio
+       .osio-valo). Kuvapohjaisella osiolla valoa ei ole, ja arvo
+       kirjoitettiin silti koko osioon. */
+    const valoQLukija = new WeakMap<HTMLElement, boolean>();
+    for (const el of valoEls) {
+      valoQLukija.set(el, getComputedStyle(el, "::before").backgroundImage.includes("radial-gradient"));
+    }
     const valoY = new WeakMap<HTMLElement, { y: number; h: number }>();
     const mittaaValo = () => {
       for (const el of valoEls) {
@@ -222,6 +246,7 @@ export default function SiteEffects() {
        Mittaus on layout-pohjainen samasta syysta kuin muillakin:
        pinnatun elementin getBoundingClientRect jaatyy, offsetTop ei. */
     const kiinniEls = Array.from(document.querySelectorAll<HTMLElement>("[data-kiinni]"));
+    const kiinniJoukko = new Set<Element>(kiinniEls);
     const kiinniY = new WeakMap<HTMLElement, { y: number; h: number }>();
     const mittaaKiinni = () => {
       for (const el of kiinniEls) {
@@ -467,6 +492,176 @@ export default function SiteEffects() {
        Nyt kirjoitukset kerataan jonoon ja ajetaan kerralla funktion
        lopussa. Arvot ja jarjestys ovat samat, joten liike ei muutu.
        Mitattu 30.9.2026. */
+    /* Sama arvo kirjoitetaan vain kerran. Kaukana olevien osioiden luvut
+       ovat rajoitettuja (0 tai 1) ja toistuivat joka kehys; Safari
+       kasittelee jokaisen setPropertyn muutoksena, vaikka arvo ei muutu. */
+    const viimeiset = new WeakMap<HTMLElement, Map<string, string>>();
+    const aseta = (el: HTMLElement, n: string, v: string) => {
+      let m = viimeiset.get(el);
+      if (!m) {
+        m = new Map();
+        viimeiset.set(el, m);
+      }
+      if (m.get(n) === v) return;
+      m.set(n, v);
+      el.style.setProperty(n, v);
+    };
+    const valoKaiut = new WeakMap<HTMLElement, HTMLElement[]>();
+    /* MUUTTUJA SUORAAN LUKIJALLE. Safari maalaa uudelleen sen elementin,
+       jonka muuttuja muuttuu, eli koko osion kuvineen, vaikka muuttujaa
+       lukisi vain yksi sen lapsi. Siksi isoilla sailioilla muuttuja
+       kirjoitetaan niihin lapsiin, joiden tyylit sita lukevat (ks.
+       globals.css: var(--rvp) ja var(--kiinni)). Arvo on sama, joten
+       ulkonako ei muutu. Muilla sailio itse on lukija. */
+    /* LUKIJAT SELVITETAAN TYYLISIVUILTA. --rvp ja --piirto kirjoitettiin
+       osion sailioon (.nelja, .jana, .tahdisto, .porras-rivi ...), jolloin
+       Safari laski ja maalasi koko osion uudelleen joka kehys. MITATTU
+       Safarissa 30.9.2026: muuttujakirjoitus bodyyn 15 ms, lehteen 0 ms;
+       kaikki muuttujat pois 29 -> 50 fps.
+
+       Nyt arvo kirjoitetaan niihin sailion jalkelaisiin, joihin osuu
+       jokin saanto joka lukee muuttujaa (var(--rvp) jne.). Saannon
+       viimeisesta osasta kaytetaan vain ensimmainen tunniste (tagi,
+       luokka tai attribuutti), joten tilaluokat kuten .rvs-in eivat
+       rajaa pois. Pois jatetaan:
+       - elementit toisen kirjoittajan sisalla (sisakkaiset data-rvs),
+       - elementit joille CSS itse maarittaa saman muuttujan (esim.
+         .porras-rivi { --piirto: ... }), ja niiden sisalto.
+       Jos saantoja ei voi lukea tai lukijoita on paljon, arvo menee
+       sailioon kuten ennenkin. Arvo on sama, joten ulkonako ei muutu. */
+    const vanhatKohteet = location.search.includes("vanhat-kohteet");
+    const jaa = (t: string, erotin: (ch: string) => boolean): string[] => {
+      const osat: string[] = [];
+      let d = 0;
+      let a = 0;
+      for (let i = 0; i < t.length; i++) {
+        const ch = t[i];
+        if (ch === "(" || ch === "[") d++;
+        else if (ch === ")" || ch === "]") d--;
+        else if (d === 0 && erotin(ch)) {
+          osat.push(t.slice(a, i));
+          a = i + 1;
+        }
+      }
+      osat.push(t.slice(a));
+      return osat.map((x) => x.trim()).filter(Boolean);
+    };
+    const subjekti = (sel: string): string | null => {
+      const puhdas = sel.replace(/::[\w-]+(\([^)]*\))?/g, "").replace(/:(before|after)\b/g, "");
+      const osat = jaa(puhdas, (ch) => ch === " " || ch === ">" || ch === "+" || ch === "~" || ch === "\n" || ch === "\t");
+      const m = /^([a-zA-Z][\w-]*|\.[\w-]+|\[[^\]]+\]|#[\w-]+)/.exec(osat[osat.length - 1] ?? "");
+      return m ? m[1] : null;
+    };
+    type Saannot = { lukijat: string; maarittajat: string; varma: boolean };
+    const saantoMuisti = new Map<string, Saannot>();
+    const lueSaannot = (nimi: string): Saannot => {
+      const lukijat = new Set<string>();
+      const maarittajat: string[] = [];
+      let varma = true;
+      const kaytto = new RegExp("var\\(\\s*" + nimi + "\\s*[,)]");
+      /* voimassa: onko saannon @media/@supports-ehto nyt tosi. Maarittajiksi
+         kelpaavat vain voimassa olevat saannot: esim. reduced-motion-
+         lohkon ".lv-k { --piirto: 1 }" ei maarita mitaan tavallisessa
+         nakymassa, ja sen laskeminen jatti kortit ilman arvoa. Lukijoiksi
+         kelpaavat kaikki, koska ylimaarainen lukija ei muuta ulkonakoa. */
+      const kay = (rules: CSSRuleList, sisakkainen: boolean, voimassa: boolean) => {
+        for (const r of Array.from(rules)) {
+          if (r instanceof CSSStyleRule) {
+            const teksti = r.style.cssText;
+            if (sisakkainen && (kaytto.test(teksti) || r.style.getPropertyValue(nimi) !== "")) varma = false;
+            if (!sisakkainen) {
+              if (voimassa && r.style.getPropertyValue(nimi) !== "") {
+                for (const x of jaa(r.selectorText, (ch) => ch === ",")) {
+                  if (!/::|:before|:after/.test(x)) maarittajat.push(x);
+                }
+              }
+              if (kaytto.test(teksti)) {
+                for (const x of jaa(r.selectorText, (ch) => ch === ",")) {
+                  // Esim. ".proc-cta > *": viimeista osaa ei voi loysata,
+                  // joten kaytetaan koko valitsinta ilman pseudoelementtia.
+                  const sj = subjekti(x) ?? x.replace(/::[\w-]+(\([^)]*\))?/g, "").replace(/:(before|after)\b/g, "").trim();
+                  if (sj) lukijat.add(sj);
+                  else varma = false;
+                }
+              }
+            }
+            if (r.cssRules && r.cssRules.length) kay(r.cssRules, true, voimassa);
+          } else if ("cssRules" in r && (r as CSSGroupingRule).cssRules) {
+            let ehto = voimassa;
+            if (r instanceof CSSMediaRule) ehto = ehto && window.matchMedia(r.media.mediaText).matches;
+            else if (r instanceof CSSSupportsRule) ehto = ehto && CSS.supports(r.conditionText);
+            kay((r as CSSGroupingRule).cssRules, sisakkainen, ehto);
+          }
+        }
+      };
+      for (const sh of Array.from(document.styleSheets)) {
+        let rules: CSSRuleList | null = null;
+        try {
+          rules = sh.cssRules;
+        } catch {
+          // Toisen palvelimen tyylisivu (fontit): ei lueta, ei muuttujia.
+          continue;
+        }
+        if (rules) kay(rules, false, true);
+      }
+      if (!lukijat.size) varma = false;
+      return { lukijat: Array.from(lukijat).join(","), maarittajat: maarittajat.join(","), varma };
+    };
+    let lukijaMuisti = new WeakMap<HTMLElement, Map<string, HTMLElement[]>>();
+    const kirjoitetut: [HTMLElement, string][] = [];
+    // @media-ehdot voivat vaihtua koon muuttuessa: lasketaan uudelleen.
+    window.addEventListener(
+      "resize",
+      () => {
+        saantoMuisti.clear();
+        lukijaMuisti = new WeakMap();
+        // Vanhat kohteet tyhjiksi, ettei niihin jaa vanhentunutta arvoa
+        // peittamaan uusien kohteiden periytyvaa arvoa.
+        for (const [el, n] of kirjoitetut) {
+          el.style.removeProperty(n);
+          viimeiset.get(el)?.delete(n);
+        }
+        kirjoitetut.length = 0;
+      },
+      { passive: true, signal },
+    );
+    const lukijat = (el: HTMLElement, nimi: string, kirjoittajat: Set<Element>): HTMLElement[] => {
+      if (vanhatKohteet) return [el];
+      let m = lukijaMuisti.get(el);
+      if (!m) {
+        m = new Map();
+        lukijaMuisti.set(el, m);
+      }
+      const vanha = m.get(nimi);
+      if (vanha) return vanha;
+      let t = saantoMuisti.get(nimi);
+      if (!t) {
+        t = lueSaannot(nimi);
+        saantoMuisti.set(nimi, t);
+      }
+      let k: HTMLElement[] = [el];
+      if (t.varma) {
+        try {
+          if (!el.matches(t.lukijat)) {
+            const maar = t.maarittajat;
+            const e = Array.from(el.querySelectorAll<HTMLElement>(t.lukijat)).filter((c) => {
+              for (let a: Element | null = c; a && a !== el; a = a.parentElement) {
+                if (kirjoittajat.has(a)) return false;
+                if (maar && a.matches(maar)) return false;
+              }
+              return true;
+            });
+            // Ei yhtaan lukijaa: arvoa ei tarvitse kirjoittaa minnekaan.
+            if (e.length <= 80) k = e;
+          }
+        } catch {
+          k = [el];
+        }
+      }
+      m.set(nimi, k);
+      for (const x of k) kirjoitetut.push([x, nimi]);
+      return k;
+    };
     const jono: (() => void)[] = [];
     let kirjoitusVaihe = false;
     const W = (f: () => void) => {
@@ -497,6 +692,23 @@ export default function SiteEffects() {
         kansi: p.lastElementChild as HTMLElement,
         piilossa: false,
       }));
+    /* Samat kannet kertovat myos verkostokankaiden nakyvyyden. Kangas
+       piirtaa joka kehys, ja Safarissa viisi paallekkaista kangasta oli
+       vierityksen raskain yksittainen tyo, vaikka niista nakyi kerrallaan
+       yksi tai kaksi. Kangas on piilossa, kun jokin sen oman alueen
+       (sivun juuri tai kankaan kaare) sisalla oleva kansi peittaa
+       nakyman samalla puolen nakyman varalla. NetBackdrop lukee tiedon
+       attribuutista, ei asettelusta. */
+    const kankaat = Array.from(document.querySelectorAll<HTMLElement>(".netbd")).map((nb) => {
+      const alue = nb.classList.contains("netbd-cover")
+        ? (nb.closest(".netbd-clip")?.parentElement ?? null)
+        : nb.parentElement;
+      return {
+        nb,
+        kannet: alue ? vaiheet.map((v) => v.kansi).filter((k) => k !== alue && alue.contains(k)) : [],
+        piilossa: false,
+      };
+    });
     let ticking = false;
     // Paljastusjarjestelmalla oli OMA scroll-kuuntelija ja OMA rAF, joka
     // ajoi rect-lukunsa vasta taman funktion kirjoitusten jalkeen - eli
@@ -529,11 +741,21 @@ export default function SiteEffects() {
       // asetteluun, joten lukujen siirtaminen eteen ei muuta yhtaan
       // laskettua arvoa - se vain poistaa laskennat joita ei tarvita.
       if (!reduce) {
-        const parMids = pars.map((el) => {
+        /* NAKYMAN ULKOPUOLELLA EI KIRJOITETA. Parallaksiarvo muuttuu joka
+           kehys koko sivun kaikille ~30 elementille, myos niille jotka ovat
+           tuhansien pikselien paassa. Safari kasittelee jokaisen muutoksen
+           tyylityona. MITATTU 1.10.2026: jokaisella sivun osuudella noin
+           15 turhaa kirjoitusta kehyksessa. Arvo lasketaan samasta
+           sijainnista heti kun elementti on puolen nakyman paassa, joten
+           nakyva liike on sama. */
+        const parNakyy: boolean[] = [];
+        const parMids = pars.map((el, i) => {
           const r = el.getBoundingClientRect();
+          parNakyy[i] = r.bottom > -vh * 0.5 && r.top < vh * 1.5 && !el.closest("[data-peitossa]");
           return r.top + r.height / 2 - vh / 2;
         });
         pars.forEach((el, i) => {
+          if (!parNakyy[i]) return;
           const sp = parseFloat(el.dataset.par ?? "0");
           /* VAAKAKOMPONENTTI SAMASTA LUVUSTA. data-parx kayttaa tasan
              samaa etaisyytta nakyman keskelta kuin pysty, joten liike on
@@ -542,7 +764,7 @@ export default function SiteEffects() {
              kaksi erillista setPropertya samalle ominaisuudelle jattaisi
              vain jalkimmaisen voimaan. */
           const spx = parseFloat(el.dataset.parx ?? "0");
-          W(() => { el.style.setProperty(
+          W(() => { aseta(el, 
             "translate",
             `${(-parMids[i] * spx).toFixed(1)}px ${(-parMids[i] * sp).toFixed(1)}px`,
           ); });
@@ -575,7 +797,12 @@ export default function SiteEffects() {
           if (!m) continue;
           const matka = Math.max((vh * 0.62 + m.h * 0.35) * m.k, 1);
           const kuljettu = sc + vh - m.y;
-          W(() => { el.style.setProperty("--piirto", Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3)); });
+          const pv = Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3);
+          const pq = (Math.round(parseFloat(pv) * 25) / 25).toFixed(2);
+          W(() => {
+            for (const k of lukijat(el, "--piirto", hehkuJoukko)) aseta(k, "--piirto", pv);
+            for (const k of lukijat(el, "--piirto-q", hehkuJoukko)) aseta(k, "--piirto-q", pq);
+          });
         }
 
         for (const el of valoEls) {
@@ -590,9 +817,23 @@ export default function SiteEffects() {
              MITATTU 30.9.2026: Miksi-osion vieritys 60 -> 86 fps pelkalla
              valon jaadytyksella. Porras siirtaa valoa alle 0,5 % kerrallaan
              eika sita erota; pystykaiku kayttaa edelleen tarkkaa --valoa. */
+          /* Tarkka --valo kirjoitetaan vain pystykaiulle, joka on sen ainoa
+             lukija. Safari (WebKit) maalaa elementin uudelleen jokaisesta
+             sen omasta muuttujamuutoksesta, joten osion koko korkuinen
+             kerros piirtyi joka kehys. MITATTU Safarissa 30.9.2026:
+             muuttujakirjoitukset pois 24 -> 42 fps. Osio saa vain
+             porrastetun --valo-q:n, joka muuttuu harvoin. */
+          let kaiut = valoKaiut.get(el);
+          if (!kaiut) {
+            kaiut = Array.from(el.querySelectorAll<HTMLElement>(":scope > .kaiku"));
+            valoKaiut.set(el, kaiut);
+          }
+          const vs = valo.toFixed(3);
+          const vq = (Math.round(valo * 50) / 50).toFixed(2);
           W(() => {
-            el.style.setProperty("--valo", valo.toFixed(3));
-            el.style.setProperty("--valo-q", (Math.round(valo * 50) / 50).toFixed(2));
+            for (const k of kaiut!) aseta(k, "--valo", vs);
+            const vk = valoKerros.get(el) ?? (valoQLukija.get(el) ? el : null);
+            if (vk) aseta(vk, "--valo-q", vq);
           });
         }
 
@@ -601,14 +842,13 @@ export default function SiteEffects() {
         for (const el of kiinniEls) {
           const m = kiinniY.get(el);
           if (!m) continue;
-          W(() => { el.style.setProperty(
-            "--kiinni",
-            Math.min(Math.max((sc + vh - m.y) / Math.max(m.h, 1), 0), 1).toFixed(3)
-          ); });
+          const kv = Math.min(Math.max((sc + vh - m.y) / Math.max(m.h, 1), 0), 1).toFixed(3);
+          W(() => { for (const k of lukijat(el, "--kiinni", kiinniJoukko)) aseta(k, "--kiinni", kv); });
         }
 
         rvsEls.forEach((el, i) => {
-          W(() => { el.style.setProperty("--rvp", rvsP[i].toFixed(3)); });
+          const rv = rvsP[i].toFixed(3);
+          W(() => { for (const k of lukijat(el, "--rvp", rvsJoukko)) aseta(k, "--rvp", rv); });
           // PALAUTUVA "OSIO ON ESILLA" -TILA. Tarvitaan koska CSS ei osaa
           // haarautua muuttujan ARVOSTA: animaatiota ei voi kaynnistaa
           // ehdolla var(--rvp) === 1. Luokka on siis sama tieto luettavassa
@@ -626,11 +866,14 @@ export default function SiteEffects() {
       // KAANTO on automaattista -> sammuu.
       if (!reduce) {
         // Sama jako kuin parseissa: kaikki rectit ensin, kirjoitukset sitten.
-        const tiltDs = tilts.map((el) => {
+        const tiltNakyy: boolean[] = [];
+        const tiltDs = tilts.map((el, i) => {
           const r = el.getBoundingClientRect();
+          tiltNakyy[i] = r.bottom > -vh * 0.5 && r.top < vh * 1.5 && !el.closest("[data-peitossa]");
           return (r.top + r.height / 2 - vh / 2) / vh;
         });
         tilts.forEach((el, i) => {
+        if (!tiltNakyy[i]) return;
         // Keskikohtien etaisyys, normalisoitu viewportin korkeuteen.
         const d = tiltDs[i];
         // 1 = keskella (taysi kaanto), 0 = TILT_RANGEn paassa keskelta
@@ -638,7 +881,8 @@ export default function SiteEffects() {
         // parhaiten katsottavissa ja suoristuu tullessaan nakyviin seka
         // poistuessaan.
         const t = Math.max(1 - Math.abs(d) / TILT_RANGE, 0);
-        W(() => { el.style.setProperty("--tilt", t.toFixed(3)); });
+        // --tilt ei enaa kirjoiteta: CSS ei lue sita (ks. globals.css,
+        // varjot kayttavat vakiota), ja se oli koko kortin muuttuja.
         // VARJOLLE PORRASTETTU ARVO. box-shadow'n sumennussade ja
         // siirtyma ovat maalausominaisuuksia: portaattomana ne maalaavat
         // ison sumennetun varjon uudelleen joka kehyksessa. Mitattuna
@@ -680,7 +924,7 @@ export default function SiteEffects() {
         // Positiivinen rotateX vie ylareunan poispain katsojasta. Sama t,
         // joten molemmat akselit ovat huipussaan yhta aikaa keskella.
         const back = mockup ? ` rotateX(${(t * TILT_BACK_MAX).toFixed(2)}deg)` : "";
-        W(() => { el.style.setProperty("--tilt-rot", `${axis}(${main.toFixed(2)}deg)${back}`); });
+        W(() => { aseta(el, "--tilt-rot", `${axis}(${main.toFixed(2)}deg)${back}`); });
         });
       }
 
@@ -716,8 +960,8 @@ export default function SiteEffects() {
           // kertaakaan matkan aikana - juuri se poistaa toistuvuuden.
           const gx = 56 + Math.sin(mbProg * Math.PI * 1.7) * 6;
           for (const el of mbLayers) {
-            W(() => { el.style.setProperty("--mb-gy", `${gy.toFixed(1)}%`); });
-            W(() => { el.style.setProperty("--mb-gx", `${gx.toFixed(1)}%`); });
+            W(() => { aseta(el, "--mb-gy", `${gy.toFixed(1)}%`); });
+            W(() => { aseta(el, "--mb-gx", `${gx.toFixed(1)}%`); });
           }
           // LIIKE background-positionilla, EI transformilla. Mika tahansa
           // kehyskohtainen transformi tolla nakymankokoisella kuviokerroksella
@@ -805,12 +1049,12 @@ export default function SiteEffects() {
           Math.max((A - refCover.getBoundingClientRect().top) / (0.6 * A), 0),
           1,
         );
-        W(() => { refSticky.style.setProperty("--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3)); });
+        W(() => { aseta(refSticky, "--ref-scrim", (rp * REF_SCRIM_MAX).toFixed(3)); });
         // Sama etenema myos .refsille omana muuttujanaan. RAAKA rp (0..1),
         // ei rp * REF_SCRIM_MAX: overlayn oma gradientti maaraa
         // voimakkuuden, ja muuttuja saataa vain sen etenemaa. Ei uutta
         // laskentaa - rp on jo tassa ja se on 0,000 tasan pin-hetkella.
-        W(() => { refCover.style.setProperty("--refs-dim", rp.toFixed(3)); });
+        W(() => { aseta(refCover, "--refs-dim", rp.toFixed(3)); });
       }
 
 
@@ -825,7 +1069,7 @@ export default function SiteEffects() {
       // kertaalleen, jottei aiempi arvo jaa elamaan.
       if (afterCover) {
         const v = (vh - afterCover.getBoundingClientRect().top) / (vh * COVER_FADE_SPAN);
-        W(() => { afterCover.style.setProperty("--cover-fade", Math.min(Math.max(v, 0), 1).toFixed(3)); });
+        W(() => { aseta(afterCover, "--cover-fade", Math.min(Math.max(v, 0), 1).toFixed(3)); });
       }
 
       // Kolmas pari: Referenssien tummennus etenee kun .aftercover nousee
@@ -833,14 +1077,14 @@ export default function SiteEffects() {
       if (refCover && afterCover) {
         const apRaw = 1 - afterCover.getBoundingClientRect().top / vh;
         const ap = Math.min(Math.max(apRaw, 0), 1);
-        W(() => { refCover.style.setProperty("--refs-scrim", (ap * REF_SCRIM_MAX).toFixed(3)); });
+        W(() => { aseta(refCover, "--refs-scrim", (ap * REF_SCRIM_MAX).toFixed(3)); });
         // RAJAAMATON etenema NavCarriersille. Rajattu ap kyllastyy ykkoseen
         // heti kun .aftercover peittaa nakyman ylareunan, joten silla ei voi
         // ajoittaa mitaan sen jalkeen - ikkunan siirtaminen myohemmaksi
         // vaatii arvon joka jatkaa yli ykkosen. Negatiivisena se kertoo
         // kuinka kaukana .aftercover viela on, mika on Referenssien
         // keskijakson ainoa mitta. Ei uusi laskenta - sama rect, sama rivi.
-        W(() => { refCover.style.setProperty("--refs-ap", apRaw.toFixed(3)); });
+        W(() => { aseta(refCover, "--refs-ap", apRaw.toFixed(3)); });
       }
 
       if (hero && cover) {
@@ -866,10 +1110,8 @@ export default function SiteEffects() {
            skrubbauksen on jo oltava valmis. */
           const matka = Math.max(hero.offsetHeight - vh * 2, 1);
           const kuljettu = -wrap.getBoundingClientRect().top;
-          W(() => { hero.style.setProperty(
-            "--hero-s",
-            Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(4),
-          ); });
+          const hs = Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(4);
+          W(() => { for (const k of lukijat(hero, "--hero-s", new Set())) aseta(k, "--hero-s", hs); });
         }
 
         const p = Math.min(Math.max(1 - cover.getBoundingClientRect().top / vh, 0), 1);
@@ -877,7 +1119,11 @@ export default function SiteEffects() {
         // alareunassa, 1 kun cover peittaa heron. Sama mittaus kuin ennen,
         // vain ilman kerrointa - scrimin aikataulu on nyt HeroScrubissa,
         // jotta p:n ja q:n jaksot ovat yhdessa paikassa.
-        W(() => { hero.style.setProperty("--hero-q", p.toFixed(4)); });
+        /* --hero-q EI OLE CSS-MUUTTUJA. Sita lukee vain HeroScrub, joten
+           arvo annetaan elementin kentassa. Muuttujana se kirjoitettiin
+           heroon (167 lasta) joka kehys, ja Safari laski koko heron
+           tyylit uudelleen. MITATTU 1.10.2026 Safarissa: sivun alku 28 fps. */
+        W(() => { (hero as HTMLElement & { heroQ?: number }).heroQ = p; });
       }
 
       if (strip && copyW > 0) {
@@ -885,14 +1131,29 @@ export default function SiteEffects() {
         const x = -(((stripOff % copyW) + copyW) % copyW);
         W(() => { strip.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`; });
       }
+      const kansiRect = new Map<HTMLElement, DOMRect>();
       for (const v of vaiheet) {
         const k = v.kansi.getBoundingClientRect();
+        kansiRect.set(v.kansi, k);
         const piiloon = k.top <= -vh * 0.5 && k.bottom >= vh;
         if (piiloon !== v.piilossa) {
           v.piilossa = piiloon;
           W(() => {
             if (piiloon) v.vaihe.setAttribute("data-peitossa", "");
             else v.vaihe.removeAttribute("data-peitossa");
+          });
+        }
+      }
+      for (const kn of kankaat) {
+        const piiloon = kn.kannet.some((k) => {
+          const r = kansiRect.get(k);
+          return !!r && r.top <= -vh * 0.5 && r.bottom >= vh;
+        });
+        if (piiloon !== kn.piilossa) {
+          kn.piilossa = piiloon;
+          W(() => {
+            if (piiloon) kn.nb.setAttribute("data-kangas-piilossa", "");
+            else kn.nb.removeAttribute("data-kangas-piilossa");
           });
         }
       }

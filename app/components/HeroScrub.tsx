@@ -331,7 +331,10 @@ export default function HeroScrub() {
     const schedule = (p: number) => {
       for (let k = 0; k < WIN.length; k++) put(`--st${k + 1}`, smoothstep(WIN[k][0], WIN[k][1], p));
       put("--hero-glow", GLOW_MAX * smoothstep(GLOW_WIN[0], GLOW_WIN[1], p));
-      const raw = hero ? parseFloat(hero.style.getPropertyValue("--hero-q")) : 0;
+      // SiteEffects antaa coverin etenemän elementin kentässä eikä
+      // CSS-muuttujana: CSS ei lue sitä, ja muuttuja koko heroon
+      // laski Safarissa heron tyylit uudelleen joka kehys.
+      const raw = hero ? ((hero as HTMLElement & { heroQ?: number }).heroQ ?? NaN) : 0;
       const q = Number.isFinite(raw) ? Math.min(Math.max(raw, 0), 1) : 0;
       put("--hero-scrim", SCRIM_P * p + (SCRIM_Q - SCRIM_P) * (1 - (1 - q) * (1 - q)));
       put("--hero-hint", p > HINT_P ? 0 : 1);

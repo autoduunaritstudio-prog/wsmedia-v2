@@ -12633,8 +12633,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    kuin kortit eika jaatynytta --rvp:ta. */
 .page-lyhytvideot .nelja {
   box-shadow:
-    0 0 calc(var(--piirto, 0) * 120px) calc(var(--piirto, 0) * -24px) rgba(111,236,255,.26),
-    0 0 calc(var(--piirto, 0) * 40px) calc(var(--piirto, 0) * -8px) rgba(111,236,255,.16);
+    0 0 calc(var(--piirto-q, 0) * 120px) calc(var(--piirto-q, 0) * -24px) rgba(111,236,255,.26),
+    0 0 calc(var(--piirto-q, 0) * 40px) calc(var(--piirto-q, 0) * -8px) rgba(111,236,255,.16);
 }
 /* Kortin oma reunahehku jaa, mutta se on ruudukon sisainen: se
    valaisee naapurikortin reunan ja kahden pikselin hiusvalin. */
@@ -12965,8 +12965,11 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .page-lyhytvideot .lv-k {
   box-shadow: 0 0 calc(var(--p2) * 22px) calc(var(--p2) * -12px) rgba(var(--kaaviohi),.16);
 }
+/* --piirto-q on --piirto 0,04:n portain. Ruudukon oma varjo on sen
+   ainoa --piirron lukija, ja joka kehys muuttuva arvo maalasi koko
+   ruudukon kortteineen uudelleen. Porras on alle 3 px sumeutta. */
 .page-lyhytvideot .nelja {
-  box-shadow: 0 0 calc(var(--piirto, 0) * 70px) calc(var(--piirto, 0) * -34px) rgba(111,236,255,.13);
+  box-shadow: 0 0 calc(var(--piirto-q, 0) * 70px) calc(var(--piirto-q, 0) * -34px) rgba(111,236,255,.13);
 }
 .page-lyhytvideot .lv-k.nelja-k::before {
   box-shadow: 0 0 calc(var(--p2) * 7px) rgba(var(--kaaviohi),.3);
@@ -13110,8 +13113,10 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
      pyorii, ja pyoriminen jota mikaan nakyva ei seuraa lukeutuu
      automaattisena animaationa. --kiinni on yksi tasan silla hetkella
      kun sticky tarttuu, joten rata pysahtyy samaan aikaan kuin osio.
-     Mitattuna rata ehtii 1,35 kierrosta ennen pysahdysta. */
-  --kierto: calc(var(--kiinni, 0) * 1.5);
+     Mitattuna rata ehtii 1,35 kierrosta ennen pysahdysta.
+     --kierto lasketaan solmussa itsessaan (.th-solmu alla), jotta
+     SiteEffects voi kirjoittaa --kiinnin vain solmuille eika koko
+     tahdistolle, jonka Safari maalasi joka kehys uudelleen. */
 }
 @media (max-width: 1000px) { .tahdisto { max-width: 340px } }
 
@@ -13133,6 +13138,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .tahdisto .th-solmu {
   position: absolute; left: 50%; top: 50%; display: block;
   width: 17%;
+  --kierto: calc(var(--kiinni, 0) * 1.5);
   /* Kulma: oma kolmannes kierroksesta plus yhteinen etenema. */
   --a: calc((var(--kierto) + var(--i) / 3) * 1turn);
   /* 0 = radan takana, 1 = edessa. */
@@ -13352,11 +13358,16 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
      800 pikselia. Ennen se oli 400. Loppukohta on mitattu siita missa
      jana on viela nakyvissa: sen ylareuna ylittaa nakyman ylareunan
      kohdassa 8316. */
-  .page-lyhytvideot #prosessi .jana {
+  /* --veto lasketaan lukijoissa itsessaan eika .janassa: SiteEffects
+     kirjoittaa --piirron vain sita lukeviin elementteihin, koska
+     Safari maalasi koko .janan uudelleen jokaisesta muutoksesta.
+     Kaava on sama kuin ennen. */
+  .page-lyhytvideot #prosessi .jana-akseli i {
     --veto: clamp(0, calc((var(--piirto, 1) - .10) * 1.45), 1);
+    scale: var(--veto, 1) 1;
   }
-  .page-lyhytvideot #prosessi .jana-akseli i { scale: var(--veto, 1) 1 }
   .page-lyhytvideot #prosessi .jakso {
+    --veto: clamp(0, calc((var(--piirto, 1) - .10) * 1.45), 1);
     --kohta: calc((var(--i, 0) * 2 + 1) / 8);
     /* abs() ei ole kaikissa selaimissa joissa muu tama sivu toimii.
        max(a, -a) on sama luku ilman tukiehtoa. */
@@ -14775,3 +14786,82 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   --grey: #6e6e73;
   --hair: rgba(17,21,26,.12);
 }
+
+/* ==================================================================
+   OSION VALO OMANA ELEMENTTINAAN (Safari), 30.9.2026
+   ==================================================================
+   Valo oli osion ::before, eli se kuului osion omaan maalaukseen.
+   Safari maalaa elementin uudelleen jokaisesta sen muuttujamuutoksesta,
+   joten valon porraskin (--valo-q) piirsi koko osion sisaltoineen, ja
+   osion minka tahansa muutoksen yhteydessa myos koko korkuisen maskatun
+   liukuvarin. MITATTU Safarissa: valo omalle kerrokselleen ja muuttujat
+   pois 23 -> 51 fps.
+
+   SiteEffects lisaa osioon (vain talla sivulla ja vain jos ::before on
+   valo) tyhjan .osio-valo-elementin ensimmaiseksi lapseksi ja merkitsee
+   osion data-valokerros-attribuutilla. Valo piirretaan elementtiin samoin
+   arvoin kuin ::before, ja ::before sammuu. Ilman JS:aa ::before jaa. */
+.page-lyhytvideot [data-valokerros]::before { content: none !important }
+.page-lyhytvideot .osio-valo {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  will-change: transform;
+}
+.page-lyhytvideot .seo-sec > .osio-valo {
+  
+  --v: var(--valo-q, var(--valo, .5));
+  background:
+    radial-gradient(
+      calc(46% + var(--v) * 16%) calc(28% + var(--v) * 10%)
+      at calc(86% - var(--v) * 22%) calc(24% + var(--v) * 30%),
+      rgba(111,236,255,.13), transparent 70%),
+    radial-gradient(
+      calc(42% + var(--v) * 12%) calc(26% + var(--v) * 8%)
+      at calc(8% + var(--v) * 20%) calc(78% - var(--v) * 24%),
+      rgba(0,124,143,.15), transparent 72%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
+}
+.page-lyhytvideot .seo-sec:nth-of-type(even) > .osio-valo {
+  background:
+    radial-gradient(
+      calc(44% + var(--v) * 14%) calc(26% + var(--v) * 10%)
+      at calc(12% + var(--v) * 24%) calc(26% + var(--v) * 28%),
+      rgba(111,236,255,.11), transparent 70%),
+    radial-gradient(
+      calc(40% + var(--v) * 12%) calc(24% + var(--v) * 8%)
+      at calc(90% - var(--v) * 22%) calc(76% - var(--v) * 22%),
+      rgba(0,124,143,.14), transparent 72%);
+}
+.page-lyhytvideot .jakso-pari > .osio-valo {
+  
+  --v: var(--valo-q, var(--valo, .5));
+  background:
+    radial-gradient(
+      calc(40% + var(--v) * 14%) calc(18% + var(--v) * 8%)
+      at calc(86% - var(--v) * 20%) calc(20% + var(--v) * 26%),
+      rgba(111,236,255,.13), transparent 70%),
+    radial-gradient(
+      calc(38% + var(--v) * 12%) calc(17% + var(--v) * 7%)
+      at calc(10% + var(--v) * 18%) calc(80% - var(--v) * 24%),
+      rgba(0,124,143,.15), transparent 72%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+}
+
+/* SUMEA HEHKU OMALLE KERROKSELLEEN. Kortin kajo (.lv-taus::before,
+   blur 30px) ja rivimerkin kajo (.porras-merkki::after, blur 22px)
+   kirkastuvat vierityksen mukana (opacity var(--p2) / var(--piirto)).
+   Safari sumensi ne uudelleen jokaisella kehyksella, koska opacity
+   muuttui maalattavalla elementilla. Omalla kerroksella sumennus
+   maalataan kerran ja opacity hoidetaan kompositoinnissa. Ulkonako on
+   sama. MITATTU Safarissa 1.10.2026: Miksi-osio 31 -> 57 fps,
+   kokonaisuus 37 -> 53 fps. */
+.page-lyhytvideot .lv-taus::before,
+.wsx .porras-merkki::after { will-change: opacity }
+
+/* KIERTORADAN SOLMUT OMILLE KERROKSILLEEN. Solmujen sijainti, koko ja
+   kirkkaus muuttuvat joka kehys (--kiinni -> --a), ja niilla on
+   drop-shadow. Ilman omaa kerrosta Safari piirsi varjon uudelleen joka
+   kehyksella. MITATTU Safarissa 1.10.2026: sivun alku 48 -> 55 fps. */
+.tahdisto .th-solmu,
+.tahdisto .th-ws { will-change: transform, opacity }
