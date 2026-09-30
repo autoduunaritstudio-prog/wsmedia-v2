@@ -14865,3 +14865,10 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    kehyksella. MITATTU Safarissa 1.10.2026: sivun alku 48 -> 55 fps. */
 .tahdisto .th-solmu,
 .tahdisto .th-ws { will-change: transform, opacity }
+
+/* ALUSTAMERKIT PYSYVASTI OMALLA KERROKSELLAAN. Kerros syntyi tahan asti
+   vain kellunta-animaation ansiosta: kun animaatio poistettiin
+   kokeeksi, Safari piirsi merkit sumennuksineen joka kehys uudelleen ja
+   heron vieritys putosi 12 fps:iin (MITATTU 1.10.2026). Sama tilanne
+   olisi reduced-motion-kayttajilla, joilta kellunta on pois. */
+.nm { will-change: transform }

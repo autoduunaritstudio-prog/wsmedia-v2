@@ -1135,7 +1135,15 @@ export default function SiteEffects() {
       for (const v of vaiheet) {
         const k = v.kansi.getBoundingClientRect();
         kansiRect.set(v.kansi, k);
-        const piiloon = k.top <= -vh * 0.5 && k.bottom >= vh;
+        /* Vaihe on pinon sisalla ja kansi sen viimeinen lapsi, joten vaihe
+           ei ulotu kannen alareunan alle. Se on siis kokonaan peitossa
+           kun kannen ylareuna on vaiheen ylareunan ylapuolella, samalla
+           puolen nakyman varalla. Aiempi ehto vaati kannen ulottuvan
+           nakyman alareunaan asti: sivun lopussa, kun alatunniste tulee
+           nakyviin, kaikki kuusi vaihetta tulivat kerralla takaisin
+           tarjousosion alle, ja Chrome valkytti tarjouksen kuvaa. */
+        const s = v.vaihe.getBoundingClientRect();
+        const piiloon = k.top <= Math.min(s.top, 0) - vh * 0.5 && k.bottom >= Math.min(s.bottom, vh);
         if (piiloon !== v.piilossa) {
           v.piilossa = piiloon;
           W(() => {

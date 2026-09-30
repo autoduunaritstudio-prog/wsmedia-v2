@@ -60,13 +60,26 @@ export default function Palkki() {
        rootMargin -50% siirtaa rajan nakyman puolivaliin, jolloin
        palkki tulee vasta kun cover on todella peittanyt heron. */
     const coverina = !!merkitty || hero.classList.contains("cover");
-    const a = new IntersectionObserver(
-      ([e]) => {
-        ohi.current = coverina ? e.isIntersecting : !e.isIntersecting;
-        paivita();
-      },
-      { threshold: 0, rootMargin: coverina ? "-50% 0px 0px 0px" : "0px" },
-    );
+    /* SIJAINTI LUETAAN VIERITYKSESTA, EI IntersectionObserverilla.
+       Merkitty osio on pinon vaihe, joka saa peitossa ollessaan
+       visibility: hidden (SiteEffects). Safari lakkasi silloin
+       raportoimasta sita nakyvaksi, ja palkki katosi valilla kesken
+       sivun. Ehto on sama kuin ennen: rootMargin -50 % ylhaalta eli
+       elementti leikkaa nakyman alempaa puoliskoa. */
+    let viimeksi: boolean | null = null;
+    const tarkista = () => {
+      const r = hero.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const leikkaa = coverina ? r.top < vh && r.bottom > vh * 0.5 : r.top < vh && r.bottom > 0;
+      const uusi = coverina ? leikkaa : !leikkaa;
+      if (uusi === viimeksi) return;
+      viimeksi = uusi;
+      ohi.current = uusi;
+      paivita();
+    };
+    tarkista();
+    window.addEventListener("scroll", tarkista, { passive: true });
+    window.addEventListener("resize", tarkista, { passive: true });
     const b = new IntersectionObserver(
       ([e]) => {
         lomake.current = e.isIntersecting;
@@ -74,10 +87,10 @@ export default function Palkki() {
       },
       { threshold: 0 },
     );
-    a.observe(hero);
     b.observe(tarjous);
     return () => {
-      a.disconnect();
+      window.removeEventListener("scroll", tarkista);
+      window.removeEventListener("resize", tarkista);
       b.disconnect();
     };
   }, []);
