@@ -13159,7 +13159,11 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   scale: calc(.66 + var(--syvyys) * .5);
   /* Ilmestyminen on erillaan syvyydesta: ensimmainen kerroin tuo
      solmun nakyviin osion alussa, toinen hoitaa radan oman vaihtelun. */
-  opacity: calc(clamp(0, calc(var(--piirto, 1) * 8), 1) * (.4 + var(--syvyys) * .6));
+  /* Kolmas kerroin himmentaa radan pois osion viimeisella 15 %:lla
+     ennen kuin osio pinnautuu (--kiinni 0,85 -> 1). Pinnattuna rata
+     seisoo nakyman ylareunan kohdalla, ja ilman tata alimmat logot
+     jaivat puoliksi nakyviin korttien ylle koko pinnauksen ajaksi. */
+  opacity: calc(clamp(0, calc(var(--piirto, 1) * 8), 1) * (.4 + var(--syvyys) * .6) * clamp(0, calc((1 - var(--kiinni, 0)) / .15), 1));
   /* Takapuoli tunnuksen taakse. round palauttaa -1, 0 tai 1, ja
      tunnuksen z-index on 2. */
   z-index: 1;
@@ -14872,3 +14876,65 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    heron vieritys putosi 12 fps:iin (MITATTU 1.10.2026). Sama tilanne
    olisi reduced-motion-kayttajilla, joilta kellunta on pois. */
 .nm { will-change: transform }
+
+/* ---------- LYHYTVIDEOT: B-ROLL-OSIOIDEN TEKSTIT SULAVIKSI ----------
+   Vaitteen ja laatan tekstit seuraavat vieritysta (--rvp) suoraan, joten
+   jokainen hiiren rullan askel siirsi niita kerralla ja liike tokki.
+   Lyhyt siirtyma samoille ominaisuuksille pehmentaa askeleet: teksti
+   liukuu kohti vierityksen maaraamaa paikkaa. opacity ja translate
+   kulkevat kompositoinnissa, ja oma kerros (will-change) pitaa ne
+   siella myos Safarissa. */
+.page-lyhytvideot .vaite[data-rvs] .vaite-teksti,
+.page-lyhytvideot .vaite[data-rvs] .vaite-alla,
+.page-lyhytvideot .vaite[data-rvs] .vaite-teksti b > i,
+.page-lyhytvideot .laatta[data-rvs] .laatta-kick,
+.page-lyhytvideot .laatta[data-rvs] .laatta-lause,
+.page-lyhytvideot .laatta[data-rvs] .laatta-alla,
+.page-lyhytvideot .laatta[data-rvs] .laatta-lause b > i {
+  will-change: opacity, translate;
+  transition:
+    opacity .55s cubic-bezier(.22,.61,.36,1),
+    translate .55s cubic-bezier(.22,.61,.36,1);
+}
+.page-lyhytvideot .vaite[data-rvs] .swrap::after,
+.page-lyhytvideot .laatta .laatta-teksti .swrap::before {
+  transition: scale .55s cubic-bezier(.22,.61,.36,1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-lyhytvideot .vaite[data-rvs] .vaite-teksti,
+  .page-lyhytvideot .vaite[data-rvs] .vaite-alla,
+  .page-lyhytvideot .vaite[data-rvs] .vaite-teksti b > i,
+  .page-lyhytvideot .laatta[data-rvs] .laatta-kick,
+  .page-lyhytvideot .laatta[data-rvs] .laatta-lause,
+  .page-lyhytvideot .laatta[data-rvs] .laatta-alla,
+  .page-lyhytvideot .laatta[data-rvs] .laatta-lause b > i { transition: none }
+}
+
+/* ---------- LYHYTVIDEOT: OSIOIDEN VALIT TIIVIIMMIKSI ----------
+   Osion pohja- ja ylavara oli 99px (clamp 84..132px, 11vh) molemmin
+   puolin, eli kehotuksen ja seuraavan osion ylaotsikon valiin jai
+   noin 170px tyhjaa. Nyt 8vh (64..96px). Miksi-osion ja heron alla
+   olevan tilastonauhan omat vara-arvot pysyvat. */
+.page-lyhytvideot .seo-sec[id]:not(#miksi) { padding-block: clamp(64px, 8vh, 96px) }
+
+/* ---------- LYHYTVIDEOT: PYSYVA PALKKI AUKEAA NAPISTA ----------
+   Palkissa nakyy vain nappi. Selite liukuu esiin napin vasemmalle
+   puolelle kun hiiri osuu nappiin, ja pysyy auki niin kauan kuin hiiri
+   on palkin paalla. Vain hiirella kaytettavilla naytoilla; kapealla
+   naytolla palkki toimii kuten ennenkin. */
+@media (min-width: 721px) and (hover: hover) {
+  .page-lyhytvideot .cta-palkki {
+    gap: 0; padding: 8px;
+    transition:
+      opacity .32s ease, translate .32s cubic-bezier(.2,.6,.2,1),
+      gap .45s cubic-bezier(.22,.61,.36,1), padding .45s cubic-bezier(.22,.61,.36,1);
+  }
+  .page-lyhytvideot .cta-palkki p {
+    max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap;
+    transition: max-width .45s cubic-bezier(.22,.61,.36,1), opacity .3s ease;
+  }
+  .page-lyhytvideot .cta-palkki:has(.btn:hover, .btn:focus-visible),
+  .page-lyhytvideot .cta-palkki.nayta:has(p:hover) { gap: 22px; padding-left: 22px }
+  .page-lyhytvideot .cta-palkki:has(.btn:hover, .btn:focus-visible) p,
+  .page-lyhytvideot .cta-palkki.nayta:has(p:hover) p { max-width: 460px; opacity: 1 }
+}
