@@ -126,25 +126,33 @@ export default function GraafinenSuunnittelu() {
               </Vaite>
 
               <div className="pino">
-                {/* B-ROLLEJA KARSITTU (1.10.2026): kolme hengahdysta
-                    perakkain tuntui kuvalta kuvan paalla. Auton laatta
-                    toisti heron pakettiautoa ja hintavaite Hinta-osiota,
-                    joten jaljella on yksi kuvallinen vaite. Aineistot-osio
-                    poistettiin samana paivana. */}
+                {/* RAKENNE 1.10.2026: tarkeimmat ensin, hengahdys ennen
+                    hintaa. Prosessi on oma kaarensa. Hintavaite on silta
+                    hinnastoon, jotta pinta ei nouse suoraan toisen paalle.
+                    Materiaalit ja toiminta-alue ovat tukitietoa, joten ne
+                    ovat hannassa Kenelle-osion ja UKK:n jalkeen. */}
                 <Jakso>
                   <Prosessi />
-                  <Materiaalit />
-                  <Alueet />
                 </Jakso>
 
-                {/* Sivun hanta on yksi pinta, joka nousee edellisen paalle. */}
-                <Jakso>
-                  <Hinta />
-                  <Kenelle />
-                  <Ukk />
-                  <Kaytannossa />
-                  <Tarjous />
-                </Jakso>
+                <div className="pino">
+                  <Vaite
+                    kuva="/graafinen-suunnittelu/luonnokset.webp"
+                    alla="Kartoitus ja tarjous ovat maksuttomia eivätkä sido mihinkään."
+                  >
+                    Logo alkaen 490 €, koko ilme <b><i>alkaen 1 490 €.</i></b>
+                  </Vaite>
+
+                  <Jakso>
+                    <Hinta />
+                    <Kenelle />
+                    <Materiaalit />
+                    <Ukk />
+                    <Alueet />
+                    <Kaytannossa />
+                    <Tarjous />
+                  </Jakso>
+                </div>
               </div>
             </div>
           </div>

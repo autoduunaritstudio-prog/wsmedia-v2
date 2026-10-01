@@ -222,10 +222,8 @@ export function Palvelut() {
                   <img src={o.kuva} alt="" loading="lazy" decoding="async" />
                   <figcaption className={g.hinta}>{o.px}</figcaption>
                 </figure>
-                {/* Painoarkin leikkausmerkit kuvan kulmissa. */}
-                <span className={g.rajat} aria-hidden="true" />
               </div>
-              <p className={g.laji}>{o.kick}</p>
+              <p className={g.laji}><i aria-hidden="true" />{o.kick}</p>
               <h3>{o.h}</h3>
               <p className={g.kuvaus}>{o.p}</p>
               <ul className={g.lista}>
@@ -285,7 +283,7 @@ export function Prosessi() {
           <span>Prosessi</span>
           <i>Kaksi hyväksyntää sinulta</i>
         </div>
-        <h2 className="seo-h2 rv">Näin graafisen suunnittelun projekti <span className="mark">etenee</span></h2>
+        <h2 className="seo-h2 rv">Näin graafisen suunnittelun projekti etenee</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
           Sinulta tarvitaan kaksi hyväksyntää: suunnan valinta ja lopullinen luonnos. Kaiken muun
           hoidamme me, myös asioinnin painon ja asentajan kanssa.

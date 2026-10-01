@@ -173,24 +173,14 @@
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
 @media (prefers-reduced-motion: reduce) { .ketju i::after { transform: none } }
 
-/* ---------- PALVELUT: LEIKKAUSMERKIT ----------
-   Painoarkin kulmamerkit kuvan ymparilla: painotuotteen kieli, ei
-   koriste. Merkit asettuvat kuvan kulmiin vierityksen mukana. */
-.raami { position: relative; margin: 0 0 22px }
-.rajat {
-  --c: rgba(244,247,250,.5); --g: 14px; --l: 10px;
-  position: absolute; inset: calc(var(--g) * -1); pointer-events: none;
-  background:
-    linear-gradient(var(--c), var(--c)) 0 var(--g) / var(--l) 1px,
-    linear-gradient(var(--c), var(--c)) var(--g) 0 / 1px var(--l),
-    linear-gradient(var(--c), var(--c)) 100% var(--g) / var(--l) 1px,
-    linear-gradient(var(--c), var(--c)) calc(100% - var(--g)) 0 / 1px var(--l),
-    linear-gradient(var(--c), var(--c)) 0 calc(100% - var(--g)) / var(--l) 1px,
-    linear-gradient(var(--c), var(--c)) var(--g) 100% / 1px var(--l),
-    linear-gradient(var(--c), var(--c)) 100% calc(100% - var(--g)) / var(--l) 1px,
-    linear-gradient(var(--c), var(--c)) calc(100% - var(--g)) 100% / 1px var(--l);
-  background-repeat: no-repeat;
-  opacity: clamp(0, calc(var(--rvp, 1) * 2.2 - .5), 1);
-  scale: calc(1.05 - clamp(0, calc(var(--rvp, 1) * 1.6), 1) * .05);
+/* ---------- PALVELUT: LAJIMERKKI ----------
+   Sama vino merkki kuin heron kohdenimissa (.tag i): pieni teippipala
+   lajin edessa. Venyy auki vierityksen mukana, ei muuta liiketta. */
+.raami { margin: 0 0 22px }
+.laji { display: flex; align-items: center; gap: 10px }
+.laji i {
+  display: block; width: 22px; height: 8px; border-radius: 1px;
+  background: var(--lampo); transform: skewX(-30deg); transform-origin: 0 50%;
+  scale: clamp(.15, calc(var(--rvp, 1) * 2 - .2), 1) 1;
 }
-@media (prefers-reduced-motion: reduce) { .rajat { opacity: 1; scale: 1 } }
+@media (prefers-reduced-motion: reduce) { .laji i { scale: 1 } }

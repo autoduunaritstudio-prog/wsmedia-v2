@@ -15231,32 +15231,9 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
    kehotuspalkin alle, kun seuraava pinta nousi paalle. */
 .page-graafinen-suunnittelu #palvelut.seo-sec { padding-bottom: clamp(110px, 15vh, 150px) }
 
-/* ==================================================================
-   GRAAFINEN SUUNNITTELU: KOROSTUS ON TEIPPIA
-   ==================================================================
-   Otsikon korostettu sana saa sanan alle oranssin teippikaistaleen,
-   joka vedetaan auki vasemmalta kun otsikko tulee nakyviin. Leveampi
-   kuin viiva, joten se ei lue linkkina. Ilman scroll-timeline-tukea
-   kaistale on valmiiksi paikallaan. */
-.page-graafinen-suunnittelu .seo-h2 .mark {
-  color: var(--seo-ink);
-  background-image: linear-gradient(rgba(232,165,74,.62), rgba(232,165,74,.62));
-  background-repeat: no-repeat;
-  background-position: 0 92%;
-  background-size: 100% .3em;
-  padding: 0 .06em;
-  box-decoration-break: clone; -webkit-box-decoration-break: clone;
-}
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .page-graafinen-suunnittelu .seo-h2 .mark {
-      animation: gs-teippi linear both;
-      animation-timeline: view();
-      animation-range: entry 60% cover 38%;
-    }
-  }
-}
-@keyframes gs-teippi {
-  from { background-size: 0% .3em }
-  to { background-size: 100% .3em }
+
+/* Nouseva pinta tarvitsee hengitysvaran ennen otsikkoa: 45 pikselia
+   nayttaa silta, etta teksti on liimattu pinnan reunaan. */
+.page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin) > .seo-sec:first-of-type {
+  padding-top: clamp(96px, 14vh, 150px);
 }
