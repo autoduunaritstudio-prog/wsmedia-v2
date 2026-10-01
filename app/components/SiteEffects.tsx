@@ -716,6 +716,44 @@ export default function SiteEffects() {
     });
     let ticking = false;
 
+    /* LAHELLA OLEVAT (1.10.2026). Vierityskasittelija mittasi joka
+       kehys KAIKKIEN parallaksi-, kaanto- ja paljastuselementtien
+       sijainnin, myos tuhansien pikselien paassa olevien. Nyt
+       IntersectionObserver pitaa kirjaa niista, jotka ovat nakymassa
+       tai 60 % nakyman korkeudesta sen ulkopuolella, ja vain ne
+       mitataan. Kaukana olevien arvo ei muutu (parallaksia ei
+       kirjoiteta, paljastus on 0 tai 1), joten ulkonako on sama.
+       Lahtiessaan elementti saa lopullisen arvonsa kerran. */
+    const lahella = new Set<Element>([...pars, ...tilts, ...rvsEls]);
+    const rvsLoppu = new Map<Element, number>();
+    const lahIo =
+      typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            (es) => {
+              for (const e of es) {
+                if (e.isIntersecting) lahella.add(e.target);
+                else {
+                  lahella.delete(e.target);
+                  if (rvsJoukko.has(e.target)) rvsLoppu.set(e.target, e.boundingClientRect.top > 0 ? 0 : 1);
+                }
+              }
+              if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(onScroll);
+              }
+            },
+            { rootMargin: "60% 0px" },
+          )
+        : null;
+    if (lahIo) for (const el of lahella) lahIo.observe(el);
+    signal.addEventListener("abort", () => lahIo?.disconnect());
+
+    /* Mittaus: ?mittaa kirjaa vierityskasittelijan keston
+       window.__vierityMs-taulukkoon. Ei vaikuta muuhun. */
+    const mittaa = location.search.includes("mittaa");
+    const mittaukset: number[] = [];
+    if (mittaa) (window as unknown as { __vierityMs: number[] }).__vierityMs = mittaukset;
+
     /* ==================================================================
        PEHMENNETTY VIERITYSASEMA
        ==================================================================
@@ -774,6 +812,7 @@ export default function SiteEffects() {
     let revealFn: (() => void) | null = null;
 
     const onScroll = () => {
+      const mittausAlku = mittaa ? performance.now() : 0;
       kirjoitusVaihe = true;
       const vh = window.innerHeight;
       const h = document.documentElement;
@@ -826,6 +865,10 @@ export default function SiteEffects() {
            nakyva liike on sama. */
         const parNakyy: boolean[] = [];
         const parMids = pars.map((el, i) => {
+          if (!lahella.has(el)) {
+            parNakyy[i] = false;
+            return 0;
+          }
           const r = el.getBoundingClientRect();
           parNakyy[i] = r.bottom > -vh * 0.5 && r.top < vh * 1.5 && !el.closest("[data-peitossa]");
           return r.top + viive + r.height / 2 - vh / 2;
@@ -860,6 +903,7 @@ export default function SiteEffects() {
       // asti kunnes kortti on luettavalla korkeudella.
       if (!reduce) {
         const rvsP = rvsEls.map((el) => {
+          if (!lahella.has(el)) return rvsLoppu.get(el) ?? -1;
           const r = el.getBoundingClientRect();
           const span = Math.max(vh * (1 - RVS_END) + r.height / 2, 1);
           return Math.min(Math.max((vh - (r.top + viive)) / span, 0), 1);
@@ -923,6 +967,8 @@ export default function SiteEffects() {
         }
 
         rvsEls.forEach((el, i) => {
+          if (rvsP[i] < 0) return;
+          rvsLoppu.delete(el);
           const rv = rvsP[i].toFixed(3);
           W(() => { for (const k of lukijat(el, "--rvp", rvsJoukko)) aseta(k, "--rvp", rv); });
           // PALAUTUVA "OSIO ON ESILLA" -TILA. Tarvitaan koska CSS ei osaa
@@ -944,6 +990,10 @@ export default function SiteEffects() {
         // Sama jako kuin parseissa: kaikki rectit ensin, kirjoitukset sitten.
         const tiltNakyy: boolean[] = [];
         const tiltDs = tilts.map((el, i) => {
+          if (!lahella.has(el)) {
+            tiltNakyy[i] = false;
+            return 0;
+          }
           const r = el.getBoundingClientRect();
           tiltNakyy[i] = r.bottom > -vh * 0.5 && r.top < vh * 1.5 && !el.closest("[data-peitossa]");
           return (r.top + viive + r.height / 2 - vh / 2) / vh;
@@ -1247,6 +1297,7 @@ export default function SiteEffects() {
       kirjoitusVaihe = false;
       tyhjenna();
       ticking = false;
+      if (mittaa) mittaukset.push(performance.now() - mittausAlku);
 
       /* HANTA. Vierintatapahtumia tulee vain silloin kun sivu oikeasti
          liikkuu, joten napsautushiirella niita tulee yksi per napsautus.
