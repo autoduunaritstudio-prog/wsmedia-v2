@@ -15055,3 +15055,115 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
   .page-graafinen-suunnittelu #prosessi .jakso::before { box-shadow: 0 0 0 4px #172132 }
 }
 
+
+/* ==================================================================
+   GRAAFINEN SUUNNITTELU: LAMPOINEN VARI, MERKIT JA KUVIOT, 1.10.2026
+   ==================================================================
+   Sama kuvakieli kuin verkkosivuilla, omat aiheet. Lampoinen
+   (--lampo) on palveluiden ja vaihtoehtojen vari, syaani WS Median
+   oma. Kuviot piirtyvat --rvp:sta (data-rvs parin sailiossa). */
+.page-graafinen-suunnittelu .gs-ik {
+  width: 22px; height: 22px; flex: none;
+  fill: none; stroke: var(--lampo); stroke-width: 1.7;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.page-graafinen-suunnittelu .gs-ik-ws { stroke: var(--seo-hi) }
+.page-graafinen-suunnittelu .gs-otsikko { display: flex; align-items: center; gap: 10px }
+.page-graafinen-suunnittelu .gs-otsikko h3 { margin: 0 }
+.page-graafinen-suunnittelu #miksi .paketti:not(.hl) .seo-spec li::before { background: var(--lampo) }
+
+/* Palvelukortin ylarivi: kehystetty merkki ja ylaotsikko. */
+.page-graafinen-suunnittelu .gs-yla { display: flex; align-items: center; gap: 12px; margin-bottom: 14px }
+.page-graafinen-suunnittelu .gs-yla .duo2-kick { margin: 0; color: var(--lampo) }
+.page-graafinen-suunnittelu .gs-ik-kehys {
+  width: 40px; height: 40px; box-sizing: border-box; padding: 8px;
+  border-radius: 12px; border: 1px solid var(--lampo-h);
+  background: rgba(232,165,74,.08);
+}
+.page-graafinen-suunnittelu .gs-pari .seo-spec li::before { background: var(--lampo) }
+
+/* ---------- PALVELUKORTTIEN KUVIOT ---------- */
+.page-graafinen-suunnittelu .gs-kuvio {
+  display: block; width: 100%; max-width: 240px; height: auto; margin-top: 24px;
+  overflow: visible; fill: none; stroke-linecap: round; stroke-linejoin: round;
+  --k: clamp(0, calc((var(--rvp, 1) - var(--i, 0) * .1) * 2.4), 1);
+  --k1: clamp(0, calc(var(--k) * 2), 1);
+  --k2: clamp(0, calc((var(--k) - .45) * 1.82), 1);
+}
+.page-graafinen-suunnittelu .gs-kuvio * { transform-box: fill-box }
+.page-graafinen-suunnittelu .gs-kuvio .gk-rata { stroke: rgba(111,236,255,.16); stroke-width: 1 }
+.page-graafinen-suunnittelu .gs-kuvio .gk-viiva {
+  stroke: rgba(111,236,255,.7); stroke-width: 1.6;
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--k1));
+}
+.page-graafinen-suunnittelu .gs-kuvio .gk-viiva.gk-lampo { stroke: var(--lampo); stroke-width: 2.4 }
+
+/* 1. Varit syttyvat vuorotellen */
+.page-graafinen-suunnittelu .gs-kuvio .gk-pala { transform-origin: center; stroke: rgba(255,255,255,.18); stroke-width: 1 }
+.page-graafinen-suunnittelu .gs-kuvio .gk-p1 { fill: #6fecff; scale: clamp(0, calc(var(--k2) * 4), 1) }
+.page-graafinen-suunnittelu .gs-kuvio .gk-p2 { fill: #e8a54a; scale: clamp(0, calc((var(--k2) - .2) * 4), 1) }
+.page-graafinen-suunnittelu .gs-kuvio .gk-p3 { fill: #f4f7fa; scale: clamp(0, calc((var(--k2) - .4) * 4), 1) }
+.page-graafinen-suunnittelu .gs-kuvio .gk-p4 { fill: #0b0f14; scale: clamp(0, calc((var(--k2) - .6) * 4), 1) }
+
+/* 2. Teippi vedetaan auton kyljelle */
+.page-graafinen-suunnittelu .gs-kuvio .gk-teippi {
+  stroke: var(--lampo); stroke-width: 6; transform-origin: left center;
+  scale: var(--k2) 1;
+}
+.page-graafinen-suunnittelu .gs-kuvio .gk-teippi.gk-ohut { stroke-width: 2; opacity: .7 }
+
+/* 3. Tarra ja lasta */
+.page-graafinen-suunnittelu .gs-kuvio .gk-tarra { fill: none; stroke: var(--lampo); stroke-width: 3 }
+.page-graafinen-suunnittelu .gs-kuvio .gk-tarra circle { fill: rgba(232,165,74,.25) }
+.page-graafinen-suunnittelu .gs-kuvio .gk-tarra {
+  clip-path: inset(-10% calc((1 - var(--k2)) * 100%) -10% 0);
+}
+.page-graafinen-suunnittelu .gs-kuvio .gk-lasta {
+  stroke: #f4f7fa; stroke-width: 2.4;
+  translate: calc(var(--k2) * 88px) 0;
+  opacity: calc(1 - clamp(0, (var(--k2) - .9) * 10, 1));
+}
+
+/* 4. Kortit levittyvat viuhkaksi */
+.page-graafinen-suunnittelu .gs-kuvio .gk-kortti {
+  fill: #172132; stroke: rgba(111,236,255,.55); stroke-width: 1.2;
+  transform-origin: 50% 100%;
+}
+.page-graafinen-suunnittelu .gs-kuvio .gk-k1 { rotate: calc(var(--k1) * -14deg); translate: calc(var(--k1) * -30px) 0 }
+.page-graafinen-suunnittelu .gs-kuvio .gk-k3 { rotate: calc(var(--k1) * 14deg); translate: calc(var(--k1) * 30px) 0 }
+.page-graafinen-suunnittelu .gs-kuvio .gk-k2 { stroke: var(--lampo); fill: #1d2a3e }
+.page-graafinen-suunnittelu .gs-kuvio .gk-kortti-viiva { stroke: var(--lampo); stroke-width: 1.6; opacity: var(--k2) }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-graafinen-suunnittelu .gs-kuvio { --k: 1 }
+}
+
+/* ---------- KESTOIKAPALKKI MATERIAALITAULUKOSSA ----------
+   Vaalea osa on lyhin odotettu kesto, tayteinen osa ylaraja.
+   Asteikko 0..7 vuotta, sama kaikilla riveilla. */
+.page-graafinen-suunnittelu .gs-ika {
+  display: block; position: relative; height: 4px; margin-top: 10px; max-width: 150px;
+  border-radius: 2px; background: rgba(255,255,255,.08); overflow: hidden;
+}
+.page-graafinen-suunnittelu .gs-ika > i {
+  position: absolute; inset: 0 auto 0 0; width: calc(var(--b) * 100%);
+  border-radius: 2px; transform-origin: left center;
+  background: linear-gradient(90deg, rgba(232,165,74,.35) 0 calc(var(--a) / var(--b) * 100%), var(--lampo) 0);
+  scale: clamp(0, calc((var(--rvp, 1) - var(--i, 0) * .08) * 2.2), 1) 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-graafinen-suunnittelu .gs-ika > i { scale: 1 1 }
+}
+
+/* ---------- KENELLE: EI KANNATA LAMPOISELLA ---------- */
+.page-graafinen-suunnittelu #kenelle .kaksi-k.ei { color: var(--lampo) }
+
+/* ---------- GRAAFINEN: TEIPPAUS-HERON JA COVERIN LIITOS ----------
+   Teippaus-hero on 420vh vierityskaari + 100svh hantaa
+   (TeippausHero.module.css). Cover nousee hannan paalle kuten muilla
+   palvelusivuilla, joten animaatio on valmis ennen kuin cover alkaa.
+   Mobiilissa heron vaiheet ovat virrassa (stagewrap 300vh), joten
+   liitosta ei tarvita. */
+@media (min-width: 901px) {
+  .page-graafinen-suunnittelu .stickysub > .cover { margin-top: -100svh }
+}

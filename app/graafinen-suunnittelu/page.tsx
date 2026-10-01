@@ -10,7 +10,7 @@ import SiteEffects from "../components/SiteEffects";
 import { Laatta, Vaite } from "../components/Maasto";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
-import Hero from "./components/Hero";
+import TeippausHero from "./components/TeippausHero";
 import { buildJsonLd } from "./jsonld";
 import { Materiaalit, Miksi, Palvelut, Prosessi, Tiedostot } from "./sections";
 import { Alueet, Hinta, Kaytannossa, Kenelle, Tarjous } from "./sections2";
@@ -79,7 +79,11 @@ export default function GraafinenSuunnittelu() {
           coverin alle nakymattomiin. BreadcrumbList-merkinta sailyy
           jsonld.ts:ssa. */}
       <div className="stickysub">
-        <Hero />
+        {/* TEIPPAUS-HERO (prototyyppi wsmedia-teippaus-hero, porttaus
+            sellaisenaan). Korvaa aiemman heron ja nelja pinnan
+            nayttamon. Desktopilla heron peraan jaa 100svh hantaa, jonka
+            paalle cover nousee, ks. globals.css. */}
+        <TeippausHero />
         <div className="cover">
           <NetBackdrop mount="cover" />
           <Logos />

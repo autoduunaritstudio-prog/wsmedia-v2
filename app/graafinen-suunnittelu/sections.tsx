@@ -1,6 +1,111 @@
 import type { CSSProperties } from "react";
 
+import type { ReactNode } from "react";
+
 import { Kaiku } from "../components/Maasto";
+
+/* ==================================================================
+   MERKIT JA KUVIOT
+   ==================================================================
+   Sama periaate kuin verkkosivuilla: merkki kertoo mista kohta puhuu,
+   kuvio nayttaa mekaniikan. Kuviot ovat taman sivun omia: logo ja
+   varit, teippi auton kyljessa, tarra ikkunassa ja kortit viuhkana.
+   Lampoinen (--lampo) on taman sivun palveluiden vari, syaani
+   WS Median oma. Kuviot piirtyvat --rvp:sta, eli vierityksen
+   mukana eika ajastimella. */
+const IK: Record<string, ReactNode> = {
+  kyna: (
+    <>
+      <path d="M12 3.5l6 6.5-6 10.5-6-10.5z" />
+      <circle cx="12" cy="11.2" r="1.7" />
+      <path d="M12 3.5v6" />
+    </>
+  ),
+  auto: (
+    <>
+      <path d="M2.5 16.5v-9h11v9M13.5 10.5h3.8l3.2 3.2v2.8h-7" />
+      <circle cx="6.5" cy="17.5" r="2" />
+      <circle cx="16.5" cy="17.5" r="2" />
+    </>
+  ),
+  liike: (
+    <>
+      <path d="M3.5 9.5l1.6-5h13.8l1.6 5M4.5 9.5v10h15v-10M3.5 9.5h17" />
+      <path d="M9.5 19.5v-5.5h5v5.5" />
+    </>
+  ),
+  kortit: (
+    <>
+      <rect x="3" y="8" width="13" height="9" rx="1.6" />
+      <path d="M7.5 5h11.9A1.6 1.6 0 0 1 21 6.6V14" />
+      <path d="M6 12.5h5" />
+    </>
+  ),
+  rulla: (
+    <>
+      <circle cx="8" cy="11" r="5" />
+      <circle cx="8" cy="11" r="1.6" />
+      <path d="M8 16h13" />
+    </>
+  ),
+  ok: <path d="M4.5 12.5l4.5 4.5L19.5 6.5" />,
+  kyna2: (
+    <>
+      <path d="M4.5 19.5l4-1 11-11-3-3-11 11z" />
+      <path d="M14.5 6.5l3 3" />
+    </>
+  ),
+};
+
+function Merkki({ nimi, className = "gs-ik" }: { nimi: string; className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      {IK[nimi]}
+    </svg>
+  );
+}
+
+/* Kuviot: viewBox 160 x 48, kiintea kuvasuhde, joten pathLength=1 ja
+   stroke-dasharray toimivat oikeassa mittakaavassa. */
+const KUVIOT: ReactNode[] = [
+  /* LOGO JA VARIT: kehys ja tunnus piirtyvat, sitten nelja varia
+     syttyvat vuorotellen. */
+  <>
+    <rect className="gk-viiva" x="4" y="6" width="36" height="36" rx="9" pathLength={1} />
+    <path className="gk-viiva gk-lampo" d="M14 31c2-10 14-4 16-14" pathLength={1} />
+    <circle className="gk-pala gk-p1" cx="62" cy="24" r="8" />
+    <circle className="gk-pala gk-p2" cx="84" cy="24" r="8" />
+    <circle className="gk-pala gk-p3" cx="106" cy="24" r="8" />
+    <circle className="gk-pala gk-p4" cx="128" cy="24" r="8" />
+  </>,
+  /* AUTO: kylki piirtyy, sitten teippi vedetaan sen paalle
+     vasemmalta oikealle. */
+  <>
+    <path className="gk-viiva" d="M8 38V12h76v26M84 20h20l14 12v6H84" pathLength={1} />
+    <circle className="gk-viiva" cx="28" cy="39" r="5" pathLength={1} />
+    <circle className="gk-viiva" cx="100" cy="39" r="5" pathLength={1} />
+    <path className="gk-teippi" d="M14 32L44 18h34" />
+    <path className="gk-teippi gk-ohut" d="M20 36h56" />
+  </>,
+  /* IKKUNA: tarra painetaan lasiin, lasta kulkee sen yli. */
+  <>
+    <rect className="gk-rata" x="4" y="4" width="152" height="40" rx="3" />
+    <rect className="gk-viiva" x="14" y="10" width="96" height="30" rx="2" pathLength={1} />
+    <g className="gk-tarra">
+      <circle cx="36" cy="25" r="8" />
+      <path d="M52 21h42M52 29h28" />
+    </g>
+    <path className="gk-lasta" d="M18 8v34" />
+    <path className="gk-rata" d="M122 10h22v30h-22z" />
+  </>,
+  /* KORTIT: pino levittyy viuhkaksi. */
+  <>
+    <rect className="gk-kortti gk-k1" x="63" y="12" width="34" height="24" rx="3" />
+    <rect className="gk-kortti gk-k2" x="63" y="12" width="34" height="24" rx="3" />
+    <rect className="gk-kortti gk-k3" x="63" y="12" width="34" height="24" rx="3" />
+    <path className="gk-kortti-viiva" d="M69 19h12M69 24h18" />
+  </>,
+];
 
 /**
  * GRAAFINEN SUUNNITTELU -SIVUN OSIOT, SIVUSTON JAETULLA KUVAKIELELLA.
@@ -26,6 +131,7 @@ import { Kaiku } from "../components/Maasto";
    .hl ja sen ylla merkki. Hintakentat jaavat pois, .hinta-f kantaa
    yhden rivin luonnehdinnan. */
 const SILTA: {
+  ik: string;
   merkki?: string;
   h: string;
   kuvaus: string;
@@ -33,6 +139,7 @@ const SILTA: {
   hl?: boolean;
 }[] = [
   {
+    ik: "rulla",
     h: "Teippaamo tai painotalo",
     kuvaus: "Tuottaa ja asentaa. Suunnittelu on sivutuote.",
     li: [
@@ -42,6 +149,7 @@ const SILTA: {
     ],
   },
   {
+    ik: "ok",
     merkki: "WS Media",
     h: "Suunnittelemme ilmeen ja hoidamme tuotannon",
     kuvaus: "Suunnittelu, tuotanto ja asennus samassa tarjouksessa.",
@@ -53,6 +161,7 @@ const SILTA: {
     ],
   },
   {
+    ik: "kyna2",
     h: "Mainostoimisto",
     kuvaus: "Suunnittelee. Tuotanto ja asennus jäävät sinulle.",
     li: [
@@ -85,7 +194,10 @@ export function Miksi() {
           {SILTA.map((s) => (
             <div className={s.hl ? "paketti hl" : "paketti"} key={s.h}>
               {s.merkki ? <em className="paketti-merkki">{s.merkki}</em> : null}
-              <h3>{s.h}</h3>
+              <div className="gs-otsikko">
+                <Merkki nimi={s.ik} className={s.hl ? "gs-ik gs-ik-ws" : "gs-ik"} />
+                <h3>{s.h}</h3>
+              </div>
               <p className="hinta-f">{s.kuvaus}</p>
               <ul className="seo-spec">
                 {s.li.map((x) => (
@@ -114,8 +226,9 @@ export function Miksi() {
    jokaiselle ensimmaisen jalkeen, eli kolmas kortti olisi saanut
    viivan rivin alkuun. Kaksi erillista paria pitaa viivan siella
    minne se kuuluu. */
-const PALVELUT: { kick: string; h: string; p: string; li: string[]; px: string }[] = [
+const PALVELUT: { ik: string; kick: string; h: string; p: string; li: string[]; px: string }[] = [
   {
+    ik: "kyna",
     kick: "Perusta",
     h: "Logo ja yritysilme",
     p: "Logon suunnittelu on koko ilmeen pohja. Logon ympärille tehdään väripaletti, fontit ja graafinen ohjeisto, joiden ansiosta ilme pysyy samana, vaikka materiaalia tekisi joku muu.",
@@ -128,6 +241,7 @@ const PALVELUT: { kick: string; h: string; p: string; li: string[]; px: string }
     px: "Logo alk. 490 € · ilme ohjeistoineen alk. 1 490 €",
   },
   {
+    ik: "auto",
     kick: "Liikkuva pinta",
     h: "Auton mainosteippaus",
     p: "Pakettiauton logoteippauksesta koko kaluston ilmeeseen. Suunnittelu tehdään kerran, joten seuraavista autoista maksat vain tulostuksen ja asennuksen.",
@@ -140,6 +254,7 @@ const PALVELUT: { kick: string; h: string; p: string; li: string[]; px: string }
     px: "Avaimet käteen alk. 490 €",
   },
   {
+    ik: "liike",
     kick: "Toimitila",
     h: "Ikkunateippaukset, kyltit ja valomainokset",
     p: "Liikkeen ikkuna ja julkisivu näkyvät ohikulkijoille joka päivä. Teemme ne samalla ilmeellä kuin muutkin materiaalisi.",
@@ -152,6 +267,7 @@ const PALVELUT: { kick: string; h: string; p: string; li: string[]; px: string }
     px: "Ikkunateippaus alk. 290 € · valomainos tarjouksen mukaan",
   },
   {
+    ik: "kortit",
     kick: "Käteen jäävä",
     h: "Käyntikortit, esitteet ja roll-upit",
     p: "Suunnittelemme painotuotteet ja teetämme ne valmiiksi. Saat painovalmiit tiedostot myös itsellesi, jos haluat tilata lisäpainoksen myöhemmin muualta.",
@@ -165,12 +281,15 @@ const PALVELUT: { kick: string; h: string; p: string; li: string[]; px: string }
   },
 ];
 
-function Pari({ osa }: { osa: typeof PALVELUT }) {
+function Pari({ osa, alku }: { osa: typeof PALVELUT; alku: number }) {
   return (
-    <div className="duo2" style={{ marginTop: "48px" }}>
-      {osa.map((o) => (
-        <div className="duo2-col" key={o.h}>
-          <p className="duo2-kick">{o.kick}</p>
+    <div className="duo2 gs-pari" style={{ marginTop: "48px" }} data-rvs="">
+      {osa.map((o, j) => (
+        <div className="duo2-col" key={o.h} style={{ "--i": j } as CSSProperties}>
+          <div className="gs-yla">
+            <Merkki nimi={o.ik} className="gs-ik gs-ik-kehys" />
+            <p className="duo2-kick">{o.kick}</p>
+          </div>
           <h3>{o.h}</h3>
           <p className="seo-body">{o.p}</p>
           <ul className="seo-spec porras rv">
@@ -178,6 +297,9 @@ function Pari({ osa }: { osa: typeof PALVELUT }) {
               <li key={x}>{x}</li>
             ))}
           </ul>
+          <svg className="gs-kuvio" viewBox="0 0 160 48" aria-hidden="true">
+            {KUVIOT[alku + j]}
+          </svg>
           <p className="hinta-f" style={{ marginTop: "18px" }}>
             {o.px}
           </p>
@@ -202,8 +324,8 @@ export function Palvelut() {
           vain sen osan, jonka tarvitset nyt.
         </p>
 
-        <Pari osa={PALVELUT.slice(0, 2)} />
-        <Pari osa={PALVELUT.slice(2, 4)} />
+        <Pari osa={PALVELUT.slice(0, 2)} alku={0} />
+        <Pari osa={PALVELUT.slice(2, 4)} alku={2} />
       </div>
     </section>
   );
@@ -342,6 +464,11 @@ export function Tiedostot() {
    Kestoika-sarakkeessa oli painotuotteiden kohdalla ajatusviiva.
    Taulukossa tyhja solu on selkeampi kuin merkki jota pitaa tulkita,
    ja ruudunlukija lukee ajatusviivan aaneen. */
+/* Kestoikapalkki: vuodet asteikolla 0..7. Valomainoksen kesto on
+   tunteja ja painotuotteilla kestoa ei ole, joten niilla palkkia ei
+   piirreta. */
+const IKA: ([number, number] | null)[] = [[3, 7], [5, 7], [3, 5], null, null];
+
 const MATERIAALIT: [string, string, string, string][] = [
   [
     "Ajoneuvoteippaus",
@@ -390,7 +517,7 @@ export function Materiaalit() {
           materiaalia käytetään ja kuinka kauan sen pitäisi kestää.
         </p>
 
-        <table className="spec porras rv" style={{ marginTop: "48px" }}>
+        <table className="spec porras rv gs-ikataulu" style={{ marginTop: "48px" }} data-rvs="">
           <thead>
             <tr>
               <th scope="col">Kohde</th>
@@ -400,11 +527,22 @@ export function Materiaalit() {
             </tr>
           </thead>
           <tbody>
-            {MATERIAALIT.map(([kohde, mat, ika, huom]) => (
+            {MATERIAALIT.map(([kohde, mat, ika, huom], r) => (
               <tr key={kohde}>
                 <th scope="row">{kohde}</th>
                 <td>{mat}</td>
-                <td>{ika}</td>
+                <td>
+                  {ika}
+                  {IKA[r] ? (
+                    <span
+                      className="gs-ika"
+                      aria-hidden="true"
+                      style={{ "--a": IKA[r]![0] / 7, "--b": IKA[r]![1] / 7, "--i": r } as CSSProperties}
+                    >
+                      <i />
+                    </span>
+                  ) : null}
+                </td>
                 <td>{huom}</td>
               </tr>
             ))}
