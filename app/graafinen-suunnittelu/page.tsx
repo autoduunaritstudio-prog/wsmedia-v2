@@ -125,35 +125,22 @@ export default function GraafinenSuunnittelu() {
                 Kun kaikki näyttää samalta, yritys <b><i>jää mieleen.</i></b>
               </Vaite>
 
-              <div className="pino">
-                {/* RAKENNE 1.10.2026: tarkeimmat ensin, hengahdys ennen
-                    hintaa. Prosessi on oma kaarensa. Hintavaite on silta
-                    hinnastoon, jotta pinta ei nouse suoraan toisen paalle.
-                    Materiaalit ja toiminta-alue ovat tukitietoa, joten ne
-                    ovat hannassa Kenelle-osion ja UKK:n jalkeen. */}
-                <Jakso>
-                  <Prosessi />
-                </Jakso>
-
-                <div className="pino">
-                  <Vaite
-                    kuva="/graafinen-suunnittelu/luonnokset.webp"
-                    alla="Kartoitus ja tarjous ovat maksuttomia eivätkä sido mihinkään."
-                  >
-                    Logo alkaen 490 €, koko ilme <b><i>alkaen 1 490 €.</i></b>
-                  </Vaite>
-
-                  <Jakso>
-                    <Hinta />
-                    <Kenelle />
-                    <Materiaalit />
-                    <Ukk />
-                    <Alueet />
-                    <Kaytannossa />
-                    <Tarjous />
-                  </Jakso>
-                </div>
-              </div>
+              {/* RAKENNE 1.10.2026: vain kaksi pintaa ja yksi hengahdys
+                  niiden valissa. Aiemmin Prosessi, hintavaite ja Hinta
+                  nousivat kukin edellisen paalle, kolme peittoa perakkain.
+                  Nyt Prosessi jatkuu suoraan hinnastoon samalla pinnalla.
+                  Materiaalit ja toiminta-alue ovat tukitietoa, joten ne
+                  ovat hannassa Kenelle-osion ja UKK:n jalkeen. */}
+              <Jakso>
+                <Prosessi />
+                <Hinta />
+                <Kenelle />
+                <Materiaalit />
+                <Ukk />
+                <Alueet />
+                <Kaytannossa />
+                <Tarjous />
+              </Jakso>
             </div>
           </div>
         </div>
