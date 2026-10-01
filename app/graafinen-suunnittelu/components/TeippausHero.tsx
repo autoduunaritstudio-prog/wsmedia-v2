@@ -587,6 +587,35 @@ export default function TeippausHero() {
                         <stop offset=".94" stopColor="#000" stopOpacity="0" />
                         <stop offset="1" stopColor="#000" stopOpacity=".3" />
                       </linearGradient>
+                      {/* Aidompi runko: kasetin pyorea etuprofiili, tummat
+                          paatykappaleet, kasettirako, kaantyvat jalat ja
+                          ylalistan kiinnike. */}
+                      <linearGradient id="th-kasetti" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stopColor="#eef1f5" />
+                        <stop offset=".16" stopColor="#c4cbd4" />
+                        <stop offset=".46" stopColor="#959daa" />
+                        <stop offset=".78" stopColor="#5d6470" />
+                        <stop offset="1" stopColor="#353a42" />
+                      </linearGradient>
+                      <linearGradient id="th-paaty" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0" stopColor="#1c2026" />
+                        <stop offset=".45" stopColor="#4a515c" />
+                        <stop offset="1" stopColor="#23272e" />
+                      </linearGradient>
+                      <linearGradient id="th-lista" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stopColor="#fbfcfd" />
+                        <stop offset=".42" stopColor="#cdd3db" />
+                        <stop offset=".58" stopColor="#8d95a1" />
+                        <stop offset="1" stopColor="#636b78" />
+                      </linearGradient>
+                      <linearGradient id="th-varjo-ylos" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stopColor="#000" stopOpacity=".38" />
+                        <stop offset="1" stopColor="#000" stopOpacity="0" />
+                      </linearGradient>
+                      <linearGradient id="th-varjo-alas" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stopColor="#000" stopOpacity="0" />
+                        <stop offset="1" stopColor="#000" stopOpacity=".5" />
+                      </linearGradient>
                       <radialGradient id="th-flo">
                         <stop offset="0" stopColor="#000" stopOpacity=".7" />
                         <stop offset="1" stopColor="#000" stopOpacity="0" />
@@ -595,9 +624,12 @@ export default function TeippausHero() {
                         <rect x="14" y="14" width="172" height="410" />
                       </clipPath>
                     </defs>
-                    <ellipse cx="104" cy="466" rx="110" ry="12" fill="url(#th-flo)" />
-                    <rect x="22" y="452" width="22" height="8" rx="3" fill="#2f343d" />
-                    <rect x="156" y="452" width="22" height="8" rx="3" fill="#2f343d" />
+                    <ellipse cx="102" cy="468" rx="112" ry="10" fill="url(#th-flo)" />
+                    {/* kaantyvat jalat kasetin alla */}
+                    <path d="M18 452h30l-3 12a3 3 0 0 1-3 2.4H16.5a2.5 2.5 0 0 1-2.4-3.1z" fill="#24282f" />
+                    <path d="M182 452h-30l3 12a3 3 0 0 0 3 2.4h15.5a2.5 2.5 0 0 0 2.4-3.1z" fill="#24282f" />
+                    <rect x="17" y="463.5" width="25" height="2" rx="1" fill="#0d0f12" />
+                    <rect x="158" y="463.5" width="25" height="2" rx="1" fill="#0d0f12" />
                     <g clipPath="url(#th-bclip)">
                       <rect x="14" y="14" width="172" height="410" style={{ fill: "var(--wrap)", transition: "fill .5s" }} />
                       <use href="#th-bars" x="64" y="300" width="170" height="226" style={{ color: "var(--acc)", transition: "color .5s" }} />
@@ -626,12 +658,29 @@ export default function TeippausHero() {
                       </g>
                       <rect x="14" y="14" width="172" height="410" fill="url(#th-bshade)" />
                       <rect x="14" y="14" width="172" height="410" fill="url(#th-bsheen)" />
+                      {/* ylalistan varjo ja kasettiin painuva alareuna */}
+                      <rect x="14" y="17" width="172" height="9" fill="url(#th-varjo-ylos)" />
+                      <rect x="14" y="398" width="172" height="26" fill="url(#th-varjo-alas)" />
                     </g>
-                    <rect x="10" y="8" width="180" height="9" rx="3" fill="url(#th-alu)" />
-                    <rect x="6" y="420" width="188" height="34" rx="7" fill="url(#th-alu)" />
-                    <rect x="6" y="420" width="10" height="34" rx="4" fill="#3b414b" />
-                    <rect x="184" y="420" width="10" height="34" rx="4" fill="#3b414b" />
-                    <rect x="20" y="424" width="160" height="3" rx="1.5" fill="#fff" opacity=".7" />
+                    {/* ylalista: alumiiniprofiili, paatytulpat ja keskella
+                        tangon kiinnike */}
+                    <rect x="11" y="8" width="178" height="10" rx="2.5" fill="url(#th-lista)" />
+                    <rect x="11" y="16.6" width="178" height="1.4" fill="#000" opacity=".25" />
+                    <rect x="8" y="7" width="7" height="12" rx="2.2" fill="url(#th-paaty)" />
+                    <rect x="185" y="7" width="7" height="12" rx="2.2" fill="url(#th-paaty)" />
+                    <rect x="94" y="4.5" width="12" height="5" rx="1.5" fill="#3a4048" />
+                    {/* kasettirako, josta banneri nousee */}
+                    <rect x="15" y="416.5" width="170" height="4.5" rx="2.2" fill="#121418" />
+                    {/* kasetti: pyorea etuprofiili, valoviiva, sauma ja
+                        tummat paatykappaleet */}
+                    <path d="M6 428a8 8 0 0 1 8-8h172a8 8 0 0 1 8 8v16a10 10 0 0 1-10 10H16a10 10 0 0 1-10-10z" fill="url(#th-kasetti)" />
+                    <rect x="16" y="423" width="168" height="2" rx="1" fill="#fff" opacity=".8" />
+                    <rect x="16" y="441.5" width="168" height="1" fill="#000" opacity=".22" />
+                    <rect x="16" y="447" width="168" height="1.2" rx=".6" fill="#fff" opacity=".18" />
+                    <path d="M6 428a8 8 0 0 1 8-8h6v34h-4a10 10 0 0 1-10-10z" fill="url(#th-paaty)" />
+                    <path d="M194 428a8 8 0 0 0-8-8h-6v34h4a10 10 0 0 0 10-10z" fill="url(#th-paaty)" />
+                    <rect x="9" y="424" width="1.2" height="24" rx=".6" fill="#fff" opacity=".22" />
+                    <rect x="189.8" y="424" width="1.2" height="24" rx=".6" fill="#fff" opacity=".12" />
                   </svg>
                   <div className={s.tag}>
                     <i />
