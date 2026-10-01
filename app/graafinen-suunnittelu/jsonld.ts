@@ -58,8 +58,8 @@ const BASE_GRAPH = [
       "@type": "WebPage",
       "@id": "https://wsmedia.fi/graafinen-suunnittelu#sivu",
       "url": "https://wsmedia.fi/graafinen-suunnittelu",
-      "name": "Graafinen suunnittelu yritykselle | Yritysilme ja teippaukset | WS Media",
-      "description": "Graafinen suunnittelu yritykselle avaimet käteen: logo, yritysilme ja graafinen ohjeisto sekä käyntikortit, teippaukset ja kyltit valmiiksi asennettuna.",
+      "name": "Graafinen suunnittelu ja logo yritykselle | Espoo | WS Media",
+      "description": "Logo, yritysilme ja graafinen ohjeisto yritykselle. Hoidamme myös käyntikortit, roll-upit ja auton mainosteippauksen valmiiksi. Logo alk. 490 €.",
       "inLanguage": "fi-FI",
       "isPartOf": {
         "@id": "https://wsmedia.fi/#organisaatio"
@@ -117,11 +117,11 @@ const BASE_GRAPH = [
             "name": "Logo ja tunnus",
             "description": "Logosuunnittelu ja logopaketti eri tiedostomuodoissa, mukana muutoskierrokset.",
             "priceCurrency": "EUR",
-            "price": "690",
+            "price": "490",
             "priceSpecification": {
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
-              "price": "690",
+              "price": "490",
               "valueAddedTaxIncluded": false
             }
           },
@@ -140,34 +140,34 @@ const BASE_GRAPH = [
           },
           {
             "@type": "Offer",
-            "name": "Ajoneuvoteippaus avaimet käteen",
+            "name": "Auton mainosteippaus avaimet käteen",
             "description": "Suunnittelu, materiaalit ja asennus. Logoteippaus, osateippaus tai yliteippaus henkilö- ja pakettiautoihin sekä raskaaseen kalustoon.",
             "priceCurrency": "EUR",
-            "price": "590",
+            "price": "490",
             "priceSpecification": {
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
-              "price": "590",
+              "price": "490",
               "valueAddedTaxIncluded": false
             }
           },
           {
             "@type": "Offer",
-            "name": "Julkisivu-, ikkuna- ja kylttiratkaisut",
-            "description": "Julkisivu- ja ikkunateippaukset, valomainokset, opasteet ja lattiateippaukset asennettuna, lupa-asiat selvitettynä.",
+            "name": "Ikkunateippaus",
+            "description": "Ikkuna- ja julkisivuteippaukset asennettuna. Valomainokset ja kyltit tarjouksen mukaan.",
             "priceCurrency": "EUR",
-            "price": "890",
+            "price": "290",
             "priceSpecification": {
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
-              "price": "890",
+              "price": "290",
               "valueAddedTaxIncluded": false
             }
           },
           {
             "@type": "Offer",
-            "name": "Painotuotteet",
-            "description": "Käyntikortit, flyerit, esitteet ja roll-upit suunnittelusta painoon, painovalmiit aineistot mukaan.",
+            "name": "Painotuotteiden suunnittelu",
+            "description": "Käyntikorttien, flyereiden, esitteiden ja roll-upien suunnittelu, painovalmiit aineistot mukaan. Painatus tarjouksen mukaan.",
             "priceCurrency": "EUR",
             "price": "190",
             "priceSpecification": {

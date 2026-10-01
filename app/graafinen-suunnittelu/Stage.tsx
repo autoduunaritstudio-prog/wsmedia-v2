@@ -288,7 +288,7 @@ export default function Stage() {
             </div>
           </div>
         </div>
-        <p className="stagenote">Sama tunnus, samat värit ja sama typografia, riippumatta siitä mihin pintaan se päätyy.</p>
+        <p className="stagenote">Sama logo, samat värit ja sama fontti, oli pinta mikä tahansa.</p>
       </div>
   );
 }

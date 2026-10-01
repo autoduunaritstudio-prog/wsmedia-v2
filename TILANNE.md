@@ -1,4 +1,4 @@
-# WS Media -sivusto, tilanne 30.9.2026
+# WS Media -sivusto, tilanne 1.10.2026
 
 Tämä tiedosto on siirtomuistio uuteen chattiin. Repo: `wsmedia-v2`, paikallinen polku `/Users/tuomas/Desktop/wsmedia-v2`, dev-palvelin `localhost:3000`.
 
@@ -84,20 +84,30 @@ Yhteiset koot ovat `globals.css`:ssä `:is(.page-verkkosivut, .page-lyhytvideot,
 
 ## 4. Mitä on tehty
 
-### Commitattu
+Kaikki on commitattu ja pushattu. `main` on samassa kohdassa kuin `origin/main`, työpuu on puhdas lukuun ottamatta kolmea seuraamatonta tiedostoa (`kaynnista-dev.command`, `kaynnista-prod.command`, `public/_perf.html`), jotka jätettiin tarkoituksella pois.
 
-- `6a44632` Verkkosivut ja lyhytvideot samaan kuvakieleen
-- `dd822ec` Väliaikainen tulossa-sivu wsmedia.fi-hostille
+| Commit | Sisältö |
+| --- | --- |
+| `dd822ec` | Väliaikainen tulossa-sivu wsmedia.fi-hostille |
+| `5f7e873` | Lyhytvideot: tekstit, hinnat ja suorituskyky; SEO ja graafinen kuvakieleen |
+| `9fb77b8` | Lyhytvideot: peitetyt pinon vaiheet piiloon, ei läpikuultoa |
+| `a5850ad` | Lyhytvideot: Safarin vieritys sujuvaksi |
+| `69f3107` | Lyhytvideot: tarjousosion välkyntä ja Safarin katoava palkki |
+| `c553d85` | Lyhytvideot: sulavat B-roll-tekstit, tiiviimmät välit, palkki napista |
+| `1ceb344` | Verkkosivut: tekstit hakusanojen mukaan, nopeus ja samat korjaukset kuin lyhytvideoilla |
+| `2086ab1` | Pehmeä vieritys: Lenis ja koristeiden oma pehmennys |
 
-### Commitoimatta työpuussa
+### Hakukoneoptimointi-sivu kuvakieleen
 
-**Hakukoneoptimointi-sivu kuvakieleen.** Sivulla ei ollut sivutason verkostokerrosta lainkaan ja osioilla oli neljä eri pohjaa (`data-tone="ink"` #060a0e, `.valo` vaalea, `.ruudukko`, sivun oma). Nyt yksi kerros, läpinäkyvät osiot, yksi peittoketju ja pystykaiut NÄKYVYYS, SISÄLTÖ, PAIKALLINEN, 12 KK, LUVUT, KENELLE, FAQ. Häntä (hinnoittelu, kenelle, UKK, CTA) yhdessä `Jakso`-kaaressa. Hero jätettiin rauhaan.
+Sivulla ei ollut sivutason verkostokerrosta lainkaan ja osioilla oli neljä eri pohjaa (`data-tone="ink"` #060a0e, `.valo` vaalea, `.ruudukko`, sivun oma). Nyt yksi kerros, läpinäkyvät osiot, yksi peittoketju ja pystykaiut NÄKYVYYS, SISÄLTÖ, PAIKALLINEN, 12 KK, LUVUT, KENELLE, FAQ. Häntä (hinnoittelu, kenelle, UKK, CTA) yhdessä `Jakso`-kaaressa. Hero jätettiin rauhaan.
 
-**Graafinen suunnittelu -sivu kuvakieleen.** Oli viimeinen vaaleassa ilmeessä, kolmetoista peräkkäistä osiota ilman peittoa. Nyt `.wsx`, sivutason verkosto, rae, pinnattu hero + cover, yksi peittoketju. Jaksot: Miksi + Palvelut, Prosessi + Aineistot, Materiaalit + Toiminta-alue, häntä Hinta, Kenelle, UKK, Taustaa, Tarjous. Kolme hengähdystä. Kaikki omat kortit korvattu jaetuilla palikoilla. Käsin kirjoitettu lomake vaihtui `BudgetForm`-komponenttiin. Blogi-osio ja Loppu-lohko poistettiin.
+### Graafinen suunnittelu -sivu kuvakieleen
+
+Oli viimeinen vaaleassa ilmeessä, kolmetoista peräkkäistä osiota ilman peittoa. Nyt `.wsx`, sivutason verkosto, rae, pinnattu hero + cover, yksi peittoketju. Jaksot: Miksi + Palvelut, Prosessi + Aineistot, Materiaalit + Toiminta-alue, häntä Hinta, Kenelle, UKK, Taustaa, Tarjous. Kolme hengähdystä. Kaikki omat kortit korvattu jaetuilla palikoilla. Käsin kirjoitettu lomake vaihtui `BudgetForm`-komponenttiin. Blogi-osio ja Loppu-lohko poistettiin.
 
 Pintanäyttämön juuriluokka `.stage` piti nimetä `.gs-nayttamo`:ksi: `.stage` on varattu lyhytvideoiden puhelinviuhkalle (`.stickysub .stage` asettaa 470 px korkeuden ja laitteiden paikat).
 
-**Tekstikorjaukset kaikilla neljällä sivulla.** Poistettuja toistoja ja virheitä:
+### Tekstikorjaukset kaikilla neljällä sivulla
 
 - Tarjouksen otsikko oli sanatarkasti sama kuin sitä edeltävä hengähdys (SEO).
 - "Kartoitus ja alustava auditointi ovat maksuttomia" kahdesti vierekkäin (SEO).
@@ -136,41 +146,62 @@ CSS globals.css:n lopussa: `html.lenis-smooth { scroll-behavior: auto !important
 
 **Säätönupit:** `lerp` Pehmeavieritys.tsx:ssä (pienempi = pehmeämpi ja hitaampi), `wheelMultiplier` (pienempi = lyhyempi askel per napsautus), `PEHMENNYS_TAU` SiteEffects.tsx:ssä.
 
-**Ei vielä todennettu selaimessa.** Testattavat kohdat: sticky-pinot kaikilla neljällä palvelusivulla, etusivun heron latausruutu ja sen lukko, ankkurilinkit (`#tarjous`, `#hinnoittelu`), mobiilikosketus, evästebanneri ja valikko.
+**Todennettu ja hyväksytty 1.10.2026.** Tuomas testasi rullahiirellä ja ohjauslevyllä, build menee läpi, commitattu (`2086ab1`) ja pushattu.
 
 `package.json` ja `package-lock.json` muuttuivat, `lenis ^1.3.26`.
 
 ---
 
+## 4c. Graafinen suunnittelu: tekstit, hinnat ja visuaali, 1.10.2026 (ei commitattu)
+
+- Tekstit hakusanojen mukaan (Keyword Planner + kilpailijat), uudet hinnat: logo 490, ilme 1 490, auton mainosteippaus 490, ikkunateippaus 290, painotuotteen suunnittelu 190 (painatus tarjouksen mukaan), valomainos tarjouksen mukaan. Sama luku korteissa, UKK:ssa, laskurissa ja JSON-LD:ssä.
+- Pohja #172132 (verkkosivut #111823, lyhytvideot #0b0f14). Portaikko jatkuu SEO-sivulle ja etusivulle.
+- Hengähdykset: vaite + kuva, täysi laatta, vaite + kuva. Kuvat public/graafinen-suunnittelu/ (ilme, pakettiauto, luonnokset).
+- Graafinen lisätty verkkosivujen ja lyhytvideoiden yhteisiin sääntöihin: osio-valo, B-roll-tekstien pehmennys, palkki napista, 72 px välit, prosessin solmut ja viisi saraketta, kenelle-palstat, footer, .mark, napin hehku.
+- Push tehdään kun kaikki palvelusivut ovat valmiit (Tuomaksen päätös).
+
 ## 5. Seuraavat askeleet
 
-1. **Tarkista graafinen suunnittelu -sivu selaimessa.** `npm run dev`, avaa `/graafinen-suunnittelu`. Erityisesti **hero**: pintanäyttämö on oikeassa palstassa 0,82 skaalalla, eikä sitä ole verrattu muihin sivuihin.
-2. **Tarkista hakukoneoptimointi-sivu.** Tausta yhtenäinen herosta CTA:han, hinnoittelu tumma, pystykaiut eivät osu leipätekstiin.
-3. `npm run build`.
-4. Commit nimetyillä poluilla osoitteella `autoduunaritstudio@gmail.com`.
-5. Push ja Vercel-deployn tarkistus.
+Mitään pakollista ei ole kesken. Alla olevat ovat avoimia päätöksiä ja siivousta, tärkein ensin.
 
-### Avoimet päätökset
+### 1. (Tehty) Lyhytvideoiden hinnat
 
-- **Kaupunkisivut.** `/hakukoneoptimointi/espoo` ja yhdeksän muuta ovat linkkejä 404:ään. Graafisella sivulla vastaavat muutettiin tekstiksi. Päätä: rakennetaanko kaupunkisivut vai muutetaanko SEO-sivunkin linkit tekstiksi.
-- **Lyhytvideoiden hinnat** ovat yhä `[HINTA]` ja `[X]` -paikanpitäjiä. Kun hinnat tulevat, `app/lyhytvideot/components/sections2.tsx` ja `app/lyhytvideot/structured-data.ts` päivitetään **yhdessä**: JSON-LD:n Offer kantaa yhä kirjaimellista `"price": "[HINTA]"`.
-- **Ajatusviivat** ovat vielä `toihin-meille`- ja `tietosuoja`-sivuilla sekä komponenteissa `Results.tsx`, `Booking.tsx` ja `Refs.tsx`.
-- **Kuvat graafiselle sivulle.** Kansio `public/graafinen-suunnittelu` on tyhjä, joten kolme hengähdystä ovat ilman valokuvaa. Kuvapaikat ovat valmiina.
-- **Lyhytvideot-sivun pohjaväri** on `#0b0f14`, verkkosivujen `#111823`. Päätä pitääkö ne yhtenäistää.
+Sivulla näkyy yhä `[HINTA]` ja `[X]` -paikanpitäjiä (`app/lyhytvideot/components/sections2.tsx`, yhdeksän kohtaa), mutta **rakenteisessa datassa on jo oikeat hinnat** (`app/lyhytvideot/structured-data.ts`: 1500 ja 2200 euroa). Google saa siis hinnat joita sivulla ei näy. Tämä on sekä asiavirhe että riski rikkinäisestä rikastetusta hakutuloksesta.
+
+Kun hinnat lisätään, molemmat tiedostot päivitetään **yhdessä**, ja luvut tarkistetaan täsmäämään.
+
+### 2. Kaupunkisivut
+
+`/hakukoneoptimointi/espoo` ja yhdeksän muuta ovat linkkejä 404:ään. Graafisella sivulla vastaavat muutettiin tekstiksi. Päätä: rakennetaanko kaupunkisivut vai muutetaanko SEO-sivunkin linkit tekstiksi.
+
+### 3. Kuvat graafiselle sivulle
+
+Kansio `public/graafinen-suunnittelu` on tyhjä, joten kolme hengähdystä ovat ilman valokuvaa. Kuvapaikat ovat valmiina sivun `page.tsx`:ssä: lisää `kuva="/graafinen-suunnittelu/<nimi>.webp"` kolmeen `<Vaite>`-elementtiin.
+
+### 4. Ajatusviivat lopuilta sivuilta
+
+Vielä jäljellä: `toihin-meille`, `tietosuoja` sekä komponentit `Results.tsx`, `Booking.tsx` ja `Refs.tsx`.
+
+### 5. Pohjaväri
+
+Lyhytvideot, SEO ja graafinen ovat `#0b0f14`, verkkosivut `#111823`. Päätä yhtenäistetäänkö.
 
 ### Kuollutta koodia
 
-Nämä eivät ole minkään sivun käytössä. Poista kun olet varmistanut:
+Ei minkään sivun käytössä. Tarkistettu 1.10.2026:
 
-- `app/verkkosivut/Rakentuu.tsx`, `app/components/HeroBrowserStage.tsx` ja `.rakentuu` / `.rk-*` -säännöt globals.css:ssä
+- `app/components/HeroBrowserStage.tsx`
+- `app/verkkosivut/components/Rakentuu.tsx` ja `.rakentuu` / `.rk-*` -säännöt globals.css:ssä
 - `app/verkkosivut/sections.tsx`, `app/verkkosivut/sections2.tsx`
 - `app/hakukoneoptimointi/sections.tsx`, `app/hakukoneoptimointi/sections2.tsx`
 - Vanha `.page-graafinen-suunnittelu` CSS-lohko globals.css:ssä, noin 110 riviä: `.bcard`, `.bento`, `.bt-item`, `.hline`, `.hsteps`, `.hbox`, `.files`, `.frow`, `.twopanel`, `.pan`, `.closer`, `.hsplit`, `.bridge`
-- `_to_delete/`-kansio, aja `rm -rf _to_delete`
+
+Elävät vastineet ovat `app/verkkosivut/components/` ja `app/hakukoneoptimointi/components/` -kansioissa, eli juuritason `sections*.tsx` ovat vanhoja kopioita.
 
 ### Tiedossa olevat, koskemattomat
 
 - 19 px vaakavieritys `/lyhytvideot`-sivulla 1230 px leveydellä, heron `.chip-f`-lipukkeesta. Oli olemassa jo ennen tätä työtä.
+- Seuraamattomat `kaynnista-dev.command`, `kaynnista-prod.command` ja `public/_perf.html`. Päätä commitataanko vai `.gitignore`en.
 
 ---
 

@@ -10616,26 +10616,42 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 /* ---------- FOOTERI ----------
    Sama kuin SEO-sivulla ja etusivulla: tumma. Vaalea footeri tumman
    sivun alla lukee eri sivustona. */
-.page-verkkosivut footer {
+.page-verkkosivut footer,
+.page-graafinen-suunnittelu footer {
   background: #060b14; border-top-color: rgba(255,255,255,.12); color: #b9c0cf;
 }
 .page-verkkosivut footer .foot-top,
+.page-graafinen-suunnittelu footer .foot-top,
 .page-verkkosivut footer .foot-base,
-.page-verkkosivut footer hr { border-color: rgba(255,255,255,.12) }
+.page-graafinen-suunnittelu footer .foot-base,
+.page-verkkosivut footer hr,
+.page-graafinen-suunnittelu footer hr { border-color: rgba(255,255,255,.12) }
 .page-verkkosivut footer a,
+.page-graafinen-suunnittelu footer a,
 .page-verkkosivut footer address,
-.page-verkkosivut footer .cc-reopen { color: #b9c0cf }
+.page-graafinen-suunnittelu footer address,
+.page-verkkosivut footer .cc-reopen,
+.page-graafinen-suunnittelu footer .cc-reopen { color: #b9c0cf }
 .page-verkkosivut footer a:hover,
-.page-verkkosivut footer .cc-reopen:hover { color: #f5f5f7 }
+.page-graafinen-suunnittelu footer a:hover,
+.page-verkkosivut footer .cc-reopen:hover,
+.page-graafinen-suunnittelu footer .cc-reopen:hover { color: #f5f5f7 }
 .page-verkkosivut footer .footer-mark,
+.page-graafinen-suunnittelu footer .footer-mark,
 .page-verkkosivut footer .foot-brand > :not(p):not(ul),
+.page-graafinen-suunnittelu footer .foot-brand > :not(p):not(ul),
 .page-verkkosivut footer .foot-col h4,
+.page-graafinen-suunnittelu footer .foot-col h4,
 .page-verkkosivut footer h2,
-.page-verkkosivut footer h4 { color: #f5f5f7 }
-.page-verkkosivut footer .foot-social a {
+.page-graafinen-suunnittelu footer h2,
+.page-verkkosivut footer h4,
+.page-graafinen-suunnittelu footer h4 { color: #f5f5f7 }
+.page-verkkosivut footer .foot-social a,
+.page-graafinen-suunnittelu footer .foot-social a {
   color: #b9c0cf; border-color: rgba(255,255,255,.18);
 }
-.page-verkkosivut footer .foot-social a:hover { color: #f5f5f7; border-color: rgba(255,255,255,.4) }
+.page-verkkosivut footer .foot-social a:hover,
+.page-graafinen-suunnittelu footer .foot-social a:hover { color: #f5f5f7; border-color: rgba(255,255,255,.4) }
 
 /* ---------- LOMAKE ON VAALEA SAAREKE ----------
    Sama ratkaisu ja sama perustelu kuin SEO-sivulla: kentat joihin
@@ -10700,7 +10716,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    grid-auto-flow: column antaa jokaiselle jaksolle oman sarakkeen
    riippumatta siita montako niita on. */
 @media (min-width: 901px) {
-  .page-verkkosivut .jana-jaksot {
+  .page-verkkosivut .jana-jaksot,
+  .page-graafinen-suunnittelu .jana-jaksot {
     grid-template-columns: none;
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
@@ -10841,7 +10858,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    SEO-sivulla aksenttisana on syaani laatikko tekstin takana. Talla
    sivulla se on viiva sanan alla, ja viiva vetaytyy auki vasemmalta.
    Sama vari, sama sana, eri merkki. */
-.page-verkkosivut .mark {
+.page-verkkosivut .mark,
+.page-graafinen-suunnittelu .mark {
   background: none;
   color: var(--seo-ink);
   box-shadow: none;
@@ -10910,7 +10928,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   .page-verkkosivut #miksi .kaksi { column-gap: 0 }
   .page-verkkosivut #miksi .kaksi > div:nth-child(even) { padding-left: 48px; border-left: 1px solid var(--seo-rule) }
   .page-verkkosivut #miksi .kaksi > div:nth-child(odd) { padding-right: 48px }
-  .page-verkkosivut #kenelle .kaksi > div + div { padding-left: 48px; border-left: 1px solid var(--seo-rule) }
+  .page-verkkosivut #kenelle .kaksi > div + div,
+.page-graafinen-suunnittelu #kenelle .kaksi > div + div { padding-left: 48px; border-left: 1px solid var(--seo-rule) }
 }
 
 /* ---------- 6. PYSTYKAIKU ----------
@@ -11415,7 +11434,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    Mitaan muuta ei tehda: ei valkoisia alustoja, ei opasiteettia, ei
    harmaasuodinta. Nauhan pitaa nayttaa samalta, joten sen saa nayttaa
    samalta vain samalla saannolla. */
-.page-verkkosivut .logostrip img.ink { filter: invert(1) }
+.page-verkkosivut .logostrip img.ink,
+.page-graafinen-suunnittelu .logostrip img.ink { filter: invert(1) }
 
 /* ==================================================================
    NAKYVYYS: NELJA KOHTAA OMANA MUOTONAAN
@@ -11489,11 +11509,15 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    3. Leipateksti kevenee. Rivi lyhenee 30 merkkiin ja vari
       pehmenee, jolloin otsikkorivi luetaan ensin ja kuvaus vasta
       jos se kiinnostaa. */
-.page-verkkosivut #prosessi .jana { --solmu: 34px }
-.page-verkkosivut #prosessi .jana-akseli { overflow: visible }
-.page-verkkosivut #prosessi .jakso { position: relative }
+.page-verkkosivut #prosessi .jana,
+.page-graafinen-suunnittelu #prosessi .jana { --solmu: 34px }
+.page-verkkosivut #prosessi .jana-akseli,
+.page-graafinen-suunnittelu #prosessi .jana-akseli { overflow: visible }
+.page-verkkosivut #prosessi .jakso,
+.page-graafinen-suunnittelu #prosessi .jakso { position: relative }
 @media (min-width: 901px) {
-  .page-verkkosivut #prosessi .jakso::before {
+  .page-verkkosivut #prosessi .jakso::before,
+.page-graafinen-suunnittelu #prosessi .jakso::before {
     content: ""; position: absolute; left: -5px; top: calc(-1 * var(--solmu) - 4px);
     width: 9px; height: 9px; border-radius: 50%;
     background: var(--seo-rule); box-shadow: 0 0 0 4px #0b0f14;
@@ -11501,24 +11525,30 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   }
   /* Solmu syttyy kun tayttoviiva on ohittanut sen. Kynnys on
      vaiheen oma osuus janasta, eli viides syttyy vasta lopussa. */
-  .page-verkkosivut #prosessi .jakso {
+  .page-verkkosivut #prosessi .jakso,
+.page-graafinen-suunnittelu #prosessi .jakso {
     --auki: clamp(0, calc((var(--rvp, 1) - var(--i) * .17) * 8), 1);
   }
-  .page-verkkosivut #prosessi .jakso::before {
+  .page-verkkosivut #prosessi .jakso::before,
+.page-graafinen-suunnittelu #prosessi .jakso::before {
     background: color-mix(in srgb, var(--blue) calc(var(--auki) * 100%), var(--seo-rule));
   }
-  .page-verkkosivut #prosessi .jakso > * {
+  .page-verkkosivut #prosessi .jakso > *,
+.page-graafinen-suunnittelu #prosessi .jakso > * {
     opacity: calc(.42 + var(--auki) * .58);
     translate: 0 calc((1 - var(--auki)) * 8px);
   }
 }
-.page-verkkosivut #prosessi .jakso-p {
+.page-verkkosivut #prosessi .jakso-p,
+.page-graafinen-suunnittelu #prosessi .jakso-p {
   font-size: 15px; line-height: 1.6; max-width: 30ch;
   color: color-mix(in srgb, var(--seo-ink-2) 86%, transparent);
 }
-.page-verkkosivut #prosessi .jakso h3 { margin-bottom: 10px }
+.page-verkkosivut #prosessi .jakso h3,
+.page-graafinen-suunnittelu #prosessi .jakso h3 { margin-bottom: 10px }
 @media (prefers-reduced-motion: reduce) {
-  .page-verkkosivut #prosessi .jakso > * { opacity: 1; translate: none }
+  .page-verkkosivut #prosessi .jakso > *,
+.page-graafinen-suunnittelu #prosessi .jakso > * { opacity: 1; translate: none }
 }
 
 /* ==================================================================
@@ -12347,7 +12377,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    pohjalla, joten viiva niiden valissa ei erota mitaan, se vain
    piirtaa poikkiviivan sivun yli. */
 .page-lyhytvideot #kenelle + .seo-sec,
-.page-lyhytvideot #ukk { border-top: 0 }
+.page-lyhytvideot #ukk,
+.page-graafinen-suunnittelu #ukk { border-top: 0 }
 
 /* ---------- TAUSTAN VALONLAHTEET ----------
    Tausta oli tasainen: sama kuvio samalla kirkkaudella ylhaalta
@@ -12447,7 +12478,9 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 
 /* Nappi valaisee samalla tavalla kun se tulee nakyviin. */
 .page-lyhytvideot .btn.mag,
-.page-lyhytvideot .cta-palkki .btn {
+.page-graafinen-suunnittelu .btn.mag,
+.page-lyhytvideot .cta-palkki .btn,
+.page-graafinen-suunnittelu .cta-palkki .btn {
   box-shadow: 0 0 34px -6px rgba(111,236,255,.5), 0 0 0 0 rgba(111,236,255,0);
 }
 .page-lyhytvideot .btn.mag:hover,
@@ -12976,7 +13009,9 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 }
 /* Napit: kajo oli leveampi kuin nappi itse. */
 .page-lyhytvideot .btn.mag,
-.page-lyhytvideot .cta-palkki .btn {
+.page-graafinen-suunnittelu .btn.mag,
+.page-lyhytvideot .cta-palkki .btn,
+.page-graafinen-suunnittelu .cta-palkki .btn {
   box-shadow: 0 0 20px -10px rgba(111,236,255,.45);
 }
 .page-lyhytvideot .btn.mag:hover,
@@ -13631,7 +13666,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    oleva alleviivattu sana lupaa siksi jotain johon voi klikata.
    Sama korostus tulee varista ilman tuota lupausta, ja se on myos
    sama keino kuin sivun muissa otsikoissa (<b><i> hengahdyksissa). */
-.page-verkkosivut .mark {
+.page-verkkosivut .mark,
+.page-graafinen-suunnittelu .mark {
   background: none; background-image: none; box-shadow: none;
   padding: 0; color: var(--seo-hi);
 }
@@ -13701,7 +13737,9 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    on tekstin vieressa: sen tehtava on hohtaa sen verran etta silma
    huomaa sen olevan valoa eika vain viiva. */
 .page-verkkosivut .seo-sec .kaiku.vas,
-.page-verkkosivut .seo-sec .kaiku.oik {
+.page-graafinen-suunnittelu .seo-sec .kaiku.vas,
+.page-verkkosivut .seo-sec .kaiku.oik,
+.page-graafinen-suunnittelu .seo-sec .kaiku.oik {
   filter: drop-shadow(0 0 6px rgba(111,236,255,.22))
           drop-shadow(0 0 22px rgba(111,236,255,.12));
 }
@@ -13884,7 +13922,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    .seo-h2:lla on hyphens: auto ja palsta on tassa kapea. Tavutus on
    oikein leipatekstissa mutta ei 60px:n otsikossa, jossa katkoviiva on
    yhta iso kuin kirjaimet. Rivi saa katketa vain valilyonnista. */
-.page-verkkosivut #tarjous .seo-h2 { hyphens: manual; text-wrap: balance }
+.page-verkkosivut #tarjous .seo-h2,
+.page-graafinen-suunnittelu #tarjous .seo-h2 { hyphens: manual; text-wrap: balance }
 
 /* ---------- OHITUSLINKKI ----------
    Nappaimistolla sivu alkoi logosta ja valikkonapista, ja niiden lapi
@@ -14470,13 +14509,16 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    tehtava. Rivien valiset viivat eivat erota mitaan - rivit ovat jo
    erillaan omalla merkillaan ja valilyonnilla. Vali kasvaa sen verran
    kuin viiva vei, jottei lista tiivisty luettelopatkaksi. */
-.page-verkkosivut #kenelle .kaksi { border-top: 0 }
+.page-verkkosivut #kenelle .kaksi,
+.page-graafinen-suunnittelu #kenelle .kaksi { border-top: 0 }
 .page-verkkosivut #kenelle .seo-spec li,
-.page-verkkosivut #kenelle .kaksi li {
+.page-verkkosivut #kenelle .kaksi li,
+.page-graafinen-suunnittelu #kenelle .kaksi li {
   border-top: 0; border-bottom: 0; padding: 10px 0;
 }
 .page-verkkosivut #kenelle .seo-spec li + li,
-.page-verkkosivut #kenelle .kaksi li + li { padding-top: 14px }
+.page-verkkosivut #kenelle .kaksi li + li,
+.page-graafinen-suunnittelu #kenelle .kaksi li + li { padding-top: 14px }
 
 /* PALVELUN SISALTO SAA TUTTU TILANTEEN VIIVAKIELEN.
    Osiot ovat rakenteeltaan samat: kaksi palstaa, joissa on
@@ -14583,7 +14625,9 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    (.wsx .laatta.taysi .laatta-lause.suuri + .laatta-alla), joten
    yleinen nosto ei koskenut sita talla sivulla. */
 .page-lyhytvideot .laatta.taysi .laatta-lause.suuri + .laatta-alla,
-.page-lyhytvideot .laatta.taysi .laatta-alla { font-size: 21px; line-height: 1.6 }
+.page-graafinen-suunnittelu .laatta.taysi .laatta-lause.suuri + .laatta-alla,
+.page-lyhytvideot .laatta.taysi .laatta-alla,
+.page-graafinen-suunnittelu .laatta.taysi .laatta-alla { font-size: 21px; line-height: 1.6 }
 
 /* ---------- LYHYTVIDEOT: HERO JA KAKSI OSIOTA ISOMMIKSI ----------
    Heron otsikko oli 63px ja tekstipalsta 770px levea. Puhelinrivi
@@ -14614,7 +14658,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    luettavasti ilman tavutusta. text-wrap: balance jakaa rivit
    tasapituisiksi sen sijaan etta viimeiselle jaisi yksi sana. */
 .page-lyhytvideot #miksi h2,
-.page-lyhytvideot .seo-h2 {
+.page-lyhytvideot .seo-h2,
+.page-graafinen-suunnittelu .seo-h2 {
   hyphens: manual;
   -webkit-hyphens: manual;
   text-wrap: balance;
@@ -14805,12 +14850,12 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    valo) tyhjan .osio-valo-elementin ensimmaiseksi lapseksi ja merkitsee
    osion data-valokerros-attribuutilla. Valo piirretaan elementtiin samoin
    arvoin kuin ::before, ja ::before sammuu. Ilman JS:aa ::before jaa. */
-:is(.page-lyhytvideot, .page-verkkosivut) [data-valokerros]::before { content: none !important }
-:is(.page-lyhytvideot, .page-verkkosivut) .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) [data-valokerros]::before { content: none !important }
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .osio-valo {
   position: absolute; inset: 0; z-index: -1; pointer-events: none;
   will-change: transform;
 }
-:is(.page-lyhytvideot, .page-verkkosivut) .seo-sec > .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .seo-sec > .osio-valo {
   
   --v: var(--valo-q, var(--valo, .5));
   background:
@@ -14825,7 +14870,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
   mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
 }
-:is(.page-lyhytvideot, .page-verkkosivut) .seo-sec:nth-of-type(even) > .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .seo-sec:nth-of-type(even) > .osio-valo {
   background:
     radial-gradient(
       calc(44% + var(--v) * 14%) calc(26% + var(--v) * 10%)
@@ -14836,7 +14881,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
       at calc(90% - var(--v) * 22%) calc(76% - var(--v) * 22%),
       rgba(0,124,143,.14), transparent 72%);
 }
-:is(.page-lyhytvideot, .page-verkkosivut) .jakso-pari > .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .jakso-pari > .osio-valo {
   
   --v: var(--valo-q, var(--valo, .5));
   background:
@@ -14884,30 +14929,30 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    liukuu kohti vierityksen maaraamaa paikkaa. opacity ja translate
    kulkevat kompositoinnissa, ja oma kerros (will-change) pitaa ne
    siella myos Safarissa. */
-:is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-teksti,
-:is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-alla,
-:is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-teksti b > i,
-:is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-kick,
-:is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-lause,
-:is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-alla,
-:is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-lause b > i {
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .vaite[data-rvs] .vaite-teksti,
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .vaite[data-rvs] .vaite-alla,
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .vaite[data-rvs] .vaite-teksti b > i,
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .laatta[data-rvs] .laatta-kick,
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .laatta[data-rvs] .laatta-lause,
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .laatta[data-rvs] .laatta-alla,
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .laatta[data-rvs] .laatta-lause b > i {
   will-change: opacity, translate;
   transition:
     opacity .55s cubic-bezier(.22,.61,.36,1),
     translate .55s cubic-bezier(.22,.61,.36,1);
 }
-:is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .swrap::after,
-:is(.page-lyhytvideot, .page-verkkosivut) .laatta .laatta-teksti .swrap::before {
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .vaite[data-rvs] .swrap::after,
+:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .laatta .laatta-teksti .swrap::before {
   transition: scale .55s cubic-bezier(.22,.61,.36,1);
 }
 @media (prefers-reduced-motion: reduce) {
-  :is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-teksti,
-  :is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-alla,
-  :is(.page-lyhytvideot, .page-verkkosivut) .vaite[data-rvs] .vaite-teksti b > i,
-  :is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-kick,
-  :is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-lause,
-  :is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-alla,
-  :is(.page-lyhytvideot, .page-verkkosivut) .laatta[data-rvs] .laatta-lause b > i { transition: none }
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .vaite[data-rvs] .vaite-teksti,
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .vaite[data-rvs] .vaite-alla,
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .vaite[data-rvs] .vaite-teksti b > i,
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .laatta[data-rvs] .laatta-kick,
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .laatta[data-rvs] .laatta-lause,
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .laatta[data-rvs] .laatta-alla,
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .laatta[data-rvs] .laatta-lause b > i { transition: none }
 }
 
 /* ---------- LYHYTVIDEOT: OSIOIDEN VALIT TIIVIIMMIKSI ----------
@@ -14926,20 +14971,20 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    on palkin paalla. Vain hiirella kaytettavilla naytoilla; kapealla
    naytolla palkki toimii kuten ennenkin. */
 @media (min-width: 721px) and (hover: hover) {
-  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki {
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .cta-palkki {
     gap: 0; padding: 8px;
     transition:
       opacity .32s ease, translate .32s cubic-bezier(.2,.6,.2,1),
       gap .45s cubic-bezier(.22,.61,.36,1), padding .45s cubic-bezier(.22,.61,.36,1);
   }
-  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki p {
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .cta-palkki p {
     max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap;
     transition: max-width .45s cubic-bezier(.22,.61,.36,1), opacity .3s ease;
   }
-  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki:has(.btn:hover, .btn:focus-visible),
-  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki.nayta:has(p:hover) { gap: 22px; padding-left: 22px }
-  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki:has(.btn:hover, .btn:focus-visible) p,
-  :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki.nayta:has(p:hover) p { max-width: 460px; opacity: 1 }
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .cta-palkki:has(.btn:hover, .btn:focus-visible),
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .cta-palkki.nayta:has(p:hover) { gap: 22px; padding-left: 22px }
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .cta-palkki:has(.btn:hover, .btn:focus-visible) p,
+  :is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .cta-palkki.nayta:has(p:hover) p { max-width: 460px; opacity: 1 }
 }
 
 /* ==================================================================
@@ -14967,3 +15012,46 @@ html.lenis.lenis-stopped { overflow: clip }
 /* Sisakkaiset vieritysalueet: vieritys ei saa vuotaa niista sivulle.
    Sama kuin paketin omassa CSS:ssa. */
 html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
+
+
+/* ==================================================================
+   GRAAFINEN SUUNNITTELU: VAALEAMPI POHJA, SAMAT KORISTEET, 1.10.2026
+   ==================================================================
+   Sivujen pohja vaalenee askel kerrallaan: lyhytvideot #0b0f14
+   (11,15,20), verkkosivut #111823 (17,24,35), graafinen #172132
+   (23,33,50). Askel on sama kuin lyhytvideoista verkkosivuihin:
+   +6 punaisessa, +9 vihreassa, +15 sinisessa. Hakukoneoptimointi ja
+   etusivu jatkavat samaa portaikkoa myohemmin.
+
+   Kontrastit uudella pohjalla: #f4f7fa 15,0:1 ja #a9b8c6 8,0:1,
+   eli molemmat selvasti yli AA:n.
+
+   KAIKKI PAIKAT SAMALLA KERRALLA, kuten verkkosivuilla: sivun oma
+   tausta, verkostokerroksen pohja ja vinjetti, pinon peittavat
+   osiot, jakso-parit ja heron cover. Yksi jaljessa oleva kohta nakyy
+   vaakasuorana nauhana. Valitsimet ovat vahintaan yhta tarkkoja kuin
+   aiemmat #0b0f14-saannot, ja ne ovat tiedoston lopussa, joten ne
+   voittavat. */
+.page-graafinen-suunnittelu { background: #172132 }
+.page-graafinen-suunnittelu .netbd,
+.page-graafinen-suunnittelu .netbd:not(.netbd-cover) { background-color: #172132 }
+.page-graafinen-suunnittelu .pino > :first-child ~ * { background: var(--secbg, #172132) }
+.page-graafinen-suunnittelu .stickysub > .cover,
+.page-graafinen-suunnittelu .jakso-pari { background: #172132 }
+.page-graafinen-suunnittelu .jakso-pari .netbd-glow,
+.page-graafinen-suunnittelu .netbd-cover .netbd-glow,
+.page-graafinen-suunnittelu .netbd:not(.netbd-cover) .netbd-glow {
+  background: radial-gradient(110% 86% at 50% 42%, transparent 30%, #172132 100%);
+}
+
+/* Osioiden valit samoiksi kuin lyhytvideoilla ja verkkosivuilla:
+   99px -> 8vh (64..96px). */
+.page-graafinen-suunnittelu .seo-sec[id] { padding-block: clamp(64px, 8vh, 96px) }
+
+/* Prosessin solmun rengas on sivun pohjan varinen, jotta solmu
+   irtoaa janasta. Verkkosivuilla se on #0b0f14, tassa sivun oma
+   pohja. */
+@media (min-width: 901px) {
+  .page-graafinen-suunnittelu #prosessi .jakso::before { box-shadow: 0 0 0 4px #172132 }
+}
+

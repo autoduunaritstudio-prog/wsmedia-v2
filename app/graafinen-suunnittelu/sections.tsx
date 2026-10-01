@@ -37,29 +37,28 @@ const SILTA: {
     kuvaus: "Tuottaa ja asentaa. Suunnittelu on sivutuote.",
     li: [
       "Suunnittelu usein vain yksinkertaisiin töihin",
-      "Valmiit vektoroidut tiedostot oletetaan olemassa oleviksi",
-      "Ilme ei jatku verkkoon eikä somekanaviin",
+      "Olettaa, että sinulla on valmis vektorilogo",
+      "Ilme ei jatku nettisivuille eikä someen",
     ],
   },
   {
     merkki: "WS Media",
     h: "Suunnittelemme ilmeen ja hoidamme tuotannon",
-    kuvaus: "Suunnittelu, tuotanto ja asennus samasta sopimuksesta.",
+    kuvaus: "Suunnittelu, tuotanto ja asennus samassa tarjouksessa.",
     hl: true,
     li: [
-      "Yksi sopimus kattaa suunnittelun, tuotannon ja asennuksen",
-      "Sama ilme verkossa, somessa ja auton kyljessä",
+      "Sama ilme nettisivuilla, somessa ja auton kyljessä",
       "Saat alkuperäistiedostot ja täydet käyttöoikeudet",
-      "Vastaamme kokonaisuudesta, myös alihankkijan työstä",
+      "Vastaamme lopputuloksesta, myös alihankkijan työstä",
     ],
   },
   {
     h: "Mainostoimisto",
     kuvaus: "Suunnittelee. Tuotanto ja asennus jäävät sinulle.",
     li: [
-      "Painovalmis tiedosto on lopputuote",
-      "Toimittajien kilpailutus jää asiakkaalle",
-      "Aikataulujen sovittelu jää asiakkaalle",
+      "Painovalmis tiedosto on lopputulos",
+      "Kilpailutat painon ja teippaamon itse",
+      "Sovittelet aikataulut itse",
     ],
   },
 ];
@@ -74,11 +73,12 @@ export function Miksi() {
           <i>Kaksi tekijää, yksi väli</i>
         </div>
         <h2 className="seo-h2 rv">
-          Teippaamo osaa asentaa. Mainostoimisto osaa <span className="mark">suunnitella.</span>
+          Mainostoimisto vai teippaamo? Meiltä saat <span className="mark">molemmat.</span>
         </h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Kumpikin tekee oman osuutensa hyvin. Ongelma on se väli, johon asiakas jää: kuka piirtää,
-          kuka tulostaa, kuka asentaa ja kuka vastaa siitä, että lopputulos vastaa suunnitelmaa.
+          Mainostoimisto suunnittelee ja teippaamo asentaa. Väliin jää kysymyksiä, joihin kukaan ei
+          vastaa: kuka tekee painovalmiit tiedostot, kuka sopii asennusajan ja kuka korjaa, jos auton
+          kylki ei näytä luonnokselta. Yleensä ne jäävät yrittäjälle.
         </p>
 
         <div className="paketit porras rv">
@@ -97,10 +97,9 @@ export function Miksi() {
         </div>
 
         <p className="seo-body" style={{ marginTop: "40px", maxWidth: "78ch" }}>
-          Emme teippaa emmekä paina itse, vaan käytämme alan tekijöitä jotka tekevät sitä työkseen
-          joka päivä. Me valitsemme heidät, annamme heille oikeat tiedostot ja vastaamme siitä että
-          lopputulos vastaa suunnitelmaa. Käytännössä se tarkoittaa yhtä asiaa: sinun ei tarvitse
-          toimia projektipäällikkönä omassa markkinoinnissasi.
+          Emme teippaa emmekä paina itse. Valitsemme tekijät, annamme heille oikeat tiedostot ja
+          vastaamme siitä, että lopputulos vastaa hyväksymääsi luonnosta. Sinun ei tarvitse toimia
+          projektipäällikkönä oman yrityksesi markkinoinnissa.
         </p>
       </div>
     </section>
@@ -118,51 +117,51 @@ export function Miksi() {
 const PALVELUT: { kick: string; h: string; p: string; li: string[]; px: string }[] = [
   {
     kick: "Perusta",
-    h: "Yritysilme ja logo",
-    p: "Se pohja, jonka päälle kaikki muu rakennetaan: tunnus, väripaletti ja typografia sekä graafinen ohjeisto, joka pitää ilmeen samana riippumatta siitä kuka materiaalia tekee.",
+    h: "Logo ja yritysilme",
+    p: "Logon suunnittelu on koko ilmeen pohja. Logon ympärille tehdään väripaletti, fontit ja graafinen ohjeisto, joiden ansiosta ilme pysyy samana, vaikka materiaalia tekisi joku muu.",
     li: [
-      "Logosuunnittelu ja logopaketti eri tiedostomuodoissa",
-      "Väripaletti CMYK-, RGB- ja HEX-arvoineen",
-      "Typografia otsikoille ja leipätekstille",
-      "Graafinen ohjeisto PDF-muodossa",
+      "Logopaketti kaikissa tarvittavissa tiedostomuodoissa",
+      "Väriarvot painoon, näytölle ja teippiin",
+      "Fontit otsikoille ja leipätekstille",
+      "Graafinen ohjeisto PDF-tiedostona",
     ],
-    px: "Logo alk. 690 € · ilme ohjeistoineen alk. 1 490 €",
+    px: "Logo alk. 490 € · ilme ohjeistoineen alk. 1 490 €",
   },
   {
     kick: "Liikkuva pinta",
-    h: "Ajoneuvoteippaukset",
-    p: "Logoteippauksesta koko kaluston brändäykseen. Sama suunnittelu skaalautuu yhdestä autosta koko kalustoon, joten seuraavista ajoneuvoista maksat vain tuotannon ja asennuksen.",
+    h: "Auton mainosteippaus",
+    p: "Pakettiauton logoteippauksesta koko kaluston ilmeeseen. Suunnittelu tehdään kerran, joten seuraavista autoista maksat vain tulostuksen ja asennuksen.",
     li: [
       "Logoteippaus, osateippaus ja yliteippaus",
-      "Pakettiautot, henkilöautot ja raskas kalusto",
-      "Koko kaluston yhtenäinen ilme",
-      "Asennus lämpimissä sisätiloissa",
+      "Pakettiautot, henkilöautot ja kuorma-autot",
+      "Koko kalusto samalla ilmeellä",
+      "Asennus lämpimässä sisätilassa",
     ],
-    px: "Avaimet käteen alk. 590 €",
+    px: "Avaimet käteen alk. 490 €",
   },
   {
     kick: "Toimitila",
-    h: "Julkisivu, kyltit ja ikkunat",
-    p: "Toimitilan pinnat viestinviejiksi. Ensivaikutelma syntyy ennen kuin asiakas astuu ovesta sisään.",
+    h: "Ikkunateippaukset, kyltit ja valomainokset",
+    p: "Liikkeen ikkuna ja julkisivu näkyvät ohikulkijoille joka päivä. Teemme ne samalla ilmeellä kuin muutkin materiaalisi.",
     li: [
-      "Julkisivu- ja ikkunateippaukset",
-      "Valomainokset ja valokyltit",
+      "Ikkuna- ja julkisivuteippaukset",
+      "Valomainokset ja kyltit",
       "Opasteet ja lattiateippaukset",
-      "Lupa-asiat selvitettynä",
+      "Mainosluvan selvitys kunnalta",
     ],
-    px: "Avaimet käteen alk. 890 €",
+    px: "Ikkunateippaus alk. 290 € · valomainos tarjouksen mukaan",
   },
   {
     kick: "Käteen jäävä",
-    h: "Painotuotteet",
-    p: "Käyntikortit, flyerit, esitteet ja roll-upit suunnittelusta painoon. Saat painovalmiit aineistot myös itsellesi, jos haluat teettää lisäpainoksen myöhemmin muualla.",
+    h: "Käyntikortit, esitteet ja roll-upit",
+    p: "Suunnittelemme painotuotteet ja teetämme ne valmiiksi. Saat painovalmiit tiedostot myös itsellesi, jos haluat tilata lisäpainoksen myöhemmin muualta.",
     li: [
       "Käyntikortit ja kirjelomakkeet",
       "Flyerit, esitteet ja oppaat",
       "Roll-upit ja messumateriaalit",
-      "Painovalmiit aineistot oikeilla väriarvoilla",
+      "Oikeat väriarvot painoa varten",
     ],
-    px: "Suunnittelu alk. 190 € · painatus sisällytettynä",
+    px: "Suunnittelu alk. 190 € · painatus tarjouksen mukaan",
   },
 ];
 
@@ -199,8 +198,8 @@ export function Palvelut() {
         </div>
         <h2 className="seo-h2 rv">Mitä graafinen suunnittelu meillä sisältää?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Ilme rakennetaan kerran ja käytetään joka pinnalla. Voit ostaa koko kokonaisuuden tai
-          yksittäisen palan siitä.
+          Ilme suunnitellaan kerran ja sitä käytetään kaikkialla. Voit tilata koko kokonaisuuden tai
+          vain sen osan, jonka tarvitset nyt.
         </p>
 
         <Pari osa={PALVELUT.slice(0, 2)} />
@@ -221,27 +220,27 @@ const VAIHEET: [string, string, string][] = [
   [
     "WS Media",
     "Kartoitus",
-    "Käymme läpi mitä pintoja ilmeen pitää kattaa: montako ajoneuvoa, mitkä toimipisteet ja mitä painotuotteita tarvitaan.",
+    "Käydään läpi, mihin ilmettä tarvitaan: montako autoa, mitkä toimitilat ja mitä painotuotteita.",
   ],
   [
     "WS Media",
     "Suunnittelu",
-    "Kaksi tai kolme ehdotusta, joista valitset suunnan. Valittuun tehdään yhdestä kahteen muutoskierrosta.",
+    "Teemme kaksi tai kolme ehdotusta, joista valitset suunnan. Valittua hiotaan yhdestä kahteen muutoskierrosta.",
   ],
   [
     "WS Media",
-    "Tuotantovalmius",
-    "Teemme paino- ja asennusvalmiit tiedostot: vektorimuodot, oikeat väriarvot ja mitat jokaiselle pinnalle erikseen.",
+    "Painovalmiit tiedostot",
+    "Vektorimuotoiset tiedostot, oikeat väriarvot ja mitat jokaiselle pinnalle erikseen.",
   ],
   [
     "Alihankinta · meidän vastuullamme",
     "Tuotanto ja asennus",
-    "Kilpailutamme materiaalitoimittajan ja asentajan, sovimme aikataulun ja valvomme laadun paikan päällä.",
+    "Valitsemme painon ja asentajan, sovimme aikataulun ja tarkistamme jäljen.",
   ],
   [
     "WS Media",
     "Luovutus",
-    "Tarkistamme jäljen, luovutamme alkuperäistiedostot ja graafisen ohjeiston. Ilme on käytettävissäsi ilman rajoituksia.",
+    "Saat alkuperäistiedostot ja graafisen ohjeiston. Ilmettä saa käyttää ilman rajoituksia.",
   ],
 ];
 
@@ -254,10 +253,10 @@ export function Prosessi() {
           <span>Prosessi</span>
           <i>Kaksi hyväksyntää sinulta</i>
         </div>
-        <h2 className="seo-h2 rv">Näin projekti etenee</h2>
+        <h2 className="seo-h2 rv">Näin graafisen suunnittelun projekti etenee</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Sinun osuutesi on kaksi hyväksyntää: suunnan valinta ja lopullinen luonnos. Kaikki muu
-          kulkee meidän kauttamme, myös alihankkijoiden kanssa asiointi.
+          Sinulta tarvitaan kaksi hyväksyntää: suunnan valinta ja lopullinen luonnos. Kaiken muun
+          hoidamme me, myös asioinnin painon ja asentajan kanssa.
         </p>
 
         <div className="jana" data-rvs="">
@@ -283,7 +282,7 @@ export function Prosessi() {
    AINEISTOT  ·  mita luovutuksessa siirtyy
    ================================================================== */
 const TIEDOSTOT: [string, string, string][] = [
-  ["AI · EPS", "Muokattavat alkuperäistiedostot", "Avautuvat suunnitteluohjelmissa, käytetään painossa ja teippauksessa"],
+  ["AI · EPS", "Muokattavat alkuperäistiedostot", "Muokattavat Illustratorissa, käytetään painossa ja teippauksessa"],
   ["SVG", "Vektorilogo verkkoon", "Skaalautuu terävänä jokaiseen kokoon"],
   ["PDF", "Painovalmis aineisto", "Leikkuuvarat ja oikeat väriprofiilit valmiina"],
   ["PNG", "Läpinäkyvä tunnus", "Somekäyttöön, esityksiin ja verkkosivuille"],
@@ -300,12 +299,12 @@ export function Tiedostot() {
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Aineistot</span>
-          <i>{TIEDOSTOT.length} toimitettavaa</i>
+          <i>{TIEDOSTOT.length} tiedostoa sinulle</i>
         </div>
-        <h2 className="seo-h2 rv">Ilme on sinun, myös tiedostoina.</h2>
+        <h2 className="seo-h2 rv">Mitä tiedostoja saat valmiista logosta ja ilmeestä?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Tämä on se kohta, joka jää alalla useimmiten sopimatta. Meillä se sanotaan ääneen: kaikki
-          aineistot ja täydet käyttöoikeudet siirtyvät sinulle.
+          Tämä jää alalla usein sopimatta. Meillä kaikki aineistot ja täydet käyttöoikeudet
+          siirtyvät sinulle.
         </p>
 
         <table className="spec porras rv" style={{ marginTop: "48px" }}>
@@ -328,10 +327,9 @@ export function Tiedostot() {
         </table>
 
         <p className="seo-body" style={{ marginTop: "32px", maxWidth: "78ch" }}>
-          Käyttöoikeuksista sovitaan kirjallisesti ennen työn aloittamista. Jos teetät myöhemmin
-          lisäpainoksen tai toisen auton teippauksen jossain muualla, tiedostot toimivat
-          sellaisenaan. Emme pidä aineistoja panttina, koska se ei ole yhteistyön arvoinen tapa
-          pitää asiakas.
+          Käyttöoikeuksista sovitaan kirjallisesti ennen työn alkua. Jos teetät myöhemmin
+          lisäpainoksen tai teippaat seuraavan auton muualla, tiedostot toimivat sellaisenaan. Emme
+          pidä aineistoja panttina.
         </p>
       </div>
     </section>
@@ -353,7 +351,7 @@ const MATERIAALIT: [string, string, string, string][] = [
   ],
   [
     "Yliteippaus",
-    "Värinvaihtokalvo laminoituna",
+    "Valettu värinvaihtokalvo",
     "5–7 vuotta",
     "Alkuperäinen maalipinta säilyy kalvon alla",
   ],
@@ -361,7 +359,7 @@ const MATERIAALIT: [string, string, string, string][] = [
     "Ikkuna- ja julkisivuteippaus",
     "Ikkunakalvo tai tarrateippi",
     "3–5 vuotta",
-    "Suojaa myös UV-säteilyltä ja vähentää häikäisyä",
+    "Erikoiskalvoilla myös häikäisy- ja UV-suoja",
   ],
   [
     "Valomainos",
@@ -386,10 +384,10 @@ export function Materiaalit() {
           <span>Materiaalit</span>
           <i>Kirjataan aina tarjoukseen</i>
         </div>
-        <h2 className="seo-h2 rv">Mitä pintaan oikeasti tulee</h2>
+        <h2 className="seo-h2 rv">Kuinka kauan teippaus kestää?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Halpa ja kallis tarjous eroavat yleensä juuri tässä. Kerromme aina tarjouksessa mitä
-          materiaalia käytetään ja mikä sen odotettu kestoikä on.
+          Halpa ja kallis tarjous eroavat yleensä materiaalissa. Kerromme tarjouksessa aina, mitä
+          materiaalia käytetään ja kuinka kauan sen pitäisi kestää.
         </p>
 
         <table className="spec porras rv" style={{ marginTop: "48px" }}>

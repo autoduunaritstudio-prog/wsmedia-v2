@@ -16,16 +16,16 @@ import { useState } from "react";
 type Item = { label: string; desc: string; min: number; max: number; on: boolean };
 
 const ITEMS: Item[] = [
-  { label: "Logo ja tunnus", desc: "Logopaketti eri tiedostomuodoissa", min: 690, max: 1900, on: true },
-  { label: "Väripaletti, typografia ja graafinen ohjeisto", desc: "Ilmeen pelisäännöt yhteen PDF-tiedostoon", min: 800, max: 2400, on: true },
+  { label: "Logo ja tunnus", desc: "Logopaketti eri tiedostomuodoissa", min: 490, max: 1200, on: true },
+  { label: "Väripaletti, typografia ja graafinen ohjeisto", desc: "Ilmeen pelisäännöt yhteen PDF-tiedostoon", min: 1000, max: 2000, on: true },
   { label: "Käyntikortit", desc: "Suunnittelu ja painatus", min: 190, max: 490, on: false },
   { label: "Flyer tai esite", desc: "Nelisivuinen, haitari tai kolmitaitteinen", min: 280, max: 1200, on: false },
   { label: "Roll-up", desc: "Suunnittelu, tulostus ja teline", min: 290, max: 690, on: false },
-  { label: "Ajoneuvo: logoteippaus", desc: "Logot ja yhteystiedot, per ajoneuvo", min: 590, max: 900, on: false },
-  { label: "Ajoneuvo: osateippaus", desc: "Kyljet ja takaosa, per ajoneuvo", min: 1190, max: 2200, on: false },
-  { label: "Ajoneuvo: yliteippaus", desc: "Koko auto värinvaihtokalvolla, per ajoneuvo", min: 3400, max: 5200, on: false },
-  { label: "Ikkuna- tai julkisivuteippaus", desc: "Toimitilan pinnat, laajuuden mukaan", min: 890, max: 3500, on: false },
-  { label: "Valomainos tai kyltti", desc: "Valokirjaimet, kotelo tai opaste", min: 900, max: 5500, on: false },
+  { label: "Ajoneuvo: logoteippaus", desc: "Logot ja yhteystiedot, per ajoneuvo", min: 490, max: 900, on: false },
+  { label: "Ajoneuvo: osateippaus", desc: "Kyljet ja takaosa, per ajoneuvo", min: 990, max: 2200, on: false },
+  { label: "Ajoneuvo: yliteippaus", desc: "Koko auto värinvaihtokalvolla, per ajoneuvo", min: 2400, max: 4500, on: false },
+  { label: "Ikkuna- tai julkisivuteippaus", desc: "Toimitilan pinnat, laajuuden mukaan", min: 290, max: 2500, on: false },
+  { label: "Valomainos tai kyltti", desc: "Valokirjaimet, kotelo tai opaste", min: 800, max: 5000, on: false },
 ];
 
 const fmt = (n: number) => n.toLocaleString("fi-FI");

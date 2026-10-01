@@ -1,3 +1,4 @@
+import SmartLink from "../components/SmartLink";
 import { FAQ } from "./faq-data";
 import { Kaiku } from "../components/Maasto";
 
@@ -37,7 +38,20 @@ export function Ukk() {
             {FAQ.map((f, n) => (
               <details key={f.q} name="ukk-graafinen" open={n === 0}>
                 <summary>{f.q}</summary>
-                <div className="a">{f.a}</div>
+                <div className="a">
+                  {f.a}
+                  {f.linkit ? (
+                    <>
+                      {" "}
+                      {f.linkit.map((l, i) => (
+                        <span key={l.href}>
+                          {i > 0 ? " · " : null}
+                          <SmartLink href={l.href}>{l.label}</SmartLink>
+                        </span>
+                      ))}
+                    </>
+                  ) : null}
+                </div>
               </details>
             ))}
           </div>

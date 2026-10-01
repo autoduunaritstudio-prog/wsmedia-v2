@@ -21,8 +21,8 @@ export function Hinta() {
         </div>
         <h2 className="seo-h2 rv">Paljonko graafinen suunnittelu maksaa?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Hinta riippuu siitä, montako pintaa ilmeen pitää kattaa. Valitse mitä tarvitset, niin
-          näet suuruusluokan heti.
+          Hinta riippuu siitä, mitä kaikkea tarvitset. Valitse kohteet, niin näet suuruusluokan
+          heti.
         </p>
 
         <PriceConfig />
@@ -65,10 +65,10 @@ export function Kenelle() {
           <span>Kenelle</span>
           <i>Kaksi palstaa, suora vastaus</i>
         </div>
-        <h2 className="seo-h2 rv">Kenelle tämä sopii ja kenelle ei</h2>
+        <h2 className="seo-h2 rv">Kenelle graafinen suunnittelu meiltä sopii?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Jos tilanteesi on oikean palstan kaltainen, sanomme sen kartoituksessa ja ohjaamme sinut
-          muualle. Se on halvempaa meille molemmille.
+          Jos tilanteesi kuuluu jälkimmäiseen ryhmään, sanomme sen kartoituksessa suoraan. Se säästää
+          molempien aikaa.
         </p>
 
         <div className="kaksi porras rv" style={{ marginTop: "48px" }}>
@@ -124,14 +124,14 @@ export function Alueet() {
           <span>Toiminta-alue</span>
           <i>Espoo ja koko Suomi</i>
         </div>
-        <h2 className="seo-h2 rv">Suunnittelu etänä, asennus lähellä sinua</h2>
+        <h2 className="seo-h2 rv">Graafinen suunnittelu Espoossa ja koko Suomessa</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Suunnittelu ja hyväksynnät hoituvat verkossa mistä päin Suomea tahansa. Asennus tehdään
-          sinun paikkakunnallasi: valitsemme asentajan sieltä, missä ajoneuvot ja toimitilat ovat.
+          Toimistomme on Espoossa, ja pääkaupunkiseudun yrityksiä tapaamme mielellämme myös paikan
+          päällä. Suunnittelu ja hyväksynnät hoituvat verkossa mistä päin Suomea tahansa, ja asennus
+          tehdään siellä, missä autosi ja toimitilasi ovat.
         </p>
         <p className="seo-body" style={{ marginTop: "22px", maxWidth: "72ch" }}>
-          Kotipaikkamme on Espoo, mutta teippaus ja asennus eivät edellytä sitä että olisimme
-          samassa kaupungissa. Painotuotteet toimitetaan suoraan osoitteeseesi.
+          Painotuotteet toimitetaan suoraan osoitteeseesi.
         </p>
         <p className="seo-tags" style={{ marginTop: "28px" }}>
           {KAUPUNGIT.map((k) => (
@@ -147,17 +147,17 @@ export function Alueet() {
    TAUSTAA  ·  pitka teksti hakukonetta ja lukijaa varten
    ================================================================== */
 export function Kaytannossa() {
+  /* Sama rakenne kuin lyhytvideosivulla: pieni otsikko, kaksi
+     ensimmaista lohkoa auki ja loput "Lue koko teksti" -napin takana.
+     Suljettu sisalto on DOM:ssa, joten hakukone lukee sen. */
   return (
-    <section className="seo-sec" id="kaytannossa">
-      <div className="swrap">
-        <div className="seo-ord" data-rvs="">
-          <span>Taustaa</span>
-          <i>Neljä kysymystä ennen tarjouspyyntöä</i>
+    <section id="kaytannossa" className="seosec">
+      <div className="wrap-n">
+        <div className="shead rv" data-par="0.03" style={{ marginBottom: "30px" }}>
+          <h2>Graafinen suunnittelu käytännössä</h2>
         </div>
-        <h2 className="seo-h2 rv">Graafinen suunnittelu käytännössä</h2>
-
-        <div className="seo-teksti rv" style={{ marginTop: "40px" }}>
-          <h3>Miksi yhtenäinen ilme kannattaa</h3>
+        <div className="prose seoprose rv">
+          <h3>Miksi yhtenäinen yritysilme kannattaa?</h3>
           <p>
             Yrityksen ilme ei ole logo vaan se kokonaisuus, jonka asiakas kohtaa: verkkosivu,
             käyntikortti, pakettiauton kylki, toimitilan ikkuna ja somekanavan profiilikuva. Kun ne
@@ -165,38 +165,50 @@ export function Kaytannossa() {
             jokainen kohtaaminen alkaa alusta.
           </p>
 
-          <h3>Mistä graafisen suunnittelun hinta muodostuu</h3>
+          <h3>Mistä graafisen suunnittelun hinta muodostuu?</h3>
           <p>
-            Hinta on työtunteja. Suomessa kokeneen suunnittelijan tuntihinta asettuu tyypillisesti
-            70–120 euroon, joten hinta kertoo suoraan sen, kuinka paljon työtä kohteeseen käytetään.
-            Suurimmat yksittäiset tekijät ovat laajuus eli montako pintaa ja versiota tarvitaan,
+            Hinta muodostuu työtunneista, joten se kertoo suoraan, kuinka paljon työtä kohteeseen
+            käytetään. Suurimmat tekijät ovat laajuus eli montako pintaa ja versiota tarvitaan,
             muutoskierrosten määrä ja käyttöoikeuksien laajuus.
           </p>
-          <p>
-            Teippausten ja painotuotteiden kohdalla mukaan tulee vielä materiaali ja työ. Siksi
-            kahden tarjouksen vertailu pelkän loppusumman perusteella on harhaanjohtavaa: halvempi
-            tarjous voi sisältää lyhytikäisen kalvon, ulkoasennuksen ja oletuksen siitä että
-            toimitat itse painovalmiin tiedoston.
-          </p>
 
-          <h3>Ajoneuvo on mediatila, joka on jo maksettu</h3>
-          <p>
-            Mediabudjetti maksaa näkyvyydestä niin kauan kuin sitä maksetaan. Teipattu auto näkyy
-            joka ajokilometrillä eikä sitä voi kytkeä pois päältä, ja kustannus jakautuu koko kalvon
-            elinkaarelle. Kolme vuotta kestävä ja seitsemän vuotta kestävä teippaus maksavat
-            asennettuna lähes saman verran, mutta jälkimmäinen jakaa kustannuksen kaksinkertaiselle
-            ajalle. Siksi materiaalivalinnasta kannattaa kysyä jo tarjousvaiheessa.
-          </p>
+          <details className="seomore">
+            <summary>
+              <span>Lue koko teksti</span>
+            </summary>
 
-          <h3>Suunnittelun ja tuotannon ero</h3>
-          <p>
-            Suunnittelu ratkaisee miltä lopputulos näyttää. Tuotanto ratkaisee kuinka kauan se
-            kestää. Nämä ovat eri ammatteja, ja siksi ne kannattaa ostaa eri tekijöiltä, mutta
-            niiden yhteensovittaminen ei kuulu asiakkaalle. Sinä hyväksyt luonnoksen ja saat
-            valmiin lopputuloksen. Kaikki siltä väliltä on meidän työtämme. Sama logiikka toimii
-            myös <SmartLink href="/verkkosivut">verkkosivuissa</SmartLink> ja{" "}
-            <SmartLink href="/lyhytvideot">lyhytvideoissa</SmartLink>.
-          </p>
+            <p>
+              Teippausten ja painotuotteiden kohdalla mukaan tulee vielä materiaali ja työ. Siksi
+              kahden tarjouksen vertailu pelkän loppusumman perusteella on harhaanjohtavaa: halvempi
+              tarjous voi sisältää lyhytikäisen kalvon, ulkoasennuksen ja oletuksen siitä, että
+              toimitat itse painovalmiin tiedoston.
+            </p>
+
+            <h3>Kannattaako pakettiauton mainosteippaus?</h3>
+            <p>
+              Mainos netissä tai lehdessä näkyy niin kauan kuin siitä maksetaan. Teipattu auto näkyy
+              joka ajokilometrillä, eikä sitä voi kytkeä pois päältä. Kustannus jakautuu koko kalvon
+              käyttöiälle, joten pidempään kestävä kalvo tulee vuotta kohden usein edullisemmaksi,
+              vaikka se maksaa enemmän. Siksi materiaalista kannattaa kysyä jo tarjousvaiheessa.
+            </p>
+
+            <h3>Mikä on suunnittelun ja tuotannon ero?</h3>
+            <p>
+              Suunnittelu ratkaisee, miltä lopputulos näyttää. Tuotanto ratkaisee, kuinka kauan se
+              kestää. Ne ovat eri ammatteja, mutta niiden yhteensovittaminen ei kuulu asiakkaalle.
+              Sinä hyväksyt luonnoksen ja saat valmiin lopputuloksen, ja kaikki siltä väliltä on
+              meidän työtämme.
+            </p>
+
+            <h3>Mitä muuta WS Media tekee?</h3>
+            <p>
+              WS Media tekee graafisen suunnittelun Espoosta käsin koko Suomeen. Koska teemme myös{" "}
+              <SmartLink href="/verkkosivut">verkkosivut</SmartLink>,{" "}
+              <SmartLink href="/hakukoneoptimointi">hakukoneoptimoinnin</SmartLink> ja{" "}
+              <SmartLink href="/lyhytvideot">lyhytvideot</SmartLink>, sama ilme siirtyy suoraan
+              sivustolle, someen ja mainontaan, eikä samaa työtä tehdä kahteen kertaan.
+            </p>
+          </details>
         </div>
       </div>
     </section>
@@ -223,12 +235,11 @@ export function Tarjous() {
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Maksuton kartoitus</span>
-          <i>Vastaus 24 tunnissa</i>
         </div>
         <div className="loc">
           <div>
             <h2 className="seo-h2 rv">
-              Pyydä tarjous <span className="mark">yritysilmeestä.</span>
+              Pyydä tarjous logosta, ilmeestä tai <span className="mark">teippauksesta.</span>
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
               Kerro lyhyesti mitä pintoja ilmeen pitäisi kattaa: montako ajoneuvoa, onko logo
@@ -253,7 +264,7 @@ export function Tarjous() {
                 placeholder: "Espoo",
               }}
               submitLabel="Pyydä tarjous"
-              note="Vastaamme 24 tunnin sisällä. Kartoitus ei sido mihinkään."
+              note="Kartoitus ei sido mihinkään."
               tilt="y"
             />
           </div>

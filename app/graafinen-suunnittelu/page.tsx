@@ -7,7 +7,7 @@ import NetBackdrop from "../components/NetBackdrop";
 import Nav from "../components/Nav";
 import Palkki from "../components/Palkki";
 import SiteEffects from "../components/SiteEffects";
-import { Vaite } from "../components/Maasto";
+import { Laatta, Vaite } from "../components/Maasto";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import Hero from "./components/Hero";
@@ -16,9 +16,9 @@ import { Materiaalit, Miksi, Palvelut, Prosessi, Tiedostot } from "./sections";
 import { Alueet, Hinta, Kaytannossa, Kenelle, Tarjous } from "./sections2";
 import { Ukk } from "./ukk";
 
-const TITLE = "Graafinen suunnittelu yritykselle | Yritysilme ja teippaukset | WS Media";
+const TITLE = "Graafinen suunnittelu ja logo yritykselle | Espoo | WS Media";
 const DESCRIPTION =
-  "Graafinen suunnittelu yritykselle avaimet käteen: logo, yritysilme ja ohjeisto sekä teippaukset ja painotuotteet asennettuna. Yksi tarjous, yksi lasku.";
+  "Logo, yritysilme ja graafinen ohjeisto yritykselle. Hoidamme myös käyntikortit, roll-upit ja auton mainosteippauksen valmiiksi. Logo alk. 490 €.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -33,8 +33,7 @@ export const metadata: Metadata = {
     title: TITLE,
     /* Ajatusviivat pois: ne paljastavat koneen kirjoittaman tekstin, ja
        tama pätkä nakyy jaetussa linkissa sellaisenaan. */
-    description:
-      "Logo, yritysilme ja graafinen ohjeisto sekä käyntikortit, teippaukset ja kyltit valmiiksi asennettuna. Yksi tarjous, yksi lasku.",
+    description: DESCRIPTION,
   },
 };
 
@@ -98,10 +97,9 @@ export default function GraafinenSuunnittelu() {
               Toiminta-alue ovat molemmat toteutuksen reunaehtoja, ja
               hanta Hinnasta Tarjoukseen on yksi pinta.
 
-              Hengahdyksissa ei ole valokuvaa, koska talle sivulle ei
-              ole yhtaan omaa kuvaa. Vaite toimii ilmankin, ks.
-              Maasto.tsx: "lause tyhjalla pohjalla on vaite". Kun kuvat
-              tulevat, ne lisataan naihin kolmeen kohtaan. */}
+              Hengahdykset ovat samaa sarjaa kuin kahdella muulla
+              palvelusivulla: kuvallinen vaite, taysi laatta, kuvallinen
+              vaite. Kuvat ovat public/graafinen-suunnittelu-kansiossa. */}
           <div className="pino">
             <Jakso omaPohja={false}>
               <Miksi />
@@ -109,8 +107,14 @@ export default function GraafinenSuunnittelu() {
             </Jakso>
 
             <div className="pino">
-              <Vaite alla="Sama auto ohittaa saman ihmisen kymmeniä kertoja kuukaudessa, mutta vain jos hän tunnistaa sen samaksi yritykseksi joka näkyi hakutuloksissa.">
-                Tunnistettavuus on halvin tapa <b><i>moninkertaistaa</i></b> jo tehty markkinointi.
+              {/* Kehotuspalkki alkaa tasta, kuten kahdella muulla
+                  palvelusivulla. Kuvassa kayntikortit, varimallit ja
+                  puhelin samalla tunnuksella: lause puhuu juuri siita. */}
+              <Vaite
+                palkkiAlkaa
+                kuva="/graafinen-suunnittelu/ilme.webp"
+                alla="Asiakas näkee pakettiautosi liikenteessä ja myöhemmin saman logon hakutuloksissa. Jos ne näyttävät samalta, hän tunnistaa yrityksesi jo ennen kuin soittaa.">
+                Kun kaikki näyttää samalta, yritys <b><i>jää mieleen.</i></b>
               </Vaite>
 
               <div className="pino">
@@ -120,12 +124,18 @@ export default function GraafinenSuunnittelu() {
                 </Jakso>
 
                 <div className="pino">
-                  <Vaite
-                    palkkiAlkaa
-                    alla="Teippaus tekee siitä mainospinnan, joka näkyy joka ajokilometrillä ilman erillistä mediabudjettia."
-                  >
-                    Pakettiauto ajaa joka tapauksessa. Se on mediatila, joka on <b><i>jo maksettu.</i></b>
-                  </Vaite>
+                  {/* Keskimmainen hengahdys on taysi laatta, kuten
+                      lyhytvideoilla ja verkkosivuilla: vaite, laatta,
+                      vaite. */}
+                  <Laatta kuva="/graafinen-suunnittelu/pakettiauto.webp" korkeus="taysi">
+                    <p className="laatta-kick">Auton mainosteippaus</p>
+                    <p className="laatta-lause suuri">
+                      Pakettiauto ajaa <b><i>joka tapauksessa.</i></b>
+                    </p>
+                    <p className="laatta-alla">
+                      Teippauksella siitä tulee mainos, joka näkyy joka ajokilometrillä ilman erillistä mainosbudjettia.
+                    </p>
+                  </Laatta>
 
                   <div className="pino">
                     <Jakso>
@@ -134,8 +144,11 @@ export default function GraafinenSuunnittelu() {
                     </Jakso>
 
                     <div className="pino">
-                      <Vaite alla="Kartoitus ja tarjous ovat maksuttomia eivätkä sido mihinkään.">
-                        Hinta riippuu siitä, montako <b><i>pintaa ilme kattaa.</i></b>
+                      <Vaite
+                        kuva="/graafinen-suunnittelu/luonnokset.webp"
+                        alla="Kartoitus ja tarjous ovat maksuttomia eivätkä sido mihinkään."
+                      >
+                        Logo alkaen 490 €, koko ilme <b><i>alkaen 1 490 €.</i></b>
                       </Vaite>
 
                       {/* SIVUN HANTA ON YKSI PINTA, ks. kolme muuta
@@ -166,7 +179,11 @@ export default function GraafinenSuunnittelu() {
         brandHeading="h2"
       />
 
-      <Palkki />
+      <Palkki
+        otsikko="Maksuton kartoitus"
+        selite="Logo, ilme tai teippaus. Saat kiinteän hinnan, ei sido mihinkään."
+        nappi="Pyydä tarjous"
+      />
       <SiteEffects />
     </div>
   );

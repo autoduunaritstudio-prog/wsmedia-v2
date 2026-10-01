@@ -18,14 +18,14 @@ export default function Hero() {
     <header className="hero">
       <div className="wrap hero-split">
         <div className="hero-copy">
-          <p className="kick li d1">Graafinen suunnittelu yritykselle</p>
+          <p className="kick li d1">Graafinen suunnittelu · Espoo</p>
           <h1 className="li d2" id="paasisalto" tabIndex={-1}>
-            Yksi ilme. <span className="accent">Kaikki pinnat.</span>
+            Graafinen suunnittelu yritykselle, <span className="accent">logosta auton kylkeen.</span>
           </h1>
           <p className="sub li d3">
-            Suunnittelemme logon, värit ja koko yritysilmeen, ja viemme sen käyntikortista
-            pakettiauton kylkeen asti. Sinä et etsi painotaloa etkä teippaajaa: saat yhden
-            tarjouksen, yhden yhteyshenkilön ja yhden laskun.
+            Suunnittelemme logon, värit ja graafisen ohjeiston ja viemme ilmeen käyntikortteihin,
+            roll-upeihin, ikkunoihin ja pakettiauton kylkeen. Painotaloa tai teippaajaa ei
+            tarvitse etsiä itse: saat yhden tarjouksen, yhden yhteyshenkilön ja yhden laskun.
           </p>
           <div className="heroctas li d4">
             <a className="btn mag" href="#tarjous">
@@ -38,15 +38,15 @@ export default function Hero() {
           <p className="herotrust li d4">
             <span>
               <i />
-              Avaimet käteen, myös asennus
+              Logo alk. 490 € + alv
             </span>
             <span>
               <i />
-              Alkuperäistiedostot ja täydet oikeudet
+              Alkuperäistiedostot sinulle
             </span>
             <span>
               <i />
-              Koko Suomi
+              Asennus koko Suomessa
             </span>
           </p>
         </div>

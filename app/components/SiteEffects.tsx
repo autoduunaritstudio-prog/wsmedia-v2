@@ -195,9 +195,9 @@ export default function SiteEffects() {
       document.querySelectorAll<HTMLElement>(".wsx .seo-sec, .wsx .jakso-pari")
     );
     /* Valon oma kerros, ks. globals.css "OSION VALO OMANA ELEMENTTINAAN".
-       Vain lyhytvideosivulla ja vain osioihin joiden ::before on valo. */
+       Lyhytvideoilla, verkkosivuilla ja graafisella sivulla, vain osioihin joiden ::before on valo. */
     const valoKerros = new WeakMap<HTMLElement, HTMLElement>();
-    if (document.querySelector(".page-lyhytvideot, .page-verkkosivut")) {
+    if (document.querySelector(".page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu")) {
       for (const el of valoEls) {
         const pse = getComputedStyle(el, "::before");
         if (pse.content === "none" || !pse.backgroundImage.includes("radial-gradient")) continue;

@@ -3,28 +3,34 @@
  * osion etta FAQPage-rakenteisen datan, jolloin ne eivat voi eriytya.
  */
 
-export type FaqItem = { group: string; q: string; a: string };
+export type FaqItem = {
+  group: string;
+  q: string;
+  a: string;
+  /** Sisaiset linkit vastauksen alle. Ei JSON-LD:hen, koska teksti on merkkijono. */
+  linkit?: { href: string; label: string }[];
+};
 
 export const FAQ: FaqItem[] = [
   {
     group: "Hinta ja laajuus",
     q: "Paljonko graafinen suunnittelu maksaa yritykselle?",
-    a: "Hinta muodostuu käytännössä työtunneista: Suomessa kokeneen graafisen suunnittelijan tuntihinta on tyypillisesti 70–120 euroa. Meillä logo alkaa 690 eurosta ja yritysilme graafisine ohjeistoineen 1 490 eurosta. Painotuotteen suunnittelu alkaa 190 eurosta ja teippaukset avaimet käteen 590 eurosta. Kaikkiin hintoihin lisätään arvonlisävero 25,5 %.",
+    a: "Hinta riippuu siitä, mitä kaikkea tarvitset. Meillä logo alkaa 490 eurosta ja yritysilme graafisine ohjeistoineen 1 490 eurosta. Painotuotteen suunnittelu alkaa 190 eurosta, auton mainosteippaus avaimet käteen 490 eurosta ja ikkunateippaus 290 eurosta. Hintoihin lisätään arvonlisävero 25,5 %.",
   },
   {
     group: "Hinta ja laajuus",
     q: "Mikä on graafisen suunnittelijan tuntihinta Suomessa?",
-    a: "Freelancerin tuntihinta asettuu tyypillisesti 50–90 euroon ja mainostoimiston 90–120 euroon. Me emme laskuta tuntityönä vaan annamme kiinteän hinnan, jotta tiedät kustannuksen etukäteen emmekä me hyödy siitä että työ venyy.",
+    a: "Graafisen suunnittelijan tuntihinta on tyypillisesti 45–100 euroa kokemuksesta riippuen, ja mainostoimistoissa hinnat ovat usein tätä korkeammat. Me emme laskuta tunneista vaan annamme kiinteän hinnan, joten tiedät kustannuksen etukäteen.",
   },
   {
     group: "Hinta ja laajuus",
     q: "Paljonko logosuunnittelu maksaa?",
-    a: "Markkinoilla yksinkertainen tekstilogo on halvimmillaan alle kahdensadan euron ja kokonainen visuaalinen identiteetti nousee useaan tuhanteen. Meillä logo alkaa 690 eurosta. Ero halvimpaan syntyy siitä, että teemme useamman ehdotuksen, muutoskierrokset ja logopaketin kaikkiin käyttötarkoituksiin, myös teippaukseen ja painoon, joissa kuvatiedosto ei kelpaa.",
+    a: "Suomessa logon suunnittelu maksaa tyypillisesti muutamasta sadasta noin 1 500 euroon, ja koko yritysilme ohjeistoineen nousee usein useaan tuhanteen. Meillä logo alkaa 490 eurosta. Hintaan sisältyy kaksi tai kolme ehdotusta, muutoskierrokset ja logopaketti kaikkiin käyttötarkoituksiin, myös teippaukseen ja painoon, joissa pelkkä kuvatiedosto ei kelpaa.",
   },
   {
     group: "Hinta ja laajuus",
     q: "Mitä auton mainosteippaus maksaa?",
-    a: "Hinta riippuu laajuudesta. Markkinoilla pelkkä logoteippaus asettuu 200–500 euroon, osateippaus 400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 590 eurosta ja sisältää suunnittelun, materiaalit ja asennuksen, ei pelkkää asennusta valmiilla tiedostolla.",
+    a: "Hinta riippuu laajuudesta. Pelkkä logoteippaus maksaa tyypillisesti 200–400 euroa, osateippaus 400–1 200 euroa ja koko pakettiauton teippaus 1 500–4 000 euroa. Meillä auton mainosteippaus alkaa 490 eurosta ja sisältää suunnittelun, materiaalit ja asennuksen. Moni teippaamo laskuttaa suunnittelun erikseen tai olettaa, että sinulla on valmis tiedosto.",
   },
   {
     group: "Hinta ja laajuus",
@@ -34,7 +40,7 @@ export const FAQ: FaqItem[] = [
   {
     group: "Toteutus",
     q: "Teettekö teippaukset ja painotuotteet itse?",
-    a: "Emme. Teippaus, painatus ja asennus tulevat alihankintana tekijöiltä, jotka tekevät sitä työkseen joka päivä. Me suunnittelemme, valitsemme toimittajat, toimitamme heille oikeat tiedostot ja vastaamme lopputuloksesta sinulle. Saat yhden tarjouksen ja yhden laskun, emmekä siirrä vastuuta eteenpäin jos jokin menee pieleen.",
+    a: "Emme. Teippaus, painatus ja asennus tehdään alihankintana alan ammattilaisilla. Me suunnittelemme, valitsemme toimittajat, toimitamme heille oikeat tiedostot ja vastaamme lopputuloksesta sinulle. Saat yhden tarjouksen ja yhden laskun, emmekä siirrä vastuuta eteenpäin, jos jokin menee pieleen.",
   },
   {
     group: "Toteutus",
@@ -43,8 +49,8 @@ export const FAQ: FaqItem[] = [
   },
   {
     group: "Toteutus",
-    q: "Mitä graafinen ohjeisto sisältää?",
-    a: "Graafinen ohjeisto kokoaa ilmeen pelisäännöt yhteen PDF-tiedostoon: logon eri versiot ja suojaetäisyydet, minimikoot, väriarvot CMYK-, RGB- ja HEX-muodossa, typografian otsikoille ja leipätekstille sekä esimerkit siitä miten logoa ei saa käyttää. Sen ansiosta ilme pysyy samana, vaikka materiaalia tekisi joku muu.",
+    q: "Mitä graafinen ohjeisto sisältää ja paljonko se maksaa?",
+    a: "Graafinen ohjeisto kokoaa ilmeen pelisäännöt yhteen PDF-tiedostoon: logon eri versiot ja suojaetäisyydet, minimikoot, väriarvot CMYK-, RGB- ja HEX-muodossa, typografian otsikoille ja leipätekstille sekä esimerkit siitä miten logoa ei saa käyttää. Sen ansiosta ilme pysyy samana, vaikka materiaalia tekisi joku muu. Ohjeisto sisältyy yritysilmeeseen, jonka hinta alkaa 1 490 eurosta.",
   },
   {
     group: "Toteutus",
@@ -80,6 +86,11 @@ export const FAQ: FaqItem[] = [
     group: "Kesto ja jatko",
     q: "Teettekö myös verkkosivut ja videot?",
     a: "Kyllä. WS Media tekee graafisen suunnittelun lisäksi verkkosivut, hakukoneoptimoinnin ja lyhytvideot. Kun sama tiimi tekee sekä digitaalisen että fyysisen ilmeen, yritys näyttää samalta verkossa, somessa ja kadulla, eikä samaa työtä tehdä kahteen kertaan.",
+    linkit: [
+      { href: "/verkkosivut", label: "Verkkosivut" },
+      { href: "/hakukoneoptimointi", label: "Hakukoneoptimointi" },
+      { href: "/lyhytvideot", label: "Lyhytvideot" },
+    ],
   },
 ];
 
