@@ -13,7 +13,7 @@ import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 import TeippausHero from "./components/TeippausHero";
 import RepeytyvaReuna from "./components/RepeytyvaReuna";
 import { buildJsonLd } from "./jsonld";
-import { Materiaalit, Miksi, Palvelut, Prosessi, Tiedostot } from "./sections";
+import { Materiaalit, Miksi, Palvelut, Prosessi } from "./sections";
 import { Alueet, Hinta, Kaytannossa, Kenelle, Tarjous } from "./sections2";
 import { Ukk } from "./ukk";
 
@@ -125,9 +125,11 @@ export default function GraafinenSuunnittelu() {
               </Vaite>
 
               <div className="pino">
+                {/* Aineistot-osio poistettiin (Tuomaksen paatos 1.10.2026):
+                    tiedostomuodoista sovitaan asiakkaan kanssa, ja UKK
+                    vastaa omistajuuteen. Prosessi jaa kaareen yksin. */}
                 <Jakso>
                   <Prosessi />
-                  <Tiedostot />
                 </Jakso>
 
                 <div className="pino">

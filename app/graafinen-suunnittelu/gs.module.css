@@ -1,0 +1,143 @@
+/* GRAAFINEN SUUNNITTELU: PALVELUT, KENELLE JA HINTALASKURI
+   Oma moduuli, jotta nama eivat tormaa jaettuihin .wsx-saantoihin.
+   Varit ovat sivuston muuttujia (--seo-ink, --seo-ink-2, --seo-hi,
+   --lampo), joten pinta pysyy samana kuin muualla sivulla. */
+
+/* ---------- PALVELUT ---------- */
+.palvelut {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 56px 48px; margin-top: 44px;
+}
+.palvelu { min-width: 0 }
+.kuva {
+  position: relative; margin: 0 0 22px; aspect-ratio: 16 / 10;
+  border-radius: 16px; overflow: hidden; background: #0b0f14;
+  box-shadow: 0 30px 60px -30px rgba(0,0,0,.7);
+}
+.kuva img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  /* Kuva tarkentuu vierityksen mukana: yksi hillitty liike. */
+  scale: calc(1.08 - clamp(0, calc((var(--rvp, 1) - var(--i, 0) * .06) * 1.6), 1) * .08);
+}
+@media (prefers-reduced-motion: reduce) { .kuva img { scale: 1 } }
+.hinta {
+  position: absolute; left: 14px; bottom: 14px; max-width: calc(100% - 28px);
+  padding: 8px 14px; border-radius: 999px;
+  background: rgba(11,15,20,.78); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  color: #f4f7fa; font-size: 14px; font-weight: 600; line-height: 1.35;
+  border: 1px solid rgba(232,165,74,.45);
+}
+.laji { margin: 0 0 6px; color: var(--lampo); font-size: 14px; font-weight: 600; letter-spacing: .02em }
+.palvelu h3 { margin: 0 0 10px; font-size: clamp(22px, 2vw, 28px); line-height: 1.2; letter-spacing: -.015em; color: var(--seo-ink) }
+.kuvaus { margin: 0; color: var(--seo-ink-2); font-size: 17px; line-height: 1.6; max-width: 52ch }
+.lista { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 8px }
+.lista li { position: relative; padding-left: 20px; color: var(--seo-ink); font-size: 15.5px; line-height: 1.45 }
+.lista li::before {
+  content: ""; position: absolute; left: 0; top: .62em; width: 9px; height: 2px;
+  border-radius: 1px; background: var(--lampo);
+}
+@media (max-width: 760px) {
+  .palvelut { grid-template-columns: minmax(0, 1fr); gap: 44px }
+}
+
+/* ---------- KENELLE ---------- */
+.kenelle {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 32px; margin-top: 40px; align-items: start;
+}
+.kenelle h3 { margin: 0 0 18px; font-size: 20px; letter-spacing: -.01em }
+.kenelle ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px }
+.kenelle li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 12px; align-items: start; font-size: 17px; line-height: 1.5 }
+.kenelle li svg { width: 26px; height: 26px; padding: 4px; border-radius: 50%; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
+.sopii { padding: 30px 0 }
+.sopii h3 { color: var(--seo-hi) }
+.sopii li { color: var(--seo-ink) }
+.sopii li svg { stroke: #0b0f14; background: var(--seo-hi) }
+.eiSovi {
+  padding: 30px 30px 32px; border-radius: 20px;
+  background: rgba(232,165,74,.06); border: 1px solid rgba(232,165,74,.28);
+}
+.eiSovi h3 { color: var(--lampo) }
+.eiSovi li { color: var(--seo-ink) }
+.eiSovi li svg { stroke: var(--lampo); background: rgba(232,165,74,.14) }
+.eiSovi small { display: block; margin-top: 4px; color: var(--seo-ink-2); font-size: 15px }
+@media (max-width: 760px) {
+  .kenelle { grid-template-columns: minmax(0, 1fr); gap: 8px }
+  .sopii { padding: 10px 0 20px }
+  .eiSovi { padding: 24px 20px }
+}
+
+/* ---------- HINTALASKURI ---------- */
+.laskuri {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 40px; margin-top: 40px; align-items: start;
+}
+.valinnat { display: grid; gap: 28px; min-width: 0 }
+.ryhma { border: 0; margin: 0; padding: 0; min-width: 0 }
+.ryhma legend { padding: 0; margin-bottom: 12px; font-size: 15px; font-weight: 600; color: var(--seo-ink) }
+.laatat { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px }
+.laatta, .autoValinta {
+  appearance: none; font: inherit; text-align: left; cursor: pointer; color: var(--seo-ink);
+  display: grid; gap: 4px; align-content: start; padding: 14px 16px 15px; border-radius: 14px;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.1);
+  transition: border-color .2s, background-color .2s, transform .15s;
+}
+.laatta:hover, .autoValinta:hover { border-color: rgba(255,255,255,.28) }
+.laatta:active, .autoValinta:active { transform: scale(.985) }
+.laatta:focus-visible, .autoValinta:focus-visible, .maara button:focus-visible { outline: 2px solid var(--seo-hi); outline-offset: 2px }
+.laatta b, .autoValinta b { font-size: 15.5px; font-weight: 600; line-height: 1.3 }
+.laatta span { font-size: 13.5px; color: var(--seo-ink-2); line-height: 1.4 }
+.laatta em, .autoValinta em { font-style: normal; font-size: 13.5px; color: var(--lampo); font-weight: 600; margin-top: 4px }
+.laatta[aria-pressed="true"], .autoValinta[aria-checked="true"] {
+  border-color: var(--seo-hi); background: rgba(111,236,255,.08);
+  box-shadow: inset 0 0 0 1px var(--seo-hi);
+}
+.laatta { position: relative; padding-right: 40px }
+.laatta::after {
+  content: ""; position: absolute; right: 14px; top: 15px; width: 16px; height: 16px; border-radius: 5px;
+  border: 1.5px solid rgba(255,255,255,.3);
+}
+.laatta[aria-pressed="true"]::after {
+  border-color: var(--seo-hi); background: var(--seo-hi)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%230b0f14' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat;
+}
+.autot { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px }
+.maara {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 12px;
+  font-size: 15px; color: var(--seo-ink);
+}
+.maara[aria-disabled="true"] { opacity: .45 }
+.maara button {
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font: inherit; font-size: 18px; line-height: 1;
+  color: var(--seo-ink); background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.18);
+}
+.maara button:disabled { cursor: default; opacity: .4 }
+.maara output { min-width: 2ch; text-align: center; font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums }
+.maara small { flex-basis: 100%; color: var(--seo-ink-2); font-size: 13.5px }
+
+.yhteenveto {
+  position: sticky; top: calc(var(--nav-top, 44px) + 90px);
+  padding: 26px 26px 28px; border-radius: 22px;
+  background: linear-gradient(180deg, rgba(111,236,255,.07), rgba(255,255,255,.02));
+  border: 1px solid rgba(111,236,255,.25);
+  box-shadow: 0 40px 80px -40px rgba(0,0,0,.8);
+}
+.yvOtsikko { margin: 0 0 14px; font-size: 15px; font-weight: 600; color: var(--seo-hi) }
+.yvRivit { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14.5px }
+.yvRivit li { display: flex; justify-content: space-between; gap: 14px; color: var(--seo-ink-2) }
+.yvRivit li span:last-child { color: var(--seo-ink); white-space: nowrap; font-variant-numeric: tabular-nums }
+.yvTyhja { margin: 0; color: var(--seo-ink-2); font-size: 14.5px; line-height: 1.5 }
+.yvSumma {
+  margin: 20px 0 6px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12);
+  font-size: clamp(34px, 3.4vw, 46px); font-weight: 700; letter-spacing: -.03em; line-height: 1.05;
+  color: #f4f7fa; font-variant-numeric: tabular-nums;
+}
+.yvSumma span { margin: 0 .12em; color: var(--seo-ink-2); font-weight: 400 }
+.yvSumma small { font-size: .55em; color: var(--seo-ink-2); font-weight: 500 }
+.yvAlv { margin: 0 0 20px; font-size: 13.5px; line-height: 1.5; color: var(--seo-ink-2) }
+.yvNappi { width: 100%; text-align: center; justify-content: center }
+@media (max-width: 980px) {
+  .laskuri { grid-template-columns: minmax(0, 1fr) }
+  .yhteenveto { position: static }
+  .autot { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+}

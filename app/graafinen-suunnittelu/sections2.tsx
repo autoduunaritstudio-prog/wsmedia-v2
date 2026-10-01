@@ -3,6 +3,7 @@ import SmartLink from "../components/SmartLink";
 import { Kaiku } from "../components/Maasto";
 
 import PriceConfig from "./PriceConfig";
+import g from "./gs.module.css";
 
 /* ==================================================================
    HINTA  ·  sivun hinnasto, ei omaa pohjaa
@@ -71,21 +72,43 @@ export function Kenelle() {
           molempien aikaa.
         </p>
 
-        <div className="kaksi porras rv" style={{ marginTop: "48px" }}>
-          <div>
-            <p className="kaksi-k on">Sopii sinulle, jos</p>
+        {/* KAKSI ERI PINTAA, EI KAKSI SAMANLAISTA PALSTAA.
+            Vasen on kenelle palvelu on tehty: avoin lista, syaani merkki.
+            Oikea on rajaus: oma vaimea pinta, lampoinen merkki, ja kohdan
+            jalkeen sanotaan mika on parempi vaihtoehto silloin. */}
+        <div className={g.kenelle}>
+          <div className={g.sopii}>
+            <h3>Sopii sinulle, jos</h3>
             <ul>
               {SOPII.map((x) => (
-                <li key={x}>{x}</li>
+                <li key={x}>
+                  <svg viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="M4.5 10.5l3.5 3.5 7.5-8" />
+                  </svg>
+                  <span>{x}</span>
+                </li>
               ))}
             </ul>
           </div>
-          <div>
-            <p className="kaksi-k ei">Ei kannata, jos</p>
+          <div className={g.eiSovi}>
+            <h3>Ei kannata, jos</h3>
             <ul>
-              {EI_SOVI.map((x) => (
-                <li key={x}>{x}</li>
-              ))}
+              {EI_SOVI.map((x) => {
+                const k = x.indexOf(". ");
+                const ehto = k > 0 ? x.slice(0, k + 1) : x;
+                const vaihto = k > 0 ? x.slice(k + 2) : null;
+                return (
+                  <li key={x}>
+                    <svg viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M6 6l8 8M14 6l-8 8" />
+                    </svg>
+                    <span>
+                      {ehto}
+                      {vaihto ? <small>{vaihto}</small> : null}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -102,18 +125,6 @@ export function Kenelle() {
    hakukoneelle huonompi kuin ei linkkia lainkaan, joten paikkakunnat
    ovat toistaiseksi tekstia. Kun kaupunkisivut tehdaan, nama
    muuttuvat takaisin linkeiksi. */
-const KAUPUNGIT = [
-  "Espoo",
-  "Helsinki",
-  "Vantaa",
-  "Tampere",
-  "Turku",
-  "Oulu",
-  "Lahti",
-  "Kuopio",
-  "Pori",
-  "Joensuu",
-];
 
 export function Alueet() {
   return (
@@ -133,11 +144,8 @@ export function Alueet() {
         <p className="seo-body" style={{ marginTop: "22px", maxWidth: "72ch" }}>
           Painotuotteet toimitetaan suoraan osoitteeseesi.
         </p>
-        <p className="seo-tags" style={{ marginTop: "28px" }}>
-          {KAUPUNGIT.map((k) => (
-            <span key={k}>{k}</span>
-          ))}
-        </p>
+        {/* Kaupunkilista poistettiin 1.10.2026. Se oli tarkoitettu linkeiksi
+            kaupunkisivuille, joita ei viela ole. Lisataan kun sivut tehdaan. */}
       </div>
     </section>
   );

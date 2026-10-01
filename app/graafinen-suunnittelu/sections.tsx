@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 
 import { Kaiku } from "../components/Maasto";
 
+import g from "./gs.module.css";
+
 /* ==================================================================
    MERKIT JA KUVIOT
    ==================================================================
@@ -65,47 +67,6 @@ function Merkki({ nimi, className = "gs-ik" }: { nimi: string; className?: strin
   );
 }
 
-/* Kuviot: viewBox 160 x 48, kiintea kuvasuhde, joten pathLength=1 ja
-   stroke-dasharray toimivat oikeassa mittakaavassa. */
-const KUVIOT: ReactNode[] = [
-  /* LOGO JA VARIT: kehys ja tunnus piirtyvat, sitten nelja varia
-     syttyvat vuorotellen. */
-  <>
-    <rect className="gk-viiva" x="4" y="6" width="36" height="36" rx="9" pathLength={1} />
-    <path className="gk-viiva gk-lampo" d="M14 31c2-10 14-4 16-14" pathLength={1} />
-    <circle className="gk-pala gk-p1" cx="62" cy="24" r="8" />
-    <circle className="gk-pala gk-p2" cx="84" cy="24" r="8" />
-    <circle className="gk-pala gk-p3" cx="106" cy="24" r="8" />
-    <circle className="gk-pala gk-p4" cx="128" cy="24" r="8" />
-  </>,
-  /* AUTO: kylki piirtyy, sitten teippi vedetaan sen paalle
-     vasemmalta oikealle. */
-  <>
-    <path className="gk-viiva" d="M8 38V12h76v26M84 20h20l14 12v6H84" pathLength={1} />
-    <circle className="gk-viiva" cx="28" cy="39" r="5" pathLength={1} />
-    <circle className="gk-viiva" cx="100" cy="39" r="5" pathLength={1} />
-    <path className="gk-teippi" d="M14 32L44 18h34" />
-    <path className="gk-teippi gk-ohut" d="M20 36h56" />
-  </>,
-  /* IKKUNA: tarra painetaan lasiin, lasta kulkee sen yli. */
-  <>
-    <rect className="gk-rata" x="4" y="4" width="152" height="40" rx="3" />
-    <rect className="gk-viiva" x="14" y="10" width="96" height="30" rx="2" pathLength={1} />
-    <g className="gk-tarra">
-      <circle cx="36" cy="25" r="8" />
-      <path d="M52 21h42M52 29h28" />
-    </g>
-    <path className="gk-lasta" d="M18 8v34" />
-    <path className="gk-rata" d="M122 10h22v30h-22z" />
-  </>,
-  /* KORTIT: pino levittyy viuhkaksi. */
-  <>
-    <rect className="gk-kortti gk-k1" x="63" y="12" width="34" height="24" rx="3" />
-    <rect className="gk-kortti gk-k2" x="63" y="12" width="34" height="24" rx="3" />
-    <rect className="gk-kortti gk-k3" x="63" y="12" width="34" height="24" rx="3" />
-    <path className="gk-kortti-viiva" d="M69 19h12M69 24h18" />
-  </>,
-];
 
 /**
  * GRAAFINEN SUUNNITTELU -SIVUN OSIOT, SIVUSTON JAETULLA KUVAKIELELLA.
@@ -226,9 +187,9 @@ export function Miksi() {
    jokaiselle ensimmaisen jalkeen, eli kolmas kortti olisi saanut
    viivan rivin alkuun. Kaksi erillista paria pitaa viivan siella
    minne se kuuluu. */
-const PALVELUT: { ik: string; kick: string; h: string; p: string; li: string[]; px: string }[] = [
+const PALVELUT: { kuva: string; kick: string; h: string; p: string; li: string[]; px: string }[] = [
   {
-    ik: "kyna",
+    kuva: "/graafinen-suunnittelu/palvelu-logo.webp",
     kick: "Perusta",
     h: "Logo ja yritysilme",
     p: "Logon suunnittelu on koko ilmeen pohja. Logon ympärille tehdään väripaletti, fontit ja graafinen ohjeisto, joiden ansiosta ilme pysyy samana, vaikka materiaalia tekisi joku muu.",
@@ -241,7 +202,7 @@ const PALVELUT: { ik: string; kick: string; h: string; p: string; li: string[]; 
     px: "Logo alk. 490 € · ilme ohjeistoineen alk. 1 490 €",
   },
   {
-    ik: "auto",
+    kuva: "/graafinen-suunnittelu/palvelu-auto.webp",
     kick: "Liikkuva pinta",
     h: "Auton mainosteippaus",
     p: "Pakettiauton logoteippauksesta koko kaluston ilmeeseen. Suunnittelu tehdään kerran, joten seuraavista autoista maksat vain tulostuksen ja asennuksen.",
@@ -254,7 +215,7 @@ const PALVELUT: { ik: string; kick: string; h: string; p: string; li: string[]; 
     px: "Avaimet käteen alk. 490 €",
   },
   {
-    ik: "liike",
+    kuva: "/graafinen-suunnittelu/palvelu-ikkuna.webp",
     kick: "Toimitila",
     h: "Ikkunateippaukset, kyltit ja valomainokset",
     p: "Liikkeen ikkuna ja julkisivu näkyvät ohikulkijoille joka päivä. Teemme ne samalla ilmeellä kuin muutkin materiaalisi.",
@@ -267,7 +228,7 @@ const PALVELUT: { ik: string; kick: string; h: string; p: string; li: string[]; 
     px: "Ikkunateippaus alk. 290 € · valomainos tarjouksen mukaan",
   },
   {
-    ik: "kortit",
+    kuva: "/graafinen-suunnittelu/palvelu-kortit.webp",
     kick: "Käteen jäävä",
     h: "Käyntikortit, esitteet ja roll-upit",
     p: "Suunnittelemme painotuotteet ja teetämme ne valmiiksi. Saat painovalmiit tiedostot myös itsellesi, jos haluat tilata lisäpainoksen myöhemmin muualta.",
@@ -280,34 +241,6 @@ const PALVELUT: { ik: string; kick: string; h: string; p: string; li: string[]; 
     px: "Suunnittelu alk. 190 € · painatus tarjouksen mukaan",
   },
 ];
-
-function Pari({ osa, alku }: { osa: typeof PALVELUT; alku: number }) {
-  return (
-    <div className="duo2 gs-pari" style={{ marginTop: "48px" }} data-rvs="">
-      {osa.map((o, j) => (
-        <div className="duo2-col" key={o.h} style={{ "--i": j } as CSSProperties}>
-          <div className="gs-yla">
-            <Merkki nimi={o.ik} className="gs-ik gs-ik-kehys" />
-            <p className="duo2-kick">{o.kick}</p>
-          </div>
-          <h3>{o.h}</h3>
-          <p className="seo-body">{o.p}</p>
-          <ul className="seo-spec porras rv">
-            {o.li.map((x) => (
-              <li key={x}>{x}</li>
-            ))}
-          </ul>
-          <svg className="gs-kuvio" viewBox="0 0 160 48" aria-hidden="true">
-            {KUVIOT[alku + j]}
-          </svg>
-          <p className="hinta-f" style={{ marginTop: "18px" }}>
-            {o.px}
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 export function Palvelut() {
   return (
@@ -324,8 +257,30 @@ export function Palvelut() {
           vain sen osan, jonka tarvitset nyt.
         </p>
 
-        <Pari osa={PALVELUT.slice(0, 2)} alku={0} />
-        <Pari osa={PALVELUT.slice(2, 4)} alku={2} />
+        {/* PALVELUT KUVINA, EI KORTTEINA.
+            Aiemmin nelja samannakoista korttia, joissa piirretty merkki ja
+            kuvio. Ne lukivat yleisina, ja osa merkeista ei vastannut
+            palvelua. Nyt jokaisella palvelulla on oma valokuvansa siita
+            mita asiakas saa, hinta on kuvan paalla, ja teksti on suoraan
+            kuvan alla ilman korttikehysta. */}
+        <div className={g.palvelut}>
+          {PALVELUT.map((o, i) => (
+            <article className={g.palvelu} key={o.h} data-rvs="" style={{ "--i": i % 2 } as CSSProperties}>
+              <figure className={g.kuva}>
+                <img src={o.kuva} alt="" loading="lazy" decoding="async" />
+                <figcaption className={g.hinta}>{o.px}</figcaption>
+              </figure>
+              <p className={g.laji}>{o.kick}</p>
+              <h3>{o.h}</h3>
+              <p className={g.kuvaus}>{o.p}</p>
+              <ul className={g.lista}>
+                {o.li.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

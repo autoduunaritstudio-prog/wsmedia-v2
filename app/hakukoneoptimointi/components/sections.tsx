@@ -111,18 +111,6 @@ export function Aikataulu() {
    se nayttaa tasan sen mita osio myy: kolme ensimmaista karttatulosta.
    Se sailyy sellaisenaan. Vain kehys vaihtuu taman sivun omaksi:
    hiusviivat, mono-mikrolabelit, ei pyoristyksia. */
-const KAUPUNGIT: [string, string][] = [
-  ["/hakukoneoptimointi/espoo", "Espoo"],
-  ["/hakukoneoptimointi/helsinki", "Helsinki"],
-  ["/hakukoneoptimointi/vantaa", "Vantaa"],
-  ["/hakukoneoptimointi/tampere", "Tampere"],
-  ["/hakukoneoptimointi/turku", "Turku"],
-  ["/hakukoneoptimointi/oulu", "Oulu"],
-  ["/hakukoneoptimointi/lahti", "Lahti"],
-  ["/hakukoneoptimointi/kuopio", "Kuopio"],
-  ["/hakukoneoptimointi/pori", "Pori"],
-  ["/hakukoneoptimointi/joensuu", "Joensuu"],
-];
 
 export function Paikallinen() {
   return (
@@ -226,13 +214,9 @@ export function Paikallinen() {
               niistä on oma rankattava sivunsa omalla hakusanallaan.
             </p>
 
-            <div className="loc-kaupungit porras rv">
-              {KAUPUNGIT.map(([href, label]) => (
-                <SmartLink href={href} key={href}>
-                  {label}
-                </SmartLink>
-              ))}
-            </div>
+            {/* Kaupunkilinkit poistettiin 1.10.2026: ne osoittivat
+                kaupunkisivuille, joita ei viela ole (404). Lisataan kun
+                sivut tehdaan. */}
           </div>
         </div>
 
