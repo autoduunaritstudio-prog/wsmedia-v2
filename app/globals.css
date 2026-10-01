@@ -14941,3 +14941,29 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki:has(.btn:hover, .btn:focus-visible) p,
   :is(.page-lyhytvideot, .page-verkkosivut) .cta-palkki.nayta:has(p:hover) p { max-width: 460px; opacity: 1 }
 }
+
+/* ==================================================================
+   PEHMEA VIERITYS (Lenis)  ·  ks. app/components/Pehmeavieritys.tsx
+   ==================================================================
+   Luokat tulevat Lenisilta <html>-elementille. Tama korvaa paketin oman
+   lenis.css:n: siita otetaan vain ne kaksi saantoa jotka talla
+   sivustolla ovat valttamattomia, eika height: auto -saantoa, joka on
+   Lenisin kaariversiota varten eika window-tilaa.
+   ================================================================== */
+
+/* SELAIMEN OMA PEHMENNYS POIS KUN LENIS ON PAALLA. Rivilla 265 on
+   html { scroll-behavior: smooth }, joka tekee ankkureista liukuvia
+   ilman Lenista. Yhta aikaa ne ovat kaksi pehmennysta samasta
+   liikkeesta: selain animoi kohteen ja Lenis animoi sen perassa, ja
+   lopputulos nykii. Lenisin ollessa paalla pehmennys on sen tyota. */
+html.lenis-smooth { scroll-behavior: auto !important }
+
+/* LUKKO. Heron latausruudun html.hero-locked { overflow: hidden } estaa
+   kayttajan vierityksen mutta ei skriptattua, ja juuri siihen Lenis
+   aiemmin kaatui. Lenis pysaytetaan koodista (lenis.stop()), ja tama
+   saanto on sen nakyva pari. */
+html.lenis.lenis-stopped { overflow: clip }
+
+/* Sisakkaiset vieritysalueet: vieritys ei saa vuotaa niista sivulle.
+   Sama kuin paketin omassa CSS:ssa. */
+html.lenis [data-lenis-prevent] { overscroll-behavior: contain }

@@ -5,6 +5,7 @@ import "./globals.css";
 import { SIVUSTO } from "./sivusto";
 
 import Analytics from "./components/consent/Analytics";
+import Pehmeavieritys from "./components/Pehmeavieritys";
 import CookieBanner from "./components/consent/CookieBanner";
 
 const instrument = Instrument_Sans({
@@ -63,6 +64,7 @@ export default function RootLayout({
     <html lang="fi" className={instrument.variable}>
       <body>
         {children}
+        <Pehmeavieritys />
         <CookieBanner />
         <Analytics />
       </body>

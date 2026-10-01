@@ -713,6 +713,57 @@ export default function SiteEffects() {
       };
     });
     let ticking = false;
+
+    /* ==================================================================
+       PEHMENNETTY VIERITYSASEMA
+       ==================================================================
+       MIKSI: Mac-ohjauslevy ja Magic Mouse tuottavat pikselitarkkoja
+       vierintatapahtumia, kymmenia pienia askelia sekunnissa. Tavallisen
+       hiiren rulla tuottaa yhden napsautuksen kerrallaan, ja selain
+       siirtaa sivua kertaheitolla noin sadan pikselin verran. Kaikki
+       talla sivulla oleva vierintaan sidottu liike (parallaksi,
+       paljastus, pystykaiut, osioiden valo, korttien kaanto) lasketaan
+       vierityksen ARVOSTA, joten napsautushiirella jokainen arvo hyppaa
+       saman verran. Liike ei ole raju vaan se katoaa: vali-asentoja ei
+       piirretä kertaakaan, joten animaatiota ei nay, nakyy vain kaksi
+       pysahtynytta tilaa.
+
+       KORJAUS EI OLE VIERITYKSEN KAAPPAUS. Sivu sai aiemmin Lenisin, ja
+       se ajoi window.scrollTo:ta omassa silmukassaan, mika rikkoi heron
+       skriptatun vierityksen (ks. HeroScrub.tsx). Natiiviin vieritykseen
+       ei siis kosketa lainkaan: sivu hyppaa tasan niin kuin
+       kayttojarjestelma kaskee, ja sticky, selaimen oma haku ja
+       saavutettavuus toimivat muuttumattomina.
+
+       Sen sijaan KORISTEIDEN AJURI pehmennetaan. scP seuraa todellista
+       vierityskohtaa eksponentiaalisesti, ja viive kertoo kuinka paljon
+       todellinen vieritys on karannut sen edelle. Kaikki koristearvot
+       lasketaan scP:sta (tai rect-lukemasta + viive, mika on sama rect
+       siina nakymassa jossa scP on), jolloin sadan pikselin hyppy
+       muuttuu saman mittaiseksi liu'uksi.
+
+       TAU on sama 0,06 s kuin heron vierityselokuvalla
+       (film-codec.ts SMOOTH_TAU), jotta hero ja muu sivu kulkevat
+       samassa rytmissa. Ohjauslevylla askel on muutama pikseli, joten
+       60 ms:n viive on mittaamaton; napsautushiirella se on tasan se
+       mita puuttui.
+
+       KATTO rajaa viiveen kahteen ja puoleen nakymaan. Ilman sita
+       vierityspalkin raahaus tai ankkurilinkki jattaisi koristeet
+       liukumaan sekunniksi jalkeen. */
+    /* 0,035 eika 0,06. Sivulla on nyt Lenis (ks. Pehmeavieritys.tsx),
+       joka pehmentaa jo itse vierityksen, jolloin tapahtumia tulee joka
+       kehys pienin askelin eika viive ehdi kasvaa. Pitka aikavakio
+       paalla olisi toinen pehmennys ensimmaisen paalla, eli turhaa
+       laahausta. Lyhyt arvo suodattaa jaannoksen ja on se mika jaa
+       jaljelle jos Lenis ei ole kaytossa (reduced motion, vanha selain,
+       skripti ei lataudu). */
+    const PEHMENNYS_TAU = 0.035;
+    const PEHMENNYS_KATTO = 2.5;
+    /* Alle taman eroa ei erota, ja silmukka saa pysahtya. */
+    const PEHMENNYS_RAJA = 0.5;
+    let scP = window.scrollY;
+    let pehmHetki = 0;
     // Paljastusjarjestelmalla oli OMA scroll-kuuntelija ja OMA rAF, joka
     // ajoi rect-lukunsa vasta taman funktion kirjoitusten jalkeen - eli
     // yksi ylimaarainen pakotettu asettelulaskenta joka kehyksessa.
@@ -725,6 +776,26 @@ export default function SiteEffects() {
       const vh = window.innerHeight;
       const h = document.documentElement;
       const sc = window.scrollY;
+
+      /* Kehysriippumaton seuranta: kerroin lasketaan kuluneesta ajasta,
+         joten liike on sama 60, 120 ja 144 hertsilla. dt rajataan, jotta
+         valilehden palautus taustalta ei tee yhta jattiaskelta. */
+      const hetki = performance.now();
+      const dt = pehmHetki ? Math.min((hetki - pehmHetki) / 1000, 0.05) : 0;
+      pehmHetki = hetki;
+      if (reduce) {
+        scP = sc;
+      } else {
+        const katto = vh * PEHMENNYS_KATTO;
+        if (Math.abs(sc - scP) > katto) scP = sc - Math.sign(sc - scP) * katto;
+        if (dt > 0) scP += (sc - scP) * (1 - Math.exp(-dt / PEHMENNYS_TAU));
+        else scP = sc;
+        if (Math.abs(sc - scP) < PEHMENNYS_RAJA) scP = sc;
+      }
+      /* Kuinka paljon todellinen vieritys on edella pehmennettya. Lisataan
+         rect-lukemiin: r.top + viive on sama reuna siina nakymassa jossa
+         pehmennetty vieritys on. */
+      const viive = sc - scP;
 
       // Lukuvaihe ensin, ennen yhtaan kirjoitusta.
       revealFn?.();
@@ -755,7 +826,7 @@ export default function SiteEffects() {
         const parMids = pars.map((el, i) => {
           const r = el.getBoundingClientRect();
           parNakyy[i] = r.bottom > -vh * 0.5 && r.top < vh * 1.5 && !el.closest("[data-peitossa]");
-          return r.top + r.height / 2 - vh / 2;
+          return r.top + viive + r.height / 2 - vh / 2;
         });
         pars.forEach((el, i) => {
           if (!parNakyy[i]) return;
@@ -789,7 +860,7 @@ export default function SiteEffects() {
         const rvsP = rvsEls.map((el) => {
           const r = el.getBoundingClientRect();
           const span = Math.max(vh * (1 - RVS_END) + r.height / 2, 1);
-          return Math.min(Math.max((vh - r.top) / span, 0), 1);
+          return Math.min(Math.max((vh - (r.top + viive)) / span, 0), 1);
         });
         /* Hehkun etenema. Nolla kun elementin YLAREUNA on nakyman
            alareunassa, yksi kun se on noussut kolmanneksen nakymasta
@@ -799,7 +870,7 @@ export default function SiteEffects() {
           const m = hehkuY.get(el);
           if (!m) continue;
           const matka = Math.max((vh * 0.62 + m.h * 0.35) * m.k, 1);
-          const kuljettu = sc + vh - m.y;
+          const kuljettu = scP + vh - m.y;
           const pv = Math.min(Math.max(kuljettu / matka, 0), 1).toFixed(3);
           const pq = (Math.round(parseFloat(pv) * 25) / 25).toFixed(2);
           W(() => {
@@ -812,7 +883,7 @@ export default function SiteEffects() {
           const m = valoY.get(el);
           if (!m) continue;
           const matka = Math.max(m.h + vh, 1);
-          const kuljettu = sc + vh - m.y;
+          const kuljettu = scP + vh - m.y;
           const valo = Math.min(Math.max(kuljettu / matka, 0), 1);
           /* --valo-q on porrastettu (0,02) kopio osion taustavalolle. Valo
              on osion koko korkuinen liukuvari maskeineen, ja sen jokainen
@@ -845,7 +916,7 @@ export default function SiteEffects() {
         for (const el of kiinniEls) {
           const m = kiinniY.get(el);
           if (!m) continue;
-          const kv = Math.min(Math.max((sc + vh - m.y) / Math.max(m.h, 1), 0), 1).toFixed(3);
+          const kv = Math.min(Math.max((scP + vh - m.y) / Math.max(m.h, 1), 0), 1).toFixed(3);
           W(() => { for (const k of lukijat(el, "--kiinni", kiinniJoukko)) aseta(k, "--kiinni", kv); });
         }
 
@@ -873,7 +944,7 @@ export default function SiteEffects() {
         const tiltDs = tilts.map((el, i) => {
           const r = el.getBoundingClientRect();
           tiltNakyy[i] = r.bottom > -vh * 0.5 && r.top < vh * 1.5 && !el.closest("[data-peitossa]");
-          return (r.top + r.height / 2 - vh / 2) / vh;
+          return (r.top + viive + r.height / 2 - vh / 2) / vh;
         });
         tilts.forEach((el, i) => {
         if (!tiltNakyy[i]) return;
@@ -936,7 +1007,7 @@ export default function SiteEffects() {
         // 0 -> coverin korkeus juuri sen matkan aikana kun kuvio on
         // nakyvissa, joten liike osuu sinne missa se nahdaan.
         const mbRect = mbLayer.getBoundingClientRect();
-        const p = -mbRect.top;
+        const p = -(mbRect.top + viive);
         // Eteneminen koko kuvioalueella, ei coverin korkeudella: kerros
         // ulottuu nyt footeriin asti ja liikkeen on jakauduttava sille.
         /* Nimittajan pohjaksi yksi nakyma. Etusivulla kerros on
@@ -1170,17 +1241,28 @@ export default function SiteEffects() {
       }
       lastSc = sc;
 
-      navAndProgress(sc, h);
+      navAndProgress(sc, h, scP);
       kirjoitusVaihe = false;
       tyhjenna();
       ticking = false;
+
+      /* HANTA. Vierintatapahtumia tulee vain silloin kun sivu oikeasti
+         liikkuu, joten napsautushiirella niita tulee yksi per napsautus.
+         Pehmennys tarvitsee kehyksia myos sen JALKEEN, muuten se jaa
+         puoliväliin ja arvo hyppaa seuraavalla tapahtumalla. Silmukka
+         pyorii vain niin kauan kuin eroa on, eli idlena tasta ei tule
+         yhtaan kehysta. */
+      if (!reduce && !ticking && Math.abs(window.scrollY - scP) >= PEHMENNYS_RAJA) {
+        ticking = true;
+        requestAnimationFrame(onScroll);
+      }
     };
 
     // Navi tiivistyy scrolled-tilassa 4px, joten tila vaihdetaan hystereesilla:
     // paalle vasta 14px:n jalkeen, pois vasta alle 4px:n. Ilman sita tila
     // varahtelisi kynnyksen tuntumassa ja jokainen vaihto siirtaisi sisaltoa.
     let scrolled = false;
-    const navAndProgress = (sc: number, h: HTMLElement) => {
+    const navAndProgress = (sc: number, h: HTMLElement, scPeh: number = sc) => {
       if (!scrolled && sc > 14) scrolled = true;
       else if (scrolled && sc < 4) scrolled = false;
       if (nav && nav.classList.contains("scrolled") !== scrolled) W(() => { nav.classList.toggle("scrolled", scrolled); });
@@ -1205,7 +1287,10 @@ export default function SiteEffects() {
         // kompositoritransformi, joten kehysta kohden ei tule asettelua,
         // maalausta eika rasterointia. Ks. #prog globals.css:ssa.
         const max = h.scrollHeight - window.innerHeight;
-        W(() => { prog.style.transform = `scaleX(${(max > 0 ? sc / max : 0).toFixed(4)})`; });
+        /* Palkki kulkee pehmennetylla arvolla: se on koriste kuten muutkin
+           vierintaan sidotut liikkeet, ja napsautushiirella raaka arvo
+           naytti saman hypyn. */
+        W(() => { prog.style.transform = `scaleX(${(max > 0 ? scPeh / max : 0).toFixed(4)})`; });
       }
     };
 
