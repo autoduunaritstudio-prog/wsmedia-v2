@@ -624,12 +624,12 @@ export default function TeippausHero() {
                         <rect x="14" y="14" width="172" height="410" />
                       </clipPath>
                     </defs>
-                    <ellipse cx="102" cy="468" rx="112" ry="10" fill="url(#th-flo)" />
-                    {/* kaantyvat jalat kasetin alla */}
-                    <path d="M18 452h30l-3 12a3 3 0 0 1-3 2.4H16.5a2.5 2.5 0 0 1-2.4-3.1z" fill="#24282f" />
-                    <path d="M182 452h-30l3 12a3 3 0 0 0 3 2.4h15.5a2.5 2.5 0 0 0 2.4-3.1z" fill="#24282f" />
-                    <rect x="17" y="463.5" width="25" height="2" rx="1" fill="#0d0f12" />
-                    <rect x="158" y="463.5" width="25" height="2" rx="1" fill="#0d0f12" />
+                    {/* Sirompi runko kuten oikeissa roll-upeissa: matala
+                        kasetti (noin 8 % bannerin leveydesta), ohuet
+                        kaantyvat jalat ja kapea ylalista. */}
+                    <ellipse cx="100" cy="442" rx="104" ry="6" fill="url(#th-flo)" />
+                    <path d="M24 433.5l-12 7.5M176 433.5l12 7.5" stroke="#2a2f37" strokeWidth="3" strokeLinecap="round" />
+                    <path d="M10.5 441.5h5M184.5 441.5h5" stroke="#0d0f12" strokeWidth="2" strokeLinecap="round" />
                     <g clipPath="url(#th-bclip)">
                       <rect x="14" y="14" width="172" height="410" style={{ fill: "var(--wrap)", transition: "fill .5s" }} />
                       <use href="#th-bars" x="64" y="300" width="170" height="226" style={{ color: "var(--acc)", transition: "color .5s" }} />
@@ -660,27 +660,21 @@ export default function TeippausHero() {
                       <rect x="14" y="14" width="172" height="410" fill="url(#th-bsheen)" />
                       {/* ylalistan varjo ja kasettiin painuva alareuna */}
                       <rect x="14" y="17" width="172" height="9" fill="url(#th-varjo-ylos)" />
-                      <rect x="14" y="398" width="172" height="26" fill="url(#th-varjo-alas)" />
+                      <rect x="14" y="400" width="172" height="22" fill="url(#th-varjo-alas)" />
                     </g>
-                    {/* ylalista: alumiiniprofiili, paatytulpat ja keskella
+                    {/* ylalista: kapea alumiiniprofiili, paatytulpat ja
                         tangon kiinnike */}
-                    <rect x="11" y="8" width="178" height="10" rx="2.5" fill="url(#th-lista)" />
-                    <rect x="11" y="16.6" width="178" height="1.4" fill="#000" opacity=".25" />
-                    <rect x="8" y="7" width="7" height="12" rx="2.2" fill="url(#th-paaty)" />
-                    <rect x="185" y="7" width="7" height="12" rx="2.2" fill="url(#th-paaty)" />
-                    <rect x="94" y="4.5" width="12" height="5" rx="1.5" fill="#3a4048" />
-                    {/* kasettirako, josta banneri nousee */}
-                    <rect x="15" y="416.5" width="170" height="4.5" rx="2.2" fill="#121418" />
-                    {/* kasetti: pyorea etuprofiili, valoviiva, sauma ja
-                        tummat paatykappaleet */}
-                    <path d="M6 428a8 8 0 0 1 8-8h172a8 8 0 0 1 8 8v16a10 10 0 0 1-10 10H16a10 10 0 0 1-10-10z" fill="url(#th-kasetti)" />
-                    <rect x="16" y="423" width="168" height="2" rx="1" fill="#fff" opacity=".8" />
-                    <rect x="16" y="441.5" width="168" height="1" fill="#000" opacity=".22" />
-                    <rect x="16" y="447" width="168" height="1.2" rx=".6" fill="#fff" opacity=".18" />
-                    <path d="M6 428a8 8 0 0 1 8-8h6v34h-4a10 10 0 0 1-10-10z" fill="url(#th-paaty)" />
-                    <path d="M194 428a8 8 0 0 0-8-8h-6v34h4a10 10 0 0 0 10-10z" fill="url(#th-paaty)" />
-                    <rect x="9" y="424" width="1.2" height="24" rx=".6" fill="#fff" opacity=".22" />
-                    <rect x="189.8" y="424" width="1.2" height="24" rx=".6" fill="#fff" opacity=".12" />
+                    <rect x="12" y="10" width="176" height="5.5" rx="2" fill="url(#th-lista)" />
+                    <rect x="10" y="9.5" width="4" height="6.5" rx="1.6" fill="url(#th-paaty)" />
+                    <rect x="186" y="9.5" width="4" height="6.5" rx="1.6" fill="url(#th-paaty)" />
+                    <rect x="96" y="7.5" width="8" height="3" rx="1" fill="#3a4048" />
+                    {/* kasettirako ja matala kasetti */}
+                    <rect x="15" y="418.5" width="170" height="2.6" rx="1.3" fill="#121418" />
+                    <path d="M9 426a6 6 0 0 1 6-6h170a6 6 0 0 1 6 6v3a5 5 0 0 1-5 5H14a5 5 0 0 1-5-5z" fill="url(#th-kasetti)" />
+                    <rect x="15" y="421.6" width="170" height="1.1" rx=".55" fill="#fff" opacity=".85" />
+                    <rect x="15" y="430.5" width="170" height=".8" fill="#fff" opacity=".2" />
+                    <path d="M9 426a6 6 0 0 1 6-6h0v14h-1a5 5 0 0 1-5-5z" fill="url(#th-paaty)" />
+                    <path d="M191 426a6 6 0 0 0-6-6h0v14h1a5 5 0 0 0 5-5z" fill="url(#th-paaty)" />
                   </svg>
                   <div className={s.tag}>
                     <i />
