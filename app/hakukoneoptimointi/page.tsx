@@ -167,7 +167,7 @@ export default function Hakukoneoptimointi() {
                   ihminen tyossaan aamulla, eli tasan se jota lause
                   koskee: hakukoneoptimointi ei tuota tulosta
                   paivassa, koska tyo on oikeaa tyota. */}
-              <Laatta kuva="/hakukoneoptimointi/paja.webp" korkeus="taysi">
+              <Laatta kuva="/hakukoneoptimointi/paja-valmis.webp" korkeus="taysi">
                 <p className="laatta-kick">Aikataulu</p>
                 <p className="laatta-lause">
                   Kukaan ei voi luvata <b><i>päivämäärää.</i></b>

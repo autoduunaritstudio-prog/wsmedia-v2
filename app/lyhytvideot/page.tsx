@@ -164,7 +164,7 @@ export default function Lyhytvideot() {
                 </Jakso>
 
                 <div className="pino">
-                  <Laatta kuva="/lyhytvideot/kuvauspaiva.webp" korkeus="taysi">
+                  <Laatta kuva="/lyhytvideot/kuvauspaiva-valmis.webp" korkeus="taysi">
                     <p className="laatta-kick">Kuvauspäivä</p>
                     <p className="laatta-lause suuri">
                       Yksi päivä, <b><i>useita kanavia.</i></b>

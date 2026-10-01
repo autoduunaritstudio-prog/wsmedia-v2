@@ -15288,3 +15288,24 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
 /*    Ilman sumennusta kuva paistoi korttien lapi: pinta peittavammaksi. */
 .wsx .fig.serp, .wsx .fig.ai, .wsx .kysely { background-color: rgba(16,24,33,.9) }
 .wsx .gfx-kayra { background-color: rgba(30,40,53,.82) }
+
+/* 4. TOINEN RAEKERROS (.wsx::after) ILMAN SEKOITUSTA. Kerros oli
+      mix-blend-mode: screen koko ruudun paalla. Screen harmaalla
+      kohinalla on matemaattisesti sama kuin valkoinen, jonka
+      peittavyys = kohinan kirkkaus, joten sama kohina muutetaan
+      SVG:n sisalla valkoiseksi alfakohinaksi ja sekoitus jaa pois.
+      Mitattu selaimessa pikseleittain: keskiero 0,3/255, suurin
+      2,3/255, sama keskikirkkaus. .rae (soft-light) jaa ennalleen. */
+.wsx::after {
+  mix-blend-mode: normal;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch' result='t'/><feColorMatrix in='t' type='luminanceToAlpha' color-interpolation-filters='sRGB' result='l'/><feComposite in='l' in2='t' operator='in' color-interpolation-filters='sRGB' result='la'/><feFlood flood-color='%23fff' color-interpolation-filters='sRGB'/><feComposite in2='la' operator='in' color-interpolation-filters='sRGB'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* 5. LAATTOJEN SYAANI KALVO JA KUVASUODIN PAISTETTU KUVIIN.
+      Laatan kuvassa oli suodin (saturate, contrast, brightness) ja sen
+      paalla mix-blend-mode: overlay -kalvo, molemmat lasketaan
+      liikkuvalle kuvalle joka kehys. Ne on nyt piirretty selaimessa
+      samoilla arvoilla kuviin *-valmis.webp (kartoitus, paja,
+      kuvauspaiva), joten tyyleista ne jaavat pois. */
+.wsx .laatta::before { content: none }
+.wsx .laatta img { filter: none }

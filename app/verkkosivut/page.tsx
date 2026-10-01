@@ -176,7 +176,7 @@ export default function Verkkosivut() {
                   askeleesta, joten hengahdys on sen osion edessa
                   josta se puhuu. Kick "Prosessi" jaa pois: osion
                   nimi on sivukiskossa heti taman alla. */}
-              <Laatta kuva="/verkkosivut/kartoitus.webp" korkeus="taysi">
+              <Laatta kuva="/verkkosivut/kartoitus-valmis.webp" korkeus="taysi">
                 <p className="laatta-lause suuri">
                   Et tarvitse mitään <b><i>valmiiksi.</i></b>
                 </p>
