@@ -15246,17 +15246,9 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
    nykiminen palvelusivuilla: selain laski sumennukset ja sekoitukset
    uudelleen joka kehys, koska niiden alla liikkui verkostokangas.
 
-   1. RAE: valmis kohinakuva (public/rae.png, 128 px, 19 kt) pelkalla
-      lapinakyvyydella. Ennen feTurbulence + mix-blend-mode koko ruudun
-      kerroksessa, eli koko naytto sekoitettiin joka kehys uudelleen.
-      Vinjetin voimakkuus sovitettu, koska soft-light vaimensi sita. */
-.wsx .rae {
-  mix-blend-mode: normal; opacity: 1;
-  background-image: url("/rae.png"); background-size: 128px 128px;
-}
-.wsx .rae::after {
-  background: radial-gradient(120% 90% at 50% 40%, transparent 42%, rgba(0,0,0,.16) 100%);
-}
+   1. RAE: pidetaan alkuperaisena (feTurbulence + soft-light).
+      Valmis kohinakuva muutti pinnan ilmetta selvasti, kokeiltu ja
+      peruttu 1.10.2026. */
 
 /* 2. LASIPINNAT LIIKKUVAN TAUSTAN PAALLA: sumennus pois, pinta
       peittavammaksi. Palkki on kiintea ja sen alla vierii koko sivu,
