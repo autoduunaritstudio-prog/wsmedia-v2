@@ -15195,34 +15195,36 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
 .page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin) {
   background: #172132;
 }
-/* RAITAKERROS: nakyman korkuinen, pysyy nakyman kohdalla (--ry) ja
-   kuvio on kaikilla pinnoilla samassa kohdassa (--ro), joten raidat
-   jatkuvat saumatta kun pinta nousee toisen paalle. Etukerros liikkuu
-   nopeammin kuin takakerros. Arvot: components/StudioRaidat.tsx. */
+/* TAUSTAKERROS: nakyman korkuinen, pysyy nakyman kohdalla (--ry) ja
+   on kaikilla pinnoilla samassa kohdassa (--ro), joten se jatkuu
+   saumatta kun pinta nousee toisen paalle. Arvot: StudioRaidat.tsx.
+
+   Toistuvat vinoraidat poistettu (1.10.2026): niita oli liikaa ja ne
+   kilpailivat sisallon kanssa. Tilalla on heron kiiltopyyhkaisyn
+   jatke: pehmea satiinikiilto, joka liukuu vierityksen mukana kuin
+   valo teippikalvon pinnalla, ja tummansininen valo kulmissa. */
 .page-graafinen-suunnittelu .stickysub > .cover::before,
 .page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin)::after {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 100vh;
   z-index: -1; pointer-events: none;
   transform: translate3d(0, var(--ry, 0px), 0);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 440 480'%3E%3Cg fill='%23fff' fill-opacity='.045'%3E%3Cpolygon points='0,0 70,0 301,400 231,400'/%3E%3Cpolygon points='100,0 146,0 377,400 331,400'/%3E%3Cpolygon points='176,0 202,0 433,400 407,400'/%3E%3C/g%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 440 600'%3E%3Cg fill='%23fff' fill-opacity='.022'%3E%3Cpolygon points='0,0 70,0 301,400 231,400'/%3E%3Cpolygon points='100,0 146,0 377,400 331,400'/%3E%3Cpolygon points='176,0 202,0 433,400 407,400'/%3E%3C/g%3E%3C/svg%3E"),
-    radial-gradient(ellipse 60% 55% at 80% 22%, rgba(34,62,124,.5), transparent 72%), radial-gradient(ellipse 50% 45% at 10% 85%, rgba(34,62,124,.3), transparent 72%);
-  background-repeat: repeat-y, repeat-y, no-repeat, no-repeat;
-  background-size: auto 1300px, auto 1800px, 100% 100%, 100% 100%;
-  background-position:
-    right -4% top calc(var(--gs-y, 0) * -.24px - var(--ro, 0px)),
-    left -14% top calc(var(--gs-y, 0) * -.1px - var(--ro, 0px) + 760px),
-    0 0, 0 0;
+  background-image:
+    linear-gradient(118deg,
+      transparent 0 18%,
+      rgba(150,190,255,.045) 23%, rgba(205,228,255,.095) 26%, rgba(150,190,255,.045) 29%,
+      transparent 36% 64%,
+      rgba(150,190,255,.025) 70%, rgba(205,228,255,.05) 72%, rgba(150,190,255,.025) 74%,
+      transparent 80% 100%),
+    radial-gradient(ellipse 60% 55% at 82% 18%, rgba(38,70,138,.5), transparent 72%),
+    radial-gradient(ellipse 50% 45% at 8% 88%, rgba(38,70,138,.28), transparent 72%);
+  background-repeat: repeat-x, no-repeat, no-repeat;
+  background-size: 180% 100%, 100% 100%, 100% 100%;
+  background-position: calc(var(--gs-y, 0) * -.42px) 0, 0 0, 0 0;
 }
 .page-graafinen-suunnittelu .stickysub > .cover { isolation: isolate }
-@media (max-width: 760px) {
-  .page-graafinen-suunnittelu .stickysub > .cover::before,
-  .page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin)::after { background-size: auto 820px, auto 1100px, 100% 100%, 100% 100% }
-}
 @media (prefers-reduced-motion: reduce) {
   .page-graafinen-suunnittelu .stickysub > .cover::before,
-  .page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin)::after {
-    background-position: right -4% top calc(0px - var(--ro, 0px)), left -14% top calc(760px - var(--ro, 0px)), 0 0, 0 0;
-  }
+  .page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin)::after { background-position: 0 0, 0 0, 0 0 }
 }
 /* Etusivun saanto #palvelut { padding-bottom: 0 } osui myos taman
    sivun Palvelut-osioon: kaaren lopussa viimeiset rivit jaivat
