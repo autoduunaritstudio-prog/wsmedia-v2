@@ -75,36 +75,8 @@ export default function TeippausHero() {
       return c;
     };
 
-    // torn edges
-    const rnd = (seed: number) => () => {
-      seed = (seed * 16807) % 2147483647;
-      return (seed - 1) / 2147483646;
-    };
-    const makeEdge = (n: number, seed: number, amp: number) => {
-      const r = rnd(seed);
-      const a: number[] = [];
-      let w = 0;
-      for (let i = 0; i <= n; i++) {
-        w += (r() - 0.5) * amp * 0.9;
-        w *= 0.93;
-        a.push(w + (r() - 0.5) * amp * 0.7 + (r() < 0.08 ? (r() - 0.5) * amp * 2.2 : 0));
-      }
-      return a;
-    };
-    const N = 300;
-    const eF = makeEdge(N, 11, 0.75);
-    const eS = makeEdge(N, 29, 0.5);
-    {
-      const f = q<HTMLElement>("[data-th=fringe]");
-      const st = q<HTMLElement>("[data-th=studio]");
-      const poly = (edge: number[], off: number, amp: number) => {
-        const pts = ["0% 0%", "100% 0%"];
-        for (let i = N; i >= 0; i--) pts.push(`${((i / N) * 100).toFixed(2)}% calc(100% - ${(off + edge[i] * amp).toFixed(1)}px)`);
-        return `polygon(${pts.join(",")})`;
-      };
-      f.style.clipPath = poly(eF, 6, 7);
-      st.style.clipPath = poly(eS, 20, 8);
-    }
+    /* Repeytynyt reuna on siirretty heron alareunasta coverin
+       ylareunaan, ks. RepeytyvaReuna.tsx. */
 
     // palette
     let pal = { w: "#10172a", a: "#7fe3f7", l: "#ece3d6" };
@@ -264,7 +236,18 @@ export default function TeippausHero() {
       cx.globalAlpha = 1;
     };
 
-    let p = reduce ? 1 : 0;
+    /* AIKAJANA ILMAN TYHJAA ALKUA JA LOPPUA.
+       Prototyypin aikajanalla p 0..0,08 ei tapahdu mitaan ja 0,98..1
+       vain odotetaan, mitattuna 13 % ja 10 % tyhjaa vieritysta.
+       Vieritys pr 0..1 kuvataan nyt suoraan valille 0,08..0,98, joten
+       teippaus alkaa ensimmaisesta rullan askeleesta ja kuvateksti on
+       valmis kun vieritys loppuu. Tapahtumien keskinaiset ajoitukset
+       eivat muutu, ja .meterin korkeus lyheni samassa suhteessa
+       (320vh -> 288vh vierityskaarta), joten tahti on sama. */
+    const P0 = 0.08;
+    const P1 = 0.98;
+    let pr = reduce ? 1 : 0;
+    let p = reduce ? 1 : P0;
     let mx = 0.5;
     let smx = 0.5;
     let hover = 0;
@@ -281,7 +264,10 @@ export default function TeippausHero() {
     };
     let raf = 0;
     const frame = () => {
-      if (!reduce) p = progress();
+      if (!reduce) {
+        pr = progress();
+        p = P0 + (P1 - P0) * pr;
+      }
       smx += (mx - smx) * 0.08;
       shov += (hover - shov) * 0.06;
       const pw = ease(clamp((p - 0.08) / 0.42));
@@ -373,10 +359,10 @@ export default function TeippausHero() {
       prop(pCards, (p - 0.78) / 0.12, [-10, 40, 0.9]);
       gloss.style.backgroundPosition = `${lerp(100, -50, clamp((p - 0.88) / 0.1))}% 0`;
       cap.style.opacity = String(ease(clamp((p - 0.92) / 0.06)));
-      fill.style.width = (p * 100).toFixed(2) + "%";
-      pct.textContent = Math.round(p * 100) + " %";
-      trk.style.setProperty("--idle", p > 0.03 ? "0" : "1");
-      const done = p > 0.97;
+      fill.style.width = (pr * 100).toFixed(2) + "%";
+      pct.textContent = Math.round(pr * 100) + " %";
+      trk.style.setProperty("--idle", pr > 0.03 ? "0" : "1");
+      const done = pr > 0.99;
       lbl.textContent = done ? "Valmis" : "Vieritä";
       mouse.style.opacity = done ? "0" : "1";
       raf = requestAnimationFrame(frame);
@@ -462,7 +448,6 @@ export default function TeippausHero() {
         <div className={s.meter} data-th="scrub" aria-hidden="true" />
         <div className={s.pin}>
           <div className={s.tear} aria-hidden="true">
-            <div className={s.fringe} data-th="fringe" />
             <div className={s.studio} data-th="studio">
               <svg className={`${s.slashes} ${s.s2}`} data-th="sl2" viewBox="0 0 300 400">
                 <use href="#th-bars" />
@@ -490,11 +475,6 @@ export default function TeippausHero() {
                 Laske arvio hinnasta ›
               </a>
             </div>
-            <ul className={s.facts}>
-              <li>Logo alk. 490 € + alv</li>
-              <li>Alkuperäistiedostot sinulle</li>
-              <li>Asennus koko Suomessa</li>
-            </ul>
           </div>
 
           <div className={s.stagewrap} data-th="track">

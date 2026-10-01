@@ -22,11 +22,11 @@
 }
 .root *, .root *::before, .root *::after { box-sizing: border-box }
 
-.scrub { position: relative; height: calc(420vh + 100svh); z-index: 1 }
+.scrub { position: relative; height: calc(388vh + 100svh); z-index: 1 }
 /* Sivuston yleinen osiosaanto antaa sectionille ylapaddingin. Prototyypissa
    sita ei ole, joten se nollataan tarkemmalla valitsimella. */
 .root .scrub { padding: 0; margin: 0 }
-.meter { position: absolute; left: 0; top: 0; width: 1px; height: 420vh; pointer-events: none; visibility: hidden }
+.meter { position: absolute; left: 0; top: 0; width: 1px; height: 388vh; pointer-events: none; visibility: hidden }
 .pin {
   position: sticky; top: 0; height: 100vh; height: 100svh;
   display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.08fr); align-items: center;
@@ -152,7 +152,7 @@
   .ctas { margin-top: 16px; gap: 18px }
   .btn { padding: 12px 22px; font-size: 15px }
   .link { font-size: 15px }
-  .stagewrap { height: 300vh; margin: 28px calc(-1*clamp(16px,6vw,96px)) 0 }
+  .stagewrap { height: 280vh; margin: 28px calc(-1*clamp(16px,6vw,96px)) 0 }
   .stage { position: sticky; top: calc(env(safe-area-inset-top,0px) + 76px); padding: 26px 16px 30px }
   .studio { background: linear-gradient(180deg,rgba(6,11,26,.5) 0%,transparent 30%),radial-gradient(ellipse 120% 60% at 50% 70%,#173068 0%,#0e1d40 40%,#081026 100%) }
   .scrollbar { margin-top: 30px; gap: 10px }

@@ -11,6 +11,7 @@ import { Laatta, Vaite } from "../components/Maasto";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import TeippausHero from "./components/TeippausHero";
+import RepeytyvaReuna from "./components/RepeytyvaReuna";
 import { buildJsonLd } from "./jsonld";
 import { Materiaalit, Miksi, Palvelut, Prosessi, Tiedostot } from "./sections";
 import { Alueet, Hinta, Kaytannossa, Kenelle, Tarjous } from "./sections2";
@@ -85,6 +86,8 @@ export default function GraafinenSuunnittelu() {
             paalle cover nousee, ks. globals.css. */}
         <TeippausHero />
         <div className="cover">
+          {/* Coverin ylareuna repeaa auki kuin teippi, ks. RepeytyvaReuna.tsx. */}
+          <RepeytyvaReuna />
           <NetBackdrop mount="cover" />
           <Logos />
 

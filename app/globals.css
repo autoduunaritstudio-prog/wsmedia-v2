@@ -14713,7 +14713,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    vierekkaista aluetta joissa sama kuvio on eri kirkkaudessa lukee
    rajana. Sama koskee vinjetin geometriaa ja loppuvaria.
    ================================================================== */
-.page-graafinen-suunnittelu .jakso-pari { background: #0b0f14 }
+.page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin) { background: #0b0f14 }
 .page-graafinen-suunnittelu .stickysub > .cover { background: #0b0f14 }
 .page-graafinen-suunnittelu .netbd-cover { opacity: .62 }
 .page-graafinen-suunnittelu .jakso-pari .netbd-glow,
@@ -15037,7 +15037,12 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
 .page-graafinen-suunnittelu .netbd:not(.netbd-cover) { background-color: #172132 }
 .page-graafinen-suunnittelu .pino > :first-child ~ * { background: var(--secbg, #172132) }
 .page-graafinen-suunnittelu .stickysub > .cover,
-.page-graafinen-suunnittelu .jakso-pari { background: #172132 }
+.page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin) { background: #172132 }
+/* Ketjun ensimmainen kaari (omaPohja={false}) on lapinakyva kuten
+   muilla palvelusivuilla: coverin oma verkosto jatkuu logonauhasta
+   Miksi-osioon katkeamatta. Ylla oleva pohjasaanto ilman :not()-ehtoa
+   peitti sen umpinaisella varilla, jolloin kuvio naytti loppuvan
+   heti logojen alle. */
 .page-graafinen-suunnittelu .jakso-pari .netbd-glow,
 .page-graafinen-suunnittelu .netbd-cover .netbd-glow,
 .page-graafinen-suunnittelu .netbd:not(.netbd-cover) .netbd-glow {
