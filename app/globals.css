@@ -15172,3 +15172,12 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
 @media (min-width: 901px) {
   .page-graafinen-suunnittelu .stickysub > .cover { margin-top: -100svh }
 }
+
+/* ---------- GRAAFINEN: OSIOMERKIT POIS JA TIIVIIMMAT VALIT ----------
+   Osion ylaosan "+"-merkki ja vaakaviiva (.seo-ord) pois, Tuomaksen
+   paatos 1.10.2026. Merkin oma teksti oli jo piilossa, joten
+   jaljelle jai pelkka koriste ja sen 45px:n kaista. Samalla osioiden
+   valit tiivistyvat 72px -> 40..56px. */
+.page-graafinen-suunnittelu .seo-sec > .swrap > .seo-ord { display: none }
+.page-graafinen-suunnittelu .seo-sec[id] { padding-block: clamp(40px, 5vh, 56px) }
+.page-graafinen-suunnittelu #kaytannossa.seosec { padding-block: clamp(48px, 6vh, 72px) }
