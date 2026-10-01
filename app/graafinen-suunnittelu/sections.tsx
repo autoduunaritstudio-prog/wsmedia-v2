@@ -1,72 +1,14 @@
 import type { CSSProperties } from "react";
 
-import type { ReactNode } from "react";
-
 import { Kaiku } from "../components/Maasto";
 
 import g from "./gs.module.css";
 
-/* ==================================================================
-   MERKIT JA KUVIOT
-   ==================================================================
-   Sama periaate kuin verkkosivuilla: merkki kertoo mista kohta puhuu,
-   kuvio nayttaa mekaniikan. Kuviot ovat taman sivun omia: logo ja
-   varit, teippi auton kyljessa, tarra ikkunassa ja kortit viuhkana.
-   Lampoinen (--lampo) on taman sivun palveluiden vari, syaani
-   WS Median oma. Kuviot piirtyvat --rvp:sta, eli vierityksen
-   mukana eika ajastimella. */
-const IK: Record<string, ReactNode> = {
-  kyna: (
-    <>
-      <path d="M12 3.5l6 6.5-6 10.5-6-10.5z" />
-      <circle cx="12" cy="11.2" r="1.7" />
-      <path d="M12 3.5v6" />
-    </>
-  ),
-  auto: (
-    <>
-      <path d="M2.5 16.5v-9h11v9M13.5 10.5h3.8l3.2 3.2v2.8h-7" />
-      <circle cx="6.5" cy="17.5" r="2" />
-      <circle cx="16.5" cy="17.5" r="2" />
-    </>
-  ),
-  liike: (
-    <>
-      <path d="M3.5 9.5l1.6-5h13.8l1.6 5M4.5 9.5v10h15v-10M3.5 9.5h17" />
-      <path d="M9.5 19.5v-5.5h5v5.5" />
-    </>
-  ),
-  kortit: (
-    <>
-      <rect x="3" y="8" width="13" height="9" rx="1.6" />
-      <path d="M7.5 5h11.9A1.6 1.6 0 0 1 21 6.6V14" />
-      <path d="M6 12.5h5" />
-    </>
-  ),
-  rulla: (
-    <>
-      <circle cx="8" cy="11" r="5" />
-      <circle cx="8" cy="11" r="1.6" />
-      <path d="M8 16h13" />
-    </>
-  ),
-  ok: <path d="M4.5 12.5l4.5 4.5L19.5 6.5" />,
-  kyna2: (
-    <>
-      <path d="M4.5 19.5l4-1 11-11-3-3-11 11z" />
-      <path d="M14.5 6.5l3 3" />
-    </>
-  ),
-};
-
-function Merkki({ nimi, className = "gs-ik" }: { nimi: string; className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
-      {IK[nimi]}
-    </svg>
-  );
-}
-
+/* Miksi-osion korteissa oli ikonit (rulla, ruksi, kyna), jotka eivat
+   kertoneet mitaan palvelusta. Tilalla on ketju: mita tekija hoitaa
+   neljasta vaiheesta. Segmentit ovat vinoja kuin heron WS-raidat. */
+type Taso = "on" | "osin" | "ei";
+const KETJU = ["Suunnittelu", "Tiedostot", "Tuotanto", "Asennus"];
 
 /**
  * GRAAFINEN SUUNNITTELU -SIVUN OSIOT, SIVUSTON JAETULLA KUVAKIELELLA.
@@ -92,7 +34,7 @@ function Merkki({ nimi, className = "gs-ik" }: { nimi: string; className?: strin
    .hl ja sen ylla merkki. Hintakentat jaavat pois, .hinta-f kantaa
    yhden rivin luonnehdinnan. */
 const SILTA: {
-  ik: string;
+  ketju: Taso[];
   merkki?: string;
   h: string;
   kuvaus: string;
@@ -100,7 +42,7 @@ const SILTA: {
   hl?: boolean;
 }[] = [
   {
-    ik: "rulla",
+    ketju: ["osin", "on", "on", "on"],
     h: "Teippaamo tai painotalo",
     kuvaus: "Tuottaa ja asentaa. Suunnittelu on sivutuote.",
     li: [
@@ -110,7 +52,7 @@ const SILTA: {
     ],
   },
   {
-    ik: "ok",
+    ketju: ["on", "on", "on", "on"],
     merkki: "WS Media",
     h: "Suunnittelemme ilmeen ja hoidamme tuotannon",
     kuvaus: "Suunnittelu, tuotanto ja asennus samassa tarjouksessa.",
@@ -122,7 +64,7 @@ const SILTA: {
     ],
   },
   {
-    ik: "kyna2",
+    ketju: ["on", "on", "ei", "ei"],
     h: "Mainostoimisto",
     kuvaus: "Suunnittelee. Tuotanto ja asennus jäävät sinulle.",
     li: [
@@ -155,10 +97,19 @@ export function Miksi() {
           {SILTA.map((s) => (
             <div className={s.hl ? "paketti hl" : "paketti"} key={s.h}>
               {s.merkki ? <em className="paketti-merkki">{s.merkki}</em> : null}
-              <div className="gs-otsikko">
-                <Merkki nimi={s.ik} className={s.hl ? "gs-ik gs-ik-ws" : "gs-ik"} />
-                <h3>{s.h}</h3>
-              </div>
+              <h3>{s.h}</h3>
+              <ol className={g.ketju} data-rvs="" aria-label="Mitä tekijä hoitaa">
+                {KETJU.map((v, i) => (
+                  <li key={v} data-taso={s.ketju[i]} style={{ "--j": i } as CSSProperties}>
+                    <i />
+                    <span>
+                      {v}
+                      {s.ketju[i] === "osin" ? <small>osittain</small> : null}
+                      {s.ketju[i] === "ei" ? <small className={g.sr}>, ei sisälly</small> : null}
+                    </span>
+                  </li>
+                ))}
+              </ol>
               <p className="hinta-f">{s.kuvaus}</p>
               <ul className="seo-spec">
                 {s.li.map((x) => (

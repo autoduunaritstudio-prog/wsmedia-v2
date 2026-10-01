@@ -141,3 +141,34 @@
   .yhteenveto { position: static }
   .autot { grid-template-columns: repeat(2, minmax(0, 1fr)) }
 }
+
+/* ---------- MIKSI: MITA TEKIJA HOITAA ---------- */
+.ketju {
+  list-style: none; margin: 14px 0 18px; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px;
+}
+.ketju li { min-width: 0 }
+.ketju i {
+  display: block; height: 10px; margin: 0 3px; border-radius: 2px;
+  background: rgba(255,255,255,.09); transform: skewX(-30deg);
+  position: relative; overflow: hidden;
+}
+.ketju i::after {
+  content: ""; position: absolute; inset: 0; background: var(--lampo);
+  transform-origin: 0 50%;
+  /* Vaiheet tayttyvat jarjestyksessa vierityksen mukana. */
+  transform: scaleX(clamp(0, calc(var(--rvp, 1) * 2.4 - var(--j, 0) * .32), 1));
+}
+.ketju li[data-taso="osin"] i::after {
+  background: repeating-linear-gradient(90deg, var(--lampo) 0 5px, transparent 5px 9px);
+}
+.ketju li[data-taso="ei"] i::after { display: none }
+:global(.hl) .ketju i::after { background: var(--seo-hi) }
+.ketju span {
+  display: block; margin-top: 9px; font-size: 13px; line-height: 1.3; font-weight: 600;
+  color: var(--seo-ink); overflow-wrap: anywhere;
+}
+.ketju small { display: block; font-weight: 400; color: var(--lampo); font-size: 12px }
+.ketju li[data-taso="ei"] span { color: rgba(169,184,198,.5); font-weight: 400; text-decoration: line-through }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
+@media (prefers-reduced-motion: reduce) { .ketju i::after { transform: none } }

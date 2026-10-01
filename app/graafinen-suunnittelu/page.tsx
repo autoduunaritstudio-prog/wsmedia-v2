@@ -7,7 +7,7 @@ import NetBackdrop from "../components/NetBackdrop";
 import Nav from "../components/Nav";
 import Palkki from "../components/Palkki";
 import SiteEffects from "../components/SiteEffects";
-import { Laatta, Vaite } from "../components/Maasto";
+import { Vaite } from "../components/Maasto";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import TeippausHero from "./components/TeippausHero";
@@ -125,56 +125,25 @@ export default function GraafinenSuunnittelu() {
               </Vaite>
 
               <div className="pino">
-                {/* Aineistot-osio poistettiin (Tuomaksen paatos 1.10.2026):
-                    tiedostomuodoista sovitaan asiakkaan kanssa, ja UKK
-                    vastaa omistajuuteen. Prosessi jaa kaareen yksin. */}
+                {/* B-ROLLEJA KARSITTU (1.10.2026): kolme hengahdysta
+                    perakkain tuntui kuvalta kuvan paalla. Auton laatta
+                    toisti heron pakettiautoa ja hintavaite Hinta-osiota,
+                    joten jaljella on yksi kuvallinen vaite. Aineistot-osio
+                    poistettiin samana paivana. */}
                 <Jakso>
                   <Prosessi />
+                  <Materiaalit />
+                  <Alueet />
                 </Jakso>
 
-                <div className="pino">
-                  {/* Keskimmainen hengahdys on taysi laatta, kuten
-                      lyhytvideoilla ja verkkosivuilla: vaite, laatta,
-                      vaite. */}
-                  <Laatta kuva="/graafinen-suunnittelu/pakettiauto.webp" korkeus="taysi">
-                    <p className="laatta-kick">Auton mainosteippaus</p>
-                    <p className="laatta-lause suuri">
-                      Pakettiauto ajaa <b><i>joka tapauksessa.</i></b>
-                    </p>
-                    <p className="laatta-alla">
-                      Teippauksella siitä tulee mainos, joka näkyy joka ajokilometrillä ilman erillistä mainosbudjettia.
-                    </p>
-                  </Laatta>
-
-                  <div className="pino">
-                    <Jakso>
-                      <Materiaalit />
-                      <Alueet />
-                    </Jakso>
-
-                    <div className="pino">
-                      <Vaite
-                        kuva="/graafinen-suunnittelu/luonnokset.webp"
-                        alla="Kartoitus ja tarjous ovat maksuttomia eivätkä sido mihinkään."
-                      >
-                        Logo alkaen 490 €, koko ilme <b><i>alkaen 1 490 €.</i></b>
-                      </Vaite>
-
-                      {/* SIVUN HANTA ON YKSI PINTA, ks. kolme muuta
-                          palvelusivua. Vierekkaiset kerrokset ovat aina
-                          kaksi eri kuviota, ja raja niiden valissa
-                          nakyy vaikka vari olisi sama. Yksi kaare, yksi
-                          kerros, viisi osiota sen sisalla. */}
-                      <Jakso>
-                        <Hinta />
-                        <Kenelle />
-                        <Ukk />
-                        <Kaytannossa />
-                        <Tarjous />
-                      </Jakso>
-                    </div>
-                  </div>
-                </div>
+                {/* Sivun hanta on yksi pinta, joka nousee edellisen paalle. */}
+                <Jakso>
+                  <Hinta />
+                  <Kenelle />
+                  <Ukk />
+                  <Kaytannossa />
+                  <Tarjous />
+                </Jakso>
               </div>
             </div>
           </div>

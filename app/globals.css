@@ -15181,3 +15181,26 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
 .page-graafinen-suunnittelu .seo-sec > .swrap > .seo-ord { display: none }
 .page-graafinen-suunnittelu .seo-sec[id] { padding-block: clamp(40px, 5vh, 56px) }
 .page-graafinen-suunnittelu #kaytannossa.seosec { padding-block: clamp(48px, 6vh, 72px) }
+
+
+/* ==================================================================
+   GRAAFINEN SUUNNITTELU: HERON STUDIOTAUSTA JATKUU KOKO SIVULLE
+   ==================================================================
+   Verkostokuvio on kolmella muulla palvelusivulla, ja sama kuvio
+   joka sivulla sai sivut toistamaan toisiaan. Tama sivu jatkaa
+   heron omaa studiotaustaa: tummansininen valo ja WS-merkin
+   vinoraidat jokaisella pinnalla. Verkosto pois vain talta sivulta. */
+.page-graafinen-suunnittelu .netbd { display: none }
+.page-graafinen-suunnittelu .stickysub > .cover,
+.page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin) {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 440 400' preserveAspectRatio='xMaxYMin meet'%3E%3Cg fill='%23fff' fill-opacity='.04'%3E%3Cpolygon points='0,0 70,0 301,400 231,400'/%3E%3Cpolygon points='100,0 146,0 377,400 331,400'/%3E%3Cpolygon points='176,0 202,0 433,400 407,400'/%3E%3C/g%3E%3C/svg%3E") no-repeat right -6% top -4% / auto min(120vh, 1080px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 440 400'%3E%3Cg fill='%23fff' fill-opacity='.022'%3E%3Cpolygon points='0,0 70,0 301,400 231,400'/%3E%3Cpolygon points='100,0 146,0 377,400 331,400'/%3E%3Cpolygon points='176,0 202,0 433,400 407,400'/%3E%3C/g%3E%3C/svg%3E") no-repeat left -22% top 62% / auto min(160vh, 1500px),
+    radial-gradient(ellipse 55% 42% at 82% 16%, rgba(34,62,124,.55), transparent 72%),
+    radial-gradient(ellipse 45% 36% at 8% 72%, rgba(34,62,124,.32), transparent 72%),
+    #172132;
+}
+/* Etusivun saanto #palvelut { padding-bottom: 0 } osui myos taman
+   sivun Palvelut-osioon: kaaren lopussa viimeiset rivit jaivat
+   kehotuspalkin alle, kun seuraava pinta nousi paalle. */
+.page-graafinen-suunnittelu #palvelut.seo-sec { padding-bottom: clamp(110px, 15vh, 150px) }
