@@ -12,6 +12,7 @@ import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import TeippausHero from "./components/TeippausHero";
 import RepeytyvaReuna from "./components/RepeytyvaReuna";
+import StudioRaidat from "./components/StudioRaidat";
 import { buildJsonLd } from "./jsonld";
 import { Materiaalit, Miksi, Palvelut, Prosessi } from "./sections";
 import { Alueet, Hinta, Kaytannossa, Kenelle, Tarjous } from "./sections2";
@@ -163,6 +164,7 @@ export default function GraafinenSuunnittelu() {
         nappi="Pyydä tarjous"
       />
       <SiteEffects />
+      <StudioRaidat />
     </div>
   );
 }

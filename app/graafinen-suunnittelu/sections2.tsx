@@ -20,7 +20,7 @@ export function Hinta() {
           <span>Hinta</span>
           <i>Avaimet käteen · ei aloitusmaksua</i>
         </div>
-        <h2 className="seo-h2 rv">Paljonko graafinen suunnittelu maksaa?</h2>
+        <h2 className="seo-h2 rv">Paljonko graafinen suunnittelu <span className="mark">maksaa?</span></h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
           Hinta riippuu siitä, mitä kaikkea tarvitset. Valitse kohteet, niin näet suuruusluokan
           heti.

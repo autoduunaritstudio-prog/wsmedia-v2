@@ -10,7 +10,7 @@
 }
 .palvelu { min-width: 0 }
 .kuva {
-  position: relative; margin: 0 0 22px; aspect-ratio: 16 / 10;
+  position: relative; margin: 0; aspect-ratio: 16 / 10;
   border-radius: 16px; overflow: hidden; background: #0b0f14;
   box-shadow: 0 30px 60px -30px rgba(0,0,0,.7);
 }
@@ -172,3 +172,25 @@
 .ketju li[data-taso="ei"] span { color: rgba(169,184,198,.5); font-weight: 400; text-decoration: line-through }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
 @media (prefers-reduced-motion: reduce) { .ketju i::after { transform: none } }
+
+/* ---------- PALVELUT: LEIKKAUSMERKIT ----------
+   Painoarkin kulmamerkit kuvan ymparilla: painotuotteen kieli, ei
+   koriste. Merkit asettuvat kuvan kulmiin vierityksen mukana. */
+.raami { position: relative; margin: 0 0 22px }
+.rajat {
+  --c: rgba(244,247,250,.5); --g: 14px; --l: 10px;
+  position: absolute; inset: calc(var(--g) * -1); pointer-events: none;
+  background:
+    linear-gradient(var(--c), var(--c)) 0 var(--g) / var(--l) 1px,
+    linear-gradient(var(--c), var(--c)) var(--g) 0 / 1px var(--l),
+    linear-gradient(var(--c), var(--c)) 100% var(--g) / var(--l) 1px,
+    linear-gradient(var(--c), var(--c)) calc(100% - var(--g)) 0 / 1px var(--l),
+    linear-gradient(var(--c), var(--c)) 0 calc(100% - var(--g)) / var(--l) 1px,
+    linear-gradient(var(--c), var(--c)) var(--g) 100% / 1px var(--l),
+    linear-gradient(var(--c), var(--c)) 100% calc(100% - var(--g)) / var(--l) 1px,
+    linear-gradient(var(--c), var(--c)) calc(100% - var(--g)) 100% / 1px var(--l);
+  background-repeat: no-repeat;
+  opacity: clamp(0, calc(var(--rvp, 1) * 2.2 - .5), 1);
+  scale: calc(1.05 - clamp(0, calc(var(--rvp, 1) * 1.6), 1) * .05);
+}
+@media (prefers-reduced-motion: reduce) { .rajat { opacity: 1; scale: 1 } }
