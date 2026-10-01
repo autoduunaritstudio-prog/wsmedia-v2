@@ -67,6 +67,11 @@
     radial-gradient(ellipse 60% 75% at 74% 46%,#173068 0%,#0e1d40 38%,#0a1430 70%,#081026 100%);
 }
 .slashes { position: absolute; right: -6%; top: -14%; height: 128%; width: auto; color: #ffffff; opacity: .035; will-change: transform }
+/* Vinoraitojen polygonit jatkuvat viewBoxin oikean reunan yli (x 433 / 300).
+   SVG rajasi ne reunaansa, ja vasemman kerroksen reuna osui auton
+   vasemmalle puolelle pystysuorana tummana rajana. Raidat saavat jatkua,
+   .studio rajaa kokonaisuuden. */
+.slashes { overflow: visible }
 .slashes.s2 { right: auto; left: -18%; top: -30%; height: 160%; opacity: .02 }
 
 .stagewrap { min-width: 0; position: relative; z-index: 1 }
