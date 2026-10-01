@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { peilaaKankaalle } from "./videokangas";
+import { onKevyt } from "./kevyttila";
 
 /**
  * PUHELINMOCKUP JOSSA ON AITO VIDEO JA INSTAGRAM REELS -KAYTTOLIITTYMA.
@@ -64,6 +65,8 @@ type Props = {
   shares: [number, number];
   /** Vain tiktok-variantissa: tallennusten maara. */
   saves?: [number, number];
+  /** Sivupuhelin: kevyessa tilassa (hidas laite) nayttaa pysakuvan. */
+  toissijainen?: boolean;
 };
 
 export default function PhoneReel({
@@ -80,6 +83,7 @@ export default function PhoneReel({
   comments,
   shares,
   saves,
+  toissijainen = false,
 }: Props) {
   const vid = useRef<HTMLVideoElement>(null);
   const prg = useRef<HTMLElement>(null);
@@ -130,7 +134,7 @@ export default function PhoneReel({
     let peitossa = false;
     const cover = v.closest(".stickysub")?.querySelector<HTMLElement>(":scope > .cover") ?? null;
     const paivita = () => {
-      if (nakyy && !peitossa && !document.hidden) {
+      if (nakyy && !peitossa && !document.hidden && !(toissijainen && onKevyt())) {
         void v.play().then(
           () => setPlaying(true),
           () => setPlaying(false),
@@ -165,7 +169,9 @@ export default function PhoneReel({
       : null;
     if (cover && ioPeitto) ioPeitto.observe(cover);
     document.addEventListener("visibilitychange", paivita);
+    window.addEventListener("ws-kevyt", paivita);
     return () => {
+      window.removeEventListener("ws-kevyt", paivita);
       io.disconnect();
       ioPeitto?.disconnect();
       document.removeEventListener("visibilitychange", paivita);

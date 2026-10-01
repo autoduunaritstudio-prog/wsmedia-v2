@@ -80,6 +80,7 @@ export default function Hero() {
         </div>
         <PhoneReel
           className="p2"
+          toissijainen
           depth={26}
           variant="tiktok"
           src="/hero/laaksolahti-hero.mp4"
@@ -111,6 +112,7 @@ export default function Hero() {
         />
         <PhoneReel
           className="p3"
+          toissijainen
           depth={34}
           src="/hero/vauhtiveikot-hero.mp4"
           poster="/hero/vauhtiveikot-hero.webp"

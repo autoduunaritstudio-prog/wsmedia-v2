@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import { easeOutCubic, formatCount, parseCount } from "./count-format";
 import { tauotaPiilossa } from "./animaatiotauko";
+import { mittaaLaite } from "./kevyttila";
 
 /**
  * Sivun skrolli- ja osoitinsidonnaiset efektit yhdessä paikassa.
@@ -21,6 +22,7 @@ export default function SiteEffects() {
     const ac = new AbortController();
     const { signal } = ac;
     const puraTauko = tauotaPiilossa();
+    const puraMittaus = mittaaLaite();
 
     /* PALJASTUKSEN OLETUS ON NAKYVA, ei piilotettu.
      *
@@ -1604,6 +1606,7 @@ export default function SiteEffects() {
       refRo?.disconnect();
       ac.abort();
       puraTauko();
+      puraMittaus();
       heroRo?.disconnect();
       ro?.disconnect();
       io.disconnect();

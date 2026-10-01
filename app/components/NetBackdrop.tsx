@@ -417,7 +417,8 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
       /* 30 FPS:N KATTO MYOS VIERITTAESSA (1.10.2026). Verkosto liikkuu
          hitaasti, joten 30 kuvaa sekunnissa nayttaa samalta, ja piirto
          puolittuu juuri silloin kun selain tarvitsee aikaa vieritykseen. */
-      if (now - viimeksiPiirretty < 32) return;
+      /* Kevyessa tilassa (hidas laite, ks. kevyttila.ts) 15 fps. */
+      if (now - viimeksiPiirretty < (document.documentElement.dataset.kevyt === "1" ? 64 : 32)) return;
       viimeksiPiirretty = now;
       /* Absoluuttinen aika, ei kertyma: ks. tyypin P kommentti. Sama
          luku jokaiselle ilmentymalle samassa kehyksessa. */
