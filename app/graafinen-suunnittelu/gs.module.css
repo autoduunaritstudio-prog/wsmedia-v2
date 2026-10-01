@@ -23,7 +23,7 @@
 .hinta {
   position: absolute; left: 14px; bottom: 14px; max-width: calc(100% - 28px);
   padding: 8px 14px; border-radius: 999px;
-  background: rgba(11,15,20,.78); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  background: rgba(11,15,20,.86);
   color: #f4f7fa; font-size: 14px; font-weight: 600; line-height: 1.35;
   border: 1px solid rgba(232,165,74,.45);
 }

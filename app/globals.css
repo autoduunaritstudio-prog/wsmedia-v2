@@ -15237,3 +15237,62 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
 .page-graafinen-suunnittelu .jakso-pari:not(.jakso-avoin) > .seo-sec:first-of-type {
   padding-top: clamp(96px, 14vh, 150px);
 }
+
+
+/* ==================================================================
+   KEVYEMMAT TEHOSTEET, 1.10.2026
+   ==================================================================
+   Sama ulkonako, vahemman laskentaa joka kehys. Taustalla Edgen
+   nykiminen palvelusivuilla: selain laski sumennukset ja sekoitukset
+   uudelleen joka kehys, koska niiden alla liikkui verkostokangas.
+
+   1. RAE: valmis kohinakuva (public/rae.png, 128 px, 19 kt) pelkalla
+      lapinakyvyydella. Ennen feTurbulence + mix-blend-mode koko ruudun
+      kerroksessa, eli koko naytto sekoitettiin joka kehys uudelleen.
+      Vinjetin voimakkuus sovitettu, koska soft-light vaimensi sita. */
+.wsx .rae {
+  mix-blend-mode: normal; opacity: 1;
+  background-image: url("/rae.png"); background-size: 128px 128px;
+}
+.wsx .rae::after {
+  background: radial-gradient(120% 90% at 50% 40%, transparent 42%, rgba(0,0,0,.16) 100%);
+}
+
+/* 2. LASIPINNAT LIIKKUVAN TAUSTAN PAALLA: sumennus pois, pinta
+      peittavammaksi. Palkki on kiintea ja sen alla vierii koko sivu,
+      footerin ja korttien alla elava verkosto. */
+.cta-palkki { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(13,18,26,.95) }
+.wsx footer, .wsx .svc-txt, .wsx .statband, .wsx .chip-f,
+.wsx .gfx-kayra, .wsx .kysely, .wsx .fig.serp, .wsx .fig.ai {
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+
+/* 3. HEHKUT: sade kiinteaksi. Ennen sade laskettiin --p2:sta, eli
+      kolmen kerroksen drop-shadow laskettiin uudelleen joka
+      vierityskehys. Lopputila on sama kuin ennen (--p2 = 1). */
+.page-lyhytvideot .lv-k .wp-line,
+.page-lyhytvideot .lv-k .wp-line3 {
+  filter: drop-shadow(0 0 2px rgba(var(--kaaviohi),.6)) drop-shadow(0 0 7px rgba(var(--kaaviohi),.26));
+}
+.page-lyhytvideot .lv-k .wp-cols u { filter: drop-shadow(0 0 5px rgba(var(--kaaviohi),.3)) }
+.page-lyhytvideot .lv-k .wp-cols rect { filter: drop-shadow(0 0 6px rgba(111,236,255,.35)) }
+.wsx .km-viiva.km-kirkas,
+.wsx .km-kehys.km-vahva { filter: drop-shadow(0 0 6px rgba(111,236,255,.5)) }
+
+/*    Kaiun hohto leivottu viivan vareihin: drop-shadow ylisuuren
+      liikkuvan sanan ymparilla oli sivun raskain yksittainen suodin. */
+.page-verkkosivut .seo-sec .kaiku.vas,
+.page-graafinen-suunnittelu .seo-sec .kaiku.vas,
+.page-verkkosivut .seo-sec .kaiku.oik,
+.page-graafinen-suunnittelu .seo-sec .kaiku.oik {
+  filter: none;
+  -webkit-text-stroke-color: rgba(111,236,255,.17);
+}
+
+/*    Sumennus pois sateittaisista liukuvareista: liukuvari on jo
+      pehmea, ja blur sen paalla laski saman asian uudelleen. */
+.wsx .porras-merkki::after { filter: none; inset: -45% -30% }
+.page-lyhytvideot .lv-taus::before { filter: none }
+/*    Ilman sumennusta kuva paistoi korttien lapi: pinta peittavammaksi. */
+.wsx .fig.serp, .wsx .fig.ai, .wsx .kysely { background-color: rgba(16,24,33,.9) }
+.wsx .gfx-kayra { background-color: rgba(30,40,53,.82) }

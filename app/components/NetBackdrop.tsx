@@ -380,7 +380,6 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
 
     let raf = 0;
     let prev = 0;
-    let edellinenKohde = -1;
     let viimeksiPiirretty = 0;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
@@ -412,9 +411,13 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
         viimeksiPiirretty = 0;
         return;
       }
-      const liikkuu = Math.abs(target - sp) > 1e-5 || target !== edellinenKohde;
-      edellinenKohde = target;
-      if (!liikkuu && now - viimeksiPiirretty < 32) return;
+      /* Piilotettu kangas (display: none, esim. graafisen suunnittelun
+         sivu) on 0 px leveä: ei piirtoa. */
+      if (w === 0) return;
+      /* 30 FPS:N KATTO MYOS VIERITTAESSA (1.10.2026). Verkosto liikkuu
+         hitaasti, joten 30 kuvaa sekunnissa nayttaa samalta, ja piirto
+         puolittuu juuri silloin kun selain tarvitsee aikaa vieritykseen. */
+      if (now - viimeksiPiirretty < 32) return;
       viimeksiPiirretty = now;
       /* Absoluuttinen aika, ei kertyma: ks. tyypin P kommentti. Sama
          luku jokaiselle ilmentymalle samassa kehyksessa. */
