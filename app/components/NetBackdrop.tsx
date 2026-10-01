@@ -78,6 +78,13 @@ const PAN_X = 220;
    HeroScrubissa: raaka scrollY tulee epatasaisina askelina, ja
    jatkuvana taustana se nakyisi nykimisena. */
 const SCROLL_TAU = 0.12;
+/* VERKOSTO KUVANA (1.10.2026, kokeilu). Kentta piirretaan KERRAN
+   nakymaa isompaan kankaaseen, ja vieritys vain liu'uttaa kangasta
+   CSS-transformilla. Liu'utus on naytonohjaimen tyota eika maksa
+   paasaikeessa mitaan, joten hitaallakin koneella vieritys ei odota
+   verkoston piirtoa. Hinta: pisteet eivat ajelehdi toisiinsa nahden,
+   verkosto liikkuu yhtena kappaleena. false palauttaa elavan version. */
+const KUVANA = true;
 
 /* KAIKKI KERROKSET PIIRTAVAT SAMAN KENTAN.
    Sivulla on useita ilmentymia: yksi sivutason kerros ja yksi jokaista
@@ -213,11 +220,26 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
     const size = () => {
       readColors();
       dpr = Math.min(window.devicePixelRatio || 1, DPR_MAX);
-      w = cv.clientWidth;
-      h = cv.clientHeight;
+      if (KUVANA) {
+        const isanta = cv.parentElement;
+        w = isanta ? isanta.clientWidth : cv.clientWidth;
+        h = isanta ? isanta.clientHeight : cv.clientHeight;
+        isanta?.classList.add("netbd-kuva");
+      } else {
+        w = cv.clientWidth;
+        h = cv.clientHeight;
+      }
       fh = h + PAN_Y;
-      cv.width = Math.round(w * dpr);
-      cv.height = Math.round(h * dpr);
+      if (KUVANA) {
+        cv.width = Math.round((w + PAN_X) * dpr);
+        cv.height = Math.round(fh * dpr);
+        cv.style.width = `${w + PAN_X}px`;
+        cv.style.height = `${fh}px`;
+        kuvaPiirretty = false;
+      } else {
+        cv.width = Math.round(w * dpr);
+        cv.height = Math.round(h * dpr);
+      }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const n = Math.min(Math.round((w * fh) / DENSITY), MAX_POINTS);
       // Pisteet luodaan uudelleen vain jos maara muuttuu: pelkka ikkunan
@@ -233,6 +255,12 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
         }));
         px = new Float64Array(n);
         py = new Float64Array(n);
+      }
+      if (KUVANA && w > 0) {
+        draw(0);
+        kuvaPiirretty = true;
+        const q = progress();
+        cv.style.transform = `translate3d(${-(Math.sin(q * Math.PI) * PAN_X)}px, ${-(q * PAN_Y)}px, 0)`;
       }
     };
 
@@ -286,8 +314,11 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
       }
     };
 
+    let kuvaPiirretty = false;
+    let edOx = NaN;
+    let edOy = NaN;
     const draw = (t: number) => {
-      ctx.clearRect(0, 0, w, h);
+      ctx.clearRect(0, 0, KUVANA ? w + PAN_X : w, KUVANA ? fh : h);
       // Kimpoaminen reunoista, ei kierratysta: kierratys saa pisteen
       // ilmestymaan yhtakkia vastakkaiselle laidalle keskelle omaa
       // viivaverkkoaan. Rajat ovat KENTAN rajat, eivat nakyman.
@@ -299,8 +330,8 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
       // Kameran sijainti kentassa. Pystysuunta seuraa vieritysta suoraan;
       // vaakasuunta kulkee saman etenemän yli mutta puolikkaan jaksoa
       // eri vaiheessa (sini), jolloin nousu ei ole tasan suora.
-      const ox = -(Math.sin(sp * Math.PI) * PAN_X);
-      const oy = -(sp * PAN_Y);
+      const ox = KUVANA ? 0 : -(Math.sin(sp * Math.PI) * PAN_X);
+      const oy = KUVANA ? 0 : -(sp * PAN_Y);
       /* KENTTA ON NAKYMAN KOORDINAATEISSA, EI KANKAAN.
          Sivutason kerros on fixed eli sen ylareuna on aina nakyman
          ylareunassa. Peittavan vaiheen kerros on sticky osionsa
@@ -418,6 +449,20 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
          hitaasti, joten 30 kuvaa sekunnissa nayttaa samalta, ja piirto
          puolittuu juuri silloin kun selain tarvitsee aikaa vieritykseen. */
       /* Kevyessa tilassa (hidas laite, ks. kevyttila.ts) 15 fps. */
+      if (KUVANA) {
+        if (!kuvaPiirretty) {
+          draw(0);
+          kuvaPiirretty = true;
+        }
+        const ox = Math.round(-(Math.sin(sp * Math.PI) * PAN_X) * 10) / 10;
+        const oy = Math.round(-(sp * PAN_Y) * 10) / 10;
+        if (ox !== edOx || oy !== edOy) {
+          edOx = ox;
+          edOy = oy;
+          cv.style.transform = `translate3d(${ox}px, ${oy}px, 0)`;
+        }
+        return;
+      }
       if (now - viimeksiPiirretty < (document.documentElement.dataset.kevyt === "1" ? 64 : 32)) return;
       viimeksiPiirretty = now;
       /* Absoluuttinen aika, ei kertyma: ks. tyypin P kommentti. Sama

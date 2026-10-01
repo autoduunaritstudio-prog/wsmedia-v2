@@ -15309,3 +15309,8 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
       kuvauspaiva), joten tyyleista ne jaavat pois. */
 .wsx .laatta::before { content: none }
 .wsx .laatta img { filter: none }
+
+/* Verkosto kuvana, ks. NetBackdrop.tsx KUVANA: kangas on nakymaa
+   isompi ja liukuu transformilla, kerros rajaa sen. */
+.netbd.netbd-kuva { overflow: hidden }
+.netbd.netbd-kuva canvas { position: absolute; left: 0; top: 0; will-change: transform }
