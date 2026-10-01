@@ -409,7 +409,11 @@ export default function TeippausHero() {
             <polygon points="320,0 414,163 537,164 517,199 435,199 516,341 652,107 464,107 437,61 679,60 714,1" />
           </g>
         </symbol>
-        <symbol id="th-bars" viewBox="0 0 300 400">
+        {/* overflow visible: raitojen polygonit jatkuvat viewBoxin yli
+            (x 433). Symboli rajaa oletuksena omaan ruutuunsa, ja taustan
+            vasen raitakerros katkesi siksi pystysuoraan auton vasemmalla
+            puolella. Kortit ja roll-up rajaavat raidat omilla reunoillaan. */}
+        <symbol id="th-bars" viewBox="0 0 300 400" overflow="visible">
           <g fill="currentColor">
             <polygon points="0,0 70,0 301,400 231,400" />
             <polygon points="100,0 146,0 377,400 331,400" />
