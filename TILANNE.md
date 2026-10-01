@@ -164,6 +164,12 @@ CSS globals.css:n lopussa: `html.lenis-smooth { scroll-behavior: auto !important
 
 Mitään pakollista ei ole kesken. Alla olevat ovat avoimia päätöksiä ja siivousta, tärkein ensin.
 
+### 0. Edge: palvelusivut raskaita ja CTA-palkki välkkyy (avoin, 1.10.2026)
+
+Julkaistulla sivulla (wsmedia-v2.vercel.app) kaikki palvelusivut pyörivät Edgessä raskaasti ja CTA-palkki välkkyy. Chromessa ja Safarissa kaikki toimii. Epäily: Edgen "Enhance your security on the web" (Balanced) ajaa JavaScriptin ilman JIT:iä harvoin käydyillä sivuilla. Tuomas ei löytänyt asetusta suomenkielisestä Edgestä, tarkistus kesken: osoiterivin "Added security" -merkintä tai Asetukset > Privacy, search, and services > Security. Jos syy varmistuu, kevennetään vieritysskriptit (SiteEffects, teippaus-heron canvas) niin että ne toimivat myös ilman JIT:iä. Muuten mitataan Edgellä Tuomaksen koneella.
+
+Graafisen suunnittelun sivun muutokset 1.10. iltapäivältä ovat paikallisia committeja, push vasta kun palvelusivut ovat valmiit.
+
 ### 1. (Tehty) Lyhytvideoiden hinnat
 
 Sivulla näkyy yhä `[HINTA]` ja `[X]` -paikanpitäjiä (`app/lyhytvideot/components/sections2.tsx`, yhdeksän kohtaa), mutta **rakenteisessa datassa on jo oikeat hinnat** (`app/lyhytvideot/structured-data.ts`: 1500 ja 2200 euroa). Google saa siis hinnat joita sivulla ei näy. Tämä on sekä asiavirhe että riski rikkinäisestä rikastetusta hakutuloksesta.
