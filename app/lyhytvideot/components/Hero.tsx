@@ -58,26 +58,6 @@ export default function Hero() {
           id="stage"
           aria-label="Esimerkkejä WS Median tuottamista lyhytvideoista"
         >
-        <div className="chip-f cf1">
-          <em>▲</em>
-          <span>
-            1,7 milj.<small>katselukertaa</small>
-          </span>
-        </div>
-        {/* cf2 oikealle, cf3 vasemmalle - ks. .stickysub .stage .cfN
-            globals.css:ssa. Jarjestys DOMissa ei ohjaa sijaintia. */}
-        <div className="chip-f cf2">
-          <em>✓</em>
-          <span>
-            Toimitettu<small>7 päivässä</small>
-          </span>
-        </div>
-        <div className="chip-f cf3">
-          <em>▲</em>
-          <span>
-            1 milj.<small>katselua 3 kuukaudessa</small>
-          </span>
-        </div>
         <PhoneReel
           className="p2"
           toissijainen

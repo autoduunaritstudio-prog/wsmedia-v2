@@ -23,26 +23,28 @@ type VsRow = {
 export const ICONS: Record<string, ReactNode> = {
   haku: (
     <>
-      <circle cx="10.5" cy="10.5" r="6.5" />
-      <path d="M15.4 15.4 21 21" />
+      <circle cx="11" cy="11" r="7" />
+      <path d="M20 20l-3.5-3.5" />
     </>
   ),
   lomake: (
     <>
-      <path d="M4 5.5h16v10.5H10.5L6.5 19v-3H4z" />
-      <path d="M8 9.5h8M8 12.5h4.5" />
+      <path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+      <path d="M8 9h8M8 13h5" />
     </>
   ),
   nopeus: (
     <>
-      <rect x="7" y="2.8" width="10" height="18.4" rx="2.4" />
-      <path d="M12 7.4v3.6l2.3 1.6" />
+      <rect x="7" y="2" width="10" height="20" rx="2.5" />
+      <path d="M11 18h2" />
     </>
   ),
   ilme: (
     <>
-      <rect x="3.2" y="4.6" width="17.6" height="14.8" rx="2.2" />
-      <path d="M3.2 9.2h17.6M6.6 6.9h.01M9.2 6.9h.01" />
+      <circle cx="13.5" cy="7" r="1.5" />
+      <circle cx="7.5" cy="11" r="1.5" />
+      <circle cx="9" cy="17" r="1.5" />
+      <path d="M12 3a9 9 0 100 18c1.5 0 2-1 1.6-2.2-.4-1.3.5-2.3 1.9-2.3H18a3 3 0 003-3A9 9 0 0012 3z" />
     </>
   ),
 };

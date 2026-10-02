@@ -129,11 +129,11 @@ export default function Latausruutu({ video }: Props) {
     const odotettavat = new Set<string>();
     let painoYht = 0;
     let painoValmis = 0;
-    let loppuun = false;
+    let kaikkiValmiina = false;
     const valmis = (nimi: string) => {
       if (!odotettavat.delete(nimi)) return;
       painoValmis += PAINO[nimi];
-      if (odotettavat.size === 0) loppuun = true;
+      if (odotettavat.size === 0) kaikkiValmiina = true;
     };
     const odota = (nimi: string) => {
       odotettavat.add(nimi);
@@ -161,57 +161,96 @@ export default function Latausruutu({ video }: Props) {
     };
 
     const todellinen = () => {
-      if (loppuun) return 1;
+      if (kaikkiValmiina) return 1;
       return (painoValmis + PAINO.video * videoOsuus()) / painoYht;
     };
 
-    /* Aloitusarvo: ennen skriptin kaynnistymista CSS on jo kuljettanut
-       palkkia (lataus-palkki-animaatio, transformilla eli kompositorissa,
-       joten se liikkuu vaikka paasaie on varattu). Jatketaan siita,
-       ettei palkki hyppaa taaksepain. */
-    let nakyva = 0;
-    let hiipima = 0;
+    /* PALKKI LIIKKUU KOMPOSITORISSA KOKO AJAN (2.10.2026).
+       Ennen skriptia palkkia kuljettaa CSS-animaatio (lataus-palkki).
+       Skriptin otettua ohjat palkkia liikutetaan Web Animations
+       -rajapinnalla (element.animate), joka ajetaan sekin kompositorissa:
+       mitattuna 4x hidastuksella paasaikeella kirjoitettu palkki seisoi
+       sekunteja kerrallaan, koska sivun kaynnistys varasi paasaikeen.
+
+       Liike on aina "nykyisesta kohdasta tavoitteeseen" -animaatio:
+         - todellinen edistyminen kasvaa -> uusi animaatio sinne
+           (0,5 s + 1,4 s kertaa matka) ja sen jalkeen hidas hiipiminen kohti 90 %:a (12 s), joten palkki
+           ei pysahdy vaikka mitaan ei valmistuisi;
+         - kaikki valmista (tai katto) -> loppuunajo pehmealla
+           kiihdytyksella ja jarrutuksella, kesto 0,7..1,3 s jaljella olevan
+           matkan mukaan (Tuomaksen palaute: loppu oli liian terava).
+       Logon taytto (maski) ei voi liikkua kompositorissa; se luetaan
+       palkista joka kehys aina kun paasaie ehtii. */
     const palkki = el?.querySelector<HTMLElement>(".hero-load-bar") ?? null;
-    if (palkki) {
+    const nykyinen = (): number => {
+      if (!palkki) return 0;
       const m = /matrix\(([-\d.e]+)/.exec(getComputedStyle(palkki).transform);
-      const alku = m ? parseFloat(m[1]) : 0;
-      if (alku > 0) nakyva = hiipima = Math.min(alku, 0.7);
-    }
-    const kirjoita = () => {
-      el?.style.setProperty("--hero-load-p", `${(nakyva * 100).toFixed(2)}%`);
-      if (palkki) palkki.style.transform = `scaleX(${nakyva.toFixed(4)})`;
+      return m ? Math.min(Math.max(parseFloat(m[1]), 0), 1) : 0;
     };
-    /* Arvo ensin, luokka sitten: muuten yhden kehyksen ajan palkki
-       palaisi nollaan. */
-    kirjoita();
+    let anim: Animation | null = null;
+    const HIIPIMINEN_MS = 12000;
+    const kohti = (tavoite: number) => {
+      if (!palkki || typeof palkki.animate !== "function") return;
+      const v = nykyinen();
+      const g = Math.max(tavoite, v);
+      const katto = Math.max(0.9, g);
+      /* Nousun kesto matkan mukaan: iso harppaus (video valmistui) kestaa
+         pidempaan eika nayta hypylta. */
+      const nousu = 500 + 1400 * (g - v);
+      const uusi = palkki.animate(
+        [
+          { transform: `scaleX(${v})`, easing: "cubic-bezier(.4,0,.3,1)" },
+          { transform: `scaleX(${g})`, offset: nousu / (nousu + HIIPIMINEN_MS), easing: "cubic-bezier(.2,.5,.3,1)" },
+          { transform: `scaleX(${katto})` },
+        ],
+        { duration: nousu + HIIPIMINEN_MS, fill: "forwards" },
+      );
+      anim?.cancel();
+      anim = uusi;
+    };
+    let auennut = false;
+    let raf = 0;
+    let kiinni = false;
+    const loppuun = () => {
+      if (auennut) return;
+      auennut = true;
+      window.clearTimeout(katto);
+      if (!palkki || typeof palkki.animate !== "function") { avaa(); return; }
+      const v = nykyinen();
+      const uusi = palkki.animate([{ transform: `scaleX(${v})` }, { transform: "scaleX(1)" }], {
+        duration: 700 + 600 * (1 - v),
+        easing: "cubic-bezier(.65,0,.35,1)",
+        fill: "forwards",
+      });
+      anim?.cancel();
+      anim = uusi;
+      uusi.onfinish = () => {
+        /* Kehyssilmukka pois: palkki on taynna eika sita enaa lueta. */
+        kiinni = true;
+        cancelAnimationFrame(raf);
+        el?.style.setProperty("--hero-load-p", "100%");
+        avaa();
+      };
+    };
+
+    /* Ohjat skriptille: animaatio jatkaa siita mihin CSS ehti, ja vasta
+       sitten CSS-animaatio pois (.lataus-js), ettei palkki hyppaa. */
+    kohti(0);
     el?.classList.add("lataus-js");
 
-    let raf = 0;
-    let ed = 0;
-    const kehys = (t: number) => {
-      const dt = ed ? Math.min((t - ed) / 1000, 0.1) : 0;
-      ed = t;
+    /* EDISTYMINEN. Todellinen osuus: fontit 15 %, tausta 25 %, video 60 %
+       (videon osuus kasvaa sita mukaa kuin dataa tulee), joten nopealla
+       yhteydella palkki etenee nopeasti ja hitaalla hitaasti. */
+    let edTavoite = 0;
+    const kehys = () => {
       const tod = todellinen();
-      hiipima = Math.max(hiipima + dt * 0.14 * Math.max(0, 0.9 - hiipima), tod * 0.9);
-      const tavoite = loppuun ? 1 : Math.max(tod, hiipima);
-      /* Kohti tavoitetta noin 0,2 s:n aikavakiolla; loppuunajo nopeammin. */
-      const tau = loppuun ? 0.2 : 0.3;
-      /* Nopeuskatto 1,5 palkkia sekunnissa: kun video valmistuu kerralla,
-         palkki pyyhkaisee loppuun eika hyppaa. */
-      const askel = (tavoite - nakyva) * (1 - Math.exp(-dt / tau));
-      nakyva += Math.min(askel, dt * 1.5);
-      kirjoita();
-      if (loppuun && nakyva > 0.995) {
-        nakyva = 1;
-        kirjoita();
-        raf = 0;
-        avaa();
-        return;
-      }
-      raf = requestAnimationFrame(kehys);
+      if (tod >= 1) { loppuun(); }
+      else if (!auennut && tod > edTavoite + 0.03) { edTavoite = tod; kohti(tod); }
+      el?.style.setProperty("--hero-load-p", `${(nykyinen() * 100).toFixed(1)}%`);
+      if (!kiinni) raf = requestAnimationFrame(kehys);
     };
     raf = requestAnimationFrame(kehys);
-    siivous.push(() => cancelAnimationFrame(raf));
+    siivous.push(() => { kiinni = true; cancelAnimationFrame(raf); anim?.cancel(); });
 
     const fontit = document.fonts?.ready;
     if (fontit) fontit.then(() => valmis("fontit"), () => valmis("fontit"));
@@ -235,9 +274,7 @@ export default function Latausruutu({ video }: Props) {
 
     /* Katto ei avaa suoraan vaan ajaa palkin loppuun: ruutu ei katoa
        keskeneraisen palkin paalta. */
-    katto = window.setTimeout(() => {
-      loppuun = true;
-    }, KATTO_MS);
+    katto = window.setTimeout(loppuun, KATTO_MS);
 
     return () => {
       window.clearTimeout(katto);

@@ -2,6 +2,7 @@
 import "../_tyylit/verkkosivut.css";
 import type { Metadata } from "next";
 
+import Latausruutu from "../components/Latausruutu";
 import NetBackdrop from "../components/NetBackdrop";
 import Logos from "../components/Logos";
 import Footer from "../components/Footer";
@@ -67,6 +68,9 @@ export default function Verkkosivut() {
           osiokohtaista. Osiokohtaiset kerrokset alkoivat ja loppuivat
           osion mukana, joten kuvio katkesi jokaisella rajalla, ja ne
           osiot joilla kerrosta ei ollut lukivat tyhjina. */}
+      {/* LATAUSRUUTU kuten Lyhytvideoilla: sivu avautuu kerralla valmiina,
+          ja heron tekstit piirtyvat ilman sisaantuloanimaatiota (LCP). */}
+      <Latausruutu />
       <NetBackdrop merkit={false} />
 
       <div className="rae" aria-hidden="true" />
@@ -235,7 +239,7 @@ export default function Verkkosivut() {
       </div>
 
       <Footer
-        intro="Lyhytvideot, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
+        intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
         base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
         brandHeading="h2"

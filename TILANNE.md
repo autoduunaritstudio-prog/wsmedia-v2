@@ -226,6 +226,14 @@ Lighthouse (pilvikone ilman GPU:ta, 2 ajoa): lyhytvideot mobiili 36-44 -> 53 (LC
 
 Ei tehty: Nextin automaattinen esilataus hakee latauksen jalkeen kaikkien valikon sivujen datan ja niiden kuvia (noin 250 KiB mobiilissa). Hyoty nopeampi sivunvaihto, haitta datankulutus.
 
+## 4g. Lyhytvideot: Miksi- ja kanavakorttien uusi ulkoasu, 2.10.2026
+
+Tuomaksen hyvaksyma luonnos (toisesta keskustelusta, kuvana). Miksi-kortit: pieni otsikkorivi (`.lv-kick`), iso luku tai sana (`.lv-luku`, liukuvari korteissa 2-4), lyhyempi teksti, ruudukko 7/5 ja 5/7, kaavioiden kulmamerkinnat (`.wp-tile`) piilossa. Kaaviot ja niiden piirto ennallaan. Kanavakortit: elokuvaklaffi ylareunassa alustan varilla (`.klaffi`, varsi + pohja), pienempi tunnus, lyhyempi teksti ja tagi. Kun kortti paljastuu (`.rv.on`), varsi iskee kiinni, kimpoaa ja asettuu (`@keyframes klaffi-isku`, porrastettu 0,25 / 0,4 / 0,55 s). Reduced motion: varsi suoraan lepoasentoon. Tekstit `sisalto.tsx`:ssa (REASONS: kick, luku; PLATFORMS: tag).
+
+Jatko samana paivana (Tuomaksen palaute): klaffi lyo kerran kiinni ilman pomppua (.34 s, kiihtyva), varsi nakyy kortin ylapuolella (kortti overflow: visible). Pikkuotsikot (.seo-selite) pois seitsemasta osiosta (Miksi, Prosessi, Kokonaisuus, Tulokset, Hinnoittelu, Kenelle, UKK; jaljella Alustat ja Tarjous). Osioiden pystyvali clamp(40px, 5vh, 56px), Miksi lahemmas tilastokorttia ja sen kortit pienemmiksi. Kenelle: oranssi otsikkorivi ja valintamerkit, ei sovi -palstalla hillitty ruksi.
+
+Latausruudun palkki (sama paiva): liike Web Animations -rajapinnalla kompositorissa myos skriptin otettua ohjat, loppuunajo pehmea 0,7-1,3 s.
+
 ## 5. Seuraavat askeleet
 
 Mitään pakollista ei ole kesken. Alla olevat ovat avoimia päätöksiä ja siivousta, tärkein ensin.

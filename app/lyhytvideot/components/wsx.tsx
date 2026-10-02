@@ -102,7 +102,6 @@ export function Miksi() {
       <Kaiku sana="MIKSI" puoli="oik" />
       <Pystykisko teksti="Miksi lyhytvideot" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Miksi somevideot kannattavat</p>
         <div className="miksi-ylaosa">
           <div>
             <h2 className="seo-h2 rv">
@@ -125,7 +124,8 @@ export function Miksi() {
               <div className="lv-taus" aria-hidden="true">
                 {PANEELIT[r.art]}
               </div>
-              <b className="nelja-n">{k + 1}</b>
+              <p className="lv-kick">{r.kick}</p>
+              <b className="lv-luku">{r.luku}</b>
               <h3>{r.h}</h3>
               <p>{r.p}</p>
             </li>
@@ -160,15 +160,22 @@ export function Alustat() {
         <div className="duo2" style={{ marginTop: "48px" }}>
           {PLATFORMS.map((p) => (
             <div className={`duo2-col kanava kanava-${p.mark} rv`} key={p.mark}>
+              {/* KLAFFI (2.10.2026). Elokuvaklaffin raidat kortin
+                  ylareunassa alustan omalla varilla. Kun kortti tulee
+                  nakyviin, ylempi varsi iskee alas, kimpoaa ja asettuu,
+                  ks. globals.css "KANAVAKORTIT: KLAFFI". */}
+              <div className="klaffi" aria-hidden="true">
+                <i className="klaffi-varsi" />
+                <i className="klaffi-pohja" />
+              </div>
               <p className="kanava-merkki">
-                {/* tone="brand" eli alustan omat varit. Harmaat
-                    viivalogot lukivat koristeena; varillisina ne
-                    tunnistaa yhdella silmayksella, ja juuri
-                    tunnistaminen on taman osion tehtava. */}
+                {/* tone="brand" eli alustan omat varit: tunnistaminen on
+                    taman osion tehtava. */}
                 <PlatformMark id={p.mark} tone="brand" />
               </p>
               <h3>{p.h}</h3>
               <p className="seo-body">{p.p}</p>
+              <p className="kanava-tag">{p.tag}</p>
             </div>
           ))}
         </div>
@@ -193,7 +200,6 @@ export function Prosessi() {
       <Kaiku sana="PROSESSI" puoli="vas" />
       <Pystykisko teksti="Prosessi" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Ensimmäisestä puhelusta julkaisuun</p>
         <h2 className="seo-h2 rv">Näin lyhytvideotuotanto etenee.</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
           Ensimmäisestä puhelusta valmiisiin videoihin kuluu tyypillisesti noin 10 päivää. Sinun
@@ -336,7 +342,6 @@ export function Kokonaisuus() {
       <Kaiku sana="BRÄNDI" puoli="oik" />
       <Pystykisko teksti="Kokonaisuus" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Video, mainonta ja haku yhdessä</p>
         <h2 className="seo-h2 rv">Lyhytvideo tekee yrityksesi tutuksi. Mainonta ja Google-haku tuovat yhteydenotot.</h2>
 
         <div className="portaat porras rv">
@@ -373,7 +378,6 @@ export function Tulokset() {
       <Kaiku sana="TYÖT" puoli="oik" />
       <Pystykisko teksti="Tehtyä työtä" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Asiakkaiden omilla tileillä</p>
         <h2 className="seo-h2 rv">Esimerkkejä tekemistämme somevideoista</h2>
 
         {/* Ruudukko oli .swrapin ULKOPUOLELLA, joten se levisi koko
@@ -397,7 +401,6 @@ export function Hinnoittelu() {
        varisena kuin kaikki muut. */
     <section className="seo-sec" id="hinnoittelu">
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Kiinteä kuukausihinta · ei aloitusmaksua</p>
         <h2 className="seo-h2 rv">Paljonko somevideot ja lyhytvideot maksavat?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
           Kiinteä kuukausihinta, ei aloitusmaksuja eikä pitkiä sopimuksia. Hintaan vaikuttavat
@@ -451,7 +454,6 @@ export function Kenelle() {
       <Kaiku sana="KENELLE" puoli="vas" />
       <Pystykisko teksti="Kenelle" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Sopiiko tämä sinulle</p>
         <h2 className="seo-h2 rv">Kenelle lyhytvideotuotanto sopii?</h2>
 
         <div className="kaksi porras rv" style={{ marginTop: "48px" }}>
@@ -492,7 +494,6 @@ export function Ukk() {
     <section className="seo-sec" id="ukk">
       <Kaiku sana="FAQ" puoli="oik" />
       <div className="swrap">
-        <p className="seo-selite" data-rvs="">Usein kysyttyä</p>
         <div className="qa2">
           <div className="qa2-side">
             <h2 className="seo-h2 rv">Usein kysytyt kysymykset lyhytvideotuotannosta</h2>

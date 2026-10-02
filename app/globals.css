@@ -15475,7 +15475,7 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
    ================================================================== */
 /* Sama ruutu kuin etusivulla (.hero-load), pohjana taman sivun oma
    tumma, jotta haivytys paattyy samaan variin josta sivu alkaa. */
-.page-lyhytvideot .lataus { background: #0b0f14 }
+.page-lyhytvideot .lataus, .page-verkkosivut .lataus { background: #0b0f14 }
 /* VARAVENTTIILI ILMAN JAVASCRIPTIA. Jos skripti ei koskaan kaynnisty,
    ruutu haipyy itse 15 sekunnin kohdalla. Tavallisesti ruutu on poistettu
    kauan ennen sita, eika viivastetty animaatio vaikuta mihinkaan ennen
@@ -15588,4 +15588,613 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
   background-size: cover; background-position: center;
   background-image: var(--juliste-2x);
   background-image: image-set(var(--juliste-1x) 1x, var(--juliste-2x) 2x);
+}
+
+/* ==================================================================
+   KORTIT, UUSI ULKOASU (2.10.2026, Tuomaksen hyvaksyma luonnos)
+   Miksi-kortit: pieni otsikkorivi, iso luku tai sana, lyhyempi teksti.
+   Kaaviot ja niiden piirto ovat ennallaan. Kanavakortit: elokuvaklaffi
+   ylareunassa, alustan tunnus, teksti ja tagi.
+   ================================================================== */
+.page-lyhytvideot #miksi .nelja { grid-template-columns: repeat(12, minmax(0, 1fr)) }
+.page-lyhytvideot #miksi .nelja-k:nth-child(1),
+.page-lyhytvideot #miksi .nelja-k:nth-child(4) { grid-column: span 7 }
+.page-lyhytvideot #miksi .nelja-k:nth-child(2),
+.page-lyhytvideot #miksi .nelja-k:nth-child(3) { grid-column: span 5 }
+@media (max-width: 860px) {
+  .page-lyhytvideot #miksi .nelja { grid-template-columns: minmax(0, 1fr) }
+  .page-lyhytvideot #miksi .nelja-k:nth-child(n) { grid-column: auto }
+}
+.page-lyhytvideot .lv-k > .lv-kick,
+.page-lyhytvideot .lv-k > .lv-luku { position: relative; z-index: 2 }
+.page-lyhytvideot .lv-k > .lv-kick {
+  margin: 0 0 12px; max-width: none;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(230,236,242,.72);
+}
+.page-lyhytvideot .lv-k > .lv-luku {
+  display: block; margin: 0 0 22px;
+  font-size: clamp(44px, 5vw, 68px); font-weight: 600; letter-spacing: -.035em; line-height: 1;
+  color: #fff; width: fit-content;
+}
+.page-lyhytvideot .lv-k:nth-child(2) > .lv-luku,
+.page-lyhytvideot .lv-k:nth-child(3) > .lv-luku,
+.page-lyhytvideot .lv-k:nth-child(4) > .lv-luku {
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.page-lyhytvideot .lv-k:nth-child(2) > .lv-luku { background-image: linear-gradient(90deg, #f2f5f8 0%, #a6f2f3 55%, #8de8ea 100%) }
+.page-lyhytvideot .lv-k:nth-child(3) > .lv-luku { background-image: linear-gradient(90deg, #c3c8cd 0%, #c8f2f6 60%, #cefaff 100%) }
+.page-lyhytvideot .lv-k:nth-child(4) > .lv-luku { background-image: linear-gradient(90deg, #eef1f3 0%, #ecd3c8 50%, #f0b593 100%) }
+.page-lyhytvideot .lv-k > h3 { font-size: clamp(18px, 1.4vw, 21px); margin-bottom: 10px }
+.page-lyhytvideot .lv-k > p:not(.lv-kick) { font-size: 15.5px; max-width: 36ch }
+/* Kaavio matalampana alakaistalla: lyhyempi teksti ja iso luku vievat
+   ylaosan, ja kortin teksti ei saa osua kaavioon. */
+.page-lyhytvideot #miksi .lv-k { min-height: 360px }
+.page-lyhytvideot #miksi .lv-taus { height: 42% }
+/* Kaavioiden kulmamerkinnat (0:30, 4, Mitattu, 1 000 000+) ovat nyt
+   kortin isona lukuna, joten kaaviossa niita ei toisteta. */
+.page-lyhytvideot .lv-k .wp-tile { display: none }
+
+/* ---------- KANAVAKORTIT: KLAFFI ---------- */
+.page-lyhytvideot #alustat .kanava-tiktok { --klaffi: #25f4ee }
+.page-lyhytvideot #alustat .kanava-instagram { --klaffi: #fb9a4b }
+.page-lyhytvideot #alustat .kanava-youtube { --klaffi: #fa5a5a }
+.page-lyhytvideot #alustat .kanava {
+  /* overflow: visible, jotta avoin varsi nakyy kortin ylapuolella eika
+     leikkaudu. Kortin pyoreat ylakulmat tehdaan klaffin omilla
+     kulmilla. Reunus myos kapealla naytolla: klaffi kuuluu korttiin. */
+  position: relative; overflow: visible; padding: 0 26px 26px;
+  border: 1px solid var(--seo-rule); border-radius: 18px; background: rgba(255,255,255,.022);
+}
+.page-lyhytvideot #alustat .klaffi {
+  position: relative; height: 50px; margin: -1px -27px 26px;
+}
+.page-lyhytvideot #alustat .klaffi i {
+  position: absolute; left: 0; right: 0; height: 22px;
+  background: repeating-linear-gradient(115deg, var(--klaffi) 0 15px, #070a0e 15px 31px);
+}
+.page-lyhytvideot #alustat .klaffi-pohja { bottom: 4px }
+/* Varsi saranoituu vasemmasta alakulmastaan pohjan ylareunaan. Lepoasento
+   on kiinni. Ylakulmat pyoristetaan kortin kulmien mukaan. */
+.page-lyhytvideot #alustat .klaffi-varsi {
+  top: 0; border-radius: 18px 18px 0 0; z-index: 1;
+  transform-origin: 0 100%; rotate: -18deg;
+}
+/* ISKU (2.10.2026, Tuomaksen palaute: "mahdollisimman realistinen, ilman
+   pomppua"). Varsi on auki kortin tullessa nakyviin ja lyo kerran kiinni
+   kiihtyvalla liikkeella kuten oikea klaffi, ja pysahtyy siihen. */
+.page-lyhytvideot #alustat .kanava.rv.on .klaffi-varsi {
+  animation: klaffi-isku .34s cubic-bezier(.6, 0, .95, .5) both;
+}
+.page-lyhytvideot #alustat .kanava:nth-child(1) .klaffi-varsi { animation-delay: .5s }
+.page-lyhytvideot #alustat .kanava:nth-child(2) .klaffi-varsi { animation-delay: .68s }
+.page-lyhytvideot #alustat .kanava:nth-child(3) .klaffi-varsi { animation-delay: .86s }
+@keyframes klaffi-isku {
+  from { rotate: -18deg }
+  to { rotate: 0deg }
+}
+.page-lyhytvideot #alustat .kanava-merkki {
+  margin: 0 0 16px; padding: 0; border: 0; background: none !important;
+}
+.page-lyhytvideot #alustat .kanava-merkki svg { width: 30px; height: 30px }
+.page-lyhytvideot #alustat .duo2-col h3 { font-size: 30px; margin-bottom: 14px }
+.page-lyhytvideot #alustat .duo2-col .seo-body { font-size: 18px; line-height: 1.6 }
+@media (max-width: 960px) { .page-lyhytvideot #alustat .duo2 { gap: 22px } }
+.page-lyhytvideot #alustat .kanava-tag {
+  display: inline-block; margin: 18px 0 0; padding: 5px 11px;
+  font-size: 12px; font-weight: 500; line-height: 1.3;
+  color: var(--klaffi); border: 1px solid color-mix(in srgb, var(--klaffi) 45%, transparent);
+  background: color-mix(in srgb, var(--klaffi) 7%, transparent); border-radius: 999px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-lyhytvideot #alustat .kanava .klaffi-varsi,
+  .page-lyhytvideot #alustat .kanava.rv.on .klaffi-varsi { animation: none !important; rotate: 0deg !important }
+}
+
+/* ==================================================================
+   TIIVIMPI RYTMI (2.10.2026, Tuomaksen palaute: liikaa tyhjaa osioiden
+   valissa, pikkuotsikot pois). Osioiden pystyvali samaksi kuin graafisen
+   suunnittelun sivulla.
+   ================================================================== */
+.page-lyhytvideot .seo-sec[id]:not(#miksi) { padding-block: clamp(40px, 5vh, 56px) }
+/* Miksi-osio lahemmas tilastokorttia, ja otsikko ylos eika
+   pystykeskelle kuvan viereen. */
+.page-lyhytvideot #miksi.seo-sec { padding-top: 44px }
+.page-lyhytvideot .miksi-ylaosa { margin-top: 0; align-items: start }
+/* Miksi-kortit ylemmas ja pienemmiksi. */
+.page-lyhytvideot #miksi .nelja { margin-top: 36px }
+.page-lyhytvideot #miksi .lv-k { min-height: 320px; padding: 30px 30px 28px }
+.page-lyhytvideot .lv-k > .lv-luku { font-size: clamp(38px, 4vw, 54px); margin-bottom: 16px }
+.page-lyhytvideot .lv-k > .lv-kick { margin-bottom: 10px }
+.page-lyhytvideot .lv-k > h3 { font-size: clamp(17px, 1.3vw, 19px); margin-bottom: 8px }
+.page-lyhytvideot .lv-k > p:not(.lv-kick) { font-size: 15px }
+.page-lyhytvideot #miksi .lv-taus { height: 36% }
+/* Osion oma kehotus ja seuraava otsikko lahemmas toisiaan. */
+.page-lyhytvideot .seo-sec[id] .kehotus { margin-top: 48px }
+
+/* ---------- KENELLE: VAROVASTI ORANSSIA JA MERKIT ----------
+   Sopii-palsta saa oranssin otsikkorivin ja oranssin valintamerkin,
+   ei sovi -palsta hillityn ruksin. Sama oranssi kuin Instagramin
+   klaffissa, jolloin vari on jo sivulla eika tule tyhjasta. */
+.page-lyhytvideot #kenelle .kaksi > div:first-child .kaksi-kick { color: #fb9a4b }
+.page-lyhytvideot #kenelle .seo-spec li { grid-template-columns: 18px minmax(0, 1fr); gap: 14px }
+.page-lyhytvideot #kenelle .seo-spec li::before {
+  content: ""; width: 18px; height: 18px; margin-top: 3px; border-radius: 0;
+  -webkit-mask: var(--merkki) center / contain no-repeat; mask: var(--merkki) center / contain no-repeat;
+}
+.page-lyhytvideot #kenelle .kaksi > div:first-child .seo-spec li::before {
+  background: #fb9a4b;
+  --merkki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+}
+.page-lyhytvideot #kenelle .kaksi > div:last-child .seo-spec li::before {
+  background: rgba(169,184,198,.7);
+  --merkki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M7 7l10 10M17 7L7 17'/%3E%3C/svg%3E");
+}
+
+/* Miksi-kortit pinnatussa tilassa ylemmas: osion alle tilaa, jolloin
+   kortisto asettuu ruudun keskivaiheille eika nojaa alareunaan.
+   Pinnaus on kaytossa vain leveilla naytoilla, joten vali myos. */
+@media (min-width: 761px) and (min-height: 641px) {
+  .page-lyhytvideot #miksi { padding-bottom: max(48px, 14svh) }
+}
+
+/* ==================================================================
+   VERKKOSIVUT: KORTTIEN VIIMEISTELY (2.10.2026, portattu toisen chatin
+   esikatselusta). Miksi-ongelmakortit oranssilla palkilla ja ikoneilla,
+   sisallon tarkistuslistaruudut piirtyvine valintamerkkeineen ja
+   toteutustavan selainikkunat, joiden rautalanka rakentuu (.wf.rv.on).
+   ================================================================== */
+/* Rautalanka kayttaa reveal-jarjestelman .on-luokkaa laukaisimena,
+   mutta itse laatikko ei liu'u eika haivy: vain sen sisalto. */
+.page-verkkosivut #toteutustapa .wf.rv { opacity: 1; transform: none; transition: none }
+/* --- Miksi: neljä ongelmaa kortteina, ei tekstilohkoina --- */
+.page-verkkosivut #miksi .kaksi {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 44px;
+}
+.page-verkkosivut #miksi .kaksi > div:nth-child(n) {
+  position: relative; border: 1px solid var(--seo-rule); border-radius: 18px; padding: 24px 24px 24px 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012)); overflow: hidden;
+}
+/* oranssi hälytyspalkki piirtyy sivulta sisään */
+.page-verkkosivut #miksi .kaksi > div::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, #ffb27a, #e8a54a); transform-origin: 0 0; scale: 1 0;
+  transition: scale .7s cubic-bezier(.2,.8,.2,1) calc(var(--k, 0) * .12s);
+}
+.page-verkkosivut #miksi .kaksi.on > div::before { scale: 1 1 }
+.page-verkkosivut #miksi .vs-otsikko { gap: 14px; margin-bottom: 10px }
+.page-verkkosivut #miksi .vs-ik {
+  flex: none; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+  color: #ffb27a; background: rgba(255,154,77,.10); box-shadow: inset 0 0 0 1px rgba(255,154,77,.28);
+  transition: transform .5s cubic-bezier(.3,1.6,.5,1) calc(var(--j, 0) * .12s + .2s), opacity .4s calc(var(--j, 0) * .12s + .2s);
+}
+.page-verkkosivut #miksi .vs-ik svg { width: 21px; height: 21px }
+.page-verkkosivut #miksi .kaksi:not(.on) .vs-ik { transform: scale(.5); opacity: 0 }
+.page-verkkosivut #miksi .kaksi .seo-body { font-size: 16.5px; line-height: 1.55; max-width: 44ch }
+@media (max-width: 760px) { .page-verkkosivut #miksi .kaksi { grid-template-columns: minmax(0, 1fr) } }
+
+/* Lukurivi: luvut laskevat ylös ja palkki täyttyy */
+.page-verkkosivut #miksi .luvut b span { font: inherit; letter-spacing: inherit; color: inherit; font-variant-numeric: tabular-nums }
+
+/* --- Sisältö: kahdeksan kohtaa tarkistuslistaruutuina --- */
+.page-verkkosivut #sisalto .osa .hs-rows, .page-verkkosivut #sisalto .osa-teksti .hs-rows {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; border-top: 0;
+}
+.page-verkkosivut #sisalto .hs-rows > div:nth-child(n) {
+  position: relative; overflow: hidden; border: 1px solid var(--seo-rule); border-radius: 16px;
+  padding: 15px 16px 16px; background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012));
+}
+.page-verkkosivut #sisalto .hs-rows dt { display: flex; align-items: flex-start; gap: 10px; font-size: 17px; line-height: 1.3; grid-template-columns: none }
+.page-verkkosivut #sisalto .hs-rows dd { margin: 8px 0 0; padding: 0; font-size: 16px; line-height: 1.5; max-width: none }
+.page-verkkosivut #sisalto .tk { flex: none; width: 24px; height: 24px; margin-top: -1px }
+.page-verkkosivut #sisalto .tick { width: 24px; height: 24px; display: block; overflow: visible }
+.page-verkkosivut #sisalto .tk-r { stroke: rgba(111,236,255,.28); stroke-width: 1.6; fill: rgba(111,236,255,0); transition: fill .4s calc(var(--j) * .1s + .35s), stroke .4s calc(var(--j) * .1s + .35s) }
+.page-verkkosivut #sisalto .tk-v { stroke: var(--seo-hi); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 20; stroke-dashoffset: 20; transition: stroke-dashoffset .5s cubic-bezier(.3,.9,.3,1) calc(var(--j) * .1s + .25s), stroke .4s calc(var(--j) * .1s + .35s) }
+.page-verkkosivut #sisalto .hs-rows.on .tk-v { stroke-dashoffset: 0; stroke: #0b0f14 }
+.page-verkkosivut #sisalto .hs-rows.on .tk-r { fill: var(--seo-hi); stroke: var(--seo-hi) }
+/* kerran ohi kulkeva kiilto, ei jatkuvaa liikettä */
+.page-verkkosivut #sisalto .hs-rows > div::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.10), transparent); transform: skewX(-18deg); opacity: 0; pointer-events: none;
+}
+.page-verkkosivut #sisalto .hs-rows.on > div::after { animation: vs-kiilto 1s calc(var(--k, 0) * .1s + .4s) ease-out both }
+@keyframes vs-kiilto { 0% { left: -60%; opacity: 1 } 100% { left: 130%; opacity: 1 } }
+@media (max-width: 760px) { .page-verkkosivut #sisalto .osa .hs-rows, .page-verkkosivut #sisalto .osa-teksti .hs-rows { grid-template-columns: minmax(0, 1fr) } }
+
+/* --- Toteutustapa: kolme selainikkunaa, joiden sisältö rakentuu --- */
+.page-verkkosivut #toteutustapa .duo2-col { padding-top: 0 }
+.page-verkkosivut #toteutustapa .duo2-kick {
+  display: flex; align-items: center; gap: 12px; margin: 0 -22px 0; padding: 11px 16px; border-bottom: 1px solid var(--seo-rule);
+  background: rgba(255,255,255,.04); color: var(--seo-ink-2); font-size: 12.5px; letter-spacing: .06em;
+}
+.page-verkkosivut #toteutustapa .duo2-col:nth-child(1) .duo2-kick, .page-verkkosivut #toteutustapa .duo2-col:nth-child(2) .duo2-kick, .page-verkkosivut #toteutustapa .duo2-col:last-child .duo2-kick { background: rgba(255,255,255,.04) }
+.page-verkkosivut #toteutustapa .dots { display: flex; gap: 6px }
+.page-verkkosivut #toteutustapa .dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.18) }
+.page-verkkosivut #toteutustapa .url {
+  flex: 1; text-align: left; padding: 5px 12px; border-radius: 99px; background: rgba(11,15,20,.6);
+  box-shadow: inset 0 0 0 1px var(--seo-rule); text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 13.5px;
+}
+.page-verkkosivut #toteutustapa .duo2-col:nth-child(1) .url { color: var(--lampo) }
+.page-verkkosivut #toteutustapa .duo2-col:nth-child(2) .url { color: var(--seo-hi) }
+.page-verkkosivut #toteutustapa .duo2-col:nth-child(3) .url { color: var(--seo-ink) }
+.page-verkkosivut #toteutustapa .wf {
+  margin: 0 -22px 22px; padding: 16px 20px; height: 132px; background: rgba(11,15,20,.55); border-bottom: 1px solid var(--seo-rule);
+  display: grid; align-content: start; gap: 9px; overflow: hidden;
+}
+.page-verkkosivut #toteutustapa .wf i, .page-verkkosivut #toteutustapa .wf u { display: block; border-radius: 6px; background: rgba(255,255,255,.10); text-decoration: none }
+.page-verkkosivut #toteutustapa .wf > *, .page-verkkosivut #toteutustapa .wf span > *, .page-verkkosivut #toteutustapa .wf div > * {
+  opacity: 0; transform: translateY(8px) scaleX(.92); transform-origin: 0 50%;
+  transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1); transition-delay: calc(var(--w, 0) * .09s);
+}
+.page-verkkosivut #toteutustapa .wf.on > *, .page-verkkosivut #toteutustapa .wf.on span > *, .page-verkkosivut #toteutustapa .wf.on div > * { opacity: 1; transform: none }
+.page-verkkosivut #toteutustapa .b-nav { height: 10px; width: 100%; background: rgba(255,255,255,.14) !important; position: relative }
+/* a: perussivusto */
+.page-verkkosivut #toteutustapa .wf-a .b-hero { height: 44px; background: linear-gradient(90deg, rgba(232,165,74,.30), rgba(232,165,74,.08)) !important }
+.page-verkkosivut #toteutustapa .wf-a .b-btn { width: 54px; height: 12px; background: var(--lampo) !important }
+.page-verkkosivut #toteutustapa .wf-a span { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px } .page-verkkosivut #toteutustapa .wf-a span i { height: 18px }
+/* b: räätälöity */
+.page-verkkosivut #toteutustapa .wf-b .b-code { display: grid; gap: 6px }
+.page-verkkosivut #toteutustapa .wf-b .b-code i { height: 7px; background: rgba(111,236,255,.30) !important } .page-verkkosivut #toteutustapa .wf-b .b-code i:nth-child(1) { width: 62% } .page-verkkosivut #toteutustapa .wf-b .b-code i:nth-child(2) { width: 78%; margin-left: 14px } .page-verkkosivut #toteutustapa .wf-b .b-code i:nth-child(3) { width: 44%; margin-left: 14px }
+.page-verkkosivut #toteutustapa .wf-b .b-code .cur { width: 8px; height: 12px; margin-left: 0; background: var(--seo-hi) !important; animation: vs-kursori 1s steps(2) infinite }
+@keyframes vs-kursori { 50% { opacity: 0 } }
+.page-verkkosivut #toteutustapa .wf-b .b-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px } .page-verkkosivut #toteutustapa .wf-b .b-grid i { height: 22px; background: rgba(111,236,255,.14) !important }
+/* c: verkkokauppa */
+.page-verkkosivut #toteutustapa .wf-c .b-nav .cart { position: absolute; right: 0; top: -4px; width: 17px; height: 17px; border-radius: 50%; background: var(--seo-hi) !important; color: #0b0f14; font: 700 10.5px/17px var(--font, inherit); text-align: center; opacity: 0; transform: scale(0) }
+.page-verkkosivut #toteutustapa .wf-c .b-shop { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px } .page-verkkosivut #toteutustapa .wf-c .b-shop i { height: 30px; background: rgba(255,255,255,.12) !important }
+.page-verkkosivut #toteutustapa .wf-c.on .b-nav .cart { animation: vs-kori .5s 1.1s cubic-bezier(.3,1.6,.5,1) forwards }
+@keyframes vs-kori { to { opacity: 1; transform: scale(1) } }
+.page-verkkosivut #toteutustapa .wf > :nth-child(1), .page-verkkosivut #toteutustapa .wf span > :nth-child(1) { --w: 0 } .page-verkkosivut #toteutustapa .wf > :nth-child(2) { --w: 1 } .page-verkkosivut #toteutustapa .wf > :nth-child(3) { --w: 2 }
+.page-verkkosivut #toteutustapa .wf span > :nth-child(2), .page-verkkosivut #toteutustapa .wf div > :nth-child(2) { --w: 3 } .page-verkkosivut #toteutustapa .wf span > :nth-child(3), .page-verkkosivut #toteutustapa .wf div > :nth-child(3) { --w: 4 } .page-verkkosivut #toteutustapa .wf div > :nth-child(4), .page-verkkosivut #toteutustapa .wf div > :nth-child(5) { --w: 5 } .page-verkkosivut #toteutustapa .wf div > :nth-child(6) { --w: 6 }
+
+/* Kapealla sarakkeen sivutayte on 26px, ei 22px: kehys reunasta reunaan. */
+@media (max-width: 900px) {
+  .page-verkkosivut #toteutustapa .duo2-kick { margin: 0 -26px; padding: 11px 18px }
+  .page-verkkosivut #toteutustapa .wf { margin: 0 -26px 22px; padding: 16px 24px }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-verkkosivut #miksi .kaksi > div::before { scale: 1 1 }
+  .page-verkkosivut #miksi .vs-ik { transform: none !important; opacity: 1 !important }
+  .page-verkkosivut #sisalto .tk-v { stroke-dashoffset: 0; stroke: #0b0f14 } .page-verkkosivut #sisalto .tk-r { fill: var(--seo-hi); stroke: var(--seo-hi) }
+  .page-verkkosivut #toteutustapa .wf > *, .page-verkkosivut #toteutustapa .wf span > *, .page-verkkosivut #toteutustapa .wf div > * { opacity: 1; transform: none }
+  .page-verkkosivut #toteutustapa .wf-c .b-nav .cart { opacity: 1; transform: none; animation: none }
+  .page-verkkosivut #toteutustapa .wf-b .b-code .cur { animation: none }
+  .page-verkkosivut #sisalto .hs-rows > div::after { animation: none !important; opacity: 0 }
+  .page-verkkosivut #miksi .kaksi > div::before, .page-verkkosivut #sisalto .tk-r, .page-verkkosivut #sisalto .tk-v { transition: none }
+}
+
+/* Sisallon tarkistuslistaruudut: kaksi saraketta kuten mallissa, mutta
+   tekstit samassa koossa kuin ennen korttimuutosta. Mallin 16-17px:n
+   tekstilla lista lyheni vasemman palstan mittaiseksi, jolloin
+   pinnatulla sivukartalla ei ollut matkaa eika se liikkunut. */
+.page-verkkosivut #sisalto .osa .hs-rows { gap: 16px }
+.page-verkkosivut #sisalto .hs-rows > div:nth-child(n) { padding: 20px 22px 22px }
+.page-verkkosivut #sisalto .hs-rows dt { font-size: 18.5px; gap: 12px }
+.page-verkkosivut #sisalto .hs-rows dd { font-size: 17.5px; line-height: 1.6; margin-top: 10px }
+
+/* SIVUKARTTA LASKEUTUU LISTAN POHJAAN. Ylareunaan pinnattuna se jai
+   puoleenvaliin: osio pinnautuu pinossa kun sen alareuna osuu ruudun
+   alareunaan, ja silloin kartta oli yha 140px:ssa. Nyt kartta on oman
+   kiskonsa pohjalla ja pinnattu alareunastaan, jolloin se kulkee
+   ruudun alaosassa vierityksen mukana ja asettuu viimeisten korttien
+   tasalle. Kisko alkaa tekstin alta, joten kartta ei nouse sen paalle. */
+@media (min-width: 861px) {
+  .page-verkkosivut #sisalto .osa-teksti { display: flex; flex-direction: column }
+  .page-verkkosivut #sisalto .osa-kisko { flex: 1; display: flex; flex-direction: column; margin-top: 30px }
+  .page-verkkosivut #sisalto .osa-kisko > .osa-gfx { margin-top: auto; top: auto; bottom: 40px }
+}
+
+/* ==================================================================
+   VERKKOSIVUT: PREMIUM-KORTIT (2.10.2026, Tuomaksen palaute)
+   Tuttu tilanne- ja Nakyvyys-kortit: kerroksellinen pinta, valoa
+   ylakulmasta, liukuva reunaviiva, syvyysvarjo ja lasimainen
+   merkkiruutu. Animaatiot ennallaan. Varjot ovat staattisia (ei
+   kehyskohtaista box-shadow-muutosta, ks. CLAUDE.md).
+   ================================================================== */
+/* Hiusviiva Tuttu tilanne -korttien ylapuolelta pois. */
+.page-verkkosivut #miksi .kaksi { border-top: 0 }
+
+.page-verkkosivut #miksi .kaksi > div:nth-child(n),
+.page-verkkosivut #hakukoneoptimointi .nelja-k {
+  --pk-valo: 255,178,122;
+  border: 0; border-radius: 20px; overflow: hidden; isolation: isolate;
+  background:
+    radial-gradient(130% 90% at 0% 0%, rgba(var(--pk-valo), .085), transparent 55%),
+    radial-gradient(90% 70% at 100% 100%, rgba(111,236,255,.035), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.012) 60%, rgba(255,255,255,.02));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 1px 0 rgba(0,0,0,.35),
+    0 28px 56px -32px rgba(0,0,0,.85);
+  transition: translate .45s cubic-bezier(.2,.8,.2,1);
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k { --pk-valo: 111,236,255 }
+/* Liukuva reunaviiva: kirkkain ylavasemmalla, hiipuu alas. */
+.page-verkkosivut #miksi .kaksi > div::after,
+.page-verkkosivut #hakukoneoptimointi .nelja-k::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+  background: linear-gradient(155deg, rgba(var(--pk-valo), .5), rgba(255,255,255,.09) 32%, rgba(255,255,255,.04) 68%, rgba(var(--pk-valo), .16));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events: none; z-index: 2; opacity: .85; transition: opacity .45s;
+}
+@media (hover: hover) {
+  .page-verkkosivut #miksi .kaksi > div:hover,
+  .page-verkkosivut #hakukoneoptimointi .nelja-k:hover { translate: 0 -4px }
+  .page-verkkosivut #miksi .kaksi > div:hover::after,
+  .page-verkkosivut #hakukoneoptimointi .nelja-k:hover::after { opacity: 1 }
+}
+
+/* Nakyvyys: erilliset kortit taulukon sijaan. */
+.page-verkkosivut #hakukoneoptimointi .nelja {
+  gap: 16px; background: none; border: 0; border-radius: 0; overflow: visible;
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-k { padding: 32px 34px 34px }
+@media (max-width: 600px) { .page-verkkosivut #hakukoneoptimointi .nelja-k { padding: 26px 24px 28px } }
+.page-verkkosivut #miksi .kaksi { gap: 16px }
+
+/* Lasimainen merkkiruutu molempiin. */
+.page-verkkosivut #miksi .vs-ik,
+.page-verkkosivut #hakukoneoptimointi .nelja-ik {
+  background: linear-gradient(145deg, rgba(255,178,122,.24), rgba(255,154,77,.05));
+  border: 0;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,178,122,.34),
+    inset 0 1px 0 rgba(255,255,255,.14),
+    0 10px 24px -10px rgba(255,140,60,.5);
+}
+.page-verkkosivut #hakukoneoptimointi .nelja-ik { width: 44px; height: 44px; padding: 10px; border-radius: 13px }
+.page-verkkosivut #hakukoneoptimointi .nelja-yla { grid-template-columns: 44px minmax(0, 1fr) }
+.page-verkkosivut #miksi .kaksi h3,
+.page-verkkosivut #hakukoneoptimointi .nelja-k h3 { color: #fff; letter-spacing: -.015em }
+
+/* Otsikon korostus ilman laatikkoa: lammin liukuvari tekstissa. */
+.page-verkkosivut #miksi .seo-h2 .korosta {
+  color: #ffb27a;
+  background: linear-gradient(90deg, #ffc08f, #e8a54a);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  padding-right: .04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-verkkosivut #miksi .kaksi > div:nth-child(n),
+  .page-verkkosivut #hakukoneoptimointi .nelja-k { transition: none; translate: none !important }
+}
+
+/* ---------- TIIVIIMPI RYTMI KUTEN LYHYTVIDEOILLA ---------- */
+.page-verkkosivut .seo-sec[id] { padding-block: clamp(40px, 5vh, 56px) }
+.page-verkkosivut .seo-sec[id] .kehotus { margin-top: 48px }
+
+/* ---------- TARJOUS SAMAKSI KUIN LYHYTVIDEOILLA ---------- */
+.page-verkkosivut #tarjous .loc {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
+  gap: 56px;
+  align-items: start;
+}
+.page-verkkosivut #tarjous .fcard { margin: 0 }
+@media (max-width: 900px) {
+  .page-verkkosivut #tarjous .loc { grid-template-columns: minmax(0, 1fr); gap: 40px }
+}
+.page-verkkosivut #tarjous .seo-h2 { hyphens: auto }
+
+/* ---------- FOOTER SAMAKSI KUIN LYHYTVIDEOILLA ---------- */
+.page-verkkosivut footer { -webkit-backdrop-filter: none; backdrop-filter: none; --grey: var(--seo-ink-2) }
+
+/* ==================================================================
+   NAKYVYYS-KORTIT NAYTTOINEEN (2.10.2026), ks. NakyvyysPaneelit.tsx
+   Rakenne kuten Lyhytvideoiden Miksi-korteissa: merkinta, iso
+   liukuvarillinen luku, otsikko, teksti ja alla nayttö. Naytot ovat
+   tunnistettavia: PageSpeed-mittari, sivuston linkkikartta,
+   hakutulos ja puhelimen soittonappi. Liike lahtee .rv.on:sta kerran.
+   ================================================================== */
+@property --np-pct { syntax: "<integer>"; inherits: false; initial-value: 0 }
+
+.page-verkkosivut #hakukoneoptimointi .np-ruudukko { margin-top: 44px }
+.page-verkkosivut #hakukoneoptimointi .np-k {
+  display: flex; flex-direction: column;
+  padding: 30px 30px 26px;
+}
+.page-verkkosivut #hakukoneoptimointi .np-k::before { content: none }
+.page-verkkosivut #hakukoneoptimointi .np-k > :not(.np-lava) { position: relative; z-index: 3 }
+.page-verkkosivut #hakukoneoptimointi .np-kick {
+  margin: 0 0 10px; max-width: none;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(230,236,242,.72);
+}
+.page-verkkosivut #hakukoneoptimointi .np-luku {
+  display: block; width: fit-content; margin: 0 0 16px;
+  font-size: clamp(38px, 4vw, 54px); font-weight: 600; letter-spacing: -.035em; line-height: 1.05;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+}
+.page-verkkosivut #hakukoneoptimointi .np-k:nth-child(1) .np-luku { background-image: linear-gradient(90deg, #f2f5f8, #9ef0b9 60%, #4ee08a) }
+.page-verkkosivut #hakukoneoptimointi .np-k:nth-child(2) .np-luku { background-image: linear-gradient(90deg, #f2f5f8 0%, #a6f2f3 55%, #6fecff 100%) }
+.page-verkkosivut #hakukoneoptimointi .np-k:nth-child(3) .np-luku { background-image: linear-gradient(90deg, #eef1f3 0%, #ffd2a8 50%, #ffa65c 100%) }
+.page-verkkosivut #hakukoneoptimointi .np-k:nth-child(4) .np-luku { background-image: linear-gradient(90deg, #eef1f3 0%, #c8f2f6 50%, #6fecff 100%) }
+.page-verkkosivut #hakukoneoptimointi .np-k h3 { font-size: clamp(18px, 1.4vw, 21px); margin: 0 0 8px }
+.page-verkkosivut #hakukoneoptimointi .np-k .np-teksti { font-size: 15px; line-height: 1.6; max-width: 46ch; margin: 0 0 22px }
+
+/* Nayttö: tumma sisapaneeli kortin alaosassa. */
+.page-verkkosivut #hakukoneoptimointi .np-lava {
+  margin-top: auto; height: 196px; position: relative; overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(6,10,15,.72), rgba(6,10,15,.92));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.page-verkkosivut #hakukoneoptimointi .np-lava::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size: 22px 22px; mask-image: radial-gradient(120% 90% at 50% 40%, #000, transparent);
+}
+
+/* ---------- 1. PAGESPEED-MITTARI ---------- */
+.page-verkkosivut #hakukoneoptimointi .np-nopeus {
+  position: absolute; inset: 0; display: grid; grid-template-columns: 132px minmax(0, 1fr);
+  align-items: center; gap: 22px; padding: 0 24px;
+}
+.page-verkkosivut #hakukoneoptimointi .np-mittari { position: relative; width: 132px; height: 132px }
+.page-verkkosivut #hakukoneoptimointi .np-mittari svg { width: 100%; height: 100%; rotate: -90deg; overflow: visible }
+.page-verkkosivut #hakukoneoptimointi .np-m-rata { fill: rgba(78,224,138,.08); stroke: rgba(78,224,138,.16); stroke-width: 7 }
+.page-verkkosivut #hakukoneoptimointi .np-m-kaari {
+  fill: none; stroke: #4ee08a; stroke-width: 7; stroke-linecap: round;
+  stroke-dasharray: 100; stroke-dashoffset: 100;
+  transition: stroke-dashoffset 1.8s cubic-bezier(.25,.8,.25,1) .3s;
+}
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-m-kaari { stroke-dashoffset: 7 }
+.page-verkkosivut #hakukoneoptimointi .np-m-luku {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 40px; font-weight: 600; letter-spacing: -.03em; color: #4ee08a;
+  --np-pct: 0; counter-reset: np var(--np-pct);
+  transition: --np-pct 1.8s cubic-bezier(.25,.8,.25,1) .3s;
+}
+.page-verkkosivut #hakukoneoptimointi .np-m-luku::after { content: counter(np) }
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-m-luku { --np-pct: 93 }
+.page-verkkosivut #hakukoneoptimointi .np-m-ala {
+  position: absolute; left: 0; right: 0; bottom: 30px; text-align: center;
+  font-size: 11px; color: rgba(230,236,242,.55);
+}
+.page-verkkosivut #hakukoneoptimointi .np-mitat { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px }
+.page-verkkosivut #hakukoneoptimointi .np-mitat li {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; align-items: baseline;
+  font-size: 12.5px; color: rgba(230,236,242,.72);
+}
+.page-verkkosivut #hakukoneoptimointi .np-mitat b { color: #4ee08a; font-weight: 600; font-variant-numeric: tabular-nums }
+.page-verkkosivut #hakukoneoptimointi .np-mitat i {
+  grid-column: 1 / -1; height: 4px; border-radius: 4px; background: rgba(255,255,255,.07); position: relative; overflow: hidden;
+}
+.page-verkkosivut #hakukoneoptimointi .np-mitat i::after {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: calc(var(--w) * 100%);
+  border-radius: inherit; background: linear-gradient(90deg, #4ee08a, #9ef0b9);
+  transform-origin: 0 50%; scale: 0 1; transition: scale 1s cubic-bezier(.25,.8,.25,1) var(--d);
+}
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-mitat i::after { scale: 1 1 }
+.page-verkkosivut #hakukoneoptimointi .np-mitat .np-tavoite { display: block; font-size: 11px; color: rgba(230,236,242,.42) }
+
+/* ---------- 2. LINKKIKARTTA JA INDEKSOIJA ---------- */
+.page-verkkosivut #hakukoneoptimointi .np-puu { position: absolute; inset: 14px 10px 10px; width: calc(100% - 20px); height: calc(100% - 24px); overflow: visible }
+.page-verkkosivut #hakukoneoptimointi .np-p-viiva {
+  fill: none; stroke: rgba(111,236,255,.55); stroke-width: 1.4;
+  stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.1s ease .35s;
+}
+.page-verkkosivut #hakukoneoptimointi .np-p-viiva.np-p-2 { transition-delay: 1s }
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-p-viiva { stroke-dashoffset: 0 }
+.page-verkkosivut #hakukoneoptimointi .np-p-solmu { opacity: 0; transition: opacity .5s ease calc(var(--d) + .2s) }
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-p-solmu { opacity: 1 }
+.page-verkkosivut #hakukoneoptimointi .np-p-solmu rect { fill: rgba(111,236,255,.07); stroke: rgba(111,236,255,.45); stroke-width: 1 }
+.page-verkkosivut #hakukoneoptimointi .np-p-juuri rect { fill: rgba(111,236,255,.18); stroke: #6fecff }
+.page-verkkosivut #hakukoneoptimointi .np-p-solmu text {
+  fill: #e6f9fc; font-size: 10.5px; font-weight: 600; text-anchor: middle; font-family: inherit;
+}
+.page-verkkosivut #hakukoneoptimointi .np-p-pieni text { font-size: 9.5px; fill: rgba(230,249,252,.75) }
+.page-verkkosivut #hakukoneoptimointi .np-p-botti {
+  fill: #fff; stroke: rgba(111,236,255,.5); stroke-width: 5; paint-order: stroke;
+  opacity: 0; transition: opacity .5s 1.6s;
+}
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-p-botti { opacity: 1 }
+
+/* ---------- 3. HAKUTULOS: OMA SIVU NOUSEE KARKEEN ---------- */
+.page-verkkosivut #hakukoneoptimointi .np-haku { position: absolute; inset: 0; padding: 18px 20px }
+.page-verkkosivut #hakukoneoptimointi .np-h-kentta {
+  display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 16px; border-radius: 99px;
+  background: #f4f6f8; color: #1d1d1f; font-size: 13.5px;
+}
+.page-verkkosivut #hakukoneoptimointi .np-h-kentta svg { width: 16px; height: 16px; fill: none; stroke: #5f6368; stroke-width: 2.2; stroke-linecap: round; flex: none }
+.page-verkkosivut #hakukoneoptimointi .np-h-sana { display: inline-flex; align-items: center }
+.page-verkkosivut #hakukoneoptimointi .np-h-sana > span {
+  display: inline-block; overflow: hidden; white-space: nowrap; max-width: 0; font-variant-ligatures: none;
+  transition: max-width 1.1s steps(15, end) .4s;
+}
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-h-sana > span { max-width: 7.6em }
+.page-verkkosivut #hakukoneoptimointi .np-h-sana::after {
+  content: ""; width: 1.5px; height: 16px; margin-left: 1px; background: #1a73e8; animation: np-kursori 1s steps(2) infinite;
+}
+@keyframes np-kursori { 50% { opacity: 0 } }
+.page-verkkosivut #hakukoneoptimointi .np-h-tulokset { list-style: none; margin: 14px 0 0; padding: 0; position: relative; height: 118px }
+.page-verkkosivut #hakukoneoptimointi .np-h-tulokset li {
+  position: absolute; left: 0; right: 0; top: 0; height: 36px; padding: 6px 12px; border-radius: 10px;
+  display: grid; align-content: center; gap: 4px;
+  translate: 0 calc(var(--y) * 40px);
+  transition: translate .9s cubic-bezier(.5,0,.2,1) 2s, background-color .6s 2s, box-shadow .6s 2s;
+}
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-h-tulokset li { translate: 0 calc(var(--y2) * 40px) }
+.page-verkkosivut #hakukoneoptimointi .np-h-tulokset small { font-size: 11px; color: rgba(230,236,242,.5); line-height: 1 }
+.page-verkkosivut #hakukoneoptimointi .np-h-muu i { display: block; height: 7px; width: 62%; border-radius: 4px; background: rgba(138,180,248,.35) }
+.page-verkkosivut #hakukoneoptimointi .np-h-oma b { font-size: 13px; font-weight: 600; color: #8ab4f8; line-height: 1.1 }
+.page-verkkosivut #hakukoneoptimointi .np-h-oma small { color: #ffb27a }
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-h-oma {
+  background: rgba(255,166,92,.1); box-shadow: inset 0 0 0 1px rgba(255,166,92,.45);
+}
+
+/* ---------- 4. PUHELIN JA YHTEYDENOTTO ---------- */
+.page-verkkosivut #hakukoneoptimointi .np-kokemus {
+  position: absolute; inset: 0; display: grid; grid-template-columns: auto minmax(0, 1fr);
+  align-items: center; gap: 20px; padding: 0 26px;
+}
+.page-verkkosivut #hakukoneoptimointi .np-puhelin {
+  position: relative; width: 96px; height: 172px; margin-top: 44px; padding: 12px 9px;
+  border-radius: 18px; background: #0f151c;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.14), 0 14px 30px -12px rgba(0,0,0,.8);
+  display: grid; align-content: start; gap: 7px;
+}
+.page-verkkosivut #hakukoneoptimointi .np-ph-kuva { display: block; height: 42px; border-radius: 7px; background: linear-gradient(135deg, rgba(111,236,255,.35), rgba(111,236,255,.08)) }
+.page-verkkosivut #hakukoneoptimointi .np-ph-rivi { display: block; height: 6px; border-radius: 3px; background: rgba(255,255,255,.18) }
+.page-verkkosivut #hakukoneoptimointi .np-ph-lyhyt { width: 60% }
+.page-verkkosivut #hakukoneoptimointi .np-ph-nappi {
+  display: flex; align-items: center; justify-content: center; gap: 5px; height: 26px; margin-top: 4px; border-radius: 99px;
+  background: #6fecff; color: #06141a; font-size: 11px; font-weight: 700;
+}
+.page-verkkosivut #hakukoneoptimointi .np-ph-nappi svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linejoin: round }
+/* Napautus: sormen jalki painuu nappiin ja aalto leviaa. */
+.page-verkkosivut #hakukoneoptimointi .np-ph-sormi {
+  position: absolute; left: 50%; top: 111px; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%;
+  background: rgba(255,255,255,.55); box-shadow: 0 0 0 0 rgba(255,255,255,.45);
+  opacity: 0;
+}
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-ph-sormi { animation: np-napautus 3.6s ease-out 1s infinite }
+@keyframes np-napautus {
+  0% { opacity: 0; scale: 1.6 }
+  12% { opacity: .9; scale: 1 }
+  20% { opacity: .9; scale: .85 }
+  34% { opacity: 0; scale: 2.4 }
+  100% { opacity: 0; scale: 2.4 }
+}
+.page-verkkosivut #hakukoneoptimointi .np-ilmoitus {
+  display: grid; gap: 3px; padding: 12px 14px 12px 40px; border-radius: 14px; position: relative;
+  background: rgba(244,246,248,.96); color: #1d1d1f;
+  box-shadow: 0 18px 36px -16px rgba(0,0,0,.8);
+  opacity: 0; translate: 0 10px;
+}
+.page-verkkosivut #hakukoneoptimointi .np-ilmoitus::before {
+  content: ""; position: absolute; left: 13px; top: 50%; width: 16px; height: 16px; margin-top: -8px; border-radius: 50%;
+  background: #4ee08a; box-shadow: inset 0 0 0 4px #c9f6da;
+}
+.page-verkkosivut #hakukoneoptimointi .np-ilmoitus b { font-size: 13px; font-weight: 700 }
+.page-verkkosivut #hakukoneoptimointi .np-ilmoitus span { font-size: 11.5px; color: #616166 }
+.page-verkkosivut #hakukoneoptimointi .np-k.on .np-ilmoitus { animation: np-ilmoitus 3.6s cubic-bezier(.2,.8,.2,1) 1s infinite }
+@keyframes np-ilmoitus {
+  0%, 22% { opacity: 0; translate: 0 10px }
+  30%, 86% { opacity: 1; translate: 0 0 }
+  100% { opacity: 0; translate: 0 -6px }
+}
+
+@media (max-width: 600px) {
+  .page-verkkosivut #hakukoneoptimointi .np-k { padding: 24px 20px 20px }
+  .page-verkkosivut #hakukoneoptimointi .np-nopeus { grid-template-columns: 112px minmax(0, 1fr); gap: 16px; padding: 0 16px }
+  .page-verkkosivut #hakukoneoptimointi .np-mittari { width: 112px; height: 112px }
+  .page-verkkosivut #hakukoneoptimointi .np-m-ala { bottom: 22px }
+  .page-verkkosivut #hakukoneoptimointi .np-kokemus { padding: 0 16px; gap: 14px }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-verkkosivut #hakukoneoptimointi .np-m-kaari { transition: none; stroke-dashoffset: 7 }
+  .page-verkkosivut #hakukoneoptimointi .np-m-luku { transition: none; --np-pct: 93 }
+  .page-verkkosivut #hakukoneoptimointi .np-mitat i::after { transition: none; scale: 1 1 }
+  .page-verkkosivut #hakukoneoptimointi .np-p-viiva { transition: none; stroke-dashoffset: 0 }
+  .page-verkkosivut #hakukoneoptimointi .np-p-solmu { transition: none; opacity: 1 }
+  .page-verkkosivut #hakukoneoptimointi .np-p-botti { display: none }
+  .page-verkkosivut #hakukoneoptimointi .np-h-sana > span { transition: none; max-width: none }
+  .page-verkkosivut #hakukoneoptimointi .np-h-sana::after { animation: none }
+  .page-verkkosivut #hakukoneoptimointi .np-h-tulokset li { transition: none; translate: 0 calc(var(--y2) * 40px) }
+  .page-verkkosivut #hakukoneoptimointi .np-ph-sormi { animation: none !important; opacity: 0 }
+  .page-verkkosivut #hakukoneoptimointi .np-ilmoitus { animation: none !important; opacity: 1; translate: none }
 }

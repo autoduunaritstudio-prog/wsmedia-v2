@@ -3,26 +3,37 @@
    sivun ilme vaihtuu, tekstit eivat. Paikanpitajat [HINTA] ja [X]
    sailyvat sellaisinaan, Tuomas tayttaa ne myohemmin. */
 
+/* KORTIT, UUSI ULKOASU (2.10.2026, Tuomaksen hyvaksyma luonnos):
+   jokaisella kortilla on iso luku tai sana (luku), sen ylapuolella pieni
+   otsikkorivi (kick) ja lyhyempi teksti. Kaaviot ovat ennallaan. */
 export const REASONS = [
   {
     art: "hook",
-    h: "Alku ratkaisee, katsotaanko video loppuun",
-    p: "Katsoja päättää muutamassa sekunnissa, jatkaako hän. Siksi jokainen käsikirjoitus alkaa siitä, mikä kiinnostaa sinun asiakastasi, eikä yrityksen esittelystä.",
+    kick: "Pysyvyys",
+    luku: "3 s",
+    h: "Alku ratkaisee",
+    p: "Katsoja päättää muutamassa sekunnissa, jatkaako hän.",
   },
   {
     art: "channels",
+    kick: "Samasta kuvauksesta",
+    luku: "4 kanavaa",
     h: "Yksi kuvauspäivä, useita kanavia",
-    p: "Samasta kuvauspäivästä syntyvät videot TikTokiin, Reelsiin, Shortsiin ja tarvittaessa LinkedIniin. Sama kuvauspäivä riittää kaikkiin kanaviin.",
+    p: "Sama päivä riittää TikTokiin, Reelsiin, Shortsiin ja LinkedIniin.",
   },
   {
     art: "funnel",
-    h: "Tavoite on yhteydenotto, ei pelkät katselut",
-    p: "Jokaisen videon lopussa sanotaan, mitä katsojan kannattaa tehdä seuraavaksi. Seuraamme katselujen lisäksi, tuleeko sivuillesi kävijöitä ja yhteydenottoja.",
+    kick: "Yhteydenotot",
+    luku: "Mitattu",
+    h: "Tavoite on yhteydenotto",
+    p: "Seuraamme katselujen lisäksi kävijöitä ja yhteydenottoja.",
   },
   {
     art: "reach",
+    kick: "Katselukertaa yhdelle asiakkaalle",
+    luku: "1\u00A0000\u00A0000+",
     h: "Näkyvyyttä ilman mainosbudjettia",
-    p: "Somepalvelut näyttävät videoita myös ihmisille, jotka eivät vielä seuraa tiliäsi. Uuden tilin video voi levitä yhtä laajalle kuin tunnetun yrityksen.",
+    p: "Uuden tilin video voi levitä yhtä laajalle kuin tunnetun yrityksen.",
   },
 ];
 
@@ -34,17 +45,20 @@ export const PLATFORMS = [
   {
     mark: "tiktok" as const,
     h: "TikTok-videot yritykselle",
-    p: "TikTokissa uusikin tili voi tavoittaa paljon katsojia, joten se sopii hyvin, kun somenäkyvyyttä vasta rakennetaan. Parhaiten toimii rento video, joka puhuu katsojan kielellä eikä kuulosta mainokselta.",
+    p: "Uusikin tili voi tavoittaa paljon katsojia. Sopii, kun näkyvyyttä vasta rakennetaan.",
+    tag: "Rento ja suora",
   },
   {
     mark: "instagram" as const,
     h: "Instagram Reels yritykselle",
-    p: "Instagramia käyttävät kaikenikäiset, ja moni katsoo yrityksen tilin ennen kuin ottaa yhteyttä. Reels tuo uusia katsojia, ja tilin muut julkaisut kertovat, millainen yritys olet.",
+    p: "Moni katsoo yrityksen tilin ennen kuin ottaa yhteyttä. Reels tuo uusia katsojia.",
+    tag: "Yrityksen käyntikortti",
   },
   {
     mark: "youtube" as const,
     h: "YouTube Shorts yritykselle",
-    p: "Shorts-videot löytyvät YouTuben ja Googlen hauista vielä kuukausien päästä. Ne tuovat kanavalle uusia katsojia, ja pidemmät videot kertovat osaamisestasi tarkemmin.",
+    p: "Löytyvät YouTuben ja Googlen hauista vielä kuukausien päästä.",
+    tag: "Pitkä elinikä",
   },
 ];
 

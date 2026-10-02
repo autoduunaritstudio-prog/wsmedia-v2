@@ -4,20 +4,18 @@ import { Kaiku } from "../../components/Maasto";
 import { FAQ_GROUPS } from "../faq";
 
 import { Puu } from "./Artefaktit";
+import Laskuri from "./Laskuri";
+import { NAKYVYYS_NAYTOT, NAKYVYYS_OTSAKE } from "./NakyvyysPaneelit";
 import {
   BSTATS,
   EI_SOVI,
   FIGS,
-  FLIST,
   ICONS,
-  INCLUDE_ICONS,
   INCLUDES,
   OPTIONS,
   PLANS,
   PROBLEMS,
   REFCHIPS,
-  SEO_ICONS,
-  SEO_KUVIOT,
   SEO_POINTS,
   SOPII,
   STEPS,
@@ -38,11 +36,34 @@ import {
  * sisalla yhtaan lausetta jota lukija nakee.
  */
 
-function Ikoni({ nimi }: { nimi: string }) {
+function Ikoni({ nimi, j }: { nimi: string; j: number }) {
   return (
-    <svg className="vs-ikoni" viewBox="0 0 24 24" aria-hidden="true">
-      {ICONS[nimi]}
-    </svg>
+    <span className="vs-ik" style={{ "--j": j } as CSSProperties}>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        {ICONS[nimi]}
+      </svg>
+    </span>
+  );
+}
+
+/* Luku joka laskee ylos: "90+/100" -> 90 laskuriin, loput sellaisenaan.
+   Vali- tai ajatusviivalliset (2–4) jaavat staattisiksi. */
+function Luku({ n }: { n: string }) {
+  const m = /^(\d+)([+ ].*)$/.exec(n);
+  if (!m) return <>{n}</>;
+  return (
+    <>
+      <Laskuri n={Number(m[1])} />
+      {m[2]}
+    </>
   );
 }
 
@@ -57,7 +78,7 @@ export function Ongelma() {
           <i>Neljä syytä, mikä tahansa riittää</i>
         </div>
         <h2 className="seo-h2 rv">
-          Verkkosivut ovat olemassa, mutta ne eivät <span className="mark">tuo asiakkaita.</span>
+          Verkkosivut ovat olemassa, mutta ne eivät <span className="korosta">tuo asiakkaita.</span>
         </h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
           Nämä neljä syytä toistuvat lähes jokaisessa sivustouudistuksessa. Yksikin niistä
@@ -65,10 +86,10 @@ export function Ongelma() {
         </p>
 
         <div className="kaksi porras rv" style={{ marginTop: "56px" }}>
-          {PROBLEMS.map((p) => (
-            <div key={p.h}>
+          {PROBLEMS.map((p, i) => (
+            <div key={p.h} style={{ "--k": i } as CSSProperties}>
               <div className="vs-otsikko">
-                <Ikoni nimi={p.ic} />
+                <Ikoni nimi={p.ic} j={i} />
                 <h3>{p.h}</h3>
               </div>
               <p className="seo-body">{p.p}</p>
@@ -79,7 +100,9 @@ export function Ongelma() {
         <div className="luvut porras rv">
           {BSTATS.map((s) => (
             <div key={s.p}>
-              <b>{s.n}</b>
+              <b>
+                <Luku n={s.n} />
+              </b>
               <span>{s.p}</span>
             </div>
           ))}
@@ -120,8 +143,10 @@ export function Sisalto() {
                   että rakenne on se osa jota ei voi vaihtaa jälkikäteen ilman että näkyvyys
                   katkeaa.
                 </p>
-                <div className="osa-gfx kohoa rv">
-                  <Puu />
+                <div className="osa-kisko">
+                  <div className="osa-gfx kohoa rv">
+                    <Puu />
+                  </div>
                 </div>
               </div>
               {/* MERKKI JOKAISELLE RIVILLE. Kahdeksan riviä oli
@@ -133,11 +158,14 @@ export function Sisalto() {
                   syntyy vasempaan reunaan oma kisko. */}
               <dl className="hs-rows hs-merkein porras rv">
                 {INCLUDES.map(([h, p], i) => (
-                  <div key={h}>
+                  <div key={h} style={{ "--k": i } as CSSProperties}>
                     <dt>
-                      <svg className="hs-ik" viewBox="0 0 24 24" aria-hidden="true">
-                        {INCLUDE_ICONS[i]}
-                      </svg>
+                      <span className="tk" style={{ "--j": i } as CSSProperties}>
+                        <svg className="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <circle className="tk-r" cx="12" cy="12" r="10.5" />
+                          <path className="tk-v" d="M7 12.6l3.3 3.3L17 9" />
+                        </svg>
+                      </span>
                       <span>{h}</span>
                     </dt>
                     <dd>{p}</dd>
@@ -152,7 +180,48 @@ export function Sisalto() {
   );
 }
 
-/* ---------- Toteutustapa ---------- */
+/* ---------- Toteutustapa ----------
+   Selainikkunan rautalanka rakentuu kun ikkuna tulee esiin (.rv.on). */
+const RAUTALANKA = [
+  <div className="wf wf-a rv" aria-hidden="true" key="a">
+    <i className="b-nav" />
+    <i className="b-hero" />
+    <i className="b-btn" />
+    <span>
+      <i />
+      <i />
+      <i />
+    </span>
+  </div>,
+  <div className="wf wf-b rv" aria-hidden="true" key="b">
+    <i className="b-nav" />
+    <div className="b-code">
+      <i />
+      <i />
+      <i />
+      <i className="cur" />
+    </div>
+    <div className="b-grid">
+      <i />
+      <i />
+      <i />
+      <i />
+    </div>
+  </div>,
+  <div className="wf wf-c rv" aria-hidden="true" key="c">
+    <i className="b-nav">
+      <u className="cart">1</u>
+    </i>
+    <div className="b-shop">
+      <i />
+      <i />
+      <i />
+      <i />
+      <i />
+      <i />
+    </div>
+  </div>,
+];
 export function Toteutustapa() {
   return (
     <section className="seo-sec" id="toteutustapa">
@@ -165,9 +234,17 @@ export function Toteutustapa() {
         <h2 className="seo-h2 rv">Perussivusto vai räätälöidyt verkkosivut?</h2>
 
         <div className="duo2" style={{ marginTop: "48px" }}>
-          {OPTIONS.map((o) => (
+          {OPTIONS.map((o, i) => (
             <div className="duo2-col" key={o.oc}>
-              <p className="duo2-kick">{o.oc}</p>
+              <p className="duo2-kick">
+                <span className="dots" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span className="url">{o.oc}</span>
+              </p>
+              {RAUTALANKA[i]}
               <h3>{o.h}</h3>
               <p className="seo-body">{o.p}</p>
               <ul className="seo-spec porras rv">
@@ -217,24 +294,19 @@ export function Nakyvyys() {
         {/* data-hehku ON NOPEUSSAADIN, ks. globals.css. --rvp:n matka on
             aina noin yksi nakyma, joten piirto olisi ohi kauan ennen
             kuin osio on. */}
-        <ol className="nelja nelja-ikoni" data-rvs="" data-hehku="1.3">
+        {/* NAYTOT LYHYTVIDEOIDEN MALLIIN (2.10.2026): merkinta, iso luku,
+            otsikko, teksti ja alla nayttö joka nayttaa asian sellaisena
+            kuin lukija sen nakee. Ks. NakyvyysPaneelit.tsx. */}
+        <ol className="nelja np-ruudukko">
           {SEO_POINTS.map(([h, p], i) => (
-            <li className="nelja-k" key={h} style={{ "--i": i } as CSSProperties}>
-              <div className="nelja-yla">
-                <svg className="nelja-ik" viewBox="0 0 24 24" aria-hidden="true">
-                  {SEO_ICONS[i]}
-                </svg>
-                <h3>{h}</h3>
+            <li className="nelja-k np-k rv" key={h} style={{ "--i": i } as CSSProperties}>
+              <p className="np-kick">{NAKYVYYS_OTSAKE[i].kick}</p>
+              <b className="np-luku">{NAKYVYYS_OTSAKE[i].luku}</b>
+              <h3>{h}</h3>
+              <p className="np-teksti">{p}</p>
+              <div className="np-lava" aria-hidden="true">
+                {NAKYVYYS_NAYTOT[i]}
               </div>
-              <p>{p}</p>
-              {/* KUVIO KORTIN POHJALLE. Merkki kertoo mista kohta
-                  puhuu mutta ei nayta mitaan; kuvio piirtaa sen
-                  mekaniikan josta rivi puhuu. Se on selvasti tekstia
-                  vaimeampi, koska sen tehtava on antaa kortille pohja
-                  ja syvyys eika kilpailla otsikon kanssa. */}
-              <svg className="nelja-kuvio" viewBox="0 0 100 36" aria-hidden="true">
-                {SEO_KUVIOT[i]}
-              </svg>
             </li>
           ))}
         </ol>
@@ -457,6 +529,8 @@ export function Ukk() {
 
 /* ---------- Tarjous ---------- */
 export function Tarjous() {
+  /* SAMA KOKONAISUUS KUIN LYHYTVIDEOILLA: sama rakenne, samat luokat,
+     sama lomakekortti. Vain sisalto puhuu verkkosivuista. */
   return (
     <section className="seo-sec kuvapohja" id="tarjous">
       <img
@@ -468,45 +542,35 @@ export function Tarjous() {
         data-par="0.028"
       />
       <div className="swrap">
-        <div className="seo-ord" data-rvs="">
-        </div>
+        <p className="seo-selite" data-rvs="">Vastaus 24 tunnissa</p>
         <div className="loc">
           <div>
             <h2 className="seo-h2 rv">
-              Pyydä tarjous <span className="mark">verkkosivuista.</span>
+              Valmis uudistamaan <span className="korosta">verkkosivut?</span>
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-              Kerro lyhyesti mitä yritys tekee ja millainen sivusto on mielessä. Saat
-              kiinteähintaisen tarjouksen, eikä yhteydenotto sido sinua mihinkään. Teemme
-              kotisivuja Espoosta käsin koko Suomeen.
+              Vastaamme 24 tunnin sisällä ja kerromme suoraan, mitä ehdotamme ja mitä se maksaa.
             </p>
             <ol className="askel porras rv">
-              {FLIST.map(([h, s]) => (
-                <li key={h}>
-                  <b>{h}</b>
-                  <span>{s}</span>
-                </li>
-              ))}
+              <li>
+                <b>24 h</b>
+                <span>Luemme viestin ja vastaamme sähköpostilla.</span>
+              </li>
+              <li>
+                <b>30 min</b>
+                <span>Puhelu tai etäpalaveri: tavoite, sivurakenne ja aikataulu.</span>
+              </li>
+              <li>
+                <b>Tarjous</b>
+                <span>Kirjallinen ehdotus kiinteällä hinnalla. Ei sitoumuksia ennen hyväksyntää.</span>
+              </li>
             </ol>
           </div>
 
-          {/* SAMA KORTTI KUIN LYHYTVIDEOILLA. Budjettiliukuri pois:
-              se oli kortin korkein yksittainen osa, ja budjetin
-              kysyminen ennen kuin kavija tietaa mita han on ostamassa
-              karsii yhteydenottoja. Hinnat ovat sivulla jo omana
-              osionaan, joten kysymys ei kerro meille mitaan jota
-              lukija ei olisi juuri lukenut.
-
-              Kaksi kenttaa jaa: nykyiset verkkosivut ja millainen
-              sivusto on mielessa. Kaanto -y kuten Lyhytvideoilla. */}
           <BudgetForm
             showBudget={false}
             messageLabel="Millainen sivusto on mielessä?"
-            extraField={{ id: "nyk", label: "Nykyiset verkkosivut (jos on)", placeholder: "esimerkki.fi" }}
             note="Ei sitoumuksia."
-            /* Kortti on oikeanpuoleinen lohko ja kaantyy kohti vasenta
-               tekstipalstaa: "y" tuo VASEMMAN reunan katsojaa kohti.
-               Aiempi "-y" kaansi sen poispain tekstista. */
             tilt="y"
           />
         </div>
