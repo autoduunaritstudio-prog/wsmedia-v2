@@ -15314,3 +15314,238 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
    isompi ja liukuu transformilla, kerros rajaa sen. */
 .netbd.netbd-kuva { overflow: hidden }
 .netbd.netbd-kuva canvas { position: absolute; left: 0; top: 0; will-change: transform }
+
+
+/* ==================================================================
+   SUORITUSKYKY 1.10.2026 ilta: palvelusivujen vieritys
+   ==================================================================
+   Mitattu ohjelmistorasteroinnilla (ei naytonohjainta), 1366x768.
+   Jokaisen kohdan ulkoasu on tarkistettu kuvavertailulla ennen ja
+   jalkeen. Mittausskriptit: scripts/perf-vertailu/. */
+
+/* 1. OSION VALO KANKAALTA. SiteEffects piirtaa valon kahdeksasosan
+      kokoiselle kankaalle ja lukee arvot ylla olevista saannoista, ks.
+      teeValoKangas. Kun kangas on kaytossa, CSS:n oma maalaus ja maski
+      sammuvat; ilman JS:aa tai jos luku epaonnistuu, luokkaa ei tule ja
+      kerros piirtyy kuten ennen. */
+.osio-valo.kankaalla {
+  background: none !important;
+  -webkit-mask-image: none !important; mask-image: none !important;
+  will-change: auto !important;
+}
+.osio-valo.kankaalla > canvas { display: block; width: 100%; height: 100% }
+
+/* 2. VERKOSTO JAETTUNA KUVANA, ks. NetBackdrop.tsx kuvaMuisti. Kuva saa
+      samat saannot kuin kangas jonka se korvaa. max-width: none, koska
+      preflight rajaa kuvat vanhempansa levyisiksi ja kentta on nakymaa
+      220 px leveampi. */
+.netbd.netbd-kuva .netbd-img {
+  position: absolute; left: 0; top: 0; display: block;
+  max-width: none; will-change: transform;
+  pointer-events: none; user-select: none;
+}
+
+/* 3. RAE ILMAN SEKOITUSTILAA (lyhytvideot).
+      .rae oli koko ruudun kokoinen mix-blend-mode: soft-light -kerros.
+      Sekoitustila pakottaa selaimen kokoamaan KOKO sivun valikuvaksi ja
+      laskemaan soft-lightin jokaiselle pikselille joka kehyksessa.
+      MITATTU: kehyksen koontiaika sivun keskiosassa 33,3 ms -> 22,7 ms
+      kun sekoitus jaa pois; se oli sivun kallein yksittainen kerros.
+
+      Aiempi yritys (valmis kohinakuva) nakyi, koska kohinan voimakkuus
+      ei vastannut soft-lightin tulosta. Tama kuva on LASKETTU
+      alkuperaisesta: alkuperainen .rae renderoitiin Chromessa sivun
+      pohjavarin #0b0f14 paalle (1x ja 2x), ja jokaiselle pikselille
+      haettiin se vari ja alfa, joka tavallisella paallepiirrolla antaa
+      TASAN saman lopputuloksen. Tarkistettu pikseleittain: pohjavarilla
+      0 eroavaa pikselia molemmilla tarkkuuksilla. Kuvien ja valkoisen
+      tekstin paalla ero alkuperaiseen on enintaan pari savya.
+
+      Vinjetti (.rae::after) kuului samaan soft-light-ryhmaan, eika sita
+      voi toistaa tavallisella mustalla liukuvarilla: se harmaannuttaisi
+      vaalean heron kulmat, mita soft-light ei tee. Sen vaikutus tummaan
+      pohjaan oli 1-3 savya nakyman alakulmissa, joten se jaa pois.
+
+      Kuvat: public/rae/, tehty skriptilla scripts/perf-vertailu/rae.
+      Muilla palvelusivuilla on eri pohjavari, joten ne saavat oman
+      kuvansa kun niiden vuoro tulee; siihen asti niilla on alkuperainen. */
+.page-lyhytvideot .rae {
+  mix-blend-mode: normal; opacity: 1;
+  background-image: url("/rae/rae-0b0f14-1x.png");
+  background-image: image-set(url("/rae/rae-0b0f14-1x.png") 1x, url("/rae/rae-0b0f14-2x.png") 2x);
+  background-size: 180px 180px;
+}
+.page-lyhytvideot .rae::after { content: none }
+@media (prefers-reduced-motion: reduce) { .page-lyhytvideot .rae { opacity: .88 } }
+
+/* 4. KANTAJAHAHMOJEN KERROS NAVIN KORKUISEKSI (palvelusivut).
+      .carriers on #navin sisalla ja #nav on mix-blend-mode: difference,
+      joten sekoitettava alue on navin ja taman SVG:n yhteinen ala. SVG
+      oli koko nakyman kokoinen, vaikka hahmot liikkuvat palvelusivuilla
+      vain navin kaistalla. overflow: visible on jo paalla, joten mikaan
+      ei leikkaudu vaikka hahmo kavisi kaistan ulkopuolella; kerros
+      vain kasvaa silloin sen mukana. MITATTU: sekoituksen hinta
+      5,7 ms -> 3,5 ms kehyksessa. Logoon ja painikkeeseen ei kosketa. */
+/* EI hakukoneoptimointi-sivulla: siella .carriers on overflow: clip
+   (hahmot rajataan SVG:n laatikkoon), joten matala laatikko leikkaisi
+   hahmot pois. Todettu kuvavertailussa. */
+.page-palvelu:not(.page-hakukoneoptimointi) #nav .carriers { height: 1px }
+
+/* 5. PEITOSSA OLEVA VERKOSTOKERROS POIS KOONNISTA. SiteEffects merkitsee
+      kerroksen data-kangas-piilossa-attribuutilla kun jokin kansi peittaa
+      nakyman kokonaan sen paalla. Attribuutti esti aiemmin vain kankaan
+      piirron; kerros itse koottiin silti joka kehyksessa kansien alle.
+      MITATTU sivun lopussa: kolme paallekkaista verkostoa, kehyksen
+      koontiaika 47,8 ms -> 23,3 ms. Kuvavertailu: ei eroa. */
+.netbd[data-kangas-piilossa] { visibility: hidden }
+
+/* 6. SISAANTULOANIMAATIO POIS KUN SE ON VALMIS, ks. SiteEffects.
+      Samat loppuarvot kuin liin-animaatiolla. !important, koska
+      animaation arvo voitti kaikki tavalliset saannot, ja saman on
+      patevan sen jalkeenkin. */
+.li.li-valmis { opacity: 1 !important; transform: none !important; animation: none !important }
+
+/* 7. VERKOSTOKERROKSEN RYHMALAPINAKYVYYS LAPSIIN, ks. NetBackdrop.tsx
+      litista(). Luokka tulee vain kun kaava patee (tasainen pohja,
+      luettava hehku). Kentta ja merkit saavat ryhman lapinakyvyyden
+      suoraan, hehku on jo sekoitettu pohjavariin. */
+/* Lupa sivukohtaisesti, ks. litista(): vain lyhytvideoilla tarkistettu. */
+.page-lyhytvideot .netbd { --nb-litista: 1 }
+.netbd.netbd-litea { opacity: 1 !important }
+.netbd.netbd-litea > canvas,
+.netbd.netbd-litea > .netbd-img { opacity: var(--nb-op, 1) }
+
+/* 8. MERKKIEN KELLUNTA TAUOLLE KUN KERROS EI NAY. Jokainen kaynnissa
+      oleva CSS-animaatio saa tyylilaskennan jokaisessa kehyksessa jossa
+      paasaie tekee muutakin tyota, eli vierittaessa aina, vaikka itse
+      liike ajettaisiin kompositorissa. MITATTU: 16 alustamerkkia olivat
+      16 tyylilaskentaa kehyksessa koko sivun matkalla, vaikka heron
+      merkit ovat kannen alla ja jakson merkit nakyman ulkopuolella.
+
+      data-kangas-piilossa tulee SiteEffectsilta (kansi peittaa
+      kerroksen), data-nb-ulkona NetBackdropilta (peittavan vaiheen
+      kerros ei ole nakymassa). Animaatio jatkuu samasta kohdasta. */
+.netbd[data-kangas-piilossa] .nm,
+.netbd[data-nb-ulkona] .nm { animation-play-state: paused }
+
+/* 9. LASISUMENNUKSEN POISTO EI OLLUT VOIMASSA CHROMESSA.
+      Ylla oleva kohta 2 ("LASIPINNAT LIIKKUVAN TAUSTAN PAALLA") kirjoittaa
+      "backdrop-filter: none; -webkit-backdrop-filter: none" tassa
+      jarjestyksessa. Kaannoksen CSS-pakkaaja (Lightning CSS) yhdistaa
+      parin ja jattaa jaljelle VAIN -webkit-etuliitteisen rivin, jota
+      Chrome ja Edge eivat tunne. TODENNETTU kaannetysta tiedostosta
+      (".cta-palkki{-webkit-backdrop-filter:none;background:#0d121af2}")
+      ja selaimesta: getComputedStyle antoi edelleen blur(14px)
+      saturate(1.3). Safarissa poisto toimi, Chromessa ja Edgessa
+      sumennukset laskettiin yha joka kehys, vaikka pohjat oli jo tehty
+      peittavammiksi.
+
+      Etuliitteinen rivi ENSIN, kuten tiedoston muissa saannoissa
+      (esim. .page-dark .stickysub .statband): silloin pakkaaja
+      sailyttaa molemmat.
+
+      Tassa korjataan vain ne, joiden pohja on jo (lahes) umpinainen,
+      eli joilla sumennus ei nay: palkki (.95) seka lyhytvideosivun
+      footer (umpinainen) ja heron lipukkeet (.92). Kuvavertailu: ero enintaan pari
+      savya lipukkeiden kohdalla. .statband jatetaan TARKOITUKSELLA
+      ennalleen Chromessa: sen pohja on lahes lapinakyva, joten
+      sumennuksen poisto nakyisi (verkoston viivat kortin lapi). Se ja
+      muiden sivujen kortit ovat Tuomaksen paatos. */
+.cta-palkki { -webkit-backdrop-filter: none; backdrop-filter: none }
+.page-lyhytvideot footer,
+.page-lyhytvideot .chip-f { -webkit-backdrop-filter: none !important; backdrop-filter: none !important }
+
+/* ==================================================================
+   LATAUSRUUTU PALVELUSIVULLA JA VIDEOIDEN TOISTOPAINIKE, 2.10.2026
+   ks. app/components/Latausruutu.tsx ja PhoneReel.tsx
+   ================================================================== */
+/* Sama ruutu kuin etusivulla (.hero-load), pohjana taman sivun oma
+   tumma, jotta haivytys paattyy samaan variin josta sivu alkaa. */
+.page-lyhytvideot .lataus { background: #0b0f14 }
+/* VARAVENTTIILI ILMAN JAVASCRIPTIA. Jos skripti ei koskaan kaynnisty,
+   ruutu haipyy itse 15 sekunnin kohdalla. Tavallisesti ruutu on poistettu
+   kauan ennen sita, eika viivastetty animaatio vaikuta mihinkaan ennen
+   alkuaan. 6 s oli liian vahan: hitaalla koneella (6x hidastus) skripti
+   kaynnistyi vasta 13 s:n kohdalla, ja ruutu oli jo haipynyt. Kun skripti
+   ottaa ohjat, venttiili poistetaan (.lataus-js). */
+.lataus { animation: lataus-vara .7s linear 15s forwards }
+.lataus.lataus-js { animation: none }
+@keyframes lataus-vara { to { opacity: 0; visibility: hidden } }
+
+/* PALKKI LIIKKUU HETI, MYOS ENNEN SKRIPTIA. Hitaalla koneella skripti
+   kaynnistyy vasta sekuntien paasta, ja paasaie on sen ajan varattu.
+   Mitattu (6x hidastus): paasaikeella ajettu animaatio seisoi 4 s
+   kerrallaan. Siksi palkki liikkuu transformilla, jonka selain ajaa
+   kompositorissa paasaikeesta riippumatta. Skripti ottaa ohjat
+   (.lataus-js) ja jatkaa siita mihin animaatio ehti, ks. Latausruutu.tsx.
+
+   Logon taytto on maski eika voi liikkua kompositorissa. Se seuraa samaa
+   aikataulua rekisteroidyn muuttujan kautta aina kun paasaie ehtii. */
+@property --hero-load-p { syntax: "<percentage>"; inherits: true; initial-value: 0% }
+.lataus .hero-load-track { position: relative }
+.lataus .hero-load-bar {
+  width: 100%; transform-origin: 0 50%; transform: scaleX(0);
+  transition: none;
+  animation: lataus-palkki 15s linear forwards;
+}
+.lataus .hero-load-logo { animation: lataus-alku 15s linear forwards }
+.lataus.lataus-js .hero-load-logo, .lataus.lataus-js .hero-load-bar { animation: none }
+/* Hidastuva mutta ei koskaan seisova: alku reipas, sitten yha
+   hitaampi, ja 70 %:n jalkeen tayttaa vasta skripti. Samat pisteet
+   molemmissa, jotta palkki ja logo kulkevat yhdessa. */
+@keyframes lataus-palkki {
+  0% { transform: scaleX(0) }
+  3% { transform: scaleX(.12) }
+  8% { transform: scaleX(.22) }
+  20% { transform: scaleX(.38) }
+  40% { transform: scaleX(.52) }
+  70% { transform: scaleX(.63) }
+  100% { transform: scaleX(.70) }
+}
+@keyframes lataus-alku {
+  0% { --hero-load-p: 0% }
+  3% { --hero-load-p: 12% }
+  8% { --hero-load-p: 22% }
+  20% { --hero-load-p: 38% }
+  40% { --hero-load-p: 52% }
+  70% { --hero-load-p: 63% }
+  100% { --hero-load-p: 70% }
+}
+/* VALOJUOVA. Kapea vaalea kiilto kulkee palkin poikki koko latauksen
+   ajan, myos kompositorissa: ruutu nayttaa elavalta silloinkin kun
+   edistyminen on hetken hidasta. */
+.lataus .hero-load-track::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 45%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.75), rgba(255,255,255,0));
+  transform: translateX(-100%);
+  animation: lataus-kiilto 1.6s cubic-bezier(.45,0,.55,1) infinite;
+}
+@keyframes lataus-kiilto { to { transform: translateX(320%) } }
+/* Logon hengitys samoin kompositoriin: lapinakyvyys eika vari.
+   .72..1 kertaa .50 = .36..50, eli sama kuin etusivulla. */
+.lataus .hero-load-dim { color: rgba(245,245,247,.5); animation: lataus-hengitys 2.4s ease-in-out infinite }
+@keyframes lataus-hengitys { 0%, 100% { opacity: .72 } 50% { opacity: 1 } }
+@media (prefers-reduced-motion: reduce) {
+  .lataus .hero-load-track::after { animation: none; display: none }
+  .lataus .hero-load-dim { animation: none; opacity: .72 }
+}
+
+/* TEKSTI palkin alla. Sama vaalea kuin logon himmea pohja mutta hieman
+   kirkkaampi, jotta se lukee: .55 antaa #0b0f14:aa vasten noin 6:1. */
+.lataus-teksti {
+  margin: -8px 0 0; font-size: var(--text-caption, 13px);
+  letter-spacing: .04em; color: rgba(245,245,247,.55);
+}
+
+/* TOISTOPAINIKE puhelimen ruudulla. Mitat suhteessa .phonen 224 px
+   leveyteen, kuten muukin kayttoliittyma. .ig on z-index 4, painike sen
+   paalla. */
+.ph-play {
+  position: absolute; left: 50%; top: 50%; z-index: 5;
+  width: 54px; height: 54px; margin: -27px 0 0 -27px; padding: 0;
+  border: 0; border-radius: 50%;
+  background: rgba(0,0,0,.42); color: #fff;
+  display: grid; place-items: center; cursor: pointer;
+}
+.ph-play svg { width: 24px; height: 24px; fill: currentColor; stroke: none; margin-left: 2px }
+.ph-play:focus-visible { outline: 2px solid #fff; outline-offset: 3px }

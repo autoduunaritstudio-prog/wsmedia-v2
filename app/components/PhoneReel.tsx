@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { peilaaKankaalle } from "./videokangas";
-import { onKevyt } from "./kevyttila";
+import { kytkeSaasto, onKevyt, onSaasto, onSaastoTiukka } from "./kevyttila";
 
 /**
  * PUHELINMOCKUP JOSSA ON AITO VIDEO JA INSTAGRAM REELS -KAYTTOLIITTYMA.
@@ -103,6 +103,11 @@ export default function PhoneReel({
      aikana, ja etenemapalkki kirjoitetaan suoraan DOMiin. */
   const [p, setP] = useState(0);
   const [playing, setPlaying] = useState(false);
+  /* KASIKAYTTO (2.10.2026). Hitaalla laitteella tai yhteydella video ei
+     lahde itsestaan, vaan ruudulla on toistopainike. Painallus on
+     kayttajan oma valinta ja ohittaa tunnistuksen talle videolle. */
+  const [kasin, setKasin] = useState(false);
+  const pyydetty = useRef(false);
 
   useEffect(() => {
     const v = vid.current;
@@ -133,8 +138,25 @@ export default function PhoneReel({
     let nakyy = false;
     let peitossa = false;
     const cover = v.closest(".stickysub")?.querySelector<HTMLElement>(":scope > .cover") ?? null;
+    const html = document.documentElement;
+    /* LATAUSRUUTU, ks. Latausruutu.tsx. Ruudun aikana video ei pyori
+       vaan latautuu valmiiksi, ja lahtee kayntiin kun ruutu avautuu.
+       Sivupuhelimet lahtevat puoli sekuntia keskimmaisen jalkeen, jotta
+       kolme purkua ei ala samalla hetkella kuin ruudun haivytys. */
+    const lukittu = () => html.dataset.lataus === "1";
+    let odottaaVuoroa = toissijainen && lukittu();
+    let vuoro = 0;
+    /* Sivupuhelin: hidas laite tai hidas verkko. Keskimmainen: vain kun
+       selain itse ilmoittaa hitaan yhteyden tai datansaaston. Yksi video
+       ei kuormita laitetta, ja kesken toiston pysahtyva paavideo
+       nayttaisi vialta. */
+    const kasikaytto = () =>
+      !pyydetty.current && (toissijainen ? onKevyt() || onSaasto() : onSaastoTiukka());
+    if (lukittu() && !kasikaytto()) v.preload = "auto";
     const paivita = () => {
-      if (nakyy && !peitossa && !document.hidden && !(toissijainen && onKevyt())) {
+      const k = kasikaytto();
+      setKasin(k);
+      if (nakyy && !peitossa && !document.hidden && !k && !lukittu() && !odottaaVuoroa) {
         void v.play().then(
           () => setPlaying(true),
           () => setPlaying(false),
@@ -170,7 +192,33 @@ export default function PhoneReel({
     if (cover && ioPeitto) ioPeitto.observe(cover);
     document.addEventListener("visibilitychange", paivita);
     window.addEventListener("ws-kevyt", paivita);
+    window.addEventListener("ws-saasto", paivita);
+    v.addEventListener("ws-toista", paivita);
+    const auki = () => {
+      if (odottaaVuoroa) {
+        vuoro = window.setTimeout(() => {
+          odottaaVuoroa = false;
+          paivita();
+        }, 500);
+      }
+      paivita();
+    };
+    window.addEventListener("ws-lataus-auki", auki);
+    /* VERKON MITTAUS selaimille jotka eivat kerro yhteydesta. Jos
+       keskimmainen video on yha latautumassa neljan sekunnin kuluttua,
+       yhteys on hidas: sivupuhelimet jaavat pysakuvaksi. */
+    let hidas = 0;
+    if (!toissijainen && !onSaasto()) {
+      hidas = window.setTimeout(() => {
+        if (v.readyState < 3 && v.networkState === v.NETWORK_LOADING) kytkeSaasto();
+      }, 4000);
+    }
     return () => {
+      window.clearTimeout(vuoro);
+      window.clearTimeout(hidas);
+      window.removeEventListener("ws-lataus-auki", auki);
+      window.removeEventListener("ws-saasto", paivita);
+      v.removeEventListener("ws-toista", paivita);
       window.removeEventListener("ws-kevyt", paivita);
       io.disconnect();
       ioPeitto?.disconnect();
@@ -178,6 +226,11 @@ export default function PhoneReel({
       cancelAnimationFrame(raf);
     };
   }, []);
+
+  const toista = () => {
+    pyydetty.current = true;
+    vid.current?.dispatchEvent(new Event("ws-toista"));
+  };
 
   const g = grown(p);
   const at = ([a, b]: [number, number]) => fmt(a + (b - a) * g);
@@ -220,6 +273,17 @@ export default function PhoneReel({
             backgroundPosition: "center",
           }}
         />
+
+        {/* TOISTOPAINIKE. Nakyy vain kasikaytossa (hidas laite tai
+            verkko) ja kun video ei pyori. Sama merkki jonka Reels ja
+            TikTok nayttavat pysaytetyn videon paalla. */}
+        {kasin && !playing && (
+          <button type="button" className="ph-play" aria-label="Toista video" onClick={toista}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 5.2v13.6L19 12z" />
+            </svg>
+          </button>
+        )}
 
         {/* Tummennus ylos ja alas: IG:n oma kaytanto, ja se on tassa myos
             luettavuuden ehto - teksti on suoraan videokuvan paalla. */}

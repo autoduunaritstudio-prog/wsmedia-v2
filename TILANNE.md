@@ -160,6 +160,56 @@ CSS globals.css:n lopussa: `html.lenis-smooth { scroll-behavior: auto !important
 - Graafinen lisätty verkkosivujen ja lyhytvideoiden yhteisiin sääntöihin: osio-valo, B-roll-tekstien pehmennys, palkki napista, 72 px välit, prosessin solmut ja viisi saraketta, kenelle-palstat, footer, .mark, napin hehku.
 - Push tehdään kun kaikki palvelusivut ovat valmiit (Tuomaksen päätös).
 
+## 4d. Lyhytvideot: vierityksen kevennys, 1.–2.10.2026 (ei commitattu, ei pushattu)
+
+Mittaus: pilvikone ilman näytönohjainta, 1366 × 768, tuotantobuild, vertailukohta `hoyrymedia.fi/lyhytvideot`. Skriptit ja ajo-ohje: `scripts/perf-vertailu/README.md`. Kolmen ajon keskiarvot:
+
+| Prosessori | Ennen | Jälkeen | Höyry |
+| --- | --- | --- | --- |
+| 1x | 14,6 fps | 34,5 fps | 49,9 fps |
+| 4x hidastus | 5,6 fps | 16,1 fps | 22,3 fps |
+| 6x hidastus | 4,1 fps | 10,8 fps | 14,6 fps |
+
+Kehysvälin mediaani 1x: 56 ms → 17 ms (Höyry 17 ms). Ero Höyryyn syntyy sivun alusta (hero ja coverin nousu, noin 1 400 px), muu sivu on samalla tasolla.
+
+Ulkoasu tarkistettu kuvavertailulla 33 vierityskohdassa: keskiero 1,1/255, eli rakeen yhden sävyn vaihtelu. Muut sivut tarkistettu samoin.
+
+**Mitä muuttui** (kommentit koodissa, globals.css:n lopussa kohdat 1–9):
+
+1. Osion valo (`.osio-valo`) piirretään kahdeksasosan kokoiselle kankaalle. Rasterointityö 7,1 s → 1,2 s vierityksen aikana.
+2. Verkosto on yksi jaettu kuva viiden kankaan sijaan (`NetBackdrop.tsx`, `kuvaMuisti`).
+3. Rae ilman `mix-blend-mode: soft-light` -tilaa lyhytvideoilla: valmis kuva `public/rae/`, laskettu alkuperäisestä pohjavärin #0b0f14 päällä (0 eroavaa pikseliä tasaisella pohjalla). Rakeen vinjetti (1–3 sävyä alakulmissa) jäi pois. Muut sivut tarvitsevat oman kuvan omalle pohjavärilleen.
+4. `.carriers`-SVG navin korkuiseksi (ei SEO-sivulla, jossa se on `overflow: clip`).
+5. Kannen alla oleva verkostokerros `visibility: hidden`.
+6. `.li`-sisääntuloanimaatio poistetaan kun se on valmis (`.li-valmis`).
+7. Verkostokerroksen ryhmäläpinäkyvyys lapsiin, vain lyhytvideoilla (`--nb-litista: 1`). Verkkosivuilla sama muutti hinnaston valoa 4–12 sävyä, joten sitä ei otettu käyttöön.
+8. Merkkien kellunta tauolle kun kerros ei näy.
+9. Lasisumennuksen poisto korjattu Chromelle, ks. alla.
+
+Lisäksi: peitossa olevan pinon vaiheen `--rvp` ei kirjoiteta, piilossa olevan kerroksen merkkejä ei siirretä, logonauhaa siirretään vain näkyvissä.
+
+**Löytö: `backdrop-filter: none` ei ollut voimassa Chromessa eikä Edgessä.** Aiempi sääntö ("LASIPINNAT LIIKKUVAN TAUSTAN PÄÄLLÄ") kirjoittaa `backdrop-filter` ennen `-webkit-backdrop-filter`-riviä, ja käännöksen CSS-pakkaaja jättää silloin vain etuliitteisen rivin. Safarissa poisto toimi, Chromessa sumennukset laskettiin yhä. Korjattu palkille sekä lyhytvideosivun footerille ja lipukkeille (pohja jo lähes umpinainen). **Avoinna:** `.statband` lyhytvideoilla (sumennus maksaa noin 11 ms kehyksessä coverin noustessa; ilman sitä verkoston viivat näkyvät kortin läpi) ja muiden sivujen kortit (`.svc-txt`, `.gfx-kayra`, `.kysely`, `.fig`).
+
+**Mitä jäi** (vaativat päätöksen, koska ne näkyvät): heron kolme puhelinta (noin 19 ms kehyksessä ilman näytönohjainta), navin `mix-blend-mode: difference` (4–7 ms joka kohdassa), `.statband`-sumennus. Pääsäikeessä suurin erä on tyylilaskenta: `--rvp` periytyy, joten jokainen kirjoitus laskee myös elementin jälkeläiset.
+
+Tiedossa ollut vaakaylivuoto on yhä olemassa: 1366 px leveydellä `scrollWidth` on 1506 kohdassa y ≈ 900 (kantajahahmot), sama ennen ja jälkeen.
+
+## 4e. Lyhytvideot: latausruutu, videoiden porrastus ja toistopainike, 2.10.2026 (ei commitattu, ei pushattu)
+
+Tuomaksen pyyntö: latausruutu alkuun kuten Höyryllä, ja hitaalla koneella tai netillä videot eivät lähde itsestään vaan saavat play-painikkeen.
+
+- **Latausruutu** (`app/components/Latausruutu.tsx`, kytketty vain `app/lyhytvideot/page.tsx`:ään). Sama ulkoasu kuin etusivulla (`.hero-load`). Odottaa fontit, verkostotaustan (NetBackdrop lähettää `ws-tausta-valmis`) ja keskimmäisen puhelimen videon. Katto 1,5 s kiinnittymisestä. Näytetään vain kun sivulle tullaan suoraan, ei sivuston sisäisellä siirtymällä. Vieritys estetään tapahtumista, ei `overflow: hidden` -säännöllä (ei vierityspalkin hyppyä). Ilman JavaScriptia `<noscript>` piilottaa ruudun, ja jos skripti ei käynnisty, CSS häivyttää sen 6 s kohdalla.
+- **Palkki liikkuu koko ajan** (2.10. päivitys, Tuomaksen palaute: palkki seisoi harmaana 6x-hidastuksella). Syy: pääsäie on käynnistyksen ajan varattu, ja muuttujalla ajettu animaatio seisoo silloin. Nyt palkki liikkuu transformilla kompositorissa jo ennen skriptiä (hidastuva käyrä 0 -> 70 % 15 s:ssa), skripti jatkaa samasta kohdasta. Tavoite = todellinen edistyminen (fontit 15 %, tausta 25 %, video 60 % puskuroidun datan mukaan, joten verkon nopeus näkyy palkissa) tai hiipivä eteneminen kohti 90 %:a. Lopussa palkki pyyhkäisee täyteen ja ruutu häipyy vasta sitten. Valojuova kulkee palkin poikki koko ajan, teksti "Hetki, sivu latautuu". CSS-varaventtiili 6 s -> 15 s, koska 6x-hidastuksella skripti käynnistyi vasta 13 s kohdalla.
+- **Porrastus** (`PhoneReel.tsx`). Ruudun aikana videot latautuvat mutta eivät pyöri (`html[data-lataus]`). Keskimmäinen lähtee kun ruutu avautuu, sivupuhelimet 0,5 s myöhemmin.
+- **Toistopainike** (`.ph-play`). Sivupuhelimissa kun laite on hidas (`data-kevyt`) tai verkko hidas (`data-saasto`). Keskimmäisessä vain kun selain itse ilmoittaa hitaan yhteyden tai datansäästön (`data-saasto="tiukka"`, Chrome ja Edge). Safari ja Firefox eivät kerro yhteydestä: jos keskimmäinen video latautuu yhä 4 s kohdalla, tila on `data-saasto="mitattu"` ja sivupuhelimet jäävät pysäytyskuvaksi.
+- **Kevyttilan mittaus** alkaa nyt sekunnin kuluttua ruudun avautumisesta, ei ruudun aikana.
+
+Mitattu (pilvikone ilman näytönohjainta): ruutu avautuu noin 0,6 s hydraation jälkeen, häivytys 0,7 s. Lighthouse kahdella ajolla: LCP ei muuttunut (työpöytä 1,3–1,5 s, mobiili 5,8–6,3 s molemmilla), Speed Index heikkeni (työpöytä 1,3–1,5 s -> 1,9–2,0 s, mobiili 3,3–4,1 s -> 4,4–4,8 s), pisteet työpöytä 91–94 -> 89–90, mobiili 52 -> 49–54. Vierityksen fps ei muuttunut.
+
+Seuraus ulkoasulle: heron tekstien sisääntulo (`.li`) tapahtuu ruudun takana, ja sivu paljastuu ruudun häivytyksellä. Jos sisääntulo halutaan näkyviin ruudun jälkeen, LCP siirtyy ruudun avautumiseen.
+
+Avoimet päätökset: painikkeen ulkoasu, pysäytetäänkö myös keskimmäinen video hitaalla koneella, ja otetaanko ruutu muille palvelusivuille.
+
 ## 5. Seuraavat askeleet
 
 Mitään pakollista ei ole kesken. Alla olevat ovat avoimia päätöksiä ja siivousta, tärkein ensin.

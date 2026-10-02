@@ -2,6 +2,7 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 
+import Latausruutu from "../components/Latausruutu";
 import NetBackdrop from "../components/NetBackdrop";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
@@ -105,6 +106,9 @@ const STATS = [
 export default function Lyhytvideot() {
   return (
     <div className="page-palvelu page-lyhytvideot wsx">
+      {/* LATAUSRUUTU. Ensimmaisena, jotta sen efekti ajetaan ennen
+          puhelinten efekteja: ne lukevat lukon kiinnittyessaan. */}
+      <Latausruutu video=".stage .p1 video" />
       {/* SIVUTASON VERKOSTO. Tama on se kerros joka renderoi myos
           NetMarksit, eli herossa kelluvat Instagram-, TikTok- ja
           YouTube-merkit. Se jai pois kun sivu siirtyi wsx-ilmeeseen,

@@ -86,6 +86,26 @@ const SCROLL_TAU = 0.12;
    verkosto liikkuu yhtena kappaleena. false palauttaa elavan version. */
 const KUVANA = true;
 
+/* KENTTA JAETTUNA KUVANA (1.10.2026 ilta).
+   KUVANA-tilassa jokainen ilmentyma piti omaa nakymaa isompaa
+   kangastaan, eli lyhytvideosivulla viisi 1586 x 1668 px:n kangasta
+   (retina-naytolla noin 2900 x 2800). Kentta on niissa kaikissa SAMA,
+   koska siemen, koko ja varit ovat samat.
+
+   MITATTU ohjelmistorasteroinnilla 1366x768: kankaat veivat jokaisesta
+   kehyksesta 9,5 ms pelkassa kerrosten luovutuksessa (commit 13,7 ms,
+   ilman verkostoa 4,2 ms), vaikka niita ei piirretty uudelleen.
+
+   Ensimmainen ilmentyma tallentaa piirtamansa kankaan PNG-kuvaksi, ja
+   kaikki samankokoiset ilmentymat nayttavat sen jalkeen tuon yhden
+   kuvan tavallisena <img>-elementtina. Kangas tyhjennetaan. Kuva on
+   pikselilleen sama kuin kangas (PNG on haviton), ja liu'utus on
+   edelleen sama transform.
+
+   Avain on koko, tarkkuus ja varit: jos jokin niista eroaa, ilmentyma
+   saa oman kuvansa. */
+const kuvaMuisti = new Map<string, Promise<string | null>>();
+
 /* KAIKKI KERROKSET PIIRTAVAT SAMAN KENTAN.
    Sivulla on useita ilmentymia: yksi sivutason kerros ja yksi jokaista
    peittavaa vaihetta kohti. Ne olivat aiemmin toisistaan riippumattomia
@@ -217,8 +237,88 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
       if (d) dotColor = d;
     };
 
+    /* Liu'utettava elementti: kangas kunnes jaettu kuva on valmis. */
+    let liuku: HTMLElement = cv;
+    let kuvaEl: HTMLImageElement | null = null;
+    let kuvaAvain = "";
+    let purettu = false;
+    /* RYHMAN LAPINAKYVYYS PURETTUNA LAPSIIN (1.10.2026 ilta).
+       Peittavan vaiheen kerros on opacity .46 -ryhma, jossa on kentta
+       ja sen paalla hehku. Ryhman lapinakyvyys pakottaa selaimen
+       kokoamaan lapset ensin omaksi valikuvakseen ja sekoittamaan sen
+       sitten sivuun: kolme koko nakyman kokoista sekoitusta kehyksessa
+       yhden kerroksen takia. MITATTU: 23,3 ms -> 19,7 ms sivun
+       keskiosassa.
+
+       Sama kuva syntyy ilman ryhmaa, kun kerroksen alla on tasainen
+       vari B: kentta saa lapinakyvyyden a suoraan, ja hehkun vari c
+       vaihdetaan sekoitukseen a*c + (1-a)*B samalla alfalla. Kaava:
+         a*(hehku kentan paalla) B:n paalla
+           = g*(a*c + (1-a)*B) + (1-g)*(a*kentta + (1-a*l)*B)
+       eli tasan se, minka uusi hehku ja lapinakyva kentta tuottavat.
+       Arvot luetaan lasketuista tyyleista, joten globals.css:n saannot
+       maarittavat ulkoasun edelleen. Jos alla ei ole tasaista varia tai
+       hehkua ei voi lukea, ryhma jaa ennalleen.
+
+       Sivutason kerroksella on oma umpinainen taustavari. Se puretaan
+       vain kun vari on sama kuin sivun pohja sen alla (lyhytvideot:
+       molemmat #0b0f14), jolloin kerros on umpinainen jo valmiiksi. */
+    const litista = () => {
+      const isanta = cv.parentElement;
+      if (!isanta) return;
+      const hehku = isanta.querySelector<HTMLElement>(":scope > .netbd-glow");
+      if (!hehku) return;
+      isanta.classList.remove("netbd-litea");
+      hehku.style.removeProperty("background-image");
+      const oma = getComputedStyle(isanta);
+      /* SIVUKOHTAINEN LUPA. Kaava olettaa tasaisen pohjan, mutta
+         kerroksen alla on myos osion valo (.osio-valo). Purettuna hehku
+         peittaa valoa reunoilla hieman enemman kuin ryhmana (kerroin
+         1-g eika 1-a*g). MITATTU kuvavertailulla: lyhytvideoilla ero on
+         enintaan 6 savya alle prosentissa pikseleista, verkkosivujen
+         hinnastossa 4-12 savya 14 prosentissa. Siksi purku on paalla
+         vain sivuilla, joilla se on tarkistettu: --nb-litista: 1. */
+      if (oma.getPropertyValue("--nb-litista").trim() !== "1") return;
+      const a = parseFloat(oma.opacity);
+      if (!(a > 0 && a < 1)) return;
+      /* Kerroksen oma tausta: joko ei mitaan (peittava vaihe) tai
+         umpinainen vari (sivutason kerros). Ruudukkokuvaa tai
+         puolilapinakyvaa varia ei pureta. */
+      if (oma.backgroundImage !== "none") return;
+      const omaM = /rgba?\(([^)]+)\)/.exec(oma.backgroundColor);
+      const omaV = omaM ? omaM[1].split(",").map((x) => parseFloat(x)) : null;
+      const omaAlfa = omaV ? (omaV[3] ?? 1) : 0;
+      if (omaAlfa !== 0 && omaAlfa !== 1) return;
+      let pohja: number[] | null = null;
+      for (let e = isanta.parentElement; e; e = e.parentElement) {
+        const t = getComputedStyle(e);
+        const m = /rgba?\(([^)]+)\)/.exec(t.backgroundColor);
+        const v = m ? m[1].split(",").map((x) => parseFloat(x)) : null;
+        const alfa = v ? (v[3] ?? 1) : 0;
+        if (t.backgroundImage !== "none" && alfa < 1) return;
+        if (!v || alfa === 0) continue;
+        if (alfa < 1) return;
+        pohja = v;
+        break;
+      }
+      if (!pohja) return;
+      const kuva = getComputedStyle(hehku).backgroundImage;
+      const vari = /rgb\((\d+), (\d+), (\d+)\)/g;
+      const osumat = Array.from(kuva.matchAll(vari));
+      if (osumat.length !== 1 || !kuva.startsWith("radial-gradient(")) return;
+      const c = [1, 2, 3].map((i) => Number(osumat[0][i]));
+      /* Oma umpinainen vari kelpaa vain jos se on SAMA kuin pohja: silloin
+         ryhma oli "a * oma + (1-a) * pohja" = sama vari, ja kaava patee
+         tasan. Eri varilla kentan viivojen alle jaisi pieni ero. */
+      if (omaAlfa === 1 && omaV!.slice(0, 3).some((x, i) => x !== pohja![i])) return;
+      const seos = c.map((x, i) => (a * x + (1 - a) * pohja![i]).toFixed(2));
+      hehku.style.backgroundImage = kuva.replace(vari, `rgb(${seos.join(" ")})`);
+      isanta.style.setProperty("--nb-op", String(a));
+      isanta.classList.add("netbd-litea");
+    };
     const size = () => {
       readColors();
+      litista();
       dpr = Math.min(window.devicePixelRatio || 1, DPR_MAX);
       if (KUVANA) {
         const isanta = cv.parentElement;
@@ -231,11 +331,26 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
       }
       fh = h + PAN_Y;
       if (KUVANA) {
-        cv.width = Math.round((w + PAN_X) * dpr);
-        cv.height = Math.round(fh * dpr);
+        const kw = Math.round((w + PAN_X) * dpr);
+        const kh = Math.round(fh * dpr);
+        /* Jaettu kuva on jo kaytossa ja mikaan ei muuttunut (esim.
+           mobiiliselaimen osoitepalkin heilahdus): kangasta ei varata
+           eika piirreta uudelleen. */
+        if (liuku !== cv && kuvaAvain === `${kw}x${kh}|${lineRgb}|${dotColor}`) return;
+        cv.width = kw;
+        cv.height = kh;
         cv.style.width = `${w + PAN_X}px`;
         cv.style.height = `${fh}px`;
         kuvaPiirretty = false;
+        /* Koko tai vari vaihtui kun jaettu kuva oli jo kaytossa: kangas
+           takaisin nakyviin heti, kunnes uusi kuva on valmis. */
+        if (liuku !== cv) {
+          cv.style.display = "";
+          if (kuvaEl) kuvaEl.style.display = "none";
+          liuku = cv;
+          kuvaAvain = "";
+          edOx = NaN;
+        }
       } else {
         cv.width = Math.round(w * dpr);
         cv.height = Math.round(h * dpr);
@@ -261,7 +376,91 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
         kuvaPiirretty = true;
         const q = progress();
         cv.style.transform = `translate3d(${-(Math.sin(q * Math.PI) * PAN_X)}px, ${-(q * PAN_Y)}px, 0)`;
+        pyydaKuva();
       }
+    };
+    /* Kuvan teko omaan tehtavaansa hetken paahan. Kankaan kopiointi ja
+       pakkauksen kaynnistys osuivat muuten sivun latauksen pitkaan
+       tehtavaan (Lighthouse: TBT +40 ms). Kangas nayttaa saman kuvan
+       siihen asti. EI requestIdleCallback: kuormitetulla sivulla
+       joutoaikaa ei tule, ja kuva valmistui vasta 9 s:n kohdalla. */
+    let kuvaAjastettu = false;
+    const pyydaKuva = () => {
+      if (kuvaAjastettu) return;
+      kuvaAjastettu = true;
+      const aja = () => {
+        kuvaAjastettu = false;
+        if (!purettu) teeKuva();
+      };
+      window.setTimeout(aja, 300);
+    };
+    const teeKuva = () => {
+      if (typeof cv.toBlob !== "function" || !cv.width) return;
+      const avain = `${cv.width}x${cv.height}|${lineRgb}|${dotColor}`;
+      if (avain === kuvaAvain) return;
+      kuvaAvain = avain;
+      let lupaus = kuvaMuisti.get(avain);
+      if (!lupaus) {
+        /* PAKKAUS TAUSTASAIKEESSA. canvas.toBlob pakkaa selaimen
+           joutoajalla, ja kuormitetulla sivulla sita ei aina tule
+           sekunteihin (mitattu: kuva ei ollut valmis 5 s:n kohdalla).
+           OffscreenCanvas.convertToBlob pakkaa omassa saikeessaan.
+           Kopio OffscreenCanvasiin on yksi piirto. */
+        lupaus = new Promise<string | null>((valmis) => {
+          const url = (b: Blob | null) => valmis(b ? URL.createObjectURL(b) : null);
+          try {
+            if (typeof OffscreenCanvas !== "undefined") {
+              const oc = new OffscreenCanvas(cv.width, cv.height);
+              const ox = oc.getContext("2d");
+              if (ox && typeof oc.convertToBlob === "function") {
+                ox.drawImage(cv, 0, 0);
+                oc.convertToBlob({ type: "image/png" }).then(url, () => valmis(null));
+                return;
+              }
+            }
+            cv.toBlob(url, "image/png");
+          } catch {
+            valmis(null);
+          }
+        });
+        kuvaMuisti.set(avain, lupaus);
+      }
+      const leveys = `${w + PAN_X}px`;
+      const korkeus = `${fh}px`;
+      lupaus.then((url) => {
+        if (!url || purettu || kuvaAvain !== avain) return;
+        const k = kuvaEl ?? new Image();
+        if (!kuvaEl) {
+          k.alt = "";
+          k.decoding = "async";
+          k.draggable = false;
+          k.className = "netbd-img";
+          kuvaEl = k;
+        }
+        k.src = url;
+        const vaihda = () => {
+          if (purettu || kuvaAvain !== avain) return;
+          k.style.width = leveys;
+          k.style.height = korkeus;
+          k.style.transform = cv.style.transform;
+          k.style.display = "";
+          if (!k.isConnected) cv.before(k);
+          cv.style.display = "none";
+          /* Kankaan muisti vapaaksi. size() varaa sen uudelleen jos
+             ikkunan koko muuttuu. */
+          cv.width = 0;
+          cv.height = 0;
+          liuku = k;
+          /* Sivutason kerros kertoo latausruudulle (Latausruutu.tsx),
+             etta tausta on valmiina kuvana: raskas alkutyo on tehty. */
+          if (mount !== "cover" && document.documentElement.dataset.tausta !== "1") {
+            document.documentElement.dataset.tausta = "1";
+            window.dispatchEvent(new Event("ws-tausta-valmis"));
+          }
+        };
+        if (typeof k.decode === "function") k.decode().then(vaihda, vaihda);
+        else vaihda();
+      });
     };
 
     /* Sivun etenema 0..1. Nimittajana koko vieritettava matka, joten
@@ -423,7 +622,13 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
       const target = progress();
       if (sp < 0 || dt === 0) sp = target;
       else sp += (target - sp) * (1 - Math.exp(-dt / SCROLL_TAU));
-      pushSp();
+      /* Piilossa olevan kerroksen merkkeja ei siirreta (1.10.2026 ilta).
+         Sivutason kerros on kannen alla lahes koko sivun ajan, ja sen
+         kymmenen merkkia saivat silti uuden transformin joka kehys.
+         Kun kerros palaa nakyviin, merkit siirtyvat oikeaan kohtaan
+         samassa kehyksessa, koska arvo lasketaan etenemasta. */
+      const piilossa = !!host && (host.hasAttribute("data-kangas-piilossa") || !!host.closest("[data-peitossa]"));
+      if (!piilossa) pushSp();
       /* Peiton laskenta (kaaren getBoundingClientRect joka kehys) poistettiin
          30.9.2026: shouldRun() palauttaa sivutason kerrokselle aina true,
          joten tieto ei ohjannut mitaan, mutta luku pakotti asettelun
@@ -438,7 +643,7 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
          Tieto tulee SiteEffectsilta attribuuttina (ei asettelun lukua).
          Kun kangas palaa nakyviin, se piirtyy samassa kehyksessa, ja
          kentta on ajasta laskettu, joten se on heti oikeassa kohdassa. */
-      if (host && (host.hasAttribute("data-kangas-piilossa") || host.closest("[data-peitossa]"))) {
+      if (piilossa) {
         viimeksiPiirretty = 0;
         return;
       }
@@ -450,16 +655,17 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
          puolittuu juuri silloin kun selain tarvitsee aikaa vieritykseen. */
       /* Kevyessa tilassa (hidas laite, ks. kevyttila.ts) 15 fps. */
       if (KUVANA) {
-        if (!kuvaPiirretty) {
+        if (!kuvaPiirretty && liuku === cv) {
           draw(0);
           kuvaPiirretty = true;
+          pyydaKuva();
         }
         const ox = Math.round(-(Math.sin(sp * Math.PI) * PAN_X) * 10) / 10;
         const oy = Math.round(-(sp * PAN_Y) * 10) / 10;
         if (ox !== edOx || oy !== edOy) {
           edOx = ox;
           edOy = oy;
-          cv.style.transform = `translate3d(${ox}px, ${oy}px, 0)`;
+          liuku.style.transform = `translate3d(${ox}px, ${oy}px, 0)`;
         }
         return;
       }
@@ -554,6 +760,9 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
         io = new IntersectionObserver(
           (entries) => {
             inView = entries.some((e) => e.isIntersecting);
+            /* Merkkien kellunta tauolle kun kerros ei ole nakymassa,
+               ks. globals.css "MERKKIEN KELLUNTA TAUOLLE". */
+            ref.current?.parentElement?.toggleAttribute("data-nb-ulkona", !inView);
             setAwake();
           },
           { rootMargin: "20% 0px" },
@@ -569,6 +778,8 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
     document.addEventListener("visibilitychange", onVis);
     setAwake();
     return () => {
+      purettu = true;
+      kuvaEl?.remove();
       cancelAnimationFrame(raf);
       io?.disconnect();
       /* Oma peitto-osuus pois laskurista, muuten purettu kerros pitaisi

@@ -134,7 +134,10 @@ export default function NetMarks({ variantti = "hero" }: { variantti?: "hero" | 
               top: m.y + "%",
               width: m.s,
               height: m.s,
-              opacity: m.o,
+              /* --nb-op on verkostokerroksen oma lapinakyvyys silloin kun
+                 ryhma on purettu lapsiin, ks. NetBackdrop litista(). Muuten
+                 muuttujaa ei ole ja arvo on m.o kuten ennen. */
+              opacity: `calc(${m.o} * var(--nb-op, 1))`,
               animationDuration: m.t + "s",
               animationDelay: m.d + "s",
               "--nx": Math.round(m.h * TRAVEL_X * m.z),

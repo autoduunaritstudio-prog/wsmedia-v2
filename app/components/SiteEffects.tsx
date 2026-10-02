@@ -82,6 +82,32 @@ export default function SiteEffects() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const finePointer = window.matchMedia("(pointer: fine)").matches;
 
+    /* SISAANTULOANIMAATIO POIS KUN SE ON VALMIS (1.10.2026 ilta).
+       .li paattyy animation-fill-mode: forwards -tilaan, eli animaatio
+       jaa elementtiin voimaan loppuarvoillaan. Selain pitaa silloin
+       elementtia edelleen animoituna ryhmana: lyhytvideosivun heron
+       puhelinnayttamo (.stage.li) koottiin joka kehyksessa omaksi
+       valikuvakseen kaikkine lapsineen, vaikka mikaan ei enaa liikkunut.
+       MITATTU ohjelmistorasteroinnilla: heron kehyksen koontiaika
+       40,8 ms -> 20,1 ms kun animaatio poistetaan sen paatyttya.
+
+       .li-valmis asettaa samat loppuarvot (opacity 1, transform none)
+       tavallisina tyyleina, joten ulkoasu ei muutu. */
+    document.addEventListener(
+      "animationend",
+      (e) => {
+        if (e.animationName !== "liin") return;
+        const t = e.target;
+        if (t instanceof HTMLElement && t.classList.contains("li")) t.classList.add("li-valmis");
+      },
+      { signal },
+    );
+    /* Animaatio on voinut paattya ennen kuin tama kuuntelija asennettiin. */
+    for (const el of document.querySelectorAll<HTMLElement>(".li")) {
+      const a = el.getAnimations?.().find((x) => (x as CSSAnimation).animationName === "liin");
+      if (a && a.playState === "finished") el.classList.add("li-valmis");
+    }
+
     const nav = document.getElementById("nav");
     const prog = document.getElementById("prog");
 
@@ -199,6 +225,106 @@ export default function SiteEffects() {
     /* Valon oma kerros, ks. globals.css "OSION VALO OMANA ELEMENTTINAAN".
        Lyhytvideoilla, verkkosivuilla ja graafisella sivulla, vain osioihin joiden ::before on valo. */
     const valoKerros = new WeakMap<HTMLElement, HTMLElement>();
+    /* VALO PIENELLE KANKAALLE (1.10.2026 ilta).
+       Valo oli osion korkuinen kerros, jossa kaksi liukuvaria ja maski.
+       Jokainen --valo-q:n porras (50 kpl osion ohituksen aikana) maalasi
+       koko kerroksen uudelleen: hinnastosta tarjoukseen ulottuvalla
+       jaksolla se on 1366 x 5202 px. MITATTU ohjelmistorasteroinnilla:
+       vierityksen rasterointityo 7,1 s -> 1,1 s kun valo on pois.
+
+       Valo on pelkkaa pehmeaa liukuvaria, joten sen voi piirtaa
+       kahdeksasosan kokoiselle kankaalle ja venyttaa: yksi porras on
+       silloin 64 kertaa vahemman pikseleita, ja venytys on kompositorin
+       tyota. Arvot LUETAAN CSS:sta (lasketusta tyylista kahdessa
+       paatepisteessa, v = 0 ja v = 1), joten saannot globals.css:ssa
+       ovat edelleen ainoa paikka jossa valon muoto on maaritelty. Kaikki
+       CSS:n lausekkeet ovat v:n suhteen lineaarisia, joten vali
+       interpoloidaan suoraan.
+
+       Jos lukeminen ei onnistu (selain sarjoittaa liukuvarin toisin),
+       kerros jaa ennalleen ja CSS piirtaa sen kuten ennenkin. */
+    type ValoPiste = { rx: number; ry: number; cx: number; cy: number; rgb: string; a: number; loppu: number };
+    const VALO_RE =
+      /radial-gradient\(\s*([\d.]+)%\s+([\d.]+)%\s+at\s+([\d.]+)%\s+([\d.]+)%\s*,\s*rgba?\(([^)]+)\)\s*,\s*rgba?\([^)]+\)\s+([\d.]+)%\s*\)/g;
+    const lueValot = (k: HTMLElement, v: string): ValoPiste[] => {
+      k.style.setProperty("--valo-q", v);
+      const out: ValoPiste[] = [];
+      for (const m of getComputedStyle(k).backgroundImage.matchAll(VALO_RE)) {
+        const c = m[5].split(",").map((t) => parseFloat(t));
+        if (c.length < 3 || c.some((n) => Number.isNaN(n))) return [];
+        out.push({ rx: +m[1], ry: +m[2], cx: +m[3], cy: +m[4], rgb: `${c[0]},${c[1]},${c[2]}`, a: c[3] ?? 1, loppu: +m[6] });
+      }
+      return out;
+    };
+    const VALO_SKAALA = 8;
+    type ValoKangas = { koko: () => void; piirra: (v: number) => void };
+    const valoKankaat = new WeakMap<HTMLElement, ValoKangas>();
+    const teeValoKangas = (k: HTMLElement): ValoKangas | null => {
+      const alku = lueValot(k, "0");
+      const loppu = lueValot(k, "1");
+      k.style.removeProperty("--valo-q");
+      const cs = getComputedStyle(k);
+      const maski = /rgb\(0, 0, 0\)\s+([\d.]+)%\s*,\s*rgb\(0, 0, 0\)\s+([\d.]+)%/.exec(
+        cs.maskImage || cs.getPropertyValue("-webkit-mask-image") || "",
+      );
+      if (!alku.length || alku.length !== loppu.length || !maski) return null;
+      const cv = document.createElement("canvas");
+      const x = cv.getContext("2d", { alpha: true });
+      if (!x) return null;
+      const m0 = +maski[1] / 100;
+      const m1 = +maski[2] / 100;
+      let w = 0;
+      let h = 0;
+      let ed = NaN;
+      const koko = () => {
+        const nw = Math.max(2, Math.ceil(k.offsetWidth / VALO_SKAALA));
+        const nh = Math.max(2, Math.ceil(k.offsetHeight / VALO_SKAALA));
+        if (nw === w && nh === h) return;
+        w = nw;
+        h = nh;
+        cv.width = w;
+        cv.height = h;
+        const v = ed;
+        ed = NaN;
+        if (!Number.isNaN(v)) piirra(v);
+      };
+      const piirra = (v: number) => {
+        if (v === ed || !w) return;
+        ed = v;
+        x.globalCompositeOperation = "source-over";
+        x.clearRect(0, 0, w, h);
+        // CSS:ssa ensimmainen liukuvari on paallimmaisena: piirretaan lopusta alkuun.
+        for (let i = alku.length - 1; i >= 0; i--) {
+          const a = alku[i];
+          const b = loppu[i];
+          const li = (p: number, q: number) => p + (q - p) * v;
+          x.save();
+          x.translate((li(a.cx, b.cx) / 100) * w, (li(a.cy, b.cy) / 100) * h);
+          x.scale(Math.max((li(a.rx, b.rx) / 100) * w, 0.01), Math.max((li(a.ry, b.ry) / 100) * h, 0.01));
+          const g = x.createRadialGradient(0, 0, 0, 0, 0, 1);
+          /* Loppuvari on SAMA vari alfalla 0, ei musta lapinakyva: CSS
+             interpoloi liukuvarin esikerrotussa avaruudessa, canvas ei. */
+          g.addColorStop(0, `rgba(${a.rgb},${a.a})`);
+          g.addColorStop(Math.min(a.loppu / 100, 1), `rgba(${a.rgb},0)`);
+          x.fillStyle = g;
+          x.fillRect(-1, -1, 2, 2);
+          x.restore();
+        }
+        x.globalCompositeOperation = "destination-in";
+        const lg = x.createLinearGradient(0, 0, 0, h);
+        lg.addColorStop(0, "rgba(0,0,0,0)");
+        lg.addColorStop(m0, "#000");
+        lg.addColorStop(m1, "#000");
+        lg.addColorStop(1, "rgba(0,0,0,0)");
+        x.fillStyle = lg;
+        x.fillRect(0, 0, w, h);
+      };
+      k.classList.add("kankaalla");
+      k.appendChild(cv);
+      koko();
+      piirra(0.5);
+      return { koko, piirra };
+    };
     if (document.querySelector(".page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu")) {
       for (const el of valoEls) {
         const pse = getComputedStyle(el, "::before");
@@ -209,6 +335,8 @@ export default function SiteEffects() {
         el.prepend(k);
         el.setAttribute("data-valokerros", "");
         valoKerros.set(el, k);
+        const kangas = teeValoKangas(k);
+        if (kangas) valoKankaat.set(k, kangas);
       }
     }
     /* --valo-q:ta lukee vain osion ::before-valo (tai sen kopio
@@ -231,6 +359,8 @@ export default function SiteEffects() {
           n = n.offsetParent as HTMLElement | null;
         }
         valoY.set(el, { y, h: el.offsetHeight });
+        const k = valoKerros.get(el);
+        if (k) valoKankaat.get(k)?.koko();
       }
     };
     mittaaValo();
@@ -351,6 +481,24 @@ export default function SiteEffects() {
     const LOGO_SPEED = 0.4;
     let copyW = 0;
     let stripOff = 0;
+    /* Onko logonauha nakymassa tai sen tuntumassa. Ilman
+       IntersectionObserveria nauhaa siirretaan aina, kuten ennen. */
+    let stripNakyy = true;
+    if (stripBand && typeof IntersectionObserver !== "undefined") {
+      const stripIo = new IntersectionObserver(
+        (es) => {
+          const ennen = stripNakyy;
+          stripNakyy = es.some((e) => e.isIntersecting);
+          if (stripNakyy && !ennen && strip && copyW > 0) {
+            const x = -(((stripOff % copyW) + copyW) % copyW);
+            strip.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`;
+          }
+        },
+        { rootMargin: "25% 0px" },
+      );
+      stripIo.observe(stripBand);
+      signal.addEventListener("abort", () => stripIo.disconnect());
+    }
     let lastSc = window.scrollY;
     if (strip && !reduce) {
       const measureStrip = () => {
@@ -697,6 +845,29 @@ export default function SiteEffects() {
         kansi: p.lastElementChild as HTMLElement,
         piilossa: false,
       }));
+    /* PEITOSSA OLEVA EI SAA KIRJOITUKSIA (1.10.2026 ilta).
+       Pinnattu vaihe pysyy geometrisesti nakymassa koko sen ajan kun se
+       on kannen alla, joten IntersectionObserver pitaa sen elementit
+       "lahella" ja niiden --rvp laskettiin ja kirjoitettiin joka kehys:
+       arvo ei ole vakio, koska siihen lisataan vierityksen pehmennyksen
+       viive. MITATTU: Miksi-osion nelja korttia (17 elementtia kukin) ja
+       niiden kuvaajat saivat uuden arvon lahes joka kehyksessa koko
+       loppusivun ajan, vaikka osio oli visibility: hidden. Tyylilaskenta
+       noin 100 elementtia kehyksessa.
+
+       Piilotettu vaihe ei nay, joten arvon voi jattaa siihen mihin se
+       jai. Kun kansi vetaytyy, vaihe tulee takaisin nakyviin puolen
+       nakyman varalla ja arvo lasketaan taas joka kehys. */
+    const vaiheMuisti = new WeakMap<Element, { piilossa: boolean }[]>();
+    const peitetty = (el: Element): boolean => {
+      let v = vaiheMuisti.get(el);
+      if (!v) {
+        v = vaiheet.filter((x) => x.vaihe.contains(el));
+        vaiheMuisti.set(el, v);
+      }
+      for (let i = 0; i < v.length; i++) if (v[i].piilossa) return true;
+      return false;
+    };
     /* Samat kannet kertovat myos verkostokankaiden nakyvyyden. Kangas
        piirtaa joka kehys, ja Safarissa viisi paallekkaista kangasta oli
        vierityksen raskain yksittainen tyo, vaikka niista nakyi kerrallaan
@@ -904,6 +1075,7 @@ export default function SiteEffects() {
       if (!reduce) {
         const rvsP = rvsEls.map((el) => {
           if (!lahella.has(el)) return rvsLoppu.get(el) ?? -1;
+          if (peitetty(el)) return -1;
           const r = el.getBoundingClientRect();
           const span = Math.max(vh * (1 - RVS_END) + r.height / 2, 1);
           return Math.min(Math.max((vh - (r.top + viive)) / span, 0), 1);
@@ -953,7 +1125,9 @@ export default function SiteEffects() {
           W(() => {
             for (const k of kaiut!) aseta(k, "--valo", vs);
             const vk = valoKerros.get(el) ?? (valoQLukija.get(el) ? el : null);
-            if (vk) aseta(vk, "--valo-q", vq);
+            const kangas = vk ? valoKankaat.get(vk) : undefined;
+            if (kangas) kangas.piirra(parseFloat(vq));
+            else if (vk) aseta(vk, "--valo-q", vq);
           });
         }
 
@@ -1254,8 +1428,14 @@ export default function SiteEffects() {
 
       if (strip && copyW > 0) {
         stripOff += (sc - lastSc) * LOGO_SPEED;
-        const x = -(((stripOff % copyW) + copyW) % copyW);
-        W(() => { strip.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`; });
+        /* Nauha siirretaan vain kun se on nakymassa (1.10.2026 ilta).
+           Siirtyma kertyy silti koko ajan, joten nauha on oikeassa
+           kohdassa heti kun se tulee takaisin nakyviin. Aiemmin
+           transform kirjoitettiin joka kehys koko sivun matkalla. */
+        if (stripNakyy) {
+          const x = -(((stripOff % copyW) + copyW) % copyW);
+          W(() => { strip.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`; });
+        }
       }
       const kansiRect = new Map<HTMLElement, DOMRect>();
       for (const v of vaiheet) {
@@ -1305,7 +1485,10 @@ export default function SiteEffects() {
          puoliväliin ja arvo hyppaa seuraavalla tapahtumalla. Silmukka
          pyorii vain niin kauan kuin eroa on, eli idlena tasta ei tule
          yhtaan kehysta. */
-      if (!reduce && !ticking && Math.abs(window.scrollY - scP) >= PEHMENNYS_RAJA) {
+      /* sc eika window.scrollY: arvo luettiin taman kutsun alussa, eika
+         sivu voi vieria kutsun aikana. Uusi luku kirjoitusten jalkeen
+         pakotti tyylit ja asettelun laskettavaksi kesken kehyksen. */
+      if (!reduce && !ticking && Math.abs(sc - scP) >= PEHMENNYS_RAJA) {
         ticking = true;
         requestAnimationFrame(onScroll);
       }
