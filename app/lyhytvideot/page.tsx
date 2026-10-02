@@ -1,4 +1,6 @@
 
+/* Sivun tyylit: generoitu app/globals.css:sta, ks. scripts/tyylit.cjs. */
+import "../_tyylit/lyhytvideot.css";
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 

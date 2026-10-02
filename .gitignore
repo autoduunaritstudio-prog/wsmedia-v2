@@ -68,3 +68,6 @@ Referenssi videot/
 # Valkkymisen mittausajojen valiaikaiskansio (11 MB kuvakaappauksia).
 # Syntyy scripts/flicker-scan.mjs -ajosta, ei kuulu repoon.
 .tmp-flicker/
+
+# generoidut sivukohtaiset tyylit, ks. scripts/tyylit.cjs
+/app/_tyylit/

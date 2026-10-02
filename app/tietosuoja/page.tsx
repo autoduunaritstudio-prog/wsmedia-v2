@@ -1,3 +1,5 @@
+/* Sivun tyylit: generoitu app/globals.css:sta, ks. scripts/tyylit.cjs. */
+import "../_tyylit/tietosuoja.css";
 import type { Metadata } from "next";
 
 import Backdrop from "../components/Backdrop";

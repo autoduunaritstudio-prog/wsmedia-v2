@@ -707,37 +707,24 @@ export default function SiteEffects() {
     };
     type Saannot = { lukijat: string; maarittajat: string; varma: boolean };
     const saantoMuisti = new Map<string, Saannot>();
-    const lueSaannot = (nimi: string): Saannot => {
-      const lukijat = new Set<string>();
-      const maarittajat: string[] = [];
-      let varma = true;
-      const kaytto = new RegExp("var\\(\\s*" + nimi + "\\s*[,)]");
-      /* voimassa: onko saannon @media/@supports-ehto nyt tosi. Maarittajiksi
-         kelpaavat vain voimassa olevat saannot: esim. reduced-motion-
-         lohkon ".lv-k { --piirto: 1 }" ei maarita mitaan tavallisessa
-         nakymassa, ja sen laskeminen jatti kortit ilman arvoa. Lukijoiksi
-         kelpaavat kaikki, koska ylimaarainen lukija ei muuta ulkonakoa. */
+    /* TYYLISAANNOT LUETAAN KERRAN (2.10.2026). Aiemmin jokainen muuttuja
+       (--rvp, --piirto, --kiinni ...) kavi kaikki tyylisivun saannot
+       lapi ja sarjallisti jokaisen tekstiksi (cssText). MITATTU latauksen
+       profiilissa (4x hidastus): 0,58 s, sivun raskain oma funktio. Nyt
+       saannot litistetaan kerran listaksi tekstiensa kanssa, ja muuttujat
+       suodatetaan siita. Lopputulos on sama. Lista tehdaan uudelleen kun
+       ikkunan koko muuttuu, koska @media-ehdot voivat vaihtua. */
+    type Saantorivi = { r: CSSStyleRule; teksti: string; sisakkainen: boolean; voimassa: boolean };
+    let saantolista: Saantorivi[] | null = null;
+    const litista = (): Saantorivi[] => {
+      const lista: Saantorivi[] = [];
       const kay = (rules: CSSRuleList, sisakkainen: boolean, voimassa: boolean) => {
-        for (const r of Array.from(rules)) {
+        for (let i = 0; i < rules.length; i++) {
+          const r = rules[i];
           if (r instanceof CSSStyleRule) {
             const teksti = r.style.cssText;
-            if (sisakkainen && (kaytto.test(teksti) || r.style.getPropertyValue(nimi) !== "")) varma = false;
-            if (!sisakkainen) {
-              if (voimassa && r.style.getPropertyValue(nimi) !== "") {
-                for (const x of jaa(r.selectorText, (ch) => ch === ",")) {
-                  if (!/::|:before|:after/.test(x)) maarittajat.push(x);
-                }
-              }
-              if (kaytto.test(teksti)) {
-                for (const x of jaa(r.selectorText, (ch) => ch === ",")) {
-                  // Esim. ".proc-cta > *": viimeista osaa ei voi loysata,
-                  // joten kaytetaan koko valitsinta ilman pseudoelementtia.
-                  const sj = subjekti(x) ?? x.replace(/::[\w-]+(\([^)]*\))?/g, "").replace(/:(before|after)\b/g, "").trim();
-                  if (sj) lukijat.add(sj);
-                  else varma = false;
-                }
-              }
-            }
+            /* Vain muuttujia sisaltavat saannot kiinnostavat. */
+            if (teksti.includes("--")) lista.push({ r, teksti, sisakkainen, voimassa });
             if (r.cssRules && r.cssRules.length) kay(r.cssRules, true, voimassa);
           } else if ("cssRules" in r && (r as CSSGroupingRule).cssRules) {
             let ehto = voimassa;
@@ -757,6 +744,39 @@ export default function SiteEffects() {
         }
         if (rules) kay(rules, false, true);
       }
+      return lista;
+    };
+    const lueSaannot = (nimi: string): Saannot => {
+      const lukijat = new Set<string>();
+      const maarittajat: string[] = [];
+      let varma = true;
+      const kaytto = new RegExp("var\\(\\s*" + nimi + "\\s*[,)]");
+      /* voimassa: onko saannon @media/@supports-ehto nyt tosi. Maarittajiksi
+         kelpaavat vain voimassa olevat saannot: esim. reduced-motion-
+         lohkon ".lv-k { --piirto: 1 }" ei maarita mitaan tavallisessa
+         nakymassa, ja sen laskeminen jatti kortit ilman arvoa. Lukijoiksi
+         kelpaavat kaikki, koska ylimaarainen lukija ei muuta ulkonakoa. */
+      if (!saantolista) saantolista = litista();
+      for (const { r, teksti, sisakkainen, voimassa } of saantolista) {
+        if (!teksti.includes(nimi)) continue;
+        if (sisakkainen && (kaytto.test(teksti) || r.style.getPropertyValue(nimi) !== "")) varma = false;
+        if (!sisakkainen) {
+          if (voimassa && r.style.getPropertyValue(nimi) !== "") {
+            for (const x of jaa(r.selectorText, (ch) => ch === ",")) {
+              if (!/::|:before|:after/.test(x)) maarittajat.push(x);
+            }
+          }
+          if (kaytto.test(teksti)) {
+            for (const x of jaa(r.selectorText, (ch) => ch === ",")) {
+              // Esim. ".proc-cta > *": viimeista osaa ei voi loysata,
+              // joten kaytetaan koko valitsinta ilman pseudoelementtia.
+              const sj = subjekti(x) ?? x.replace(/::[\w-]+(\([^)]*\))?/g, "").replace(/:(before|after)\b/g, "").trim();
+              if (sj) lukijat.add(sj);
+              else varma = false;
+            }
+          }
+        }
+      }
       if (!lukijat.size) varma = false;
       return { lukijat: Array.from(lukijat).join(","), maarittajat: maarittajat.join(","), varma };
     };
@@ -767,6 +787,7 @@ export default function SiteEffects() {
       "resize",
       () => {
         saantoMuisti.clear();
+        saantolista = null;
         lukijaMuisti = new WeakMap();
         // Vanhat kohteet tyhjiksi, ettei niihin jaa vanhentunutta arvoa
         // peittamaan uusien kohteiden periytyvaa arvoa.

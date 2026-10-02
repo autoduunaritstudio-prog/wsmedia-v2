@@ -1,3 +1,5 @@
+/* Sivun tyylit: generoitu app/globals.css:sta, ks. scripts/tyylit.cjs. */
+import "../_tyylit/verkkosivut.css";
 import type { Metadata } from "next";
 
 import NetBackdrop from "../components/NetBackdrop";

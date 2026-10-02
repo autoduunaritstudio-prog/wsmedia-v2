@@ -65,7 +65,7 @@ type Props = {
 export default function Latausruutu({ video }: Props) {
   /* Palvelimella aina nakyvissa. Selaimessa sisaisella siirtymalla ei
      lainkaan, jolloin ensimmainenkaan kuva ei nayta ruutua. */
-  const [nayta, setNayta] = useState(() => (typeof window === "undefined" ? true : suoraSaapuminen()));
+  const [nayta] = useState(() => (typeof window === "undefined" ? true : suoraSaapuminen()));
   const ruutu = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -107,7 +107,10 @@ export default function Latausruutu({ video }: Props) {
       delete html.dataset.lataus;
       el?.classList.add("is-gone");
       window.dispatchEvent(new Event("ws-lataus-auki"));
-      poisto = window.setTimeout(() => setNayta(false), HAIVYTYS_MS);
+      /* Ruutu jaa DOMiin piilotettuna (display: none), ei poisteta: sen
+         lasnaolo kertoo CSS:lle, etta sivu avattiin ruudun kautta, ks.
+         globals.css "HERON TEKSTI RUUDUN TAKANA". */
+      poisto = window.setTimeout(() => el?.classList.add("lataus-pois"), HAIVYTYS_MS);
     };
 
     /* EDISTYMINEN (2.10.2026 paivitys). Palkki ei saa seisoa: hitaalla

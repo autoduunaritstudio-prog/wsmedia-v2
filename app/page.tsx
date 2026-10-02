@@ -1,6 +1,8 @@
 // Etusivun ainoa taustakerros. Vanha <Backdrop /> (ohuet viivat, pisteet,
 // kulmamerkit) poistettiin taalta kun metallikuvio alkoi kattaa coverista
 // footeriin; alasivut kayttavat sita yha variant="simple":lla.
+/* Sivun tyylit: generoitu app/globals.css:sta, ks. scripts/tyylit.cjs. */
+import "./_tyylit/perus.css";
 import MetalBackdrop from "./components/MetalBackdrop";
 import SiteEffects from "./components/SiteEffects";
 import Nav from "./components/Nav";

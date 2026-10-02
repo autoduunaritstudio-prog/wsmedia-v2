@@ -53,3 +53,11 @@ export function writeConsent(consent: Consent): void {
 export function openConsentSettings(): void {
   window.dispatchEvent(new Event(CONSENT_OPEN));
 }
+
+/**
+ * Ennen ensimmaista piirtoa ajettava skripti (layout.tsx): merkitsee
+ * <html data-suostumus>, jos voimassa oleva suostumus on tallessa, jolloin
+ * CSS piilottaa palvelimen renderoiman bannerin ennen kuin se nakyy.
+ * Samat ehdot kuin readConsent():ssa.
+ */
+export const SUOSTUMUS_ENNEN_PIIRTOA = `try{var c=JSON.parse(localStorage.getItem(${JSON.stringify(CONSENT_KEY)})||"null");if(c&&c.v===${CONSENT_VERSION}&&typeof c.ts==="number"&&Date.now()-c.ts<=${CONSENT_MAX_AGE_DAYS}*864e5)document.documentElement.setAttribute("data-suostumus","")}catch(e){}`;

@@ -11,15 +11,22 @@ import { CONSENT_OPEN, readConsent, writeConsent } from "./consent";
  * hyvaksyminen.
  */
 export default function CookieBanner() {
-  const [open, setOpen] = useState(false);
+  /* Avoinna jo palvelimella: banneri on HTML:ssa ensimmaisesta piirrosta
+     asti. Jos suostumus on jo annettu, <html data-suostumus> (layout.tsx)
+     piilottaa sen CSS:lla ennen piirtoa, joten tilaa ei tarvitse muuttaa
+     latauksessa. */
+  const [open, setOpen] = useState(true);
+  /* Kayttajan itse avaama banneri liukuu sisaan; ensimmaisella
+     nayttokerralla se on valmiiksi paikallaan (ks. globals.css .cc). */
+  const [avattu, setAvattu] = useState(false);
   const [analytics, setAnalytics] = useState(false);
   const toggleId = useId();
 
   useEffect(() => {
-    // Palvelin ei tieda suostumusta, joten nakyvyys ratkaistaan vasta taalla.
-    if (readConsent() === null) setOpen(true);
-
     const onOpen = () => {
+      // Piilotus on vain ensimmaista piirtoa varten; avaus ohittaa sen.
+      document.documentElement.removeAttribute("data-suostumus");
+      setAvattu(true);
       setAnalytics(readConsent()?.analytics ?? false);
       setOpen(true);
     };
@@ -36,7 +43,7 @@ export default function CookieBanner() {
 
   return (
     <div
-      className="cc"
+      className={avattu ? "cc cc-avattu" : "cc"}
       role="dialog"
       aria-modal="false"
       aria-label="Evästeasetukset"

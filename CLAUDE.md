@@ -194,6 +194,25 @@ kaikki.
 ilmenisi vaakaylivuotoa. Ylivuoto on todellinen vain ≤ 820 px leveydellä
 (mitattu 162 px @ 820, 109 px @ 600, 58 px @ 390) ja `clip` hoitaa sen.
 
+## Tyylit: muokkaa aina app/globals.css:aa
+
+Sivut eivat lataa globals.css:aa suoraan. `scripts/tyylit.cjs` tuottaa
+jokaiselle sivulle oman tiedoston `app/_tyylit/<sivu>.css`, josta on
+poistettu saannot jotka voivat osua vain toisella sivulla (`.page-<sivu>`,
+`.page-palvelu`, `.wsx` valitsimen ylimmalla tasolla). `next.config.ts`
+ajaa sen jokaisen kaannoksen ja dev-palvelimen alussa, ja dev-palvelin
+tuottaa tiedostot uudelleen kun globals.css muuttuu. `_tyylit/` on
+generoitu eika versionhallinnassa. Uusi sivu: lisaa se `KOHTEET`-listaan
+ja tuo `../_tyylit/<sivu>.css` sivun ensimmaisena tuontina.
+
+## Animaatio ja LCP
+
+Animoitavaa tekstia (myos pelkka transform tai opacity 0,01) Chrome ei
+kirjaa piirretyksi ennen kuin sivun kaynnistys on valmis: mitattuna
+mobiili-LCP noin 5 s, ilman animaatiota 2,3-2,9 s. Ala lisaa
+sisaantuloanimaatiota sivun suurimmalle tekstille ensimmaisessa
+nakymassa ilman mittausta.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

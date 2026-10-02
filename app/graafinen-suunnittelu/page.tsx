@@ -1,3 +1,5 @@
+/* Sivun tyylit: generoitu app/globals.css:sta, ks. scripts/tyylit.cjs. */
+import "../_tyylit/graafinen-suunnittelu.css";
 import type { Metadata } from "next";
 
 import Footer from "../components/Footer";

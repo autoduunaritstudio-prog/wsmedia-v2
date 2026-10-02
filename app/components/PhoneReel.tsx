@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { peilaaKankaalle } from "./videokangas";
 import { kytkeSaasto, onKevyt, onSaasto, onSaastoTiukka } from "./kevyttila";
 
@@ -50,6 +50,10 @@ type Props = {
    */
   variant?: "reels" | "tiktok";
   src: string;
+  /**
+   * Julisteen perusnimi (.webp). Kaytossa on kaksi kokoa samalla nimella:
+   * -1x.webp (270x480) ja -2x.webp (540x960), ks. globals.css .ph-kangas.
+   */
   poster: string;
   handle: string;
   /**
@@ -152,7 +156,10 @@ export default function PhoneReel({
        nayttaisi vialta. */
     const kasikaytto = () =>
       !pyydetty.current && (toissijainen ? onKevyt() || onSaasto() : onSaastoTiukka());
-    if (lukittu() && !kasikaytto()) v.preload = "auto";
+    /* Vain nakyva video ladataan valmiiksi: kapealla naytolla
+       sivupuhelimet ovat piilossa (display: none), eika niiden dataa
+       tarvita. */
+    if (lukittu() && !kasikaytto() && v.getClientRects().length > 0) v.preload = "auto";
     const paivita = () => {
       const k = kasikaytto();
       setKasin(k);
@@ -257,7 +264,6 @@ export default function PhoneReel({
           loop
           playsInline
           preload="metadata"
-          poster={poster}
         >
           <source src={src} type="video/mp4" />
         </video>
@@ -267,11 +273,12 @@ export default function PhoneReel({
           width={540}
           height={960}
           aria-hidden="true"
-          style={{
-            backgroundImage: `url(${poster})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
+          style={
+            {
+              "--juliste-1x": `url(${poster.replace(/\.webp$/, "-1x.webp")})`,
+              "--juliste-2x": `url(${poster.replace(/\.webp$/, "-2x.webp")})`,
+            } as CSSProperties
+          }
         />
 
         {/* TOISTOPAINIKE. Nakyy vain kasikaytossa (hidas laite tai

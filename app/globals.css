@@ -3385,6 +3385,9 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 }
 .page-lyhytvideot .pricenote { margin-top: 24px }
 .page-lyhytvideot .fitbox a { color: var(--blue); text-decoration: none }
+/* Suostumus jo annettu: palvelimen renderoima banneri piiloon ennen
+   ensimmaista piirtoa, ks. layout.tsx ja consent.ts. */
+html[data-suostumus] .cc { display: none }
 .cc {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
   padding: 0 16px 16px;
@@ -3400,8 +3403,13 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
   border: 1px solid var(--hair); border-radius: 20px;
   box-shadow: 0 30px 70px -24px rgba(29,29,31,.32);
   padding: 22px 24px 20px;
-  animation: ccup .45s cubic-bezier(.2,.6,.2,1) both;
 }
+/* Liukuminen vain kun kavija avaa bannerin itse (footerin
+   Evasteasetukset). Ensimmaisella nayttokerralla banneri on palvelimen
+   HTML:ssa valmiiksi paikallaan: animoitavaa tekstia Chrome ei kirjaa
+   piirretyksi (LCP) ennen sivun kaynnistysta, ja etusivulla banneri oli
+   suurin elementti (mobiili-LCP 5,6 s). */
+.cc-avattu .cc-in { animation: ccup .45s cubic-bezier(.2,.6,.2,1) both }
 @keyframes ccup { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: none } }
 .cc-h { font-size: var(--text-ui); font-weight: var(--weight-semibold); letter-spacing: -0.014em; margin-bottom: 5px }
 .cc-txt p { font-size: var(--text-label); color: var(--grey); line-height: 1.55 }
@@ -3444,7 +3452,7 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 }
 .cc-reopen:hover { color: var(--ink) }
 @media (prefers-reduced-motion: reduce) {
-  .cc-in { animation: none }
+  .cc-avattu .cc-in { animation: none }
   .cc-sw, .cc-sw::after { transition: none }
 }
 
@@ -15450,10 +15458,16 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
       savya lipukkeiden kohdalla. .statband jatetaan TARKOITUKSELLA
       ennalleen Chromessa: sen pohja on lahes lapinakyva, joten
       sumennuksen poisto nakyisi (verkoston viivat kortin lapi). Se ja
-      muiden sivujen kortit ovat Tuomaksen paatos. */
+      muiden sivujen kortit ovat Tuomaksen paatos.
+
+      2.10.2026: Tuomas paatti, etta lyhytvideosivun tilastokortin
+      sumennus pois ("vaikutus on mitaton"). Verkoston viivat nakyvat
+      nyt kortin lapi. Sumennus maksoi noin 11 ms jokaisessa kehyksessa
+      kannen noustessa. Muiden sivujen kortit ennallaan. */
 .cta-palkki { -webkit-backdrop-filter: none; backdrop-filter: none }
 .page-lyhytvideot footer,
-.page-lyhytvideot .chip-f { -webkit-backdrop-filter: none !important; backdrop-filter: none !important }
+.page-lyhytvideot .chip-f,
+.page-lyhytvideot .statband { -webkit-backdrop-filter: none !important; backdrop-filter: none !important }
 
 /* ==================================================================
    LATAUSRUUTU PALVELUSIVULLA JA VIDEOIDEN TOISTOPAINIKE, 2.10.2026
@@ -15530,6 +15544,19 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
   .lataus .hero-load-dim { animation: none; opacity: .72 }
 }
 
+.lataus.lataus-pois { display: none }
+
+/* HERON TEKSTI RUUDUN TAKANA (2.10.2026). Kun sivu avataan latausruudun
+   kautta, heron sisaantuloanimaatio (.li) ajetaan ruudun takana, eika
+   sita juuri nae: ruudun haivytys on se sisaantulo jonka kavija nakee.
+   Animaatio maksoi silti paljon: Chrome kirjaa animoitavan tekstin
+   piirretyksi (LCP) vasta sivun kaynnistyksen jalkeen. MITATTU mobiilissa
+   (4x CPU, hidas 4G, mediaani 3 ajosta): LCP 6,6 s -> 3,2 s.
+   Teksti on siksi valmiiksi paikallaan aina kun ruutu on sivulla.
+   Sisaisella siirtymalla ruutua ei ole, ja animaatio toimii ennallaan.
+   Ruutu jaa DOMiin (display: none), jotta ehto pysyy voimassa. */
+.page-palvelu:has(> .lataus) .li { animation: none; opacity: 1; transform: none }
+
 /* TEKSTI palkin alla. Sama vaalea kuin logon himmea pohja mutta hieman
    kirkkaampi, jotta se lukee: .55 antaa #0b0f14:aa vasten noin 6:1. */
 .lataus-teksti {
@@ -15549,3 +15576,16 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
 }
 .ph-play svg { width: 24px; height: 24px; fill: currentColor; stroke: none; margin-left: 2px }
 .ph-play:focus-visible { outline: 2px solid #fff; outline-offset: 3px }
+
+/* JULISTE PUHELIMEN RUUDULLA (2.10.2026). Juliste on vain kankaan
+   taustakuvana, ei enaa <video poster>:ina: video on lapinakyva kankaan
+   alla, joten sen juliste ei nakynyt koskaan, mutta se ladattiin silti,
+   myos kapealla naytolla piilotetuille sivupuhelimille. Koko valitaan
+   nayton tarkkuuden mukaan: 270x480 (1x) tai 540x960 (2x). Aiempi yksi
+   608x1080-kuva oli kaksi kertaa liian suuri (PageSpeed: 141 KiB).
+   Laatu SSIM >= 0,975 skaalattua alkuperaista vastaan. */
+.phone .ph-kangas {
+  background-size: cover; background-position: center;
+  background-image: var(--juliste-2x);
+  background-image: image-set(var(--juliste-1x) 1x, var(--juliste-2x) 2x);
+}

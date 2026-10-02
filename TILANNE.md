@@ -210,6 +210,22 @@ Seuraus ulkoasulle: heron tekstien sisääntulo (`.li`) tapahtuu ruudun takana, 
 
 Avoimet päätökset: painikkeen ulkoasu, pysäytetäänkö myös keskimmäinen video hitaalla koneella, ja otetaanko ruutu muille palvelusivuille.
 
+## 4f. Koko sivuston tekninen kevennys, 2.10.2026 (ei commitattu)
+
+Tuomaksen pyyntö: tekninen puoli kuntoon ennen kuin jatketaan. Mitattu mobiilissa (4x CPU, hidas 4G, mediaani) ja Lighthousella rinnakkain GitHubin version kanssa samalla koneella.
+
+- **Heron teksti latausruudun takana** (lyhytvideot). Chrome ei kirjaa animoitavaa tekstia piirretyksi (LCP) ennen kuin sivun kaynnistys on valmis, mobiilissa noin 5 s. Kun ruutu on sivulla, `.li` on valmiiksi paikallaan (`.page-palvelu:has(> .lataus) .li`), ja ruudun haivytys on sisaantulo. Ruutu jaa DOMiin (`.lataus-pois`, display none). Mobiili-LCP 6,6 s -> 2,9 s.
+- **Puhelinten julisteet**: `-1x.webp` 270x480 ja `-2x.webp` 540x960 (SSIM >= 0,975), vain kankaan taustana `image-set`illa. `<video poster>` poistettu (video on lapinakyva kankaan alla, juliste ei nakynyt koskaan). Kapealla naytolla piilotettujen sivupuhelinten julisteita ja videoita ei ladata. Vanhat `public/hero/*-hero.webp` eivat ole enaa kaytossa.
+- **Sivukohtaiset tyylit**: `scripts/tyylit.cjs` tuottaa `app/_tyylit/<sivu>.css` = globals.css miinus saannot, jotka voivat osua vain toisella sivulla. Jarjestys ei muutu. Ajetaan `next.config.ts`:sta jokaisen kaannoksen ja dev-palvelimen alussa, dev-palvelimen aikana globals.css:n muutos tuottaa ne uudelleen. `_tyylit/` on .gitignoressa. **Muokkaa aina globals.css:aa.** Layout ei enaa tuo tyyleja, jokainen sivu tuo omansa. 404 on `app/global-not-found.tsx` (experimental.globalNotFound), koska not-found.tsx:n tyylituonti olisi liitetty kaikille sivuille. Pakattu koko: etusivu 64 -> 25 KiB, lyhytvideot 64 -> 46 KiB, verkkosivut 64 -> 53 KiB. Ensimmainen yritys (sivusaannot omiin tiedostoihin) kaansi saantojen voittojarjestyksen ja hylattiin. Todennettu laskettujen tyylien vertailulla (kaikki elementit ja ::before/::after, 7 sivua, 2 leveytta, 2 vierityskohtaa).
+- **Evastebanneri palvelimen HTML:ssa**: `layout.tsx`:n skripti ennen piirtoa merkitsee `html[data-suostumus]`, joka piilottaa bannerin jos suostumus on jo annettu. Liukuminen vain kun kavija avaa bannerin itse (`.cc-avattu`). Banneri oli etusivun LCP-elementti: mobiili-LCP 5,6 s -> 1,9 s.
+- **SiteEffects lukee tyylisaannot kerran** (ei kerran per muuttuja). Kaynnistystyo 0,95 s -> 0,51 s (4x hidastus).
+
+Lighthouse (pilvikone ilman GPU:ta, 2 ajoa): lyhytvideot mobiili 36-44 -> 53 (LCP 6,2-6,7 -> 4,0 s), tyopoyta LCP 1,3-1,5 -> 0,7-0,9 s; etusivu mobiili 61-62 -> 67-68, tyopoyta 95-96 -> 98. Vierityksen fps ei muuttunut.
+
+**Avoin paatos:** verkkosivut- ja hakukoneoptimointi-sivuilla heron sisaantuloanimaatio pitaa mobiili-LCP:n noin 5 s:ssa (ilman animaatiota 2,3-2,5 s). Mika tahansa animaatio tekstissa aiheuttaa saman (testattu: lapinakyvyys 0,01, pelkka siirto, lyhyt kesto). Poisto muuttaa ulkoasua, joten Tuomas paattaa.
+
+Ei tehty: Nextin automaattinen esilataus hakee latauksen jalkeen kaikkien valikon sivujen datan ja niiden kuvia (noin 250 KiB mobiilissa). Hyoty nopeampi sivunvaihto, haitta datankulutus.
+
 ## 5. Seuraavat askeleet
 
 Mitään pakollista ei ole kesken. Alla olevat ovat avoimia päätöksiä ja siivousta, tärkein ensin.

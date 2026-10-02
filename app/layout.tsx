@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { Instrument_Sans } from "next/font/google";
-import "./globals.css";
+/* TYYLIT EIVAT TULE TASTA vaan jokainen sivu tuo oman tiedostonsa
+   app/_tyylit/-kansiosta, ks. scripts/tyylit.cjs. Lahde on edelleen
+   app/globals.css. */
 
 import { SIVUSTO } from "./sivusto";
 
 import Analytics from "./components/consent/Analytics";
 import Pehmeavieritys from "./components/Pehmeavieritys";
 import CookieBanner from "./components/consent/CookieBanner";
+import { SUOSTUMUS_ENNEN_PIIRTOA } from "./components/consent/consent";
 
 const instrument = Instrument_Sans({
   variable: "--font-instrument",
@@ -61,7 +64,19 @@ export default function RootLayout({
      * Bodylla se jäisi näkymättömäksi, koko font-family mitätöityisi ja sivu
      * perisi Tailwindin oletusfonttipinon.
      */
-    <html lang="fi" className={instrument.variable}>
+    /* suppressHydrationWarning: alla oleva skripti lisaa <html>:lle
+       data-suostumus-attribuutin ennen Reactin hydraatiota. */
+    <html lang="fi" className={instrument.variable} suppressHydrationWarning>
+      <head>
+        {/* EVASTEBANNERI ILMAN VALAHDYSTA (2.10.2026). Banneri on
+            palvelimen HTML:ssa, jotta ensikavija nakee sen heti eika vasta
+            sivun skriptin kaynnistyttya. Mitattuna se oli etusivun suurin
+            elementti (LCP) ja ilmestyi mobiilissa vasta 5 s:n kohdalla.
+            Tama skripti ajetaan ennen ensimmaista piirtoa ja piilottaa
+            bannerin, jos voimassa oleva suostumus on jo annettu. Ehdot
+            samat kuin consent.ts:n readConsent(). */}
+        <script dangerouslySetInnerHTML={{ __html: SUOSTUMUS_ENNEN_PIIRTOA }} />
+      </head>
       <body>
         {children}
         <Pehmeavieritys />

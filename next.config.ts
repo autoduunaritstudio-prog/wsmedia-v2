@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 
+/* Sivukohtaiset tyylitiedostot tuotetaan app/globals.css:sta ennen
+   kaannosta ja kehityspalvelimen alussa; kehityspalvelimen aikana
+   globals.css:n muutos tuottaa ne uudelleen. Ks. scripts/tyylit.cjs. */
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const tyylit = require("./scripts/tyylit.cjs");
+tyylit.generoi();
+if (process.env.NODE_ENV !== "production") tyylit.seuraa();
+
 const nextConfig: NextConfig = {
+  /* 404 ohittaa layoutin, ks. app/global-not-found.tsx. */
+  experimental: { globalNotFound: true },
   images: {
     /* Next 16 muutti oletuksen: images.qualities on nyt [75], ja
        quality-proppi joka ei ole listalla PAKOTETAAN lahimpaan
