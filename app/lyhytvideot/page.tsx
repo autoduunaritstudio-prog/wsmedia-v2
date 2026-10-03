@@ -157,7 +157,7 @@ export default function Lyhytvideot() {
               {/* Kehotuspalkki alkaa tasta. Ks. Palkki.tsx. */}
               <Vaite
                 palkkiAlkaa
-                kuva="/lyhytvideot/kuvaaminen.webp"
+                kuva="/kuvat/fx9.webp"
                 alla="Uusi tili voi tavoittaa saman yleisön kuin vakiintunut brändi. Se on pienen yrityksen etu."
               >
                 Algoritmi jakaa sisältöä kiinnostuksen, ei <b><i>seuraajamäärän mukaan.</i></b>
@@ -170,7 +170,7 @@ export default function Lyhytvideot() {
                 </Jakso>
 
                 <div className="pino">
-                  <Laatta kuva="/lyhytvideot/kuvauspaiva-valmis.webp" korkeus="taysi">
+                  <Laatta kuva="/kuvat/halli.webp" korkeus="taysi">
                     <p className="laatta-kick">Kuvauspäivä</p>
                     <p className="laatta-lause suuri">
                       Yksi päivä, <b><i>useita kanavia.</i></b>
@@ -189,7 +189,7 @@ export default function Lyhytvideot() {
 
                     <div className="pino">
                       <Vaite
-                        kuva="/lyhytvideot/ovi.webp"
+                        kuva="/kuvat/huoltoasema.webp"
                         alla="Ohjaamme katsojan verkkosivuille, yhteydenottolomakkeelle tai myymälään ja mittaamme, mitä siitä seuraa."
                       >
                         Näyttökerrat ovat <b><i>välitavoite.</i></b>

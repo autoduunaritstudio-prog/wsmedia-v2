@@ -1,3 +1,4 @@
+import { ORGANISAATIO } from "../components/organisaatio";
 import { FAQ } from "./faq-data";
 
 /**
@@ -7,20 +8,8 @@ import { FAQ } from "./faq-data";
  */
 const BASE_GRAPH = [
     {
-      "@type": "ProfessionalService",
-      "@id": "https://wsmedia.fi/#organisaatio",
-      "name": "WS Media Oy",
-      "alternateName": "WS Media",
-      "url": "https://wsmedia.fi/",
+      ...ORGANISAATIO,
       "description": "WS Media on espoolainen graafiseen suunnitteluun, verkkosivuihin, hakukoneoptimointiin ja lyhytvideotuotantoon erikoistunut toimisto.",
-      "vatID": "FI36150844",
-      "taxID": "3615084-4",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Espoo",
-        "addressRegion": "Uusimaa",
-        "addressCountry": "FI"
-      },
       "areaServed": [
         {
           "@type": "Country",

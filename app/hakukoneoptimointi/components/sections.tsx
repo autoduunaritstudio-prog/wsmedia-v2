@@ -554,7 +554,9 @@ export function Tarjous() {
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
               Käymme läpi sivustosi nykytilan, toimialasi hakuvolyymit ja kilpailutilanteen. Saat
               suoran näkemyksen siitä, kannattaako hakukoneoptimointi juuri sinun tapauksessasi,
-              myös silloin kun vastaus on ei.
+              myös silloin kun vastaus on ei. Puhelinnumeron ja aukioloajat löydät{" "}
+              <a href="/yhteystiedot">yhteystiedoista</a>, ja tekijät esittelemme{" "}
+              <a href="/meista">Meistä-sivulla</a>.
             </p>
             <ol className="askel porras rv">
               <li>

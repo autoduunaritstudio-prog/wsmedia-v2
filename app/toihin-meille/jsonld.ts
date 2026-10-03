@@ -1,3 +1,4 @@
+import { ORGANISAATIO } from "../components/organisaatio";
 import { FAQ } from "./faq-data";
 
 /**
@@ -6,32 +7,16 @@ import { FAQ } from "./faq-data";
  */
 const BASE_GRAPH = [
     {
-      "@type": [
-        "ProfessionalService",
-        "Organization"
-      ],
-      "@id": "https://wsmedia.fi/#organisaatio",
-      "name": "WS Media Oy",
-      "url": "https://wsmedia.fi/",
+      ...ORGANISAATIO,
       "description": "WS Media Oy tuottaa lyhytvideoita, verkkosivuja, hakukoneoptimointia ja graafista suunnittelua suomalaisille yrityksille.",
-      "vatID": "FI36150844",
-      "taxID": "3615084-4",
       "areaServed": {
         "@type": "Country",
         "name": "Suomi"
       },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Espoo",
-        "addressRegion": "Uusimaa",
-        "addressCountry": "FI"
-      },
       "knowsLanguage": [
         "fi",
         "en"
-      ],
-      "sameAs": []
-    },
+      ],},
     {
       "@type": "WebSite",
       "@id": "https://wsmedia.fi/#sivusto",
@@ -46,7 +31,7 @@ const BASE_GRAPH = [
       "@type": "WebPage",
       "@id": "https://wsmedia.fi/toihin-meille#sivu",
       "url": "https://wsmedia.fi/toihin-meille",
-      "name": "Töihin WS Medialle | Avoin haku freelancereille ja tekijöille",
+      "name": "Töihin WS Medialle | Freelancerit ja tekijät",
       "description": "Jatkuva avoin haku: videokuvaajat, editoijat, kehittäjät, hakukoneoptimoijat, graafiset suunnittelijat sekä asentajat ja painotalot. Toimeksianto tai työsuhde.",
       "inLanguage": "fi-FI",
       "isPartOf": {

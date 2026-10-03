@@ -12,11 +12,14 @@ export const ROUTES = {
   verkkosivut: "/verkkosivut",
   seo: "/hakukoneoptimointi",
   graafinen: "/graafinen-suunnittelu",
+  meista: "/meista",
   toihin: "/toihin-meille",
   tietosuoja: "/tietosuoja",
+  laskutus: "/laskutustiedot",
+  yhteystiedot: "/yhteystiedot",
   palvelut: "/#palvelut",
   prosessi: "/#prosessi",
-  yhteys: "/#lomake",
+  yhteys: "/yhteystiedot",
 } as const;
 
 /**
@@ -74,17 +77,16 @@ export const SERVICE_MENU: ServiceMenuItem[] = [
 export const OVERLAY_NAV: NavLink[] = [
   { href: "/", label: "Etusivu" },
   { href: "#palvelut", label: "Palvelut", menu: SERVICE_MENU },
-  { href: "#prosessi", label: "Prosessi" },
-  { href: "#ukk", label: "Usein kysyttyä" },
+  { href: ROUTES.meista, label: "Meistä" },
   { href: ROUTES.toihin, label: "Töihin meille" },
-  // Yhteystiedot-sivua ei ole; ankkuri etusivun lomakkeeseen.
-  { href: "#lomake", label: "Yhteystiedot" },
+  { href: ROUTES.yhteystiedot, label: "Yhteystiedot" },
+  { href: ROUTES.laskutus, label: "Laskutus" },
 ];
 
 /** Yhteystiedot yhdessa paikassa: taysvalikko ja tietosuojasivu kayttavat samoja. */
 export const CONTACT = {
   company: "WS Media Oy",
-  street: "Kuusiniementie 8 A 3",
+  street: "Kuusiniementie 8 F 3",
   city: "02710 Espoo",
   email: "info@wsmedia.fi",
   phone: "040 564 8770",
@@ -93,12 +95,14 @@ export const CONTACT = {
 };
 
 /** Some-kanavat. Avautuvat uuteen valilehteen. */
-export type SocialLink = { href: string; label: string; icon: "instagram" | "tiktok" | "linkedin" };
+export type SocialLink = { href: string; label: string; icon: "instagram" | "tiktok" | "linkedin" | "kartta" };
 
 export const SOCIAL: SocialLink[] = [
   { href: "https://www.instagram.com/wsmedia.fi/", label: "Instagram", icon: "instagram" },
   { href: "https://www.tiktok.com/@wsmedia.fi", label: "TikTok", icon: "tiktok" },
   { href: "https://fi.linkedin.com/company/ws-media-oy", label: "LinkedIn", icon: "linkedin" },
+  /* Google-yritysprofiili: sijainti, aukioloajat ja arvostelut. */
+  { href: "https://www.google.com/maps?cid=17434529617661064987", label: "Google-profiili", icon: "kartta" },
 ];
 
 /**
@@ -120,10 +124,9 @@ export const HOME_FOOTER: FooterColumn[] = [
     title: "Yritys",
     links: [
       { href: "#referenssit", label: "Referenssit" },
-      { href: "#prosessi", label: "Prosessi" },
-      { href: "#ukk", label: "Usein kysyttyä" },
       { href: ROUTES.toihin, label: "Töihin meille" },
       { href: "#lomake", label: "Ota yhteyttä" },
+      { href: ROUTES.laskutus, label: "Laskutustiedot" },
     ],
   },
 ];
@@ -141,11 +144,11 @@ export const SUBPAGE_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
+      { href: ROUTES.meista, label: "Meistä" },
       { href: "/#referenssit", label: "Referenssit" },
-      { href: "/#prosessi", label: "Prosessi" },
-      { href: "/#ukk", label: "Usein kysyttyä" },
       { href: ROUTES.toihin, label: "Töihin meille" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
+      { href: ROUTES.laskutus, label: "Laskutustiedot" },
     ],
   },
 ];
@@ -165,10 +168,8 @@ export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
     title: "Verkkosivut",
     links: [
       { href: "/verkkosivut#hinnoittelu", label: "Verkkosivujen hinta" },
-      { href: "/verkkosivut#prosessi", label: "Prosessi" },
       { href: "/verkkosivut#sisalto", label: "Palvelun sisältö" },
       { href: "/verkkosivut#hakukoneoptimointi", label: "Hakukoneoptimoidut sivut" },
-      { href: "/verkkosivut#ukk", label: "Usein kysyttyä" },
     ],
   },
   {
@@ -183,8 +184,8 @@ export const VERKKOSIVUT_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
-      { href: "/#ukk", label: "Usein kysyttyä" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
+      { href: ROUTES.laskutus, label: "Laskutustiedot" },
       { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },
     ],
@@ -208,7 +209,6 @@ export const SEO_FOOTER: FooterColumn[] = [
       { href: "/hakukoneoptimointi#hinnoittelu", label: "Hakukoneoptimoinnin hinta" },
       { href: "/hakukoneoptimointi#sisalto", label: "Palvelun sisältö" },
       { href: "/hakukoneoptimointi#mittarit", label: "Mittarit ja raportointi" },
-      { href: "/hakukoneoptimointi#ukk", label: "Usein kysyttyä" },
     ],
   },
   {
@@ -223,8 +223,8 @@ export const SEO_FOOTER: FooterColumn[] = [
   {
     title: "Yritys",
     links: [
-      { href: "/#ukk", label: "Usein kysyttyä" },
       { href: ROUTES.yhteys, label: "Ota yhteyttä" },
+      { href: ROUTES.laskutus, label: "Laskutustiedot" },
       { href: ROUTES.tietosuoja, label: "Tietosuojaseloste" },
       { action: "consent", label: "Evästeasetukset" },
     ],

@@ -23,8 +23,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/verkkosivut", 0.9, "weekly"],
     ["/hakukoneoptimointi", 0.8, "monthly"],
     ["/graafinen-suunnittelu", 0.8, "monthly"],
+    ["/meista", 0.6, "monthly"],
     ["/toihin-meille", 0.5, "monthly"],
-    ["/tietosuoja", 0.3, "yearly"],
+    ["/yhteystiedot", 0.6, "yearly"],
   ];
   return sivut.map(([polku, priority, changeFrequency]) => ({
     url: `${SIVUSTO}${polku}`,

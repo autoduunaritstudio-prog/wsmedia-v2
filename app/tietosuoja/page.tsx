@@ -15,9 +15,10 @@ import { COOKIE_ROWS, SECTIONS } from "./content";
 export const metadata: Metadata = {
   title: "Tietosuojaseloste | WS Media",
   description:
-    "WS Media Oy:n tietosuojaseloste: mitä henkilötietoja keräämme, millä perusteella niitä käsitellään, mitä evästeitä sivustolla käytetään ja mitkä ovat rekisteröidyn oikeudet.",
+    "WS Media Oy:n tietosuojaseloste: mitä henkilötietoja keräämme ja miksi, mitä evästeitä sivustolla käytetään ja mitkä ovat oikeutesi.",
   alternates: { canonical: "https://wsmedia.fi/tietosuoja" },
-  robots: { index: true, follow: true },
+  /* Luonnos: ei indeksiin ennen oikeudellista tarkistusta. */
+  robots: { index: false, follow: true },
 };
 
 const beforeCookies = SECTIONS.filter((s) => s.n < 7);

@@ -274,6 +274,8 @@ const VAIHEET: [string, string, string][] = [
   ],
 ];
 
+
+
 export function Prosessi() {
   return (
     <section className="seo-sec" id="prosessi">
@@ -282,6 +284,11 @@ export function Prosessi() {
         <div className="seo-ord" data-rvs="">
           <span>Prosessi</span>
           <i>Kaksi hyväksyntää sinulta</i>
+        </div>
+        <div className="gs-raita rv" aria-hidden="true">
+          <i />
+          <i />
+          <i />
         </div>
         <h2 className="seo-h2 rv">Näin graafisen suunnittelun projekti etenee</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>

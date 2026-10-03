@@ -14,9 +14,9 @@ import { buildJsonLd } from "./jsonld";
 import { Miksi, Roolit, ValiCta, Tyomalli, Prosessi, Odotukset, Tyonkuva } from "./sections";
 import { Ukk } from "./ukk";
 
-const TITLE = "Töihin WS Medialle | Avoin haku freelancereille ja tekijöille";
+const TITLE = "Töihin WS Medialle | Freelancerit ja tekijät";
 const DESCRIPTION =
-  "Haemme jatkuvasti freelancereita ja osaajia: videokuvaajat, editoijat, kehittäjät, hakukoneoptimoijat, graafiset suunnittelijat ja asentajat. Toimeksianto tai työsuhde, koko Suomi.";
+  "Haemme freelancereita ja osaajia: videokuvaajat, editoijat, kehittäjät, hakukoneoptimoijat ja graafiset suunnittelijat. Toimeksianto tai työsuhde.";
 
 export const metadata: Metadata = {
   title: TITLE,

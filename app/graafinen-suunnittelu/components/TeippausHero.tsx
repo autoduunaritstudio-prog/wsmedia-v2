@@ -216,7 +216,7 @@ export default function TeippausHero() {
     };
     photo.onload = onLoad;
     maskImg.onload = onLoad;
-    photo.src = "/graafinen-suunnittelu/van-blank.jpg";
+    photo.src = "/graafinen-suunnittelu/van-blank.webp";
     maskImg.src = "/graafinen-suunnittelu/van-mask.png";
 
     const X0 = 90;

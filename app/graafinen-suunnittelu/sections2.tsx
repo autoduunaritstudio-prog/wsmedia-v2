@@ -128,8 +128,17 @@ export function Kenelle() {
 
 export function Alueet() {
   return (
-    <section className="seo-sec" id="alueet">
-      <Kaiku sana="ALUEET" puoli="vas" />
+    <section className="seo-sec kuvapohja" id="alueet">
+      {/* Kuva todistaa sen mita teksti sanoo: asennus tehdaan siella,
+          missa auto on. Sama kuvapohja kuin Lyhytvideoiden alueissa. */}
+      <img
+        className="pohjakuva"
+        src="/graafinen-suunnittelu/pakettiauto.webp"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        data-par="0.028"
+      />
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Toiminta-alue</span>
@@ -231,51 +240,54 @@ export function Kaytannossa() {
    pikselin paahan. Sama poisto kuin kolmella muulla palvelusivulla.
    Kasin kirjoitettu lomake vaihtui sivuston omaan: se on sama
    komponentti, sama validointi ja sama ulkoasu kaikkialla. */
-const ASKELEET: [string, string][] = [
-  ["24 h", "Luemme viestin ja vastaamme sähköpostilla."],
-  ["30 min", "Kartoitus: mitä pintoja ilmeen pitää kattaa ja missä järjestyksessä."],
-  ["Tarjous", "Kiinteä hinta, joka sisältää suunnittelun, materiaalit ja asennuksen."],
-];
-
 export function Tarjous() {
+  /* SAMA KOKONAISUUS KUIN LYHYTVIDEOILLA JA VERKKOSIVUILLA: sama
+     rakenne, samat luokat ja sama lomakekortti. Vain sisalto puhuu
+     ilmeesta ja teippauksesta. */
   return (
-    <section className="seo-sec" id="tarjous">
+    <section className="seo-sec kuvapohja" id="tarjous">
+      <img
+        className="pohjakuva"
+        src="/graafinen-suunnittelu/luonnokset.webp"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        data-par="0.028"
+      />
       <div className="swrap">
-        <div className="seo-ord" data-rvs="">
-          <span>Maksuton kartoitus</span>
-        </div>
+        <p className="seo-selite" data-rvs="">Vastaus 24 tunnissa</p>
         <div className="loc">
           <div>
             <h2 className="seo-h2 rv">
-              Pyydä tarjous logosta, ilmeestä tai <span className="mark">teippauksesta.</span>
+              Valmis uudistamaan <span className="korosta">yrityksen ilmeen?</span>
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-              Kerro lyhyesti mitä pintoja ilmeen pitäisi kattaa: montako ajoneuvoa, onko logo
-              olemassa ja mihin mennessä työn pitäisi olla valmis.
+              Vastaamme 24 tunnin sisällä ja kerromme suoraan, mitä ehdotamme ja mitä se maksaa. Puhelinnumeron ja aukioloajat löydät{" "}
+              <a href="/yhteystiedot">yhteystiedoista</a>, ja tekijät esittelemme{" "}
+              <a href="/meista">Meistä-sivulla</a>.
             </p>
             <ol className="askel porras rv">
-              {ASKELEET.map(([h, s]) => (
-                <li key={h}>
-                  <b>{h}</b>
-                  <span>{s}</span>
-                </li>
-              ))}
+              <li>
+                <b>24 h</b>
+                <span>Luemme viestin ja vastaamme sähköpostilla.</span>
+              </li>
+              <li>
+                <b>30 min</b>
+                <span>Kartoitus: mitä pintoja ilmeen pitää kattaa ja missä järjestyksessä.</span>
+              </li>
+              <li>
+                <b>Tarjous</b>
+                <span>Kiinteä hinta, joka sisältää suunnittelun, materiaalit ja asennuksen.</span>
+              </li>
             </ol>
           </div>
-          <div>
-            <BudgetForm
-              showBudget={false}
-              messageLabel="Mitä tarvitset? Kerro esimerkiksi ajoneuvojen määrä ja aikataulu."
-              extraField={{
-                id: "pk",
-                label: "Paikkakunta, jossa asennus tehdään",
-                placeholder: "Espoo",
-              }}
-              submitLabel="Pyydä tarjous"
-              note="Kartoitus ei sido mihinkään."
-              tilt="y"
-            />
-          </div>
+
+          <BudgetForm
+            showBudget={false}
+            messageLabel="Mitä tarvitset? Kerro esimerkiksi ajoneuvojen määrä ja paikkakunta."
+            note="Ei sitoumuksia."
+            tilt="y"
+          />
         </div>
       </div>
     </section>

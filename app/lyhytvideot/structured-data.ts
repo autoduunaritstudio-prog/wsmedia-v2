@@ -1,7 +1,8 @@
+import { ORGANISAATIO } from "../components/organisaatio";
 import { FAQ_GROUPS } from "./faq-data";
 
 const ORG_ID = "https://wsmedia.fi/#organisaatio";
-const OG_IMAGE = "https://wsmedia.fi/og/lyhytvideotuotanto-yrityksille.jpg";
+const OG_IMAGE = "https://wsmedia.fi/lyhytvideot/opengraph-image";
 
 /**
  * Mockupin JSON-LD-graafi. FAQPage-osa kootaan samasta FAQ_GROUPS-datasta
@@ -11,36 +12,9 @@ export const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "ProfessionalService",
-      "@id": ORG_ID,
-      name: "WS Media Oy",
-      alternateName: "WS Media",
-      url: "https://wsmedia.fi/",
+      ...ORGANISAATIO,
       description:
         "WS Media on espoolainen lyhytvideotuotantoon, verkkosivuihin ja graafiseen suunnitteluun erikoistunut toimisto.",
-      vatID: "FI36150844",
-      /* ENTITEETTI KIINNI PROFIILEIHINSA.
-         sameAs on se kohta josta hakukone ja tekoaly paattelevat etta
-         sivun "WS Media" ja somen "WS Media" ovat sama toimija. Ilman
-         sita nimi on pelkka merkkijono. Osoitteet ovat samat jotka
-         footerissa jo ovat, eli ne eivat ole uusi vaite.
-
-         telephone ja email olivat footerissa mutta eivat merkinnassa,
-         vaikka juuri ne ovat paikallisen haun perustietoja. */
-      sameAs: [
-        "https://www.instagram.com/wsmedia.fi/",
-        "https://www.tiktok.com/@wsmedia.fi",
-        "https://fi.linkedin.com/company/ws-media-oy",
-      ],
-      telephone: "+358405648770",
-      email: "info@wsmedia.fi",
-      taxID: "3615084-4",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Espoo",
-        addressRegion: "Uusimaa",
-        addressCountry: "FI",
-      },
       areaServed: [
         { "@type": "Country", name: "Suomi" },
         { "@type": "City", name: "Espoo" },

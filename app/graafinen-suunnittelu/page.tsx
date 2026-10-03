@@ -9,7 +9,7 @@ import NetBackdrop from "../components/NetBackdrop";
 import Nav from "../components/Nav";
 import Palkki from "../components/Palkki";
 import SiteEffects from "../components/SiteEffects";
-import { Vaite } from "../components/Maasto";
+import { Laatta, Vaite } from "../components/Maasto";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import TeippausHero from "./components/TeippausHero";
@@ -133,23 +133,42 @@ export default function GraafinenSuunnittelu() {
                   Nyt Prosessi jatkuu suoraan hinnastoon samalla pinnalla.
                   Materiaalit ja toiminta-alue ovat tukitietoa, joten ne
                   ovat hannassa Kenelle-osion ja UKK:n jalkeen. */}
+              <div className="pino">
               <Jakso>
                 <Prosessi />
-                <Hinta />
-                <Kenelle />
-                <Materiaalit />
-                <Ukk />
-                <Alueet />
-                <Kaytannossa />
-                <Tarjous />
               </Jakso>
+
+              {/* HENGAHDYS PROSESSIN JALKEEN (2.10.2026). Prosessista
+                  hinnastoon tuli tekstia tekstin perään ilman taukoa.
+                  Taysi kuvalaatta katkaisee sen, kuten Verkkosivuilla. */}
+              <div className="pino">
+                <Laatta kuva="/verkkosivut/liiketila.webp" korkeus="taysi">
+                  <p className="laatta-lause suuri">
+                    Toimitilan ikkuna mainostaa <b><i>joka päivä.</i></b>
+                  </p>
+                  <p className="laatta-alla">
+                    Ikkunateippaus näkyy ohikulkijoille myös silloin, kun ovi on kiinni.
+                  </p>
+                </Laatta>
+
+                <Jakso>
+                  <Hinta />
+                  <Kenelle />
+                  <Materiaalit />
+                  <Ukk />
+                  <Alueet />
+                  <Kaytannossa />
+                  <Tarjous />
+                </Jakso>
+              </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <Footer
-        intro="Graafinen suunnittelu, verkkosivut ja lyhytvideot yrityksille. Espoo ja Helsinki, koko Suomi."
+        intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
         base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
         brandHeading="h2"

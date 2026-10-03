@@ -30,7 +30,7 @@ import Tape from "./components/Tape";
 import { buildJsonLd } from "./jsonld";
 
 export const metadata: Metadata = {
-  title: "Hakukoneoptimointi yritykselle | SEO-palvelut ja hinta | WS Media",
+  title: "Hakukoneoptimointi yritykselle | SEO-palvelut | WS Media",
   description:
     "Hakukoneoptimointi yritykselle: tekninen SEO, sisältö ja paikallinen näkyvyys, sekä näkyvyys tekoälyhauissa. Kuukausipaketit alkaen 390 €/kk.",
   alternates: { canonical: "https://wsmedia.fi/hakukoneoptimointi" },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     locale: "fi_FI",
     siteName: "WS Media",
     url: "https://wsmedia.fi/hakukoneoptimointi",
-    title: "Hakukoneoptimointi yritykselle | SEO-palvelut ja hinta | WS Media",
+    title: "Hakukoneoptimointi yritykselle | SEO-palvelut | WS Media",
     description:
       "Tekninen SEO, sisältö ja paikallinen näkyvyys, sekä näkyvyys tekoälyhauissa. Kuukausipaketit alkaen 390 €/kk.",
   },

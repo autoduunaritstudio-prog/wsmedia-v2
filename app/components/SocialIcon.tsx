@@ -43,5 +43,12 @@ export default function SocialIcon({ name }: { name: SocialLink["icon"] }) {
           <path d="M9.6 10.9 a2.3 2.3 0 0 1 4.6 0 V14" />
         </svg>
       );
+    case "kartta":
+      return (
+        <svg {...common}>
+          <path d="M10 17.2 s-5.2-5-5.2-8.9 a5.2 5.2 0 0 1 10.4 0 c0 3.9-5.2 8.9-5.2 8.9 z" />
+          <circle cx="10" cy="8.3" r="1.9" />
+        </svg>
+      );
   }
 }

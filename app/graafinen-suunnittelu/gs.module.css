@@ -49,13 +49,23 @@
 .kenelle ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px }
 .kenelle li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 12px; align-items: start; font-size: 17px; line-height: 1.5 }
 .kenelle li svg { width: 26px; height: 26px; padding: 4px; border-radius: 50%; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
-.sopii { padding: 30px 0 }
+.sopii li svg { box-shadow: 0 6px 16px -6px rgba(111,236,255,.6) }
+.sopii {
+  padding: 30px 30px 32px; border-radius: 20px; position: relative;
+  background:
+    radial-gradient(130% 80% at 0% 0%, rgba(111,236,255,.09), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.012));
+  box-shadow: inset 0 0 0 1px rgba(111,236,255,.22), inset 0 1px 0 rgba(255,255,255,.08), 0 28px 56px -32px rgba(0,0,0,.85);
+}
 .sopii h3 { color: var(--seo-hi) }
 .sopii li { color: var(--seo-ink) }
 .sopii li svg { stroke: #0b0f14; background: var(--seo-hi) }
 .eiSovi {
   padding: 30px 30px 32px; border-radius: 20px;
-  background: rgba(232,165,74,.06); border: 1px solid rgba(232,165,74,.28);
+  background:
+    radial-gradient(130% 80% at 0% 0%, rgba(255,178,122,.08), transparent 55%),
+    rgba(232,165,74,.04);
+  box-shadow: inset 0 0 0 1px rgba(232,165,74,.28), inset 0 1px 0 rgba(255,255,255,.06), 0 28px 56px -32px rgba(0,0,0,.85);
 }
 .eiSovi h3 { color: var(--lampo) }
 .eiSovi li { color: var(--seo-ink) }
@@ -63,7 +73,7 @@
 .eiSovi small { display: block; margin-top: 4px; color: var(--seo-ink-2); font-size: 15px }
 @media (max-width: 760px) {
   .kenelle { grid-template-columns: minmax(0, 1fr); gap: 8px }
-  .sopii { padding: 10px 0 20px }
+  .sopii { padding: 24px 20px }
   .eiSovi { padding: 24px 20px }
 }
 
@@ -184,3 +194,24 @@
   scale: clamp(.15, calc(var(--rvp, 1) * 2 - .2), 1) 1;
 }
 @media (prefers-reduced-motion: reduce) { .laji i { scale: 1 } }
+
+/* ---------- PALVELUKUVAT: TEIPPIPYYHKAISY ----------
+   Kuva paljastuu vinona pyyhkaisyna vasemmalta, kuin kalvo
+   asennettaisiin rakelilla. Etenee vierityksen mukana (--rvp). */
+.kuva {
+  --pk: clamp(0, calc((var(--rvp, 1) - var(--i, 0) * .06) * 2.4), 1);
+  clip-path: polygon(0 0, calc(var(--pk) * 130%) 0, calc(var(--pk) * 130% - 30%) 100%, 0 100%);
+}
+.kuva::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.16) 50%, transparent 60%);
+  transform: translateX(calc(-100% + var(--pk) * 200%)); opacity: calc(1 - var(--pk) * var(--pk));
+}
+.palvelu .kuva img { transition: transform .7s cubic-bezier(.2,.8,.2,1) }
+@media (hover: hover) {
+  .palvelu:hover .kuva img { transform: scale(1.045) }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kuva { clip-path: none }
+  .kuva::after { display: none }
+}

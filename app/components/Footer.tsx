@@ -40,7 +40,6 @@ type Props = {
  * kayttaja etsii ne aina footerin alalaidasta.
  */
 export default function Footer({ intro, columns, base, brandHeading = "h4" }: Props) {
-  const Brand = brandHeading;
   const Sarake = brandHeading === "h2" ? "h3" : "h4";
   return (
     <footer>
@@ -50,7 +49,7 @@ export default function Footer({ intro, columns, base, brandHeading = "h4" }: Pr
             <span className="footer-mark" aria-hidden="true">
               <LogoMark />
             </span>
-            <Brand>WS Media</Brand>
+            <p className="foot-nimi">WS Media</p>
             <p>{intro}</p>
             <ul className="foot-social">
               {SOCIAL.map((s) => (
@@ -83,7 +82,7 @@ export default function Footer({ intro, columns, base, brandHeading = "h4" }: Pr
             <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
             <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>
             {/* Valilyonti ennen <br />:aa. Ilman sita pelkkaa tekstia
-                poimiva lukija saa "Kuusiniementie 8 A 302710 Espoo":
+                poimiva lukija saa "Kuusiniementie 8 F 302710 Espoo":
                 selain nayttaa rivinvaihdon, mutta textContentissa
                 merkkeja ei erota mikaan. Osoite on juuri se tieto joka
                 halutaan koneelle oikein. */}

@@ -29,7 +29,9 @@ export default function Hero() {
           <h1>
             Sisältöä, joka{" "}
             <br />
-            <WordSwap words={WORDS} />
+            {/* deferToClient: palvelimen HTML:ssa vain ensimmainen lause, jolloin
+                H1 on hakukoneelle yksi luettava lause. */}
+            <WordSwap words={WORDS} deferToClient />
           </h1>
           {/* .sub nousi otsikon yhteyteen. Vali on .hero .sub -saannon
               oma margin-top 22px, sama kuin alkuperaisessa pinotussa

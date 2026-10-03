@@ -3,6 +3,7 @@
 // footeriin; alasivut kayttavat sita yha variant="simple":lla.
 /* Sivun tyylit: generoitu app/globals.css:sta, ks. scripts/tyylit.cjs. */
 import "./_tyylit/perus.css";
+import type { Metadata } from "next";
 import MetalBackdrop from "./components/MetalBackdrop";
 import SiteEffects from "./components/SiteEffects";
 import Nav from "./components/Nav";
@@ -18,6 +19,29 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import { HOME_FOOTER, OVERLAY_NAV } from "./components/site-data";
 import { buildHomeFaqJsonLd } from "./faq-data";
+import { ORG_ID, ORGANISAATIO } from "./components/organisaatio";
+
+/* ETUSIVUN METATIEDOT. Aiemmin etusivu peri juuren oletukset ("WS Media,
+   etusivu"), eika sillä ollut canonicalia eika jakotietoja. Otsikko kantaa
+   paahakusanan (mainostoimisto Espoo), kuvaus luettelee palvelut. */
+const OTSIKKO = "Mainostoimisto Espoo: lyhytvideot ja verkkosivut | WS Media";
+const KUVAUS =
+  "WS Media on espoolainen mainostoimisto: lyhytvideot, verkkosivut, hakukoneoptimointi ja graafinen suunnittelu samasta tiimistä. Kiinteät hinnat.";
+
+export const metadata: Metadata = {
+  title: OTSIKKO,
+  description: KUVAUS,
+  alternates: { canonical: "https://wsmedia.fi" },
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    locale: "fi_FI",
+    siteName: "WS Media",
+    url: "https://wsmedia.fi",
+    title: OTSIKKO,
+    description: KUVAUS,
+  },
+};
 
 const STATS = [
   { value: "150+", label: "toteutettua projektia" },
@@ -39,6 +63,31 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildHomeFaqJsonLd()) }}
+      />
+      {/* Yritys ja sivusto: sama organisaatiosolmu kuin muilla sivuilla. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                ...ORGANISAATIO,
+                description:
+                  "Espoolainen mainostoimisto: lyhytvideot, verkkosivut, hakukoneoptimointi ja graafinen suunnittelu yrityksille.",
+                areaServed: { "@type": "Country", name: "Suomi" },
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://wsmedia.fi/#sivusto",
+                url: "https://wsmedia.fi",
+                name: "WS Media",
+                inLanguage: "fi-FI",
+                publisher: { "@id": ORG_ID },
+              },
+            ],
+          }),
+        }}
       />
       <div id="prog" />
       <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />

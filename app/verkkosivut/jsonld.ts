@@ -1,3 +1,4 @@
+import { ORGANISAATIO } from "../components/organisaatio";
 import { FAQ_GROUPS } from "./faq";
 import { UKK_KYSYMYKSET } from "./components/sisalto";
 
@@ -8,34 +9,8 @@ import { UKK_KYSYMYKSET } from "./components/sisalto";
  */
 const BASE_GRAPH = [
     {
-      "@type": "ProfessionalService",
-      "@id": "https://wsmedia.fi/#organisaatio",
-      "name": "WS Media Oy",
-      "alternateName": "WS Media",
-      "url": "https://wsmedia.fi/",
+      ...ORGANISAATIO,
       "description": "WS Media on espoolainen verkkosivuihin, lyhytvideotuotantoon ja graafiseen suunnitteluun erikoistunut toimisto.",
-      "vatID": "FI36150844",
-      "taxID": "3615084-4",
-      /* ENTITEETTI KIINNI PROFIILEIHINSA. sameAs on se kohta josta
-         hakukone ja tekoaly paattelevat etta sivun "WS Media" ja
-         somen "WS Media" ovat sama toimija. Osoitteet ovat samat
-         jotka footerissa jo ovat, eli ne eivat ole uusi vaite.
-         telephone ja email olivat footerissa mutta eivat
-         merkinnassa, vaikka juuri ne ovat paikallisen haun
-         perustietoja. */
-      "sameAs": [
-        "https://www.instagram.com/wsmedia.fi/",
-        "https://www.tiktok.com/@wsmedia.fi",
-        "https://fi.linkedin.com/company/ws-media-oy"
-      ],
-      "telephone": "+358405648770",
-      "email": "info@wsmedia.fi",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Espoo",
-        "addressRegion": "Uusimaa",
-        "addressCountry": "FI"
-      },
       "areaServed": [
         {
           "@type": "Country",

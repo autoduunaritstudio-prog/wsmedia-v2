@@ -549,7 +549,9 @@ export function Tarjous() {
               Valmis uudistamaan <span className="korosta">verkkosivut?</span>
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-              Vastaamme 24 tunnin sisällä ja kerromme suoraan, mitä ehdotamme ja mitä se maksaa.
+              Vastaamme 24 tunnin sisällä ja kerromme suoraan, mitä ehdotamme ja mitä se maksaa. Puhelinnumeron ja aukioloajat löydät{" "}
+              <a href="/yhteystiedot">yhteystiedoista</a>, ja tekijät esittelemme{" "}
+              <a href="/meista">Meistä-sivulla</a>.
             </p>
             <ol className="askel porras rv">
               <li>

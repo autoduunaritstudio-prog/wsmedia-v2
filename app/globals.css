@@ -2377,7 +2377,7 @@ footer .foot-legal a, footer .foot-legal button { padding: 0 }
 }
 footer .footer-mark { display: block; color: var(--ink); margin-bottom: 12px }
 footer .footer-mark svg { height: 26px; width: auto; display: block }
-footer h4 { font-size: var(--text-caption); color: var(--ink); font-weight: var(--weight-semibold); margin-bottom: 10px }
+footer h4, footer .foot-nimi { font-size: var(--text-caption); color: var(--ink); font-weight: var(--weight-semibold); margin-bottom: 10px }
 footer a { display: block; color: var(--grey); text-decoration: none; padding: 4px 0 }
 footer a:hover { color: var(--ink) }
 
@@ -2991,7 +2991,7 @@ footer a:hover { color: var(--ink) }
 }
 .refcard-meta { position: absolute; left: 14px; right: 14px; bottom: 12px; z-index: 2 }
 .refcard-meta b { display: block; font-size: var(--text-ui-sm); font-weight: var(--weight-semibold) }
-.refcard-meta span { display: block; font-size: var(--text-caption-sm); color: #d2d2d7; margin-top: 2px }
+.refcard-meta span { display: block; font-size: var(--text-label); color: #d2d2d7; margin-top: 2px }
 
 @media (prefers-reduced-motion: reduce) {
   /* Sama kuin herolla: pinnaus on asettelua eika liiketta, joten
@@ -3310,7 +3310,7 @@ html.rv-ready .svc.rev.rv:not(.on) { transform: translateX(36px) }
 .page-palvelu .final h2 { max-width: 20ch }
 .page-palvelu .final .sub { max-width: 46ch }
 .page-palvelu footer .cols { gap: var(--space-gap-footer-sub) }
-.page-palvelu footer h2, .page-palvelu footer h4 {
+.page-palvelu footer .foot-nimi, .page-palvelu footer h4 {
   font-size: var(--text-caption); color: var(--ink); font-weight: var(--weight-semibold); margin-bottom: 10px; letter-spacing: 0;
 }
 
@@ -8996,7 +8996,7 @@ html.rv-ready .page-lyhytvideot .whygrid .whycard.rv:nth-child(even):not(.on) { 
 .page-hakukoneoptimointi footer .footer-mark,
 .page-hakukoneoptimointi footer .foot-brand > :not(p):not(ul),
 .page-hakukoneoptimointi footer .foot-col h4,
-.page-hakukoneoptimointi footer h2,
+.page-hakukoneoptimointi footer .foot-nimi,
 .page-hakukoneoptimointi footer h4 { color: #f5f5f7 }
 .page-hakukoneoptimointi footer .foot-social a {
   color: #b9c0cf; border-color: rgba(255,255,255,.18);
@@ -10514,7 +10514,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 
 /* ---------- KAHDEN PALSTAN OTSIKKORIVI ---------- */
 .wsx .kaksi-kick, .wsx .duo2-kick {
-  font-family: var(--seo-mono); font-size: 11px; font-weight: 600;
+  font-family: var(--seo-mono); font-size: 13px; font-weight: 600;
   letter-spacing: .18em; text-transform: uppercase; color: var(--blue); margin: 0 0 14px;
 }
 
@@ -10650,8 +10650,8 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .page-graafinen-suunnittelu footer .foot-brand > :not(p):not(ul),
 .page-verkkosivut footer .foot-col h4,
 .page-graafinen-suunnittelu footer .foot-col h4,
-.page-verkkosivut footer h2,
-.page-graafinen-suunnittelu footer h2,
+.page-verkkosivut footer .foot-nimi,
+.page-graafinen-suunnittelu footer .foot-nimi,
 .page-verkkosivut footer h4,
 .page-graafinen-suunnittelu footer h4 { color: #f5f5f7 }
 .page-verkkosivut footer .foot-social a,
@@ -11673,7 +11673,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 }
 .wsx .kehotus-txt { min-width: 0; flex: 1 1 380px }
 .wsx .kehotus-kick {
-  font-family: var(--seo-mono); font-size: 11px; font-weight: 600;
+  font-family: var(--seo-mono); font-size: 13px; font-weight: 600;
   letter-spacing: .12em; text-transform: uppercase;
   color: var(--seo-hi); margin: 0 0 10px;
 }
@@ -11799,7 +11799,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .page-lyhytvideot footer .footer-mark,
 .page-lyhytvideot footer .foot-brand > :not(p):not(ul),
 .page-lyhytvideot footer .foot-col h4,
-.page-lyhytvideot footer h2,
+.page-lyhytvideot footer .foot-nimi,
 .page-lyhytvideot footer h4 { color: #f5f5f7 }
 .page-lyhytvideot footer .foot-social a {
   color: #b9c0cf; border-color: rgba(255,255,255,.18);
@@ -16198,3 +16198,484 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
   .page-verkkosivut #hakukoneoptimointi .np-ph-sormi { animation: none !important; opacity: 0 }
   .page-verkkosivut #hakukoneoptimointi .np-ilmoitus { animation: none !important; opacity: 1; translate: none }
 }
+
+/* ==================================================================
+   KAYTANNOSSA-TEKSTIT LUETTAVIKSI (kaikki wsx-sivut, 2.10.2026)
+   Otsikot olivat samaa kokoa kuin leipateksti eika kappaleilla ollut
+   valia, joten osio luki yhtena tekstimassana. */
+.wsx .seoprose { max-width: 68ch }
+.wsx .seoprose h3 {
+  font-size: clamp(19px, 1.5vw, 22px); font-weight: 600; letter-spacing: -.012em; line-height: 1.3;
+  color: var(--seo-ink); margin: 34px 0 10px;
+}
+.wsx .seoprose h3:first-child { margin-top: 0 }
+.wsx .seoprose p { font-size: 17px; line-height: 1.75; color: var(--seo-ink-2); margin: 0 0 14px }
+.wsx .seoprose strong { color: var(--seo-ink); font-weight: 600 }
+.wsx .seoprose a { color: var(--seo-hi) }
+.wsx .seoprose .seomore { margin-top: 18px }
+
+/* ==================================================================
+   GRAAFINEN SUUNNITTELU: VIIMEISTELY (2.10.2026)
+   Sama rytmi, premium-pinnat, tarjous ja footer kuin Lyhytvideoilla
+   ja Verkkosivuilla. Mauste on sivun oma: vino teippiraita
+   (skewX -30deg, sama kuin heron kohdenimissa) korttien kulmassa ja
+   kestoikapalkeissa.
+   ================================================================== */
+.page-graafinen-suunnittelu .seo-sec[id] { padding-block: clamp(40px, 5vh, 56px) }
+.page-graafinen-suunnittelu .lataus { background: #0b0f14 }
+
+/* --- Mainostoimisto vai teippaamo: premium-kortit --- */
+.page-graafinen-suunnittelu #miksi .paketti {
+  --pk-valo: 255,178,122;
+  border: 0; border-radius: 20px; isolation: isolate; overflow: hidden;
+  background:
+    radial-gradient(130% 80% at 0% 0%, rgba(var(--pk-valo), .08), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.012) 60%, rgba(255,255,255,.02));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 1px 0 rgba(0,0,0,.35), 0 28px 56px -32px rgba(0,0,0,.85);
+  transition: translate .45s cubic-bezier(.2,.8,.2,1);
+}
+.page-graafinen-suunnittelu #miksi .paketti.hl {
+  --pk-valo: 111,236,255;
+  background:
+    radial-gradient(130% 80% at 50% 0%, rgba(111,236,255,.14), transparent 60%),
+    linear-gradient(180deg, rgba(111,236,255,.06), rgba(255,255,255,.015));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 0 0 1px rgba(111,236,255,.18), 0 34px 70px -30px rgba(0,0,0,.9), 0 0 60px -20px rgba(111,236,255,.35);
+}
+.page-graafinen-suunnittelu #miksi .paketti::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; z-index: 2;
+  background: linear-gradient(155deg, rgba(var(--pk-valo), .5), rgba(255,255,255,.08) 32%, rgba(255,255,255,.04) 68%, rgba(var(--pk-valo), .16));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+}
+/* Teippiraita oikeaan ylakulmaan: kaksi vinoa kaistaa. */
+.page-graafinen-suunnittelu #miksi .paketti::before {
+  content: ""; position: absolute; top: -6px; right: 22px; width: 54px; height: 30px; z-index: 1;
+  background: linear-gradient(90deg, rgba(var(--pk-valo), .55) 0 14px, transparent 14px 22px, rgba(var(--pk-valo), .25) 22px 34px, transparent 34px);
+  transform: skewX(-30deg); pointer-events: none;
+}
+.page-graafinen-suunnittelu #miksi .paketti-merkki { z-index: 3; top: 14px; left: 26px; background: var(--seo-hi); color: #06141a }
+.page-graafinen-suunnittelu #miksi .paketti.hl h3 { margin-top: 26px }
+@media (hover: hover) {
+  .page-graafinen-suunnittelu #miksi .paketti:hover { translate: 0 -4px }
+}
+
+/* --- Materiaalitaulukko paneeliksi, kestoika teippiraitana --- */
+@media (min-width: 761px) {
+  .page-graafinen-suunnittelu #materiaalit .spec {
+    border-collapse: separate; border-spacing: 0; border: 0; border-radius: 20px; overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.09), inset 0 1px 0 rgba(255,255,255,.08), 0 28px 56px -32px rgba(0,0,0,.85);
+  }
+  .page-graafinen-suunnittelu #materiaalit .spec thead th { padding-top: 18px; padding-bottom: 16px; background: rgba(255,255,255,.03); border-bottom: 1px solid var(--seo-rule-soft) }
+  .page-graafinen-suunnittelu #materiaalit .spec tr > :first-child { padding-left: 28px }
+  .page-graafinen-suunnittelu #materiaalit .spec tr > :last-child { padding-right: 28px }
+  .page-graafinen-suunnittelu #materiaalit .spec tbody th,
+  .page-graafinen-suunnittelu #materiaalit .spec tbody td { border-bottom: 1px solid var(--seo-rule-soft); transition: background-color .25s }
+  .page-graafinen-suunnittelu #materiaalit .spec tbody tr:last-child > * { border-bottom: 0 }
+  .page-graafinen-suunnittelu #materiaalit .spec tbody tr:hover > * { background: rgba(255,178,122,.045) }
+}
+.page-graafinen-suunnittelu .gs-ika {
+  height: 7px; max-width: 160px; border-radius: 1px; overflow: visible;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 10px, transparent 10px 13px);
+  transform: skewX(-30deg);
+}
+.page-graafinen-suunnittelu .gs-ika > i {
+  border-radius: 1px;
+  background: linear-gradient(90deg, rgba(255,178,122,.4) 0 calc(var(--a) / var(--b) * 100%), #ffb27a 0, #e8a54a);
+  box-shadow: 0 0 14px -2px rgba(255,166,92,.55);
+}
+
+/* --- Tarjous kuten muilla palvelusivuilla --- */
+.page-graafinen-suunnittelu #tarjous .loc {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
+  gap: 56px; align-items: start;
+}
+.page-graafinen-suunnittelu #tarjous .fcard { margin: 0 }
+@media (max-width: 900px) {
+  .page-graafinen-suunnittelu #tarjous .loc { grid-template-columns: minmax(0, 1fr); gap: 40px }
+}
+.page-graafinen-suunnittelu #tarjous .seo-h2 { hyphens: auto }
+@media (min-width: 901px) {
+  .page-graafinen-suunnittelu #tarjous > .swrap,
+  .page-graafinen-suunnittelu #alueet > .swrap { display: block }
+}
+
+/* --- Alueet: kuvapohja kuten Lyhytvideoilla --- */
+.page-graafinen-suunnittelu #alueet .pohjakuva { object-position: 50% 60% }
+.page-graafinen-suunnittelu #alueet { padding-block: clamp(80px, 12vh, 140px) }
+
+/* --- Footer kuten muilla --- */
+.page-graafinen-suunnittelu footer { -webkit-backdrop-filter: none; backdrop-filter: none }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-graafinen-suunnittelu #miksi .paketti { transition: none; translate: none !important }
+}
+
+/* ==================================================================
+   GRAAFINEN SUUNNITTELU: PROSESSIN VAIHEKUVAT JA TEIPPIRAITA
+   Jokaisessa vaiheessa on pieni tyopoyta, jolla vaiheen tyo tehdaan
+   alan omilla tyokaluilla. Piirto etenee vierityksen mukana (--kp,
+   sama --rvp joka sytyttaa janan solmut). Kapealla naytolla ja
+   liikkeen vahennyksella kuvat ovat valmiina (--kp: 1).
+   ================================================================== */
+.page-graafinen-suunnittelu #prosessi .jakso { --kp: 1 }
+@media (min-width: 901px) {
+  .page-graafinen-suunnittelu #prosessi .jakso {
+    --kp: clamp(0, calc((var(--rvp, 1) - var(--i) * .1) * 3), 1);
+    /* Prosessi pinnautuu heti kun se on kokonaan nakyvissa, ja --rvp
+       jaatyy siihen. Solmut ja kuvat ehtivat silti valmiiksi. */
+    --auki: clamp(0, calc((var(--rvp, 1) - var(--i) * .11) * 7), 1);
+  }
+}
+.page-graafinen-suunnittelu #prosessi .jk-kuva {
+  position: relative; height: 144px; margin: 0 0 18px; border-radius: 14px; overflow: hidden;
+  background: linear-gradient(180deg, rgba(6,10,15,.55), rgba(6,10,15,.88));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), inset 0 1px 0 rgba(255,255,255,.06), 0 18px 36px -24px rgba(0,0,0,.9);
+}
+.page-graafinen-suunnittelu #prosessi .jk-kuva::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 14px 14px; mask-image: radial-gradient(110% 90% at 50% 45%, #000, transparent);
+}
+/* Kuvake keskelle, varihehku taakse. */
+.page-graafinen-suunnittelu #prosessi .jk-kuva { display: grid; place-items: center }
+.page-graafinen-suunnittelu #prosessi .jk-kuva::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 150px; height: 150px; margin: -75px 0 0 -75px;
+  border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(var(--halo), .38), rgba(var(--halo), 0));
+  opacity: var(--pop);
+}
+.page-graafinen-suunnittelu #prosessi .jakso { --pop: clamp(0, calc(var(--kp) * 1.4), 1); --halo: 111,236,255 }
+.page-graafinen-suunnittelu #prosessi .jakso:nth-child(2) { --halo: 255,150,190 }
+.page-graafinen-suunnittelu #prosessi .jakso:nth-child(3) { --halo: 170,140,255 }
+.page-graafinen-suunnittelu #prosessi .jakso:nth-child(4) { --halo: 255,90,110 }
+.page-graafinen-suunnittelu #prosessi .jakso:nth-child(5) { --halo: 255,214,102 }
+.page-graafinen-suunnittelu #prosessi .jk-kuva img {
+  position: relative; z-index: 1; width: 128px; height: 128px;
+  opacity: var(--pop);
+  transform: translateY(calc((1 - var(--pop)) * 16px)) scale(calc(.72 + var(--pop) * .28)) rotate(calc((1 - var(--pop)) * -8deg));
+}
+
+/* Teippiraita otsikon ylla: kolme vinoa kaistaa asettuu kerran. */
+.page-graafinen-suunnittelu .gs-raita { display: flex; gap: 10px; height: 12px; margin: 0 0 30px }
+.page-graafinen-suunnittelu .gs-raita.rv { opacity: 1; transform: none }
+.page-graafinen-suunnittelu #prosessi .gs-raita i {
+  display: block; height: 100%; transform-origin: 0 50%;
+  transform: skewX(-30deg) scaleX(0); transition: transform .8s cubic-bezier(.2,.8,.2,1);
+}
+.page-graafinen-suunnittelu #prosessi .gs-raita i:nth-child(1) { width: 120px; background: linear-gradient(90deg, #0891b2, #6fecff) }
+.page-graafinen-suunnittelu #prosessi .gs-raita i:nth-child(2) { width: 56px; background: #f2f4f6; transition-delay: .15s }
+.page-graafinen-suunnittelu #prosessi .gs-raita i:nth-child(3) { width: 26px; background: #ffb27a; transition-delay: .3s }
+.page-graafinen-suunnittelu #prosessi .gs-raita.on i { transform: skewX(-30deg) scaleX(1) }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-graafinen-suunnittelu #prosessi .jakso { --kp: 1 !important }
+  .page-graafinen-suunnittelu #prosessi .gs-raita i { transition: none; transform: skewX(-30deg) }
+}
+
+/* ==================================================================
+   MEISTA-SIVU (3.10.2026), app/meista
+   Pohja ja rytmi kuten palvelusivuilla. Sivun omat osat: palvelukiekko
+   herossa, kolmen vaiheen ketju, klaffikortit tiimille, tyotavan
+   bento ja referenssivideot.
+   ================================================================== */
+.page-meista .seo-sec[id] { padding-block: clamp(40px, 5vh, 56px) }
+
+/* --- Hero: kameran etsin ---
+   Kuva on FX9 kuvauskeikalla, joten hero kehystetaan kuin kameran
+   monitori: kulmamerkit rajaavat kuva-alan, ylakulmassa REC ja sivun
+   nimi, otsikko kulkee koko leveydella ja alareunan tietopalkki jakaa
+   ingressin, napit ja palvelut kolmeen sarakkeeseen. Teksti tayttaa
+   heron tasaisesti eika kasaudu vasempaan kulmaan. */
+.page-meista .mt-hero {
+  --mt-etsin: clamp(16px, 2.6vw, 40px);
+  min-height: 100svh; display: grid; align-content: end;
+  padding-top: calc(var(--nav-top) + clamp(110px, 16vh, 170px));
+  padding-bottom: clamp(56px, 9vh, 104px);
+}
+.page-meista .mt-etsin { position: absolute; inset: calc(var(--nav-top) + 96px) var(--mt-etsin) var(--mt-etsin); pointer-events: none; z-index: 1 }
+.page-meista .mt-etsin i { position: absolute; width: clamp(22px, 2.4vw, 36px); aspect-ratio: 1; border: 0 solid rgba(255,255,255,.55) }
+.page-meista .mt-etsin i:nth-child(1) { left: 0; top: 0; border-width: 1.5px 0 0 1.5px }
+.page-meista .mt-etsin i:nth-child(2) { right: 0; top: 0; border-width: 1.5px 1.5px 0 0 }
+.page-meista .mt-etsin i:nth-child(3) { left: 0; bottom: 0; border-width: 0 0 1.5px 1.5px }
+.page-meista .mt-etsin i:nth-child(4) { right: 0; bottom: 0; border-width: 0 1.5px 1.5px 0 }
+
+.page-meista .mt-rec { display: flex; align-items: center; gap: 12px; margin: 0 0 clamp(22px, 3vh, 34px); font-size: 15px; color: rgba(255,255,255,.86) }
+.page-meista .mt-rec b { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; letter-spacing: .06em; color: #fff }
+.page-meista .mt-rec b::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #ff4a4a; box-shadow: 0 0 12px rgba(255,74,74,.8); animation: mt-rec 1.6s steps(1, end) infinite }
+.page-meista .mt-rec span { padding-left: 12px; border-left: 1px solid rgba(255,255,255,.3) }
+@keyframes mt-rec { 50% { opacity: .15 } }
+
+.page-meista .mt-hero .seo-h1 {
+  font-size: clamp(40px, 6vw, 84px); line-height: 1; letter-spacing: -.04em;
+  max-width: 28ch; text-wrap: balance; margin: 0;
+}
+
+/* Tietopalkki: ohut viiva, kolme saraketta samalla ylareunalla. */
+.page-meista .mt-hero-ala {
+  margin-top: clamp(36px, 6vh, 64px); padding-top: clamp(24px, 3vh, 32px);
+  border-top: 1px solid rgba(255,255,255,.22);
+  display: grid; gap: 28px;
+}
+.page-meista .mt-hero .hero-lead { margin: 0; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.6; max-width: 46ch; color: rgba(255,255,255,.84) }
+.page-meista .mt-hero .heroctas { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px }
+.page-meista .mt-hero .heroctas a { white-space: nowrap }
+.page-meista .mt-hero-pal { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, max-content); gap: 10px 28px; font-size: 15.5px }
+.page-meista .mt-hero-pal a { color: rgba(255,255,255,.9); text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; padding-bottom: 2px; transition: background-size .3s, color .3s }
+.page-meista .mt-hero-pal a:hover, .page-meista .mt-hero-pal a:focus-visible { color: var(--seo-hi); background-size: 100% 1px }
+@media (min-width: 760px) {
+  .page-meista .mt-hero-ala { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "lead cta" "lead pal"; column-gap: 48px; align-items: start }
+  .page-meista .mt-hero .hero-lead { grid-area: lead }
+  .page-meista .mt-hero .heroctas { grid-area: cta }
+  .page-meista .mt-hero-pal { grid-area: pal }
+}
+@media (min-width: 1200px) {
+  .page-meista .mt-hero-ala { grid-template-columns: minmax(0, 1.15fr) auto minmax(0, .85fr); grid-template-areas: "lead cta pal"; column-gap: clamp(40px, 4vw, 72px) }
+  .page-meista .mt-hero-pal { justify-self: end }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-meista .mt-rec b::before { animation: none; opacity: 1 }
+}
+.page-meista .mt-hero .hero-tausta img { opacity: .72 }
+.page-meista .mt-hero .hero-tausta::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(11,15,20,.45) 0, rgba(11,15,20,.2) 30%, rgba(11,15,20,.55) 62%, rgba(11,15,20,.94) 100%);
+}
+
+/* --- Pinon ulkopuolinen vaite on tavallinen kuvakaista, ei taysi nakyma.
+   Pinon sisainen (cover) pysyy palvelusivujen mittaisena. --- */
+.page-meista > .vaite { min-height: 0; padding: clamp(120px, 20vh, 220px) 0 }
+.page-meista .vaite.kuvallinen > img { object-position: 50% 35% }
+
+/* --- Kortin otsikko on linkki, joka kattaa koko kortin --- */
+.page-meista .mt-fc h3 a { color: inherit; text-decoration: none }
+.page-meista .mt-fc h3 a::after { content: ""; position: absolute; inset: 0; z-index: 2 }
+.page-meista .mt-fc:has(a:focus-visible) { outline: 2px solid var(--seo-hi); outline-offset: 3px }
+.page-meista .mt-fc:hover h3 a { color: var(--seo-hi) }
+/* --- WS Media lyhyesti --- */
+.page-meista .mt-proosa { margin-top: 28px; max-width: 68ch }
+.page-meista .mt-proosa p { font-size: clamp(17px, 1.3vw, 19px); line-height: 1.7; color: rgba(255,255,255,.84); margin: 0 0 18px }
+.page-meista .mt-proosa a { color: var(--seo-hi); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px }
+
+/* --- Miksi: kolmen vaiheen ketju --- */
+.page-meista .mt-flow { list-style: none; margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; position: relative }
+.page-meista .mt-fc {
+  position: relative; border-radius: 22px; overflow: hidden; isolation: isolate;
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.012));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.1), inset 0 1px 0 rgba(255,255,255,.08), 0 28px 56px -32px rgba(0,0,0,.85);
+  transition: translate .45s cubic-bezier(.2,.8,.2,1);
+}
+.page-meista .mt-fi { position: relative; aspect-ratio: 16 / 10; overflow: hidden }
+.page-meista .mt-fi img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transform: scale(calc(1.1 - clamp(0, calc((var(--rvp, 1) - var(--i, 0) * .06) * 1.8), 1) * .1));
+}
+.page-meista .mt-fi::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(11,15,20,.92)) }
+.page-meista .mt-n {
+  position: absolute; left: 18px; bottom: 16px; z-index: 1; width: 46px; height: 46px; border-radius: 50%;
+  display: grid; place-items: center; background: #0b0f14; border: 2px solid #6fecff;
+  font-weight: 700; font-size: 19px; color: #6fecff; box-shadow: 0 0 0 7px rgba(111,236,255,.13);
+}
+.page-meista .mt-fc h3 { font-size: clamp(20px, 1.8vw, 24px); letter-spacing: -.02em; margin: 22px 24px 8px; color: #fff; line-height: 1.2 }
+.page-meista .mt-fc p { margin: 0 24px 26px; font-size: 16.5px; line-height: 1.55; color: var(--seo-ink-2) }
+@media (hover: hover) { .page-meista .mt-fc:hover { translate: 0 -4px } }
+@media (max-width: 860px) { .page-meista .mt-flow { grid-template-columns: minmax(0, 1fr) } }
+
+/* --- Tiimi: klaffikortit. Klaffi sulkeutuu kerran, ei pompi. --- */
+.page-meista .mt-sg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; margin-top: 64px; align-items: start }
+.page-meista .mt-sg.rv { opacity: 1; transform: none }
+.page-meista .mt-sl:nth-child(2) { margin-top: 40px }
+.page-meista .mt-sl:nth-child(3) { margin-top: 80px }
+.page-meista .mt-arm {
+  height: 46px; border-radius: 12px 12px 0 0; display: flex; overflow: hidden; position: relative; z-index: 1;
+  background: #0d151f; border: 1px solid rgba(255,255,255,.24); border-bottom: 0; margin-bottom: -1px;
+  transform-origin: 0 100%; transform: rotate(-16deg);
+}
+.page-meista .mt-arm i { flex: 1; background: #eef4f8; transform: skewX(-28deg) }
+.page-meista .mt-arm i:nth-child(even) { background: #0b0f14 }
+.page-meista .mt-sg.on .mt-arm { animation: mt-klaps .34s cubic-bezier(.6, 0, .95, .5) both; animation-delay: calc(var(--i) * .22s + .3s) }
+@keyframes mt-klaps { from { transform: rotate(-16deg) } to { transform: rotate(0deg) } }
+.page-meista .mt-sb {
+  border-radius: 0 0 22px 22px; padding: 22px 24px 26px;
+  background: linear-gradient(170deg, #1b2c3f, #0f1822);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 40px 70px -40px rgba(0,0,0,.85);
+  opacity: 0; translate: 0 18px; transition: opacity .6s ease, translate .7s cubic-bezier(.2,.8,.2,1);
+  transition-delay: calc(var(--i) * .22s);
+}
+.page-meista .mt-sg.on .mt-sb { opacity: 1; translate: 0 0 }
+.page-meista .mt-sh { display: flex; justify-content: space-between; padding-bottom: 14px; margin-bottom: 18px; border-bottom: 1px dashed rgba(255,255,255,.24); font-size: 14px; color: #9fe9f6 }
+.page-meista .mt-sb h3 { font-size: clamp(26px, 2.4vw, 32px); margin: 0; letter-spacing: -.03em; color: #fff; line-height: 1.1 }
+.page-meista .mt-role { margin: 6px 0 18px; color: #6fecff; font-size: 17px; font-weight: 600 }
+.page-meista .mt-sb ul { list-style: none; margin: 0; padding: 0; display: grid }
+.page-meista .mt-sb li { padding: 11px 0; border-top: 1px solid rgba(255,255,255,.12); font-size: 16.5px; color: #e6eef5 }
+.page-meista .mt-note { margin: 16px 0 0; font-size: 15.5px; line-height: 1.5; color: var(--seo-ink-2) }
+@media (max-width: 900px) { .page-meista .mt-sg { grid-template-columns: minmax(0, 1fr) } .page-meista .mt-sl:nth-child(n) { margin-top: 0 } }
+
+/* --- Tyotapa: bento --- */
+.page-meista .mt-tg { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px; margin-top: 48px }
+.page-meista .mt-t {
+  grid-column: span 2; border-radius: 22px; padding: 26px; position: relative; overflow: hidden;
+  background:
+    radial-gradient(130% 90% at 0% 0%, rgba(111,236,255,.07), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.012));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.1), inset 0 1px 0 rgba(255,255,255,.08), 0 28px 56px -32px rgba(0,0,0,.85);
+}
+.page-meista .mt-t.big {
+  grid-column: span 4; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 26px; padding: 0;
+  background: linear-gradient(160deg, rgba(111,236,255,.12), rgba(255,255,255,.03));
+  box-shadow: inset 0 0 0 1px rgba(111,236,255,.3), 0 28px 56px -32px rgba(0,0,0,.85);
+}
+.page-meista .mt-t.big img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 240px; filter: brightness(.85) }
+.page-meista .mt-t.big > div { padding: 30px 30px 30px 0; align-self: center }
+.page-meista .mt-t.wide { grid-column: span 4 }
+.page-meista .mt-t h3 { font-size: clamp(20px, 1.8vw, 25px); margin: 0 0 10px; letter-spacing: -.02em; color: #fff; line-height: 1.2 }
+.page-meista .mt-t p { margin: 0; font-size: 16.5px; line-height: 1.55; color: var(--seo-ink-2); max-width: 48ch }
+@media (max-width: 860px) {
+  .page-meista .mt-tg { grid-template-columns: minmax(0, 1fr) }
+  .page-meista .mt-t, .page-meista .mt-t.big, .page-meista .mt-t.wide { grid-column: auto }
+  .page-meista .mt-t.big { grid-template-columns: minmax(0, 1fr) }
+  .page-meista .mt-t.big > div { padding: 0 26px 26px }
+}
+
+/* --- Tarjous ja footer kuten palvelusivuilla --- */
+.page-meista #tarjous .loc { grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); gap: 56px; align-items: start }
+.page-meista #tarjous .fcard { margin: 0 }
+@media (max-width: 900px) { .page-meista #tarjous .loc { grid-template-columns: minmax(0, 1fr); gap: 40px } }
+.wsx #tarjous .seo-lead a { color: var(--seo-hi); white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px }
+.page-meista footer { -webkit-backdrop-filter: none; backdrop-filter: none }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-meista .mt-arm { animation: none !important }
+  .page-meista .mt-arm { transform: none }
+  .page-meista .mt-sb { opacity: 1; translate: none; transition: none }
+  .page-meista .mt-fi img { transform: none }
+  .page-meista .mt-fc { transition: none; translate: none !important }
+}
+/* Meista lainaa SEO-sivun pohjan; lomakekortti ja otsikko kuten Lyhytvideoilla. */
+.page-meista #tarjous .fcard { transition: opacity .8s cubic-bezier(.2,.6,.2,1), transform .8s cubic-bezier(.2,.6,.2,1) }
+.page-meista #tarjous .fcard .btn { padding: 14px }
+.page-meista #tarjous .seo-h2 { text-wrap: balance }
+@media (max-width: 600px) {
+}
+
+/* ==================================================================
+   LASKUTUSTIEDOT JA YHTEYSTIEDOT
+   Tumma .wsx-teema kuten Meista-sivulla. Lyhyet sivut: ei peittoja.
+   ================================================================== */
+.page-laskutustiedot .lt-hero { min-height: 100svh; display: grid; align-content: center; padding-top: calc(var(--nav-top) + clamp(100px, 13vh, 150px)); padding-bottom: clamp(56px, 9vh, 104px) }
+.page-laskutustiedot .lt-in { display: grid; gap: 56px; align-items: center }
+.page-laskutustiedot .lt-hero .seo-h1 { margin: 0; font-size: clamp(44px, 5.2vw, 80px); line-height: 1; letter-spacing: -.04em; overflow-wrap: normal; word-break: normal; hyphens: manual }
+.page-laskutustiedot .lt-hero .hero-lead { margin-top: 26px; max-width: 42ch; font-size: clamp(19px, 1.55vw, 23px); line-height: 1.55 }
+.page-laskutustiedot .lt-huom { margin: 30px 0 0; max-width: 46ch; font-size: clamp(16.5px, 1.2vw, 18px); line-height: 1.65; color: rgba(255,255,255,.62) }
+.page-laskutustiedot .lt-huom a { color: var(--seo-hi) }
+
+/* Paperiarkki: vaalea lasku tummalla sivulla, alareuna repaisty. */
+.page-laskutustiedot .lt-arkki {
+  --paperi: #f3f5f7; --muste: #0e141b; --haalea: #5d6873;
+  position: relative; color: var(--muste); background: var(--paperi);
+  padding: clamp(28px, 3.4vw, 48px) clamp(24px, 3vw, 44px) clamp(44px, 5vw, 64px);
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 50px 90px -40px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.06);
+  -webkit-mask: linear-gradient(#000, #000) top / 100% calc(100% - 8px) no-repeat, conic-gradient(from 135deg at 50% 0, #000 90deg, transparent 0) bottom / 14px 8px repeat-x;
+  mask: linear-gradient(#000, #000) top / 100% calc(100% - 8px) no-repeat, conic-gradient(from 135deg at 50% 0, #000 90deg, transparent 0) bottom / 14px 8px repeat-x;
+}
+.page-laskutustiedot .lt-arkki::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; border-radius: 6px 6px 0 0;
+  background: linear-gradient(90deg, var(--seo-hi), #007c8f);
+}
+.page-laskutustiedot .lt-otsake { margin: 0 0 10px; font-size: 15px; letter-spacing: .02em; color: var(--haalea) }
+.page-laskutustiedot .lt-nimi { margin: 0 0 20px; font-size: clamp(30px, 3vw, 42px); font-weight: 700; letter-spacing: -.03em; line-height: 1.1 }
+.page-laskutustiedot .lt-arkki dl { margin: 0 }
+.page-laskutustiedot .lt-rivi { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 16px; padding: 13px 0; border-top: 1px solid rgba(14,20,27,.1) }
+.page-laskutustiedot .lt-rivi dt { color: var(--haalea); font-size: 16.5px }
+.page-laskutustiedot .lt-rivi dd { margin: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 18px; font-variant-numeric: tabular-nums }
+.page-laskutustiedot .lt-verkko { margin-top: 26px; padding-top: 22px; border-top: 1.5px dashed rgba(14,20,27,.28) }
+.page-laskutustiedot .lt-osoite {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px;
+  padding: 16px 18px; border-radius: 10px; background: #0e141b; color: #fff;
+}
+.page-laskutustiedot .lt-osoite span { font-size: clamp(26px, 2.6vw, 36px); font-weight: 600; letter-spacing: .02em; font-variant-numeric: tabular-nums }
+.page-laskutustiedot .kopioi {
+  flex: none; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+  padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(14,20,27,.2); background: transparent; color: var(--muste);
+  transition: background-color .2s, color .2s, border-color .2s;
+}
+.page-laskutustiedot .kopioi:hover, .page-laskutustiedot .kopioi:focus-visible { background: var(--muste); color: #fff; border-color: var(--muste) }
+.page-laskutustiedot .lt-osoite .kopioi { color: #0e141b; background: var(--seo-hi); border-color: var(--seo-hi) }
+.page-laskutustiedot .lt-osoite .kopioi:hover, .page-laskutustiedot .lt-osoite .kopioi:focus-visible { background: #fff; border-color: #fff }
+@media (min-width: 1000px) {
+  .page-laskutustiedot .lt-in { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: clamp(56px, 7vw, 128px) }
+  .page-laskutustiedot .lt-arkki { rotate: 1.5deg }
+}
+@media (max-width: 520px) { .page-laskutustiedot .lt-rivi { grid-template-columns: 1fr; gap: 4px } }
+
+/* --- Hero: puhelinnumero on otsikko --- */
+.page-yhteystiedot .yt-hero { min-height: 0; padding-top: calc(var(--nav-top) + clamp(120px, 18vh, 200px)); padding-bottom: clamp(48px, 7vh, 80px) }
+.page-yhteystiedot .yt-h1 { margin: 0; font-size: clamp(20px, 1.8vw, 26px); font-weight: 500; letter-spacing: -.01em; color: rgba(255,255,255,.78) }
+.page-yhteystiedot .yt-numero {
+  display: inline-block; margin: clamp(10px, 2vh, 20px) 0 0; color: #fff; text-decoration: none;
+  font-size: clamp(56px, 12.5vw, 196px); font-weight: 700; line-height: .92; letter-spacing: -.055em;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+  background: linear-gradient(var(--seo-hi), var(--seo-hi)) 0 100% / 0 6px no-repeat; padding-bottom: .08em;
+  transition: color .35s, background-size .5s cubic-bezier(.2,.7,.2,1);
+}
+.page-yhteystiedot .yt-numero:hover, .page-yhteystiedot .yt-numero:focus-visible { color: var(--seo-hi); background-size: 100% 6px; outline: none }
+.page-yhteystiedot .yt-lead { margin: clamp(18px, 3vh, 28px) 0 0; font-size: clamp(19px, 1.6vw, 24px); color: rgba(255,255,255,.86) }
+.page-yhteystiedot .yt-rivi { margin: clamp(40px, 6vh, 64px) 0 0; display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 28px clamp(40px, 6vw, 96px) }
+.page-yhteystiedot .yt-auki { flex-direction: column; align-items: flex-start !important; gap: 2px !important }
+.page-yhteystiedot .yt-auki b { display: inline-block; min-width: 3.4em; font-weight: 600; color: rgba(255,255,255,.62) }
+.page-yhteystiedot .yt-rivi > div { padding-top: 16px; border-top: 1px solid rgba(255,255,255,.22) }
+.page-yhteystiedot .yt-rivi dt { font-size: 14.5px; color: rgba(255,255,255,.58); margin-bottom: 6px }
+.page-yhteystiedot .yt-rivi dd { margin: 0; display: flex; align-items: center; gap: 12px; color: #fff; font-size: clamp(17px, 1.4vw, 20px) }
+.page-yhteystiedot .yt-rivi a { color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.3); transition: color .2s, border-color .2s }
+.page-yhteystiedot .yt-rivi a:hover, .page-yhteystiedot .yt-rivi a:focus-visible { color: var(--seo-hi); border-color: var(--seo-hi) }
+.page-yhteystiedot .kopioi {
+  flex: none; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; padding: 5px 11px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.28); background: transparent; color: rgba(255,255,255,.85); transition: background-color .2s, color .2s, border-color .2s;
+}
+.page-yhteystiedot .kopioi:hover, .page-yhteystiedot .kopioi:focus-visible { background: #fff; color: #0b0f14; border-color: #fff }
+@media (max-width: 860px) { .page-yhteystiedot .yt-rivi { grid-template-columns: 1fr } }
+
+/* --- Filminauha: omat kuvat ruutuina, rei'itys ylhaalla ja alhaalla --- */
+.page-yhteystiedot .yt-filmi {
+  --rei: 14px;
+  position: relative; background: #05080b; padding: calc(var(--rei) + 16px) 0;
+  box-shadow: 0 -1px 0 rgba(255,255,255,.06), 0 1px 0 rgba(255,255,255,.06);
+}
+.page-yhteystiedot .yt-filmi::before, .page-yhteystiedot .yt-filmi::after {
+  content: ""; position: absolute; left: 0; right: 0; height: var(--rei);
+  background: radial-gradient(circle at 50% 50%, transparent 0) ;
+  background: repeating-linear-gradient(90deg, transparent 0 10px, rgba(255,255,255,.16) 10px 28px, transparent 28px 38px);
+  -webkit-mask: linear-gradient(#000, #000); mask: linear-gradient(#000, #000);
+  border-radius: 2px;
+}
+.page-yhteystiedot .yt-filmi::before { top: 8px }
+.page-yhteystiedot .yt-filmi::after { bottom: 8px }
+/* Nauha on 7 ruutua leveä ja keskitetty: viisi nakyy, reunaruudut
+   peittavat liukuman (data-parx -0.4 = noin +-250 px). */
+.page-yhteystiedot .yt-filmi { overflow: clip }
+.page-yhteystiedot .yt-filmi-in {
+  --ruutu: calc((100vw - 60px) / 5);
+  display: grid; grid-template-columns: repeat(7, var(--ruutu)); gap: 10px;
+  width: max-content; margin-left: calc(50% - (7 * var(--ruutu) + 60px) / 2);
+  will-change: translate;
+}
+.page-yhteystiedot .yt-filmi img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; border-radius: 3px; filter: saturate(.9) contrast(1.05) }
+@media (max-width: 860px) { .page-yhteystiedot .yt-filmi-in { --ruutu: 58vw } }
+
+/* --- Tekijat lopputekstien tapaan --- */
+.page-yhteystiedot .yt-tekijat { padding-block: clamp(80px, 12vh, 140px) }
+.page-yhteystiedot .yt-tekijat .seo-lead { margin-top: 20px; max-width: 56ch }
+.page-yhteystiedot .yt-krediitit { margin: 48px 0 0 }
+.page-yhteystiedot .yt-krediitit > div {
+  display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: baseline; gap: 12px 40px;
+  padding: clamp(22px, 3vh, 32px) 0; border-top: 1px solid rgba(255,255,255,.14);
+}
+.page-yhteystiedot .yt-krediitit > div:last-child { border-bottom: 1px solid rgba(255,255,255,.14) }
+.page-yhteystiedot .yt-krediitit dt { font-size: clamp(26px, 3.4vw, 52px); font-weight: 600; letter-spacing: -.035em; line-height: 1.05; color: #fff }
+.page-yhteystiedot .yt-krediitit dd { margin: 0; display: grid; gap: 4px }
+.page-yhteystiedot .yt-krediitit b { font-size: clamp(20px, 1.8vw, 26px); color: var(--seo-hi); font-weight: 600; letter-spacing: -.015em }
+.page-yhteystiedot .yt-krediitit span { font-size: 16px; color: rgba(255,255,255,.66) }
+@media (max-width: 760px) { .page-yhteystiedot .yt-krediitit > div { grid-template-columns: 1fr } }
+
+.page-yhteystiedot .yt-alue { margin: 56px 0 0; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.12); max-width: 70ch; color: rgba(255,255,255,.72); font-size: 17px; line-height: 1.65 }
