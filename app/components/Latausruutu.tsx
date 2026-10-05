@@ -215,6 +215,20 @@ export default function Latausruutu({ video }: Props) {
       if (auennut) return;
       auennut = true;
       window.clearTimeout(katto);
+      /* NOPEALLA YHTEYDELLA RUUTUA EI NAE (5.10.2026). Sisalto (merkki,
+         palkki, teksti) tulee esiin vasta 0,8 s piirron jalkeen
+         (.hero-load-sisus, CSS). Jos kaikki ehti valmiiksi sita ennen,
+         kavija on nahnyt vain tumman pohjan: palkkia ei ajeta loppuun eika
+         ruutua haivyteta, vaan sivu avataan heti. */
+      const sisus = el?.querySelector<HTMLElement>(".hero-load-sisus");
+      if (sisus && parseFloat(getComputedStyle(sisus).opacity) < 0.01) {
+        kiinni = true;
+        cancelAnimationFrame(raf);
+        anim?.cancel();
+        el?.classList.add("heti");
+        avaa();
+        return;
+      }
       if (!palkki || typeof palkki.animate !== "function") { avaa(); return; }
       const v = nykyinen();
       const uusi = palkki.animate([{ transform: `scaleX(${v})` }, { transform: "scaleX(1)" }], {
@@ -298,14 +312,16 @@ export default function Latausruutu({ video }: Props) {
         <style>{".lataus{display:none!important}"}</style>
       </noscript>
       <div className="hero-load lataus" ref={ruutu} aria-hidden="true">
-        <div className="hero-load-logo">
-          <LogoMark className="hero-load-dim" />
-          <LogoMark className="hero-load-fill" />
+        <div className="hero-load-sisus">
+          <div className="hero-load-logo">
+            <LogoMark className="hero-load-dim" />
+            <LogoMark className="hero-load-fill" />
+          </div>
+          <div className="hero-load-track">
+            <div className="hero-load-bar" />
+          </div>
+          <p className="lataus-teksti">Hetki, sivu latautuu</p>
         </div>
-        <div className="hero-load-track">
-          <div className="hero-load-bar" />
-        </div>
-        <p className="lataus-teksti">Hetki, sivu latautuu</p>
       </div>
     </>
   );

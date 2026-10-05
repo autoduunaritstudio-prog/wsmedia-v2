@@ -379,6 +379,16 @@ export default function HeroScrub() {
       // tiettya kohtaa sivulla, ei introa. Sama ehto kuin
       // SmoothScrollin sivunvaihtonollauksessa.
       if (!window.location.hash) window.scrollTo(0, 0);
+      /* NOPEALLA YHTEYDELLA RUUTUA EI NAE (5.10.2026). Ruudun sisalto
+         (merkki ja palkki) tulee esiin vasta 0,8 s piirron jalkeen
+         (.hero-load-sisus, CSS). Jos sarja ehti valmiiksi sita ennen,
+         kavija on nahnyt vain tumman pohjan, joten sivu avataan heti
+         ilman haivytysta, ja navi samoin. */
+      const sisus = load.current?.querySelector<HTMLElement>(".hero-load-sisus");
+      if (sisus && parseFloat(getComputedStyle(sisus).opacity) < 0.01) {
+        load.current?.classList.add("heti");
+        document.documentElement.classList.add("hero-heti");
+      }
       document.documentElement.classList.remove("hero-locked");
       load.current?.classList.add("is-gone");
       // Lukon purku ei itsessaan laukaise IntersectionObserveria, joten
@@ -594,12 +604,14 @@ export default function HeroScrub() {
             ylempi kirkas ja maskattu alhaalta ylos --hero-load-p:n
             mukaan. Merkin polkuihin ei kosketa - maski on elementin
             paalla, ei sen sisalla. */}
-        <div className="hero-load-logo">
-          <LogoMark className="hero-load-dim" />
-          <LogoMark className="hero-load-fill" />
-        </div>
-        <div className="hero-load-track">
-          <div className="hero-load-bar" />
+        <div className="hero-load-sisus">
+          <div className="hero-load-logo">
+            <LogoMark className="hero-load-dim" />
+            <LogoMark className="hero-load-fill" />
+          </div>
+          <div className="hero-load-track">
+            <div className="hero-load-bar" />
+          </div>
         </div>
       </div>
     </div>

@@ -1267,6 +1267,21 @@ html.hero-locked { overflow: hidden }
    mittaria ei voi ajautua eri lukemiin. */
 .hero-load-bar { height: 100%; width: var(--hero-load-p, 0%); background: #f5f5f7; transition: width .12s linear }
 .hero-load.is-gone { opacity: 0; visibility: hidden; pointer-events: none }
+/* RUUTU VAIN HITAALLA YHTEYDELLA (5.10.2026). Pohja peittaa sivun
+   ensimmaisesta piirrosta asti (ei vilahdusta), mutta merkki ja palkki
+   tulevat esiin vasta 0,8 s jalkeen. Jos sivu on valmis sita ennen,
+   HeroScrub ja Latausruutu avaavat sen heti ilman haivytysta (.heti,
+   html.hero-heti navin osalta). Rako 26 px on sama kuin .hero-loadin. */
+.hero-load-sisus {
+  display: flex; flex-direction: column; align-items: center; gap: 26px;
+  animation: hero-load-esiin .3s ease .8s both;
+}
+@keyframes hero-load-esiin { from { opacity: 0 } }
+@media (prefers-reduced-motion: reduce) { .hero-load-sisus { animation-duration: .01s } }
+.hero-load.heti, html.hero-heti #nav { transition: none }
+/* Piilotetun ruudun hengitys ei saa jaada pyorimaan: se laski tyylit
+   joka kehyksessa koko sivun ajan (animaatiot.mjs, 5.10.2026). */
+.hero-load.is-gone .hero-load-dim { animation: none }
 
 /* NAVI PIILOON LATAUKSEN AJAKSI. visibility: hidden poistaa alipuun myos
    saavutettavuuspuusta ja valilehtijarjestyksesta, joten erillista
