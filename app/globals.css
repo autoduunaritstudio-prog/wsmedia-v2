@@ -10596,7 +10596,9 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 }
 /* Jatkuvat animaatiot tauolle kun osio on piilossa, ks.
    app/components/animaatiotauko.ts. */
-[data-tauko], [data-tauko] * { animation-play-state: paused !important }
+[data-tauko], [data-tauko] *,
+[data-tauko]::before, [data-tauko]::after,
+[data-tauko] *::before, [data-tauko] *::after { animation-play-state: paused !important }
 /* Kokonaan kannen alla oleva pinon vaihe, ks. SiteEffects "PEITETYT
    VAIHEET PIILOON". Asettelu ei muutu, vain maalaus jaa pois. */
 [data-peitossa], [data-peitossa] * { visibility: hidden !important }

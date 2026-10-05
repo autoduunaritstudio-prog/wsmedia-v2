@@ -21,6 +21,18 @@ const KOHTEET = [
   ".km-pylvas",
   ".phone",
   ".chip-f",
+  /* 5.10.2026: animaatiot.mjs loysi nama pyorimasta nakyman ulkopuolella
+     (tarjouskortin kiertava reuna, heron vierintavihje, Referenssien
+     alustamerkit, verkkosivujen kursorit ja indeksoijan SMIL-polku,
+     Meista- ja Toihin meille -heron tausta ja REC-valo). */
+  ".card.fcard",
+  ".hero-hint i",
+  ".refs .nm",
+  ".b-code .cur",
+  ".np-h-sana",
+  "svg.np-puu",
+  ".hero-tausta",
+  ".mt-rec b",
 ];
 
 export function tauotaPiilossa(): () => void {
@@ -57,6 +69,11 @@ export function tauotaPiilossa(): () => void {
         for (const el of els) {
           if (tauko) el.setAttribute("data-tauko", "");
           else el.removeAttribute("data-tauko");
+          /* SMIL-animaatio (animateMotion) ei tottele CSS:aa. */
+          if (el instanceof SVGSVGElement) {
+            if (tauko) el.pauseAnimations();
+            else el.unpauseAnimations();
+          }
         }
       },
     };
@@ -73,6 +90,11 @@ export function tauotaPiilossa(): () => void {
   return () => {
     io.disconnect();
     purut.forEach((f) => f());
-    ryhmat.forEach((els) => els.forEach((el) => el.removeAttribute("data-tauko")));
+    ryhmat.forEach((els) =>
+      els.forEach((el) => {
+        el.removeAttribute("data-tauko");
+        if (el instanceof SVGSVGElement) el.unpauseAnimations();
+      }),
+    );
   };
 }
