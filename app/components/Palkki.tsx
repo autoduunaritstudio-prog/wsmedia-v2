@@ -84,14 +84,13 @@ export default function Palkki({
       return !!e && (e === heronNappi || heronNappi.contains(e));
     };
     let viimeksi: boolean | null = null;
-    let raf = 0;
-    const tarkista = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        laske();
-      });
-    };
+    /* Tarkistus suoraan vieritystapahtumassa, ei kehyskutsussa (5.10.2026).
+       Kehyskutsussa getBoundingClientRect ja elementFromPoint pakottivat
+       tyylilaskennan aina kun toinen kehyskutsu oli jo kirjoittanut
+       tyyleja (etusivulla 0,3 s 4x-hidastuksella 7 s:n vierityksessa).
+       Vieritystapahtuma ajetaan kehyksen alussa, kerran kehyksessa, ennen
+       kehyskutsuja, jolloin asettelu on valmiina ja luku halpa. */
+    const tarkista = () => laske();
     /* ETUSIVU (5.10.2026): palkki tulee vasta heron jalkeen, eli kun
        nouseva cover on peittanyt puolet nakymasta. Heron napit haipyvat
        sisaan vierityksen mukana, joten napin osumatesti paastaisi palkin
@@ -116,8 +115,6 @@ export default function Palkki({
     window.addEventListener("scroll", tarkista, { passive: true });
     window.addEventListener("resize", koko, { passive: true });
     tarkista();
-    window.addEventListener("scroll", tarkista, { passive: true });
-    window.addEventListener("resize", tarkista, { passive: true });
     const b = new IntersectionObserver(
       ([e]) => {
         lomake.current = e.isIntersecting;
@@ -127,7 +124,6 @@ export default function Palkki({
     );
     b.observe(tarjous);
     return () => {
-      if (raf) cancelAnimationFrame(raf);
       window.removeEventListener("scroll", tarkista);
       window.removeEventListener("resize", koko);
       ro.disconnect();

@@ -54,8 +54,21 @@ const kori: number[][] = Array.from({ length: TASOT + 1 }, () => []);
    oikeasti muuttuu, ja silloin asettelu on jo valmis. */
 let sivunKorkeus = 0;
 let korkeusRo: ResizeObserver | null = null;
+/* VIERITYS JA NAKYMAN KORKEUS SAMOIN (5.10.2026). window.scrollY ja
+   innerHeight pakottavat nekin asettelun, jos jokin kehyskutsu on jo
+   kirjoittanut tyyleja: mitattuna latauksen jalkeen 0,1 s neljassa
+   sekunnissa pelkkaa progress()-funktiota. Vieritystapahtuma ajetaan
+   kehyksen alussa ennen kehyskutsuja, jolloin luku on halpa. Kamera on
+   pehmennetty (SCROLL_TAU), joten yhden kehyksen viive ei nay. */
+let vierY = 0;
+let nakymaH = 0;
+const lueVieritys = () => {
+  vierY = window.scrollY;
+};
 const lueKorkeus = () => {
   sivunKorkeus = document.documentElement.scrollHeight;
+  nakymaH = window.innerHeight;
+  vierY = window.scrollY;
 };
 const seuraaKorkeutta = () => {
   if (korkeusRo || typeof ResizeObserver === "undefined") return;
@@ -64,6 +77,7 @@ const seuraaKorkeutta = () => {
   korkeusRo.observe(document.body);
   korkeusRo.observe(document.documentElement);
   window.addEventListener("resize", lueKorkeus, { passive: true });
+  window.addEventListener("scroll", lueVieritys, { passive: true });
 };
 /* Kuinka paljon kentta on nakymaa korkeampi. Tama on se matka jonka
    verkosto kulkee koko sivun vierityksen aikana, eli parallaksin
@@ -468,8 +482,12 @@ export default function NetBackdrop({ mount = "fixed", merkit }: Props) {
        riippumatta siita kuinka pitka sivu on. */
     seuraaKorkeutta();
     const progress = () => {
-      const span = (sivunKorkeus || document.documentElement.scrollHeight) - window.innerHeight;
-      return span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+      if (!korkeusRo) {
+        const span = document.documentElement.scrollHeight - window.innerHeight;
+        return span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+      }
+      const span = sivunKorkeus - nakymaH;
+      return span > 0 ? Math.min(Math.max(vierY / span, 0), 1) : 0;
     };
     let sp = -1;
 

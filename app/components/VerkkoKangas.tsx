@@ -90,9 +90,21 @@ export default function VerkkoKangas() {
     let sp = -1;
     let edellinen = 0;
 
-    const etenema = () => {
-      const span = document.documentElement.scrollHeight - window.innerHeight;
-      return span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+    /* VIERITYS LUETAAN VIERITYSTAPAHTUMASSA, EI KEHYKSESSA (5.10.2026).
+       scrollY ja scrollHeight pakottavat tyylit ja asettelun laskettaviksi,
+       jos jokin muu kehyskutsu (SiteEffects, EtuTummennus) on jo ehtinyt
+       kirjoittaa tyyleja. Mitattuna 4x-hidastuksella tama silmukka maksoi
+       1,3 s pakotettua tyylilaskentaa 7 s:n vierityksessa. Vieritystapahtuma
+       ajetaan kehyksen alussa ennen kehyskutsuja, jolloin luku on halpa;
+       dokumentin korkeus luetaan vain kun se muuttuu (ResizeObserver).
+       Kamera on pehmennetty (SCROLL_TAU), joten mahdollinen yhden kehyksen
+       viive ei nay. */
+    let vierY = window.scrollY;
+    let span = document.documentElement.scrollHeight - window.innerHeight;
+    const etenema = () => (span > 0 ? Math.min(Math.max(vierY / span, 0), 1) : 0);
+    const mittaaSpan = () => {
+      span = document.documentElement.scrollHeight - window.innerHeight;
+      vierY = window.scrollY;
     };
 
     const koko = () => {
@@ -194,6 +206,7 @@ export default function VerkkoKangas() {
     /* Reduced motion: ei ajelehtimista, mutta kamera seuraa vieritysta
        (kayttajan oma liike, ks. CLAUDE.md). Piirretaan vierityksessa. */
     const vieritys = () => {
+      vierY = window.scrollY;
       if (!hiljaa) return;
       sp = etenema();
       piirra(0);
@@ -207,6 +220,9 @@ export default function VerkkoKangas() {
       piirra(hiljaa ? 0 : kello());
     });
     ro.observe(cv);
+    const roDoc = new ResizeObserver(mittaaSpan);
+    roDoc.observe(document.documentElement);
+    window.addEventListener("resize", mittaaSpan, { passive: true });
     const io = new IntersectionObserver((e) => {
       nakyy = e.some((x) => x.isIntersecting);
       kaynnista();
@@ -217,7 +233,9 @@ export default function VerkkoKangas() {
     window.addEventListener("scroll", vieritys, { passive: true });
     return () => {
       window.removeEventListener("scroll", vieritys);
+      window.removeEventListener("resize", mittaaSpan);
       ro.disconnect();
+      roDoc.disconnect();
       io.disconnect();
       document.removeEventListener("visibilitychange", nakyvyys);
       if (raf) cancelAnimationFrame(raf);

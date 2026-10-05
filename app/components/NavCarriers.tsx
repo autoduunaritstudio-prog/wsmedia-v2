@@ -286,16 +286,32 @@ export default function NavCarriers() {
     let lepoY = -1;
     let lepoW = -1;
     let lepoPiirretty = false;
+    /* Lepotarkistuksen luvut tapahtumista (5.10.2026): scrollY ja
+       innerWidth kehyskutsussa pakottivat asettelun aina kun toinen
+       kehyskutsu oli jo kirjoittanut tyyleja, myos silloin kun hahmot
+       olivat piilossa. Vieritystapahtuma ajetaan kehyksen alussa ennen
+       kehyskutsuja, joten arvo on sama jonka kehys olisi lukenut. */
+    let vierY = window.scrollY;
+    let leveys = window.innerWidth;
+    const onVieritys = () => {
+      vierY = window.scrollY;
+    };
+    const onKoko = () => {
+      leveys = window.innerWidth;
+      vierY = window.scrollY;
+    };
+    window.addEventListener("scroll", onVieritys, { passive: true });
+    window.addEventListener("resize", onKoko, { passive: true });
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       /* Hahmot liikkuvat vierityksen mukaan. Kun ne ovat piilossa (idle)
          eika sivu ole liikkunut, kehyksessa ei ole mitaan tehtavaa:
          aiemmin se luki silti kolme elementin sijaintia joka kehys. */
-      const sy = window.scrollY;
-      if (idle && sy === lepoY && window.innerWidth === lepoW) return;
-      if (window.innerWidth !== lepoW) lepoPiirretty = false;
+      const sy = vierY;
+      if (idle && sy === lepoY && leveys === lepoW) return;
+      if (leveys !== lepoW) lepoPiirretty = false;
       lepoY = sy;
-      lepoW = window.innerWidth;
+      lepoW = leveys;
       const r = strip.getBoundingClientRect();
 
       // Scroll-nopeus rectin muutoksesta: nauha liikkuu sivun mukana, joten
@@ -725,6 +741,8 @@ export default function NavCarriers() {
 
     return () => {
       cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onVieritys);
+      window.removeEventListener("resize", onKoko);
       window.removeEventListener("resize", measure);
       nav.classList.remove("carriers-on");
       setBeamHost(null);

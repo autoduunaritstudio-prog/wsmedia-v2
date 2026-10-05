@@ -37,8 +37,14 @@ export default function EtuTummennus() {
       if (v !== ed) el.style.opacity = String(v / ASKEL);
       return v;
     };
-    const paivita = () => {
-      raf = 0;
+    /* LUKU VIERITYSTAPAHTUMASSA, KIRJOITUS KEHYKSESSA (5.10.2026).
+       Rectien luku kehyskutsussa pakotti tyylilaskennan aina kun jokin
+       toinen kehyskutsu oli jo kirjoittanut tyyleja. Vieritystapahtuma
+       ajetaan kehyksen alussa ennen kehyskutsuja, jolloin luku on halpa.
+       Kehyskutsu vain kirjoittaa lasketut arvot. */
+    let o1 = 0;
+    let oh = -1;
+    const lue = () => {
       const vh = window.innerHeight;
       // 1) Tummuminen: alkaa kun Referenssien ylareuna on 45 % nakymasta
       //    alareunan alapuolella ja on valmis kun se koskettaa alareunaa.
@@ -53,22 +59,28 @@ export default function EtuTummennus() {
       // Coverin kuviokerros nakyy uudelleen .aftercoverin jalkeen
       // (.belowcover: Prosessi, UKK, yhteydenotto). Se vaalenee siksi
       // samassa tahdissa kuin .aftercover, muuten Prosessi jaisi tummaksi.
-      v1 = kirjoita(yo1, Math.round(Math.min(p1, p2) * ASKEL), v1);
+      o1 = Math.round(Math.min(p1, p2) * ASKEL);
       // 3) UKK: kuvio himmenee kun osio nousee nakyviin (ylareuna
       //    nakyman alareunasta 40 %:iin) ja katoaa lopussa kokonaan.
       //    Pelkka data-attribuutti, jonka VerkkoKangas lukee piirtaessaan.
       if (kangas && ukk) {
         const ut = ukk.getBoundingClientRect().top;
-        const h = Math.round(Math.min(1, Math.max(0, (vh - ut) / (0.6 * vh))) * ASKEL);
-        if (h !== h1) {
-          h1 = h;
-          kangas.dataset.himmea = String(h / ASKEL);
-        }
+        oh = Math.round(Math.min(1, Math.max(0, (vh - ut) / (0.6 * vh))) * ASKEL);
+      }
+    };
+    const paivita = () => {
+      raf = 0;
+      v1 = kirjoita(yo1, o1, v1);
+      if (kangas && oh >= 0 && oh !== h1) {
+        h1 = oh;
+        kangas.dataset.himmea = String(oh / ASKEL);
       }
     };
     const ajasta = () => {
+      lue();
       if (!raf) raf = requestAnimationFrame(paivita);
     };
+    lue();
     paivita();
     window.addEventListener("scroll", ajasta, { passive: true });
     window.addEventListener("resize", ajasta, { passive: true });
