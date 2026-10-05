@@ -164,7 +164,7 @@ export default function Verkkosivut() {
           {/* Kehotuspalkki alkaa tasta, kuten lyhytvideosivulla. Ks. Palkki.tsx. */}
           <Vaite
             palkkiAlkaa
-            kuva="/verkkosivut/luonnos.webp"
+            kuva="/verkkosivut/luonnos-k.webp"
             alla="Kun rakenne on mietitty valmiiksi, jokaisella sivulla on selvä tehtävä: mitä kävijä etsii, mitä hän saa selville ja mistä hän ottaa yhteyttä."
           >
             Sivun rakenne kannattaa <b><i>piirtää ennen ulkoasua.</i></b>
@@ -202,7 +202,7 @@ export default function Verkkosivut() {
                     mitattua asiakastyota. */}
                 <div className="pino">
                   <Vaite
-                    kuva="/verkkosivut/naytto.webp"
+                    kuva="/verkkosivut/naytto-k.webp"
                     alla="Hinta perustuu sivumäärään ja sisällön laajuuteen, ei arvioon tunneista. Näet tarjouksesta, mitä siihen sisältyy."
                   >
                     Verkkosivujen hinta sovitaan <b><i>ennen kuin työ alkaa.</i></b>

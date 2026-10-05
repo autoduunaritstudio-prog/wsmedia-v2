@@ -510,7 +510,7 @@ export function Tarjous() {
     <section className="seo-sec kuvapohja" id="tarjous">
       <img
         className="pohjakuva"
-        src="/kuvat/tarjous-kortit.webp"
+        src="/kuvat/tarjous-kortit-k.webp"
         alt=""
         aria-hidden="true"
         loading="lazy"

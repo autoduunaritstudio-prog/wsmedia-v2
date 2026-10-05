@@ -120,7 +120,7 @@ export default function GraafinenSuunnittelu() {
                   teippaussuunnitelma naytolla ja tabletilla (3.10.2026). */}
               <Vaite
                 palkkiAlkaa
-                kuva="/graafinen-suunnittelu/ilme-teippaus.webp"
+                kuva="/graafinen-suunnittelu/ilme-teippaus-k.webp"
                 alla="Asiakas näkee pakettiautosi liikenteessä ja myöhemmin saman logon hakutuloksissa. Jos ne näyttävät samalta, hän tunnistaa yrityksesi jo ennen kuin soittaa.">
                 Kun kaikki näyttää samalta, yritys <b><i>jää mieleen.</i></b>
               </Vaite>

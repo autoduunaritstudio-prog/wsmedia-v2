@@ -13714,6 +13714,14 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
 .wsx .lava-tausta img {
   filter: saturate(.85) contrast(.96) brightness(1.32);
 }
+/* SUODIN VALMIINA TIEDOSTOSSA (5.10.2026). -k.webp on sama kuva tama
+   suodin jo piirrettyna (scripts/yoajo/paista-suodin.mjs, SSIM >= 0,975).
+   Firefox laski suotimen uudelleen joka kehyksessa, kun kuva liikkuu
+   parallaksilla: mitattuna noin viidesosa kehyksista. Alkuperaiset
+   tiedostot jaavat sivuille, joilla kuva on ilman suodinta. */
+.wsx :is(.laatta > img, .juova img, .vaite.kuvallinen > img, .seo-sec.kuvapohja > .pohjakuva, .lava-tausta img)[src$="-k.webp"] {
+  filter: none;
+}
 /* Lapinakyvyys oli toinen puoli samaa vaimennusta: kuva sekoittui
    pohjavariin eli #0b0f14:aan, joka on lahes musta. Kalvot jotka
    pitavat tekstin luettavana ovat omina kerroksinaan eivatka riipu
