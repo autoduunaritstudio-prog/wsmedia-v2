@@ -215,6 +215,23 @@ nakymassa ilman mittausta.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
+## Etusivun hyväksytyt ratkaisut (5.10.2026): älä muuta ulkonäköä tai ajoitusta
+
+Nämä on hyväksytty silmällä. Optimoi niitä vain niin, ettei lopputulos muutu.
+
+- **Tausta tummuu vain opacitylla.** `EtuTummennus.tsx` kirjoittaa ainoastaan `.metalbd-yo`-kerroksen `style.opacity`n (0,02 portain, vain kun arvo muuttuu). Ei CSS-muuttujia juureen tai isoon alipuuhun: muuttujan vaihto laskee tyylit koko alipuulle joka kehyksessä. Sama syy, miksi NavCarriersin juureen kirjoittama `--beam` poistettiin.
+- **VerkkoKangas lukee tummuuden ja UKK-himmennyksen piirtäessään** (`.metalbd-yo` inline-opacity ja canvasin `data-himmea`). Tyylit rakennetaan uudelleen vain kun arvo muuttuu. Älä siirrä näitä CSS-muuttujiksi.
+- **Kantajien (NavCarriers) ajoitus on hyväksytty**: paluu RET_LO 0.86 / RET_W 0.45, lamput `lampAlku = ground - 90`, keila päättyy korttirivin yläreunaan (`len` = matka `.refgrid`in yläreunaan). Kantajat eivät saa kävellä valkoisen taustan yli. Älä muuta.
+- **Palvelukorttien kuvat**: vain lyhytvideoissa video (`KorttiHero`, preload none, IntersectionObserver play/pause, reduced motion = poster). Muut ovat pysäytyskuvia (`pysakuva`). Älä palauta videoita.
+- **Etusivun tyylit** kirjoitetaan valitsimilla, jotka osuvat vain etusivuun (`.stickyzone`, `.refzone`, `.aftercover`, `.belowcover`, `#palvelut`, `.etu-*`, `.kart-*`, `.tul-*`). `.wsx`-sääntöjä ei lisätä etusivulle (perus.css-budjetti n. 31 kt gzip).
+- **`backdrop-filter` ja `filter` ovat kiellettyjä vierivillä isoilla pinnoilla.** Tumma kartoituspaneeli ja kalenteri on tehty ilman niitä tarkoituksella.
+- **Sivun ylälaidan `#prog`-palkki on poistettu kaikilta sivuilta.** Älä palauta.
+
+## Sandbox ja git
+
+- Mac-kansiossa poistaminen voi olla estetty. Jos `.git/index.lock` jää, siirrä se `_to_delete/`-kansioon (`mv`). Tiedostoja ei poisteta, ne siirretään `_to_delete/`.
+- Commit: `git -c user.name="Tuomas" -c user.email="autoduunaritstudio@gmail.com" commit`, nimetyt polut. Ei koskaan: `_to_delete/`, `JATKO-*.md`, `kaynnista-*.command`, `public/_perf.html`. Push tehdään Tuomaksen koneelta.
+
 # This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.

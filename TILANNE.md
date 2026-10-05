@@ -1,4 +1,4 @@
-# WS Media -sivusto, tilanne 1.10.2026
+# WS Media -sivusto, tilanne 5.10.2026
 
 Tämä tiedosto on siirtomuistio uuteen chattiin. Repo: `wsmedia-v2`, paikallinen polku `/Users/tuomas/Desktop/wsmedia-v2`, dev-palvelin `localhost:3000`.
 
@@ -8,7 +8,7 @@ Tämä tiedosto on siirtomuistio uuteen chattiin. Repo: `wsmedia-v2`, paikalline
 
 - **Älä oleta mitään suunnittelupäätöstä ilman koodista tai laskennasta todentamista.** Mittaa elävästä DOMista (computed styles, rectit, pikselinäytteet, kontrastit) ennen ja jälkeen.
 - **Git-commitit osoitteella `autoduunaritstudio@gmail.com`.** `kosjak93@gmail.com` ei ole GitHub-tilillä, ja sillä tehty commit estää Vercel-deployn.
-- **Staging aina nimetyillä poluilla** (`git add <polku>`), ei koskaan `git add -A`.
+- **Staging aina nimetyillä poluilla** (`git add <polku>` tai pathspec, jossa poissulut `:(exclude)_to_delete` jne.), ei pelkkää `git add -A`. Ei koskaan commitoida: `_to_delete/`, `JATKO-*.md`, `kaynnista-*.command`, `public/_perf.html`.
 - **Ei ajatusviivoja (—) teksteihin.** Käytä pilkkua tai muotoile lause toisin.
 - **Ei commiteja omapäisesti.** Tuomas kertoo milloin commitataan.
 - **Push tehdään Tuomaksen koneelta.** Sandboxissa ei ole credential helperiä eikä `gh`:ta.
@@ -21,7 +21,7 @@ Tämä tiedosto on siirtomuistio uuteen chattiin. Repo: `wsmedia-v2`, paikalline
 
 ### Sandboxin rajoitukset
 
-- `git` ei pysty poistamaan tiedostoja. Jos `.git/index.lock` jää, siirrä se: `mv .git/index.lock _to_delete/`.
+- `git` ei pysty poistamaan tiedostoja ilman erikseen myönnettyä poisto-oikeutta. Jos `.git/index.lock` jää, siirrä se: `mv .git/index.lock _to_delete/` (5.10. poisto-oikeus myönnettiin istunnolle ja lukko poistettiin).
 - Indeksin kiertotie commitille: `cp .git/index $HOME/wsx.index; export GIT_INDEX_FILE=$HOME/wsx.index`, aja `git add`/`git commit`, siirrä lock-tiedostot `_to_delete/`-kansioon, `cp $HOME/wsx.index .git/index`.
 - `npm run build` ei toimi sandboxissa (EPERM unlink `.next`). `npx tsc --noEmit` toimii.
 - Dev-palvelin ei näy `device_bash`-shellistä (`curl localhost:3000` ei vastaa), mutta **selainpaneeli näkee sen**. Aseta ikkunan koko ennen mittauksia: ilman sitä `innerWidth` on 0 ja kaikki mitat ovat roskaa.
@@ -84,7 +84,7 @@ Yhteiset koot ovat `globals.css`:ssä `:is(.page-verkkosivut, .page-lyhytvideot,
 
 ## 4. Mitä on tehty
 
-Kaikki on commitattu ja pushattu. `main` on samassa kohdassa kuin `origin/main`, työpuu on puhdas lukuun ottamatta kolmea seuraamatonta tiedostoa (`kaynnista-dev.command`, `kaynnista-prod.command`, `public/_perf.html`), jotka jätettiin tarkoituksella pois.
+Uusimmat commitit: `6645b28` (etusivu, valikko, Meistä, Töihin meille, yhteydenotot, 5.10.), `4ec8e84`, `6ab50d1`, `273053d`, `13b577f`. Seuraamatta tarkoituksella: `_to_delete/`, `JATKO-1-10-ilta.md`, `kaynnista-*.command`, `public/_perf.html`. Alla vanhempi historia.
 
 | Commit | Sisältö |
 | --- | --- |
@@ -121,6 +121,43 @@ Pintanäyttämön juuriluokka `.stage` piti nimetä `.gs-nayttamo`:ksi: `.stage`
 - UKK-vastauksessa oli HTML-linkkejä merkkijonon sisällä, joten sivulla luki kirjaimellisesti `<a href="/verkkosivut">verkkosivut</a>` (graafinen).
 - Murupolku osoitti osoitteeseen `wsmedia.fi/palvelut`, jota ei ole. Korjattu `wsmedia.fi/#palvelut` **kaikilla neljällä sivulla**.
 - Ajatusviivat pois graafisen suunnittelun sivulta, myös OG-kuvauksesta ja JSON-LD:stä.
+
+---
+
+## 4h. Etusivu ja muut sivut, 4.–5.10.2026 (commit `6645b28`, ei vielä pushattu kun tämä kirjoitettiin)
+
+Push tehdään Tuomaksen koneelta: `cd ~/Desktop/wsmedia-v2 && git push`.
+
+### Etusivu (app/page.tsx), järjestys ylhäältä alas
+1. **Hero** (scroll-elokuva). Vaihtuva sana `.swap` on syaani `#6fecff` kuten palvelusivujen heroissa.
+2. **Cover + Logos + Palvelut** (`Services.tsx`): kortit erikokoisina ristiin 7/5 ja 5/7. Kuva-alueella palvelusivun hero: lyhytvideot on silmukkavideo (`public/kortti-hero-video.mp4`), verkkosivut, SEO ja graafinen ovat pysäytyskuvia scrub-animaation lopusta (`kortti-hero-*.webp`, `KorttiHero pysakuva`). Kortissa vain "Lue lisää" -painike, ei tarjouspainiketta. Kortit eivät nouse hoverissa.
+3. **Palvelut 2** (`.refsticky` Refs.tsx:ssä): SEO ja graafinen, pinnautuu.
+4. **Referenssit** (`.refs`, tumma #0b131d): otsikko yhdellä rivillä yli 700 px, kelluvat alustamerkit (`NetMarks variantti="refs"`), lamppujen keila päättyy korttirivin yläreunaan (ei harmaata kehystä). `.refcard::after`-kehys ja juuren `--beam`-muuttuja poistettu.
+5. **Kartoitus** (`Booking.tsx`): yksi tumma paneeli `.kart-paneeli`, otsikko + faktat + "Varaa aika" vasemmalla, tumma lasikalenteri (`BookingCal`) oikealla. Entinen `.kartlead`-osio poistettu.
+6. **Tulokset** (`Results.tsx`): lista `.tul-lista`, rivi = iso luku | asiakas ja selitys | kuva. Luku mitoittuu sarakkeesta (container query), ei vuoda.
+7. **Prosessi** (`Process.tsx`): aikajana `.etu-jana`, numeroidut syaanit solmut.
+8. **UKK** (`HomeFaq.tsx`): palvelusivujen `.qa2`-rakenne omilla `.etu-ukk`-säännöillä.
+9. **Tarjous** (`#lomake.cta-palvelu`) ja tumma footer (`Footer tumma`) kuten palvelusivuilla.
+
+Osioiden alku: `.etu-ord` (nimi vasemmalla, tarkenne oikealla, viiva) + `.etu-h2`, sama järjestys kuin palvelusivujen `.seo-ord` + `.seo-h2`. Pystykaiut `Kaiku luokka="etu"` yli 1280 px.
+
+### Etusivun tausta
+- `MetalBackdrop variant="verkko"` + `VerkkoKangas` (canvas). Pohja `--etu-pohja: #dde5ee`.
+- **Tummuminen kohti Referenssejä** (`EtuTummennus.tsx`): kirjoittaa VAIN `.metalbd-yo`-kerroksen opacityn (0,02 portain). Kerros on verkon ALLA, ja VerkkoKangas lukee saman arvon: viivat liukuvat syaaniin ja himmenevät 45 %:iin (`1 - 0.55 m²`). Tummuminen alkaa kun Referenssit on 1,45 näkymää alempana ja on valmis sen alareunassa.
+- Referenssien päälle nouseva `.aftercover` pysyy vaaleana, eikä sillä ole sisäänhäivytystä (`--cover-fade` poistettu SiteEffectsistä).
+- UKK:n kohdalla verkkokuvio häipyy kokonaan (`data-himmea` canvasilla, EtuTummennus kirjoittaa).
+
+### Muut
+- **Painikkeet:** etusivulla pääpainike syaani `#6fecff` tummalla tekstillä kuten palvelusivuilla.
+- **Oikean alakulman palkki** (`Palkki.tsx`): etusivulla esiin vasta kun cover on noussut puoleenväliin.
+- **Sivun ylälaidan vierityspalkki `#prog` poistettu kaikilta sivuilta.**
+- **Varauskalenteri:** oikeat päivät, päivän ja ajan valinta lähettää `ws:varaus`-tapahtuman ja avaa `VarausIkkuna`n esitäytettynä. Google-kytkentä (`app/api/varaus`) odottaa tunnuksia ympäristömuuttujiin.
+- **Kehotukset.tsx** ohjaa kaikki CTA:t: `data-varaus` → varausikkuna, `data-yhteys` (+ `data-palvelu`) → yhteydenottoikkuna.
+- **Valikko** (FullscreenNav): ympyräavautuminen napista, palvelumerkit, nykyinen sivu ei-klikattava, somekuvakkeet brändiväreissä.
+- **Meistä:** vinoleikkaukset, faktapaneeli, Alex Pettersborg. **Töihin meille:** tumma .wsx-ilme (`page-tm`), hakemusikkuna ja liitteet (mailto). **Ota yhteyttä:** hero-CTA:t.
+
+### Kantajat (NavCarriers) ovat hyväksytyt sellaisinaan
+Paluuvaihe on alkuperäinen (RET_LO 0.86, RET_W 0.45). Lamput tulevat aiemmin (`lampAlku = ground - 90`). Kantajat eivät saa kävellä valkoisen taustan päällä. Älä muuta ajoitusta.
 
 ---
 
