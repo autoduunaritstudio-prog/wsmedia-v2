@@ -14,7 +14,9 @@ import SmartLink from "./components/SmartLink";
  *   lyhytvideot/faq-data.tsx, verkkosivut/faq.tsx,
  *   hakukoneoptimointi/faq.tsx, graafinen-suunnittelu/faq-data.ts.
  *
- * [HINTA]-paikkamerkit ovat lahteessa sellaisenaan eika niita tayteta tassa.
+ * Hinnat samat kuin lahteessa (lyhytvideot/faq-data.tsx). [HINTA]-paikkamerkit
+ * taytettiin 5.10.2026, kun lahde sai oikeat hinnat: FAQPage-tieto ja nakyva
+ * vastaus nayttivat muuten kirjaimellisesti "[HINTA]".
  */
 export type HomeFaqItem = { q: string; a: ReactNode; plain: string };
 
@@ -23,14 +25,14 @@ export const HOME_FAQ: HomeFaqItem[] = [
     q: "Paljonko lyhytvideotuotanto maksaa?",
     a: (
       <>
-        Jatkuva lyhytvideotuotanto alkaa [HINTA] eurosta kuukaudessa, ja hinta määräytyy videoiden
+        Jatkuva lyhytvideotuotanto alkaa 1 500 eurosta kuukaudessa + alv, ja hinta määräytyy videoiden
         määrän, kuvauspäivien ja kanavien mukaan. Yksittäiset videot ja kampanjatuotannot
-        hinnoitellaan projekteina alkaen [HINTA] euroa.{" "}
+        hinnoitellaan projekteina.{" "}
         <SmartLink href="/lyhytvideot#hinnoittelu">Lue lisää lyhytvideoista →</SmartLink>
       </>
     ),
     plain:
-      "Jatkuva lyhytvideotuotanto alkaa [HINTA] eurosta kuukaudessa, ja hinta määräytyy videoiden määrän, kuvauspäivien ja kanavien mukaan. Yksittäiset videot ja kampanjatuotannot hinnoitellaan projekteina alkaen [HINTA] euroa.",
+      "Jatkuva lyhytvideotuotanto alkaa 1 500 eurosta kuukaudessa + alv, ja hinta määräytyy videoiden määrän, kuvauspäivien ja kanavien mukaan. Yksittäiset videot ja kampanjatuotannot hinnoitellaan projekteina.",
   },
   {
     q: "Saanko samasta videosta versiot TikTokiin ja Instagram Reelsiin?",

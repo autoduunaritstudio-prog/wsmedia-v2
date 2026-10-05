@@ -66,7 +66,10 @@ export default function Footer({ intro, columns, base, brandHeading = "h4", tumm
 
           {columns.map((col) => (
             <div className="foot-col" key={col.title}>
-              <Sarake>{col.title}</Sarake>
+              {/* aria-level 2 (5.10.2026): footer seuraa sivun viimeista
+                  osiota, joka voi olla h2, jolloin h4 jatti otsikkolistaan
+                  aukon. Tagi pysyy, koska tyylit osuvat footer h4:aan. */}
+              <Sarake aria-level={2}>{col.title}</Sarake>
               {col.links.map((l) =>
                 "action" in l ? (
                   <CookieSettingsButton key={l.label} label={l.label} />
@@ -80,7 +83,7 @@ export default function Footer({ intro, columns, base, brandHeading = "h4", tumm
           ))}
 
           <div className="foot-col">
-            <Sarake>Yhteystiedot</Sarake>
+            <Sarake aria-level={2}>Yhteystiedot</Sarake>
             <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
             <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>
             {/* Valilyonti ennen <br />:aa. Ilman sita pelkkaa tekstia

@@ -6,8 +6,12 @@
    kokonaan, joten se tarvitsee oman html:n eika lataa sivuston tyyleja. */
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SIVUSTO } from "./sivusto";
 
 export const metadata: Metadata = {
+  /* Sivu ohittaa juuren layoutin, joten metadataBase ei periydy. Ilman
+     sita build varoitti jakokuvan osoitteesta (localhost:3000). */
+  metadataBase: new URL(SIVUSTO),
   title: "404: Sivua ei löytynyt | WS Media",
 };
 

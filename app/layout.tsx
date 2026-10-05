@@ -50,6 +50,11 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "180x180" }],
   },
   manifest: "/site.webmanifest",
+  /* Perustiedot jakotiedoille (5.10.2026). Sivut, joilla on oma openGraph,
+     korvaavat taman kokonaan; tama nakyy vain sivuilla ilman omaa
+     (laskutustiedot, tietosuoja), joilta og:type ja og:locale puuttuivat.
+     Jakokuva tulee edelleen app/opengraph-image.tsx:sta. */
+  openGraph: { type: "website", locale: "fi_FI", siteName: "WS Media" },
 };
 
 export default function RootLayout({
