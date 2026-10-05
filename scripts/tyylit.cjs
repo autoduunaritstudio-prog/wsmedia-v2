@@ -25,7 +25,7 @@ const fs = require("fs");
 const path = require("path");
 const postcss = require("postcss");
 
-const PALVELU = ["lyhytvideot", "verkkosivut", "hakukoneoptimointi", "graafinen-suunnittelu", "meista"];
+const PALVELU = ["lyhytvideot", "verkkosivut", "hakukoneoptimointi", "graafinen-suunnittelu", "meista", "tm"];
 /** Tiedostot: sivu -> sen juuriluokat. "perus" = etusivu ja muut. */
 const KOHTEET = {
   perus: [],
@@ -34,7 +34,7 @@ const KOHTEET = {
   hakukoneoptimointi: ["hakukoneoptimointi", "palvelu"],
   "graafinen-suunnittelu": ["graafinen-suunnittelu", "palvelu"],
   meista: ["meista", "hakukoneoptimointi", "palvelu"],
-  "toihin-meille": ["toihin-meille"],
+  "toihin-meille": ["tm", "hakukoneoptimointi", "palvelu"],
   tietosuoja: ["tietosuoja"],
   laskutustiedot: ["laskutustiedot", "hakukoneoptimointi", "palvelu"],
   yhteystiedot: ["yhteystiedot", "hakukoneoptimointi", "palvelu"],

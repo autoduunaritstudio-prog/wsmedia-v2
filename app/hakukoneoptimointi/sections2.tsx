@@ -80,7 +80,7 @@ export function Hinnoittelu() {
             <div />
             {TIERS.map((t) => (
               <div className={t.hl ? "hl" : undefined} key={t.name}>
-                <a className={t.hl ? "btn" : "btn alt"} href="#tarjous">
+                <a className={t.hl ? "btn" : "btn alt"} href="#tarjous" data-paketti={t.name}>
                   Pyydä tarjous
                 </a>
               </div>

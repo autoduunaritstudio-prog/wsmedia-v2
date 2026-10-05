@@ -38,7 +38,9 @@
  * .metalbd-noise on yha olemassa blobs-versiota varten.
  */
 
-type Props = { variant?: "facets" | "blobs"; tone?: "light" | "dark"; inSection?: boolean };
+import VerkkoKangas from "./VerkkoKangas";
+
+type Props = { variant?: "facets" | "blobs" | "verkko"; tone?: "light" | "dark"; inSection?: boolean };
 
 export default function MetalBackdrop({ variant = "facets", tone = "light", inSection = false }: Props) {
   if (variant === "blobs") {
@@ -62,7 +64,7 @@ export default function MetalBackdrop({ variant = "facets", tone = "light", inSe
     <div
       className={`metalbd metalbd-v2${tone === "dark" ? " metalbd-dark" : ""}${
         inSection ? " metalbd-inset" : ""
-      }`}
+      }${variant === "verkko" ? " metalbd-verkkona" : ""}`}
       aria-hidden="true"
     >
       {/* Sticky-pane on koko ratkaisun ydin. .metalbd venyy nyt coverin
@@ -84,7 +86,15 @@ export default function MetalBackdrop({ variant = "facets", tone = "light", inSe
             liike hoidetaan background-positionilla, joka on sama turvallinen
             tekniikka kuin gradientin kirkkaan kohdan siirto.
             Kuvat: public/metalbd-facets.svg ja -dark.svg. */}
-        <div className="metalbd-facets" />
+        {/* "verkko" (5.10.2026): palvelusivujen verkostokuvio vaalealla
+            pohjalla fasettien tilalla, ks. VerkkoKangas.tsx. */}
+        {/* Tumma kerros vaalean pohjan ja verkon VALISSA (5.10.2026):
+            EtuTummennus kirjoittaa sille pelkan opacityn, jolloin pohja
+            tummuu kohti Referenssejä ja vaalenee niiden jalkeen. Verkko
+            piirtyy sen paalle ja vaihtaa samalla viivojensa savyn
+            tummalle sopivaksi, joten kuvio sailyy (VerkkoKangas). */}
+        {variant === "verkko" && tone === "light" && <div className="metalbd-yo" />}
+        {variant === "verkko" ? <VerkkoKangas /> : <div className="metalbd-facets" />}
       </div>
     </div>
   );

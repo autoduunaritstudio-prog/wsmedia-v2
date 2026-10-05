@@ -2,6 +2,7 @@ import { Hakutulos, Koodi, Linkkiprofiili } from "./Artefaktit";
 import { Maininnat } from "./Grafiikat";
 import Ikoni from "./Ikoni";
 import Kehotus from "./Kehotus";
+import SisaltoTabit from "./SisaltoTabit";
 import type { IkoniNimi } from "./Ikoni";
 import { Kaiku } from "../../components/Maasto";
 
@@ -168,30 +169,17 @@ export default function Sisalto() {
           Painotus vaihtelee sen mukaan, missä kunnossa sivusto on lähtiessä.
         </p>
 
-        <div className="osat" data-rvs="">
-          {PANEELIT.map((pa, idx) => (
-            <article className="osa rv" id={pa.id} key={pa.id}>
-              <div className="osa-yla">
-                <div className="osa-gfx kohoa rv">{ARTEFAKTIT[idx]}</div>
-                <div>
-                  <div className="hs-otsikko">
-                    <Ikoni nimi={pa.ikoni} i={idx} />
-                    <h3>{pa.h}</h3>
-                  </div>
-                  <p className="hs-p">{pa.p}</p>
-                </div>
-              </div>
-              <dl className="hs-rows porras rv">
-                {pa.rows.map(([b, s]) => (
-                  <div key={b}>
-                    <dt>{b}</dt>
-                    <dd>{s}</dd>
-                  </div>
-                ))}
-              </dl>
-            </article>
-          ))}
-        </div>
+        <SisaltoTabit
+          paneelit={PANEELIT.map((pa, idx) => ({
+            id: pa.id,
+            label: pa.label,
+            h: pa.h,
+            p: pa.p,
+            rows: pa.rows,
+            kuva: ARTEFAKTIT[idx],
+            ikoni: <Ikoni nimi={pa.ikoni} i={idx} />,
+          }))}
+        />
 
         <Kehotus kick="Neljä työtä, yksi tiimi">
           Kartoituksessa käymme läpi, mikä näistä neljästä on sinun sivustollasi

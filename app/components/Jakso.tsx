@@ -35,15 +35,22 @@ export default function Jakso({
   children,
   merkit,
   omaPohja = true,
+  tausta,
 }: {
   children: ReactNode;
   merkit?: boolean;
   omaPohja?: boolean;
+  /* Nakyman kokoinen sticky-taustakerros (Graafinen suunnittelu).
+     Oma elementti eika pseudo, koska ::before on jo valon kaytossa ja
+     ::after olisi viimeinen lapsi, jolloin sticky ei pitaisi sita
+     ylhaalla. */
+  tausta?: boolean;
 }) {
   return (
     <div className={omaPohja ? "jakso-pari" : "jakso-pari jakso-avoin"}>
       {/* Merkit jatkuvat jakson yli: kaare on yksi, joten molemmat osiot
           jakavat saman kerroksen eivatka merkit katkea niiden valissa. */}
+      {tausta ? <div className="gs-tausta" aria-hidden="true" /> : null}
       {omaPohja ? <NetBackdrop mount="cover" merkit={merkit} /> : null}
       {children}
     </div>

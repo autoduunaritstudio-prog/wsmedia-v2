@@ -27,6 +27,8 @@ type Props = {
      valiin, eli ruudunlukijan otsikkolistassa on aukko. Kun brandi on
      h2, sarakkeet ovat h3. */
   brandHeading?: "h2" | "h4";
+  /** Tumma footeri kuten palvelusivuilla (etusivu). */
+  tumma?: boolean;
 };
 
 /**
@@ -39,10 +41,10 @@ type Props = {
  * linkkisarakkeeseen: ne ovat velvoitteita eivatka navigaatiota, ja
  * kayttaja etsii ne aina footerin alalaidasta.
  */
-export default function Footer({ intro, columns, base, brandHeading = "h4" }: Props) {
+export default function Footer({ intro, columns, base, brandHeading = "h4", tumma = false }: Props) {
   const Sarake = brandHeading === "h2" ? "h3" : "h4";
   return (
-    <footer>
+    <footer className={tumma ? "footer-tumma" : undefined}>
       <div className="wrap">
         <div className="foot-top">
           <div className="foot-brand">

@@ -39,7 +39,7 @@ export type ServiceMenuItem = {
   href: string;
   label: string;
   desc: string;
-  icon: "video" | "site" | "event" | "seo";
+  icon: "video" | "site" | "design" | "event" | "seo";
 };
 
 export const SERVICE_MENU: ServiceMenuItem[] = [
@@ -59,7 +59,7 @@ export const SERVICE_MENU: ServiceMenuItem[] = [
     href: ROUTES.graafinen,
     label: "Graafinen suunnittelu",
     desc: "Yritysilme, painotuotteet ja teippaukset",
-    icon: "site",
+    icon: "design",
   },
   {
     href: ROUTES.seo,
@@ -125,7 +125,7 @@ export const HOME_FOOTER: FooterColumn[] = [
     links: [
       { href: "#referenssit", label: "Referenssit" },
       { href: ROUTES.toihin, label: "Töihin meille" },
-      { href: "#lomake", label: "Ota yhteyttä" },
+      { href: ROUTES.yhteys, label: "Ota yhteyttä" },
       { href: ROUTES.laskutus, label: "Laskutustiedot" },
     ],
   },

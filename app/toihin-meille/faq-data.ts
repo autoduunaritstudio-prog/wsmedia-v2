@@ -54,7 +54,7 @@ export const FAQ: FaqItem[] = [
   {
     group: "",
     q: "Milloin kuulen hakemuksestani?",
-    a: "Vastaamme viikon sisällä — myös silloin kun vastaus on ei. Jos sopivaa toimeksiantoa ei ole heti, säilytämme hakemuksen ja otamme yhteyttä myöhemmin.",
+    a: "Vastaamme viikon sisällä, myös silloin kun vastaus on ei. Jos sopivaa toimeksiantoa ei ole heti, säilytämme hakemuksen ja otamme yhteyttä myöhemmin.",
   },
 ];
 

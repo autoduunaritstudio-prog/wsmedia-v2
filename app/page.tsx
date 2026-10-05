@@ -6,6 +6,8 @@ import "./_tyylit/perus.css";
 import type { Metadata } from "next";
 import MetalBackdrop from "./components/MetalBackdrop";
 import SiteEffects from "./components/SiteEffects";
+import EtuTummennus from "./components/EtuTummennus";
+import Palkki from "./components/Palkki";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Logos from "./components/Logos";
@@ -89,7 +91,6 @@ export default function Home() {
           }),
         }}
       />
-      <div id="prog" />
       <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
       {/* Sticky hero + nouseva cover. Hero pysyy kiinnitettyna ruudun
           ylareunaan ja cover liukuu sen paalle natiivilla sticky-kaytoksella;
@@ -103,7 +104,7 @@ export default function Home() {
           {/* Metallikuvio vain coverin alueella: hero jaa omalle
               taustalleen, ja kuvio kulkee logonauhasta lukukaistan
               loppuun. */}
-          <MetalBackdrop />
+          <MetalBackdrop variant="verkko" />
           <Logos />
           <Services />
         </div>
@@ -114,19 +115,6 @@ export default function Home() {
           saman kaareen lapsia. Lukukaista ja Tulokset menevat .aftercoveriin
           eli Referenssien coveriksi. */}
       <Refs stats={STATS}>
-        {/* Silta referensseista varaukseen. Kayttaja on juuri katsonut
-            tyot, ja cover avautuu tahan: keskitetty otsikko kertoo mita
-            seuraavaksi tapahtuu ennen kuin kalenteri tulee esiin. */}
-        <section className="kartlead">
-          <div className="wrap">
-            <div className="shead center rv" data-par="0.03">
-              <h2 className="big">
-                Katsotaan mitä sinun yrityksellesi{" "}
-                <span className="accent">kannattaa tehdä.</span>
-              </h2>
-            </div>
-          </div>
-        </section>
         <Booking />
         <Results />
       </Refs>
@@ -141,9 +129,17 @@ export default function Home() {
       <Footer
         intro="Lyhytvideot, verkkosivut ja graafinen ilme. Espoo ja Helsinki. Yrityksille jotka haluavat kasvaa."
         columns={HOME_FOOTER}
-        base="© 2026 WS Media Oy · Espoo"
+        base="© 2026 WS Media Oy"
+        tumma
+      />
+      {/* Pysyva kehotuspainike oikeassa alakulmassa kuten palvelusivuilla. */}
+      <Palkki
+        otsikko="Maksuton kartoitus"
+        selite="Käymme tilanteesi läpi ja kerromme, mikä auttaa. Ei sido mihinkään."
+        nappi="Varaa kartoitus"
       />
       <SiteEffects />
+      <EtuTummennus />
     </>
   );
 }

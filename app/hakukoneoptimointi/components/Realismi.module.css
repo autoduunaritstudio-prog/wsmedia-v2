@@ -1,0 +1,112 @@
+/* REALISTISET NAKYMAT, ks. Realismi.tsx. Vaaleat kayttoliittymat
+   tummalla sivulla. Heraaminen: data-on="1" kerran, portaittain --i:n
+   mukaan. Vain opacity ja transform. */
+
+.ikkuna {
+  position: relative; overflow: hidden;
+  padding: 14px 14px 10px; border-radius: 18px;
+  background: #fff; color: #202124;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  box-shadow: 0 50px 100px -50px rgba(0, 0, 0, .85), 0 0 0 1px rgba(255, 255, 255, .08), 0 0 70px -24px rgba(111, 236, 255, .35);
+}
+.haku {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; border-radius: 999px;
+  border: 1px solid #dfe1e5; box-shadow: 0 1px 6px rgba(32, 33, 36, .16);
+  font-size: 15px;
+}
+.haku svg { color: #5f6368; flex: none }
+
+.ikoni {
+  flex: none; width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center; font-style: normal; font-size: 11px; font-weight: 700; color: #fff;
+  box-shadow: 0 0 0 1px #ecedef, 0 0 0 4px #f1f3f4;
+}
+.sina {
+  margin-left: auto; font-style: normal;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: #0f1b30; background: #6fecff; padding: 4px 9px; border-radius: 999px;
+}
+
+/* Porrastettu heraaminen. */
+.tulos, .lahdekortti, .yritys, .nasta {
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .5s ease, transform .6s cubic-bezier(.2, .7, .2, 1);
+  transition-delay: calc(var(--i, 0) * 120ms + 150ms);
+}
+.ikkuna[data-on="1"] .tulos,
+.ikkuna[data-on="1"] .lahdekortti,
+.ikkuna[data-on="1"] .yritys { opacity: 1; transform: none }
+
+/* --- Hakutulokset --- */
+.tulokset { list-style: none; margin: 10px 0 0; padding: 0 }
+.tulos { padding: 9px 10px; border-radius: 12px }
+.lahde { display: flex; align-items: center; gap: 10px }
+.lahde span { display: flex; flex-direction: column; min-width: 0 }
+.lahde b { font-size: 13px; font-weight: 400; line-height: 1.2 }
+.lahde small { font-size: 11.5px; color: #4d5156; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.otsikko { margin: 4px 0 0; font-size: 16px; line-height: 1.3; color: #1a0dab; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.tahdet { margin: 2px 0 0; font-size: 12.5px; color: #e37400 }
+.oma { background: #f2fdff; box-shadow: 0 0 0 2px #24c6e0 }
+.ikkuna[data-on="1"] .oma { animation: korostus 2.4s ease-in-out 1.1s 2 }
+@keyframes korostus { 50% { box-shadow: 0 0 0 2px #24c6e0, 0 0 0 9px rgba(36, 198, 224, .18) } }
+
+/* --- Tekoalyn yhteenveto --- */
+.ai { padding: 18px 18px 14px; background: linear-gradient(180deg, #f6f9ff, #fff 60%) }
+.aiOts { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 15px; font-weight: 700; color: #202124 }
+.aiTeksti {
+  margin: 12px 0 0; font-size: 15px; line-height: 1.6; color: #202124;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.6s cubic-bezier(.3, .6, .2, 1) .2s;
+}
+.ikkuna[data-on="1"] .aiTeksti { clip-path: inset(0 0 0 0) }
+.aiTeksti mark { background: #d2f4fb; color: #0b4f5e; padding: 0 3px; border-radius: 3px }
+.aiLk { margin: 14px 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5f6368 }
+.aiLahteet { display: flex; flex-wrap: wrap; gap: 8px }
+.lahdekortti {
+  display: flex; align-items: center; gap: 9px; padding: 8px 12px 8px 9px;
+  border: 1px solid #e3e6ea; border-radius: 12px; background: #fff;
+  transition-delay: calc(var(--i, 0) * 140ms + 1.4s);
+}
+.lahdekortti span { display: flex; flex-direction: column }
+.lahdekortti b { font-size: 12.5px; font-weight: 600 }
+.lahdekortti small { font-size: 11px; color: #5f6368 }
+.omaLahde { border-color: #24c6e0; background: #f2fdff; box-shadow: 0 0 0 2px rgba(36, 198, 224, .25) }
+
+/* --- Karttatulokset --- */
+.kartta { padding: 0 }
+.karttaKuva { position: relative; height: 170px; overflow: hidden }
+.karttaKuva svg { display: block; width: 100%; height: 100% }
+.nasta {
+  position: absolute; width: 26px; height: 26px; margin: -26px 0 0 -13px;
+  border-radius: 50% 50% 50% 0; rotate: -45deg;
+  background: #ea4335; color: #fff; display: grid; place-items: center;
+  font: 700 12px Arial, sans-serif;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
+  transform: translateY(-30px);
+  transition: opacity .3s ease, transform .55s cubic-bezier(.3, 1.6, .5, 1);
+  transition-delay: calc(var(--i, 0) * 160ms + 200ms);
+}
+.nasta { line-height: 1 }
+.nasta b { rotate: 45deg; font-weight: 700 }
+.ikkuna[data-on="1"] .nasta { opacity: 1; transform: none }
+.omaNasta { background: #0b8aa3; width: 32px; height: 32px; margin: -32px 0 0 -16px; z-index: 2 }
+.ikkuna[data-on="1"] .omaNasta { animation: syke 1.8s ease-out 1s 3 }
+@keyframes syke { 0% { box-shadow: 0 4px 10px rgba(0,0,0,.3), 0 0 0 0 rgba(11,138,163,.55) } 100% { box-shadow: 0 4px 10px rgba(0,0,0,.3), 0 0 0 18px rgba(11,138,163,0) } }
+.yritykset { list-style: none; margin: 0; padding: 8px }
+.yritys { display: flex; align-items: center; gap: 12px; padding: 10px 10px; border-radius: 12px; transition-delay: calc(var(--i, 0) * 140ms + 700ms) }
+.yritys + .yritys { border-top: 1px solid #f1f3f4 }
+.nro { flex: none; width: 22px; height: 22px; border-radius: 50%; background: #f1f3f4; color: #5f6368; display: grid; place-items: center; font-size: 12px; font-weight: 700 }
+.ytiedot { display: flex; flex-direction: column; min-width: 0 }
+.ytiedot b { font-size: 15px; font-weight: 400; color: #1a0dab }
+.ytahdet { font-size: 12.5px; color: #70757a }
+.ytahdet i { font-style: normal; color: #fbbc04; letter-spacing: -1px }
+.ytiedot small { font-size: 12px; color: #70757a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.omaYritys { background: #f2fdff; box-shadow: 0 0 0 2px #24c6e0 }
+.omaYritys .nro { background: #0b8aa3; color: #fff }
+
+@media (prefers-reduced-motion: reduce) {
+  .tulos, .lahdekortti, .yritys, .nasta { transition: none; opacity: 1; transform: none }
+  .aiTeksti { transition: none; clip-path: none }
+  .ikkuna[data-on="1"] .oma, .ikkuna[data-on="1"] .omaNasta { animation: none }
+}

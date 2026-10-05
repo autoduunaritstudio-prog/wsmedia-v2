@@ -1,0 +1,123 @@
+/* HAKUTULOS NOUSEE, realistinen hakutulossivu. Ks. HakuNousu.tsx.
+   Hakutulossivu on vaalea kuten oikea hakukone, laskurit ja nelja
+   tyota sen ympärillä tummalla pohjalla. Liike: transform (--y). */
+
+.kehys { position: relative }
+
+/* --- Laskurit --- */
+.mittari {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: end;
+  margin: 0 6px 10px;
+}
+.pieni { display: block; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #8fb3c2 }
+.iso, .keski { display: block; font-variant-numeric: tabular-nums; line-height: 1; color: #f2f6fa; margin-top: 6px }
+.iso { font-size: 48px; font-weight: 700; letter-spacing: -.04em; transition: color .4s }
+.iso em { font-style: normal; color: #6fecff; font-size: .55em; margin-right: 2px; vertical-align: .42em }
+.keski { font-size: 24px; font-weight: 600 }
+.keski em { font-style: normal; color: #8fb3c2; font-size: .62em }
+.oikea { text-align: right }
+.kehys[data-ykkonen="1"] .iso { color: #6fecff; text-shadow: 0 0 28px rgba(111, 236, 255, .55) }
+
+/* --- Hakutulossivu --- */
+.serp {
+  position: relative; overflow: hidden;
+  padding: 14px 16px 10px; border-radius: 20px;
+  background: #fff; color: #202124;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  box-shadow: 0 60px 120px -50px rgba(0, 0, 0, .85), 0 0 0 1px rgba(255, 255, 255, .08), 0 0 80px -20px rgba(111, 236, 255, .35);
+}
+.haku {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 18px; border-radius: 999px;
+  border: 1px solid #dfe1e5; box-shadow: 0 1px 6px rgba(32, 33, 36, .18);
+  font-size: 16px; color: #202124;
+}
+.haku svg { color: #5f6368; flex: none }
+.hakuteksti { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0 }
+.kursori { width: 1.5px; height: 19px; background: #202124; flex: none; animation: vilkku 1s steps(1) infinite }
+@keyframes vilkku { 50% { opacity: 0 } }
+.valilehdet { display: flex; gap: 22px; margin: 10px 8px 0; font-size: 13px; color: #5f6368; border-bottom: 1px solid #ebebeb }
+.valilehdet span { padding-bottom: 9px }
+.aktiivinen { color: #1a73e8; border-bottom: 3px solid #1a73e8; padding-bottom: 6px !important; font-weight: 600 }
+.maara { margin: 8px 8px 6px; font-size: 12px; color: #70757a }
+
+.lista { position: relative; list-style: none; margin: 0; padding: 0 }
+.rivi {
+  position: absolute; left: 0; right: 0; top: 0; height: 80px; overflow: hidden;
+  transform: translateY(var(--y, 0px));
+  padding: 5px 10px; border-radius: 12px; background: #fff;
+}
+.lahde { display: flex; align-items: center; gap: 10px; position: relative }
+.lahde span { display: flex; flex-direction: column; min-width: 0 }
+.lahde b { font-size: 13px; font-weight: 400; color: #202124; line-height: 1.15 }
+.lahde small { font-size: 12px; color: #4d5156; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.ikoni {
+  flex: none; width: 22px; height: 22px; border-radius: 50%;
+  display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 700; color: #fff;
+  box-shadow: 0 0 0 1px #ecedef, 0 0 0 4px #f1f3f4;
+}
+.otsikko { margin: 3px 0 1px; font-size: 16px; line-height: 1.25; color: #1a0dab; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.kuvaus { margin: 0; font-size: 12.5px; line-height: 1.35; color: #4d5156; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.tahdet { color: #e37400 }
+
+/* Oma tulos: syaani kehys ja hehku, pysyy muiden paalla. */
+.oma {
+  z-index: 2;
+  background: #f2fdff;
+  box-shadow: 0 0 0 2px #24c6e0, 0 18px 40px -16px rgba(11, 138, 163, .55);
+}
+.sina {
+  margin-left: auto; font-style: normal; font-family: inherit;
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: #0f1b30; background: #6fecff; padding: 4px 9px; border-radius: 999px;
+}
+
+/* --- Nelja tyota kortteina: otsikko ja mita tehtiin. Syttyvat yksi
+   kerrallaan, merkki muuttuu tarkistusmerkiksi. --- */
+.tyot { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; list-style: none; margin: 12px 0 0; padding: 0 }
+.tyot li {
+  position: relative; display: grid; grid-template-columns: 18px 1fr; column-gap: 10px; row-gap: 1px;
+  padding: 9px 12px; border-radius: 12px;
+  background: rgba(255, 255, 255, .04); border: 1px solid rgba(143, 179, 194, .22);
+  transition: background-color .4s, border-color .4s, transform .4s cubic-bezier(.2, .7, .2, 1);
+}
+.tyot b { grid-column: 2; font-size: 13.5px; color: #c9d6e2; transition: color .4s }
+.tyot span { grid-column: 2; font-size: 12px; color: #7f97a6; line-height: 1.35; transition: color .4s }
+.tyoMerkki {
+  grid-row: 1 / span 2; align-self: center; width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid rgba(143, 179, 194, .5); position: relative;
+  transition: background-color .4s, border-color .4s;
+}
+.tyoMerkki::after {
+  content: ""; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px;
+  border: solid #0f1b30; border-width: 0 2px 2px 0; rotate: 45deg; opacity: 0; transition: opacity .3s .1s;
+}
+.tyot li[data-on="1"] { background: rgba(111, 236, 255, .12); border-color: rgba(111, 236, 255, .6); transform: translateY(-2px) }
+.tyot li[data-on="1"] b { color: #fff }
+.tyot li[data-on="1"] span { color: #bfe9f2 }
+.tyot li[data-on="1"] .tyoMerkki { background: #6fecff; border-color: #6fecff }
+.tyot li[data-on="1"] .tyoMerkki::after { opacity: 1 }
+.selite { margin: 8px 6px 0; font-size: 13px; color: #8fb3c2 }
+
+@media (max-width: 560px) {
+  .serp { padding: 14px 10px 10px }
+  .iso { font-size: 46px }
+  .keski { font-size: 22px }
+  .otsikko { font-size: 16px }
+  .valilehdet { gap: 16px }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kursori { animation: none }
+  .tyot li, .tyot b, .tyot span, .tyoMerkki { transition: none }
+}
+
+/* Alkutila: oma tulos sykkii viidennella sijalla ennen vieritysta.
+   Pelkka opacity-animaatio omalla kerroksellaan. */
+.oma::after {
+  content: ""; position: absolute; inset: 0; border-radius: 12px; pointer-events: none;
+  box-shadow: inset 0 0 0 2px #24c6e0, 0 0 0 4px rgba(36,198,224,.35) inset;
+  opacity: 0;
+}
+.kehys[data-alku="1"] .oma::after { animation: syke 1.4s ease-in-out infinite }
+@keyframes syke { 0%, 100% { opacity: 0 } 50% { opacity: 1 } }
+@media (prefers-reduced-motion: reduce) { .kehys[data-alku="1"] .oma::after { animation: none; opacity: 1 } }

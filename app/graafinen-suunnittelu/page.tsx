@@ -14,9 +14,8 @@ import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import TeippausHero from "./components/TeippausHero";
 import RepeytyvaReuna from "./components/RepeytyvaReuna";
-import StudioRaidat from "./components/StudioRaidat";
 import { buildJsonLd } from "./jsonld";
-import { Materiaalit, Miksi, Palvelut, Prosessi } from "./sections";
+import { Materiaalit, Miksi, Palvelut } from "./sections";
 import { Alueet, Hinta, Kaytannossa, Kenelle, Tarjous } from "./sections2";
 import { Ukk } from "./ukk";
 
@@ -58,14 +57,13 @@ export default function GraafinenSuunnittelu() {
       {/* RAE. Sama kiintea rakeinen kalvo kuin muilla palvelusivuilla:
           tasainen digitaalinen pinta lukee tyhjana. */}
       <div className="rae" aria-hidden="true" />
-      <div id="prog" />
 
       <Nav
         anchorBase="/"
         links={OVERLAY_NAV}
         ohitaKohde="#paasisalto"
         ctaHref="#tarjous"
-        ctaLabel="Pyydä tarjous"
+        ctaLabel="Varaa maksuton kartoitus"
         logoHref="/"
       />
 
@@ -118,50 +116,27 @@ export default function GraafinenSuunnittelu() {
 
             <div className="pino">
               {/* Kehotuspalkki alkaa tasta, kuten kahdella muulla
-                  palvelusivulla. Kuvassa kayntikortit, varimallit ja
-                  puhelin samalla tunnuksella: lause puhuu juuri siita. */}
+                  palvelusivulla. Kuvassa Laaksolahden Sahkon pakettiauton
+                  teippaussuunnitelma naytolla ja tabletilla (3.10.2026). */}
               <Vaite
                 palkkiAlkaa
-                kuva="/graafinen-suunnittelu/ilme.webp"
+                kuva="/graafinen-suunnittelu/ilme-teippaus.webp"
                 alla="Asiakas näkee pakettiautosi liikenteessä ja myöhemmin saman logon hakutuloksissa. Jos ne näyttävät samalta, hän tunnistaa yrityksesi jo ennen kuin soittaa.">
                 Kun kaikki näyttää samalta, yritys <b><i>jää mieleen.</i></b>
               </Vaite>
 
-              {/* RAKENNE 1.10.2026: vain kaksi pintaa ja yksi hengahdys
-                  niiden valissa. Aiemmin Prosessi, hintavaite ja Hinta
-                  nousivat kukin edellisen paalle, kolme peittoa perakkain.
-                  Nyt Prosessi jatkuu suoraan hinnastoon samalla pinnalla.
-                  Materiaalit ja toiminta-alue ovat tukitietoa, joten ne
-                  ovat hannassa Kenelle-osion ja UKK:n jalkeen. */}
-              <div className="pino">
-              <Jakso>
-                <Prosessi />
+              {/* RAKENNE 3.10.2026: Prosessi ja ikkunalaatta poistettu.
+                  Vaitteen paalle nousee suoraan hinnasta tarjoukseen
+                  ulottuva pinta. */}
+              <Jakso tausta>
+                <Hinta />
+                <Kenelle />
+                <Materiaalit />
+                <Ukk />
+                <Alueet />
+                <Kaytannossa />
+                <Tarjous />
               </Jakso>
-
-              {/* HENGAHDYS PROSESSIN JALKEEN (2.10.2026). Prosessista
-                  hinnastoon tuli tekstia tekstin perään ilman taukoa.
-                  Taysi kuvalaatta katkaisee sen, kuten Verkkosivuilla. */}
-              <div className="pino">
-                <Laatta kuva="/verkkosivut/liiketila.webp" korkeus="taysi">
-                  <p className="laatta-lause suuri">
-                    Toimitilan ikkuna mainostaa <b><i>joka päivä.</i></b>
-                  </p>
-                  <p className="laatta-alla">
-                    Ikkunateippaus näkyy ohikulkijoille myös silloin, kun ovi on kiinni.
-                  </p>
-                </Laatta>
-
-                <Jakso>
-                  <Hinta />
-                  <Kenelle />
-                  <Materiaalit />
-                  <Ukk />
-                  <Alueet />
-                  <Kaytannossa />
-                  <Tarjous />
-                </Jakso>
-              </div>
-              </div>
             </div>
           </div>
         </div>
@@ -170,17 +145,16 @@ export default function GraafinenSuunnittelu() {
       <Footer
         intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
+        base="© 2026 WS Media Oy"
         brandHeading="h2"
       />
 
       <Palkki
         otsikko="Maksuton kartoitus"
         selite="Logo, ilme tai teippaus. Saat kiinteän hinnan, ei sido mihinkään."
-        nappi="Pyydä tarjous"
+        nappi="Varaa kartoitus"
       />
       <SiteEffects />
-      <StudioRaidat />
     </div>
   );
 }

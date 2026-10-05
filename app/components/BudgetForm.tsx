@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 
 const DEFAULT_MIN = 500;
@@ -54,6 +54,10 @@ type Props = {
    * sivustoa.
    */
   extraField?: { id: string; label: string; placeholder?: string };
+  /** Kortin otsikko ja vaihtoehtoiset yhteystavat (kartoitusvaraus ja
+   *  puhelin) lomakkeen alla. Palvelusivujen CTA-osio kayttaa naita. */
+  otsikko?: string;
+  vaihtoehdot?: boolean;
 };
 
 export default function BudgetForm({
@@ -69,12 +73,92 @@ export default function BudgetForm({
   showBudget = true,
   tilt,
   extraField,
+  otsikko,
+  vaihtoehdot,
 }: Props) {
   const [budget, setBudget] = useState(initial);
+  const [valmis, setValmis] = useState(false);
+  const [puuttuu, setPuuttuu] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  /* Seuraava vapaa kartoitusaika varauskalenterista. Haetaan vasta kun
+     kortti tulee lahelle nakymaa, ja jos kalenteri ei vastaa, rivi
+     jatetaan pois. */
+  const [seuraava, setSeuraava] = useState<string | null>(null);
+  useEffect(() => {
+    if (!vaihtoehdot || !ref.current) return;
+    let peruttu = false;
+    const io = new IntersectionObserver(
+      async ([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        try {
+          const r = await fetch("/api/varaus?tapa=teams", { cache: "no-store" });
+          if (!r.ok) return;
+          const j = (await r.json()) as { paivat: { ajat: string[] }[] };
+          const eka = j.paivat.flatMap((p) => p.ajat)[0];
+          if (!eka || peruttu) return;
+          const d = new Date(eka);
+          const tz = "Europe/Helsinki";
+          const pv = new Intl.DateTimeFormat("fi-FI", { weekday: "short", day: "numeric", month: "numeric", timeZone: tz }).format(d);
+          const klo = new Intl.DateTimeFormat("fi-FI", { hour: "numeric", minute: "2-digit", timeZone: tz }).format(d);
+          setSeuraava(`${pv} klo ${klo}`);
+        } catch {
+          /* ei aikaa, ei riviä */
+        }
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(ref.current);
+    return () => {
+      peruttu = true;
+      io.disconnect();
+    };
+  }, [vaihtoehdot]);
   const pct = ((budget - min) / (max - min)) * 100;
 
+  /* LAHETYS (4.10.2026). Nappi ei aiemmin tehnyt mitaan. Nyt se kokoaa
+     kentat valmiiksi sahkopostiksi osoitteeseen info@wsmedia.fi, kuten
+     Ota yhteytta -ikkuna. Sivustolla ei ole lomakepalvelua; kun se
+     tehdaan, vain tama funktio vaihtuu. */
+  const laheta = () => {
+    const el = ref.current;
+    if (!el) return;
+    const arvo = (id: string) => (el.querySelector<HTMLInputElement | HTMLTextAreaElement>(`#${id}`)?.value ?? "").trim();
+    const nimi = arvo("nimi");
+    const mail = arvo("mail");
+    const puh = arvo("puh");
+    if (!nimi || (!mail && !puh)) {
+      setPuuttuu(true);
+      return;
+    }
+    setPuuttuu(false);
+    const sivu = document.title.split("|")[0].trim();
+    const rivit = [
+      `Nimi: ${nimi}`,
+      `Sähköposti: ${mail}`,
+      `Puhelin: ${puh}`,
+      `Paikkakunta: ${arvo("pk")}`,
+      ...(extraField ? [`${extraField.label}: ${arvo(extraField.id)}`] : []),
+      ...(showBudget ? [`${budgetLabel}: ${fmt(budget)} ${unit}`] : []),
+      `Sivu: ${location.pathname}`,
+      "",
+      arvo("lisa"),
+    ];
+    window.location.href = `mailto:info@wsmedia.fi?subject=${encodeURIComponent(`Tarjouspyyntö: ${sivu}`)}&body=${encodeURIComponent(rivit.join("\n"))}`;
+    setValmis(true);
+  };
+
   return (
-    <div className="card fcard rv" data-par="0.02" data-tilt={tilt} data-tilt-profile={tilt ? "card" : undefined}>
+    <div ref={ref} className="card fcard rv" data-par="0.02" data-tilt={tilt} data-tilt-profile={tilt ? "card" : undefined}>
+      {otsikko ? (
+        <div className="fcard-paa">
+          <b>{otsikko}</b>
+          <span>
+            <i aria-hidden="true" />
+            Vastaamme 24 tunnin sisällä
+          </span>
+        </div>
+      ) : null}
       {showBudget && (
         <>
           <label htmlFor="bud">{budgetLabel}</label>
@@ -121,10 +205,41 @@ export default function BudgetForm({
       )}
       <label htmlFor="lisa">{messageLabel}</label>
       <textarea id="lisa" rows={3} />
-      <button className="btn" type="button">
+      <button className="btn" type="button" onClick={laheta}>
         {submitLabel}
       </button>
-      <p className="fnote">{note}</p>
+      {puuttuu ? (
+        <p className="fnote" role="alert">
+          Kirjoita nimi ja sähköposti tai puhelinnumero, niin voimme vastata.
+        </p>
+      ) : valmis ? (
+        <p className="fnote" role="status">
+          Tarjouspyyntö avautui sähköpostiohjelmaasi. Lähetä se sieltä, niin vastaamme 24 tunnin sisällä.
+        </p>
+      ) : (
+        <p className="fnote">{note}</p>
+      )}
+      {vaihtoehdot ? (
+        <div className="fcard-muut">
+          <span className="fcard-tai">tai</span>
+          <button type="button" data-varaus="">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
+              <path d="M3.5 10h17M8 3v4M16 3v4" />
+            </svg>
+            <span>
+              Varaa 30 min kartoitus
+              {seuraava ? <small>Seuraava vapaa {seuraava}</small> : null}
+            </span>
+          </button>
+          <a href="tel:+358405648770">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M6.6 3.5h2.6l1.6 4.2-2 1.4a12 12 0 0 0 6.1 6.1l1.4-2 4.2 1.6v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z" />
+            </svg>
+            040 564 8770
+          </a>
+        </div>
+      ) : null}
     </div>
   );
 }

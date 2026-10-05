@@ -68,7 +68,7 @@ const RUUDUT: [string, string][] = [
 const TEKIJAT: [string, string, string][] = [
   ["Graafinen suunnittelu", "Ville Karppinen", "Asiakasvastaava. Myös tarjoukset ja sopimukset."],
   ["Verkkosivut ja hakukoneoptimointi", "Tuomas Ivanov", "Perustaja"],
-  ["Lyhytvideot ja Meta-mainonta", "Alex", "Toimitusjohtaja ja tuottaja"],
+  ["Lyhytvideot ja Meta-mainonta", "Alex Pettersborg", "Toimitusjohtaja ja tuottaja"],
 ];
 
 export default function Yhteystiedot() {
@@ -76,7 +76,6 @@ export default function Yhteystiedot() {
     <div className="page-palvelu page-hakukoneoptimointi page-yhteystiedot wsx">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }} />
       <NetBackdrop merkit={false} />
-      <div id="prog" />
       <div className="rae" aria-hidden="true" />
 
       <Nav
@@ -94,6 +93,16 @@ export default function Yhteystiedot() {
             {CONTACT.phone}
           </a>
           <p className="yt-lead">Soita tai kirjoita. Vastaamme 24 tunnin sisällä.</p>
+          {/* Kehotukset avaa napeista yhteysikkunan (data-yhteys) ja
+              varauskalenterin (data-varaus), kuten muillakin sivuilla. */}
+          <div className="heroctas yt-napit">
+            <button type="button" className="btn mag" data-yhteys="">
+              Lähetä viesti
+            </button>
+            <button type="button" className="yt-toinen" data-varaus="">
+              Varaa maksuton kartoitus
+            </button>
+          </div>
 
           <dl className="yt-rivi">
             <div>
@@ -177,7 +186,7 @@ export default function Yhteystiedot() {
       <Footer
         intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
+        base="© 2026 WS Media Oy"
         brandHeading="h2"
       />
       <SiteEffects />

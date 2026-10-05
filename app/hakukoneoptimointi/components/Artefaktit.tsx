@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 /* ==================================================================
    ARTEFAKTIT
@@ -35,7 +35,7 @@ export function Koodi({
   selite?: string;
 }) {
   return (
-    <figure className="art art-koodi">
+    <figure className="art art-koodi rv">
       <div className="art-palkki">
         <span className="art-pisteet" aria-hidden="true">
           <i />
@@ -47,7 +47,7 @@ export function Koodi({
       <pre>
         <code>
           {rivit.map((r, i) => (
-            <span className="art-rivi" key={i}>
+            <span className="art-rivi" key={i} style={{ "--i": i } as CSSProperties}>
               <em aria-hidden="true">{String(i + 1).padStart(2, "0")}</em>
               <span className={r.v ? "k-" + r.v : undefined}>{r.t || " "}</span>
             </span>
@@ -74,7 +74,7 @@ export function Hakutulos({
   kuvaus: string;
 }) {
   return (
-    <figure className="art art-serp">
+    <figure className="art art-serp rv">
       <div className="serp-polku">{polku}</div>
       <p className="serp-otsikko">{otsikko}</p>
       <p className="serp-kuvaus">{kuvaus}</p>
@@ -103,14 +103,14 @@ const LINKIT: [string, number, string][] = [
 
 export function Linkkiprofiili() {
   return (
-    <figure className="art art-linkit">
+    <figure className="art art-linkit rv">
       <div className="art-palkki">
         <code>viittaavat verkkotunnukset</code>
         <b>+12 / 6 kk</b>
       </div>
       <ul>
-        {LINKIT.map(([nimi, dr, tyyppi]) => (
-          <li key={nimi}>
+        {LINKIT.map(([nimi, dr, tyyppi], i) => (
+          <li key={nimi} style={{ "--i": i } as CSSProperties}>
             <span className="l-dr" data-arvo={dr >= 65 ? "korkea" : dr >= 50 ? "keski" : "matala"}>
               {dr}
             </span>

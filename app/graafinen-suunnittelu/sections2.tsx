@@ -1,9 +1,9 @@
+import SopiiKenelle from "../components/SopiiKenelle";
 import BudgetForm from "../components/BudgetForm";
+import Toimintaalue from "../components/Toimintaalue";
 import SmartLink from "../components/SmartLink";
-import { Kaiku } from "../components/Maasto";
 
 import PriceConfig from "./PriceConfig";
-import g from "./gs.module.css";
 
 /* ==================================================================
    HINTA  ·  sivun hinnasto, ei omaa pohjaa
@@ -58,62 +58,17 @@ const EI_SOVI = [
 ];
 
 export function Kenelle() {
+  const jaa = (x: string) => {
+    const k = x.indexOf(". ");
+    return k > 0 ? { t: x.slice(0, k + 1), s: x.slice(k + 2) } : { t: x };
+  };
   return (
-    <section className="seo-sec" id="kenelle">
-      <Kaiku sana="KENELLE" puoli="vas" />
-      <div className="swrap">
-        <div className="seo-ord" data-rvs="">
-          <span>Kenelle</span>
-          <i>Kaksi palstaa, suora vastaus</i>
-        </div>
-        <h2 className="seo-h2 rv">Kenelle graafinen suunnittelu meiltä sopii?</h2>
-        <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Jos tilanteesi kuuluu jälkimmäiseen ryhmään, sanomme sen kartoituksessa suoraan. Se säästää
-          molempien aikaa.
-        </p>
-
-        {/* KAKSI ERI PINTAA, EI KAKSI SAMANLAISTA PALSTAA.
-            Vasen on kenelle palvelu on tehty: avoin lista, syaani merkki.
-            Oikea on rajaus: oma vaimea pinta, lampoinen merkki, ja kohdan
-            jalkeen sanotaan mika on parempi vaihtoehto silloin. */}
-        <div className={g.kenelle}>
-          <div className={g.sopii}>
-            <h3>Sopii sinulle, jos</h3>
-            <ul>
-              {SOPII.map((x) => (
-                <li key={x}>
-                  <svg viewBox="0 0 20 20" aria-hidden="true">
-                    <path d="M4.5 10.5l3.5 3.5 7.5-8" />
-                  </svg>
-                  <span>{x}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className={g.eiSovi}>
-            <h3>Ei kannata, jos</h3>
-            <ul>
-              {EI_SOVI.map((x) => {
-                const k = x.indexOf(". ");
-                const ehto = k > 0 ? x.slice(0, k + 1) : x;
-                const vaihto = k > 0 ? x.slice(k + 2) : null;
-                return (
-                  <li key={x}>
-                    <svg viewBox="0 0 20 20" aria-hidden="true">
-                      <path d="M6 6l8 8M14 6l-8 8" />
-                    </svg>
-                    <span>
-                      {ehto}
-                      {vaihto ? <small>{vaihto}</small> : null}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+    <SopiiKenelle
+      otsikko="Kenelle graafinen suunnittelu meiltä sopii?"
+      sopii={SOPII.map((t) => ({ t }))}
+      ei={EI_SOVI.map(jaa)}
+      epavarma="jos graafinen suunnittelu ei ole sinulle oikea ratkaisu"
+    />
   );
 }
 
@@ -128,35 +83,14 @@ export function Kenelle() {
 
 export function Alueet() {
   return (
-    <section className="seo-sec kuvapohja" id="alueet">
-      {/* Kuva todistaa sen mita teksti sanoo: asennus tehdaan siella,
-          missa auto on. Sama kuvapohja kuin Lyhytvideoiden alueissa. */}
-      <img
-        className="pohjakuva"
-        src="/graafinen-suunnittelu/pakettiauto.webp"
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        data-par="0.028"
-      />
-      <div className="swrap">
-        <div className="seo-ord" data-rvs="">
-          <span>Toiminta-alue</span>
-          <i>Espoo ja koko Suomi</i>
-        </div>
-        <h2 className="seo-h2 rv">Graafinen suunnittelu Espoossa ja koko Suomessa</h2>
-        <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Toimistomme on Espoossa, ja pääkaupunkiseudun yrityksiä tapaamme mielellämme myös paikan
-          päällä. Suunnittelu ja hyväksynnät hoituvat verkossa mistä päin Suomea tahansa, ja asennus
-          tehdään siellä, missä autosi ja toimitilasi ovat.
-        </p>
-        <p className="seo-body" style={{ marginTop: "22px", maxWidth: "72ch" }}>
-          Painotuotteet toimitetaan suoraan osoitteeseesi.
-        </p>
-        {/* Kaupunkilista poistettiin 1.10.2026. Se oli tarkoitettu linkeiksi
-            kaupunkisivuille, joita ei viela ole. Lisataan kun sivut tehdaan. */}
-      </div>
-    </section>
+    <Toimintaalue
+      otsikko="Graafinen suunnittelu Espoossa ja koko Suomessa"
+      rivit={[
+        ["Espoo", "Toimistomme on Espoossa. Pääkaupunkiseudun yrityksiä tapaamme mielellämme myös paikan päällä."],
+        ["Koko Suomi", "Suunnittelu ja hyväksynnät hoituvat verkossa. Asennus tehdään siellä, missä autosi ja toimitilasi ovat."],
+        ["Ovellesi", "Painotuotteet toimitetaan suoraan osoitteeseesi."],
+      ]}
+    />
   );
 }
 
@@ -248,7 +182,7 @@ export function Tarjous() {
     <section className="seo-sec kuvapohja" id="tarjous">
       <img
         className="pohjakuva"
-        src="/graafinen-suunnittelu/luonnokset.webp"
+        src="/kuvat/tarjous-kortit.webp"
         alt=""
         aria-hidden="true"
         loading="lazy"
@@ -283,6 +217,8 @@ export function Tarjous() {
           </div>
 
           <BudgetForm
+            otsikko="Tarjouspyyntö"
+            vaihtoehdot
             showBudget={false}
             messageLabel="Mitä tarvitset? Kerro esimerkiksi ajoneuvojen määrä ja paikkakunta."
             note="Ei sitoumuksia."

@@ -2,97 +2,113 @@
 
 import { useState } from "react";
 
+import { SKILLS, hakemusMailto } from "./hakemus";
+import Liite from "./Liite";
+
 /**
- * Avoin hakemus. Oma komponenttinsa eika BudgetForm, koska kenttajoukko on
+ * Avoin hakemus (lomakekortti). Osio ympärillä on sections.tsx:n
+ * Hakemus. Oma komponenttinsa eika BudgetForm, koska kenttajoukko on
  * kokonaan eri: ei budjettiliukusaadinta vaan osaamisalueiden monivalinta.
  *
  * Valinnat ovat Reactin tilassa, jolloin DOMia ei lueta erikseen kun lomake
  * joskus kytketaan lahetykseen. Painike on toistaiseksi type="button" ilman
- * lahetystoiminnallisuutta, kuten sivuston muissakin lomakkeissa.
+ * Lahetys avaa sahkopostiohjelman valmiiksi taytetylla hakemuksella
+ * (hakemus.ts), koska lomakkeille ei viela ole taustapalvelua.
  */
 
-const SKILLS = [
-  "Videokuvaus",
-  "Editointi",
-  "Motion graphics",
-  "Verkkokehitys",
-  "Hakukoneoptimointi",
-  "Sisällöntuotanto",
-  "Graafinen suunnittelu",
-  "Teippaus tai asennus",
-];
 
 export default function ApplicationForm() {
   const [picked, setPicked] = useState<string[]>([]);
 
+  const [lahetetty, setLahetetty] = useState(false);
+  const [liitteet, setLiitteet] = useState<File[]>([]);
+
   const toggle = (s: string) =>
     setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
 
+  const laheta = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    window.location.href = hakemusMailto(
+      new FormData(e.currentTarget),
+      picked,
+      liitteet.map((t) => t.name),
+    );
+    setLahetetty(true);
+  };
+
   return (
-    <section id="hakemus" style={{ paddingTop: 20 }}>
-      <div className="wrap-n">
-        <div className="shead center rv" data-par="0.03">
-          <span className="kick">Avoin hakemus</span>
-          <h2>Kerro mitä osaat</h2>
-          <p className="sub">Hakemus vie viisi minuuttia. Luemme jokaisen ja vastaamme viikon sisällä myös silloin, kun vastaus on ei.</p>
+    <form className="card fcard rv" data-par="0.02" onSubmit={laheta}>
+      <div className="fcard-paa">
+        <b>Avoin hakemus</b>
+        <span>
+          <i aria-hidden="true" />
+          Vastaamme viikon sisällä
+        </span>
+      </div>
+      <div className="row2">
+        <div>
+          <label htmlFor="nimi">Nimi</label>
+          <input type="text" id="nimi" name="nimi" autoComplete="name" required />
         </div>
-        <div className="card fcard rv" data-par="0.02">
-          <div className="row2">
-            <div>
-              <label htmlFor="nimi">Nimi</label>
-              <input type="text" id="nimi" autoComplete="name" />
-            </div>
-            <div>
-              <label htmlFor="mail">Sähköposti</label>
-              <input type="email" id="mail" autoComplete="email" />
-            </div>
-            <div>
-              <label htmlFor="puh">Puhelinnumero</label>
-              <input type="text" id="puh" autoComplete="tel" />
-            </div>
-            <div>
-              <label htmlFor="pk">Paikkakunta</label>
-              <input type="text" id="pk" />
-            </div>
-          </div>
-
-          <label id="roolilab">Mitä osaat? Valitse yksi tai useampi</label>
-          <div className="rolepick" role="group" aria-labelledby="roolilab">
-            {SKILLS.map((s) => (
-              <label className="rp" key={s}>
-                <input
-                  type="checkbox"
-                  value={s}
-                  checked={picked.includes(s)}
-                  onChange={() => toggle(s)}
-                />
-                {s}
-              </label>
-            ))}
-          </div>
-
-          <label htmlFor="port">Linkki työnäytteisiin</label>
-          <input type="text" id="port" placeholder="Portfolio, showreel, GitHub tai Instagram" />
-          <p className="hint">Ansioluetteloa ei tarvita. Yksi linkki riittää.</p>
-
-          <div className="row2">
-            <div>
-              <label htmlFor="malli">Toimeksianto vai työsuhde?</label>
-              <input type="text" id="malli" placeholder="Kumpi kiinnostaa" />
-            </div>
-            <div>
-              <label htmlFor="hinta">Tuntihinta tai palkkatoive</label>
-              <input type="text" id="hinta" placeholder="€/h tai €/kk" />
-            </div>
-          </div>
-
-          <label htmlFor="lisa">Kerro lyhyesti mitä olet tehnyt ja mitä haluaisit tehdä</label>
-          <textarea id="lisa" rows={4}></textarea>
-
-          <button className="btn" type="button">Lähetä hakemus</button>
-          <p className="fnote">Vastaamme viikon sisällä. Käsittelemme hakemukset luottamuksellisesti.</p>
+        <div>
+          <label htmlFor="mail">Sähköposti</label>
+          <input type="email" id="mail" name="sahkoposti" autoComplete="email" required />
+        </div>
+        <div>
+          <label htmlFor="puh">Puhelinnumero</label>
+          <input type="tel" id="puh" name="puhelin" autoComplete="tel" />
+        </div>
+        <div>
+          <label htmlFor="pk">Paikkakunta</label>
+          <input type="text" id="pk" name="paikkakunta" autoComplete="address-level2" />
         </div>
       </div>
-    </section>
+
+      <label id="roolilab">Mitä osaat? Valitse yksi tai useampi</label>
+      <div className="rolepick" role="group" aria-labelledby="roolilab">
+        {SKILLS.map((s) => (
+          <label className="rp" key={s}>
+            <input
+              type="checkbox"
+              value={s}
+              checked={picked.includes(s)}
+              onChange={() => toggle(s)}
+            />
+            {s}
+          </label>
+        ))}
+      </div>
+
+      <label htmlFor="port">Linkki työnäytteisiin</label>
+      <input type="text" id="port" name="nayte" placeholder="Portfolio, showreel, GitHub tai Instagram" />
+      <p className="hint">Ansioluetteloa ei tarvita. Yksi linkki riittää.</p>
+
+      <div className="row2">
+        <div>
+          <label htmlFor="malli">Toimeksianto vai työsuhde?</label>
+          <input type="text" id="malli" name="malli" placeholder="Kumpi kiinnostaa" />
+        </div>
+        <div>
+          <label htmlFor="hinta">Tuntihinta tai palkkatoive</label>
+          <input type="text" id="hinta" name="hinta" placeholder="€/h tai €/kk" />
+        </div>
+      </div>
+
+      <label htmlFor="lisa">Kerro lyhyesti, mitä olet tehnyt ja mitä haluaisit tehdä</label>
+      <textarea id="lisa" name="viesti" rows={4}></textarea>
+
+      <Liite tiedostot={liitteet} muuta={setLiitteet} />
+
+      <button className="btn" type="submit">
+        Lähetä hakemus
+      </button>
+      <p className="fnote" role={lahetetty ? "status" : undefined}>
+        {lahetetty
+          ? liitteet.length
+            ? "Hakemus on valmiina sähköpostissasi. Lisää valitsemasi liitteet viestiin ja lähetä se."
+            : "Hakemus on valmiina sähköpostissasi. Lähetä se sähköpostiohjelmasta."
+          : "Käsittelemme hakemukset luottamuksellisesti."}
+      </p>
+    </form>
   );
 }

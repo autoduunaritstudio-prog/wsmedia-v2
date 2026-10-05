@@ -158,6 +158,8 @@ export default function NavCarriers() {
     if (!nav || !svg) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (window.matchMedia("(max-width: 860px)").matches) return;
+    /* Hakukoneoptimointisivulla taas mukana 4.10.2026, kun sivulla on
+       logonauha kuten muillakin. */
 
     const logo = nav.querySelector<HTMLElement>(".logo");
     const toggle = nav.querySelector<HTMLElement>(".navtoggle");
@@ -278,10 +280,8 @@ export default function NavCarriers() {
     let prevTop: number | null = null;
     let prevT = 0;
     let prevBack = -1;
-    let prevBeam = -1;
     let backCss = `rgb(${BG},${BG},${BG})`;
     let idle = true;
-    const root = document.documentElement;
 
     let lepoY = -1;
     let lepoW = -1;
@@ -325,14 +325,19 @@ export default function NavCarriers() {
       // apRaw:sta, jotta se on tasan nolla eika osapikselin verran auki -
       // molemmat ovat funktioita scrollista, joten tama ei ole tilaa.
       const refsTop = refCover ? refCover.getBoundingClientRect().top : 1;
-      const covered = refsTop <= 0;
+      /* AIKAISEMPI SAAPUMINEN (5.10.2026). Lamput saavat tulla heti kun
+         .refsin tumma ylareuna on noussut lampunkantajien paan ylapuolelle
+         (koti ground - 40, hahmo n. 50 px sen ylle), ei vasta nakyman
+         ylareunaan. Hahmot eivat siis koskaan kavele valkoisen paalla. */
+      const lampAlku = Math.max(0, ground - 90);
+      const covered = refsTop <= lampAlku;
       // t kulkee nollasta ykkoseen S_startista spanPx pikselia eteenpain.
       // Kuljettu matka mitataan .refgapin ylareunasta: se on R + H3 -
       // scrollY, joten h3 - gap.top = scrollY - R eli tasan matka
       // S_startista. .aftercover ei esiinny tassa lainkaan, joten vali
       // jaa vaiheen c ja coverin valiin eika siirra lamppuja mukanaan.
       const since = refGap ? h3 - refGap.getBoundingClientRect().top : 0;
-      const t = covered && spanPx > 0 ? clamp(since / spanPx, 0, 1) : 0;
+      const t = covered && spanPx > 0 ? clamp((since + lampAlku) / (spanPx + lampAlku), 0, 1) : 0;
       const uLamp = clamp(
         clamp(t / LAMP_A, 0, 1) - clamp((t - (1 - LAMP_C)) / LAMP_C, 0, 1),
         0,
@@ -613,11 +618,19 @@ export default function NavCarriers() {
           // Kartion karki hieman lampun paan ULKOPUOLELLA: nain hahmo itse
           // ei jaa kirkkaimman kohdan sisaan, jolloin difference-blendattu
           // viiva pysyy laskettuna.
+          // KEILA PAATTYY KORTTIRIVIN YLAREUNAAN (5.10.2026). Aiemmin se
+          // jatkui 60 % ruudukon korkeudesta korttien ohi ja videoseina
+          // leikattiin siita maskilla, jolloin korttien ymparille jai
+          // valaistu kehys. Nyt keilan pituus on matka korttirivin
+          // ylareunaan, ja radiaaligradientti haipyy nollaan juuri siina.
+          const ax = hx + ux * (LAMP_LEN + 6);
+          const ay = hy + uy * (LAMP_LEN + 6);
+          const yla = gr && uy > 0.05 ? (gr.top - ay) / uy : tl;
           beamSrc[i - 2] = {
-            ax: hx + ux * (LAMP_LEN + 6),
-            ay: hy + uy * (LAMP_LEN + 6),
+            ax,
+            ay,
             ang: Math.atan2(uy, ux),
-            len: tl + (gr ? gr.height * 0.6 : 200),
+            len: Math.max(80, yla),
           };
         }
 
@@ -641,19 +654,8 @@ export default function NavCarriers() {
         }
       }
 
-      // --- keilan voimakkuus ulos CSS:lle ---
-      // Korttien reunuskehys syttyy tasan silloin kun keila osuu niihin.
-      // Muuttuja on juuressa, jotta CSS saa sen ilman lisaselektoreita, ja
-      // se ohjaa VAIN opacityn arvoa: reunus itse on staattinen box-shadow
-      // .refcard::afterissa. Nain kehyskohtainen kirjoitus ei koske
-      // maalausominaisuuksiin, mika on taman projektin Chrome-saanto.
-      // Kirjoitus vain kun arvo muuttuu: yksi merkitseva desimaali riittaa
-      // silmalle ja pitaa kirjoitusten maaran kymmenesosassa.
-      const beamQ = Math.round(beamOn * 100) / 100;
-      if (beamQ !== prevBeam) {
-        prevBeam = beamQ;
-        root.style.setProperty("--beam", beamQ.toFixed(2));
-      }
+      // --beam-muuttujaa ei enaa kirjoiteta (5.10.2026): sen ainoa lukija,
+      // korttien valaistu kehys, poistettiin.
 
       // --- keilat omalla kerroksellaan ---
       const be = getBeam();

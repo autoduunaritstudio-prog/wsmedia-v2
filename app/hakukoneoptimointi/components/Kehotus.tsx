@@ -17,16 +17,31 @@
  * kohdassa luvannut ettei kartoitus maksa eika sido. "Pyyda tarjous"
  * jaa hinnastoon, jossa lukija on jo valitsemassa tasoa.
  */
-export default function Kehotus({ kick, children }: { kick: string; children: React.ReactNode }) {
+export default function Kehotus({
+  kick,
+  children,
+  yhteys,
+}: {
+  kick: string;
+  children: React.ReactNode;
+  /* true: nappi avaa Ota yhteytta -ikkunan (YhteysIkkuna) tarjouslomakkeen sijaan. */
+  yhteys?: boolean;
+}) {
   return (
     <div className="kehotus rv">
       <div className="kehotus-txt">
         <p className="kehotus-kick">{kick}</p>
         <p className="kehotus-lause">{children}</p>
       </div>
-      <a className="btn mag" href="#tarjous">
-        Pyydä maksuton kartoitus
-      </a>
+      {yhteys ? (
+        <button type="button" className="btn mag" data-yhteys="">
+          Ota yhteyttä
+        </button>
+      ) : (
+        <a className="btn mag" href="#tarjous">
+          Varaa maksuton kartoitus
+        </a>
+      )}
     </div>
   );
 }

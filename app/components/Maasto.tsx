@@ -67,8 +67,11 @@ export function Kaiku({
   sana,
   puoli = "oik",
   kohta = "keski",
+  luokka,
 }: {
   sana: string;
+  /** Lisaluokka, esim. "etu" etusivun vaalealle versiolle. */
+  luokka?: string;
   puoli?: "oik" | "vas";
   /* Pystysana keskittyy oletuksena osioon. Korkeassa osiossa keskikohta
      on kaukana siita mihin lukija katsoo kun osio alkaa, joten sana voi
@@ -81,7 +84,7 @@ export function Kaiku({
   const kirjaimet = sana.replace(/\s/g, "").length;
   return (
     <span
-      className={`kaiku ${puoli}${kohta === "ylos" ? " ylos" : ""}`}
+      className={`kaiku ${puoli}${kohta === "ylos" ? " ylos" : ""}${luokka ? ` ${luokka}` : ""}`}
       aria-hidden="true"
       data-parx="0.03"
       style={{ "--kirjaimet": kirjaimet } as CSSProperties}

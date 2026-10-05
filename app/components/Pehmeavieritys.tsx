@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 /**
@@ -54,6 +55,52 @@ import Lenis from "lenis";
 const LUKOT = ["hero-locked", "lukossa"];
 
 export default function Pehmeavieritys() {
+  /* SIVUNVAIHTO (4.10.2026). Lenis elaa juuriasettelussa sivujen yli.
+     Kun sivu vaihtui (esim. footerin linkista), Next vieritti alkuun
+     mutta Lenisin oma tavoite jai vanhan sivun loppuun, ja uusi sivu
+     liukui lopusta alkuun. Nyt sivun vaihtuessa Lenis hyppaa heti
+     alkuun tai, jos osoitteessa on #ankkuri, suoraan sen kohdalle. */
+  const pathname = usePathname();
+  const lenisRef = useRef<Lenis | null>(null);
+  const ensimmainen = useRef(true);
+  useEffect(() => {
+    if (ensimmainen.current) {
+      ensimmainen.current = false;
+      return;
+    }
+    const lenis = lenisRef.current;
+    const hyppaa = () => {
+      const hash = decodeURIComponent(window.location.hash.slice(1));
+      const kohde = hash ? document.getElementById(hash) : null;
+      if (lenis) {
+        lenis.resize();
+        lenis.scrollTo(kohde ?? 0, { immediate: true, force: true });
+      } else if (kohde) kohde.scrollIntoView({ behavior: "instant" as ScrollBehavior });
+      else window.scrollTo({ top: 0, behavior: "instant" });
+    };
+    hyppaa();
+    /* Uuden sivun korkeus voi kasvaa vasta seuraavassa kehyksessa
+       (kuvat, pinnatut osiot), joten ankkuri tarkistetaan viela kerran. */
+    const r = requestAnimationFrame(() => requestAnimationFrame(hyppaa));
+    return () => cancelAnimationFrame(r);
+  }, [pathname]);
+
+  /* SAMAN SIVUN ANKKURIT HYPPAAVAT SUORAAN (4.10.2026). Kehotukset.tsx
+     ohjaa klikkauksen tanne. Pitka liuku heron "Katso hinnat"
+     -linkista hinnastoon kesti ja ajoi kaikki pinon animaatiot lapi. */
+  useEffect(() => {
+    const hyppy = (e: Event) => {
+      const kohde = document.getElementById((e as CustomEvent<string>).detail);
+      if (!kohde) return;
+      const lenis = lenisRef.current;
+      if (lenis) lenis.scrollTo(kohde, { immediate: true, force: true });
+      else kohde.scrollIntoView({ behavior: "instant" as ScrollBehavior });
+      history.replaceState(history.state, "", `#${kohde.id}`);
+    };
+    window.addEventListener("ws:hyppy", hyppy);
+    return () => window.removeEventListener("ws:hyppy", hyppy);
+  }, []);
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -61,14 +108,14 @@ export default function Pehmeavieritys() {
       lerp: 0.1,
       wheelMultiplier: 0.7,
       gestureOrientation: "vertical",
-      /* Ankkurit (#tarjous, #hinnoittelu) Lenisin kautta, jolloin ne
-         liukuvat samalla kaavalla kuin muu vieritys eivatka hypi
-         keskella pehmeaa liiketta. */
-      anchors: true,
+      /* Ankkurit hoitaa Kehotukset.tsx: kehotukset avaavat ikkunan,
+         muut ankkurit hyppaavat suoraan (ws:hyppy). */
+      anchors: false,
       /* Lenis pyorittaa oman rAF-silmukkansa. Erillinen silmukka olisi
          yksi kehyskohtainen callback lisaa ilman etta se antaa mitaan. */
       autoRaf: true,
     });
+    lenisRef.current = lenis;
 
     const html = document.documentElement;
     let pysaytetty = false;
@@ -91,6 +138,7 @@ export default function Pehmeavieritys() {
     return () => {
       mo.disconnect();
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
 

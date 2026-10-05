@@ -44,17 +44,14 @@ export default function Hero() {
               oma margin-top 34px, sama kuin alkuperaisessa pinotussa
               asettelussa - ei uutta lukua.
 
-              "Varaa kartoitus" on <button type="button">, ei <a>:
-              napilla ei ole viela kohdetta, ja href="#" hyppaisi sivun
-              alkuun kun taas <a> ilman hrefia putoaisi pois
-              nappaimistojarjestyksesta. Ei disabled-attribuuttia, jotta
-              nappi nayttaa ja kayttaytyy aktiivisena. Ulkoasu on
-              sivuston oma sekundaarityyli .btn.alt. */}
+              Napit avaavat ikkunat Kehotukset.tsx:n kautta (5.10.2026):
+              "Pyydä tarjous" yhteyslomakkeen (data-yhteys) ja "Varaa
+              kartoitus" varauskalenterin (data-varaus). */}
           <div className="heroctas">
-            <a className="btn mag" href="#lomake">
+            <button className="btn mag" type="button" data-yhteys="">
               Pyydä tarjous
-            </a>
-            <button className="btn alt" type="button">
+            </button>
+            <button className="btn alt" type="button" data-varaus="">
               Varaa kartoitus
             </button>
             <a className="tlink" href="#tulokset">

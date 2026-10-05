@@ -22,7 +22,7 @@ export function buildJsonLd() {
         founder: { "@type": "Person", name: "Tuomas Ivanov" },
         employee: [
           { "@type": "Person", name: "Tuomas Ivanov", jobTitle: "Perustaja" },
-          { "@type": "Person", name: "Alex", jobTitle: "Toimitusjohtaja ja tuottaja" },
+          { "@type": "Person", name: "Alex Pettersborg", jobTitle: "Toimitusjohtaja ja tuottaja" },
           { "@type": "Person", name: "Ville Karppinen", jobTitle: "Asiakasvastaava" },
         ],
         knowsAbout: ["Lyhytvideot", "Verkkosivut", "Hakukoneoptimointi", "Graafinen suunnittelu"],

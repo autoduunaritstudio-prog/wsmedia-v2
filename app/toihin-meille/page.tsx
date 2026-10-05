@@ -2,16 +2,25 @@
 import "../_tyylit/toihin-meille.css";
 import type { Metadata } from "next";
 
-import Backdrop from "../components/Backdrop";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
+import NetBackdrop from "../components/NetBackdrop";
 import SiteEffects from "../components/SiteEffects";
-import SmartLink from "../components/SmartLink";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
-import ApplicationForm from "./ApplicationForm";
+import HakemusIkkuna from "./HakemusIkkuna";
 import { buildJsonLd } from "./jsonld";
-import { Miksi, Roolit, ValiCta, Tyomalli, Prosessi, Odotukset, Tyonkuva } from "./sections";
+import {
+  Hakemus,
+  Hero,
+  Miksi,
+  Nayta,
+  Odotukset,
+  Prosessi,
+  Roolit,
+  Tyomalli,
+  Tyonkuva,
+} from "./sections";
 import { Ukk } from "./ukk";
 
 const TITLE = "Töihin WS Medialle | Freelancerit ja tekijät";
@@ -34,20 +43,20 @@ export const metadata: Metadata = {
 };
 
 /**
- * Rekrytointisivu. EI .page-palvelu-kerroksessa: se on palvelusivujen
- * yhteinen kerros, eika tama sivu myy palvelua asiakkaalle. Sivutyyppi on
- * itsenainen samaan tapaan kuin /tietosuoja.
+ * Rekrytointisivu (5.10.2026). Sama tumma .wsx-ilme kuin palvelusivuilla
+ * ja Meista-sivulla: verkostotausta, kuvahero, Kaiku-sanat, kuvakaista,
+ * Kenelle-kortit, UKK ja sama lomakeosio. Sivun omat tyylit .page-tm.
  */
 export default function ToihinMeille() {
   return (
-    <div className="page-toihin-meille">
+    <div className="page-palvelu page-hakukoneoptimointi page-tm wsx">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd()) }}
       />
+      <NetBackdrop merkit={false} />
+      <div className="rae" aria-hidden="true" />
 
-      <Backdrop variant="simple" />
-      <div id="prog" />
       <Nav
         anchorBase="/"
         links={OVERLAY_NAV}
@@ -56,61 +65,24 @@ export default function ToihinMeille() {
         logoHref="/"
       />
 
-      <div className="wrap crumbs">
-        <nav aria-label="Murupolku">
-          <ol>
-            <li>
-              <SmartLink href="/">Etusivu</SmartLink>
-            </li>
-            <li aria-current="page">Töihin meille</li>
-          </ol>
-        </nav>
-      </div>
-
-      <header className="hero">
-      <div className="wrap">
-      <p className="kick li d1">Avoin haku</p>
-      <h1 className="li d2" data-par="0.05">Töihin <span className="accent">WS Medialle</span></h1>
-      <p className="sub li d3" data-par="0.035">Teemme lyhytvideoita, verkkosivuja, hakukoneoptimointia ja yritysilmeitä — usein samalle asiakkaalle samaan aikaan. Siksi etsimme jatkuvasti tekijöitä, jotka osaavat oman kapean alansa erittäin hyvin. Töitä voi tehdä freelancerina laskutuksella tai työsuhteessa.</p>
-      <div className="heroctas li d4" data-par="0.025">
-      <a className="btn mag" href="#hakemus">Jätä avoin hakemus</a>
-      <a className="tlink" href="#roolit">Katso keitä etsimme</a>
-      </div>
-      <p className="herotrust li d4">
-      <span><i />Toimeksianto tai työsuhde</span>
-      <span><i />Etätyö, koko Suomi</span>
-      <span><i />Vastaamme viikon sisällä</span>
-      </p>
-      </div>
-
-      <div className="cluster li d5" data-par="-0.02" aria-label="Rooleja joihin haemme tekijöitä">
-      <span className="rchip"><em>▶</em>Videokuvaaja</span>
-      <span className="rchip"><em>✂</em>Editoija</span>
-      <span className="rchip"><em>✦</em>Motion designer</span>
-      <span className="rchip"><em>&lt;/&gt;</em>Next.js-kehittäjä</span>
-      <span className="rchip"><em>W</em>WordPress-kehittäjä</span>
-      <span className="rchip"><em>↑</em>Hakukoneoptimoija</span>
-      <span className="rchip"><em>◆</em>Graafinen suunnittelija</span>
-      <span className="rchip"><em>▬</em>Teippausasentaja</span>
-      </div>
-      </header>
-
+      <Hero />
       <Miksi />
       <Roolit />
-      <ValiCta />
+      <Nayta />
       <Tyomalli />
       <Prosessi />
       <Odotukset />
       <Tyonkuva />
       <Ukk />
-      <ApplicationForm />
+      <Hakemus />
 
       <Footer
-        intro="Lyhytvideot, verkkosivut ja graafinen suunnittelu. Espoo ja koko Suomi."
+        intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Espoo"
+        base="© 2026 WS Media Oy"
         brandHeading="h2"
       />
+      <HakemusIkkuna />
       <SiteEffects />
     </div>
   );

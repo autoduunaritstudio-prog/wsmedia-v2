@@ -1,9 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import { usePathname } from "next/navigation";
 
 import { LogoFull, LogoMark } from "./Logo";
 import NavCarriers from "./NavCarriers";
+import PalveluMerkki from "./PalveluMerkki";
 import SmartLink from "./SmartLink";
 import SocialIcon from "./SocialIcon";
 import { CONTACT, SOCIAL, type NavLink } from "./site-data";
@@ -44,6 +46,9 @@ type Props = {
   ohitaKohde?: string;
 };
 
+/** Avausanimaation porrastusindeksi, ks. globals.css .fsnav.on. */
+const porras = (i: number) => ({ "--i": i }) as CSSProperties;
+
 const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
 
 export default function FullscreenNav({
@@ -60,6 +65,9 @@ export default function FullscreenNav({
   /** Vierityslukon aiemmat arvot, jotta lukko voidaan purkaa synkronisesti. */
   const lockRef = useRef<{ overflow: string; pad: string } | null>(null);
   const panelId = useId();
+  /* Nykyisen sivun rivi ei ole linkki: se palaa sinisena eika reagoi. */
+  const polku = usePathname();
+  const onNyt = (href: string) => href === polku;
 
   const resolve = useCallback(
     (href: string) => (href.startsWith("#") ? `${anchorBase}${href}` : href),
@@ -73,14 +81,30 @@ export default function FullscreenNav({
     lockRef.current = null;
   }, []);
 
+  /** Ympyran keskipiste valikkonapin keskelle ja sade kauimpaan kulmaan,
+   *  jotta valikko levittaytyy napista ja pakkautuu siihen takaisin. */
+  const mittaaLahto = useCallback(() => {
+    const b = btnRef.current?.getBoundingClientRect();
+    const p = panelRef.current;
+    if (!b || !p) return;
+    const x = b.left + b.width / 2;
+    const y = b.top + b.height / 2;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    p.style.setProperty("--fx", `${x}px`);
+    p.style.setProperty("--fy", `${y}px`);
+    p.style.setProperty("--fr", `${Math.ceil(Math.hypot(Math.max(x, w - x), Math.max(y, h - y))) + 2}px`);
+  }, []);
+
   const close = useCallback(() => {
     // Lukko puretaan heti, ei vasta efektin siivouksessa. Ankkurilinkkia
     // klikatessa selain hyppaa kohteeseen samassa tapahtumassa, ja jos body on
     // viela overflow: hidden, hyppy jaa tekematta eika palaa myohemmin.
     unlockScroll();
+    mittaaLahto();
     setOpen(false);
     btnRef.current?.focus();
-  }, [unlockScroll]);
+  }, [unlockScroll, mittaaLahto]);
 
   useEffect(() => {
     if (!open) return;
@@ -114,14 +138,16 @@ export default function FullscreenNav({
     };
 
     document.addEventListener("keydown", onKey);
+    window.addEventListener("resize", mittaaLahto);
     // Fokus ensimmaiseen linkkiin, ei taustan sulkupainikkeeseen.
     panelRef.current?.querySelector<HTMLElement>(".fsnav-in a, .fsnav-in button")?.focus();
 
     return () => {
       document.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", mittaaLahto);
       unlockScroll();
     };
-  }, [open, close, unlockScroll]);
+  }, [open, close, unlockScroll, mittaaLahto]);
 
   const services = links.find((l) => l.menu)?.menu ?? [];
 
@@ -159,7 +185,10 @@ export default function FullscreenNav({
             aria-expanded={open}
             aria-controls={panelId}
             aria-label="Avaa valikko"
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              mittaaLahto();
+              setOpen(true);
+            }}
           >
             <span className="navtoggle-bars" aria-hidden="true">
               <i />
@@ -186,7 +215,7 @@ export default function FullscreenNav({
             <LogoFull />
           </span>
 
-          <div className="fsnav-top">
+          <div className="fsnav-top" style={porras(0)}>
             <button
               type="button"
               className="fsnav-close"
@@ -209,15 +238,25 @@ export default function FullscreenNav({
           <div className="fsnav-body">
             <nav className="fsnav-links" aria-label="Päävalikko">
               <ul>
-                {links.map((l) => (
-                  <li key={l.label}>
-                    <SmartLink
-                      href={resolve(l.href)}
-                      onClick={close}
-                      aria-current={l.current ? "page" : undefined}
-                    >
-                      {l.label}
-                    </SmartLink>
+                {links.map((l, i) => (
+                  <li key={l.label} style={porras(i)}>
+                    {/* Palvelut-rivi ei ole linkki: palvelut ovat jo auki
+                        viereisessa sarakkeessa. */}
+                    {l.menu ? (
+                      <span className="fsnav-otsake">{l.label}</span>
+                    ) : onNyt(l.href) ? (
+                      <span className="fsnav-otsake" aria-current="page">
+                        {l.label}
+                      </span>
+                    ) : (
+                      <SmartLink
+                        href={resolve(l.href)}
+                        onClick={close}
+                        aria-current={l.current ? "page" : undefined}
+                      >
+                        {l.label}
+                      </SmartLink>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -227,20 +266,42 @@ export default function FullscreenNav({
                 hoverin takana Palvelut-rivilla, mika piilotti sen kosketuksella
                 ja hakukoneelta yhta lailla. */}
             <div className="fsnav-sub">
-              {services.map((item) => (
-                <SmartLink
-                  href={resolve(item.href)}
-                  className="fsnav-subitem"
-                  key={item.label}
-                  onClick={close}
-                >
-                  <b>{item.label}</b>
-                  <small>{item.desc}</small>
-                </SmartLink>
-              ))}
+              {services.map((item, i) => {
+                const sisalto = (
+                  <>
+                    <PalveluMerkki p={item.icon} className="fsnav-merkki" />
+                    <span>
+                      <b>{item.label}</b>
+                      <small>{item.desc}</small>
+                    </span>
+                  </>
+                );
+                return onNyt(item.href) ? (
+                  <span
+                    className="fsnav-subitem fsnav-nyt"
+                    key={item.label}
+                    style={porras(i + 1)}
+                    data-p={item.icon}
+                    aria-current="page"
+                  >
+                    {sisalto}
+                  </span>
+                ) : (
+                  <SmartLink
+                    href={resolve(item.href)}
+                    className="fsnav-subitem"
+                    key={item.label}
+                    style={porras(i + 1)}
+                    data-p={item.icon}
+                    onClick={close}
+                  >
+                    {sisalto}
+                  </SmartLink>
+                );
+              })}
             </div>
 
-            <div className="fsnav-side">
+            <div className="fsnav-side" style={porras(3)}>
               <address className="fsnav-contact">
                 <span className="fsnav-rule" aria-hidden="true" />
                 {/* Valilyonnit ennen <br />:aa: ilman niita osoite luetaan
@@ -276,25 +337,30 @@ export default function FullscreenNav({
                 {CONTACT.phone}
               </a>
 
+              {/* Somekanavat yhteystietojen alla omana lohkonaan (5.10.2026).
+                  Aiemmin pienet harmaat renkaat oikeassa reunassa, joita
+                  ei juuri huomannut. */}
+              <div className="fsnav-some">
+                <p id={`${panelId}-some`}>Seuraa meitä</p>
+                <ul className="fsnav-social" aria-labelledby={`${panelId}-some`}>
+                  {SOCIAL.map((sm, i) => (
+                    <li key={sm.label} style={porras(5 + i)}>
+                      <a
+                        href={sm.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${sm.label} (avautuu uuteen välilehteen)`}
+                        title={sm.label}
+                        data-some={sm.icon}
+                      >
+                        <SocialIcon name={sm.icon} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-
-          {/* Somerivi on sisaltokaistan ulkopuolella oikeassa reunassa, joten
-              se ankkuroidaan .fsnav-iniin eika sarakkeeseen. */}
-          <ul className="fsnav-social">
-            {SOCIAL.map((sm) => (
-              <li key={sm.label}>
-                <a
-                  href={sm.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${sm.label} (avautuu uuteen välilehteen)`}
-                >
-                  <SocialIcon name={sm.icon} />
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </>

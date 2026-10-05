@@ -22,11 +22,13 @@
 }
 .root *, .root *::before, .root *::after { box-sizing: border-box }
 
-.scrub { position: relative; height: calc(388vh + 100svh); z-index: 1 }
+/* Vierityskaari lyhennetty 288vh -> 120vh (3.10.2026): animaatio tuntui
+   liian pitkalta. Ajoitukset ovat suhteellisia, joten ne eivat muutu. */
+.scrub { position: relative; height: calc(220vh + 100svh); z-index: 1 }
 /* Sivuston yleinen osiosaanto antaa sectionille ylapaddingin. Prototyypissa
    sita ei ole, joten se nollataan tarkemmalla valitsimella. */
 .root .scrub { padding: 0; margin: 0 }
-.meter { position: absolute; left: 0; top: 0; width: 1px; height: 388vh; pointer-events: none; visibility: hidden }
+.meter { position: absolute; left: 0; top: 0; width: 1px; height: 220vh; pointer-events: none; visibility: hidden }
 .pin {
   position: sticky; top: 0; height: 100vh; height: 100svh;
   display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.08fr); align-items: center;
@@ -86,8 +88,7 @@
 .vanbox { position: absolute; left: -4%; top: 12%; width: 108%; transform-origin: 50% 50%; will-change: transform }
 .van {
   width: 100%; height: auto; display: block;
-  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 47%,#000 52%,transparent 96%);
-  mask-image: radial-gradient(ellipse 50% 50% at 50% 47%,#000 52%,transparent 96%);
+  /* Ei maskia: kuva on rajattu (van-blank-rajattu.webp), joten koko auto nakyy. */
 }
 .prop { position: absolute; opacity: 0; will-change: transform,opacity }
 .tag { position: absolute; display: grid; grid-template-columns: auto auto; column-gap: 9px; align-items: center; white-space: nowrap; text-align: left }
@@ -95,12 +96,16 @@
 .tag b { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--fg) }
 .tag span { font-size: 11px; color: var(--muted); letter-spacing: .01em }
 
+/* RAKENNE LOPPUTILASSA (3.10.2026): kyltti vasemmalla ylhaalla, auto
+   keskella ilman paallekkaisyytta, roll-up oikealla omalla paikallaan ja
+   kayntikortit edessa vasemmalla alhaalla. Jokaisen nimilappu on samalla
+   tavalla esineen vieressa tai alla, ei toisen esineen paalla. */
 /* roll-up */
-.rollup { right: -3%; bottom: 4%; width: 20% }
+.rollup { right: 0; bottom: 9%; width: 15% }
 .rollup svg { width: 100%; height: auto; display: block; overflow: visible; transform: perspective(700px) rotateY(-16deg); transform-origin: left center }
-.rollup .tag { left: -6%; bottom: -40px }
+.rollup .tag { left: 6%; top: calc(100% + 12px) }
 /* business cards */
-.cards { left: -8%; bottom: -14%; width: 50%; aspect-ratio: 1.5; perspective: 900px }
+.cards { left: 0; bottom: 0; width: 38%; aspect-ratio: 1.5; perspective: 900px }
 .plane { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(48deg) rotateZ(-20deg) }
 .bcard { position: absolute; width: 62%; aspect-ratio: 85/55; border-radius: 3px; transform-style: preserve-3d }
 .bcard::before { content: ""; position: absolute; inset: 4%; background: #000; filter: blur(10px); opacity: .55; transform: translateZ(-2px) translate(10px,14px) }
@@ -127,13 +132,13 @@
 .bcBack span { color: #55607a; line-height: 1.6 }
 .bcBack strong { color: #182034; font-weight: 700 }
 .bcBm { position: absolute; right: 10%; top: 12%; width: 20%; color: #182034 }
-.cards .tag { left: 74%; bottom: 24% }
+.cards .tag { left: 96%; bottom: 34% }
 /* light sign */
-.sign { left: 12%; top: 0; width: 32% }
+.sign { left: 3%; top: 0; width: 24% }
 .sign svg { width: 100%; height: auto; display: block; overflow: visible; position: relative }
 .sign .lit { opacity: var(--lit,0) }
 .spill { position: absolute; left: -60%; right: -60%; top: -70%; bottom: -60%; background: radial-gradient(ellipse 50% 45% at 50% 50%,var(--acc),transparent 70%); opacity: calc(var(--lit,0)*.6); pointer-events: none; mix-blend-mode: screen }
-.sign .tag { left: 4%; bottom: -30px }
+.sign .tag { left: 100%; top: 42%; margin-left: 14px }
 
 .scrollbar { display: flex; align-items: center; gap: 14px; width: 100%; max-width: 560px; margin-top: 44px }
 .mouse { flex: none; width: 20px; height: 31px; border: 2px solid var(--muted); border-radius: 11px; position: relative; transition: opacity .4s }
@@ -143,7 +148,7 @@
 .track { flex: 1; height: 4px; border-radius: 2px; background: var(--line); position: relative; overflow: hidden }
 .track::before { content: ""; position: absolute; inset: 0; width: 30%; background: linear-gradient(90deg,transparent,rgba(127,227,247,.55),transparent); animation: sweep 2.2s ease-in-out infinite; transition: opacity .4s; opacity: var(--idle,1) }
 @keyframes sweep { 0% { transform: translateX(-100%) } 100% { transform: translateX(340%) } }
-.fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--cyan); border-radius: 2px; box-shadow: 0 0 12px rgba(127,227,247,.6) }
+.fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; transform: scaleX(0); transform-origin: 0 50%; background: var(--cyan); border-radius: 2px; box-shadow: 0 0 12px rgba(127,227,247,.6) }
 .pct { flex: none; width: 3.2em; text-align: right; font-size: 13px; font-weight: 700; color: var(--cyan); font-variant-numeric: tabular-nums }
 @media (prefers-reduced-motion: reduce) { .mouse i, .track::before { animation: none } }
 .cap { font-size: clamp(15px,1.25vw,19px); font-weight: 500; color: var(--fg); opacity: 0; text-align: center; margin: 0 }
@@ -157,7 +162,7 @@
   .ctas { margin-top: 16px; gap: 18px }
   .btn { padding: 12px 22px; font-size: 15px }
   .link { font-size: 15px }
-  .stagewrap { height: 280vh; margin: 28px calc(-1*clamp(16px,6vw,96px)) 0 }
+  .stagewrap { height: 200vh; margin: 28px calc(-1*clamp(16px,6vw,96px)) 0 }
   .stage { position: sticky; top: calc(env(safe-area-inset-top,0px) + 76px); padding: 26px 16px 30px }
   .studio { background: linear-gradient(180deg,rgba(6,11,26,.5) 0%,transparent 30%),radial-gradient(ellipse 120% 60% at 50% 70%,#173068 0%,#0e1d40 40%,#081026 100%) }
   .scrollbar { margin-top: 30px; gap: 10px }
@@ -167,3 +172,21 @@
   .tag i { width: 5px }
 }
 @media (prefers-reduced-motion: reduce) { .sw { transition: none } }
+
+/* VIERINTAVIHJE: selkea kehotus heron alareunassa, kunnes kayttaja
+   aloittaa vierityksen. Pelkka pieni "Vierita"-palkki jai huomaamatta. */
+.vihje {
+  position: absolute; left: 50%; bottom: clamp(18px, 3.2vh, 34px); z-index: 4;
+  display: flex; align-items: center; gap: 12px; padding: 11px 20px 11px 16px;
+  border-radius: 999px; background: rgba(12,20,38,.72); color: var(--fg);
+  box-shadow: inset 0 0 0 1px rgba(127,227,247,.45), 0 0 34px -6px rgba(127,227,247,.55);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font-size: 15px; font-weight: 600; white-space: nowrap;
+  transform: translateX(-50%); transition: opacity .45s, transform .45s;
+  pointer-events: none;
+}
+.vihje svg { width: 22px; height: 22px; color: var(--cyan); animation: vihje 1.5s ease-in-out infinite }
+@keyframes vihje { 0%, 100% { transform: translateY(-3px) } 50% { transform: translateY(4px) } }
+.vihje[data-pois="1"] { opacity: 0; transform: translateX(-50%) translateY(12px) }
+@media (max-width: 900px) { .vihje { display: none } }
+@media (prefers-reduced-motion: reduce) { .vihje svg { animation: none } }

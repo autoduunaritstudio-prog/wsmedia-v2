@@ -1,3 +1,4 @@
+import SopiiKenelle from "../../components/SopiiKenelle";
 import type { CSSProperties } from "react";
 import BudgetForm from "../../components/BudgetForm";
 import { Kaiku } from "../../components/Maasto";
@@ -451,38 +452,12 @@ export function Hinnoittelu() {
 /* ---------- Kenelle ---------- */
 export function Kenelle() {
   return (
-    <section className="seo-sec" id="kenelle">
-      <Kaiku sana="KENELLE" puoli="vas" />
-      <div className="swrap">
-        <div className="seo-ord" data-rvs="">
-          <span>Kenelle</span>
-          <i>Sanomme sen suoraan</i>
-        </div>
-        <h2 className="seo-h2 rv">Kenelle kotisivut kannattaa teettää meillä?</h2>
-
-        <div className="kaksi porras rv" style={{ marginTop: "48px" }}>
-          <div>
-            <p className="kaksi-kick">Sopii sinulle, jos</p>
-            <ul className="seo-spec">
-              {SOPII.map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="kaksi-kick">Ei ehkä vielä, jos</p>
-            <ul className="seo-spec">
-              {EI_SOVI.map(([h, p]) => (
-                <li key={h}>
-                  {h}
-                  <s>{p}</s>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+    <SopiiKenelle
+      otsikko="Kenelle kotisivut kannattaa teettää meillä?"
+      sopii={SOPII.map((t) => ({ t }))}
+      ei={EI_SOVI.map(([t, s]) => ({ t, s }))}
+      epavarma="jos uudet verkkosivut eivät ole sinulle oikea ratkaisu"
+    />
   );
 }
 
@@ -535,7 +510,7 @@ export function Tarjous() {
     <section className="seo-sec kuvapohja" id="tarjous">
       <img
         className="pohjakuva"
-        src="/verkkosivut/koodi.webp"
+        src="/kuvat/tarjous-kortit.webp"
         alt=""
         aria-hidden="true"
         loading="lazy"
@@ -570,6 +545,8 @@ export function Tarjous() {
           </div>
 
           <BudgetForm
+            otsikko="Tarjouspyyntö"
+            vaihtoehdot
             showBudget={false}
             messageLabel="Millainen sivusto on mielessä?"
             note="Ei sitoumuksia."

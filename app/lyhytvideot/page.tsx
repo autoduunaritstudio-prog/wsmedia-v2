@@ -30,6 +30,7 @@ import {
 } from "./components/wsx";
 import { Laatta, Vaite } from "../components/Maasto";
 import { structuredData } from "./structured-data";
+import Toimintaalue from "../components/Toimintaalue";
 
 /* HAKUSANAT 30.9.2026 (Google Ads Keyword Planner, Suomi): "lyhytvideot"
    100-1 t./kk, "lyhytvideot yritykselle" 10-100 ja kilpailu suuri,
@@ -120,14 +121,13 @@ export default function Lyhytvideot() {
       {/* RAE. Sama kiintea rakeinen kalvo kuin kahdella muulla
           palvelusivulla: tasainen digitaalinen pinta lukee tyhjana. */}
       <div className="rae" aria-hidden="true" />
-      <div id="prog" />
 
       <Nav
         anchorBase="/"
         links={OVERLAY_NAV}
         ohitaKohde="#paasisalto"
         ctaHref="#tarjous"
-        ctaLabel="Pyydä tarjous"
+        ctaLabel="Varaa maksuton kartoitus"
         logoHref="/"
       />
 
@@ -208,6 +208,14 @@ export default function Lyhytvideot() {
                         <Hinnoittelu />
                         <Kenelle />
                         <Ukk />
+                        <Toimintaalue
+                          otsikko="Lyhytvideotuotantoa Espoosta koko Suomeen"
+                          rivit={[
+                            ["Espoo", "Toimipisteemme on Espoossa, ja kuvaamme päivittäin pääkaupunkiseudulla."],
+                            ["Koko Suomi", "Mitä kauempana olet, sitä enemmän kuvauspäivä vaatii sopimista, mutta etäisyys ei ole este."],
+                            ["Etänä", "Käsikirjoitus, editointi ja julkaisu toimivat etänä minne tahansa Suomessa."],
+                          ]}
+                        />
                         <Kaytannossa />
                         <Tarjous />
                       </Jakso>
@@ -223,14 +231,15 @@ export default function Lyhytvideot() {
       <Footer
         intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
+        base="© 2026 WS Media Oy"
         brandHeading="h2"
       />
 
       <Palkki
         otsikko="Maksuton kartoitus"
         selite="Katsotaan, mitkä kanavat ja videot sopivat yrityksellesi. Ei sido mihinkään."
-        nappi="Pyydä kartoitus"
+        nappi="Varaa kartoitus"
+        yhteys
       />
       <SiteEffects />
 

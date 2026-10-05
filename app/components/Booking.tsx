@@ -12,67 +12,42 @@
  * vasemmalla, mockup oikealla. Palvelut paattyy paneeliin jonka visuaali
  * on vasemmalla (normal/rev/normal), joten rev jatkaa vuorottelua.
  *
- * Kalenteri on puhdasta CSS-ruudukkoa kuten selainmockup ja
- * hintakonfiguraattori - ei kuvatiedostoa. Paivat ja kellonajat ovat
- * havainnollistavia: kuukautta tai paivamaaraa ei nimeta, jottei mockup
- * nayta tarjoavan oikeaa varattavaa aikaa.
+ * Kalenteri (BookingCal) on toimiva: paivan ja ajan valinta avaa
+ * varausikkunan valmiiksi taytettyna (5.10.2026).
  */
-const DAYS = Array.from({ length: 28 }, (_, i) => i + 1);
-/** Vapaat paivat mockupissa. */
-const FREE = new Set([4, 5, 11, 12, 18, 19, 25, 26]);
-const SELECTED = 12;
+import BookingCal from "./BookingCal";
+import { Kaiku } from "./Maasto";
+
 
 export default function Booking() {
+  /* UUSI ILME 5.10.2026: koko kartoitus on yksi tumma paneeli kuten
+     Referenssit ja tarjouslomake. Otsikko (ennen oma .kartlead-osionsa)
+     on paneelin sisalla, kalenteri on tummaa lasia sen oikealla puolella. */
   return (
     <section className="kart" id="kartoitus">
+      <Kaiku sana="KARTOITUS" puoli="oik" luokka="etu" />
       <div className="wrap">
-        <div className="svc rev rv">
-          <div className="svc-visual" data-par="0.02">
-            <div className="cal" data-tilt="-y" data-tilt-profile="mockup">
-              <div className="cal-head">
-                <b>Valitse sopiva aika</b>
-                <span className="cal-len">30 min</span>
-              </div>
-              <div className="cal-grid" aria-hidden="true">
-                {["Ma", "Ti", "Ke", "To", "Pe", "La", "Su"].map((d) => (
-                  <span className="cal-wd" key={d}>
-                    {d}
-                  </span>
-                ))}
-                {DAYS.map((d) => (
-                  <span
-                    className={`cal-day${FREE.has(d) ? " free" : ""}${d === SELECTED ? " sel" : ""}`}
-                    key={d}
-                  >
-                    {d}
-                  </span>
-                ))}
-              </div>
-              <div className="cal-slots" aria-hidden="true">
-                <span className="cal-slot">9.00</span>
-                <span className="cal-slot on">10.30</span>
-                <span className="cal-slot">13.00</span>
-              </div>
-            </div>
-          </div>
-          <div className="svc-txt" data-par="0.035">
-            <span className="kick">Ilmainen kartoitus</span>
-            <h3>30 minuuttia. Ei sitoumuksia.</h3>
-            <p>
-              Varaa aika suoraan kalenteristamme. Käymme läpi yrityksesi tarpeet ja kerromme
-              rehellisesti voimmeko auttaa — ilman myyntipuhetta.
+        <div className="kart-paneeli rv">
+          <div className="kart-teksti">
+            <p className="kart-kick">Ilmainen kartoitus</p>
+            <h2>
+              Katsotaan mitä sinun yrityksellesi <span>kannattaa tehdä.</span>
+            </h2>
+            <p className="kart-p">
+              Varaa aika suoraan kalenterista. Käymme läpi yrityksesi tarpeet ja kerromme
+              rehellisesti, voimmeko auttaa. Ilman myyntipuhetta.
             </p>
-            {/* TODO: kytke kalenteripalveluun kun se on valittu.
-                Vaihtoehdot: Cal.com (avoin lahdekoodi, itse isannoitava) tai
-                Calendly. Kun paatos on tehty, tasta tulee joko
-                <a className="btn" href="https://cal.com/wsmedia/30min"> tai
-                upotettu widget; jalkimmaisessa tapauksessa lisaa skripti
-                vasta klikkauksesta, jottei se lataudu jokaisella
-                sivulatauksella. Nyt tama on tarkoituksella toimimaton
-                type="button" ilman kasittelijaa. */}
-            <button type="button" className="btn">
+            <ul className="kart-faktat">
+              <li>30 minuuttia</li>
+              <li>Maksuton</li>
+              <li>Ei sitoumuksia</li>
+            </ul>
+            <button type="button" className="btn" data-varaus="">
               Varaa aika
             </button>
+          </div>
+          <div className="kart-kalenteri">
+            <BookingCal />
           </div>
         </div>
       </div>

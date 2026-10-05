@@ -76,7 +76,7 @@ export default function Hero() {
           </p>
           <div className="heroctas li d4">
             <a className="btn mag" href="#tarjous">
-              Pyydä tarjous
+              Varaa maksuton kartoitus
             </a>
             <a className="tlink" href="#hinnoittelu">
               Katso mitä verkkosivut maksavat

@@ -1,10 +1,11 @@
+import SopiiKenelle from "../../components/SopiiKenelle";
 import BudgetForm from "../../components/BudgetForm";
 import SmartLink from "../../components/SmartLink";
 import { FAQ_GROUPS } from "../faq";
 
 import Ikoni from "./Ikoni";
-import Kehotus from "./Kehotus";
 import { Kaiku } from "../../components/Maasto";
+import { KarttaPaketti } from "./Realismi";
 
 import type { ReactNode } from "react";
 
@@ -113,117 +114,42 @@ export function Aikataulu() {
    hiusviivat, mono-mikrolabelit, ei pyoristyksia. */
 
 export function Paikallinen() {
+  /* PAIKALLINEN B-ROLLINA (3.10.2026). Ennen tama oli pitka tekstiosio
+     ilmakuvan paalla: otsikko, kappale, nelja kohtaa, karttakortti ja
+     viela toinen kappale. Nyt se on hengahdys kuten muiden sivujen
+     kuvaosiot: yksi lause, yksi virke, kolme lyhytta tosiasiaa ja
+     karttatulokset sellaisina kuin asiakas ne nakee. */
   return (
-    <section className="seo-sec kuvapohja" id="paikallinen">
-      <Kaiku sana="PAIKALLINEN" puoli="oik" />
-      {/* KATUKUVA POIS. Se oli taysleveä kuva heti osion alussa, ja
-          sen ylapuolella oli viela toinen kuva: lukijalle se nayttti
-          silta etta sama tausta toistuu kahdesti. Yksi kuva riittaa,
-          ja se kuuluu osion POHJAKSI eika sen ylapuolelle.
-
-          Ilmakuva yosta: kadut piirtyvat valoina tummien korttelien
-          lapi ja kuvio lukee melkein karttana. Se on tasan se mita
-          paikallinen hakukoneoptimointi on, eli nakyminen kartalla
-          siina kaupungissa jossa asiakas on. */}
-      <img
-        className="pohjakuva"
-        src="/hakukoneoptimointi/kaupunki.webp"
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        data-par="0.028"
-      />
-      <div className="swrap">
-        <div className="seo-ord" data-rvs="">
-          <span>Paikallinen hakukoneoptimointi</span>
-          <i>Karttatulokset · Local Pack</i>
+    <section className="seo-sec hk-paikallinen" id="paikallinen">
+      <Kaiku sana="PAIKALLINEN" puoli="oik" kohta="ylos" />
+      <div className="swrap hk-pk">
+        <div>
+          <h2 className="seo-h2 rv">
+            <span className="korosta">”Palvelu + paikkakunta”</span> on se haku, jolla ostetaan.
+          </h2>
+          <p className="seo-lead rv" style={{ marginTop: "22px" }}>
+            Kun asiakas kirjoittaa hakuun palvelun ja paikkakunnan, hän on jo päättänyt ostaa. Kolme
+            ensimmäistä karttatulosta saa valtaosan klikkauksista.
+          </p>
+          <ul className="hk-broll-faktat rv">
+            <li>
+              <i className="hk-pk-ikoni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg></i>
+              <b>Yritysprofiili</b>
+              <span>Kategoriat, palvelut, aukioloajat ja kuvat kuntoon</span>
+            </li>
+            <li>
+              <i className="hk-pk-ikoni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h11M4 12h16M4 17h9"/><path d="M17 15l2 2 3-4"/></svg></i>
+              <b>Samat tiedot kaikkialla</b>
+              <span>Nimi, osoite ja puhelinnumero täsmälleen samoina</span>
+            </li>
+            <li>
+              <i className="hk-pk-ikoni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></i>
+              <b>Arvostelut</b>
+              <span>Tapa pyytää niitä tyytyväisiltä asiakkailta</span>
+            </li>
+          </ul>
         </div>
-
-        {/* Topografinen kartta ja kompassi: hakutulos on maasto, ja
-            paikallinen naky­vyys on sijainti siina. Kuva ankkuroituu
-            vasempaan reunaan tekstipalstan viereen eika istu kortissa,
-            mika on koko ero kuvituskuvan ja suunnitellun sivun valilla. */}
-        <div className="loc">
-          <div>
-            <div className="loc-ikoni">
-              <Ikoni nimi="kartta" />
-            </div>
-            <h2 className="seo-h2 rv">
-              <span className="mark">”Palvelu + paikkakunta”</span> on se haku, jolla ostetaan
-            </h2>
-            <p className="seo-lead rv" style={{ marginTop: "24px" }}>
-              Kun asiakas kirjoittaa hakukenttään palvelun ja paikkakunnan, hän on jo päättänyt
-              ostaa. Paikallinen hakukoneoptimointi ratkaisee, näytkö siinä hetkessä
-              karttatuloksissa ja hakutuloslistalla.
-            </p>
-            <ul className="seo-spec porras rv" style={{ marginTop: "32px" }}>
-              {[
-                "Google-yritysprofiili kuntoon: kategoriat, palvelut, aukioloajat ja kuvat",
-                "Karttatulokset eli Local Pack, kolme ensimmäistä saa valtaosan klikkauksista",
-                "NAP-tiedot: nimi, osoite ja puhelinnumero täsmälleen samoina kaikkialla",
-                "Arvostelut ja systemaattinen tapa pyytää niitä tyytyväisiltä asiakkailta",
-              ].map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div className="lpack kohoa rv">
-              <p className="lpack-k">Karttatulokset</p>
-              <div className="lmap" aria-hidden="true">
-                <svg viewBox="0 0 400 150" preserveAspectRatio="xMidYMid slice" fill="none">
-                  <rect width="400" height="150" fill="#eef1f5" />
-                  <path d="M0 36 H400 M0 86 H400 M0 126 H400" stroke="#dfe4ea" strokeWidth="8" />
-                  <path d="M70 0 V150 M190 0 V150 M300 0 V150" stroke="#dfe4ea" strokeWidth="8" />
-                  <rect x="14" y="8" width="42" height="22" rx="2" fill="#e4e9ef" />
-                  <rect x="86" y="46" width="88" height="30" rx="2" fill="#e4e9ef" />
-                  <rect x="208" y="8" width="76" height="22" rx="2" fill="#e4e9ef" />
-                  <rect x="316" y="96" width="70" height="26" rx="2" fill="#e4e9ef" />
-                  <path
-                    d="M0 104 C90 88, 150 116, 240 98 S 360 78, 400 90"
-                    stroke="#d3dce6"
-                    strokeWidth="7"
-                    fill="none"
-                  />
-                </svg>
-                <span className="lpulse" />
-                <span className="lpin" />
-              </div>
-              {(
-                [
-                  ["1", "Yrityksesi Oy", "4,9 ★ · Avoinna · 1,2 km", true],
-                  ["2", "Kilpailija Oy", "4,5 ★ · Avoinna · 2,8 km", false],
-                  ["3", "Toinen kilpailija", "4,2 ★ · Suljettu · 4,1 km", false],
-                ] as [string, string, string, boolean][]
-              ).map(([n, nimi, meta, oma]) => (
-                <div className={"lrow" + (oma ? " oma" : "")} key={n}>
-                  <em>{n}</em>
-                  <span>
-                    <b>{nimi}</b>
-                    <s>{meta}</s>
-                  </span>
-                  {oma ? <i>Sinä</i> : null}
-                </div>
-              ))}
-            </div>
-
-            <p className="seo-body" style={{ marginTop: "28px" }}>
-              <strong>Kaupunkisivut eivät maksa kappaleittain.</strong> Rakennamme ne yhdestä
-              pohjasta, joten viisi tai viisikymmentä paikkakuntaa maksaa saman verran, ja jokainen
-              niistä on oma rankattava sivunsa omalla hakusanallaan.
-            </p>
-
-            {/* Kaupunkilinkit poistettiin 1.10.2026: ne osoittivat
-                kaupunkisivuille, joita ei viela ole (404). Lisataan kun
-                sivut tehdaan. */}
-          </div>
-        </div>
-
-        <Kehotus kick="Palvelu + paikkakunta">
-          Katsotaan kartoituksessa, millä hauilla sinun alueellasi oikeasti etsitään
-          ja ketkä niissä nyt näkyvät.
-        </Kehotus>
+        <KarttaPaketti />
       </div>
     </section>
   );
@@ -397,7 +323,7 @@ export function Hinnoittelu() {
               </th>
               {TASOT.map((t) => (
                 <td className={t.hl ? "hl" : undefined} key={t.name}>
-                  <a className={t.hl ? "btn" : "btn alt"} href="#tarjous">
+                  <a className={t.hl ? "btn" : "btn alt"} href="#tarjous" data-paketti={t.name}>
                     Pyydä tarjous
                   </a>
                 </td>
@@ -424,58 +350,24 @@ export function Hinnoittelu() {
    hiusviivataulukko ei anna. */
 export function Kenelle() {
   return (
-    <section className="seo-sec" id="kenelle">
-      <Kaiku sana="KENELLE" puoli="vas" />
-      <div className="swrap">
-        <div className="seo-ord" data-rvs="">
-          <span>Rehellisesti</span>
-          <i>Kaksi palstaa, suora vastaus</i>
-        </div>
-        <h2 className="seo-h2 rv">Hakukoneoptimointi ei kannata kaikille.</h2>
-        <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Jos tilanteesi on oikean palstan kaltainen, sanomme sen kartoituksessa ja ohjaamme sinut
-          muualle. Se on halvempaa meille molemmille.
-        </p>
-
-        <div className="kaksi porras rv">
-          <div>
-            <p className="kaksi-k on">Kannattaa, jos</p>
-            <ul>
-              {[
-                "Asiakkaasi etsivät palveluasi Googlesta, toimialallasi on hakuvolyymia",
-                "Yhden asiakkaan arvo on satoja tai tuhansia euroja, ei muutamaa kymppiä",
-                "Kestät kolmesta kuuteen kuukautta ilman näkyviä tuloksia",
-                "Sivustosi on teknisesti kunnossa tai olet valmis laittamaan sen kuntoon",
-                "Haluat kanavan, joka ei sammu kun mainosbudjetti loppuu",
-              ].map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="kaksi-k ei">Ei kannata, jos</p>
-            <ul>
-              {[
-                "Tarvitset asiakkaita ensi viikolla, silloin oikea kanava on maksettu mainonta",
-                "Toimialaasi ei haeta: hakumäärät ovat lähellä nollaa alueellasi",
-                "Sivustolla on konversio-ongelma, lisää liikennettä ei korjaa sitä",
-                "Liiketoimintamalli tai kohderyhmä on vielä auki",
-                "Odotat takuuta ykkössijasta. Sellaista ei voi antaa kukaan.",
-              ].map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Osio sanoo itse "sanomme sen kartoituksessa", mutta sita ei
-            paassyt mistaan pyytamaan. Nyt paasee. */}
-        <Kehotus kick="Kumpi palsta on sinun?">
-          Jos et ole varma, kysy. Vastaamme suoraan myös silloin,
-          kun vastaus on ettei tämä kannata.
-        </Kehotus>
-      </div>
-    </section>
+    <SopiiKenelle
+      otsikko="Hakukoneoptimointi ei kannata kaikille."
+      sopii={[
+        "Asiakkaasi etsivät palveluasi Googlesta, toimialallasi on hakuvolyymia",
+        "Yhden asiakkaan arvo on satoja tai tuhansia euroja, ei muutamaa kymppiä",
+        "Kestät kolmesta kuuteen kuukautta ilman näkyviä tuloksia",
+        "Sivustosi on teknisesti kunnossa tai olet valmis laittamaan sen kuntoon",
+        "Haluat kanavan, joka ei sammu kun mainosbudjetti loppuu",
+      ].map((t) => ({ t }))}
+      ei={[
+        { t: "Tarvitset asiakkaita ensi viikolla", s: "Silloin oikea kanava on maksettu mainonta." },
+        { t: "Toimialaasi ei haeta", s: "Hakumäärät ovat lähellä nollaa alueellasi." },
+        { t: "Sivustolla on konversio-ongelma", s: "Lisää liikennettä ei korjaa sitä." },
+        { t: "Liiketoimintamalli tai kohderyhmä on vielä auki" },
+        { t: "Odotat takuuta ykkössijasta", s: "Sellaista ei voi antaa kukaan." },
+      ]}
+      epavarma="jos hakukoneoptimointi ei ole sinulle oikea ratkaisu"
+    />
   );
 }
 
@@ -531,25 +423,24 @@ export function Ukk() {
 export function Tarjous() {
   return (
     <section className="seo-sec kuvapohja" id="tarjous">
-      {/* Lomake ei kellu tyhjalla vaan tilassa: kaksi ihmista poydan
-          aaressa naytön valossa. Sama hetki johon lomake johtaa. */}
+      {/* Kaikkien sivujen tarjousosiossa sama kuva (3.10.2026): WS Median
+          kayntikortit tyopoydalla. */}
       <img
         className="pohjakuva"
-        src="/hakukoneoptimointi/poyta.webp"
+        src="/kuvat/tarjous-kortit.webp"
         alt=""
         aria-hidden="true"
         loading="lazy"
         data-par="0.028"
       />
       <div className="swrap">
-        <div className="seo-ord" data-rvs="">
-          <span>Maksuton kartoitus</span>
-          <i>Vastaus 24 tunnissa</i>
-        </div>
+        {/* SAMA KOKONAISUUS KUIN MUILLA PALVELUSIVUILLA (4.10.2026): sama
+            rakenne, samat luokat ja sama lomakekortti. Vain aihe vaihtuu. */}
+        <p className="seo-selite" data-rvs="">Vastaus 24 tunnissa</p>
         <div className="loc">
           <div>
             <h2 className="seo-h2 rv">
-              Pyydä tarjous <span className="mark">hakukoneoptimoinnista.</span>
+              Valmis näkymään <span className="korosta">Googlessa?</span>
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
               Käymme läpi sivustosi nykytilan, toimialasi hakuvolyymit ja kilpailutilanteen. Saat
@@ -568,25 +459,19 @@ export function Tarjous() {
                 <span>Kartoitus: nykytila, hakuvolyymit ja kilpailijoiden näkyvyys.</span>
               </li>
               <li>
-                <b>Suunnitelma</b>
-                <span>Mitä kannattaa tehdä ensin ja mitä se maksaa. Ei sitoumuksia.</span>
+                <b>Tarjous</b>
+                <span>Kirjallinen ehdotus hintoineen. Ei sitoumuksia ennen hyväksyntää.</span>
               </li>
             </ol>
           </div>
-          <div>
-            <BudgetForm
-              budgetLabel="Kuukausibudjetti"
-              messageLabel="Millä hauilla haluaisit näkyä? Kerro myös toimialasi."
-              submitLabel="Pyydä maksuton kartoitus"
-              extraField={{ id: "sivu", label: "Verkkosivusi osoite", placeholder: "yrityksesi.fi" }}
-              note="Vastaamme 24 tunnin sisällä. Kartoitus ei sido mihinkään."
-              min={200}
-              max={5000}
-              step={50}
-              initial={890}
-              unit="€/kk"
-            />
-          </div>
+          <BudgetForm
+            otsikko="Tarjouspyyntö"
+            vaihtoehdot
+            showBudget={false}
+            messageLabel="Millä hauilla haluaisit näkyä? Kerro myös toimialasi."
+            note="Ei sitoumuksia."
+            tilt="y"
+          />
         </div>
       </div>
     </section>

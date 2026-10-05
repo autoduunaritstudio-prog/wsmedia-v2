@@ -6,7 +6,6 @@ import Backdrop from "../components/Backdrop";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 import SiteEffects from "../components/SiteEffects";
-import SmartLink from "../components/SmartLink";
 import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 import CookieSettingsButton from "../components/consent/CookieSettingsButton";
 
@@ -40,21 +39,9 @@ export default function Tietosuoja() {
   return (
     <div className="page-tietosuoja">
       <Backdrop variant="simple" />
-      <div id="prog" />
 
       <Nav
         anchorBase="/" links={OVERLAY_NAV} ctaHref="/#lomake" ctaLabel="Pyydä tarjous" logoHref="/" />
-
-      <div className="wrap crumbs">
-        <nav aria-label="Murupolku">
-          <ol>
-            <li>
-              <SmartLink href="/">Etusivu</SmartLink>
-            </li>
-            <li aria-current="page">Tietosuojaseloste</li>
-          </ol>
-        </nav>
-      </div>
 
       <header className="ts-head">
         <div className="wrap-n">
@@ -128,7 +115,7 @@ export default function Tietosuoja() {
       <Footer
         intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
+        base="© 2026 WS Media Oy"
       />
 
       <SiteEffects />

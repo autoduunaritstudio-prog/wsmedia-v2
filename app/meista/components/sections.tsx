@@ -57,7 +57,7 @@ export function Hero() {
           </p>
           <div className="heroctas">
             <a className="btn mag" href="#tarjous">
-              Pyydä maksuton kartoitus
+              Varaa maksuton kartoitus
             </a>
           </div>
           <ul className="mt-hero-pal" aria-label="Palvelumme">
@@ -140,7 +140,7 @@ const TIIMI: { nimi: string; rooli: string; tyot: string[]; huom: string }[] = [
     huom: "Yrittäjänä yli 11 vuotta.",
   },
   {
-    nimi: "Alex",
+    nimi: "Alex Pettersborg",
     rooli: "Toimitusjohtaja ja tuottaja",
     tyot: ["Lyhytvideotuotanto", "Kuvaukset", "Meta-mainonta"],
     huom: "Tietää, mikä toimii kameran edessä.",
@@ -222,25 +222,49 @@ export function Tapa() {
             </div>
           </div>
           <div className="mt-t">
-            <h3>Yksi yhteyshenkilö</h3>
-            <p>Asiasi etenee yhden ihmisen kautta alusta loppuun.</p>
+            <svg className="mt-ik" viewBox="0 0 32 32" aria-hidden="true">
+              <path d="M16 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM7 27c0-5 4-8.5 9-8.5s9 3.5 9 8.5" />
+            </svg>
+            <div>
+              <h3>Yksi yhteyshenkilö</h3>
+              <p>Asiasi etenee yhden ihmisen kautta alusta loppuun.</p>
+            </div>
           </div>
           <div className="mt-t">
-            <h3>Suora puhe</h3>
-            <p>Hinnat ja ehdot kerrotaan etukäteen. Ei piilokuluja.</p>
+            <svg className="mt-ik" viewBox="0 0 32 32" aria-hidden="true">
+              <path d="M5 8a3 3 0 0 1 3-3h16a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H13l-6 5v-5H8a3 3 0 0 1-3-3zM11 12h10M11 16h6" />
+            </svg>
+            <div>
+              <h3>Suora puhe</h3>
+              <p>Hinnat ja ehdot kerrotaan etukäteen. Ei piilokuluja.</p>
+            </div>
           </div>
           <div className="mt-t wide">
-            <h3>Kartoitus ei sido mihinkään</h3>
-            <p>
-              Käymme läpi nykytilan, kilpailijat ja mahdollisuudet. Vastaamme
-              viestiin 24 tunnin sisällä.
-            </p>
+            <svg className="mt-ik" viewBox="0 0 32 32" aria-hidden="true">
+              <path d="M16 28a12 12 0 1 0 0-24 12 12 0 0 0 0 24zM20.5 11.5l-2.8 6.2-6.2 2.8 2.8-6.2z" />
+            </svg>
+            <div>
+              <h3>Kartoitus ei sido mihinkään</h3>
+              <p>
+                Käymme läpi nykytilan, kilpailijat ja mahdollisuudet. Vastaamme
+                viestiin 24 tunnin sisällä.
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+const FAKTAT: [string, string][] = [
+  ["Toimisto", "Kuusiniemi, Espoo"],
+  ["Palvelemme", "Pääkaupunkiseutu ja koko Suomi"],
+  ["Tiimi", "3 tekijää, yksi yhteyshenkilö"],
+  ["Palvelut", "Lyhytvideot, verkkosivut, SEO, grafiikka, Meta-mainonta"],
+  ["Avoinna", "Ma–pe 9–18, la 11–16"],
+  ["Vastaus", "Viestiin 24 tunnin sisällä"],
+];
 
 /* ---------- WS Media lyhyesti ----------
    Juokseva teksti hakukoneelle ja lukijalle: kuka, mita, missa. Linkit
@@ -250,27 +274,37 @@ export function Lyhyesti() {
     <section className="seo-sec" id="lyhyesti">
       <div className="swrap">
         <h2 className="seo-h2 rv">WS Media lyhyesti</h2>
-        <div className="seoprose mt-proosa rv">
-          <p>
-            WS Media Oy on espoolainen mainostoimisto. Teemme yrityksille{" "}
-            <a href="/lyhytvideot">lyhytvideoita</a> TikTokiin, Instagramiin ja YouTubeen,{" "}
-            <a href="/verkkosivut">verkkosivuja</a>,{" "}
-            <a href="/hakukoneoptimointi">hakukoneoptimointia</a> ja{" "}
-            <a href="/graafinen-suunnittelu">graafista suunnittelua</a> sekä hoidamme Meta-mainontaa.
-            Toimisto on Espoon Kuusiniemessä, ja asiakkaitamme on pääkaupunkiseudulla ja muualla
-            Suomessa.
-          </p>
-          <p>
-            Tiimissä on kolme tekijää. Ville Karppinen vastaa graafisesta suunnittelusta ja
-            asiakkuuksista, Tuomas Ivanov verkkosivuista ja hakukoneoptimoinnista ja Alex
-            videotuotannosta ja Meta-mainonnasta. Kuvaamme yrityksesi tiloissa tai sovitussa
-            paikassa, ja valmiit videot ja sivut toimitetaan sähköisesti.
-          </p>
-          <p>
-            Asiakkaitamme ovat esimerkiksi Colormaster, YDR Autohuolto, White Star, VauhtiVeikot ja
-            Laaksolahden Sähkö. Olemme avoinna arkisin 9–18 ja lauantaisin 11–16, ja kaikki
-            yhteystavat löydät <a href="/yhteystiedot">yhteystiedoista</a>.
-          </p>
+        <div className="mt-ly">
+          <div className="seoprose mt-proosa rv">
+            <p>
+              WS Media Oy on espoolainen mainostoimisto. Teemme yrityksille{" "}
+              <a href="/lyhytvideot">lyhytvideoita</a> TikTokiin, Instagramiin ja YouTubeen,{" "}
+              <a href="/verkkosivut">verkkosivuja</a>,{" "}
+              <a href="/hakukoneoptimointi">hakukoneoptimointia</a> ja{" "}
+              <a href="/graafinen-suunnittelu">graafista suunnittelua</a> sekä hoidamme Meta-mainontaa.
+              Toimisto on Espoon Kuusiniemessä, ja asiakkaitamme on pääkaupunkiseudulla ja muualla
+              Suomessa.
+            </p>
+            <p>
+              Tiimissä on kolme tekijää. Ville Karppinen vastaa graafisesta suunnittelusta ja
+              asiakkuuksista, Tuomas Ivanov verkkosivuista ja hakukoneoptimoinnista ja Alex Pettersborg
+              videotuotannosta ja Meta-mainonnasta. Kuvaamme yrityksesi tiloissa tai sovitussa
+              paikassa, ja valmiit videot ja sivut toimitetaan sähköisesti.
+            </p>
+            <p>
+              Olemme avoinna arkisin 9–18 ja lauantaisin 11–16, ja kaikki yhteystavat löydät{" "}
+              <a href="/yhteystiedot">yhteystiedoista</a>.
+            </p>
+          </div>
+          {/* Tietopaneeli: samat faktat silmailtavassa muodossa. */}
+          <dl className="mt-faktat rv">
+            {FAKTAT.map(([k, v]) => (
+              <div key={k}>
+                <dt>{k}</dt>
+                <dd>{v}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>
@@ -284,7 +318,7 @@ export function Tarjous() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className="pohjakuva"
-        src="/verkkosivut/kartoitus.webp"
+        src="/kuvat/tarjous-kortit.webp"
         alt=""
         aria-hidden="true"
         loading="lazy"
@@ -297,7 +331,7 @@ export function Tarjous() {
         <div className="loc">
           <div>
             <h2 className="seo-h2 rv">
-              Kerro, <span className="korosta">mitä haluat saada aikaan.</span>
+              Mitä haluat <span className="korosta">saada aikaan?</span>
             </h2>
             <p className="seo-lead rv" style={{ marginTop: "26px" }}>
               Käymme tilanteesi läpi ja kerromme suoraan, miten voimme auttaa,
@@ -325,6 +359,8 @@ export function Tarjous() {
           </div>
 
           <BudgetForm
+            otsikko="Tarjouspyyntö"
+            vaihtoehdot
             showBudget={false}
             messageLabel="Mitä haluaisit saada aikaan?"
             note="Ei sitoumuksia."

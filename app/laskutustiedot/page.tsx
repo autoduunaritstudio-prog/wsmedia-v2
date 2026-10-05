@@ -56,7 +56,6 @@ export default function Laskutustiedot() {
   return (
     <div className="page-palvelu page-hakukoneoptimointi page-laskutustiedot wsx">
       <NetBackdrop merkit={false} />
-      <div id="prog" />
       <div className="rae" aria-hidden="true" />
 
       <Nav anchorBase="/" links={OVERLAY_NAV} ctaHref={ROUTES.yhteys} ctaLabel="Ota yhteyttä" logoHref="/" />
@@ -111,7 +110,7 @@ export default function Laskutustiedot() {
       <Footer
         intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
+        base="© 2026 WS Media Oy"
         brandHeading="h2"
       />
       <SiteEffects />

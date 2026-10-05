@@ -3,6 +3,7 @@ import "../_tyylit/meista.css";
 import type { Metadata } from "next";
 
 import Footer from "../components/Footer";
+import Logos from "../components/Logos";
 import Nav from "../components/Nav";
 import NetBackdrop from "../components/NetBackdrop";
 import Palkki from "../components/Palkki";
@@ -45,12 +46,13 @@ export default function Meista() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd()) }}
       />
       <NetBackdrop merkit={false} />
-      <div id="prog" />
       <div className="rae" aria-hidden="true" />
 
-      <Nav anchorBase="/" links={OVERLAY_NAV} ctaHref="#tarjous" ctaLabel="Pyydä tarjous" logoHref="/" />
+      <Nav anchorBase="/" links={OVERLAY_NAV} ctaHref="#tarjous" ctaLabel="Varaa maksuton kartoitus" logoHref="/" />
 
       <Hero />
+      {/* Asiakkaat logonauhana kuten palvelusivuilla. */}
+      <Logos />
 
       {/* Ei peittoketjua: osiot seuraavat toisiaan tavallisessa virrassa,
           ja kaksi kuvakaistaa toimivat hengahdyksina. */}
@@ -76,14 +78,14 @@ export default function Meista() {
       <Footer
         intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
+        base="© 2026 WS Media Oy"
         brandHeading="h2"
       />
 
       <Palkki
         otsikko="Maksuton kartoitus"
         selite="Käymme tilanteesi läpi ja kerromme, mikä auttaa. Ei sido mihinkään."
-        nappi="Pyydä kartoitus"
+        nappi="Varaa kartoitus"
       />
       <SiteEffects />
     </div>

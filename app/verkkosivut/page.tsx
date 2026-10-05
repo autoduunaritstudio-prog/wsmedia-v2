@@ -15,6 +15,7 @@ import Jakso from "../components/Jakso";
 import Hero from "./components/Hero";
 import { buildJsonLd } from "./jsonld";
 import { Laatta, Vaite } from "../components/Maasto";
+import Toimintaalue from "../components/Toimintaalue";
 import {
   Hinnoittelu,
   Kenelle,
@@ -74,14 +75,13 @@ export default function Verkkosivut() {
       <NetBackdrop merkit={false} />
 
       <div className="rae" aria-hidden="true" />
-      <div id="prog" />
 
       <Nav
         anchorBase="/"
         links={OVERLAY_NAV}
         ohitaKohde="#paasisalto"
         ctaHref="#tarjous"
-        ctaLabel="Pyydä tarjous"
+        ctaLabel="Varaa maksuton kartoitus"
         logoHref="/"
       />
 
@@ -227,6 +227,14 @@ export default function Verkkosivut() {
                   <Jakso>
                     <Hinnoittelu />
                     <Ukk />
+                    <Toimintaalue
+                      otsikko="Verkkosivut yritykselle Espoosta koko Suomeen"
+                      rivit={[
+                        ["Espoo", "Toimipisteemme on Espoossa, ja pääkaupunkiseudulla tapaamme asiakkaita viikoittain."],
+                        ["Koko Suomi", "Kartoitus hoituu puhelimessa, suunnittelua seurataan demo-osoitteesta ja julkaisu tapahtuu verkossa. Sijainti ei vaikuta hintaan eikä aikatauluun."],
+                        ["Haussa", "Jos yrityksesi palvelee tiettyä aluetta, sivusto rakennetaan näkymään niillä hauilla, joissa paikkakunta on mukana."],
+                      ]}
+                    />
                     <Tarjous />
                   </Jakso>
                 </div>
@@ -241,14 +249,14 @@ export default function Verkkosivut() {
       <Footer
         intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
+        base="© 2026 WS Media Oy"
         brandHeading="h2"
       />
 
       <Palkki
         otsikko="Kiinteähintainen tarjous"
         selite="Kerro mitä yritys tekee, saat hinnan 24 tunnissa. Ei sido mihinkään."
-        nappi="Pyydä tarjous"
+        nappi="Varaa kartoitus"
       />
       <SiteEffects />
     </div>

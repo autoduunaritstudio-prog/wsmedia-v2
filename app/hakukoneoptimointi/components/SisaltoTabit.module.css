@@ -1,0 +1,83 @@
+/* NELJA OSA-ALUETTA VALILEHTINA, ks. SisaltoTabit.tsx.
+   Oranssi (#ff9a4d) on muiden sivujen toinen korostusvari: tassa se
+   merkitsee valittua valilehtea ja tehtavarivien merkkia. */
+
+.tabit {
+  --oranssi: #ff9a4d;
+  display: grid; grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+  gap: clamp(24px, 3vw, 48px); margin-top: 44px; align-items: start;
+}
+
+/* --- Valilehdet --- */
+.lista { display: grid; gap: 10px; position: sticky; top: 110px }
+.tab {
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: center;
+  width: 100%; text-align: left; cursor: pointer;
+  padding: 16px 18px; border-radius: 16px;
+  font: inherit; color: #c9d6e2;
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(143, 179, 194, .22);
+  transition: background-color .3s, border-color .3s, transform .3s cubic-bezier(.2, .7, .2, 1);
+}
+.tab:hover { background: rgba(255, 255, 255, .07) }
+.tab:focus-visible { outline: 2px solid var(--oranssi); outline-offset: 3px }
+.tab[aria-selected="true"] {
+  background: linear-gradient(135deg, rgba(255, 154, 77, .16), rgba(111, 236, 255, .06));
+  border-color: rgba(255, 154, 77, .6);
+  transform: translateX(6px);
+}
+.tabIkoni { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: rgba(111, 236, 255, .1); color: #6fecff }
+.tab[aria-selected="true"] .tabIkoni { background: rgba(255, 154, 77, .18); color: var(--oranssi) }
+.tabTeksti { display: flex; flex-direction: column; gap: 2px }
+.tabTeksti b { font-size: 16px; font-weight: 600; color: #f2f6fa }
+.tabTeksti small { font-size: 13px; color: #8fb3c2 }
+/* Automaattisen vaihdon edistyminen. */
+.palkki { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--oranssi); transform: scaleX(0); transform-origin: 0 50% }
+.tabit[data-auto="1"] .tab[aria-selected="true"] .palkki { animation: edisty 7s linear forwards }
+@keyframes edisty { to { transform: scaleX(1) } }
+
+/* --- Paneeli --- */
+.paneelit {
+  position: relative; border-radius: 24px; padding: clamp(22px, 2.6vw, 36px);
+  background: rgba(16, 30, 54, .55);
+  border: 1px solid rgba(111, 236, 255, .16);
+  box-shadow: 0 40px 90px -50px rgba(0, 0, 0, .7);
+  min-height: 560px;
+}
+.paneeli { display: none }
+.paneeli[data-on="1"] { display: block; animation: sisaan .5s cubic-bezier(.2, .7, .2, 1) }
+@keyframes sisaan { from { opacity: 0; transform: translateY(14px) } }
+
+.ylä { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start }
+.otsikko { margin: 0; font-size: clamp(24px, 2.2vw, 32px); font-weight: 650; color: #fff; letter-spacing: -.015em }
+.kuvaus { margin: 14px 0 0; font-size: 16px; line-height: 1.6; color: #c9d6e2; max-width: 46ch }
+.kuva { min-width: 0 }
+
+.rivit { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; margin: 28px 0 0 }
+.rivit > div {
+  position: relative; padding: 14px 0 14px 22px; border-top: 1px solid rgba(143, 179, 194, .18);
+}
+.rivit > div::before {
+  content: ""; position: absolute; left: 0; top: 21px; width: 8px; height: 8px; border-radius: 2px;
+  background: var(--oranssi); rotate: 45deg;
+}
+.rivit dt { font-size: 15px; font-weight: 600; color: #f2f6fa }
+.rivit dd { margin: 3px 0 0; font-size: 14px; line-height: 1.5; color: #a9bccb }
+.paneeli[data-on="1"] .rivit > div { animation: rivi .45s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--j) * 70ms + 150ms) }
+@keyframes rivi { from { opacity: 0; transform: translateY(10px) } }
+
+@media (max-width: 980px) {
+  .tabit { grid-template-columns: minmax(0, 1fr) }
+  .lista { position: static; grid-template-columns: 1fr 1fr }
+  .tab { padding: 12px; grid-template-columns: 32px 1fr; gap: 10px }
+  .tab[aria-selected="true"] { transform: none }
+  .tabIkoni { width: 32px; height: 32px }
+  .tabTeksti b { font-size: 14px }
+  .paneelit { min-height: 0 }
+  .ylä, .rivit { grid-template-columns: minmax(0, 1fr) }
+}
+@media (prefers-reduced-motion: reduce) {
+  .paneeli[data-on="1"], .paneeli[data-on="1"] .rivit > div { animation: none }
+  .tab { transition: none }
+}

@@ -8,6 +8,7 @@ import { SIVUSTO } from "./sivusto";
 
 import Analytics from "./components/consent/Analytics";
 import Pehmeavieritys from "./components/Pehmeavieritys";
+import Kehotukset from "./components/Kehotukset";
 import CookieBanner from "./components/consent/CookieBanner";
 import { SUOSTUMUS_ENNEN_PIIRTOA } from "./components/consent/consent";
 
@@ -66,7 +67,7 @@ export default function RootLayout({
      */
     /* suppressHydrationWarning: alla oleva skripti lisaa <html>:lle
        data-suostumus-attribuutin ennen Reactin hydraatiota. */
-    <html lang="fi" className={instrument.variable} suppressHydrationWarning>
+    <html lang="fi" className={instrument.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* EVASTEBANNERI ILMAN VALAHDYSTA (2.10.2026). Banneri on
             palvelimen HTML:ssa, jotta ensikavija nakee sen heti eika vasta
@@ -80,6 +81,7 @@ export default function RootLayout({
       <body>
         {children}
         <Pehmeavieritys />
+        <Kehotukset />
         <CookieBanner />
         <Analytics />
       </body>

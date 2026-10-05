@@ -201,9 +201,17 @@ export default function PriceConfig() {
           )}
         </p>
         <p className={g.yvAlv}>Hintaan lisätään arvonlisävero 25,5 %. Sisältää suunnittelun, materiaalit ja asennuksen.</p>
-        <a className={`btn ${g.yvNappi}`} href="#tarjous">
+        {/* Avaa Ota yhteytta -ikkunan, johon valinnat ja arvio tulevat
+            valmiiksi (Kehotukset.tsx lukee data-paketin). */}
+        <button
+          type="button"
+          className={`btn ${g.yvNappi}`}
+          data-yhteys=""
+          data-paketti-otsikko="Hinta-arvio"
+          data-paketti={rivit.length ? `${rivit.map((r) => r.nimi).join(", ")} (${fmt(lo)}–${fmt(hi)} € + alv)` : ""}
+        >
           Pyydä tarkka tarjous
-        </a>
+        </button>
       </aside>
     </div>
   );

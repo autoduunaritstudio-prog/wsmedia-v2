@@ -1,4 +1,4 @@
-import { Sijoituskayra } from "./Grafiikat";
+import HakuNousu from "./HakuNousu";
 
 /**
  * TUMMA ELOKUVALLINEN HERO, KUTEN ETUSIVULLA.
@@ -24,42 +24,66 @@ import { Sijoituskayra } from "./Grafiikat";
  */
 export default function Hero() {
   return (
+    /* .hk-pin: desktopilla hero pysyy paikallaan vierityskaaren ajan,
+       jolloin tuloslista ehtii nousta. Ks. globals.css. */
+    <div className="hk-pin">
     <header className="seo-hero">
       {/* Taustakuva ja sen paalla tummennus. Tummennus on pakollinen:
           ilman sita valkoinen otsikko istuisi kuvion kirkkaiden
           kohtien paalla eika kontrasti olisi mitattavissa. */}
-      <div className="hero-tausta" aria-hidden="true">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/hakukoneoptimointi/hf1.webp" alt="" data-par="0.075" data-parx="0.018" />
+      {/* KORKEUSKAYRAKARTTA (3.10.2026). Sivun oma kuvio: hakutulokset
+          ovat maasto jossa noustaan, ja paikallinen haku on kartta.
+          Pohja on sama yonsininen kuin muilla palvelusivuilla, ei musta. */}
+
+      <div className="swrap hero-sisalto hk-hero">
+        <div className="hk-teksti">
+          <p className="hero-kick">Hakukoneoptimointi yritykselle</p>
+
+          <h1 className="seo-h1 li d2">
+            Löydy silloin,
+            <br />
+            kun asiakas <span className="accent">etsii palvelua.</span>
+          </h1>
+
+          <p className="hero-lead li d3">
+            Tekninen hakukoneoptimointi, sisältö ja paikallinen näkyvyys yhdeltä tiimiltä. Sama työ
+            nostaa sinut myös tekoälyhakujen vastauksiin.
+          </p>
+
+          <div className="heroctas li d4">
+            <a className="btn mag" href="#tarjous">
+              Varaa maksuton kartoitus
+            </a>
+            <a className="tlink" href="#hinnoittelu">
+              Katso hinnat
+            </a>
+          </div>
+        </div>
+
+        {/* Oikea palsta: hakutulos nousee vierityksen mukana, ks. HakuNousu.tsx. */}
+        <div className="hk-visu li d5">
+          <HakuNousu />
+        </div>
       </div>
-
-      <div className="swrap hero-sisalto">
-        <p className="hero-kick">Hakukoneoptimointi yritykselle</p>
-
-        <h1 className="seo-h1 li d2">
-          Löydy silloin,
-          <br />
-          kun asiakas <span className="accent">etsii palvelua.</span>
-        </h1>
-
-        <p className="hero-lead li d3">
-          Tekninen hakukoneoptimointi, sisältö ja paikallinen näkyvyys yhdeltä tiimiltä. Sama työ
-          nostaa sinut myös tekoälyhakujen vastauksiin.
-        </p>
-
-        <div className="heroctas li d4">
-          <a className="btn mag" href="#tarjous">
-            Pyydä maksuton kartoitus
-          </a>
-          <a className="tlink" href="#hinnoittelu">
-            Katso hinnat
-          </a>
-        </div>
-
-        <div className="hero-todiste li d5">
-          <Sijoituskayra korkeus={210} />
-        </div>
+      {/* Vierintavihje: kertoo etta hero on vieritettava eika valmis
+          kuva. Piiloutuu kun tulos lahtee nousemaan (HakuNousu). */}
+      <div className="hk-vihje" data-n="vihje" aria-hidden="true">
+        <span className="hk-hiiri">
+          <i />
+        </span>
+        <span className="hk-vihje-teksti">
+          <b>Vieritä alas</b>
+          <small>ja katso, miten yrityksesi nousee sijalta 5 ykköseksi</small>
+        </span>
+        <span className="hk-vihje-sija">
+          <em>#5</em>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+          <em className="yksi">#1</em>
+        </span>
       </div>
     </header>
+    </div>
   );
 }

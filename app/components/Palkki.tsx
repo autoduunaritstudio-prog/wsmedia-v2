@@ -24,11 +24,13 @@ import { useEffect, useRef, useState } from "react";
 export default function Palkki({
   otsikko = "Maksuton kartoitus",
   selite = "Nykytila, hakuvolyymit ja kilpailutilanne. Ei sido mihinkään.",
-  nappi = "Pyydä kartoitus",
+  nappi = "Varaa kartoitus",
+  yhteys = true,
 }: {
   otsikko?: string;
   selite?: string;
   nappi?: string;
+  yhteys?: boolean;
 } = {}) {
   const [nayta, setNayta] = useState(false);
   const ohi = useRef(false);
@@ -37,54 +39,82 @@ export default function Palkki({
   useEffect(() => {
     const paivita = () => setNayta(ohi.current && !lomake.current);
 
-    /* MITATTU VIKA: alasivuilla hero on position: sticky, joten se ei
-       poistu nakymasta koskaan. "Hero on ohi" -ehto ei siis voinut
-       tayttya ja palkki jai nakymattomiin koko sivun ajaksi.
+    /* HETI HERON JALKEEN (4.10.2026). Aiemmin ehto luettiin coverista
+       tai [data-palkki-alku]-osiosta, ja palkki tuli vasta 2000-4600 px
+       kohdalla. Nyt raja on heron oma loppu dokumentissa: kun hero on
+       vieritetty ohi niin, etta siita on jaljella alle 40 % nakymasta,
+       heron omat napit ovat poissa ja palkki tulee.
 
-       Ehto luetaan nyt COVERISTA: kun peittava kerros on noussut
-       nakyman puolivaliin, hero on katsottu ja sen omat napit ovat
-       poissa. Sivulla jolla coveria ei ole (SEO-sivu) kaytetaan
-       heroa kuten ennenkin, ja silloin se ei ole pinnattu. */
-    /* ALKUKOHTA VOIDAAN MERKITA SIVULLA. Coverista luettu ehto tuo
-       palkin heti kun peittava kerros on noussut nakyman puolivaliin,
-       eli kaytannossa heti heron jalkeen. Lyhytvideot-sivulla se on
-       liian aikaisin: kavija on silloin vasta ensimmaisessa osiossa
-       eika ole nahnyt viela yhtaan perustetta.
-
-       Jos sivulla on [data-palkki-alku], palkki tulee vasta kun se osio
-       on noussut nakyman puolivaliin. Ehto on sama molemmissa
-       tapauksissa (elementti on nakymassa), joten haaroja ei tule
-       kahta. */
-    const merkitty = document.querySelector("[data-palkki-alku]");
+       Heron korkeus mitataan ilman pinnausta: sticky-esivanhemmat
+       hetkeksi staticiksi, koska pinnatun elementin offsetTop sisaltaa
+       pinnauksen siirtyman (ks. SiteEffects asetteluY). */
     const hero =
-      merkitty ??
-      document.querySelector(".stickysub > .cover") ??
-      document.querySelector(".seo-hero") ??
-      document.querySelector("header");
-    const tarjous = document.querySelector("#tarjous");
+      document.querySelector<HTMLElement>("[data-hero]") ??
+      document.querySelector<HTMLElement>(".hk-pin") ??
+      document.querySelector<HTMLElement>(".page-palvelu header") ??
+      document.querySelector<HTMLElement>("header");
+    /* Etusivulla lomake on #lomake. */
+    const tarjous = document.querySelector("#tarjous") ?? document.querySelector("#lomake");
     if (!hero || !tarjous) return;
 
-    /* Coverilla ehto on kaanteinen: se ON nakymassa kun hero on ohi.
-       rootMargin -50% siirtaa rajan nakyman puolivaliin, jolloin
-       palkki tulee vasta kun cover on todella peittanyt heron. */
-    const coverina = !!merkitty || hero.classList.contains("cover");
-    /* SIJAINTI LUETAAN VIERITYKSESTA, EI IntersectionObserverilla.
-       Merkitty osio on pinon vaihe, joka saa peitossa ollessaan
-       visibility: hidden (SiteEffects). Safari lakkasi silloin
-       raportoimasta sita nakyvaksi, ja palkki katosi valilla kesken
-       sivun. Ehto on sama kuin ennen: rootMargin -50 % ylhaalta eli
-       elementti leikkaa nakyman alempaa puoliskoa. */
+    let raja = 0;
+    const mittaa = () => {
+      const tarttuvat: HTMLElement[] = [];
+      for (let a: HTMLElement | null = hero; a && a !== document.body; a = a.parentElement)
+        if (getComputedStyle(a).position === "sticky") tarttuvat.push(a);
+      const ennen = tarttuvat.map((a) => a.style.getPropertyValue("position"));
+      tarttuvat.forEach((a) => a.style.setProperty("position", "static", "important"));
+      let y = 0;
+      for (let n: HTMLElement | null = hero; n; n = n.offsetParent as HTMLElement | null) y += n.offsetTop;
+      const loppu = y + hero.offsetHeight;
+      tarttuvat.forEach((a, i) => (ennen[i] ? a.style.setProperty("position", ennen[i]) : a.style.removeProperty("position")));
+      raja = loppu - window.innerHeight * 0.4;
+    };
+
+    /* Tarkempi ehto: heron oma paanappi. Palkki tulee sina hetkena kun
+       nappi poistuu nakyvista tai cover peittaa sen, jolloin konversio-
+       painike on ruudulla koko ajan. Osumatesti tehdaan vain heron
+       alueella ja kerran kehyksessa. */
+    const heronNappi = hero.querySelector<HTMLElement>("a.btn, button.btn, a[href=\"#tarjous\"]");
+    const nappiNakyy = () => {
+      if (!heronNappi) return window.scrollY <= raja;
+      const r = heronNappi.getBoundingClientRect();
+      if (r.bottom <= 0 || r.top >= window.innerHeight || r.width === 0) return false;
+      const e = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return !!e && (e === heronNappi || heronNappi.contains(e));
+    };
     let viimeksi: boolean | null = null;
+    let raf = 0;
     const tarkista = () => {
-      const r = hero.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const leikkaa = coverina ? r.top < vh && r.bottom > vh * 0.5 : r.top < vh && r.bottom > 0;
-      const uusi = coverina ? leikkaa : !leikkaa;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        laske();
+      });
+    };
+    /* ETUSIVU (5.10.2026): palkki tulee vasta heron jalkeen, eli kun
+       nouseva cover on peittanyt puolet nakymasta. Heron napit haipyvat
+       sisaan vierityksen mukana, joten napin osumatesti paastaisi palkin
+       esiin jo heron aikana. */
+    const etuCover = document.querySelector<HTMLElement>(".stickyzone > .cover");
+    const laske = () => {
+      const uusi = etuCover
+        ? etuCover.getBoundingClientRect().top <= window.innerHeight * 0.5
+        : window.scrollY > raja || (window.scrollY > 0 && !nappiNakyy());
       if (uusi === viimeksi) return;
       viimeksi = uusi;
       ohi.current = uusi;
       paivita();
     };
+    const koko = () => {
+      mittaa();
+      laske();
+    };
+    mittaa();
+    const ro = new ResizeObserver(koko);
+    ro.observe(hero);
+    window.addEventListener("scroll", tarkista, { passive: true });
+    window.addEventListener("resize", koko, { passive: true });
     tarkista();
     window.addEventListener("scroll", tarkista, { passive: true });
     window.addEventListener("resize", tarkista, { passive: true });
@@ -97,8 +127,10 @@ export default function Palkki({
     );
     b.observe(tarjous);
     return () => {
+      if (raf) cancelAnimationFrame(raf);
       window.removeEventListener("scroll", tarkista);
-      window.removeEventListener("resize", tarkista);
+      window.removeEventListener("resize", koko);
+      ro.disconnect();
       b.disconnect();
     };
   }, []);
@@ -109,9 +141,28 @@ export default function Palkki({
         <b>{otsikko}</b>
         <span>{selite}</span>
       </p>
-      <a className="btn" href="#tarjous" tabIndex={nayta ? 0 : -1}>
-        {nappi}
-      </a>
+      <span className="cta-palkki-napit">
+        {/* Toissijainen: avaa Ota yhteytta -ikkunan (YhteysIkkuna), jos
+            sivulla on sellainen. */}
+        {yhteys ? (
+          <button
+            type="button"
+            className="cta-palkki-viesti"
+            data-yhteys=""
+            aria-label="Ota yhteyttä"
+            title="Ota yhteyttä"
+            tabIndex={nayta ? 0 : -1}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2.5" />
+              <path d="M4 7l8 6 8-6" />
+            </svg>
+          </button>
+        ) : null}
+        <a className="btn" href="#tarjous" tabIndex={nayta ? 0 : -1}>
+          {nappi}
+        </a>
+      </span>
     </div>
   );
 }

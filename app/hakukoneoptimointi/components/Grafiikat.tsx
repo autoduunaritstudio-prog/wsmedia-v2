@@ -182,14 +182,14 @@ const MAININNAT = [2, 3, 3, 5, 6, 8, 9, 11, 12, 14, 16, 19];
 export function Maininnat() {
   const max = Math.max(...MAININNAT);
   return (
-    <figure className="gfx gfx-pylvaat">
+    <figure className="gfx gfx-pylvaat rv">
       <figcaption>
         <b>Maininnat tekoälyvastauksissa</b>
         <span>kpl / kk</span>
       </figcaption>
       <div className="pylvaat">
         {MAININNAT.map((v, i) => (
-          <i key={i} style={{ "--h": `${(v / max) * 100}%` } as CSSProperties} title={`${v} kpl`} />
+          <i key={i} style={{ "--h": `${(v / max) * 100}%`, "--i": i } as CSSProperties} title={`${v} kpl`} />
         ))}
       </div>
     </figure>

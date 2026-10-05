@@ -120,10 +120,24 @@ const JAKSO_MARKS: Mark[] = [
   { k: "jf", x: 94.5, y: 81, s: 38, o: 0.4, z: 0.88, t: 12, d: -3, h: -0.3, kind: "yt" },
 ];
 
-export default function NetMarks({ variantti = "hero" }: { variantti?: "hero" | "jakso" }) {
-  const joukko = variantti === "jakso" ? JAKSO_MARKS : MARKS;
+/* ETUSIVUN REFERENSSIT (5.10.2026): samat kelluvat merkit kuin
+   lyhytvideosivulla, sijoitettuna videoseinan ja otsikon ulkopuolelle.
+   Oikeassa reunassa on pystyteksti REFERENSSIT (n. 91..97 %), joten
+   oikean puolen merkit ovat sen ja korttien valissa tai ylakulmassa. */
+const REFS_MARKS: Mark[] = [
+  { k: "ra", x: 3.0, y: 16, s: 46, o: 0.55, z: 0.8, t: 14, d: -2, h: 0.5, kind: "ig" },
+  { k: "rb", x: 7.0, y: 44, s: 32, o: 0.38, z: 0.56, t: 18, d: -9, h: -0.6, kind: "tt" },
+  { k: "rc", x: 2.6, y: 72, s: 38, o: 0.46, z: 0.66, t: 13, d: -5, h: 0.35, kind: "yt" },
+  { k: "rd", x: 17, y: 9, s: 30, o: 0.36, z: 0.5, t: 16, d: -7, h: -0.45, kind: "tt" },
+  { k: "re", x: 79, y: 7, s: 36, o: 0.44, z: 0.6, t: 19, d: -12, h: 0.7, kind: "yt" },
+  { k: "rf", x: 86.5, y: 34, s: 28, o: 0.34, z: 0.46, t: 15, d: -4, h: -0.3, kind: "ig" },
+  { k: "rg", x: 12, y: 90, s: 30, o: 0.34, z: 0.5, t: 17, d: -10, h: 0.4, kind: "ig" },
+];
+
+export default function NetMarks({ variantti = "hero" }: { variantti?: "hero" | "jakso" | "refs" }) {
+  const joukko = variantti === "jakso" ? JAKSO_MARKS : variantti === "refs" ? REFS_MARKS : MARKS;
   return (
-    <div className={variantti === "jakso" ? "netmarks netmarks-jakso" : "netmarks"} aria-hidden="true">
+    <div className={variantti === "hero" ? "netmarks" : `netmarks netmarks-${variantti}`} aria-hidden="true">
       {joukko.map((m) => (
         <span
           key={m.k}

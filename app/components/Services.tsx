@@ -1,9 +1,12 @@
 import SmartLink from "./SmartLink";
-import DemoVideo from "./DemoVideo";
+import { Kaiku } from "./Maasto";
+import PalveluMerkki from "./PalveluMerkki";
+import KorttiHero from "./KorttiHero";
 
 export default function Services() {
   return (
     <section id="palvelut">
+      <Kaiku sana="PALVELUT" puoli="vas" luokka="etu" />
       <div className="wrap">
         <div className="shead rv" data-par="0.03">
           <h2 className="big">Neljä tapaa erottua. Yksi tiimi.</h2>
@@ -14,45 +17,15 @@ export default function Services() {
         </div>
 
         {/* 1. Lyhytvideot */}
-        <div className="svc rv">
-          <div className="svc-visual" data-par="0.02">
-            <div className="mini-phones">
-              {/* Sisalto kuuluu .scr:n sisaan, ei suoraan runkoon: rungon
-                  reunus on inset-varjo, jonka lapset peittaisivat. */}
-              <div className="mini" data-tilt="y">
-                <div className="scr">
-                  <DemoVideo
-                    className="phone-video"
-                    mp4="/reels-demo.mp4"
-                    poster="/reels-demo-poster.jpg"
-                    preload="metadata"
-                    label="Esimerkki WS Median tuottamasta Reels-videosta"
-                  />
-                  <div className="tag">REELS</div>
-                </div>
-              </div>
-              <div className="mini" data-tilt="-y">
-                <div className="scr">
-                  <DemoVideo
-                    className="phone-video"
-                    mp4="/tiktok-demo.mp4"
-                    poster="/tiktok-demo-poster.jpg"
-                    preload="metadata"
-                    label="Esimerkki WS Median tuottamasta TikTok-videosta"
-                  />
-                  <div className="tag">TIKTOK</div>
-                </div>
-              </div>
-              <div className="float-tag ft-a">
-                <i />
-                Katselukerrat
-                <br />
-                +312 %
-              </div>
-            </div>
+        <div className="svc rv svc-video">
+          <div className="svc-visual">
+            <KorttiHero nimi="video" kuvaus="Lyhytvideot-sivun hero: puhelimissa pyörivät asiakasvideot" />
           </div>
           <div className="svc-txt" data-par="0.035">
-            <span className="kick">Lyhytvideot</span>
+            <span className="kick">
+              <PalveluMerkki p="video" className="svc-merkki" />
+              Lyhytvideot
+            </span>
             <h3>Videot, jotka algoritmi nostaa ja ihmiset katsovat loppuun.</h3>
             <p>
               TikTok, Instagram Reels ja YouTube Shorts. Strategia, käsikirjoitus, kuvaus ja
@@ -64,10 +37,7 @@ export default function Services() {
               <li>Tekstitykset, grafiikat ja alustakohtainen optimointi</li>
             </ul>
             <div className="svc-cta">
-              <a className="btn mag" href="#lomake">
-                Pyydä tarjous
-              </a>
-              <SmartLink className="btn alt" href="/lyhytvideot">
+              <SmartLink className="btn" href="/lyhytvideot">
                 Lue lisää lyhytvideoista
               </SmartLink>
             </div>
@@ -75,39 +45,15 @@ export default function Services() {
         </div>
 
         {/* 2. Verkkosivut */}
-        <div className="svc rev rv">
-          <div className="svc-visual" data-par="0.02">
-            <div className="browser" data-tilt="-y" data-tilt-profile="mockup">
-              <div className="bar">
-                <span className="dot" />
-                <span className="dot" />
-                <span className="dot" />
-                <span className="url">laaksolahdensahko.fi</span>
-              </div>
-              <div className="page demo">
-                <div className="score" title="PageSpeed">
-                  <i>
-                    97<small>SPEED</small>
-                  </i>
-                </div>
-                <DemoVideo
-                  className="demo-video"
-                  webm="/laaksolahti-demo.webm"
-                  mp4="/laaksolahti-demo.mp4"
-                  poster="/laaksolahti-poster.jpg"
-                  label="Kuvakaappaus Laaksolahden Sähkön uudesta verkkosivustosta, jonka WS Media on toteuttanut"
-                />
-              </div>
-            </div>
-            <div className="float-tag ft-b">
-              <i />
-              Hakukonesijoitus
-              <br />
-              {"#1 paikallisesti"}
-            </div>
+        <div className="svc rev rv svc-site">
+          <div className="svc-visual">
+            <KorttiHero nimi="site" kuvaus="Verkkosivut-sivun hero" pysakuva />
           </div>
           <div className="svc-txt" data-par="0.035">
-            <span className="kick">Verkkosivut</span>
+            <span className="kick">
+              <PalveluMerkki p="site" className="svc-merkki" />
+              Verkkosivut
+            </span>
             <h3>Sivusto, joka latautuu heti ja muuttaa kävijät yhteydenotoiksi.</h3>
             <p>
               Käsin koodatut, hakukoneoptimoidut sivustot ilman raskaita sivupohjia. Tämä sivu jota
@@ -119,10 +65,7 @@ export default function Services() {
               <li>Video ja sivusto samalta tiimiltä, viesti pysyy yhtenäisenä</li>
             </ul>
             <div className="svc-cta">
-              <a className="btn mag" href="#lomake">
-                Pyydä tarjous
-              </a>
-              <SmartLink className="btn alt" href="/verkkosivut">
+              <SmartLink className="btn" href="/verkkosivut">
                 Lue lisää verkkosivuista
               </SmartLink>
             </div>

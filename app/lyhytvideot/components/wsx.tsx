@@ -1,3 +1,4 @@
+import SopiiKenelle from "../../components/SopiiKenelle";
 import BudgetForm from "../../components/BudgetForm";
 import SmartLink from "../../components/SmartLink";
 import { RefGrid } from "../../components/RefCards";
@@ -447,43 +448,12 @@ export function Hinnoittelu() {
 /* ---------- 8. Kenelle ---------- */
 export function Kenelle() {
   return (
-    <section className="seo-sec" id="kenelle">
-      {/* Savy pois. Umpinainen pohja peitti sivutason verkoston, joten
-          osio luki eri maailmasta kuin sen naapuri UKK. Lapinakyvana
-          molemmat nayttavat saman kuvion. */}
-      <Kaiku sana="KENELLE" puoli="vas" />
-      <Pystykisko teksti="Kenelle" />
-      <div className="swrap">
-        <h2 className="seo-h2 rv">Kenelle lyhytvideotuotanto sopii?</h2>
-
-        <div className="kaksi porras rv" style={{ marginTop: "48px" }}>
-          <div>
-            <p className="kaksi-kick">Sopii sinulle, jos</p>
-            <ul className="seo-spec">
-              {SOPII.map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="kaksi-kick">Älä osta tätä, jos</p>
-            <ul className="seo-spec">
-              {EI_SOVI.map((x) => (
-                <li key={x.tilanne}>
-                  {x.tilanne}
-                  <s>{x.suositus}</s>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <Kehotus kick="Etkö ole varma?">
-          Kysy meiltä. Sanomme suoraan myös silloin, jos lyhytvideot eivät ole sinulle oikea
-          ratkaisu.
-        </Kehotus>
-      </div>
-    </section>
+    <SopiiKenelle
+      otsikko="Kenelle lyhytvideotuotanto sopii?"
+      sopii={SOPII.map((t) => ({ t }))}
+      ei={EI_SOVI.map((x) => ({ t: x.tilanne, s: x.suositus }))}
+      epavarma="jos lyhytvideot eivät ole sinulle oikea ratkaisu"
+    />
   );
 }
 
@@ -525,7 +495,7 @@ export function Tarjous() {
     <section className="seo-sec kuvapohja" id="tarjous">
       <img
         className="pohjakuva"
-        src="/lyhytvideot/prosessi-leikkaus.webp"
+        src="/kuvat/tarjous-kortit.webp"
         alt=""
         aria-hidden="true"
         loading="lazy"
@@ -565,6 +535,8 @@ export function Tarjous() {
               ovat viela auki. Kysymys "mita tavoittelet" tekee saman
               tyon ilman etta kukaan joutuu arvaamaan lukua. */}
           <BudgetForm
+            otsikko="Tarjouspyyntö"
+            vaihtoehdot
             showBudget={false}
             messageLabel="Mitä tavoittelet lyhytvideoilla?"
             note="Ei sitoumuksia."

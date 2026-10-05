@@ -2,9 +2,11 @@
 
 import type { ReactNode } from "react";
 
-import GraphicsSurfaces from "./GraphicsSurfaces";
-import SearchDemo from "./SearchDemo";
 import MetalBackdrop from "./MetalBackdrop";
+import NetMarks from "./NetMarks";
+import { Kaiku } from "./Maasto";
+import PalveluMerkki from "./PalveluMerkki";
+import KorttiHero from "./KorttiHero";
 import SmartLink from "./SmartLink";
 import StatBand, { type Stat } from "./StatBand";
 import { CARDS, RefCard } from "./RefCards";
@@ -50,24 +52,19 @@ export default function Refs({ children, stats }: { children: ReactNode; stats?:
             {/* 3. Hakukoneoptimointi. Visuaalina SEO-sivun oma hakunayttamo:
                 sama tyo nakyy seka hakutuloslistassa etta tekoalyn
                 vastauksessa, ja se on koko palvelun ydinviesti. */}
-            <div className="svc rv">
-              <div className="svc-visual" data-par="0.02">
-                <div className="sdemo">
-                  <SearchDemo variant="simple" />
-                </div>
-                <div className="float-tag ft-d">
-                  <i />
-                  Orgaaninen näkyvyys
-                  <br />
-                  ei lopu kun budjetti loppuu
-                </div>
+            <div className="svc rv svc-seo">
+              <div className="svc-visual">
+                <KorttiHero nimi="seo" kuvaus="Hakukoneoptimointi-sivun hero: yritys hakutulosten ykkösenä" pysakuva />
               </div>
               <div className="svc-txt" data-par="0.035">
-                <span className="kick">Hakukoneoptimointi</span>
+                <span className="kick">
+                  <PalveluMerkki p="seo" className="svc-merkki" />
+                  Hakukoneoptimointi
+                </span>
                 <h3>Löydy silloin, kun asiakas etsii palvelua.</h3>
                 <p>
-                  Tekninen optimointi, sisältö ja paikallinen näkyvyys yhdeltä tiimiltä — ja sama
-                  työ nostaa sinut myös tekoälyhakujen vastauksiin.
+                  Tekninen optimointi, sisältö ja paikallinen näkyvyys yhdeltä tiimiltä. Sama työ
+                  nostaa sinut myös tekoälyhakujen vastauksiin.
                 </p>
                 <ul>
                   <li>Näkyvyys Googlessa ja tekoälyhauissa samalla työllä</li>
@@ -75,10 +72,7 @@ export default function Refs({ children, stats }: { children: ReactNode; stats?:
                   <li>Kuukausipaketit alkaen 390 €/kk</li>
                 </ul>
                 <div className="svc-cta">
-                  <a className="btn mag" href="#lomake">
-                    Pyydä tarjous
-                  </a>
-                  <SmartLink className="btn alt" href="/hakukoneoptimointi">
+                  <SmartLink className="btn" href="/hakukoneoptimointi">
                     Lue lisää hakukoneoptimoinnista
                   </SmartLink>
                 </div>
@@ -87,20 +81,17 @@ export default function Refs({ children, stats }: { children: ReactNode; stats?:
 
             {/* 4. Graafinen suunnittelu */}
             <div className="svc rev rv svc-graafinen">
-            <div className="svc-visual" data-par="0.02">
-              <GraphicsSurfaces />
-              <div className="float-tag ft-c">
-                <i />
-                Avaimet käteen
-                <br />
-                suunnittelu, materiaalit, asennus
-              </div>
+            <div className="svc-visual">
+              <KorttiHero nimi="design" kuvaus="Graafinen suunnittelu -sivun hero: pakettiauto teipataan WS Median ilmeeseen" pysakuva />
             </div>
             <div className="svc-txt" data-par="0.035">
-              <span className="kick">Graafinen suunnittelu</span>
+              <span className="kick">
+                <PalveluMerkki p="design" className="svc-merkki" />
+                Graafinen suunnittelu
+              </span>
               <h3>Yksi ilme, joka toimii käyntikortista pakettiauton kylkeen.</h3>
               <p>
-                Logo, värit ja graafinen ohjeisto — ja sama ilme viety painotuotteisiin,
+                Logo, värit ja graafinen ohjeisto. Sama ilme viedään painotuotteisiin,
                 teippauksiin ja kyltteihin asennettuna. Yksi tarjous, yksi lasku.
               </p>
               <ul>
@@ -109,10 +100,7 @@ export default function Refs({ children, stats }: { children: ReactNode; stats?:
                 <li>Hinta-arvion näet itse laskurilla ennen tarjousta</li>
               </ul>
               <div className="svc-cta">
-                <a className="btn mag" href="#lomake">
-                  Pyydä tarjous
-                </a>
-                <SmartLink className="btn alt" href="/graafinen-suunnittelu">
+                <SmartLink className="btn" href="/graafinen-suunnittelu">
                   Lue lisää graafisesta suunnittelusta
                 </SmartLink>
               </div>
@@ -139,12 +127,16 @@ export default function Refs({ children, stats }: { children: ReactNode; stats?:
             (mbc-1..5) kuin vaaleassa versiossa ja sama SiteEffectsin ajama
             liike, vain varit kaannettyina. Ylareunassa kevyt maskihaivytys,
             ks. .metalbd-dark globals.css:ssa. */}
-        <MetalBackdrop tone="dark" inSection />
+        {/* Tumma verkostotausta kuten Lyhytvideot-sivun Tyot-osiossa (5.10.2026). */}
+        <MetalBackdrop variant="verkko" tone="dark" inSection />
+        {/* Kelluvat alustamerkit kuten lyhytvideosivulla (5.10.2026). */}
+        <NetMarks variantti="refs" />
         <div className="refsscrim" aria-hidden="true" />
+        <Kaiku sana="REFERENSSIT" puoli="oik" luokka="etu tumma" />
         <div className="wrap">
           <div className="shead center rv" data-par="0.03">
             <span className="kick">Referenssit</span>
-            <h2>Katso miltä työmme näyttää.</h2>
+            <h2 className="big">Katso miltä työmme näyttää.</h2>
           </div>
           <div className="refgrid stagger">
             {CARDS.map((c, i) => (
@@ -179,7 +171,7 @@ export default function Refs({ children, stats }: { children: ReactNode; stats?:
           juuri siina kohdassa jonka pitaa olla saumaton. Maalaus rajataan
           takaisin osion mittaan mask-imagella, ks. globals.css. */}
       <div className="aftercover">
-        <MetalBackdrop inSection />
+        <MetalBackdrop variant="verkko" inSection />
         {children}
       </div>
     </div>

@@ -11,23 +11,22 @@ import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import Jakso from "../components/Jakso";
 import NetBackdrop from "../components/NetBackdrop";
+import Logos from "../components/Logos";
 import Hero from "./components/Hero";
-import { Laatta, Vaite } from "../components/Maasto";
+import { Vaite } from "../components/Maasto";
 import Suotimet from "./components/Suotimet";
 import Nakyvyys from "./components/Nakyvyys";
 import Sisalto from "./components/Sisalto";
 import {
-  Aikataulu,
   Hinnoittelu,
   Kenelle,
-  Mittarit,
   Paikallinen,
   Tarjous,
   Ukk,
 } from "./components/sections";
 
-import Tape from "./components/Tape";
 import { buildJsonLd } from "./jsonld";
+import Toimintaalue from "../components/Toimintaalue";
 
 export const metadata: Metadata = {
   title: "Hakukoneoptimointi yritykselle | SEO-palvelut | WS Media",
@@ -74,7 +73,6 @@ export default function Hakukoneoptimointi() {
           koko matkan viistoina harmaina juovina, ja lopputulos luki
           pesemattomana taustana eika materiaalina. Sivun oma pohja on
           puhdas, ja varit tulevat osioista ja valokuvista. */}
-      <div id="prog" />
 
       {/* RAE. Kiintea rakeinen kalvo koko sivun paalla. Tasainen
           digitaalinen pinta lukee tyhjana, rae tekee siita
@@ -86,7 +84,7 @@ export default function Hakukoneoptimointi() {
         anchorBase="/"
         links={OVERLAY_NAV}
         ctaHref="#tarjous"
-        ctaLabel="Pyydä tarjous"
+        ctaLabel="Varaa maksuton kartoitus"
         logoHref="/"
       />
 
@@ -94,8 +92,15 @@ export default function Hakukoneoptimointi() {
           otsikon ylapuolella, ja juuri sen ylapuolella on nyt osion oma
           numerorivi joka tekee saman tyon paremmin. BreadcrumbList-
           merkinta sailyy jsonld.ts:ssa. */}
+      {/* HERO JA COVER KUTEN MUILLA PALVELUSIVUILLA (4.10.2026): hero
+          pysyy paikallaan, ja kun hakutulos on noussut ykkoseksi, cover
+          logonauhoineen nousee sen paalle. Koko loppusivu on coverin
+          sisalla. */}
+      <div className="hk-pinosto">
       <Hero />
-      <Tape />
+      <div className="cover hk-cover">
+        <NetBackdrop mount="cover" />
+        <Logos />
 
       {/* PINO. Osiot nousevat toistensa PAALLE, ja jokainen paalle
           noussut jaa vuorostaan alle kun seuraava nousee.
@@ -139,84 +144,45 @@ export default function Hakukoneoptimointi() {
           Hinnoittelusta Tarjoukseen on yksi pinta. Kaari ottaa pohjan
           ja verkoston itselleen, joten kuvio ei katkea osioiden
           valissa. */}
-      <div className="pino">
-        <Nakyvyys />
-
+      {/* RAKENNE 3.10.2026: yksi B-roll heti alussa ja yksi peitto sen
+          paalle. Muut kuvaosiot ja peittokerrokset poistettu: sivu
+          etenee tavallisena vierityksena. */}
+      {/* 4.10.2026: Vaite nousee coverina Nakyvyyden paalle ja Jakso
+          vuorostaan Vaitteen paalle, sama sisakkainen rakenne kuin
+          verkkosivuilla. */}
+      {/* Ketjun ensimmainen kerros on lapinakyva (pino-avoin ja
+          omaPohja={false}), jolloin heron sivutason verkosto jatkuu
+          Nakyvyys-osioon katkeamatta, sama tausta eika kaksi. */}
+      <div className="pino pino-avoin">
+        <Jakso omaPohja={false}>
+          <Nakyvyys />
+        </Jakso>
         <div className="pino">
-          {/* Levahdyspaikka ennen sivun raskainta osiota. Yksi lause,
-              ei mitaan luettavaa, tumma pohja. */}
           <Vaite
             kuva="/hakukoneoptimointi/kuitu.webp"
             alla="Tekninen kunto, sisältö, auktoriteetti ja paikallinen näkyvyys. Yksikään niistä ei tuota tulosta yksin."
           >
             Hakukoneoptimointi ei ole <b><i>temppu.</i></b> Se on neljä työtä joita tehdään yhtä aikaa.
           </Vaite>
-
-          <div className="pino">
-            {/* PAIKALLINEN ON OSA SAMAA KUVAUSTA.
-                Se oli sivulla vasta Aikataulun jalkeen, eli viides osa
-                samasta palvelusta oli erotettu neljasta muusta. Nyt se
-                on Palvelun sisallon kanssa samassa kaareessa, eli
-                kaikki "mita teemme" on yksi pinta ja yksi kuvio. */}
-            <Jakso>
-              <Sisalto />
-              <Paikallinen />
-            </Jakso>
-
-            <div className="pino">
-              {/* Sivun rehellisin lause ei ole tekstiosio vaan
-                  taysleveä kuva, jonka paalla se on. Kuvassa on
-                  ihminen tyossaan aamulla, eli tasan se jota lause
-                  koskee: hakukoneoptimointi ei tuota tulosta
-                  paivassa, koska tyo on oikeaa tyota. */}
-              <Laatta kuva="/hakukoneoptimointi/paja-valmis.webp" korkeus="taysi">
-                <p className="laatta-kick">Aikataulu</p>
-                <p className="laatta-lause">
-                  Kukaan ei voi luvata <b><i>päivämäärää.</i></b>
-                </p>
-                <p className="laatta-alla">
-                  Emme lupaa ykkössijaa emmekä tiettyä prosenttia. Kerromme mitä tapahtuu ja
-                  milloin, myös silloin kun luvut eivät miellytä.
-                </p>
-              </Laatta>
-
-              <div className="pino">
-                <Jakso>
-                  <Aikataulu />
-                  <Mittarit />
-                </Jakso>
-
-                <div className="pino">
-                  {/* KUVA VAIHTUI. Ensimmainen oli kasi poydalla, paperi ja
-                      kahvikuppi: tunnelmaltaan oikea mutta aiheeltaan vaara.
-                      Tama sivu myy Google-nakyvyytta, joten ostopaatoksen
-                      hetki on naytön aaressa eika poydan aaressa. */}
-                  <Vaite
-                    kuva="/hakukoneoptimointi/haku2.webp"
-                    alla="Kartoitus ja alustava auditointi ovat maksuttomia eivätkä sido mihinkään."
-                  >
-                    Näy siellä, missä <b><i>ostopäätös syntyy.</i></b>
-                  </Vaite>
-
-                  {/* SIVUN HANTA ON YKSI PINTA, ks. kaksi muuta
-                      palvelusivua. Hinnasto oli vaalea osio (.valo),
-                      Kenelle musta (data-tone="ink"), UKK sivun oma
-                      pohja ja Tarjous kuvapohja: neljä eri taustaa
-                      perakkain. Vierekkaiset kerrokset ovat aina kaksi
-                      eri kuviota, ja raja niiden valissa nakyy vaikka
-                      vari olisi sama. Yksi kaare, yksi kerros, neljä
-                      osiota sen sisalla. */}
-                  <Jakso>
-                    <Hinnoittelu />
-                    <Kenelle />
-                    <Ukk />
-                    <Tarjous />
-                  </Jakso>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Jakso>
+            <Sisalto />
+            <Paikallinen />
+            <Hinnoittelu />
+            <Kenelle />
+            <Ukk />
+            <Toimintaalue
+              otsikko="Hakukoneoptimointi Espoosta koko Suomeen"
+              rivit={[
+                ["Espoo", "Toimipisteemme on Espoossa, ja pääkaupunkiseudun yrityksiä tapaamme mielellämme paikan päällä."],
+                ["Koko Suomi", "Hakukoneoptimointi tehdään verkossa, joten sijainti ei vaikuta hintaan eikä aikatauluun."],
+                ["Haussa", "Sivut rakennetaan näkymään niillä paikkakunnilla, joilla yrityksesi oikeasti palvelee."],
+              ]}
+            />
+            <Tarjous />
+          </Jakso>
         </div>
+      </div>
+      </div>
       </div>
 
       {/* MITATTU ETUSIVULTA. Etusivun footerissa on nelja lohkoa:
@@ -226,9 +192,9 @@ export default function Hakukoneoptimointi() {
           ja eri rytminen kuin etusivulla. SUBPAGE_FOOTER antaa saman
           neljan lohkon rakenteen kuin etusivu. */}
       <Footer
-        intro="Lyhytvideot, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
+        intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
-        base="© 2026 WS Media Oy · Y-tunnus 3615084-4 · Espoo"
+        base="© 2026 WS Media Oy"
         brandHeading="h2"
       />
 

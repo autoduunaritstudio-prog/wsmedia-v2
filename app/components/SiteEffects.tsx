@@ -167,17 +167,45 @@ export default function SiteEffects() {
      * (offsetTop-ketju). Se on layout-arvo eika riipu siita mihin
      * elementti maalataan, joten sticky ei vaikuta siihen mitenkaan.
      * Sijainti mitataan kerran ja resizessa, ei kehyksessa. */
+    /* STICKY VAARISTAA offsetTopin (4.10.2026). Ylla oleva oletus ei
+       pida: Chromessa pinnatun elementin offsetTop sisaltaa pinnauksen
+       siirtyman. Kun mittaus osui hetkeen jolloin osio oli kiinni
+       pinossa (esim. hyppy hinnastoon ja vieritys takaisin, tai sivu
+       ladattu #ankkurilla), sijainniksi tallentui pinnattu kohta ja
+       --piirto jai nollaan: kaaviot eivat piirtyneet lainkaan.
+       Mittauksen ajaksi sticky-esivanhemmat asetetaan staticiksi
+       (sama asettelu ilman pinnausta) ja palautetaan samassa
+       tehtavassa, joten mitaan ei piirry valissa. */
+    const asetteluY = (els: HTMLElement[], f: (el: HTMLElement, y: number) => void) => {
+      const tarttuvat = new Set<HTMLElement>();
+      for (const el of els) {
+        for (let a: HTMLElement | null = el; a && a !== document.body; a = a.parentElement) {
+          if (getComputedStyle(a).position === "sticky") tarttuvat.add(a);
+        }
+      }
+      const ennen = new Map<HTMLElement, [string, string]>();
+      tarttuvat.forEach((a) => {
+        ennen.set(a, [a.style.getPropertyValue("position"), a.style.getPropertyPriority("position")]);
+        a.style.setProperty("position", "static", "important");
+      });
+      try {
+        for (const el of els) {
+          let y = 0;
+          for (let n: HTMLElement | null = el; n; n = n.offsetParent as HTMLElement | null) y += n.offsetTop;
+          f(el, y);
+        }
+      } finally {
+        ennen.forEach(([v, pr], a) => {
+          if (v) a.style.setProperty("position", v, pr);
+          else a.style.removeProperty("position");
+        });
+      }
+    };
     const hehkuEls = Array.from(document.querySelectorAll<HTMLElement>("[data-hehku]"));
     const hehkuJoukko = new Set<Element>(hehkuEls);
     const hehkuY = new WeakMap<HTMLElement, { y: number; h: number; k: number }>();
     const mittaaHehku = () => {
-      for (const el of hehkuEls) {
-        let y = 0;
-        let n: HTMLElement | null = el;
-        while (n) {
-          y += n.offsetTop;
-          n = n.offsetParent as HTMLElement | null;
-        }
+      asetteluY(hehkuEls, (el, y) => {
         /* data-hehkun ARVO on matkan kerroin. Oletus 1.
            Sita tarvitaan siksi, etta elementin oma korkeus ei kerro
            milloin sen pitaa olla valmis: pinotussa vierityksessa
@@ -188,7 +216,7 @@ export default function SiteEffects() {
            nakyvissa, ei sen mukaan kuinka pitka se on. */
         const k = Number(el.dataset.hehku);
         hehkuY.set(el, { y, h: el.offsetHeight, k: Number.isFinite(k) && k > 0 ? k : 1 });
-      }
+      });
     };
     mittaaHehku();
     window.addEventListener("resize", mittaaHehku, { passive: true });
@@ -351,14 +379,9 @@ export default function SiteEffects() {
     }
     const valoY = new WeakMap<HTMLElement, { y: number; h: number }>();
     const mittaaValo = () => {
+      asetteluY(valoEls, (el, y) => valoY.set(el, { y, h: el.offsetHeight }));
+      /* Kankaan koko luetaan vasta kun sticky on palautettu. */
       for (const el of valoEls) {
-        let y = 0;
-        let n: HTMLElement | null = el;
-        while (n) {
-          y += n.offsetTop;
-          n = n.offsetParent as HTMLElement | null;
-        }
-        valoY.set(el, { y, h: el.offsetHeight });
         const k = valoKerros.get(el);
         if (k) valoKankaat.get(k)?.koko();
       }
@@ -384,15 +407,7 @@ export default function SiteEffects() {
     const kiinniJoukko = new Set<Element>(kiinniEls);
     const kiinniY = new WeakMap<HTMLElement, { y: number; h: number }>();
     const mittaaKiinni = () => {
-      for (const el of kiinniEls) {
-        let y = 0;
-        let n: HTMLElement | null = el;
-        while (n) {
-          y += n.offsetTop;
-          n = n.offsetParent as HTMLElement | null;
-        }
-        kiinniY.set(el, { y, h: el.offsetHeight });
-      }
+      asetteluY(kiinniEls, (el, y) => kiinniY.set(el, { y, h: el.offsetHeight }));
     };
     mittaaKiinni();
     window.addEventListener("resize", mittaaKiinni, { passive: true });
@@ -573,11 +588,6 @@ export default function SiteEffects() {
     const refCover = document.querySelector<HTMLElement>(".refs");
     const afterCover = document.querySelector<HTMLElement>(".aftercover");
     const REF_SCRIM_MAX = 0.65;
-    // Coverin sisaantulohaivytys. Kerroin ON SUORAAN se nakyvyysosuus
-    // jolla opacity saavuttaa 1:n: kun ylareuna on kohdassa vh - f*vh,
-    // osiota on nakyvissa f*vh eli f osuus nakymasta. 0.35 osuu pyydetyn
-    // 30-40 %:n haarukan keskelle.
-    const COVER_FADE_SPAN = 0.35;
     let refRo: ResizeObserver | null = null;
 
     const measureRef = () => {
@@ -1388,10 +1398,8 @@ export default function SiteEffects() {
       // pinnautuessa - lapinakyvyys nakyi valkoisena aukkona paneelin alla.
       // Sen opacity jaa CSS:n varasyottoon 1; measureRef poistaa muuttujan
       // kertaalleen, jottei aiempi arvo jaa elamaan.
-      if (afterCover) {
-        const v = (vh - afterCover.getBoundingClientRect().top) / (vh * COVER_FADE_SPAN);
-        W(() => { aseta(afterCover, "--cover-fade", Math.min(Math.max(v, 0), 1).toFixed(3)); });
-      }
+      // POISTETTU 5.10.2026: .aftercoverin sisaanhaivytys (--cover-fade).
+      // Cover nousee Referenssien paalle taysin peittavana.
 
       // Kolmas pari: Referenssien tummennus etenee kun .aftercover nousee
       // sen paalle. Sama geometriasta johdettu kaava kuin kahdella muulla.

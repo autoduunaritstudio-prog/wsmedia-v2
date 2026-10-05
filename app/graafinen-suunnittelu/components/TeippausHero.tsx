@@ -65,6 +65,7 @@ export default function TeippausHero() {
     const trk = q<HTMLElement>("[data-th=trk]");
     const lbl = q<HTMLElement>("[data-th=lbl]");
     const mouse = q<HTMLElement>("[data-th=mouse]");
+    const vihje = q<HTMLElement>("[data-th=vihje]");
     const pct = q<HTMLElement>("[data-th=pct]");
     const sl1 = q<SVGElement>("[data-th=sl1]");
     const sl2 = q<SVGElement>("[data-th=sl2]");
@@ -104,8 +105,19 @@ export default function TeippausHero() {
     const wrapC = mk(W, H);
     const albC = mk(W, H);
     const tmp = mk(W, H);
+    /* Pikseleiden luku omalle kankaalleen. willReadFrequently teki
+       aiemmin tmp-kankaasta CPU-kankaan, ja maskedBand piirsi sille joka
+       kehys ja latasi tuloksen GPU:lle: mitattuna 4x hidastuksella
+       vierityksen kehysmediaani 267 ms. Lukukangasta kaytetaan vain
+       kerran alussa. */
+    const readC = mk(W, H);
     let ready = false;
     let alive = true;
+    /* Piirretaan vain kun jokin syote muuttui (vieritys, hiiri, varit).
+       Aiemmin kangas ja kaikki tyylit kirjoitettiin joka kehys myos
+       paikallaan ollessa. */
+    let versio = 0;
+    let edellinen = "";
     const drawMark = (a: CanvasRenderingContext2D, x: number, y: number, h: number, col: string) => {
       const sc = h / 341;
       a.fillStyle = col;
@@ -191,10 +203,11 @@ export default function TeippausHero() {
         o[i + 3] = m;
       }
       wrapC.getContext("2d")!.putImageData(out, 0, 0);
+      versio++;
     };
     const init = () => {
       if (!alive) return;
-      const t = tmp.getContext("2d", { willReadFrequently: true })!;
+      const t = readC.getContext("2d", { willReadFrequently: true })!;
       t.drawImage(photo, 0, 0, W, H);
       P = t.getImageData(0, 0, W, H).data;
       maskC = mk(W, H);
@@ -216,7 +229,9 @@ export default function TeippausHero() {
     };
     photo.onload = onLoad;
     maskImg.onload = onLoad;
-    photo.src = "/graafinen-suunnittelu/van-blank.webp";
+    /* Rajattu versio (3.10.2026): studiotausta poistettu, joten kuvan
+       laatikko ei nay sivun taustaa vasten eika autoa tarvitse haivyttaa. */
+    photo.src = "/graafinen-suunnittelu/van-blank-rajattu.webp";
     maskImg.src = "/graafinen-suunnittelu/van-mask.png";
 
     const X0 = 90;
@@ -257,10 +272,28 @@ export default function TeippausHero() {
       const r = e.getBoundingClientRect();
       return clamp(-r.top / (r.height - innerHeight));
     };
+    /* KIRJOITUS VAIN KUN ARVO MUUTTUU. Jokainen tyylikirjoitus
+       likaa tyylit, ja seuraava getBoundingClientRect (taman tai
+       SiteEffectsin) pakottaa koko tyylipuun laskennan: mitattuna
+       vierityksessa 4,2 s pakotettua asettelua. Arvot pyoristetaan,
+       jotta lahes samat arvot eivat kirjoitu uudelleen. */
+    const muisti = new WeakMap<Element, Record<string, string>>();
+    const aseta = (e: HTMLElement | SVGElement, k: string, v: string) => {
+      let m = muisti.get(e);
+      if (!m) muisti.set(e, (m = {}));
+      if (m[k] === v) return;
+      m[k] = v;
+      if (k.startsWith("--")) e.style.setProperty(k, v);
+      else (e.style as unknown as Record<string, string>)[k] = v;
+    };
     const prop = (e: HTMLElement, t: number, from: [number, number, number]) => {
       const k = ease(clamp(t));
-      e.style.opacity = String(k);
-      e.style.transform = `translate(${(1 - k) * from[0]}%,${(1 - k) * from[1]}%) scale(${lerp(from[2], 1, k)})`;
+      aseta(e, "opacity", k.toFixed(3));
+      aseta(
+        e,
+        "transform",
+        `translate(${((1 - k) * from[0]).toFixed(2)}%,${((1 - k) * from[1]).toFixed(2)}%) scale(${lerp(from[2], 1, k).toFixed(4)})`,
+      );
     };
     let raf = 0;
     const frame = () => {
@@ -270,14 +303,32 @@ export default function TeippausHero() {
       }
       smx += (mx - smx) * 0.08;
       shov += (hover - shov) * 0.06;
+      const avain = `${p.toFixed(4)}|${smx.toFixed(3)}|${shov.toFixed(3)}|${versio}|${ready}`;
+      if (avain === edellinen) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
+      edellinen = avain;
       const pw = ease(clamp((p - 0.08) / 0.42));
       const sh = clamp((p - 0.5) / 0.12);
       const gather = ease(clamp((p - 0.62) / 0.14));
       // torn panel
-      sl1.style.transform = `translateY(${-p * 6}%)`;
-      sl2.style.transform = `translateY(${p * 4}%)`;
+      aseta(sl1, "transform", `translateY(${(-p * 6).toFixed(2)}%)`);
+      aseta(sl2, "transform", `translateY(${(p * 4).toFixed(2)}%)`);
       if (ready) {
         cx.clearRect(0, 0, W, H);
+        /* Varjo lattiaan pyorien alle: rajatussa kuvassa ei ole studion lattiaa. */
+        {
+          const g = cx.createRadialGradient(W / 2, 560, 0, W / 2, 560, 600);
+          g.addColorStop(0, "rgba(0,0,0,.6)");
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          cx.save();
+          cx.translate(0, 560);
+          cx.scale(1, 0.09);
+          cx.fillStyle = g;
+          cx.fillRect(0, -600, W, 1200);
+          cx.restore();
+        }
         cx.drawImage(photo, 0, 0, W, H);
         const edge = X0 + (X1 - X0) * pw;
         if (pw > 0) {
@@ -285,16 +336,6 @@ export default function TeippausHero() {
           cx.beginPath();
           cx.rect(0, 0, edge, H);
           cx.clip();
-          cx.drawImage(wrapC, 0, 0);
-          cx.restore();
-          cx.save();
-          cx.beginPath();
-          cx.rect(0, 548, edge, H);
-          cx.clip();
-          cx.translate(0, 1096);
-          cx.scale(1, -1);
-          cx.globalCompositeOperation = "color";
-          cx.globalAlpha = 0.45;
           cx.drawImage(wrapC, 0, 0);
           cx.restore();
         }
@@ -345,26 +386,38 @@ export default function TeippausHero() {
           );
         }
       }
-      // van steps back to make room
-      vanbox.style.transform = `translate(${lerp(0, -9, gather) + (smx - 0.5) * -1.5}%,${lerp(0, 14, gather)}%) scale(${lerp(1, 0.72, gather)})`;
+      /* Auto vaistyy tilaa rekvisiitalle, mutta maltillisesti: aiemmin
+         se pieneni 72 %:iin ja painui alas, ja jai korttien taakse. */
+      aseta(
+        vanbox,
+        "transform",
+        `translate(${(lerp(0, -7.4, gather) + (smx - 0.5) * -1.5).toFixed(2)}%,${lerp(0, -6.4, gather).toFixed(2)}%) scale(${lerp(1, 0.78, gather).toFixed(4)})`,
+      );
       prop(pSign, (p - 0.68) / 0.08, [0, -12, 0.94]);
       {
         const t = clamp((p - 0.74) / 0.07);
         const seq = [0, 1, 0, 0, 0.7, 0, 1, 1];
         const k = Math.min(seq.length - 1, Math.floor(t * seq.length));
         const lit = t >= 1 ? 1 : seq[k];
-        pSign.style.setProperty("--lit", String(reduce ? 1 : lit));
+        aseta(pSign, "--lit", String(reduce ? 1 : lit));
       }
       prop(pRoll, (p - 0.72) / 0.12, [40, 0, 0.92]);
       prop(pCards, (p - 0.78) / 0.12, [-10, 40, 0.9]);
-      gloss.style.backgroundPosition = `${lerp(100, -50, clamp((p - 0.88) / 0.1))}% 0`;
-      cap.style.opacity = String(ease(clamp((p - 0.92) / 0.06)));
-      fill.style.width = (pr * 100).toFixed(2) + "%";
-      pct.textContent = Math.round(pr * 100) + " %";
-      trk.style.setProperty("--idle", pr > 0.03 ? "0" : "1");
+      aseta(gloss, "backgroundPosition", `${lerp(100, -50, clamp((p - 0.88) / 0.1)).toFixed(1)}% 0`);
+      aseta(cap, "opacity", ease(clamp((p - 0.92) / 0.06)).toFixed(3));
+      /* scaleX eika width: leveyden muutos ajoi asettelun joka kehys. */
+      aseta(fill, "transform", `scaleX(${pr.toFixed(4)})`);
+      const pc = Math.round(pr * 100) + " %";
+      if (pct.textContent !== pc) pct.textContent = pc;
+      aseta(trk, "--idle", pr > 0.03 ? "0" : "1");
       const done = pr > 0.99;
-      lbl.textContent = done ? "Valmis" : "Vieritä";
-      mouse.style.opacity = done ? "0" : "1";
+      const lb = done ? "Valmis" : "Vieritä";
+      if (lbl.textContent !== lb) lbl.textContent = lb;
+      aseta(mouse, "opacity", done ? "0" : "1");
+      if (vihje) {
+        const pois = pr > 0.02 ? "1" : "0";
+        if (vihje.dataset.pois !== pois) vihje.dataset.pois = pois;
+      }
       raf = requestAnimationFrame(frame);
     };
     const onMove = (e: PointerEvent) => {
@@ -379,10 +432,23 @@ export default function TeippausHero() {
       cv.addEventListener("pointermove", onMove);
       cv.addEventListener("pointerleave", onLeave);
     }
+    /* Silmukka pyorii vain kun hero on nakyvissa. Ennen se pyori koko
+       sivun ajan, myos footerissa. */
+    let nakyy = true;
+    const io = new IntersectionObserver(([e]) => {
+      const oli = nakyy;
+      nakyy = e.isIntersecting;
+      if (nakyy && !oli) {
+        cancelAnimationFrame(raf);
+        frame();
+      } else if (!nakyy) cancelAnimationFrame(raf);
+    });
+    io.observe(el);
     frame();
 
     return () => {
       alive = false;
+      io.disconnect();
       cancelAnimationFrame(raf);
       cv.removeEventListener("pointermove", onMove);
       cv.removeEventListener("pointerleave", onLeave);
@@ -448,9 +514,16 @@ export default function TeippausHero() {
         </symbol>
       </svg>
 
-      <section className={s.scrub}>
+      <section className={s.scrub} data-hero="">
         <div className={s.meter} data-th="scrub" aria-hidden="true" />
         <div className={s.pin}>
+          {/* Vierintavihje: piilottuu heti kun vieritys alkaa. */}
+          <div className={s.vihje} data-th="vihje" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+            Vieritä alas, niin auto teipataan
+          </div>
           <div className={s.tear} aria-hidden="true">
             <div className={s.studio} data-th="studio">
               <svg className={`${s.slashes} ${s.s2}`} data-th="sl2" viewBox="0 0 300 400">
@@ -473,7 +546,7 @@ export default function TeippausHero() {
             </p>
             <div className={s.ctas}>
               <a className={s.btn} href="#tarjous">
-                Pyydä tarjous
+                Varaa maksuton kartoitus
               </a>
               <a className={s.link} href="#hinta">
                 Laske arvio hinnasta ›

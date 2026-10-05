@@ -85,7 +85,7 @@ export function Miksi() {
           <i>Kaksi tekijää, yksi väli</i>
         </div>
         <h2 className="seo-h2 rv">
-          Mainostoimisto vai teippaamo? Meiltä saat <span className="mark">molemmat.</span>
+          Mainostoimisto vai teippaamo? Meiltä saat <span className="korosta">molemmat.</span>
         </h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
           Mainostoimisto suunnittelee ja teippaamo asentaa. Väliin jää kysymyksiä, joihin kukaan ei
@@ -179,7 +179,7 @@ const PALVELUT: { kuva: string; kick: string; h: string; p: string; li: string[]
     px: "Ikkunateippaus alk. 290 € · valomainos tarjouksen mukaan",
   },
   {
-    kuva: "/graafinen-suunnittelu/palvelu-kortit.webp",
+    kuva: "/graafinen-suunnittelu/palvelu-kayntikortit.webp",
     kick: "Käteen jäävä",
     h: "Käyntikortit, esitteet ja roll-upit",
     p: "Suunnittelemme painotuotteet ja teetämme ne valmiiksi. Saat painovalmiit tiedostot myös itsellesi, jos haluat tilata lisäpainoksen myöhemmin muualta.",
@@ -296,7 +296,10 @@ export function Prosessi() {
           hoidamme me, myös asioinnin painon ja asentajan kanssa.
         </p>
 
-        <div className="jana" data-rvs="">
+        {/* data-hehku (3.10.2026): Prosessi on pinnattu, joten --rvp jaatyi
+            kesken ja viiva jai neljannen solmun kohdalle. --piirto lasketaan
+            asettelusijainnista ja etenee myos pinnattuna loppuun asti. */}
+        <div className="jana" data-rvs="" data-hehku="1">
           <div className="jana-akseli" aria-hidden="true">
             <i />
           </div>
