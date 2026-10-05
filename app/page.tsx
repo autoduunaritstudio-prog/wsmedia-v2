@@ -15,7 +15,6 @@ import Services from "./components/Services";
 import Booking from "./components/Booking";
 import Refs from "./components/Refs";
 import Results from "./components/Results";
-import Process from "./components/Process";
 import HomeFaq from "./components/HomeFaq";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
@@ -122,7 +121,6 @@ export default function Home() {
           lapinakymaton lohko. z-index 3 nostaa nama .coverin sisalla olevan
           kuviokerroksen ylapuolelle. */}
       <div className="belowcover">
-        <Process />
         <HomeFaq />
         <Contact />
       </div>

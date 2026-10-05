@@ -18616,29 +18616,6 @@ dialog.yi { margin: auto; inset: 0; position: fixed }
   margin: 0 0 clamp(36px, 4vw, 56px); max-width: 22ch; text-align: left; text-wrap: balance;
 }
 
-/* PROSESSI AIKAJANANA. Staattinen: ei vierityssidottua tayttoa, joten
-   ei kehyskohtaista tyota. */
-.etu-jana { position: relative }
-.etu-jana-akseli {
-  height: 3px; border-radius: 2px; margin-bottom: 34px;
-  background: linear-gradient(90deg, #6fecff 0%, #6fecff 70%, #ff9a4d 100%);
-}
-.etu-jaksot {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px;
-}
-@media (min-width: 901px) { .etu-jaksot { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px } }
-.etu-jakso { position: relative; border-left: 1px solid rgba(17,21,26,.16); padding-left: 22px }
-@media (min-width: 901px) {
-  .etu-jakso::before {
-    content: ""; position: absolute; left: -6px; top: -42px;
-    width: 11px; height: 11px; border-radius: 50%;
-    background: #6fecff; box-shadow: 0 0 0 4px var(--etu-pohja), 0 0 14px rgba(111,236,255,.7);
-  }
-}
-.etu-jakso-kk { margin: 0 0 12px; font-size: 12.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #00697a }
-.etu-jakso h3 { margin: 0 0 10px; font-size: clamp(20px, 1.7vw, 24px); font-weight: 600; letter-spacing: -.018em; line-height: 1.2; color: #11151a }
-.etu-jakso-p { margin: 0; font-size: 16px; line-height: 1.6; color: #4a5560; max-width: 34ch }
 #prosessi .proc-cta { justify-content: flex-start; margin-top: 48px }
 
 /* ==================================================================
@@ -18691,63 +18668,195 @@ dialog.yi { margin: auto; inset: 0; position: fixed }
 .kart-paneeli .cal-slot:hover { border-color: rgba(111,236,255,.6) }
 
 /* ==================================================================
-   TULOKSET LISTANA (5.10.2026)
-   Rivi: iso luku | asiakas ja selitys | kuva. Rivit erotetaan viivoin
-   kuten UKK:n lista; luku on rivin paaasia.
+   TULOKSET NAYTTAMONA (5.10.2026)
+   Vasemmalla asiakkaat valilehtina (logo, palvelu, paaluku), oikealla
+   valitun asiakkaan tyo isona tummalla lavalla ja lyhyt tarina:
+   mita tehtiin ja mika muuttui. Lavan taustana saman tyon valmiiksi
+   sumennettu kuva, joten jokaisella asiakkaalla on oma tunnelmansa.
    ================================================================== */
 #tulokset { padding-top: clamp(80px, 9vw, 130px) !important }
-.tul-lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid #11151a }
-.tul {
-  display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px;
-  padding: clamp(26px, 3vw, 40px) 0; border-bottom: 1px solid rgba(17,21,26,.14);
-}
-@media (min-width: 901px) {
-  .tul { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, .8fr); gap: 40px; align-items: center }
-}
-.tul-tag {
-  display: inline-block; margin-bottom: 14px; padding: 5px 11px; border-radius: 999px;
-  font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
-  color: #00697a; background: rgba(0,124,143,.08); box-shadow: inset 0 0 0 1px rgba(0,124,143,.22);
-}
-.tul-num {
-  font-size: clamp(56px, 7.4vw, 112px); font-weight: 700; letter-spacing: -.05em; line-height: .9;
-  color: #11151a; font-variant-numeric: tabular-nums; white-space: nowrap;
-}
-.tul-asiakas { margin: 0 0 8px; font-size: 15px; color: #4a5560 }
-.tul-asiakas b { color: #11151a; font-size: 18px; font-weight: 600 }
-.tul-p { margin: 0; font-size: 16px; line-height: 1.6; color: #4a5560; max-width: 40ch }
-.tul-spec { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px }
-.tul-chip {
-  display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px;
-  font-size: 14px; color: #4a5560; background: #fff; box-shadow: 0 0 0 1px rgba(17,21,26,.1);
-}
-.tul-chip b { color: #11151a; font-weight: 600 }
-.tul-chip svg { width: 16px; height: 16px }
-.tul-kuva {
-  position: relative; aspect-ratio: 16 / 10; border-radius: 18px; overflow: hidden;
-  background: #16263c; box-shadow: 0 24px 50px -30px rgba(13,13,16,.45);
-}
-.tul-kuva img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block }
+.tn { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px }
+@media (min-width: 981px) { .tn { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 28px; align-items: stretch } }
 
-/* Tulosluku mitoitetaan sarakkeen leveydesta (container query), jottei
-   pitka luku kuten "100 / 98" vuoda viereiseen tekstisarakkeeseen.
-   Mitattu 5.10.2026: 112 px:n kiintea koko meni 10 px yli 1440:lla. */
-.tul-luku { container-type: inline-size; min-width: 0 }
-.tul-num {
-  font-size: clamp(44px, 21cqi, 112px);
-  background: linear-gradient(100deg, #11151a 0%, #11151a 45%, #00697a 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+/* Valilehdet */
+.tn-lista { display: flex; flex-direction: column; border-top: 1px solid #11151a }
+.tn-tab {
+  position: relative; display: grid; gap: 6px; text-align: left; width: 100%;
+  padding: 22px 20px 22px 24px; border: 0; border-bottom: 1px solid rgba(17,21,26,.14);
+  background: transparent; color: inherit; font: inherit; cursor: pointer;
+  transition: background-color .25s;
 }
+.tn-tab::before {
+  content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 2px;
+  background: linear-gradient(180deg, #6fecff, #ff9a4d); opacity: 0; transition: opacity .25s;
+}
+.tn-tab:hover { background: rgba(255,255,255,.45) }
+.tn-tab.on { background: #fff; box-shadow: 0 20px 40px -30px rgba(13,13,16,.4) }
+.tn-tab.on::before { opacity: 1 }
+.tn-tab:focus-visible { outline: 2px solid #00697a; outline-offset: -2px }
+.tn-tab-yla { display: flex; align-items: center; gap: 10px; min-height: 30px }
+.tn-tab-yla img { height: 26px; width: auto; max-width: 120px; object-fit: contain }
+.tn-tab-yla img.mono { height: 30px }
+.tn-tab-yla b { font-size: 15px; font-weight: 700; color: #11151a }
+.tn-tab-palvelu {
+  margin-left: auto; flex: none; padding: 4px 9px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+  color: #00697a; background: rgba(0,124,143,.08);
+}
+.tn-tab-luku {
+  font-size: clamp(34px, 3.2vw, 46px); font-weight: 700; letter-spacing: -.04em; line-height: 1;
+  color: #8a96a2; font-variant-numeric: tabular-nums; transition: color .25s;
+}
+.tn-tab.on .tn-tab-luku { color: #11151a }
+.tn-tab-selite { font-size: 14.5px; color: #4a5560 }
 
-/* Prosessin solmut numeroiduiksi: vaiheet ovat jarjestys, joten numero
-   kertoo jotain. Solmu istuu janan paalla. */
-.etu-jaksot { counter-reset: etu-v }
-.etu-jakso { counter-increment: etu-v }
-@media (min-width: 901px) {
-  .etu-jana-akseli { margin-bottom: 46px }
-  .etu-jakso::before {
-    content: counter(etu-v); left: -17px; top: -64px;
-    width: 34px; height: 34px; display: grid; place-items: center;
-    font-size: 14px; font-weight: 700; color: #0b0f14;
-  }
+/* Lava */
+.tn-lava {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: center;
+  min-height: 520px; padding: clamp(28px, 3.4vw, 48px);
+  border-radius: 28px; color: #f4f7fa;
+  background:
+    linear-gradient(90deg, rgba(11,19,29,.15) 0%, rgba(11,19,29,.55) 45%, rgba(11,19,29,.92) 70%),
+    radial-gradient(60% 70% at 25% 110%, rgba(111,236,255,.30), transparent 70%),
+    var(--tausta, none) center / cover no-repeat,
+    #0b131d;
+  box-shadow: 0 50px 100px -50px rgba(5,10,18,.7);
+  animation: tn-sisaan .45s ease both;
 }
+@media (min-width: 701px) { .tn-lava { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr) } }
+.tn-lava::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; z-index: 2;
+  background: linear-gradient(90deg, #6fecff 0%, #6fecff 60%, #ff9a4d 100%);
+}
+.tn-lava::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: url(/verkko-kortti.svg) center / cover no-repeat; opacity: .3;
+}
+@keyframes tn-sisaan { from { opacity: 0 } to { opacity: 1 } }
+@media (prefers-reduced-motion: reduce) { .tn-lava { animation: none } }
+
+.tn-media { display: flex; justify-content: center }
+.tn-puhelin {
+  position: relative; width: 210px; aspect-ratio: 9 / 16; padding: 7px; box-sizing: content-box;
+  border-radius: 32px; background: #05080c; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 40px 70px -26px rgba(0,0,0,.9), 0 0 90px rgba(111,236,255,.2);
+}
+.tn-puhelin .tul-video { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 25px; background: #0b131d }
+.tn-puhelin .some-ui { inset: 7px; border-radius: 25px; font-size: 11px }
+.tn-puhelin .some-ui svg { width: 20px; height: 20px }
+.tn-puhelin .some-sivu { gap: 14px; right: 10px; bottom: 54px }
+.tn-puhelin .some-yla { font-size: 13px; top: 12px; left: 14px }
+.tn-puhelin .some-ala { left: 12px; bottom: 15px }
+.tn-puhelin .some-ala b { font-size: 11.5px }
+.tn-puhelin .some-avatar { width: 20px; height: 20px }
+.tn-selain {
+  width: 100%; max-width: 420px; border-radius: 14px; overflow: hidden; background: #0b131d;
+  box-shadow: 0 0 0 1px rgba(111,236,255,.22), 0 30px 60px -24px rgba(0,0,0,.85);
+}
+.tn-selain-palkki { display: flex; gap: 6px; padding: 9px 12px; background: #111b28 }
+.tn-selain-palkki i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.22) }
+.tn-selain img { display: block; width: 100%; height: auto }
+
+.tn-kick { margin: 0 0 14px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #b4f5ff }
+.tn-tarina h3 { margin: 0 0 10px; font-size: clamp(22px, 2vw, 28px); font-weight: 700; letter-spacing: -.02em; color: #fff }
+.tn-teimme { margin: 0; font-size: 16.5px; line-height: 1.6; color: #c9d6e2; max-width: 46ch }
+.tn-rivit { list-style: none; margin: 26px 0 0; padding: 0; border-top: 1px solid rgba(255,255,255,.16) }
+.tn-rivit li {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.tn-rivi-l { font-size: 14.5px; color: #b9c7d4 }
+.tn-rivi-arvo { display: inline-flex; align-items: center; gap: 10px; flex: none; font-variant-numeric: tabular-nums }
+.tn-rivi-arvo s { font-size: 17px; font-weight: 600; color: #7f8fa0; text-decoration-thickness: 2px }
+.tn-rivi-arvo svg { width: 18px; height: 18px }
+.tn-rivi-arvo path { fill: none; stroke: #6fecff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
+.tn-rivi-arvo b { font-size: 22px; font-weight: 700; color: #6fecff }
+
+/* Somen kayttoliittyma puhelimen paalla (SomeKayttoliittyma.tsx). */
+.some-ui {
+  position: absolute; inset: 6px; border-radius: 20px; pointer-events: none; color: #fff;
+  font-size: 8px; line-height: 1.2; text-shadow: 0 1px 3px rgba(0,0,0,.6);
+  background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, transparent 18%, transparent 70%, rgba(0,0,0,.55) 100%);
+}
+.some-ui svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.some-yla { position: absolute; top: 9px; left: 10px; right: 10px; display: flex; gap: 8px; font-size: 9.5px }
+.some-yla-tt { justify-content: center; gap: 10px }
+.some-yla-tt span { opacity: .7 }
+.some-yla-tt b { border-bottom: 1.5px solid #fff; padding-bottom: 2px }
+.some-sivu { position: absolute; right: 7px; bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px }
+.some-ala { position: absolute; left: 9px; right: 30px; bottom: 11px; display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden }
+.some-ala b { font-size: 8.5px; overflow: hidden; text-overflow: ellipsis }
+.some-avatar { width: 14px; height: 14px; flex: none; border-radius: 50%; background: linear-gradient(135deg, #ffd36f, #ff4f8b 55%, #8a5cff); box-shadow: 0 0 0 1px #fff }
+.some-avatar-iso { width: 20px; height: 20px; background: #fff; box-shadow: 0 0 0 1.5px #fff, inset 0 0 0 5px #111 }
+.some-ala-tt { right: 34px }
+.tn-selain { max-width: none; rotate: -2deg }
+.tn-tab-yla { flex-wrap: wrap }
+
+/* Puhelin iPhonen mittasuhteisiin (5.10.2026): naytto 9:19,5, isot
+   kulmapyoristykset, Dynamic Island ja sivunapit. Video rajataan
+   naytolle object-fit: coverilla. */
+.tn-puhelin {
+  width: 196px; aspect-ratio: 9 / 19.5; padding: 8px; overflow: visible;
+  border-radius: 42px; background: #0a0d12;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255,255,255,.14),
+    0 0 0 1px #2a3038,
+    0 40px 70px -26px rgba(0,0,0,.9), 0 0 90px rgba(111,236,255,.2);
+}
+.tn-puhelin .tul-video { border-radius: 34px }
+.tn-puhelin .some-ui { inset: 8px; border-radius: 34px }
+.tn-puhelin .some-yla { top: 40px }
+.tn-saari {
+  position: absolute; z-index: 3; top: 17px; left: 50%; translate: -50% 0;
+  width: 62px; height: 18px; border-radius: 999px; background: #000;
+}
+/* Sivunapit kehyksen ulkopuolella */
+.tn-puhelin::before, .tn-puhelin::after {
+  content: ""; position: absolute; width: 3px; border-radius: 2px; background: #2a3038;
+}
+.tn-puhelin::before { left: -3px; top: 92px; height: 52px; box-shadow: 0 -34px 0 -8px #2a3038 }
+.tn-puhelin::after { right: -3px; top: 118px; height: 66px }
+
+/* Verkkosivucase (5.10.2026): selain ja puhelin paallekkain, sivut
+   valittavina napeilla. Mediasarake leveampi kuin videocaseissa. */
+@media (min-width: 701px) {
+  .tn-lava-sivu { grid-template-columns: minmax(0, 1fr); gap: 36px; align-items: start }
+  .tn-lava-sivu .tn-tarina { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); column-gap: 40px; align-items: start }
+  .tn-lava-sivu .tn-tarina > * { grid-column: 1 }
+  .tn-lava-sivu .tn-rivit { grid-column: 2; grid-row: 1 / span 3; margin-top: 4px }
+  .tn-lava-sivu .tn-laitteet { max-width: 600px; padding-right: 92px; padding-bottom: 26px }
+  .tn-lava-sivu .tn-puhelin-pieni { width: 25%; max-width: 150px }
+}
+.tn-sivut { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 26px }
+.tn-laitteet { position: relative; width: 100%; padding: 0 48px 34px 0; animation: tn-sisaan .35s ease both }
+.tn-laitteet .tn-selain { rotate: -2deg }
+.tn-laitteet .tn-selain img { aspect-ratio: 16 / 10; object-fit: cover; object-position: top }
+.tn-puhelin.tn-puhelin-pieni {
+  position: absolute; right: 0; bottom: 0; width: 34%; max-width: 132px; padding: 5px;
+  border-radius: 26px; rotate: 3deg;
+}
+.tn-puhelin-pieni img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 21px }
+.tn-puhelin-pieni::before, .tn-puhelin-pieni::after { display: none }
+.tn-sivuvalinta { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px }
+.tn-sivuvalinta button {
+  font: inherit; font-size: 13.5px; font-weight: 600; padding: 7px 14px; border-radius: 999px; cursor: pointer;
+  color: #c9d6e2; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.18);
+}
+.tn-sivuvalinta button:hover { border-color: rgba(111,236,255,.6) }
+.tn-sivuvalinta button.on { color: #0b131d; background: #6fecff; border-color: #6fecff }
+.tn-sivuvalinta button:focus-visible { outline: 2px solid #6fecff; outline-offset: 2px }
+@media (prefers-reduced-motion: reduce) { .tn-laitteet { animation: none } }
+/* Linkit asiakkaan kanaviin ja sivustolle */
+.tn-linkit { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px }
+.tn-linkit a {
+  display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px 9px 13px; border-radius: 999px;
+  font-size: 14px; font-weight: 600; color: #f4f7fa; text-decoration: none;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.22);
+  transition: border-color .2s, background-color .2s;
+}
+.tn-linkit a:hover { border-color: #6fecff; background: rgba(111,236,255,.12) }
+.tn-linkit a:focus-visible { outline: 2px solid #6fecff; outline-offset: 2px }
+.tn-linkit .tn-ikoni { width: 22px; height: 22px; flex: none }
+.tn-linkit .tn-ikoni-viiva { fill: none; stroke: #6fecff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.tn-lava-sivu .tn-linkit { grid-column: 1 }
