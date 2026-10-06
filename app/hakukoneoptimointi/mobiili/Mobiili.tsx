@@ -15,6 +15,7 @@
    - Tyorivin vihrea palkki: leveys -> scaleX.
    - Valilehdet, tasot ja UKK: kaikki sisalto on HTML:ssa (suljetut
      hidden), Efektit vaihtaa. */
+import { Ansa, LomakeVirhe } from "@/app/components/mobiili/Lomakeosat";
 import "./mobiili.css";
 import "./lisat.css";
 import { Fragment, type CSSProperties } from "react";
@@ -1298,13 +1299,15 @@ export default function HakuMobiili() {
                   <textarea name="viesti" rows={4} style={{ height: "112px", paddingTop: "13px", resize: "none" }} />
                 </label>
                 {" "}
-                <p className="mo-e-vast" data-seo="kiitos" hidden style={{ margin: "0", padding: "12px 14px", borderRadius: "12px", background: "rgba(111,236,255,.1)", color: "#b4f5ff", fontSize: "14.5px" }}>
-                      {"Kiitos. Vastaamme 24 tunnin sisällä."}
+                <p className="mo-e-vast" data-seo="kiitos" role="status" hidden style={{ margin: "0", padding: "12px 14px", borderRadius: "12px", background: "rgba(111,236,255,.1)", color: "#b4f5ff", fontSize: "14.5px" }}>
+                      {"Kiitos, tarjouspyyntö on perillä. Vastaamme arkisin 24 tunnin sisällä."}
                     </p>
                 {" "}
+                <Ansa />
                 <button type="submit" className="mo-e-btn mo-e-p" style={{ width: "100%", height: "54px", marginTop: "4px", fontSize: "16.5px", fontWeight: "600" }}>
                   {"Lähetä tarjouspyyntö"}
                 </button>
+                <LomakeVirhe />
                 {" "}
                 <p style={{ margin: "0", textAlign: "center", fontSize: "12.5px", color: "#8fa3b3" }}>
                   {"Ei sitoumuksia."}

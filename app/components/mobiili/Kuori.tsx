@@ -7,6 +7,7 @@
 import "./kuori.css";
 import "./mobiili.css";
 import { LOGO_VIEWBOX, LogoPolut } from "./Logo";
+import { Ansa, LomakeVirhe } from "./Lomakeosat";
 
 export type MobiiliReitti =
   | "/"
@@ -30,20 +31,6 @@ type Props = {
   /** iso = palvelusivujen ja etusivun palkki, pieni = yhteystiedot, laskutus, tietosuoja. */
   tapa?: "iso" | "pieni";
 };
-
-/* Piilotettu ansakenttä roskapostiboteille (kuten tyopoydan .vi-ansa). */
-function Ansa() {
-  return (
-    <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}>
-      <input type="text" name="verkkosivu" tabIndex={-1} autoComplete="off" />
-    </div>
-  );
-}
-
-/* Lahetysvirhe lomakkeen alla (Moottori.tsx kirjoittaa tekstin). */
-function LomakeVirhe() {
-  return <p data-mo-lomakevirhe="" role="alert" hidden style={{ margin: "0", textAlign: "center", fontSize: "14px", lineHeight: "1.5", color: "#ffb37a" }}></p>;
-}
 
 const NUOLI = (
   <span className="mo-wv-nuoli">

@@ -6,6 +6,7 @@
    (palkki, valikko, ikkunat, paljastukset, parallaksi, verkko, laiskat
    kuvat) ovat Moottori.tsx:ssa. */
 
+import { kytkeTarjous } from "@/app/components/mobiili/tarjous";
 import { useEffect } from "react";
 import { kuuntele, onMobiili, rajaa, type Tila } from "@/app/components/mobiili/vieritys";
 import { asetteleHero } from "@/app/components/mobiili/heroAsettelu";
@@ -263,19 +264,8 @@ export default function GraafinenEfektit() {
 
     /* ---------- TARJOUSPYYNTO (osion oma lomake) ---------- */
     const lomake = q<HTMLFormElement>("[data-g=lomake]");
-    const laheta = (e: Event) => {
-      e.preventDefault();
-      if (!lomake) return;
-      const d = new FormData(lomake);
-      const k = (x: string) => String(d.get(x) ?? "").trim();
-      const rivitM = [`Nimi: ${k("nimi")}`, `Sähköposti: ${k("email")}`, `Puhelin: ${k("puhelin")}`, `Paikkakunta: ${k("paikkakunta")}`, "", k("viesti")];
-      window.location.href = `mailto:info@wsmedia.fi?subject=${encodeURIComponent("Tarjouspyyntö: Graafinen suunnittelu")}&body=${encodeURIComponent(rivitM.join("\n"))}`;
-      const kiitos = q("[data-g=kiitos]");
-      if (kiitos) kiitos.hidden = false;
-      myohemmin();
-    };
-    lomake?.addEventListener("submit", laheta);
-    siivous.push(() => lomake?.removeEventListener("submit", laheta));
+    /* /api/lomake kuten tyopoydan BudgetForm (tarjous.ts). */
+    siivous.push(kytkeTarjous(lomake, q("[data-g=kiitos]"), myohemmin));
 
     return () => siivous.forEach((f) => f());
   }, []);

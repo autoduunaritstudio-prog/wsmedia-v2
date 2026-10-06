@@ -9,6 +9,7 @@
 
    Poikkeama suunnitelmasta: prosessin edistymispalkki animoi leveytta
    (width .3s); tassa sama nakyma transformilla (scaleX .3s). */
+import { Ansa, LomakeVirhe } from "@/app/components/mobiili/Lomakeosat";
 import "./mobiili.css";
 import "./lisat.css";
 import { Fragment } from "react";
@@ -865,16 +866,18 @@ export default function ToihinMobiili() {
                       {"CV, portfolio tai työnäyte (PDF, kuva, Word, zip)"}
                     </span>
                   </span>
-                  <input type="file" name="liite" multiple style={{ display: "none" }} />
+                  <input type="file" name="liite" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.zip" style={{ display: "none" }} />
                 </label>
                 {" "}
                 <p className="mo-e-vast" data-toihin="kiitos" role="status" hidden style={{ margin: "0", padding: "12px 14px", borderRadius: "12px", background: "rgba(111,236,255,.1)", color: "#b4f5ff", fontSize: "14.5px" }}>
-                      {"Kiitos hakemuksesta. Vastaamme viikon sisällä."}
+                      {"Kiitos, hakemus on perillä. Luemme sen ja vastaamme viikon sisällä."}
                     </p>
                 {" "}
+                <Ansa />
                 <button type="submit" className="mo-e-btn mo-e-p" style={{ width: "100%", height: "54px", marginTop: "4px", fontSize: "16.5px", fontWeight: "600" }}>
                   {"Lähetä hakemus"}
                 </button>
+                <LomakeVirhe />
                 {" "}
                 <p style={{ margin: "0", textAlign: "center", fontSize: "12.5px", color: "#8fa3b3" }}>
                   {"Käsittelemme hakemukset luottamuksellisesti."}

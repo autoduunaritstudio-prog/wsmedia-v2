@@ -36,26 +36,3 @@ export async function lahetaHakemus(f: FormData, osaaminen: string[], liitteet: 
   );
   return ok ? null : "Hakemus ei lähtenyt. Yritä uudelleen tai lähetä se osoitteeseen info@wsmedia.fi.";
 }
-
-/** Mobiilin ikkunat (components/mobiili/Moottori.tsx) kayttavat tata, kunnes
- *  nekin lahettavat /api/lomake-reitin kautta. */
-export function hakemusMailto(f: FormData, osaaminen: string[], liitteet: string[] = []) {
-  const k = (n: string) => String(f.get(n) ?? "").trim();
-  const rivit = [
-    `Nimi: ${k("nimi")}`,
-    `Sähköposti: ${k("sahkoposti")}`,
-    `Puhelin: ${k("puhelin")}`,
-    `Paikkakunta: ${k("paikkakunta")}`,
-    `Osaaminen: ${osaaminen.join(", ") || "ei valittu"}`,
-    `Työnäytteet: ${k("nayte")}`,
-    ...(k("malli") ? [`Toimeksianto vai työsuhde: ${k("malli")}`] : []),
-    ...(k("hinta") ? [`Tuntihinta tai palkkatoive: ${k("hinta")}`] : []),
-    "",
-    k("viesti"),
-    ...(liitteet.length
-      ? ["", `Liitteet (lisää ne tähän viestiin ennen lähettämistä): ${liitteet.join(", ")}`]
-      : []),
-  ];
-  const aihe = `Avoin hakemus: ${osaaminen.join(", ") || k("nimi") || "WS Media"}`;
-  return `mailto:info@wsmedia.fi?subject=${encodeURIComponent(aihe)}&body=${encodeURIComponent(rivit.join("\n"))}`;
-}

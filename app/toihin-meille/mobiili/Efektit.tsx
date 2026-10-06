@@ -8,7 +8,7 @@
 
 import { useEffect } from "react";
 import { kuuntele, onMobiili, rajaa, type Tila } from "@/app/components/mobiili/vieritys";
-import { hakemusMailto } from "../hakemus";
+import { lahetaHakemus } from "../hakemus";
 import { HMALLIT, askelTyyli, hMalliTyyli, malliTyyli, odTyyli, rooliTyyli, taitoTyyli } from "./tilat";
 
 /* Suunnitelman hero: 0..SC sormivihje ja rengas, kansi nousee KA..KA+HV. */
@@ -189,22 +189,57 @@ export default function Efektit() {
     siivous.push(() => juuri.removeEventListener("click", klikki));
 
     /* ---------- AVOIN HAKEMUS (sivun oma lomake) ----------
-       Sama sahkopostisisalto kuin tyopoydan lomakkeella ja HakemusIkkunalla
-       (hakemusMailto). Kentat nimetaan sen mukaan; valitut taidot, malli
-       ja liitteiden nimet kulkevat mukana. */
+       Sama lahetys kuin tyopoydan lomakkeella ja HakemusIkkunalla
+       (lahetaHakemus, /api/lomake, 6.10.2026). Kentat nimetaan sen mukaan;
+       valitut taidot, malli ja liitteet kulkevat mukana. */
     const lomake = q<HTMLFormElement>("[data-toihin=lomake]");
-    const laheta = (e: Event) => {
+    let lahettaa = false;
+    let valmis = false; // perillä olevaa hakemusta ei lähetetä toiseen kertaan
+    const laheta = async (e: Event) => {
       e.preventDefault();
-      if (!lomake) return;
+      if (!lomake || lahettaa || valmis) return;
+      const kiitos = q("[data-toihin=kiitos]");
+      if (kiitos) kiitos.hidden = true;
       const d = new FormData(lomake);
+      const nappi = lomake.querySelector<HTMLButtonElement>("button[type=submit]");
+      const virhe = lomake.querySelector<HTMLElement>("[data-mo-lomakevirhe]");
+      const nayta = (t: string | null) => {
+        if (!virhe) return;
+        virhe.textContent = t ?? "";
+        virhe.hidden = !t;
+        mitat();
+      };
+      const nimi = String(d.get("nimi") ?? "").trim();
+      const posti = String(d.get("email") ?? "").trim();
+      if (!nimi || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(posti)) {
+        nayta("Kirjoita nimi ja sähköposti, niin voimme vastata.");
+        return;
+      }
+      nayta(null);
       d.set("sahkoposti", String(d.get("email") ?? ""));
       d.set("nayte", String(d.get("linkki") ?? ""));
       d.set("malli", HMALLIT[hmalli]);
       const osaaminen = qa("[data-taito]").map((b) => b.dataset.taito || "").filter((n) => taidot.has(n));
       const liite = lomake.querySelector<HTMLInputElement>('input[type="file"]');
-      const liitteet = liite?.files ? [...liite.files].map((f) => f.name) : [];
-      window.location.href = hakemusMailto(d, osaaminen, liitteet);
-      const kiitos = q("[data-toihin=kiitos]");
+      const liitteet = liite?.files ? [...liite.files] : [];
+      d.delete("liite");
+      lahettaa = true;
+      const teksti = nappi?.textContent ?? "";
+      if (nappi) {
+        nappi.disabled = true;
+        nappi.textContent = "Lähetetään…";
+      }
+      const viesti = await lahetaHakemus(d, osaaminen, liitteet);
+      lahettaa = false;
+      if (nappi) {
+        nappi.disabled = false;
+        nappi.textContent = teksti;
+      }
+      if (viesti) {
+        nayta(viesti);
+        return;
+      }
+      valmis = true;
       if (kiitos) kiitos.hidden = false;
       mitat();
     };

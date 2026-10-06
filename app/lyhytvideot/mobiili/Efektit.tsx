@@ -12,6 +12,7 @@
    video on nakyvissa, ja reduced motion -tilassa ei toistoa lainkaan,
    jolloin nakyy kansikuva. */
 
+import { kytkeTarjous } from "@/app/components/mobiili/tarjous";
 import { useEffect } from "react";
 import { kuuntele, onMobiili, pehmea, rajaa, reduce, type Tila } from "@/app/components/mobiili/vieritys";
 
@@ -297,18 +298,8 @@ export default function Efektit() {
 
     /* ---------- TARJOUSPYYNTO (osion oma lomake) ---------- */
     const lomake = q<HTMLFormElement>("[data-lv=lomake]");
-    const laheta = (e: Event) => {
-      e.preventDefault();
-      if (!lomake) return;
-      const d = new FormData(lomake);
-      const k = (x: string) => String(d.get(x) ?? "").trim();
-      const rivit = [`Nimi: ${k("nimi")}`, `Sähköposti: ${k("email")}`, `Puhelin: ${k("puhelin")}`, `Paikkakunta: ${k("paikkakunta")}`, "Palvelu: Lyhytvideot", "", k("viesti")];
-      window.location.href = `mailto:info@wsmedia.fi?subject=${encodeURIComponent("Tarjouspyyntö: Lyhytvideot")}&body=${encodeURIComponent(rivit.join("\n"))}`;
-      const kiitos = q("[data-lv=kiitos]");
-      if (kiitos) kiitos.hidden = false;
-    };
-    lomake?.addEventListener("submit", laheta);
-    siivous.push(() => lomake?.removeEventListener("submit", laheta));
+    /* /api/lomake kuten tyopoydan BudgetForm (tarjous.ts). */
+    siivous.push(kytkeTarjous(lomake, q("[data-lv=kiitos]")));
 
     return () => siivous.forEach((f) => f());
   }, []);

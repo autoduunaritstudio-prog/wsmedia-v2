@@ -6,6 +6,7 @@
    Reactin tilaa vierityksen aikana. Yhteiset asiat (palkki, valikko,
    ikkunat, paljastukset, parallaksi, verkko, kuvat) ovat Moottori.tsx:ssa. */
 
+import { kytkeTarjous } from "@/app/components/mobiili/tarjous";
 import { useEffect } from "react";
 import { kuuntele, onMobiili, pyyda, rajaa, reduce, type Tila } from "@/app/components/mobiili/vieritys";
 import { asetteleHero } from "@/app/components/mobiili/heroAsettelu";
@@ -261,19 +262,8 @@ export default function Efektit() {
 
     /* ---------- TARJOUSPYYNTO (osion oma lomake) ---------- */
     const lomake = q<HTMLFormElement>("[data-seo=lomake]");
-    const laheta = (e: Event) => {
-      e.preventDefault();
-      if (!lomake) return;
-      const d = new FormData(lomake);
-      const k = (x: string) => String(d.get(x) ?? "").trim();
-      const rivit2 = [`Nimi: ${k("nimi")}`, `Sähköposti: ${k("email")}`, `Puhelin: ${k("puhelin")}`, `Paikkakunta: ${k("paikkakunta")}`, "", k("viesti")];
-      window.location.href = `mailto:info@wsmedia.fi?subject=${encodeURIComponent("Tarjouspyyntö: Hakukoneoptimointi")}&body=${encodeURIComponent(rivit2.join("\n"))}`;
-      const kiitos = q("[data-seo=kiitos]");
-      if (kiitos) kiitos.hidden = false;
-      window.setTimeout(mitat, 60);
-    };
-    lomake?.addEventListener("submit", laheta);
-    siivous.push(() => lomake?.removeEventListener("submit", laheta));
+    /* /api/lomake kuten tyopoydan BudgetForm (tarjous.ts). */
+    siivous.push(kytkeTarjous(lomake, q("[data-seo=kiitos]"), () => window.setTimeout(mitat, 60)));
 
     return () => siivous.forEach((f) => f());
   }, []);

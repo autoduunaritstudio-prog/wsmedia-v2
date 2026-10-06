@@ -5,6 +5,7 @@
    renderoi mitaan. Yhteiset asiat (palkki, valikko, ikkunat,
    paljastukset, pino, verkko) ovat Moottori.tsx:ssa. */
 
+import { kytkeTarjous } from "@/app/components/mobiili/tarjous";
 import { useEffect } from "react";
 import { kuuntele, onMobiili, rajaa, type Tila, pyyda } from "@/app/components/mobiili/vieritys";
 
@@ -190,18 +191,8 @@ export default function EtuEfektit() {
 
     /* ---------- TARJOUSPYYNTO (osion oma lomake) ---------- */
     const lomake = q<HTMLFormElement>("[data-etu=lomake]");
-    const laheta = (e: Event) => {
-      e.preventDefault();
-      if (!lomake) return;
-      const d = new FormData(lomake);
-      const k = (x: string) => String(d.get(x) ?? "").trim();
-      const rivit = [`Nimi: ${k("nimi")}`, `Sähköposti: ${k("email")}`, `Puhelin: ${k("puhelin")}`, `Paikkakunta: ${k("paikkakunta")}`, "", k("viesti")];
-      window.location.href = `mailto:info@wsmedia.fi?subject=${encodeURIComponent("Tarjouspyyntö: WS Media")}&body=${encodeURIComponent(rivit.join("\n"))}`;
-      const kiitos = q("[data-etu=kiitos]");
-      if (kiitos) kiitos.hidden = false;
-    };
-    lomake?.addEventListener("submit", laheta);
-    siivous.push(() => lomake?.removeEventListener("submit", laheta));
+    /* /api/lomake kuten tyopoydan BudgetForm (tarjous.ts). */
+    siivous.push(kytkeTarjous(lomake, q("[data-etu=kiitos]")));
 
     return () => siivous.forEach((f) => f());
   }, []);
