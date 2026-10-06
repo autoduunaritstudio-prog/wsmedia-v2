@@ -1,7 +1,8 @@
 /**
  * KARTOITUKSEN VARAUS (4.10.2026), ks. components/VarausIkkuna.tsx.
  *
- * GET  /api/varaus?tapa=paikalla|teams  -> vapaat ajat 3.–5. arkipaivalle
+ * GET  /api/varaus?tapa=paikalla|teams  -> vapaat ajat 3. arkipaivasta
+ *                                          30 kalenteripaivaa eteenpain
  * POST /api/varaus                      -> tarkistaa ajan uudelleen,
  *                                          tekee tapahtuman kalenteriin
  *                                          ja lahettaa sahkopostit
@@ -24,6 +25,8 @@ export const dynamic = "force-dynamic";
 
 const tapaOk = (t: unknown): t is Tapa => t === "paikalla" || t === "teams";
 
+/** Varattavien paivien valit. GET ja POST kayttavat samaa, ja Googlen
+ *  freebusy haetaan koko valille yhdella kutsulla (varatut()). */
 function vali() {
   const p = varattavatPaivat();
   const eka = p[0];

@@ -18012,6 +18012,18 @@ dialog.yi { margin: auto; inset: 0; position: fixed }
 .vi-paiva[aria-selected="true"] { background: #0f1a2b; border-color: #0f1a2b; color: #fff }
 .vi-paiva[aria-selected="true"] span, .vi-paiva[aria-selected="true"] small { color: #9fe9f5 }
 .vi-paiva:disabled { opacity: .45; cursor: not-allowed }
+/* Viikkonakyma (6.10.2026): paivat ma–pe viikko kerrallaan, nuolet edelliseen ja seuraavaan viikkoon. */
+.vi-viikko { display: flex; align-items: center; justify-content: space-between; gap: 8px }
+.vi-viikko b { font-size: 15px; font-weight: 600; color: #142033; font-variant-numeric: tabular-nums }
+.vi-nuoli { width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border-radius: 10px; border: 1px solid #d5dde6; background: #fff; color: #142033; cursor: pointer; transition: border-color .15s }
+.vi-nuoli:hover:not(:disabled) { border-color: #24c6e0 }
+.vi-nuoli:disabled { opacity: .45; cursor: not-allowed }
+.vi-nuoli:focus-visible { outline: 2px solid #24c6e0; outline-offset: 2px }
+.vi-paivat-vk { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px }
+.vi-paivat-vk .vi-paiva { padding: 10px 2px; min-height: 44px }
+.vi-paivat-vk .vi-paiva small { font-size: 11.5px; line-height: 1.25; text-align: center }
+.vi-paivat-vk .vi-paiva b { font-size: clamp(15px, 4.2vw, 20px) }
+.vi-paivat-vk .vi-paiva { min-width: 0; overflow: hidden }
 .vi-ajat { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; max-height: 236px; overflow: auto; padding: 2px }
 .vi-aika {
   padding: 10px 0; border-radius: 10px; border: 1px solid #d5dde6; background: #fff; cursor: pointer;

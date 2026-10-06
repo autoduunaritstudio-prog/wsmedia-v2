@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { YhteysTieto } from "./Kehotukset";
+import { maanantai, viikkoTeksti, viikot } from "./varausViikot";
 
 /**
  * MAKSUTTOMAN KARTOITUKSEN VARAUS (4.10.2026).
@@ -9,7 +10,8 @@ import type { YhteysTieto } from "./Kehotukset";
  * Avautuu ws:varaus-tapahtumasta (Kehotukset.tsx). Kolme vaihetta:
  *
  * 1. Tapa: paikan paalla (paakaupunkiseutu) tai Teams.
- * 2. Aika: 3.–5. arkipaiva, vapaat 30 min ajat haetaan
+ * 2. Aika: 3. arkipaivasta kuukausi eteenpain viikko kerrallaan (ma–pe,
+ *    nuolilla edellinen ja seuraava viikko). Vapaat 30 min ajat haetaan
  *    /api/varaus-reitilta, joka lukee info@wsmedia.fi:n kalenterin
  *    varatut ajat. Paikan paalla -ajoissa on pidempi puskuri
  *    siirtymaa varten, joten vapaat ajat haetaan tavan mukaan.
@@ -45,6 +47,7 @@ export default function VarausIkkuna() {
   const [paivat, setPaivat] = useState<Paiva[]>([]);
   const [tila, setTila] = useState<Tila>("lataa");
   const [paiva, setPaiva] = useState(0);
+  const [viikko, setViikko] = useState(0);
   const [aika, setAika] = useState<string | null>(null);
   const [palvelu, setPalvelu] = useState<string | undefined>();
   const [ilmoitus, setIlmoitus] = useState<string | null>(null);
@@ -52,6 +55,15 @@ export default function VarausIkkuna() {
   /* Etusivun kalenterista valittu aika (ISO), ks. BookingCal.tsx. */
   const [toive, setToive] = useState<string | null>(null);
   const toiveRef = useRef<string | null>(null);
+
+  /* Valitsee paivan ja nayttaa sen viikon. */
+  const naytaPaiva = useCallback((lista: Paiva[], i: number) => {
+    setPaiva(i);
+    const vk = viikot(lista.map((p) => p.paiva));
+    const ma = lista[i] ? maanantai(lista[i].paiva) : null;
+    const w = vk.findIndex((v) => v[0] === ma);
+    setViikko(w < 0 ? 0 : w);
+  }, []);
 
   const hae = useCallback(async (t: Tapa) => {
     setTila("lataa");
@@ -61,7 +73,7 @@ export default function VarausIkkuna() {
       const j = (await r.json()) as { paivat: Paiva[] };
       setPaivat(j.paivat);
       const eka = j.paivat.findIndex((p) => p.ajat.length > 0);
-      setPaiva(eka < 0 ? 0 : eka);
+      naytaPaiva(j.paivat, eka < 0 ? 0 : eka);
       setTila("valmis");
       /* Toivottu aika: vapaana -> suoraan yhteystietoihin, muuten
          toivotun paivan ajat esiin ja pyynto valita toinen. */
@@ -70,19 +82,19 @@ export default function VarausIkkuna() {
         toiveRef.current = null;
         const i = j.paivat.findIndex((p) => p.ajat.includes(tv));
         if (i >= 0) {
-          setPaiva(i);
+          naytaPaiva(j.paivat, i);
           setAika(tv);
           setVaihe(3);
         } else {
           const pv = j.paivat.findIndex((p) => tv.startsWith(p.paiva) || p.ajat.some((a) => a.slice(0, 10) === tv.slice(0, 10)));
-          if (pv >= 0) setPaiva(pv);
+          if (pv >= 0) naytaPaiva(j.paivat, pv);
           setIlmoitus("Toivomasi aika ei ole vapaana. Valitse toinen aika.");
         }
       }
     } catch {
       setTila("virhe");
     }
-  }, []);
+  }, [naytaPaiva]);
 
   useEffect(() => {
     const d = ref.current;
@@ -168,6 +180,16 @@ export default function VarausIkkuna() {
   };
 
   const valittu = paivat[paiva];
+  const kaikkiViikot = viikot(paivat.map((p) => p.paiva));
+  const naytetty = kaikkiViikot[viikko] ?? [];
+  const indeksi = new Map(paivat.map((p, i) => [p.paiva, i]));
+  /* Viikon vaihto valitsee viikon ensimmaisen vapaan paivan, jotta
+     alla nakyvat kellonajat kuuluvat nakyvaan viikkoon. */
+  const vaihdaViikko = (w: number) => {
+    setViikko(w);
+    const i = (kaikkiViikot[w] ?? []).map((d) => indeksi.get(d)).find((k) => k !== undefined && paivat[k].ajat.length > 0);
+    if (i !== undefined) setPaiva(i);
+  };
   const tapaTeksti = tapa === "paikalla" ? "Paikan päällä" : tapa === "teams" ? "Teams" : null;
 
   return (
@@ -270,22 +292,33 @@ export default function VarausIkkuna() {
                 </div>
               ) : (
                 <>
-                  <div className="vi-paivat" role="tablist" aria-label="Päivä">
-                    {paivat.map((p, i) => {
-                      const t = paivaTeksti(p.paiva);
+                  <div className="vi-viikko">
+                    <button type="button" className="vi-nuoli" aria-label="Edellinen viikko" disabled={viikko <= 0} onClick={() => vaihdaViikko(viikko - 1)}>
+                      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    </button>
+                    <b aria-live="polite">{naytetty.length ? viikkoTeksti(naytetty) : ""}</b>
+                    <button type="button" className="vi-nuoli" aria-label="Seuraava viikko" disabled={viikko >= kaikkiViikot.length - 1} onClick={() => vaihdaViikko(viikko + 1)}>
+                      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    </button>
+                  </div>
+                  <div className="vi-paivat vi-paivat-vk" role="tablist" aria-label="Päivä">
+                    {naytetty.map((d) => {
+                      const i = indeksi.get(d);
+                      const p = i === undefined ? null : paivat[i];
+                      const t = paivaTeksti(d);
                       return (
                         <button
-                          key={p.paiva}
+                          key={d}
                           type="button"
                           role="tab"
                           aria-selected={i === paiva}
-                          disabled={p.ajat.length === 0}
+                          disabled={!p || p.ajat.length === 0}
                           className="vi-paiva"
-                          onClick={() => setPaiva(i)}
+                          onClick={() => i !== undefined && setPaiva(i)}
                         >
                           <span>{t.vk}</span>
                           <b>{t.pv}</b>
-                          <small>{p.ajat.length ? `${p.ajat.length} vapaata` : "täynnä"}</small>
+                          <small>{!p ? "–" : p.ajat.length ? `${p.ajat.length} vapaata` : "täynnä"}</small>
                         </button>
                       );
                     })}
