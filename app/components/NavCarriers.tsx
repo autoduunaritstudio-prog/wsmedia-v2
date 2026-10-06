@@ -138,7 +138,12 @@ const BEAM_RAMP = 0.15; // keilan nousu/lasku vaiheen b sisalla
 const BEAM_HALF_O = 0.30; // rad, ulkokeilan puolikulma (n. 17 astetta)
 const BEAM_HALF_I = 0.15; // rad, sisakeila
 const LAMP_LEN = 15;      // lampun rungon pituus kadesta paahan
-const MASK_PAD = 1;       // px, videoseinan maskin varmuusmarginaali
+const MASK_PAD = 1;       // px, videoseinan leikkauksen varmuusmarginaali
+const MASK_R = 20;        // px, leikkauksen kulmapyoristys = kortin border-radius
+/* Leikkauspolun ulkoreuna. Keilakerros on itse ruudun kokoinen SVG, joka
+   leikkaa sisaltonsa omaan alaansa, joten iso kehys vastaa entisen maskin
+   aluetta (0..100 %) eika koskaan rajaa nakyvaa keilaa. */
+const CLIP_OUTER = "M-10000 -10000H20000V20000H-10000Z";
 /* Taustan aariarvot navipalkin takana: --color-bg ja --color-dark.
    Kaytetaan blendin lapi nakyvan varin laskentaan, ks. paintFor(). */
 const BG = 255;
@@ -260,7 +265,7 @@ export default function NavCarriers() {
 
     // Keilakerros syntyy portaalilla vasta seuraavassa renderissa, joten
     // se haetaan laiskasti eika mountissa.
-    type BeamEls = { grp: SVGElement; cone: SVGElement[][]; grad: SVGElement[]; mask: SVGElement[] };
+    type BeamEls = { grp: SVGElement; cone: SVGElement[][]; grad: SVGElement[]; clip: SVGElement | null };
     let beamEls: BeamEls | null = null;
     const getBeam = (): BeamEls | null => {
       if (beamEls) return beamEls;
@@ -271,8 +276,7 @@ export default function NavCarriers() {
       if (!grp) return null;
       const cone = [0, 1].map((k) => [q(`o${k}`), q(`i${k}`)].filter(Boolean) as SVGElement[]);
       const grad = [0, 1].map((k) => q(`g${k}`)).filter(Boolean) as SVGElement[];
-      const mask = [0, 1, 2, 3, 4].map((n) => q(`m${n}`)).filter(Boolean) as SVGElement[];
-      beamEls = { grp, cone, grad, mask };
+      beamEls = { grp, cone, grad, clip: q("clip") };
       return beamEls;
     };
 
@@ -281,6 +285,7 @@ export default function NavCarriers() {
     let prevT = 0;
     let prevBack = -1;
     let backCss = `rgb(${BG},${BG},${BG})`;
+    let prevClip = "";
     let idle = true;
 
     let lepoY = -1;
@@ -723,17 +728,32 @@ export default function NavCarriers() {
             if (cr.right > x1) x1 = cr.right;
             if (cr.bottom > y1) y1 = cr.bottom;
           }
-          const m0 = be.mask[0];
-          if (m0) {
+          //
+          // LEIKKAUS clipPathilla, EI maskilla (7.10.2026). Sama muoto kuin
+          // ennen (pyoristetty unionilaatikko, rx 20, MASK_PAD), mutta
+          // evenodd-polkuna: ruudun kokoinen ulkoreuna ja kortit reikana.
+          // SVG-maski pakotti WebKitin (Safari) piirtamaan koko ruudun
+          // kokoisen luminanssipuskurin prosessorilla joka kehys kun
+          // reunat liikkuivat: vyohykkeella Referenssit-Kartoitus-Tulokset
+          // 61 % kehyksista ylitti 20 ms, ilman maskia 11 %
+          // (scripts/safari-vyohyke.mjs). Polkuleikkaus ei tarvitse
+          // apupuskuria. Chromessa kumpikin oli yhta nopea.
+          if (be.clip) {
+            let d = CLIP_OUTER;
             if (x1 > x0) {
-              m0.setAttribute("x", (x0 - MASK_PAD).toFixed(1));
-              m0.setAttribute("y", (y0 - MASK_PAD).toFixed(1));
-              m0.setAttribute("width", (x1 - x0 + MASK_PAD * 2).toFixed(1));
-              m0.setAttribute("height", (y1 - y0 + MASK_PAD * 2).toFixed(1));
-              m0.setAttribute("rx", "20");
-            } else m0.setAttribute("width", "0");
+              const x = x0 - MASK_PAD, y = y0 - MASK_PAD;
+              const w = x1 - x0 + MASK_PAD * 2, h = y1 - y0 + MASK_PAD * 2;
+              // Kuten <rect rx>: ry = rx, ja kumpikin rajataan erikseen
+              // puoleen omasta sivustaan.
+              const rx = Math.min(MASK_R, w / 2), ry = Math.min(MASK_R, h / 2);
+              const f = (v: number) => v.toFixed(1);
+              d += `M${f(x + rx)} ${f(y)}H${f(x + w - rx)}A${f(rx)} ${f(ry)} 0 0 1 ${f(x + w)} ${f(y + ry)}` +
+                `V${f(y + h - ry)}A${f(rx)} ${f(ry)} 0 0 1 ${f(x + w - rx)} ${f(y + h)}` +
+                `H${f(x + rx)}A${f(rx)} ${f(ry)} 0 0 1 ${f(x)} ${f(y + h - ry)}` +
+                `V${f(y + ry)}A${f(rx)} ${f(ry)} 0 0 1 ${f(x + rx)} ${f(y)}Z`;
+            }
+            if (d !== prevClip) { be.clip.setAttribute("d", d); prevClip = d; }
           }
-          for (let n = 1; n < be.mask.length; n++) be.mask[n].setAttribute("width", "0");
         }
       }
     };
@@ -816,15 +836,13 @@ export default function NavCarriers() {
               ))}
               {/* Videokortit leikataan pois keilasta. Nain kortin oma
                   opacity ja filter pysyvat koskemattomina - keila ei
-                  tummenna eika kirkasta niita, vaan kulkee ohi ja valista. */}
-              <mask id="beamMask" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
-                <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
-                {[0, 1, 2, 3, 4].map((n) => (
-                  <rect key={n} data-b={`m${n}`} width="0" height="0" fill="#000" />
-                ))}
-              </mask>
+                  tummenna eika kirkasta niita, vaan kulkee ohi ja valista.
+                  clipPath eika mask: ks. leikkauslohko silmukassa. */}
+              <clipPath id="beamClip" clipPathUnits="userSpaceOnUse">
+                <path data-b="clip" clipRule="evenodd" d={CLIP_OUTER} />
+              </clipPath>
             </defs>
-            <g data-b="grp" opacity="0" mask="url(#beamMask)">
+            <g data-b="grp" opacity="0" clipPath="url(#beamClip)">
               {[0, 1].map((k) => (
                 <g key={k}>
                   <path data-b={`o${k}`} fill={`url(#beamG${k})`} opacity="0.55" />
