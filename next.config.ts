@@ -29,11 +29,25 @@ const nextConfig: NextConfig = {
   /* Vanhan sivuston osoitteet, jotka ovat yha Googlen indeksissa
      (site:wsmedia.fi 6.10.2026). permanent: true antaa 308:n, jonka
      Google kasittelee kuten 301:n. Yksi hyppy suoraan lopulliseen
-     osoitteeseen, ei ketjuja. */
+     osoitteeseen, ei ketjuja.
+
+     KAUTTAVIIVA. Nextin oma loppukauttaviivan poisto ajetaan ENNEN
+     omia ohjauksia (priority), joten /rekry/ teki kaksi hyppya:
+     /rekry/ -> /rekry -> /toihin-meille. Siksi oma poisto on kytketty
+     pois (skipTrailingSlashRedirect) ja korvattu samalla saannolla
+     listan lopussa. Omien ohjausten lahde hyvaksyy loppukauttaviivan
+     (Next lisaa regexiin (?:/)?), joten /rekry/ osuu suoraan kohteeseen.
+     Muut osoitteet saavat saman 308:n kuin ennen. Ainoa ero: Nextin
+     omat /_next/-polut eivat enaa ohjaudu, koska omat saannot ohittavat
+     ne aina (niita ei kayteta kauttaviivalla). Uudet vanhat osoitteet
+     lisataan AINA ennen viimeista saantoa. */
+  skipTrailingSlashRedirect: true,
   async redirects() {
     return [
       { source: "/rekry", destination: "/toihin-meille", permanent: true },
       { source: "/lyhytvideot-yritykselle", destination: "/lyhytvideot", permanent: true },
+      /* Nextin oman kauttaviivasaannon korvaaja, pidettava viimeisena. */
+      { source: "/:path+/", destination: "/:path+", permanent: true },
     ];
   },
 };
