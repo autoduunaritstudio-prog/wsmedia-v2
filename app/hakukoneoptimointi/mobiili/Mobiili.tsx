@@ -18,7 +18,7 @@
 import "./mobiili.css";
 import "./lisat.css";
 import { Fragment, type CSSProperties } from "react";
-import { mo, TYHJA } from "@/app/components/mobiili/mo";
+import { mo, TYHJA, logoLeveys } from "@/app/components/mobiili/mo";
 import Kuori from "@/app/components/mobiili/Kuori";
 import Alatunniste from "@/app/components/mobiili/Alatunniste";
 import Moottori from "@/app/components/mobiili/Moottori";
@@ -156,9 +156,9 @@ export default function HakuMobiili() {
               {" "}
             </svg>
             {" "}
-            <div className="mo-s-tulo" style={{ position: "absolute", left: "16px", right: "16px", top: "calc(64px + max(0px, (100svh - 798px) / 2))", transform: "translateY(0px)", perspective: "900px" }} data-seo="kortti">
+            <div className="mo-s-tulo" style={{ position: "absolute", left: "16px", right: "16px", top: "72px", transform: "translateY(0px)", transformOrigin: "50% 0", perspective: "900px" }} data-seo="kortti">
               {" "}
-              <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr 1fr", alignItems: "center", height: "54px", padding: "0 6px", borderRadius: "18px", background: "rgba(10,18,32,.6)", WebkitBackdropFilter: "blur(14px)", backdropFilter: "blur(14px)", boxShadow: "inset 0 0 0 1px rgba(255,255,255,.1)" }}>
+              <div data-seo="stat" style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr 1fr", alignItems: "center", height: "54px", padding: "0 6px", borderRadius: "18px", background: "rgba(10,18,32,.92)", boxShadow: "inset 0 0 0 1px rgba(255,255,255,.1)" }}>
                 {" "}
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", paddingLeft: "8px" }}>
                   <b style={{ fontSize: "28px", lineHeight: "1", letterSpacing: "-.03em", fontWeight: "700", color: "#f5f5f7", transition: "color .3s" }} data-seo="sija">
@@ -196,7 +196,7 @@ export default function HakuMobiili() {
               <span aria-hidden="true" style={{ position: "absolute", inset: "0", borderRadius: "20px", boxShadow: "0 0 60px -10px rgba(111,236,255,.45)", opacity: "0" }} data-seo="serphehku"></span>
               <div className="mo-s-serp" style={{ position: "relative", boxShadow: "0 40px 70px -30px rgba(0,0,0,.95), 0 0 0 1px rgba(255,255,255,.12)" }}>
                 {" "}
-                <div style={{ padding: "8px 10px 4px" }}>
+                <div data-seo="hakuala" style={{ padding: "8px 10px 4px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", height: "30px", padding: "0 12px", borderRadius: "999px", boxShadow: "0 1px 6px rgba(32,33,36,.22)", fontSize: "12.5px" }}>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5f6368" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
                       <path d="M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM15.5 15.5L20 20"></path>
@@ -207,7 +207,7 @@ export default function HakuMobiili() {
                     </span>
                   </div>
                   {" "}
-                  <div style={{ display: "flex", gap: "14px", marginTop: "5px", padding: "0 6px", fontSize: "10.5px", color: "#5f6368" }}>
+                  <div data-seo-valit="" style={{ display: "flex", gap: "14px", marginTop: "5px", padding: "0 6px", fontSize: "10.5px", color: "#5f6368" }}>
                     <span style={{ color: "#1a73e8", boxShadow: "inset 0 -2px 0 #1a73e8", paddingBottom: "3px" }}>
                       {"Kaikki"}
                     </span>
@@ -226,7 +226,7 @@ export default function HakuMobiili() {
                   </div>
                 </div>
                 {" "}
-                <div style={{ position: "relative", height: "192px", borderTop: "1px solid #ebebeb" }}>
+                <div data-seo="rivit" style={{ position: "relative", height: "192px", borderTop: "1px solid #ebebeb" }}>
                   {" "}
                   {(TULOKSET).map((t: any, tI: number) => (
                     <Fragment key={tI}>
@@ -272,7 +272,7 @@ export default function HakuMobiili() {
               </div>
               </div>
               {" "}
-              <div style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "8px", marginTop: "10px" }}>
+              <div data-seo="pillirivi" style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "8px", marginTop: "10px" }}>
                 {" "}
                 <span aria-hidden="true" style={{ position: "absolute", left: "12%", right: "12%", top: "50%", height: "2px", marginTop: "-1px", background: "rgba(255,255,255,.08)" }}>
                   <i style={{ display: "block", height: "100%", width: "100%", background: "#3ddc84", transform: "scaleX(0)", transformOrigin: "0 50%", transition: "transform .3s" }} data-seo="tyop"></i>
@@ -293,7 +293,7 @@ export default function HakuMobiili() {
               {" "}
             </div>
             {" "}
-            <div aria-hidden="true" style={{ position: "absolute", left: "50%", top: "calc(100svh - 140px)", transform: "translateX(-50%) translateY(6.0px)", display: "flex", alignItems: "center", gap: "12px", height: "58px", padding: "0 8px 0 6px", borderRadius: "999px", background: "rgba(12,17,23,.62)", WebkitBackdropFilter: "blur(14px) saturate(1.3)", backdropFilter: "blur(14px) saturate(1.3)", boxShadow: "inset 0 0 0 1px rgba(255,255,255,.12), 0 10px 30px -12px rgba(0,0,0,.7)", opacity: "1", whiteSpace: "nowrap", pointerEvents: "none", zIndex: "6" }} data-seo="vihje">
+            <div aria-hidden="true" style={{ position: "absolute", left: "50%", top: "calc(100svh - 70px)", transform: "translateX(-50%) translateY(6.0px)", display: "flex", alignItems: "center", gap: "12px", height: "58px", padding: "0 8px 0 6px", borderRadius: "999px", background: "rgba(12,17,23,.92)", boxShadow: "inset 0 0 0 1px rgba(255,255,255,.12), 0 10px 30px -12px rgba(0,0,0,.7)", opacity: "1", whiteSpace: "nowrap", pointerEvents: "none", zIndex: "6" }} data-seo="vihje">
               {" "}
               <span style={{ position: "relative", width: "46px", height: "46px", borderRadius: "50%", overflow: "hidden", background: "#05090d", boxShadow: "inset 0 0 0 1px rgba(111,236,255,.22)" }}>
                 <i className="mo-e-kasi" style={{ position: "absolute", inset: "0", background: "url(/mobiili/hint-sormi-r.webp) 0 0 / 2300px 46px no-repeat", mixBlendMode: "screen" }}></i>
@@ -322,7 +322,7 @@ export default function HakuMobiili() {
               {" "}
             </div>
             {" "}
-            <div aria-hidden="true" style={{ position: "absolute", left: "16px", right: "16px", top: "calc(100svh - 140px)", height: "58px", display: "flex", alignItems: "center", gap: "12px", padding: "0 16px", borderRadius: "18px", background: "rgba(111,236,255,.1)", boxShadow: "inset 0 0 0 1px rgba(111,236,255,.35)", opacity: "0", transform: "translateY(8.0px)", zIndex: "6", pointerEvents: "none" }} data-seo="lopuksi">
+            <div aria-hidden="true" style={{ position: "absolute", left: "16px", right: "16px", top: "calc(100svh - 70px)", height: "58px", display: "flex", alignItems: "center", gap: "12px", padding: "0 16px", borderRadius: "18px", background: "rgba(111,236,255,.1)", boxShadow: "inset 0 0 0 1px rgba(111,236,255,.35)", opacity: "0", transform: "translateY(8.0px)", zIndex: "6", pointerEvents: "none" }} data-seo="lopuksi">
               <span style={{ flex: "none", width: "26px", height: "26px", borderRadius: "50%", background: "#6fecff", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0b0f14" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12.5l4.2 4L19 7"></path>
@@ -333,7 +333,7 @@ export default function HakuMobiili() {
               </span>
             </div>
             {" "}
-            <div style={{ position: "absolute", left: "22px", right: "22px", top: "calc(100svh - 368px)", transform: "translateY(0px)", zIndex: "6" }} data-seo="teksti">
+            <div style={{ position: "absolute", left: "22px", right: "22px", bottom: "82px", transform: "translateY(0px)", zIndex: "6" }} data-seo="teksti">
               {" "}
               <h1 className="mo-s-tulo2" style={{ margin: "0", fontSize: "33px", lineHeight: "1.06", letterSpacing: "-.022em", fontWeight: "640", color: "#f5f5f7" }}>
                 {"Löydy silloin, kun asiakas "}
@@ -386,7 +386,7 @@ export default function HakuMobiili() {
                 {" "}
                 {(LOGOT).map((l: any, lI: number) => (
                   <Fragment key={lI}>
-                    <img src={TYHJA} data-mo-src={l.src} alt={l.alt} style={{ height: `${l.h}px`, width: "auto", display: "block", filter: l.f, opacity: ".78" }} loading="lazy" decoding="async" />
+                    <img src={l.src} width={logoLeveys(l.src, l.h)} height={l.h} alt={l.alt} style={{ height: `${l.h}px`, width: "auto", display: "block", filter: l.f, opacity: ".78" }} decoding="async" />
                   </Fragment>
                 ))}
                 {" "}

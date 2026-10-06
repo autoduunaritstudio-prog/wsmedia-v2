@@ -79,14 +79,14 @@
 }
 .mo-root .mo-otsake[data-piilo="1"] { transform: translateY(-80px) }
 .mo-root .mo-otsake > .mo-otsake-lasi {
-  position: absolute; inset: 0; background: rgba(8,12,17,.62);
-  -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px);
+  /* Ei backdrop-filteria (7.10.2026), lahes peittava tausta. */
+  position: absolute; inset: 0; background: rgba(8,12,17,.92);
   opacity: 0; transition: opacity .35s, background-color .35s; box-shadow: 0 1px 0 rgba(255,255,255,.06);
 }
 .mo-root .mo-otsake[data-lasi="1"] > .mo-otsake-lasi { opacity: 1 }
 .mo-root .mo-otsake > .mo-otsake-logo { position: relative; display: flex; color: #f5f5f7; transition: color .35s; pointer-events: auto }
 .mo-root .mo-otsake .mo-wv-nappi { background: #ffffff; color: #0b0f14 }
-.mo-root .mo-otsake[data-teema="vaalea"] > .mo-otsake-lasi { background: rgba(220,228,237,.72); box-shadow: 0 1px 0 rgba(17,21,26,.06) }
+.mo-root .mo-otsake[data-teema="vaalea"] > .mo-otsake-lasi { background: rgba(220,228,237,.94); box-shadow: 0 1px 0 rgba(17,21,26,.06) }
 .mo-root .mo-otsake[data-teema="vaalea"] > .mo-otsake-logo { color: #0b0f14 }
 .mo-root .mo-otsake[data-teema="vaalea"] .mo-wv-nappi { background: #0b0f14; color: #f5f5f7 }
 /* Pienet sivut (yhteystiedot, laskutus, tietosuoja): suunnitelman oma
@@ -101,7 +101,9 @@
 .mo-root .mo-palkki {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; display: flex; align-items: center; gap: 8px;
   padding: 10px 12px calc(14px + env(safe-area-inset-bottom, 0px));
-  background: rgba(9,13,18,.9); -webkit-backdrop-filter: saturate(1.4) blur(18px); backdrop-filter: saturate(1.4) blur(18px);
+  /* Ei backdrop-filteria (7.10.2026): sumennus maalasi palkin alla
+     olevan sivun joka vierityskehys. Lahes peittava tausta tilalle. */
+  background: rgba(9,13,18,.96);
   box-shadow: 0 -1px 0 rgba(255,255,255,.08);
   transition: transform .45s cubic-bezier(.2,.7,.2,1), opacity .3s;
 }
@@ -141,3 +143,18 @@
 .mo-s-yhteys footer a::after, .mo-s-laskutus footer a::after, .mo-s-tietosuoja footer a::after {
   content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 44px; min-width: 44px; transform: translateY(-50%)
 }
+
+/* Nopea vieritys: paljastus ilman siirtymaa (Moottori.tsx lisaa hetkeksi). */
+.mo-root .mo-heti, .mo-root .mo-heti * { transition: none !important }
+/* Jatkuvat animaatiot tauolla nakyman ulkopuolella (Moottori.tsx). */
+.mo-root .mo-tauko, .mo-root .mo-tauko *, .mo-root .mo-tauko::before, .mo-root .mo-tauko::after,
+.mo-root .mo-tauko *::before, .mo-root .mo-tauko *::after { animation-play-state: paused !important }
+
+@media (max-width: 767px) {
+  /* Evastebanneri: jatkuva CTA-palkki pois bannerin ajaksi (se peitti
+     puhelimessa Tallenna valinta -napin) ja banneri kaiken muun ylle. */
+  html:not([data-suostumus]) body:has(> .cc) .mo-root .mo-palkki { visibility: hidden; opacity: 0; pointer-events: none }
+  body > .cc { z-index: 400 }
+}
+/* Suljetun lomakeikkunan ja valikon animaatiot tauolla. */
+.mo-root .mo-ik:not(.mo-auki) *, .mo-root .mo-wv-cb:not(:checked) ~ .mo-wv-ov * { animation-play-state: paused !important }

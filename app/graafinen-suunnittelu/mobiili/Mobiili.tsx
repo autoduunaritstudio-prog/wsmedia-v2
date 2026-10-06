@@ -18,7 +18,7 @@
 import "./mobiili.css";
 import "./lisat.css";
 import { Fragment } from "react";
-import { mo, TYHJA } from "@/app/components/mobiili/mo";
+import { mo, TYHJA, logoLeveys } from "@/app/components/mobiili/mo";
 import Kuori from "@/app/components/mobiili/Kuori";
 import Alatunniste from "@/app/components/mobiili/Alatunniste";
 import Moottori from "@/app/components/mobiili/Moottori";
@@ -35,17 +35,17 @@ export default function GraafinenMobiili() {
         {" "}
         <div style={{ height: "calc(330px + 200svh)", position: "relative" }}>
           {" "}
-          <div data-teema="tumma" className="mo-g-raidat" style={{ position: "sticky", top: "0", height: "100svh", overflow: "hidden" }}>
+          <div data-teema="tumma" data-g="hero" className="mo-g-raidat" style={{ position: "sticky", top: "0", height: "100svh", overflow: "hidden" }}>
             {" "}
             <div aria-hidden="true" style={{ position: "absolute", inset: "0", pointerEvents: "none", background: "repeating-linear-gradient(-58deg, rgba(120,170,255,0) 0 80px, rgba(120,170,255,.045) 80px 150px, rgba(120,170,255,0) 150px 230px)", WebkitMask: "linear-gradient(180deg, #000 0%, #000 55%, transparent 85%)", mask: "linear-gradient(180deg, #000 0%, #000 55%, transparent 85%)" }}></div>
             {" "}
-            <div style={{ position: "absolute", left: "0", right: "0", top: "calc(66px + max(0px, (100svh - 798px) / 2))", height: "calc(100vw * 2 / 3)", transform: "translateY(0px) scale(1)", transformOrigin: "50% 0" }} data-g="lava">
+            <div style={{ position: "absolute", left: "0", right: "0", top: "68px", height: "calc(100vw * 2 / 3)", transform: "translateY(0px) scale(1)", transformOrigin: "50% 0" }} data-g="lava">
               {" "}
               <div className="mo-g-teippi" role="img" aria-label="Valkoinen pakettiauto teipataan WS Median ilmeeseen, ja samaan ilmeeseen syntyvät valomainos, roll-up ja käyntikortit" style={{ position: "absolute", inset: "0", backgroundPosition: "0% 0%" }} data-g="ruutu"></div>
               {" "}
             </div>
             {" "}
-            <div aria-hidden="true" style={{ position: "absolute", left: "50%", top: "calc(100svh - 140px)", transform: "translateX(-50%) translateY(6px)", display: "flex", alignItems: "center", gap: "12px", height: "58px", padding: "0 8px 0 6px", borderRadius: "999px", background: "rgba(12,17,23,.62)", WebkitBackdropFilter: "blur(14px) saturate(1.3)", backdropFilter: "blur(14px) saturate(1.3)", boxShadow: "inset 0 0 0 1px rgba(255,255,255,.12), 0 10px 30px -12px rgba(0,0,0,.7)", opacity: "1", whiteSpace: "nowrap", pointerEvents: "none", zIndex: "6" }} data-g="vihje">
+            <div aria-hidden="true" style={{ position: "absolute", left: "50%", top: "calc(100svh - 70px)", transform: "translateX(-50%) translateY(6px)", display: "flex", alignItems: "center", gap: "12px", height: "58px", padding: "0 8px 0 6px", borderRadius: "999px", background: "rgba(12,17,23,.92)", boxShadow: "inset 0 0 0 1px rgba(255,255,255,.12), 0 10px 30px -12px rgba(0,0,0,.7)", opacity: "1", whiteSpace: "nowrap", pointerEvents: "none", zIndex: "6" }} data-g="vihje">
               {" "}
               <span style={{ position: "relative", width: "46px", height: "46px", borderRadius: "50%", overflow: "hidden", background: "#05090d", boxShadow: "inset 0 0 0 1px rgba(111,236,255,.22)" }}>
                 <i className="mo-e-kasi" style={{ position: "absolute", inset: "0", background: "url(/mobiili/hint-sormi-r.webp) 0 0 / 2300px 46px no-repeat", mixBlendMode: "screen" }}></i>
@@ -74,7 +74,7 @@ export default function GraafinenMobiili() {
               {" "}
             </div>
             {" "}
-            <div aria-hidden="true" style={{ position: "absolute", left: "16px", right: "16px", top: "calc(100svh - 140px)", height: "58px", display: "flex", alignItems: "center", gap: "12px", padding: "0 16px", borderRadius: "18px", background: "rgba(111,236,255,.1)", boxShadow: "inset 0 0 0 1px rgba(111,236,255,.35)", opacity: "0", transform: "translateY(8px)", zIndex: "6", pointerEvents: "none" }} data-g="lopuksi">
+            <div aria-hidden="true" style={{ position: "absolute", left: "16px", right: "16px", top: "calc(100svh - 70px)", height: "58px", display: "flex", alignItems: "center", gap: "12px", padding: "0 16px", borderRadius: "18px", background: "rgba(111,236,255,.1)", boxShadow: "inset 0 0 0 1px rgba(111,236,255,.35)", opacity: "0", transform: "translateY(8px)", zIndex: "6", pointerEvents: "none" }} data-g="lopuksi">
               <span style={{ flex: "none", width: "26px", height: "26px", borderRadius: "50%", background: "#6fecff", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0b0f14" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12.5l4.2 4L19 7"></path>
@@ -85,7 +85,7 @@ export default function GraafinenMobiili() {
               </span>
             </div>
             {" "}
-            <div style={{ position: "absolute", left: "22px", right: "22px", top: "calc(100svh - 424px)", textAlign: "left", transform: "translateY(0px)", zIndex: "6" }} data-g="teksti">
+            <div style={{ position: "absolute", left: "22px", right: "22px", bottom: "82px", textAlign: "left", transform: "translateY(0px)", zIndex: "6" }} data-g="teksti">
               {" "}
               <h1 style={{ margin: "0", fontSize: "32px", lineHeight: "1.06", letterSpacing: "-.022em", fontWeight: "640", color: "#f5f5f7" }}>
                 {"Graafinen suunnittelu yritykselle, "}
@@ -138,7 +138,7 @@ export default function GraafinenMobiili() {
                 {" "}
                 {(LOGOT).map((l, lI) => (
                   <Fragment key={lI}>
-                    <img src={TYHJA} data-mo-src={l.src} alt={l.alt} style={{ height: `${l.h}px`, width: "auto", display: "block", filter: l.f, opacity: ".78" }} loading="lazy" decoding="async" />
+                    <img src={l.src} width={logoLeveys(l.src, l.h)} height={l.h} alt={l.alt} style={{ height: `${l.h}px`, width: "auto", display: "block", filter: l.f, opacity: ".78" }} decoding="async" />
                   </Fragment>
                 ))}
                 {" "}

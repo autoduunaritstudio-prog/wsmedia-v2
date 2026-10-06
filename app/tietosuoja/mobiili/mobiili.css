@@ -10,9 +10,9 @@
 .mo-s-tietosuoja .mo-m-p2{margin:0;font-size:16px;line-height:1.62;color:rgba(255,255,255,.76)}
 .mo-s-tietosuoja .mo-m-scroll{scrollbar-width:none}.mo-s-tietosuoja .mo-m-scroll::-webkit-scrollbar{display:none}
 .mo-s-tietosuoja .mo-m-vast{animation:mo-tietosuoja-m-in .3s ease both}
-.mo-s-tietosuoja .mo-rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.mo-s-tietosuoja .mo-rv{opacity:0;transform:translateY(22px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)}
 .mo-s-tietosuoja .mo-rv.mo-on{opacity:1;transform:none}
-.mo-s-tietosuoja .mo-rv.mo-d1{transition-delay:.1s}.mo-s-tietosuoja .mo-rv.mo-d2{transition-delay:.2s}.mo-s-tietosuoja .mo-rv.mo-d3{transition-delay:.3s}
+.mo-s-tietosuoja .mo-rv.mo-d1{transition-delay:.02s}.mo-s-tietosuoja .mo-rv.mo-d2{transition-delay:.04s}.mo-s-tietosuoja .mo-rv.mo-d3{transition-delay:.06s}
 .mo-s-tietosuoja .mo-li{animation:mo-tietosuoja-m-in .8s cubic-bezier(.2,.7,.2,1) both}.mo-s-tietosuoja .mo-li.mo-d1{animation-delay:.1s}.mo-s-tietosuoja .mo-li.mo-d2{animation-delay:.22s}.mo-s-tietosuoja .mo-li.mo-d3{animation-delay:.34s}.mo-s-tietosuoja .mo-li.mo-d4{animation-delay:.46s}
 @keyframes mo-tietosuoja-m-shine{0%{transform:translateX(-150%)}55%,100%{transform:translateX(320%)}}
 @keyframes mo-tietosuoja-m-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}

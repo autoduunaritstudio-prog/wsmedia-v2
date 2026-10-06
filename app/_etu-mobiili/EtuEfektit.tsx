@@ -7,6 +7,7 @@
 
 import { useEffect } from "react";
 import { kuuntele, onMobiili, rajaa, type Tila } from "@/app/components/mobiili/vieritys";
+import { asetteleHero } from "@/app/components/mobiili/heroAsettelu";
 
 const SPRITE = "/mobiili/film-ikkuna.webp";
 
@@ -26,6 +27,10 @@ export default function EtuEfektit() {
     const teksti = q("[data-etu=teksti]");
     const peitto = q("[data-etu=peitto]");
     let viime = "";
+    /* Elokuva alkaa ylapalkin alta ja pienenee tekstin ylapuolelle mahtuvaksi
+       (heroAsettelu.ts). Suojattava osa on ruudun ylin 88 %: tunnuksen
+       MEDIA-teksti paattyy siihen, alla on tumma liuku. */
+    siivous.push(asetteleHero({ hero: q("[data-etu=hero]"), kuva: film, kuvaY: 68, kuvaH: (k) => k.offsetHeight * 0.88, teksti }));
     siivous.push(
       kuuntele({
         kirjoita: (t: Tila) => {
@@ -38,7 +43,7 @@ export default function EtuEfektit() {
           if (avain === viime) return;
           viime = avain;
           if (ruutu) ruutu.style.backgroundPosition = `${((f % 8) / 7) * 100}% ${(Math.floor(f / 8) / 4) * 100}%`;
-          if (film) film.style.transform = `translateY(${(Math.min(0, HV - 844) - 60 * kansi).toFixed(1)}px)`;
+          if (film) film.style.transform = `translateY(${(-60 * kansi).toFixed(1)}px)`;
           if (vihje) {
             vihje.style.opacity = (1 - rajaa((y - 560) / 150)).toFixed(3);
             vihje.style.transform = `translateX(-50%) translateY(${(6 * (1 - rajaa(y / 80))).toFixed(1)}px)`;

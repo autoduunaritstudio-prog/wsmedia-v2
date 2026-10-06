@@ -8,6 +8,7 @@
 
 import { useEffect } from "react";
 import { kuuntele, onMobiili, rajaa, reduce, type Tila } from "@/app/components/mobiili/vieritys";
+import { asetteleHero } from "@/app/components/mobiili/heroAsettelu";
 import { KE_TAB, LAATTA, PISTE, TAB, askelTila } from "./data";
 
 const SPRITE = "/mobiili/verkkosivut-film-ikkuna.webp";
@@ -36,6 +37,9 @@ export default function Efektit() {
     const teksti = q("[data-vs=teksti]");
     const peitto = q("[data-vs=peitto]");
     let viime = "";
+    /* Koodi-ikkuna alkaa ylapalkin alta ja pienenee tekstin ylapuolelle
+       mahtuvaksi (heroAsettelu.ts); suojattava osa ruudun ylin 90 %. */
+    siivous.push(asetteleHero({ hero: q("[data-vs=hero]"), kuva: film, kuvaY: 68, kuvaH: (k) => k.offsetHeight * 0.9, teksti }));
     siivous.push(
       kuuntele({
         kirjoita: (t: Tila) => {
@@ -48,7 +52,7 @@ export default function Efektit() {
           if (avain === viime) return;
           viime = avain;
           if (ruutu) ruutu.style.backgroundPosition = `${((f % 8) / 7) * 100}% ${(Math.floor(f / 8) / 4) * 100}%`;
-          if (film) film.style.transform = `translateY(${(Math.min(0, HV - 844) - 60 * kansi).toFixed(1)}px)`;
+          if (film) film.style.transform = `translateY(${(-60 * kansi).toFixed(1)}px)`;
           if (vihje) {
             vihje.style.opacity = (1 - rajaa((y - 200) / 110)).toFixed(3);
             vihje.style.transform = `translateX(-50%) translateY(${(6 * (1 - rajaa(y / 80))).toFixed(1)}px)`;

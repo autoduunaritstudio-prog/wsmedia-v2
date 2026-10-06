@@ -29,3 +29,24 @@
 /* Reduced motion: pulssi on itsestaan pyoriva loop (projektin CLAUDE.md),
    suunnitelman reduce-lohko sammutti vain .l-pulssin. */
 @media (prefers-reduced-motion: reduce) { .mo-s-graafinen .mo-g-pulssi { animation: none } }
+
+/* HERO MATALILLA NAYTOILLA (7.10.2026). Kuvitus alkaa ylapalkin alta
+   (68 px) ja pienenee CSS:n scale-ominaisuudella tekstin ylapuolelle
+   (heroAsettelu.ts mittaa ja tarkentaa; alla ensimmaisen piirron arvio).
+   Teksti on ankkuroitu vihjeen ylapuolelle (bottom 82 px), vihje
+   alareunaan. Pienennettyna reunat haivytetaan. Tiivis teksti alle
+   730 px:n korkeudella (media-ehto ja .mo-hero-tiivis). */
+.mo-s-graafinen [data-g=lava] { transform-origin: 50% 0; scale: 1 }
+@media (max-height: 729px) { .mo-s-graafinen [data-g=lava] { scale: .85 } }
+@media (max-height: 600px) { .mo-s-graafinen [data-g=lava] { scale: .45 } }
+.mo-s-graafinen [data-g=lava].mo-hero-skaalattu { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%) }
+.mo-s-graafinen .mo-hero-tiivis [data-g=teksti] h1 { font-size: 28px !important }
+.mo-s-graafinen .mo-hero-tiivis [data-g=teksti] > p { margin-top: 10px !important; font-size: 14.5px !important; line-height: 1.45 !important }
+.mo-s-graafinen .mo-hero-tiivis [data-g=teksti] > div { margin-top: 16px !important }
+.mo-s-graafinen .mo-hero-tiivis [data-g=teksti] .mo-e-btn { height: 48px !important }
+@media (max-height: 729px) {
+.mo-s-graafinen [data-g=teksti] h1 { font-size: 28px !important }
+.mo-s-graafinen [data-g=teksti] > p { margin-top: 10px !important; font-size: 14.5px !important; line-height: 1.45 !important }
+.mo-s-graafinen [data-g=teksti] > div { margin-top: 16px !important }
+.mo-s-graafinen [data-g=teksti] .mo-e-btn { height: 48px !important }
+}

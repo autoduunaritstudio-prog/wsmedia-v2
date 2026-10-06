@@ -28,3 +28,27 @@
    ja ilman sivuttaista paallekkaisyytta naapurinapin kanssa. */
 .mo-s-verkkosivut .mo-l-seg button { position: relative }
 .mo-s-verkkosivut .mo-l-seg button::after { content: ""; position: absolute; left: 0; right: 0; top: -2px; bottom: -2px }
+
+/* HERO MATALILLA NAYTOILLA (7.10.2026). Kuvitus alkaa ylapalkin alta
+   (68 px) ja pienenee CSS:n scale-ominaisuudella tekstin ylapuolelle
+   (heroAsettelu.ts mittaa ja tarkentaa; alla ensimmaisen piirron arvio).
+   Teksti on ankkuroitu vihjeen ylapuolelle (bottom 82 px), vihje
+   alareunaan. Pienennettyna reunat haivytetaan. Tiivis teksti alle
+   730 px:n korkeudella (media-ehto ja .mo-hero-tiivis). */
+.mo-s-verkkosivut [data-vs=film] { transform-origin: 50% 0; scale: .9 }
+@media (max-height: 799px) { .mo-s-verkkosivut [data-vs=film] { scale: .67 } }
+@media (max-height: 729px) { .mo-s-verkkosivut [data-vs=film] { scale: .53 } }
+@media (max-height: 600px) { .mo-s-verkkosivut [data-vs=film] { scale: .3 } }
+.mo-s-verkkosivut [data-vs=film].mo-hero-skaalattu { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%) }
+.mo-s-verkkosivut .mo-hero-tiivis [data-vs=teksti] h1 { font-size: 29px !important }
+.mo-s-verkkosivut .mo-hero-tiivis [data-vs=teksti] h1 > span { height: 32px !important }
+.mo-s-verkkosivut .mo-hero-tiivis [data-vs=teksti] > p { font-size: 15px !important; line-height: 1.45 !important }
+.mo-s-verkkosivut .mo-hero-tiivis [data-vs=teksti] > div { margin-top: 16px !important }
+.mo-s-verkkosivut .mo-hero-tiivis [data-vs=teksti] .mo-e-btn { height: 48px !important }
+@media (max-height: 729px) {
+.mo-s-verkkosivut [data-vs=teksti] h1 { font-size: 29px !important }
+.mo-s-verkkosivut [data-vs=teksti] h1 > span { height: 32px !important }
+.mo-s-verkkosivut [data-vs=teksti] > p { font-size: 15px !important; line-height: 1.45 !important }
+.mo-s-verkkosivut [data-vs=teksti] > div { margin-top: 16px !important }
+.mo-s-verkkosivut [data-vs=teksti] .mo-e-btn { height: 48px !important }
+}

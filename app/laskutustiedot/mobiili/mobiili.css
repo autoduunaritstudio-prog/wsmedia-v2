@@ -25,14 +25,14 @@
 .mo-s-laskutus .mo-m-kop-d.mo-ok{background:#6fecff;border-color:#6fecff;color:#0b1320}
 .mo-s-laskutus .mo-m-net path{stroke-dasharray:6 10;animation:mo-laskutus-m-viiva 9s linear infinite}
 .mo-s-laskutus .mo-m-net circle{animation:mo-laskutus-m-piste 3.2s ease-in-out infinite}
-.mo-s-laskutus .mo-rv-kuva{clip-path:inset(14% 10% 14% 10% round 24px);transition:clip-path 1s cubic-bezier(.2,.7,.2,1)}
+.mo-s-laskutus .mo-rv-kuva{clip-path:inset(14% 10% 14% 10% round 24px);transition:clip-path .5s cubic-bezier(.2,.7,.2,1)}
 .mo-s-laskutus .mo-rv-kuva.mo-on{clip-path:inset(0 0 0 0 round 24px)}
 .mo-s-laskutus .mo-m-otsikko{display:inline-block;background:linear-gradient(90deg,#11151a 0%,#11151a 50%,rgba(17,21,26,.25) 50%);background-size:200% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent;transition:background-position 1.2s cubic-bezier(.2,.7,.2,1)}
 .mo-s-laskutus .mo-rv.mo-on .mo-m-otsikko,.mo-s-laskutus .mo-rv.mo-on.mo-m-otsikko{background-position:0 0}
 .mo-s-laskutus .mo-m-otsikko-d{background-image:linear-gradient(90deg,#fff 0%,#fff 50%,rgba(255,255,255,.22) 50%)}
-.mo-s-laskutus .mo-rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.mo-s-laskutus .mo-rv{opacity:0;transform:translateY(28px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)}
 .mo-s-laskutus .mo-rv.mo-on{opacity:1;transform:none}
-.mo-s-laskutus .mo-rv.mo-d1{transition-delay:.1s}.mo-s-laskutus .mo-rv.mo-d2{transition-delay:.2s}.mo-s-laskutus .mo-rv.mo-d3{transition-delay:.3s}
+.mo-s-laskutus .mo-rv.mo-d1{transition-delay:.02s}.mo-s-laskutus .mo-rv.mo-d2{transition-delay:.04s}.mo-s-laskutus .mo-rv.mo-d3{transition-delay:.06s}
 .mo-s-laskutus .mo-li{animation:mo-laskutus-m-in .8s cubic-bezier(.2,.7,.2,1) both}.mo-s-laskutus .mo-li.mo-d1{animation-delay:.1s}.mo-s-laskutus .mo-li.mo-d2{animation-delay:.22s}.mo-s-laskutus .mo-li.mo-d3{animation-delay:.34s}.mo-s-laskutus .mo-li.mo-d4{animation-delay:.46s}
 .mo-s-laskutus .mo-m-sheet{animation:mo-laskutus-m-sheet .45s cubic-bezier(.2,.8,.2,1) both}
 .mo-s-laskutus .mo-m-fade{animation:mo-laskutus-m-fade .3s ease both}

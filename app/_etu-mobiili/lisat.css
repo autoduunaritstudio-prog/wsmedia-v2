@@ -9,3 +9,29 @@
    puhelimella; 390 px:n leveydella tulos on sama kuin suunnitelmassa. */
 .mo-s-etu .mo-e-film { background-image: url(/mobiili/film-ikkuna-0.webp); background-size: 100% 100% }
 .mo-s-etu .mo-e-film.mo-film-valmis { background-image: url(/mobiili/film-ikkuna.webp); background-size: 800% 500% }
+
+/* HERO MATALILLA NAYTOILLA (7.10.2026). Kuvitus alkaa ylapalkin alta
+   (68 px) ja pienenee CSS:n scale-ominaisuudella tekstin ylapuolelle
+   (heroAsettelu.ts mittaa ja tarkentaa; alla ensimmaisen piirron arvio).
+   Teksti on ankkuroitu vihjeen ylapuolelle (bottom 82 px), vihje
+   alareunaan. Pienennettyna reunat haivytetaan. Tiivis teksti alle
+   730 px:n korkeudella (media-ehto ja .mo-hero-tiivis). */
+.mo-s-etu [data-etu=film] { transform-origin: 50% 0; scale: .83 }
+@media (max-height: 799px) { .mo-s-etu [data-etu=film] { scale: .6 } }
+@media (max-height: 729px) { .mo-s-etu [data-etu=film] { scale: .48 } }
+@media (max-height: 600px) { .mo-s-etu [data-etu=film] { scale: .26 } }
+.mo-s-etu [data-etu=film].mo-hero-skaalattu { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%) }
+.mo-s-etu .mo-hero-tiivis [data-etu=teksti] h1 { font-size: 34px !important }
+.mo-s-etu .mo-hero-tiivis [data-etu=teksti] h1 > span { height: 72px !important }
+.mo-s-etu .mo-hero-tiivis [data-etu=teksti] > p { font-size: 15px !important; line-height: 1.45 !important }
+.mo-s-etu .mo-hero-tiivis [data-etu=teksti] > div { margin-top: 16px !important }
+.mo-s-etu .mo-hero-tiivis [data-etu=teksti] .mo-e-btn { height: 48px !important }
+.mo-s-etu .mo-hero-tiivis [data-etu=teksti] > a { margin-top: 2px !important }
+@media (max-height: 729px) {
+.mo-s-etu [data-etu=teksti] h1 { font-size: 34px !important }
+.mo-s-etu [data-etu=teksti] h1 > span { height: 72px !important }
+.mo-s-etu [data-etu=teksti] > p { font-size: 15px !important; line-height: 1.45 !important }
+.mo-s-etu [data-etu=teksti] > div { margin-top: 16px !important }
+.mo-s-etu [data-etu=teksti] .mo-e-btn { height: 48px !important }
+.mo-s-etu [data-etu=teksti] > a { margin-top: 2px !important }
+}

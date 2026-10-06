@@ -7,11 +7,13 @@
    ikkunat, paljastukset, parallaksi, verkko, kuvat) ovat Moottori.tsx:ssa. */
 
 import { useEffect } from "react";
-import { kuuntele, onMobiili, rajaa, reduce, type Tila } from "@/app/components/mobiili/vieritys";
+import { kuuntele, onMobiili, pyyda, rajaa, reduce, type Tila } from "@/app/components/mobiili/vieritys";
+import { asetteleHero } from "@/app/components/mobiili/heroAsettelu";
 
 const SC = 360;
 const KA = 340;
-const RIVI = 38;
+/* Hakutulosrivin korkeus: 38 px, tiiviissa versiossa (svh < 730) 34 px. */
+let RIVI = 38;
 const OSUUS = [27, 15, 11, 8, 6];
 const HAKU = "ilmalämpöpumppu asennus espoo";
 const fi = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -66,6 +68,21 @@ export default function Efektit() {
     const teksti = q("[data-seo=teksti]");
     const peitto = q("[data-seo=peitto]");
     let alussa = true;
+    /* Asettelu matalille naytoille (malli: seo-hero-malli.html). */
+    const stickyHero = hero?.firstElementChild instanceof HTMLElement ? (hero.querySelector<HTMLElement>("[data-teema]") ?? null) : null;
+    siivous.push(
+      asetteleHero({
+        hero: stickyHero,
+        kuva: kortti,
+        kuvaY: 72,
+        teksti,
+        muuttui: () => {
+          RIVI = stickyHero?.classList.contains("mo-hero-tiivis") ? 34 : 38;
+          alussa = true;
+          pyyda();
+        },
+      }),
+    );
     siivous.push(
       kuuntele({
         kirjoita: (t: Tila) => {

@@ -8,6 +8,7 @@
 
 import { useEffect } from "react";
 import { kuuntele, onMobiili, rajaa, type Tila } from "@/app/components/mobiili/vieritys";
+import { asetteleHero } from "@/app/components/mobiili/heroAsettelu";
 import {
   AUTO_ALKU,
   KA,
@@ -45,6 +46,9 @@ export default function GraafinenEfektit() {
     const teksti = q("[data-g=teksti]");
     const peitto = q("[data-g=peitto]");
     let viime = "";
+    /* Kuvitus alkaa ylapalkin alta ja pienenee tekstin ylapuolelle
+       mahtuvaksi (heroAsettelu.ts). */
+    siivous.push(asetteleHero({ hero: q("[data-g=hero]"), kuva: lava, kuvaY: 68, teksti }));
     siivous.push(
       kuuntele({
         kirjoita: (t: Tila) => {

@@ -307,7 +307,23 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
   }
   const valitsin = paljastus ? `${PALJASTUS}, ${paljastus}` : PALJASTUS;
   const kaikki = [...juuri.querySelectorAll<HTMLElement>(valitsin)];
+  /* Nopea vieritys (yli 1,5 nakymaa sekunnissa): paljastus ilman
+     siirtymaa, ettei sisalto haivy sisaan vasta pysahtymisen jalkeen. */
+  let nopeus = 0;
+  let edY = window.scrollY;
+  let edT = performance.now();
   const paljasta = (n: Element) => {
+    const ht = performance.now();
+    if (ht - edT > 0) {
+      const v = (Math.abs(window.scrollY - edY) / (ht - edT)) * 1000;
+      nopeus = ht - edT < 400 ? Math.max(v, nopeus * 0.5) : v;
+    }
+    edY = window.scrollY;
+    edT = ht;
+    if (!R && nopeus > 1.5 * (window.innerHeight || 664)) {
+      n.classList.add("mo-heti");
+      window.setTimeout(() => n.classList.remove("mo-heti"), 120);
+    }
     n.classList.add("mo-on");
     n.dispatchEvent(new CustomEvent("mo:on", { bubbles: true }));
     if (n.hasAttribute("data-laske")) laskurit(n);
@@ -321,7 +337,9 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
           paljasta(e.target);
           io.unobserve(e.target);
         }),
-      { threshold: 0.12 },
+      /* Paljastus alkaa ennen kuin osio on ruudulla (neljannes nakymaa
+         etukateen), jolloin se on jo valmis kun lukija ehtii sen kohdalle. */
+      { threshold: 0, rootMargin: "0px 0px 25% 0px" },
     );
     kaikki.forEach((n) => io.observe(n));
     siivous.push(() => io.disconnect());
@@ -344,9 +362,14 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
   let ctat: HTMLElement[] | null = null;
   const keraa = (HV: number) => {
     ctat = [...juuri.querySelectorAll<HTMLElement>('[data-ankkuri="lomake"], [data-ankkuri="tarjous"], [data-ankkuri="hakemus"], [data-varaus], form')].filter(
-      (n) => !n.closest(".mo-ik") && !n.closest(".mo-wv-ov") && !n.closest("[data-mo-palkki]") && !n.closest("[data-mo-otsake]") && n.getBoundingClientRect().top + window.scrollY > HV + 60,
+      (n) => !n.closest(".mo-ik") && !n.closest(".mo-wv-ov") && !n.closest("[data-mo-palkki]") && !n.closest("[data-mo-otsake]"),
     );
+    void HV;
   };
+  /* Heron napit ovat pinnatussa herossa, jonka paalle kansi
+     ([data-kerros]) nousee: kun kansi on nappien kohdalla, ne eivat enaa
+     nay, vaikka niiden laatikko on yha ruudulla. */
+  const kansi = juuri.querySelector<HTMLElement>("[data-kerros]");
   const kk = window.setTimeout(() => {
     ctat = null;
     pyyda();
@@ -364,6 +387,27 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
   const pxArvot: number[] = px.map(() => NaN);
   const pinoArvot: number[][] = pinot.map((p) => p.kortit.map(() => 0));
 
+  /* Suunnan hystereesi: piiloon vasta 12 px:n alasvierityksen jalkeen,
+     esiin 24 px:n ylosvierityksen jalkeen (ei yhden pikselin
+     varinasta). */
+  let otsakePiilo = false;
+  let kertyma = 0;
+  let otsakeY = window.scrollY;
+  const otsakeSuunta = (y: number, raja: number, reduce: boolean) => {
+    const dy = y - otsakeY;
+    otsakeY = y;
+    if (reduce || y <= raja) {
+      otsakePiilo = false;
+      kertyma = 0;
+      return false;
+    }
+    if (dy > 0) kertyma = kertyma > 0 ? kertyma + dy : dy;
+    else if (dy < 0) kertyma = kertyma < 0 ? kertyma + dy : dy;
+    if (!otsakePiilo && kertyma >= 12) otsakePiilo = true;
+    else if (otsakePiilo && kertyma <= -24) otsakePiilo = false;
+    return otsakePiilo;
+  };
+
   const irrota = kuuntele({
     lue: (t: Tila) => {
       // Teema: [data-teema], jonka alue kattaa y = 34 nakymassa.
@@ -379,8 +423,10 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
       if (palkki) {
         if (!ctat) keraa(t.HV);
         const ala = t.HV - palkki.offsetHeight;
+        const kansiY = kansi ? kansi.getBoundingClientRect().top : Infinity;
         ctaNakyy = ctat!.some((n) => {
           const r = n.getBoundingClientRect();
+          if (kansi && !kansi.contains(n) && r.top >= kansiY - 10) return false; // kannen alla
           return r.height > 0 && r.bottom > 70 && r.top < ala - 10;
         });
       }
@@ -403,12 +449,12 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
     kirjoita: (t: Tila) => {
       if (hdr) {
         if (otsake.tapa === "iso") {
-          const piilo = !t.reduce && t.y > otsake.ka + t.HV + otsake.piilo && !t.ylos;
+          const piilo = otsakeSuunta(t.y, otsake.ka + t.HV + otsake.piilo, t.reduce);
           aseta(hdr, "data-piilo", piilo ? "1" : null);
           aseta(hdr, "data-lasi", t.y > otsake.ka + t.HV + otsake.lasi ? "1" : null);
           if (otsake.teema) aseta(hdr, "data-teema", hdrTeema);
         } else {
-          aseta(hdr, "data-piilo", t.suunta > 0 && t.y > 700 ? "1" : null);
+          aseta(hdr, "data-piilo", otsakeSuunta(t.y, 700, t.reduce) ? "1" : null);
           aseta(hdr, "data-lasi", t.y > 30 ? "1" : null);
         }
       }
@@ -458,6 +504,12 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
      nakyman paassa. Vaakakaruselli ladataan kokonaan kun se lahestyy,
      ettei pyyhkaisy paljasta tyhjia kortteja. */
   siivous.push(lataaKuvat(juuri));
+
+  /* ---------------- JATKUVAT ANIMAATIOT TAUOLLE ----------------
+     Jokainen toistuva (infinite) CSS-animaatio, myos ::before/::after,
+     pysahtyy kun sen elementti on nakyman ulkopuolella (.mo-tauko,
+     mobiili.css). Etsitaan kerran joutoajalla. */
+  siivous.push(tauotaAnimaatiot(juuri));
 
   /* Uudelleenmittaus kun sisalto muuttuu (UKK auki, kuvat latautuivat). */
   const mitat = () => {
@@ -528,7 +580,7 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
     const t = tilaNyt();
     W = t.W;
     HH = t.HV;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     cv.width = Math.round(W * dpr);
     cv.height = Math.round(HH * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -548,31 +600,77 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
     const m = ((x % (2 * l)) + 2 * l) % (2 * l);
     return m > l ? 2 * l - m : m;
   };
+  /* KEVENNYS (7.10.2026). Ulkoasu kuten ennen, kustannus pois:
+     - enintaan 24 piirtoa sekunnissa ja vain kun kangas on nakyvissa
+     - devicePixelRatio enintaan 1,5 (alusta)
+     - savy() kerran kehyksessa 53 px:n kaistoille taulukkoon
+     - viivat ja pisteet 6 lapinakyvyysluokkaan (etusivulla lisaksi 3
+       savyluokkaa), yksi polku ja yksi strokeStyle per luokka
+     - taustaliuku rakennetaan uudelleen vain kun vierityskohta tai kaistat
+       muuttuvat. */
+  const LUOKAT = 6;
+  const AMAX = cfg.tila === "etu" ? 0.46 * 0.62 : cfg.tila === "toihin" ? 0.25 : 0.46 * 0.55;
+  const PMAX = cfg.tila === "etu" ? 0.55 * 0.62 : cfg.tila === "syaani" ? 0.55 * 0.55 : 0.3;
+  const SAVYT = cfg.tila === "etu" ? 3 : 1;
   const vari = (d: number, al: number) =>
     cfg.tila === "etu"
       ? `rgba(${Math.round(31 + 80 * d)},${Math.round(74 + 162 * d)},${Math.round(110 + 145 * d)},${al.toFixed(3)})`
       : `rgba(111,236,255,${al.toFixed(3)})`;
+  const tyylit: string[][] = [];
+  const pTyylit: string[][] = [];
+  for (let sv = 0; sv < SAVYT; sv++) {
+    const d = SAVYT === 1 ? 1 : sv / (SAVYT - 1);
+    tyylit.push(Array.from({ length: LUOKAT }, (_, k) => vari(d, ((k + 0.5) / LUOKAT) * AMAX)));
+    pTyylit.push(Array.from({ length: LUOKAT }, (_, k) => vari(d, ((k + 0.5) / LUOKAT) * PMAX)));
+  }
+  const polut: Path2D[] = [];
+  const pPolut: Path2D[] = [];
+  const ASKEL = 53;
+  let taulu: { d: number; a: number }[] = [];
+  let gradientti: CanvasGradient | null = null;
+  let gradAvain = "";
 
   let sp = 0;
   let nakyvissa = true;
+  let viimePiirto = 0;
+  let viimeAvain = "";
   const piirra = (nyt: number) => {
     if (loppu) return;
     raf = requestAnimationFrame(piirra);
     if (!nakyvissa || document.hidden) return;
+    const dt = nyt - viimePiirto;
+    if (dt < 1000 / 24 - 2) return; // enintaan 24 kertaa sekunnissa
+    viimePiirto = nyt;
     const y = window.scrollY;
     const t = R ? 0 : nyt / 1000;
     const max = Math.max(1, korkeus - HH);
-    sp += (Math.min(1, y / max) - sp) * 0.12;
+    const kerroin = 1 - Math.pow(1 - 0.12, Math.min(dt, 200) / (1000 / 60));
+    sp += (Math.min(1, y / max) - sp) * kerroin;
+    const pohja = y + lt;
+    const kaistaAvain = kaistat.map((k) => k.Y).join(",");
+    // Liikkumaton tila (reduced motion, ei vieritysta): ei piirreta uudelleen.
+    const avain = `${Math.round(pohja)}|${kaistaAvain}|${sp.toFixed(4)}|${W}x${HH}`;
+    if (R && avain === viimeAvain) return;
+    viimeAvain = avain;
     const ox = -Math.sin(sp * Math.PI) * PX, oy = -sp * PY;
     const fw = W + PX, fh = HH + PY;
-    const pohja = y + lt;
-    // Taustan savyliuku (suunnitelman tausta.gradientti, 53 px:n valein).
-    const g = ctx.createLinearGradient(0, 0, 0, HH);
-    for (let yy = 0; yy <= HH; yy += 53) {
-      const c = savy(pohja + yy).rgb.map((v) => Math.round(v));
-      g.addColorStop(Math.min(1, yy / HH), `rgb(${c.join(",")})`);
+    // Savytaulukko 53 px:n kaistoille (myos reunojen yli LINK verran).
+    const gAvain = `${Math.round(pohja)}|${kaistaAvain}|${HH}`;
+    if (gAvain !== gradAvain || !gradientti) {
+      gradAvain = gAvain;
+      const n = Math.ceil((HH + 2 * LINK) / ASKEL) + 1;
+      taulu = new Array(n);
+      const g = ctx.createLinearGradient(0, 0, 0, HH);
+      for (let k = 0; k < n; k++) {
+        const yy = k * ASKEL - LINK;
+        const sv = savy(pohja + yy);
+        taulu[k] = { d: sv.d, a: sv.a };
+        if (yy >= 0 && yy <= HH) g.addColorStop(Math.min(1, yy / HH), `rgb(${sv.rgb.map((v) => Math.round(v)).join(",")})`);
+      }
+      gradientti = g;
     }
-    ctx.fillStyle = g;
+    const savyY = (yy: number) => taulu[Math.max(0, Math.min(taulu.length - 1, Math.round((yy + LINK) / ASKEL)))];
+    ctx.fillStyle = gradientti;
     ctx.fillRect(0, 0, W, HH);
     const xs: number[] = [], ys: number[] = [];
     for (const p of pts) {
@@ -581,34 +679,52 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
       xs.push(x);
       ys.push(yv);
     }
-    ctx.lineWidth = 0.85;
+    for (let i = 0; i < SAVYT * LUOKAT; i++) {
+      polut[i] = new Path2D();
+      pPolut[i] = new Path2D();
+    }
+    const luokka = (al: number, max: number) => Math.max(0, Math.min(LUOKAT - 1, Math.floor((al / max) * LUOKAT)));
+    const savyLuokka = (d: number) => (SAVYT === 1 ? 0 : Math.round(d * (SAVYT - 1)));
+    const kayta = new Uint8Array(SAVYT * LUOKAT);
+    const pKayta = new Uint8Array(SAVYT * LUOKAT);
     for (let i = 0; i < xs.length; i++)
       for (let j = i + 1; j < xs.length; j++) {
-        const dx = xs[i] - xs[j], dy = ys[i] - ys[j], dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > LINK) continue;
-        const ym = (ys[i] + ys[j]) / 2;
-        const s = savy(pohja + ym);
+        const dx = xs[i] - xs[j], dy = ys[i] - ys[j], d2 = dx * dx + dy * dy;
+        if (d2 > LINK * LINK) continue;
+        const dist = Math.sqrt(d2);
+        const s = savyY((ys[i] + ys[j]) / 2);
         let al: number;
         if (cfg.tila === "etu") al = (1 - dist / LINK) * 0.46 * (0.62 - 0.07 * s.d) * s.a;
         else if (cfg.tila === "syaani") al = (1 - dist / LINK) * 0.46 * 0.55 * s.a;
         else if (cfg.tila === "meista") al = (1 - dist / LINK) * 0.46 * 0.55;
         else al = (1 - dist / LINK) * 0.25;
-        ctx.strokeStyle = vari(s.d, al);
-        ctx.beginPath();
-        ctx.moveTo(xs[i], ys[i]);
-        ctx.lineTo(xs[j], ys[j]);
-        ctx.stroke();
+        if (al <= 0.004) continue;
+        const k = savyLuokka(s.d) * LUOKAT + luokka(al, AMAX);
+        polut[k].moveTo(xs[i], ys[i]);
+        polut[k].lineTo(xs[j], ys[j]);
+        kayta[k] = 1;
       }
+    ctx.lineWidth = 0.85;
+    for (let k = 0; k < SAVYT * LUOKAT; k++) {
+      if (!kayta[k]) continue;
+      ctx.strokeStyle = tyylit[Math.floor(k / LUOKAT)][k % LUOKAT];
+      ctx.stroke(polut[k]);
+    }
     for (let i = 0; i < xs.length; i++) {
-      const s = savy(pohja + ys[i]);
+      const s = savyY(ys[i]);
       let al: number;
       if (cfg.tila === "etu") al = 0.55 * (0.62 - 0.07 * s.d) * s.a;
       else if (cfg.tila === "syaani") al = 0.55 * 0.55 * s.a;
       else al = 0.3;
-      ctx.fillStyle = vari(s.d, al);
-      ctx.beginPath();
-      ctx.arc(xs[i], ys[i], 1.6, 0, Math.PI * 2);
-      ctx.fill();
+      const k = savyLuokka(s.d) * LUOKAT + luokka(al, PMAX);
+      pPolut[k].moveTo(xs[i] + 1.6, ys[i]);
+      pPolut[k].arc(xs[i], ys[i], 1.6, 0, Math.PI * 2);
+      pKayta[k] = 1;
+    }
+    for (let k = 0; k < SAVYT * LUOKAT; k++) {
+      if (!pKayta[k]) continue;
+      ctx.fillStyle = pTyylit[Math.floor(k / LUOKAT)][k % LUOKAT];
+      ctx.fill(pPolut[k]);
     }
   };
 
@@ -640,7 +756,10 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
   io.observe(kerros ?? cv);
   const koko = () => {
     const t = tilaNyt();
-    if (t.W !== W || t.HV !== HH) alusta();
+    if (t.W !== W || t.HV !== HH) {
+      alusta();
+      gradientti = null;
+    }
   };
   window.addEventListener("resize", koko, { passive: true });
 
@@ -722,15 +841,54 @@ function lataaKuvat(juuri: HTMLElement) {
           kohteet.get(e.target)?.forEach(asetaKuva);
           io?.unobserve(e.target);
         }),
-      { rootMargin: "100% 0px 100% 0px" },
+      { rootMargin: "200% 0px" },
     );
     kohteet.forEach((_, k) => io!.observe(k));
   };
-  if (document.readyState === "complete") aloita();
-  else window.addEventListener("load", aloita, { once: true });
+  /* Heti DOMContentLoadedin jalkeen joutoajalla (ei odoteta window.loadia). */
+  const ric = (window as unknown as { requestIdleCallback?: (f: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+  let ajastin = 0;
+  const odota = () => {
+    if (ric) ajastin = ric(aloita, { timeout: 600 });
+    else ajastin = window.setTimeout(aloita, 50);
+  };
+  if (document.readyState !== "loading") odota();
+  else document.addEventListener("DOMContentLoaded", odota, { once: true });
   return () => {
     loppu = true;
     io?.disconnect();
-    window.removeEventListener("load", aloita);
+    document.removeEventListener("DOMContentLoaded", odota);
+    const cic = (window as unknown as { cancelIdleCallback?: (n: number) => void }).cancelIdleCallback;
+    if (ric && cic) cic(ajastin);
+    else window.clearTimeout(ajastin);
+  };
+}
+
+function tauotaAnimaatiot(juuri: HTMLElement) {
+  let io: IntersectionObserver | null = null;
+  let loppu = false;
+  const etsi = () => {
+    if (loppu) return;
+    const kohteet = new Set<HTMLElement>();
+    const toistuva = (cs: CSSStyleDeclaration) => cs.animationName !== "none" && cs.animationIterationCount.includes("infinite");
+    juuri.querySelectorAll<HTMLElement>("*").forEach((n) => {
+      if (n.closest(".mo-wv-ov, .mo-ik, .lataus")) return; // valikko ja ikkuna: omat tilansa
+      if (toistuva(getComputedStyle(n)) || toistuva(getComputedStyle(n, "::after")) || toistuva(getComputedStyle(n, "::before"))) kohteet.add(n);
+    });
+    if (!kohteet.size || typeof IntersectionObserver === "undefined") return;
+    io = new IntersectionObserver((ent) => ent.forEach((e) => (e.target as HTMLElement).classList.toggle("mo-tauko", !e.isIntersecting)), { rootMargin: "50px 0px" });
+    kohteet.forEach((n) => {
+      n.classList.add("mo-tauko");
+      io!.observe(n);
+    });
+  };
+  const ric = (window as unknown as { requestIdleCallback?: (f: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+  const k = ric ? ric(etsi, { timeout: 2000 }) : window.setTimeout(etsi, 500);
+  return () => {
+    loppu = true;
+    io?.disconnect();
+    const cic = (window as unknown as { cancelIdleCallback?: (n: number) => void }).cancelIdleCallback;
+    if (ric && cic) cic(k);
+    else window.clearTimeout(k);
   };
 }
