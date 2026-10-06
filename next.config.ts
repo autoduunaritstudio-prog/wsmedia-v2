@@ -32,22 +32,41 @@ const nextConfig: NextConfig = {
      osoitteeseen, ei ketjuja.
 
      KAUTTAVIIVA. Nextin oma loppukauttaviivan poisto ajetaan ENNEN
-     omia ohjauksia (priority), joten /rekry/ teki kaksi hyppya:
-     /rekry/ -> /rekry -> /toihin-meille. Siksi oma poisto on kytketty
-     pois (skipTrailingSlashRedirect) ja korvattu samalla saannolla
-     listan lopussa. Omien ohjausten lahde hyvaksyy loppukauttaviivan
-     (Next lisaa regexiin (?:/)?), joten /rekry/ osuu suoraan kohteeseen.
-     Muut osoitteet saavat saman 308:n kuin ennen. Ainoa ero: Nextin
-     omat /_next/-polut eivat enaa ohjaudu, koska omat saannot ohittavat
-     ne aina (niita ei kayteta kauttaviivalla). Uudet vanhat osoitteet
-     lisataan AINA ennen viimeista saantoa. */
+     omia ohjauksia, joten /rekry/ teki kaksi hyppya: /rekry/ -> /rekry
+     -> /toihin-meille. Siksi oma poisto on kytketty pois
+     (skipTrailingSlashRedirect) ja korvattu omalla saannolla listan
+     lopussa. Omien ohjausten lahde hyvaksyy loppukauttaviivan (Next
+     lisaa regexiin (?:/)?), joten /rekry/ osuu suoraan kohteeseen.
+
+     MIKSI 301 EIKA permanent (308). Vercelin Next-rakentaja
+     (@vercel/next, tarkistettu CLI 59.11.2) tunnistaa saannon, jonka
+     status on 308 ja Location "/$1", Nextin kauttaviivaohjaukseksi ja
+     siirtaa sen reititystaulun ensimmaiseksi (continue: true). Silloin
+     tuotannossa olisi taas kaksi hyppya. 301 ei tayta ehtoa, joten saanto
+     pysyy paikallaan vanhojen osoitteiden jalkeen (todettu vercel
+     buildin .vercel/output/config.json -tiedostosta). Google kasittelee
+     301:n ja 308:n samoin. Hinta: muut kauttaviivalliset osoitteet
+     saavat 301:n eivatka 308:aa.
+
+     MUUT EROT ENTISEEN:
+     - /_next/-polut eivat ohjaudu (omat saannot ohittavat ne aina):
+       esim. /_next/static/, /_next/image/ ja /_next/data/.../ eivat saa
+       kauttaviivaohjausta vaan menevat suoraan Nextille.
+     - Vercelin erikoisreitti /404/ antaa 404:n eika ohjaudu.
+     - skipTrailingSlashRedirect tekee asiakaspuolen
+       normalizePathTrailingSlashista no-opin: Link-komponentti ei enaa
+       poista loppukauttaviivaa hrefista. Sivuston sisaiset linkit on
+       kirjoitettu ilman sita, ja niin pitaa jatkossakin.
+
+     Uudet vanhat osoitteet lisataan AINA ennen viimeista saantoa. */
   skipTrailingSlashRedirect: true,
   async redirects() {
     return [
       { source: "/rekry", destination: "/toihin-meille", permanent: true },
       { source: "/lyhytvideot-yritykselle", destination: "/lyhytvideot", permanent: true },
-      /* Nextin oman kauttaviivasaannon korvaaja, pidettava viimeisena. */
-      { source: "/:path+/", destination: "/:path+", permanent: true },
+      /* Nextin oman kauttaviivasaannon korvaaja, pidettava viimeisena.
+         statusCode 301 tarkoituksella, ks. yla. */
+      { source: "/:path+/", destination: "/:path+", statusCode: 301 },
     ];
   },
 };
