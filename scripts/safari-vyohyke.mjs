@@ -10,6 +10,14 @@ const W = +arg("w", 1440), H = +arg("h", 900), DPR = +arg("dpr", 2), FROM = +arg
 const hide = (s) => `${s} { visibility: hidden !important }`;
 const V = {
   base: "",
+  aftercover: hide(".aftercover"),
+  refsticky: hide(".refsticky"),
+  refgrid: hide(".refgrid"),
+  refcard3d: ".refcard, .refcard * { transform: none !important }",
+  kaiku: hide(".kaiku"),
+  kartpan: hide(".kart-paneeli"),
+  kartlead: hide(".kartlead"),
+  cal: hide(".kart-kalenteri"),
   carriers: ".carriers { display: none !important }",
   beams: ".navbeams { display: none !important }",
   carrbeams: ".carriers, .navbeams { display: none !important }",
