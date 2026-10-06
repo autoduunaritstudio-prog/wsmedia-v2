@@ -31,6 +31,20 @@ type Props = {
   tapa?: "iso" | "pieni";
 };
 
+/* Piilotettu ansakenttä roskapostiboteille (kuten tyopoydan .vi-ansa). */
+function Ansa() {
+  return (
+    <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}>
+      <input type="text" name="verkkosivu" tabIndex={-1} autoComplete="off" />
+    </div>
+  );
+}
+
+/* Lahetysvirhe lomakkeen alla (Moottori.tsx kirjoittaa tekstin). */
+function LomakeVirhe() {
+  return <p data-mo-lomakevirhe="" role="alert" hidden style={{ margin: "0", textAlign: "center", fontSize: "14px", lineHeight: "1.5", color: "#ffb37a" }}></p>;
+}
+
 const NUOLI = (
   <span className="mo-wv-nuoli">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -176,6 +190,8 @@ function YhteysIkkuna({ palvelu }: { palvelu?: string }) {
               </label>
               <button type="submit" className="mo-e-btn mo-e-p mo-ik-laheta">{"Lähetä viesti"}</button>
               <p className="mo-ik-huom">{"Ei sitoumuksia."}</p>
+              <Ansa />
+              <LomakeVirhe />
             </form>
             <div className="mo-ik-kiitos" role="status">
               <span className="mo-ik-ok">
@@ -183,8 +199,8 @@ function YhteysIkkuna({ palvelu }: { palvelu?: string }) {
                   <path d="M5 12.5l4.5 4.5L19 7.5"></path>
                 </svg>
               </span>
-              <h3>{"Viesti on valmiina sähköpostissasi."}</h3>
-              <p>{"Lähetä se sähköpostiohjelmasta, niin vastaamme 24 tunnin sisällä. Jos ohjelma ei auennut, soita tai kirjoita osoitteeseen info@wsmedia.fi."}</p>
+              <h3>{"Kiitos, viesti on perillä."}</h3>
+              <p>{"Vastaamme arkisin 24 tunnin sisällä. Lähetimme vahvistuksen sähköpostiisi."}</p>
               <button type="button" className="mo-e-btn mo-e-p" data-sulje="1">{"Sulje"}</button>
             </div>
             <Suorat />
@@ -273,6 +289,8 @@ function HakemusIkkuna() {
               </label>
               <button type="submit" className="mo-e-btn mo-e-p mo-ik-laheta">{"Lähetä hakemus"}</button>
               <p className="mo-ik-huom">{"Käsittelemme hakemukset luottamuksellisesti."}</p>
+              <Ansa />
+              <LomakeVirhe />
             </form>
             <div className="mo-ik-kiitos" role="status">
               <span className="mo-ik-ok">
@@ -280,8 +298,8 @@ function HakemusIkkuna() {
                   <path d="M5 12.5l4.5 4.5L19 7.5"></path>
                 </svg>
               </span>
-              <h3>{"Hakemus on valmiina sähköpostissasi."}</h3>
-              <p>{"Lähetä se sähköpostiohjelmasta, ja liitä mukaan halutessasi CV tai työnäytteitä. Vastaamme viikon sisällä. Jos ohjelma ei auennut, kirjoita osoitteeseen info@wsmedia.fi."}</p>
+              <h3>{"Kiitos, hakemus on perillä."}</h3>
+              <p>{"Luemme sen ja vastaamme viikon sisällä. Lähetimme vahvistuksen sähköpostiisi."}</p>
               <button type="button" className="mo-e-btn mo-e-p" data-sulje="1">{"Sulje"}</button>
             </div>
             <Suorat />

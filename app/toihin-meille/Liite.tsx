@@ -5,8 +5,8 @@ import { useId } from "react";
 /**
  * "Lisää liite" -painike hakemuslomakkeisiin (5.10.2026). Tiedostokentta
  * on piilotettu painikkeen alle; valitut tiedostot nakyvat listana ja
- * ne voi poistaa. Lomakkeet lahettavat sahkopostiohjelman kautta, joten
- * tiedostot liitetaan viestiin siella (ks. hakemus.ts).
+ * ne voi poistaa. Tiedostot lahtevat hakemuksen mukana, yhteensa
+ * enintaan 4 Mt (ks. hakemus.ts).
  */
 export default function Liite({
   tiedostot,

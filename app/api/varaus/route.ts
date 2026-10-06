@@ -2,15 +2,21 @@
  * KARTOITUKSEN VARAUS (4.10.2026), ks. components/VarausIkkuna.tsx.
  *
  * GET  /api/varaus?tapa=paikalla|teams  -> vapaat ajat 3.–5. arkipaivalle
- * POST /api/varaus                      -> tarkistaa ajan uudelleen ja
+ * POST /api/varaus                      -> tarkistaa ajan uudelleen,
  *                                          tekee tapahtuman kalenteriin
+ *                                          ja lahettaa sahkopostit
+ *
+ * Sahkopostit (6.10.2026, Resend, ks. ../posti.ts): ilmoitus osoitteeseen
+ * info@wsmedia.fi ja vahvistus asiakkaalle kalenteritiedoston (.ics)
+ * kanssa. Jos posti ei lahde, varaus on silti kalenterissa.
  *
  * Aika tarkistetaan kalentereista viela varaushetkella, joten kaksi
  * samaan aikaan varaavaa tai valilla kalenteriin lisatty meno ei voi
  * tuottaa paallekkaista varausta.
  */
 import { NextResponse } from "next/server";
-import { delegointi, luoTapahtuma, varatut } from "./google";
+import { luoTapahtuma, varatut } from "./google";
+import { INFO, PUHELIN, kehys, lahetaPosti, rajoitettu } from "../posti";
 import { KESTO_MIN, onVarattavissa, varattavatPaivat, vapaat, helsinki, type Tapa } from "./ajat";
 
 export const runtime = "nodejs";
@@ -54,6 +60,34 @@ type Pyynto = {
 
 const puhdas = (s: unknown, max = 300) => String(s ?? "").replace(/[\u0000-\u001f]/g, " ").trim().slice(0, max);
 
+const TZ = "Europe/Helsinki";
+const paivaTxt = (d: Date) =>
+  new Intl.DateTimeFormat("fi-FI", { weekday: "long", day: "numeric", month: "numeric", timeZone: TZ }).format(d);
+const kloTxt = (d: Date) => new Intl.DateTimeFormat("fi-FI", { hour: "numeric", minute: "2-digit", timeZone: TZ }).format(d);
+
+/** Kalenteritiedosto asiakkaan vahvistukseen. Ei sisalla mitaan
+ *  lomakkeeseen kirjoitettua. */
+function ics(id: string, alku: Date, loppu: Date, paikka: string): string {
+  const z = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//WS Media Oy//Kartoitusvaraus//FI",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    `UID:${id}@wsmedia.fi`,
+    `DTSTAMP:${z(new Date())}`,
+    `DTSTART:${z(alku)}`,
+    `DTEND:${z(loppu)}`,
+    "SUMMARY:Maksuton kartoitus\\, WS Media",
+    `LOCATION:${paikka}`,
+    `DESCRIPTION:WS Media Oy\\, ${PUHELIN}\\, ${INFO}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+    "",
+  ].join("\r\n");
+}
+
 export async function POST(req: Request) {
   let b: Pyynto;
   try {
@@ -71,6 +105,7 @@ export async function POST(req: Request) {
   if (!tapaOk(b.tapa) || !yritys || !nimi || !puhelin || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(sahkoposti))
     return NextResponse.json({ virhe: "kentat" }, { status: 400 });
   if (b.tapa === "paikalla" && !osoite) return NextResponse.json({ virhe: "osoite" }, { status: 400 });
+  if (rajoitettu(req)) return NextResponse.json({ virhe: "liikaa" }, { status: 429 });
 
   try {
     const { alku, loppu } = vali();
@@ -102,11 +137,53 @@ export async function POST(req: Request) {
       reminders: { useDefault: false, overrides: [{ method: "popup", minutes: b.tapa === "paikalla" ? 60 : 15 }] },
       extendedProperties: { private: { lahde: "wsmedia-varaus", tapa: b.tapa } },
     };
-    /* Asiakas kutsutaan vain kun tapahtuma tehdaan info@wsmedia.fi:n
-       nimissa (delegointi). Muuten Google ei salli kutsuja palvelutilin
-       tapahtumaan. */
-    if (delegointi()) tapahtuma.attendees = [{ email: sahkoposti, displayName: nimi }];
-    await luoTapahtuma(tapahtuma);
+    const luotu = await luoTapahtuma(tapahtuma);
+
+    /* Sahkopostit. Varaus on jo kalenterissa, joten postin virhe ei
+       kaada varausta: se kirjataan lokiin. */
+    const aikaTxt = `${paivaTxt(a)} klo ${kloTxt(a)}–${kloTxt(l)}`;
+    const palvelu = puhdas(b.palvelu, 80);
+    const lisatiedot = puhdas(b.lisatiedot, 1500);
+    const rivit: [string, string][] = [
+      ["Aika", aikaTxt],
+      ["Tapa", b.tapa === "paikalla" ? `Paikan päällä, ${osoite}` : "Teams, lähetä linkki asiakkaalle"],
+      ["Yritys", yritys],
+      ["Yhteyshenkilö", nimi],
+      ["Puhelin", puhelin],
+      ["Sähköposti", sahkoposti],
+      ...(palvelu ? ([["Palvelu", palvelu]] as [string, string][]) : []),
+    ];
+    const asiakkaalle =
+      b.tapa === "paikalla"
+        ? "Tulemme paikan päälle antamaasi osoitteeseen."
+        : "Tapaaminen pidetään Teamsissa. Lähetämme linkin sähköpostiisi ennen tapaamista.";
+    const peruutus = `Jos aika ei sovikaan, vastaa tähän viestiin tai soita numeroon ${PUHELIN}.`;
+    const tulos = await Promise.allSettled([
+      lahetaPosti({
+        to: INFO,
+        subject: `Uusi kartoitus: ${yritys}, ${paivaTxt(a)} klo ${kloTxt(a)}`,
+        replyTo: sahkoposti,
+        text: [...rivit.map(([x, y]) => `${x}: ${y}`), "", lisatiedot, "", `Kalenterissa: ${luotu.htmlLink}`].join("\n"),
+        html: kehys("Uusi kartoitus varattu", ["Varaus tehtiin wsmedia.fi:ssä ja se on jo info@wsmedia.fi:n kalenterissa."], rivit, lisatiedot),
+      }),
+      lahetaPosti({
+        to: sahkoposti,
+        subject: `Kartoitus varattu: ${paivaTxt(a)} klo ${kloTxt(a)}`,
+        replyTo: INFO,
+        text: ["Hei,", "", "maksuton kartoitus on varattu.", `Aika: ${aikaTxt}`, asiakkaalle, "", peruutus, "", "Terveisin", "WS Media", `${PUHELIN}, ${INFO}`].join("\n"),
+        html: kehys("Kartoitus on varattu.", [asiakkaalle, peruutus], [["Aika", aikaTxt], ["Kesto", `${KESTO_MIN} minuuttia`]]),
+        attachments: [
+          {
+            filename: "kartoitus.ics",
+            content: Buffer.from(ics(luotu.id, a, l, b.tapa === "paikalla" ? "Paikan päällä" : "Microsoft Teams")).toString("base64"),
+            content_type: "text/calendar; charset=utf-8; method=PUBLISH",
+          },
+        ],
+      }),
+    ]);
+    tulos.forEach((t, i) => {
+      if (t.status === "rejected") console.error(i ? "varaus vahvistus" : "varaus ilmoitus", t.reason);
+    });
     return NextResponse.json({ ok: true, aika: a.toISOString() });
   } catch (e) {
     console.error("varaus POST", e);

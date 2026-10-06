@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { SKILLS, hakemusMailto } from "./hakemus";
+import { SKILLS, lahetaHakemus } from "./hakemus";
 import Liite from "./Liite";
 
 /**
@@ -10,10 +10,8 @@ import Liite from "./Liite";
  * Hakemus. Oma komponenttinsa eika BudgetForm, koska kenttajoukko on
  * kokonaan eri: ei budjettiliukusaadinta vaan osaamisalueiden monivalinta.
  *
- * Valinnat ovat Reactin tilassa, jolloin DOMia ei lueta erikseen kun lomake
- * joskus kytketaan lahetykseen. Painike on toistaiseksi type="button" ilman
- * Lahetys avaa sahkopostiohjelman valmiiksi taytetylla hakemuksella
- * (hakemus.ts), koska lomakkeille ei viela ole taustapalvelua.
+ * Valinnat ovat Reactin tilassa. Lahetys menee /api/lomake-reitille
+ * liitteineen (hakemus.ts).
  */
 
 
@@ -22,18 +20,21 @@ export default function ApplicationForm() {
 
   const [lahetetty, setLahetetty] = useState(false);
   const [liitteet, setLiitteet] = useState<File[]>([]);
+  const [lahettaa, setLahettaa] = useState(false);
+  const [virhe, setVirhe] = useState<string | null>(null);
 
   const toggle = (s: string) =>
     setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
 
-  const laheta = (e: React.FormEvent<HTMLFormElement>) => {
+  const laheta = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    window.location.href = hakemusMailto(
-      new FormData(e.currentTarget),
-      picked,
-      liitteet.map((t) => t.name),
-    );
-    setLahetetty(true);
+    if (lahettaa) return;
+    setLahettaa(true);
+    setVirhe(null);
+    const v = await lahetaHakemus(new FormData(e.currentTarget), picked, liitteet);
+    setLahettaa(false);
+    if (v) setVirhe(v);
+    else setLahetetty(true);
   };
 
   return (
@@ -99,15 +100,20 @@ export default function ApplicationForm() {
 
       <Liite tiedostot={liitteet} muuta={setLiitteet} />
 
-      <button className="btn" type="submit">
-        Lähetä hakemus
+      {/* Roskapostiansa: ihminen ei nae eika tayta tata. */}
+      <label className="vi-ansa" aria-hidden="true">
+        Verkkosivu
+        <input name="verkkosivu" tabIndex={-1} autoComplete="off" />
+      </label>
+      <button className="btn" type="submit" disabled={lahettaa || lahetetty}>
+        {lahettaa ? "Lähetetään…" : "Lähetä hakemus"}
       </button>
-      <p className="fnote" role={lahetetty ? "status" : undefined}>
-        {lahetetty
-          ? liitteet.length
-            ? "Hakemus on valmiina sähköpostissasi. Lisää valitsemasi liitteet viestiin ja lähetä se."
-            : "Hakemus on valmiina sähköpostissasi. Lähetä se sähköpostiohjelmasta."
-          : "Käsittelemme hakemukset luottamuksellisesti."}
+      <p className="fnote" role={virhe ? "alert" : lahetetty ? "status" : undefined}>
+        {virhe
+          ? virhe
+          : lahetetty
+            ? "Kiitos, hakemus on perillä. Luemme sen ja vastaamme viikon sisällä."
+            : "Käsittelemme hakemukset luottamuksellisesti."}
       </p>
     </form>
   );

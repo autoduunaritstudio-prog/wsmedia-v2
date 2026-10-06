@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { CONTACT } from "../components/site-data";
-import { SKILLS, hakemusMailto } from "./hakemus";
+import { SKILLS, lahetaHakemus } from "./hakemus";
 import Liite from "./Liite";
 
 /**
@@ -15,15 +15,16 @@ import Liite from "./Liite";
  * Kehotukset.tsx ei kasittele [data-hakemus]-nappeja, joten ne eivat
  * avaa varauskalenteria eivatka yhteyslomaketta.
  *
- * Lahetys avaa sahkopostiohjelman valmiiksi taytetylla hakemuksella
- * (sama kuin sivun lomakkeessa), koska lomakkeille ei viela ole
- * taustapalvelua.
+ * Lahetys menee /api/lomake-reitille liitteineen (sama kuin sivun
+ * lomakkeessa, ks. hakemus.ts).
  */
 export default function HakemusIkkuna() {
   const ref = useRef<HTMLDialogElement>(null);
   const [valitut, setValitut] = useState<string[]>([]);
   const [lahetetty, setLahetetty] = useState(false);
   const [liitteet, setLiitteet] = useState<File[]>([]);
+  const [lahettaa, setLahettaa] = useState(false);
+  const [virhe, setVirhe] = useState<string | null>(null);
 
   useEffect(() => {
     const d = ref.current;
@@ -57,14 +58,15 @@ export default function HakemusIkkuna() {
 
   const vaihda = (s: string) => setValitut((v) => (v.includes(s) ? v.filter((x) => x !== s) : [...v, s]));
 
-  const laheta = (e: React.FormEvent<HTMLFormElement>) => {
+  const laheta = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    window.location.href = hakemusMailto(
-      new FormData(e.currentTarget),
-      valitut,
-      liitteet.map((t) => t.name),
-    );
-    setLahetetty(true);
+    if (lahettaa) return;
+    setLahettaa(true);
+    setVirhe(null);
+    const v = await lahetaHakemus(new FormData(e.currentTarget), valitut, liitteet);
+    setLahettaa(false);
+    if (v) setVirhe(v);
+    else setLahetetty(true);
   };
 
   return (
@@ -102,13 +104,8 @@ export default function HakemusIkkuna() {
 
         {lahetetty ? (
           <div className="yi-kiitos" role="status">
-            <h3>Hakemus on valmiina sähköpostissasi.</h3>
-            <p>
-              {liitteet.length
-                ? "Lisää valitsemasi liitteet viestiin ja lähetä se sähköpostiohjelmasta. "
-                : "Lähetä se sähköpostiohjelmasta. "}
-              Vastaamme viikon sisällä. Jos ohjelma ei auennut, kirjoita osoitteeseen {CONTACT.email}.
-            </p>
+            <h3>Kiitos, hakemus on perillä.</h3>
+            <p>Luemme sen ja vastaamme viikon sisällä. Lähetimme vahvistuksen sähköpostiisi.</p>
             <button type="button" className="btn" onClick={() => ref.current?.close()}>
               Sulje
             </button>
@@ -153,8 +150,18 @@ export default function HakemusIkkuna() {
               <textarea name="viesti" rows={3} />
             </label>
             <Liite tiedostot={liitteet} muuta={setLiitteet} />
-            <button className="btn" type="submit">
-              Lähetä hakemus
+            {/* Roskapostiansa: ihminen ei nae eika tayta tata. */}
+            <label className="vi-ansa" aria-hidden="true">
+              Verkkosivu
+              <input name="verkkosivu" tabIndex={-1} autoComplete="off" />
+            </label>
+            {virhe ? (
+              <p className="vi-ilmoitus" role="alert">
+                {virhe}
+              </p>
+            ) : null}
+            <button className="btn" type="submit" disabled={lahettaa}>
+              {lahettaa ? "Lähetetään…" : "Lähetä hakemus"}
             </button>
           </form>
         )}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import { lahetaLomake } from "./lomake";
 
 const DEFAULT_MIN = 500;
 const DEFAULT_MAX = 15000;
@@ -79,6 +80,8 @@ export default function BudgetForm({
   const [budget, setBudget] = useState(initial);
   const [valmis, setValmis] = useState(false);
   const [puuttuu, setPuuttuu] = useState(false);
+  const [lahettaa, setLahettaa] = useState(false);
+  const [virhe, setVirhe] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   /* Seuraava vapaa kartoitusaika varauskalenterista. Haetaan vasta kun
      kortti tulee lahelle nakymaa, ja jos kalenteri ei vastaa, rivi
@@ -116,13 +119,12 @@ export default function BudgetForm({
   }, [vaihtoehdot]);
   const pct = ((budget - min) / (max - min)) * 100;
 
-  /* LAHETYS (4.10.2026). Nappi ei aiemmin tehnyt mitaan. Nyt se kokoaa
-     kentat valmiiksi sahkopostiksi osoitteeseen info@wsmedia.fi, kuten
-     Ota yhteytta -ikkuna. Sivustolla ei ole lomakepalvelua; kun se
-     tehdaan, vain tama funktio vaihtuu. */
-  const laheta = () => {
+  /* LAHETYS (6.10.2026): /api/lomake lahettaa tarjouspyynnon Resendilla
+     osoitteeseen info@wsmedia.fi ja vahvistuksen lahettajalle, kuten
+     Ota yhteytta -ikkuna (ks. lomake.ts). */
+  const laheta = async () => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || lahettaa || valmis) return;
     const arvo = (id: string) => (el.querySelector<HTMLInputElement | HTMLTextAreaElement>(`#${id}`)?.value ?? "").trim();
     const nimi = arvo("nimi");
     const mail = arvo("mail");
@@ -132,20 +134,23 @@ export default function BudgetForm({
       return;
     }
     setPuuttuu(false);
-    const sivu = document.title.split("|")[0].trim();
-    const rivit = [
-      `Nimi: ${nimi}`,
-      `Sähköposti: ${mail}`,
-      `Puhelin: ${puh}`,
-      `Paikkakunta: ${arvo("pk")}`,
-      ...(extraField ? [`${extraField.label}: ${arvo(extraField.id)}`] : []),
-      ...(showBudget ? [`${budgetLabel}: ${fmt(budget)} ${unit}`] : []),
-      `Sivu: ${location.pathname}`,
-      "",
-      arvo("lisa"),
-    ];
-    window.location.href = `mailto:info@wsmedia.fi?subject=${encodeURIComponent(`Tarjouspyyntö: ${sivu}`)}&body=${encodeURIComponent(rivit.join("\n"))}`;
-    setValmis(true);
+    setLahettaa(true);
+    setVirhe(false);
+    const ok = await lahetaLomake("tarjous", {
+      nimi,
+      sahkoposti: mail,
+      puhelin: puh,
+      paikkakunta: arvo("pk"),
+      lisa: extraField ? arvo(extraField.id) : undefined,
+      lisa_otsikko: extraField?.label,
+      budjetti: showBudget ? `${fmt(budget)} ${unit}` : undefined,
+      sivuotsikko: document.title.split("|")[0].trim(),
+      viesti: arvo("lisa"),
+      verkkosivu: arvo("tp-verkkosivu"),
+    });
+    setLahettaa(false);
+    if (ok) setValmis(true);
+    else setVirhe(true);
   };
 
   return (
@@ -205,16 +210,25 @@ export default function BudgetForm({
       )}
       <label htmlFor="lisa">{messageLabel}</label>
       <textarea id="lisa" rows={3} />
-      <button className="btn" type="button" onClick={laheta}>
-        {submitLabel}
+      {/* Roskapostiansa: ihminen ei nae eika tayta tata. */}
+      <div className="vi-ansa" aria-hidden="true">
+        <label htmlFor="tp-verkkosivu">Verkkosivu</label>
+        <input type="text" id="tp-verkkosivu" tabIndex={-1} autoComplete="off" />
+      </div>
+      <button className="btn" type="button" onClick={laheta} disabled={lahettaa || valmis}>
+        {lahettaa ? "Lähetetään…" : submitLabel}
       </button>
-      {puuttuu ? (
+      {virhe ? (
+        <p className="fnote" role="alert">
+          Tarjouspyyntö ei lähtenyt. Yritä uudelleen, soita 040 564 8770 tai kirjoita osoitteeseen info@wsmedia.fi.
+        </p>
+      ) : puuttuu ? (
         <p className="fnote" role="alert">
           Kirjoita nimi ja sähköposti tai puhelinnumero, niin voimme vastata.
         </p>
       ) : valmis ? (
         <p className="fnote" role="status">
-          Tarjouspyyntö avautui sähköpostiohjelmaasi. Lähetä se sieltä, niin vastaamme 24 tunnin sisällä.
+          Kiitos, tarjouspyyntö on perillä. Vastaamme arkisin 24 tunnin sisällä.
         </p>
       ) : (
         <p className="fnote">{note}</p>

@@ -13,7 +13,7 @@
      ja takaisin-painikkeella palattaessa.
    - Lomakeikkunat (#lomake, #tarjous, #hakemus) avautuvat alhaalta, eivat
      vierita. Lahetys avaa sahkopostin samalla sisallolla kuin sivuston
-     YhteysIkkuna ja HakemusIkkuna (hakemusMailto).
+     YhteysIkkuna ja HakemusIkkuna: /api/lomake (lahetaLomake, lahetaHakemus).
    - Muut ankkurit hyppaavat suoraan kohteeseen, otsikkopalkki (76 px)
      huomioiden. Kartoituslinkit ([data-varaus]) avaa Kehotukset.tsx.
    - CTA-palkki liukuu pois kun sivun oma CTA on nakyvissa.
@@ -23,7 +23,8 @@
      ([data-verkko]-kaistat). */
 
 import { useEffect } from "react";
-import { hakemusMailto } from "@/app/toihin-meille/hakemus";
+import { lahetaHakemus } from "@/app/toihin-meille/hakemus";
+import { lahetaLomake } from "@/app/components/lomake";
 import { openConsentSettings } from "@/app/components/consent/consent";
 import { MOBIILI, hyppaa, kuuntele, onMobiili, pyyda, rajaa, reduce, tilaNyt, type Tila } from "./vieritys";
 
@@ -210,7 +211,8 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
   /* ---------------- LOMAKKEEN LAHETYS ---------------- */
   if (ik) {
     const f = ik.querySelector("form");
-    const laheta = (e: Event) => {
+    let lahettaa = false;
+    const laheta = async (e: Event) => {
       e.preventDefault();
       if (!f) return;
       let ok = true;
@@ -227,24 +229,44 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
       const d = new FormData(f);
       const k = (x: string) => String(d.get(x) ?? "").trim();
       const hak = ik.getAttribute("data-ikkuna") === "hakemus";
-      let url: string;
-      if (hak) url = hakemusMailto(d, d.getAll("osaaminen").map(String));
-      else {
-        /* Sama sisalto kuin YhteysIkkuna.tsx:n laheta(). */
-        const valitut = d.getAll("palvelu").map(String);
-        const rivit = [
-          `Nimi: ${k("nimi")}`,
-          `Puhelin: ${k("puhelin")}`,
-          `Sähköposti: ${k("sahkoposti")}`,
-          `Yritys: ${k("yritys")}`,
-          `Palvelu: ${valitut.join(", ") || "ei valittu"}`,
-          "",
-          k("viesti"),
-        ];
-        const aihe = `Yhteydenotto: ${valitut.join(", ") || "WS Media"}`;
-        url = `mailto:info@wsmedia.fi?subject=${encodeURIComponent(aihe)}&body=${encodeURIComponent(rivit.join("\n"))}`;
+      const nappi = f.querySelector<HTMLButtonElement>("button[type=submit]");
+      const virhe = f.querySelector<HTMLElement>("[data-mo-lomakevirhe]");
+      if (lahettaa) return;
+      lahettaa = true;
+      const teksti = nappi?.textContent ?? "";
+      if (nappi) {
+        nappi.disabled = true;
+        nappi.textContent = "Lähetetään…";
       }
-      window.location.href = url;
+      if (virhe) virhe.hidden = true;
+      /* Sama lahetys kuin tyopoydan YhteysIkkuna ja HakemusIkkuna. */
+      let viesti: string | null;
+      if (hak) viesti = await lahetaHakemus(d, d.getAll("osaaminen").map(String));
+      else {
+        const valitut = d.getAll("palvelu").map(String);
+        const ok = await lahetaLomake("yhteys", {
+          nimi: k("nimi"),
+          yritys: k("yritys"),
+          puhelin: k("puhelin"),
+          sahkoposti: k("sahkoposti"),
+          palvelu: valitut.join(", "),
+          viesti: k("viesti"),
+          verkkosivu: k("verkkosivu"),
+        });
+        viesti = ok ? null : "Viesti ei lähtenyt. Yritä uudelleen, soita 040 564 8770 tai kirjoita osoitteeseen info@wsmedia.fi.";
+      }
+      lahettaa = false;
+      if (nappi) {
+        nappi.disabled = false;
+        nappi.textContent = teksti;
+      }
+      if (viesti) {
+        if (virhe) {
+          virhe.textContent = viesti;
+          virhe.hidden = false;
+        }
+        return;
+      }
       ik.classList.add("mo-valmis");
       const r = ik.querySelector<HTMLElement>(".mo-ik-rulla");
       if (r) r.scrollTop = 0;

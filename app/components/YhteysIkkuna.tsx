@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AUKIOLO } from "./organisaatio";
 import type { YhteysTieto } from "./Kehotukset";
+import { lahetaLomake } from "./lomake";
 
 /**
  * OTA YHTEYTTA -IKKUNA (4.10.2026).
@@ -14,9 +15,10 @@ import type { YhteysTieto } from "./Kehotukset";
  * sahkoposti), valittava palvelu ja vapaa viesti, seka suorat
  * yhteystiedot niille jotka haluavat soittaa.
  *
- * Lahetys avaa kayttajan sahkopostiohjelman valmiiksi taytetylla
- * viestilla osoitteeseen info@wsmedia.fi. Sivustolla ei viela ole
- * lomakkeiden taustapalvelua; kun se tehdaan, laheta() vaihdetaan.
+ * Lahetys menee /api/lomake-reitille, joka lahettaa viestin
+ * Resendilla osoitteeseen info@wsmedia.fi ja vahvistuksen lahettajalle
+ * (6.10.2026, ks. lomake.ts). Jos lahetys ei onnistu, ikkuna neuvoo
+ * soittamaan tai kirjoittamaan suoraan.
  *
  * Natiivi <dialog>: fokus pysyy ikkunassa, Esc sulkee, taustan
  * vieritys lukitaan .lukossa-luokalla (ks. Pehmeavieritys).
@@ -29,6 +31,8 @@ export default function YhteysIkkuna() {
   const [paketti, setPaketti] = useState<string | undefined>();
   const [otsikko, setOtsikko] = useState("Paketti");
   const [lahetetty, setLahetetty] = useState(false);
+  const [lahettaa, setLahettaa] = useState(false);
+  const [virhe, setVirhe] = useState(false);
 
   useEffect(() => {
     const d = ref.current;
@@ -39,6 +43,7 @@ export default function YhteysIkkuna() {
       setPaketti(t.paketti);
       setOtsikko(t.otsikko ?? "Paketti");
       setLahetetty(false);
+      setVirhe(false);
       if (!d.open) d.showModal();
       document.documentElement.classList.add("lukossa");
     };
@@ -58,22 +63,27 @@ export default function YhteysIkkuna() {
 
   const vaihda = (p: string) => setValitut((v) => (v.includes(p) ? v.filter((x) => x !== p) : [...v, p]));
 
-  const laheta = (e: React.FormEvent<HTMLFormElement>) => {
+  const laheta = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (lahettaa) return;
     const f = new FormData(e.currentTarget);
-    const rivit = [
-      `Nimi: ${f.get("nimi") ?? ""}`,
-      `Puhelin: ${f.get("puhelin") ?? ""}`,
-      `Sähköposti: ${f.get("sahkoposti") ?? ""}`,
-      `Yritys: ${f.get("yritys") ?? ""}`,
-      `Palvelu: ${valitut.join(", ") || "ei valittu"}`,
-      ...(paketti ? [`${otsikko}: ${paketti}`] : []),
-      "",
-      String(f.get("viesti") ?? ""),
-    ];
-    const aihe = `Yhteydenotto: ${[valitut.join(", "), paketti].filter(Boolean).join(", ") || "WS Media"}`;
-    window.location.href = `mailto:info@wsmedia.fi?subject=${encodeURIComponent(aihe)}&body=${encodeURIComponent(rivit.join("\n"))}`;
-    setLahetetty(true);
+    const g = (k: string) => String(f.get(k) ?? "");
+    setLahettaa(true);
+    setVirhe(false);
+    const ok = await lahetaLomake("yhteys", {
+      nimi: g("nimi"),
+      yritys: g("yritys"),
+      puhelin: g("puhelin"),
+      sahkoposti: g("sahkoposti"),
+      palvelu: valitut.join(", "),
+      paketti,
+      paketti_otsikko: paketti ? otsikko : undefined,
+      viesti: g("viesti"),
+      verkkosivu: g("verkkosivu"),
+    });
+    setLahettaa(false);
+    if (ok) setLahetetty(true);
+    else setVirhe(true);
   };
 
   return (
@@ -111,8 +121,8 @@ export default function YhteysIkkuna() {
 
         {lahetetty ? (
           <div className="yi-kiitos" role="status">
-            <h3>Viesti on valmiina sähköpostissasi.</h3>
-            <p>Lähetä se sähköpostiohjelmasta, niin vastaamme 24 tunnin sisällä. Jos ohjelma ei auennut, soita tai kirjoita osoitteeseen info@wsmedia.fi.</p>
+            <h3>Kiitos, viesti on perillä.</h3>
+            <p>Vastaamme arkisin 24 tunnin sisällä. Lähetimme vahvistuksen sähköpostiisi.</p>
             <button type="button" className="btn" onClick={() => ref.current?.close()}>
               Sulje
             </button>
@@ -157,8 +167,18 @@ export default function YhteysIkkuna() {
               Viesti
               <textarea name="viesti" rows={3} placeholder="Esim. tarvitsemme 4 videota kuukaudessa Instagramiin." />
             </label>
-            <button className="btn" type="submit">
-              Lähetä viesti
+            {/* Roskapostiansa: ihminen ei nae eika tayta tata. */}
+            <label className="vi-ansa" aria-hidden="true">
+              Verkkosivu
+              <input name="verkkosivu" tabIndex={-1} autoComplete="off" />
+            </label>
+            {virhe ? (
+              <p className="vi-ilmoitus" role="alert">
+                Viesti ei lähtenyt. Yritä uudelleen, soita 040 564 8770 tai kirjoita osoitteeseen info@wsmedia.fi.
+              </p>
+            ) : null}
+            <button className="btn" type="submit" disabled={lahettaa}>
+              {lahettaa ? "Lähetetään…" : "Lähetä viesti"}
             </button>
           </form>
         )}

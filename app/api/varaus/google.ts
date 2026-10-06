@@ -5,26 +5,35 @@
  * access tokeniin ja kutsuu Calendar API:a suoraan fetchilla. Ei
  * googleapis-riippuvuutta.
  *
+ * Kalenteri on info@wsmedia.fi:n paakalenteri, sama johon Projektipallot
+ * vie projektien deadlinet ("PP: ..."). Deadlinet ovat koko paivan
+ * tapahtumia tilassa "vapaa", joten ne eivat vie kartoitusaikoja.
+ * Kellonajalle tehty varattu-tilainen merkinta (kuvaus, palaveri) vie.
+ *
  * Ymparistomuuttujat (Vercel > Settings > Environment Variables):
  *   GOOGLE_SA_EMAIL        palvelutilin sahkoposti (...@...iam.gserviceaccount.com)
  *   GOOGLE_SA_PRIVATE_KEY  palvelutilin yksityinen avain (PEM, rivinvaihdot \n)
- *   GOOGLE_SA_SUBJECT      (valinnainen) info@wsmedia.fi, jos Workspacessa on
- *                          domain-wide delegation. Silloin tapahtuma tehdaan
- *                          info@wsmedia.fi:n nimissa ja asiakas saa kutsun.
+ *   GOOGLE_SA_SUBJECT      info@wsmedia.fi. Palvelutili toimii taman
+ *                          kayttajan nimissa (Workspacen domain-wide
+ *                          delegation, scopet alla). Ilman tata kalenteri
+ *                          pitaa jakaa palvelutilille muokkausoikeuksin.
  *   VARAUS_KALENTERIT      tarkistettavat kalenterit pilkulla erotettuna,
  *                          oletus info@wsmedia.fi. Ensimmaiseen tehdaan varaus.
+ *
+ * Vahvistus asiakkaalle lahtee Resendilla (route.ts), ei Googlen kutsuna:
+ * kalenterimerkinnan kuvaus on sisainen muistiinpano.
  */
 import { createSign } from "node:crypto";
 
-const SCOPE = "https://www.googleapis.com/auth/calendar";
+/* Vain se mita tarvitaan: varattujen aikojen luku ja tapahtuman luonti.
+   Samat kaksi scopea annetaan Workspacen delegoinnissa. */
+const SCOPE = "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.freebusy";
 
 export const kalenterit = () =>
   (process.env.VARAUS_KALENTERIT || "info@wsmedia.fi")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-
-export const delegointi = () => Boolean(process.env.GOOGLE_SA_SUBJECT);
 
 const b64 = (s: string | Buffer) => Buffer.from(s).toString("base64url");
 
@@ -92,8 +101,7 @@ export async function varatut(alku: Date, loppu: Date): Promise<Varattu[]> {
 export async function luoTapahtuma(tapahtuma: Record<string, unknown>) {
   const t = await token();
   const kal = encodeURIComponent(kalenterit()[0]);
-  const lahetys = delegointi() ? "?sendUpdates=all" : "";
-  const r = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${kal}/events${lahetys}`, {
+  const r = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${kal}/events`, {
     method: "POST",
     headers: { authorization: `Bearer ${t}`, "content-type": "application/json" },
     body: JSON.stringify(tapahtuma),
