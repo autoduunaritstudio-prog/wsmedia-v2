@@ -1216,12 +1216,6 @@ export default function LyhytvideotMobiili() {
                       {", sama kuvausmateriaali palvelee somen lisäksi sivustoasi ja mainontaasi, ja viesti pysyy yhtenäisenä kanavasta riippumatta."}
                     </p>
                     {" "}
-                    <p style={{ margin: "14px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
-                      <b style={{ color: "#fff" }}>
-                        {"Kolme alustaa, yksi kuvauspäivä"}
-                      </b>
-                    </p>
-                    {" "}
                   </div>
               {" "}
               <button type="button" data-lv="seo-nappi" className="mo-e-btn mo-e-o mo-osuma" style={{ height: "42px", marginTop: "16px", padding: "0 16px", fontSize: "14.5px" }}>
