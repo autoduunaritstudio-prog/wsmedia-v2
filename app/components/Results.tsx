@@ -78,8 +78,8 @@ const TULOKSET: Tulos[] = [
     ],
     rivit: [
       { l: "Katselukerrat, 3 kk", nyt: "1 milj." },
-      { l: "Seuraajat Instagramissa", ennen: "250", nyt: "824" },
-      { l: "Seuraajat TikTokissa", ennen: "0", nyt: "300" },
+      { l: "Seuraajat Instagramissa", ennen: "250", nyt: "1 000" },
+      { l: "Seuraajat TikTokissa", ennen: "0", nyt: "750" },
     ],
   },
   {
