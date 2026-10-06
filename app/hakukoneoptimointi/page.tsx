@@ -32,7 +32,7 @@ import HakuMobiili from "./mobiili/Mobiili";
 export const metadata: Metadata = {
   title: "Hakukoneoptimointi yritykselle | SEO-palvelut | WS Media",
   description:
-    "Hakukoneoptimointi yritykselle: tekninen SEO, sisältö ja paikallinen näkyvyys, sekä näkyvyys tekoälyhauissa. Kuukausipaketit alkaen 390 €/kk.",
+    "Hakukoneoptimointi yritykselle: tekninen SEO, sisältö ja paikallinen näkyvyys, sekä näkyvyys tekoälyhauissa. Kuukausipaketit alkaen 190 €/kk.",
   alternates: { canonical: "https://wsmedia.fi/hakukoneoptimointi" },
   robots: { index: true, follow: true },
   openGraph: {
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     url: "https://wsmedia.fi/hakukoneoptimointi",
     title: "Hakukoneoptimointi yritykselle | SEO-palvelut | WS Media",
     description:
-      "Tekninen SEO, sisältö ja paikallinen näkyvyys, sekä näkyvyys tekoälyhauissa. Kuukausipaketit alkaen 390 €/kk.",
+      "Tekninen SEO, sisältö ja paikallinen näkyvyys, sekä näkyvyys tekoälyhauissa. Kuukausipaketit alkaen 190 €/kk.",
   },
 };
 

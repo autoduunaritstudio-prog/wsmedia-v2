@@ -10,9 +10,9 @@ const i = (n: number) => ({ "--i": n }) as CSSProperties;
    kertoo mita tehdaan ja kuinka usein raportoidaan, ei mita saavutetaan. */
 
 const TIERS = [
-  { name: "Perusta", price: "390", tag: "", for: "Sivuston kunnossapito ja perusnäkyvyys. Sama kokonaisuus kuin verkkosivujen ylläpitopaketissa." },
-  { name: "Kasvu", price: "890", tag: "Suosituin", for: "Jatkuva sisältötyö ja paikallinen näkyvyys. Taso, jolla tulokset alkavat kertyä.", hl: true },
-  { name: "Täysi", price: "1 690", tag: "", for: "Kilpailluille toimialoille, joissa myös auktoriteetti pitää rakentaa." },
+  { name: "Perusta", price: "190", tag: "", for: "Sivuston kunnossapito ja perusnäkyvyys. Sama kokonaisuus kuin verkkosivujen ylläpitopaketissa." },
+  { name: "Kasvu", price: "590", tag: "Suosituin", for: "Jatkuva sisältötyö ja paikallinen näkyvyys. Taso, jolla tulokset alkavat kertyä.", hl: true },
+  { name: "Täysi", price: "1 200", tag: "", for: "Kilpailluille toimialoille, joissa myös auktoriteetti pitää rakentaa." },
 ];
 
 const YES = <span className="yes">✓</span>;
@@ -40,9 +40,8 @@ export function Hinnoittelu() {
           <span className="kick">Hinnoittelu</span>
           <h2>Paljonko hakukoneoptimointi maksaa?</h2>
           <p className="sub">
-            Kolme tasoa, kiinteä kuukausihinta ja maksuton kartoitus ennen aloitusta. Suomessa
-            tuloksiin tähtäävä hakukoneoptimointi asettuu tyypillisesti 400–2 000 euroon
-            kuukaudessa, tässä on meidän tasomme siitä haarukasta.
+            Kolme tasoa, kiinteä kuukausihinta ja maksuton kartoitus ennen aloitusta. Taso valitaan
+            sen mukaan, kuinka paljon uutta sisältöä tarvitaan ja kuinka kilpailtu toimiala on.
           </p>
         </div>
 
@@ -225,9 +224,9 @@ export function Taustaa() {
             <strong>tarvittavan uuden sisällön määrä</strong>.
           </p>
           <p>
-            Tästä seuraa myös se, miksi hyvin halpa hakukoneoptimointi on harvoin hyvä kauppa. Jos
-            kuukausihinta riittää kahteen tuntiin, ne kaksi tuntia menevät raportin tekemiseen.
-            Mitään ei ehditä korjata eikä kirjoittaa.
+            Tästä seuraa myös se, miksi tasot eroavat toisistaan. Perusta-tason tunnit riittävät
+            sivuston kunnossapitoon ja seurantaan. Uuden sisällön kirjoittaminen ja kilpaillut
+            hakusanat vaativat enemmän tunteja, ja siksi ne kuuluvat Kasvu- ja Täysi-tasoille.
           </p>
 
           <p>
@@ -315,7 +314,7 @@ export function Tarjous() {
           min={200}
           max={5000}
           step={50}
-          initial={890}
+          initial={590}
           unit="€/kk"
         />
       </div>

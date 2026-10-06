@@ -46,7 +46,7 @@ const BASE_GRAPH = [
       "@id": "https://wsmedia.fi/hakukoneoptimointi#sivu",
       "url": "https://wsmedia.fi/hakukoneoptimointi",
       "name": "Hakukoneoptimointi yritykselle | SEO-palvelut ja hinta | WS Media",
-      "description": "Hakukoneoptimointi yritykselle: tekninen SEO, sisältö, auktoriteetti ja paikallinen näkyvyys, ja näkyvyys myös tekoälyhauissa. Kuukausipaketit alkaen 390 €/kk.",
+      "description": "Hakukoneoptimointi yritykselle: tekninen SEO, sisältö, auktoriteetti ja paikallinen näkyvyys, ja näkyvyys myös tekoälyhauissa. Kuukausipaketit alkaen 190 €/kk.",
       "inLanguage": "fi-FI",
       "isPartOf": {
         "@id": "https://wsmedia.fi/#organisaatio"
@@ -98,11 +98,11 @@ const BASE_GRAPH = [
             "name": "Perusta",
             "description": "Sivuston tekninen kunnossapito ja perusnäkyvyys: 10 seurattavaa hakusanaa, yhden sivun optimointi kuukaudessa, Google-yritysprofiilin käyttöönotto ja raportti kolmen kuukauden välein. Kuukausi kerrallaan.",
             "priceCurrency": "EUR",
-            "price": "390",
+            "price": "190",
             "priceSpecification": {
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
-              "price": "390",
+              "price": "190",
               "unitCode": "MON",
               "valueAddedTaxIncluded": false
             }
@@ -112,11 +112,11 @@ const BASE_GRAPH = [
             "name": "Kasvu",
             "description": "Jatkuva sisältötyö ja paikallinen näkyvyys: 40 seurattavaa hakusanaa, kolmen sivun optimointi ja kaksi artikkelia kuukaudessa, viisi kaupunkisivua, tekoälyhakunäkyvyyden optimointi sekä kuukausiraportti. Vähimmäiskesto 6 kk.",
             "priceCurrency": "EUR",
-            "price": "890",
+            "price": "590",
             "priceSpecification": {
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
-              "price": "890",
+              "price": "590",
               "unitCode": "MON",
               "valueAddedTaxIncluded": false
             }
@@ -126,11 +126,11 @@ const BASE_GRAPH = [
             "name": "Täysi",
             "description": "Kilpailluille toimialoille: 100 seurattavaa hakusanaa, kuuden sivun optimointi ja neljä artikkelia kuukaudessa, rajattomasti kaupunkisivuja, auktoriteetin ja linkkien rakentaminen sekä tekoälyhakunäkyvyyden seuranta. Vähimmäiskesto 6 kk.",
             "priceCurrency": "EUR",
-            "price": "1690",
+            "price": "1200",
             "priceSpecification": {
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
-              "price": "1690",
+              "price": "1200",
               "unitCode": "MON",
               "valueAddedTaxIncluded": false
             }

@@ -36,8 +36,8 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Paljonko verkkosivujen ylläpito maksaa?",
-        a: "Perusylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, 290 €/kk + alv. Kun otat molemmat, saat ne yhteishintaan edullisemmin.",
-        plain: "Perusylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, 290 €/kk + alv. Kun otat molemmat, saat ne yhteishintaan edullisemmin.",
+        a: "Perusylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, 190 €/kk + alv. Kun otat molemmat, saat ne yhteishintaan edullisemmin.",
+        plain: "Perusylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, 190 €/kk + alv. Kun otat molemmat, saat ne yhteishintaan edullisemmin.",
       },
       {
         q: "Miten hakukoneoptimointi vaikuttaa hintaan?",

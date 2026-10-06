@@ -1056,7 +1056,7 @@ export default function VerkkosivutMobiili() {
               </b>
               {", ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Verkkotunnus on yrityksesi nimissä. Hakukoneoptimoinnin jatkuva seuranta on erillinen palvelu, "}
               <b style={{ color: "#eef3f7" }}>
-                {"290 €/kk + alv"}
+                {"190 €/kk + alv"}
               </b>
               {". Esimerkki toteutuksestamme: "}
               <a href="https://laaksolahdensahko.fi/" className="mo-osuma">

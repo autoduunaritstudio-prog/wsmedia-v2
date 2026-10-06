@@ -69,7 +69,7 @@ export default function Refs({ children, stats }: { children: ReactNode; stats?:
                 <ul>
                   <li>Näkyvyys Googlessa ja tekoälyhauissa samalla työllä</li>
                   <li>Sovitut mittarit ja raportointi, ei sijoituslupauksia</li>
-                  <li>Kuukausipaketit alkaen 390 €/kk</li>
+                  <li>Kuukausipaketit alkaen 190 €/kk</li>
                 </ul>
                 <div className="svc-cta">
                   <SmartLink className="btn" href="/hakukoneoptimointi">

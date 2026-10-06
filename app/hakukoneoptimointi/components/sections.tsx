@@ -252,9 +252,9 @@ export function Mittarit() {
    ei kortteja eika varjoja, ja suositeltu taso merkitaan syaanilla
    ylapalkilla eika kohotetulla laatikolla. */
 const TASOT = [
-  { name: "Perusta", price: "390", tag: "", for: "Sivuston kunnossapito ja perusnäkyvyys. Sama kokonaisuus kuin verkkosivujen ylläpitopaketissa." },
-  { name: "Kasvu", price: "890", tag: "Suosituin", for: "Jatkuva sisältötyö ja paikallinen näkyvyys. Taso, jolla tulokset alkavat kertyä.", hl: true },
-  { name: "Täysi", price: "1 690", tag: "", for: "Kilpailluille toimialoille, joissa myös auktoriteetti pitää rakentaa." },
+  { name: "Perusta", price: "190", tag: "", for: "Sivuston kunnossapito ja perusnäkyvyys. Sama kokonaisuus kuin verkkosivujen ylläpitopaketissa." },
+  { name: "Kasvu", price: "590", tag: "Suosituin", for: "Jatkuva sisältötyö ja paikallinen näkyvyys. Taso, jolla tulokset alkavat kertyä.", hl: true },
+  { name: "Täysi", price: "1 200", tag: "", for: "Kilpailluille toimialoille, joissa myös auktoriteetti pitää rakentaa." },
 ];
 
 const ON = <span className="on">✓</span>;
