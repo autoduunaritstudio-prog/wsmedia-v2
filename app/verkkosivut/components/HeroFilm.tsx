@@ -62,6 +62,9 @@ export default function HeroFilm() {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    /* Alle 768 px naytetaan puhelinversio (./mobiili) ja tama puu on
+       piilossa: ei posterin latausta eika kehyssilmukkaa. */
+    if (window.matchMedia("(max-width: 767px)").matches) return;
     const cv = ref.current;
     const ctx = cv?.getContext("2d");
     if (!cv || !ctx) return;
@@ -320,7 +323,12 @@ export default function HeroFilm() {
           Ei loading="lazy" eika decoding="async": molemmat siirtaisivat
           maalausta ja siten LCP:ta. object-fit: cover keskitettyna on
           sama rajaus kuin canvasin drawImage-laskenta. */}
-      <img src={POSTER} alt="" width={1920} height={1080} fetchPriority="high" />
+      <picture>
+        {/* Alle 768 px naytetaan puhelinversio ja tama puu on piilossa;
+            piilotettu <img> haettaisiin silti. */}
+        <source media="(max-width: 767px)" srcSet="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+        <img src={POSTER} alt="" width={1920} height={1080} fetchPriority="high" />
+      </picture>
       <canvas ref={ref} />
       {/* LUETTAVUUSKERROS. Elokuvan viimeinen ruutu on laaja
           tyopoytakuva, jossa oikea naytto on kirkas. Otsikko on

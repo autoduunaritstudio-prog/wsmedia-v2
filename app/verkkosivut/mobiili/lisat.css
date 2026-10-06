@@ -1,0 +1,30 @@
+/* VERKKOSIVUJEN PUHELINVERSIO: toteutuksen lisat suunnitelman CSS:n paalle
+   (mobiili.css on generoitu suunnitelmasta eika sita muokata kasin).
+
+   Heron elokuva: suunnitelmassa sarja (3120x2200, 8x5 ruutua a 390x440,
+   38 kaytossa) ladattiin heti. Tassa ensimmainen ruutu on oma 27 kt:n
+   kuvansa (ruutu 0 kohdasta 0,0, skaalattu 780x880:een, webp q50, SSIM
+   0,980), joka piirtyy heti. Kaksinkertainen koko on LCP:n takia: 390x440
+   oli pienempi kuin nakyma, joten Chrome laski sille pienemman LCP-koon
+   ja kirjasi LCP:n vasta koko sarjan vaihtuessa (mitattu 8,5 s Slow 4G
+   + 4x CPU). Koko sarja (515 kt) haetaan sivun
+   latauduttua (Efektit.tsx lisaa .mo-film-valmis kun sarja on purettu).
+   Koot prosentteina, jotta ruutu taytaa nakyman leveyden millä tahansa
+   puhelimella; 390 px:n leveydella tulos on sama kuin suunnitelmassa. */
+.mo-s-verkkosivut .mo-v-film { background-image: url(/mobiili/verkkosivut-film-ikkuna-0.webp); background-size: 100% 100% }
+.mo-s-verkkosivut .mo-v-film.mo-film-valmis { background-image: url(/mobiili/verkkosivut-film-ikkuna.webp); background-size: 800% 500% }
+
+/* PageSpeed-mittarin kaari: suunnitelmassa strokeDashoffset laskettiin
+   joka kehys (339.3 -> 33.9, 1,7 s) ja .mo-v-gauge pehmensi sen 1,8 s
+   siirtymalla. Tassa lopullinen arvo on HTML:ssa ja kaari on tyhja kunnes
+   alue paljastuu; sama siirtyma vie sen perille ilman JS-silmukkaa. */
+.mo-s-verkkosivut [data-laske]:not(.mo-on) .mo-v-gauge { stroke-dashoffset: 339.3 }
+@media (prefers-reduced-motion: reduce) {
+  .mo-s-verkkosivut .mo-v-gauge { transition: none }
+}
+
+/* Valilehtien napit ovat suunnitelmassa 40 px korkeat 48 px:n kiskossa.
+   Kosketusalue jatkuu kiskon reunoihin (44 px) ilman nakyvaa muutosta
+   ja ilman sivuttaista paallekkaisyytta naapurinapin kanssa. */
+.mo-s-verkkosivut .mo-l-seg button { position: relative }
+.mo-s-verkkosivut .mo-l-seg button::after { content: ""; position: absolute; left: 0; right: 0; top: -2px; bottom: -2px }

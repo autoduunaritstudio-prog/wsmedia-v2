@@ -1,0 +1,9 @@
+/* MEISTA-SIVUN PUHELINVERSIO: toteutuksen lisat suunnitelman CSS:n paalle
+   (mobiili.css on generoitu suunnitelmasta eika sita muokata kasin).
+
+   Heron tarkennus on sumennetun kopion haivytys (Efektit.tsx). Reduced
+   motionissa suunnitelman blur on 0, joten kopio on piilossa jo ennen
+   JavaScriptia. */
+@media (prefers-reduced-motion: reduce) {
+  .mo-s-meista [data-meista="sumea"] { opacity: 0 !important }
+}

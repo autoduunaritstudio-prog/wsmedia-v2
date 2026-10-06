@@ -1,0 +1,143 @@
+/* ==================================================================
+   MOBIILIVERSIO (6.10.2026): pohja ja rajaus
+   ==================================================================
+   Puhelinversio on oma puunsa (.mo-root), joka naytetaan vain
+   max-width: 767px. Tyopoydan puu on .mo-tyopoyta-kaareessa
+   (display: contents, joten sen asettelu ei muutu lainkaan) ja
+   piilotetaan samalla rajalla. Yli 767 px mikaan tasta tiedostosta ei
+   vaikuta tyopoytaan: .mo-root on piilossa ja kaari on pelkka contents.
+
+   Kaikki mobiilin luokat ovat mo-etuliitteella ja id:t m-etuliitteella,
+   koska suunnitelman nimet (.rv, .on, .li, #palvelut ...) ovat kaytossa
+   myos tyopoydalla ja SiteEffects kasittelee .rv-elementteja koko
+   dokumentista.
+
+   Suunnitelma on piirretty selaimen oletustyyleilla (ei Tailwindin
+   preflightia eika globals.css:n elementtisaantoja). .mo-root palauttaa
+   ne: all: revert vie jokaisen ominaisuuden selaimen oletukseen, ja
+   suunnitelman omat saannot (.mo-s-<sivu> ..., spesifisempia) ja
+   inline-tyylit voittavat sen. SVG:t jatetaan ulos, koska revert
+   kumoaisi myos niiden esitysattribuutit (fill, stroke). */
+
+.mo-tyopoyta { display: contents }
+.mo-root { display: none }
+
+@media (max-width: 767px) {
+  .mo-root { display: block }
+  /* Tyopoydan puu pois. Latausruutu (.lataus) jaa nakyviin, koska se
+     on sivun oma latausnaytto myos puhelimessa; se on palvelusivuilla
+     .page-palvelu-kaareen suora lapsi. */
+  .mo-tyopoyta > :not(.lataus):not(:has(> .lataus)) { display: none !important }
+  .mo-tyopoyta > :has(> .lataus) { display: contents !important }
+  .mo-tyopoyta > :has(> .lataus) > :not(.lataus) { display: none !important }
+  /* Ennen kuin puhelinversion puu on jasennetty (se on HTML:n lopussa),
+     ruutu on jo sivun tumma eika tyopoydan valkoinen. */
+  body { background: #0b0f14 }
+  /* Lomakeikkunan aikana sivu ei vieri taustalla. */
+  html.mo-lukko, html.mo-lukko body { overflow: hidden }
+}
+
+.mo-root {
+  position: relative;
+  /* Suunnitelman 390 px:n kehys leikkasi koristeet (hehkut, isot SVG:t);
+     clip leikkaa luomatta vierityskontekstia, joten sticky toimii
+     (ks. projektin CLAUDE.md, body { overflow-x: clip }). */
+  overflow-x: clip;
+  font-family: var(--font-instrument), system-ui, sans-serif;
+  font-size: 16px; line-height: normal; letter-spacing: normal;
+  color: #f5f5f7; text-align: left;
+  -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+}
+.mo-root :where(*:not(svg, svg *, .lataus, .lataus *)) { all: revert }
+.mo-root :where(svg) { display: inline; vertical-align: baseline; overflow: hidden }
+.mo-root :where(img, video, canvas) { max-width: none }
+.mo-root :where(button, input, textarea, select) { font-family: inherit }
+.mo-root :where(a, button, label, [role="link"]) { -webkit-tap-highlight-color: transparent }
+
+/* ------------------------------------------------------------------
+   KUORI OIKEALLA SIVULLA. Suunnitelmassa ylapalkki, valikko,
+   lomakeikkuna ja CTA-palkki ovat absolute 390x844-kehyksen sisalla;
+   sivustolla ne ovat fixed suhteessa nakymaan. Valikon ympyra alkaa
+   napin keskelta (oikea reuna - 38 px, 34 px) millä tahansa
+   leveydella, ja avautuessaan se kattaa myos ison puhelimen ja
+   vaakanakyman (980 px riittaa 390x844:lle, 118vmax isommille).
+   ------------------------------------------------------------------ */
+.mo-root .mo-wv-ov { position: fixed; clip-path: circle(0px at calc(100% - 38px) 34px) }
+.mo-root .mo-wv-cb:checked ~ .mo-wv-ov { clip-path: circle(max(980px, 118vmax) at calc(100% - 38px) 34px) }
+.mo-root .mo-ik { position: fixed }
+/* Valikon checkbox: suunnitelmassa kehyksen sisalla absolute; sivulla
+   se jaisi sivun loppuun, ja fokus (napin painallus) vierittaisi sinne. */
+.mo-root .mo-wv-cb { position: fixed; top: 0; right: 0 }
+.mo-root .mo-ik-laatikko { max-height: calc(100% - 46px) }
+
+/* Ylapalkin tilat: Moottori.tsx kirjoittaa data-attribuutit, varit
+   ja ajoitukset ovat suunnitelman (renderVals: hd). */
+.mo-root .mo-otsake {
+  position: fixed; top: 0; left: 0; right: 0; height: 68px; padding: 0 14px 0 18px;
+  display: flex; align-items: center; justify-content: space-between; z-index: 5;
+  transition: transform .4s cubic-bezier(.2,.7,.2,1); pointer-events: none;
+}
+.mo-root .mo-otsake[data-piilo="1"] { transform: translateY(-80px) }
+.mo-root .mo-otsake > .mo-otsake-lasi {
+  position: absolute; inset: 0; background: rgba(8,12,17,.62);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px);
+  opacity: 0; transition: opacity .35s, background-color .35s; box-shadow: 0 1px 0 rgba(255,255,255,.06);
+}
+.mo-root .mo-otsake[data-lasi="1"] > .mo-otsake-lasi { opacity: 1 }
+.mo-root .mo-otsake > .mo-otsake-logo { position: relative; display: flex; color: #f5f5f7; transition: color .35s; pointer-events: auto }
+.mo-root .mo-otsake .mo-wv-nappi { background: #ffffff; color: #0b0f14 }
+.mo-root .mo-otsake[data-teema="vaalea"] > .mo-otsake-lasi { background: rgba(220,228,237,.72); box-shadow: 0 1px 0 rgba(17,21,26,.06) }
+.mo-root .mo-otsake[data-teema="vaalea"] > .mo-otsake-logo { color: #0b0f14 }
+.mo-root .mo-otsake[data-teema="vaalea"] .mo-wv-nappi { background: #0b0f14; color: #f5f5f7 }
+/* Pienet sivut (yhteystiedot, laskutus, tietosuoja): suunnitelman oma
+   palkki, 64 px, beige tunnus, tausta tulee 30 px:n jalkeen ja palkki
+   piiloutuu alas vieritettaessa 700 px:n jalkeen. */
+.mo-root .mo-otsake.mo-otsake-pieni { height: 64px; padding: 0 14px 0 12px; transition: transform .3s ease }
+.mo-root .mo-otsake.mo-otsake-pieni[data-piilo="1"] { transform: translateY(-76px) }
+.mo-root .mo-otsake-pieni > .mo-otsake-lasi { background: rgba(11,15,20,.9); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; transition: opacity .3s }
+.mo-root .mo-otsake-pieni > .mo-otsake-logo { color: #e9d4b4 }
+
+/* Jatkuva CTA-palkki alhaalla (suunnitelman nav "Pikatoiminnot"). */
+.mo-root .mo-palkki {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px calc(14px + env(safe-area-inset-bottom, 0px));
+  background: rgba(9,13,18,.9); -webkit-backdrop-filter: saturate(1.4) blur(18px); backdrop-filter: saturate(1.4) blur(18px);
+  box-shadow: 0 -1px 0 rgba(255,255,255,.08);
+  transition: transform .45s cubic-bezier(.2,.7,.2,1), opacity .3s;
+}
+.mo-root .mo-palkki[data-piilo="1"] { transform: translateY(115%); opacity: 0 }
+.mo-root .mo-palkki-pieni {
+  left: auto; right: 12px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); height: 60px; padding: 6px; box-sizing: border-box;
+  border-radius: 999px; background: rgba(5,8,12,.92); border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 16px 40px rgba(0,0,0,.5); gap: 6px; -webkit-backdrop-filter: none; backdrop-filter: none;
+  opacity: 0; transform: translateY(90px); transition: opacity .35s, transform .45s cubic-bezier(.2,.8,.2,1);
+}
+.mo-root .mo-palkki-pieni[data-nakyy="1"] { opacity: 1; transform: none }
+.mo-root .mo-palkki-pieni[data-nakyy="1"][data-piilo="1"] { transform: translateY(115%); opacity: 0 }
+.mo-root .mo-palkki-pieni .mo-m-btn { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 8px; height: 48px; border-radius: 999px; font-size: 15px; font-weight: 600; text-decoration: none; box-sizing: border-box; transition: transform .15s ease; border: 0; cursor: pointer }
+.mo-root .mo-palkki-pieni .mo-m-btn:active { transform: scale(.97) }
+.mo-root .mo-palkki-pieni .mo-m-o { width: 48px; border: 1.5px solid rgba(255,255,255,.22); color: #fff; background: transparent }
+.mo-root .mo-palkki-pieni .mo-m-p { padding: 0 20px; background: #6fecff; color: #0b1320 }
+.mo-root .mo-palkki-pieni .mo-m-shine::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 40%; background: linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent); animation: mo-k-m-shine 3.4s ease-in-out infinite }
+@keyframes mo-k-m-shine { 0% { transform: translateX(-150%) } 55%, 100% { transform: translateX(320%) } }
+@media (prefers-reduced-motion: reduce) {
+  .mo-root .mo-palkki-pieni .mo-m-shine::after { animation: none }
+  .mo-root .mo-otsake, .mo-root .mo-palkki { transition: none }
+}
+
+/* Pienen tekstilinkin kosketusalue 44 px ilman ulkoasun muutosta
+   (esim. footerin Tietosuoja ja Evästeet). */
+.mo-root .mo-osuma { position: relative }
+.mo-root .mo-osuma::after { content: ""; position: absolute; left: -8px; right: -8px; top: -14px; bottom: -14px }
+
+/* Taustattomien pienten linkkien ja logon kosketusalue 44 px korkeaksi
+   (OHJE: kosketuskohteet vahintaan 44 px). Nakymaton ::after, joten
+   ulkoasu pysyy suunnitelman mukaisena. */
+.mo-root :is(.mo-e-flink, .mo-ts-linkki, .mo-otsake-logo, [data-etu-avaa]),
+.mo-s-etu #m-ukk a,
+.mo-s-yhteys footer a, .mo-s-laskutus footer a, .mo-s-tietosuoja footer a { position: relative }
+.mo-root :is(.mo-e-flink, .mo-ts-linkki, .mo-otsake-logo, [data-etu-avaa])::after,
+.mo-s-etu #m-ukk a::after,
+.mo-s-yhteys footer a::after, .mo-s-laskutus footer a::after, .mo-s-tietosuoja footer a::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 44px; min-width: 44px; transform: translateY(-50%)
+}

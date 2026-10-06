@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Inter_Tight, Jost } from "next/font/google";
 
 import s from "./TeippausHero.module.css";
@@ -36,8 +36,21 @@ const MARK: number[][] = [
 
 export default function TeippausHero() {
   const root = useRef<HTMLDivElement>(null);
+  /* PUHELINVERSIO (6.10.2026): alle 768 px:n nakymassa tama hero on
+     piilossa (puhelimella on oma versionsa, ks. ../mobiili). Kanvastyo
+     (noin 0,6 s paasaikeen tyota ja 60 kt:n kuva) kaynnistyy vasta kun
+     tyopoytanakyma on kaytossa. Tyopoydalla toiminta on ennallaan. */
+  const [kaytossa, setKaytossa] = useState(false);
+  useEffect(() => {
+    const mq = matchMedia("(max-width: 767px)");
+    const f = () => setKaytossa(!mq.matches);
+    f();
+    mq.addEventListener("change", f);
+    return () => mq.removeEventListener("change", f);
+  }, []);
 
   useEffect(() => {
+    if (!kaytossa) return;
     const el = root.current;
     if (!el) return;
     const q = <T extends Element>(sel: string) => el.querySelector(sel) as T;
@@ -456,7 +469,7 @@ export default function TeippausHero() {
       photo.onload = null;
       maskImg.onload = null;
     };
-  }, []);
+  }, [kaytossa]);
 
   const rootStyle = {
     "--font": `${interTight.style.fontFamily},ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif`,

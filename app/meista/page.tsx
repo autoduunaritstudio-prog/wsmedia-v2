@@ -13,6 +13,7 @@ import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
 
 import { buildJsonLd } from "./jsonld";
 import { Hero, Lyhyesti, Miksi, Tapa, Tarjous, Tiimi } from "./components/sections";
+import MeistaMobiili from "./mobiili/Mobiili";
 
 /* HAKUSANAT. Sivu kilpailee paikallisista yleishauista ("mainostoimisto
    espoo", "markkinointitoimisto espoo"), joissa hakutulosten karjessa
@@ -40,6 +41,10 @@ export const metadata: Metadata = {
 
 export default function Meista() {
   return (
+    <>
+    {/* Tyopoydan puu .mo-tyopoyta-kaaressa (display: contents, asettelu ei
+        muutu). Puhelinversio on taman JALKEEN, ks. app/meista/mobiili. */}
+    <div className="mo-tyopoyta">
     <div className="page-palvelu page-hakukoneoptimointi page-meista wsx">
       <script
         type="application/ld+json"
@@ -89,5 +94,8 @@ export default function Meista() {
       />
       <SiteEffects />
     </div>
+    </div>
+    <MeistaMobiili />
+    </>
   );
 }

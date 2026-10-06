@@ -11,6 +11,7 @@ import { SUBPAGE_FOOTER, OVERLAY_NAV, ROUTES } from "../components/site-data";
 import CookieSettingsButton from "../components/consent/CookieSettingsButton";
 
 import { EVASTEET, PAIVITETTY, SECTIONS } from "./content";
+import TietosuojaMobiili from "./mobiili/Mobiili";
 
 export const metadata: Metadata = {
   title: "Tietosuojaseloste | WS Media",
@@ -68,6 +69,11 @@ function Evasteosio() {
 
 export default function Tietosuoja() {
   return (
+    <>
+      {/* Tyopoydan puu .mo-tyopoyta-kaaressa (display: contents, asettelu ei
+          muutu). Puhelinversio (max-width 767px) on taman JALKEEN, koska
+          tyopoydan skriptit hakevat ensimmaisen footerin ja headerin. */}
+      <div className="mo-tyopoyta">
     <div className="page-palvelu page-hakukoneoptimointi page-tietosuoja wsx">
       <NetBackdrop merkit={false} />
       <div className="rae" aria-hidden="true" />
@@ -145,5 +151,8 @@ export default function Tietosuoja() {
       />
       <SiteEffects />
     </div>
+      </div>
+      <TietosuojaMobiili />
+    </>
   );
 }

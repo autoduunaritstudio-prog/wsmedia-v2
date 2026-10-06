@@ -27,6 +27,7 @@ import {
 
 import { buildJsonLd } from "./jsonld";
 import Toimintaalue from "../components/Toimintaalue";
+import HakuMobiili from "./mobiili/Mobiili";
 
 export const metadata: Metadata = {
   title: "Hakukoneoptimointi yritykselle | SEO-palvelut | WS Media",
@@ -47,6 +48,11 @@ export const metadata: Metadata = {
 
 export default function Hakukoneoptimointi() {
   return (
+    <>
+    {/* Tyopoydan puu .mo-tyopoyta-kaaressa (display: contents, asettelu ei
+        muutu). Puhelinversio on taman JALKEEN, koska tyopoydan skriptit
+        hakevat ensimmaisen footerin ja headerin koko dokumentista. */}
+    <div className="mo-tyopoyta">
     <div className="page-palvelu page-hakukoneoptimointi wsx">
       <script
         type="application/ld+json"
@@ -201,5 +207,10 @@ export default function Hakukoneoptimointi() {
       <Palkki />
       <SiteEffects />
     </div>
+    </div>
+    {/* PUHELINVERSIO (6.10.2026): nakyy vain max-width 767px, ks.
+        app/components/mobiili/mobiili.css ja ./mobiili. */}
+    <HakuMobiili />
+    </>
   );
 }

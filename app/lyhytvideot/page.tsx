@@ -31,6 +31,7 @@ import {
 import { Laatta, Vaite } from "../components/Maasto";
 import { structuredData } from "./structured-data";
 import Toimintaalue from "../components/Toimintaalue";
+import LyhytvideotMobiili from "./mobiili/Mobiili";
 
 /* HAKUSANAT 30.9.2026 (Google Ads Keyword Planner, Suomi): "lyhytvideot"
    100-1 t./kk, "lyhytvideot yritykselle" 10-100 ja kilpailu suuri,
@@ -108,6 +109,11 @@ const STATS = [
 
 export default function Lyhytvideot() {
   return (
+    <>
+    {/* Tyopoydan puu .mo-tyopoyta-kaaressa (display: contents, asettelu ei
+        muutu). Puhelinversio on taman JALKEEN, koska tyopoydan skriptit
+        hakevat ensimmaisen footerin ja headerin koko dokumentista. */}
+    <div className="mo-tyopoyta">
     <div className="page-palvelu page-lyhytvideot wsx">
       {/* LATAUSRUUTU. Ensimmaisena, jotta sen efekti ajetaan ennen
           puhelinten efekteja: ne lukevat lukon kiinnittyessaan. */}
@@ -248,5 +254,10 @@ export default function Lyhytvideot() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
     </div>
+    </div>
+    {/* PUHELINVERSIO (6.10.2026): nakyy vain max-width 767px, ks.
+        app/components/mobiili/mobiili.css ja ./mobiili. */}
+    <LyhytvideotMobiili />
+    </>
   );
 }

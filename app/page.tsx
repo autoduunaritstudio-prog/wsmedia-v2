@@ -21,6 +21,7 @@ import Footer from "./components/Footer";
 import { HOME_FOOTER, OVERLAY_NAV } from "./components/site-data";
 import { buildHomeFaqJsonLd } from "./faq-data";
 import { ORG_ID, ORGANISAATIO } from "./components/organisaatio";
+import EtuMobiili from "./_etu-mobiili/EtuMobiili";
 
 /* ETUSIVUN METATIEDOT. Aiemmin etusivu peri juuren oletukset ("WS Media,
    etusivu"), eika sillä ollut canonicalia eika jakotietoja. Otsikko kantaa
@@ -90,6 +91,10 @@ export default function Home() {
           }),
         }}
       />
+      {/* Tyopoydan puu .mo-tyopoyta-kaaressa (display: contents, asettelu ei
+          muutu). Puhelinversio on taman JALKEEN, koska tyopoydan skriptit
+          hakevat ensimmaisen footerin ja headerin koko dokumentista. */}
+      <div className="mo-tyopoyta">
       <Nav links={OVERLAY_NAV.map((l) => ({ ...l, current: l.href === "/" }))} ctaHref="#lomake" ctaLabel="Pyydä tarjous" />
       {/* Sticky hero + nouseva cover. Hero pysyy kiinnitettyna ruudun
           ylareunaan ja cover liukuu sen paalle natiivilla sticky-kaytoksella;
@@ -138,6 +143,10 @@ export default function Home() {
       />
       <SiteEffects />
       <EtuTummennus />
+      </div>
+      {/* PUHELINVERSIO (6.10.2026): nakyy vain max-width 767px, ks.
+          app/components/mobiili/mobiili.css ja app/_etu-mobiili. */}
+      <EtuMobiili />
     </>
   );
 }

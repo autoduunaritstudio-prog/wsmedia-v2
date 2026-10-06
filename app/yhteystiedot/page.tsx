@@ -15,6 +15,7 @@ import Nav from "../components/Nav";
 import NetBackdrop from "../components/NetBackdrop";
 import SiteEffects from "../components/SiteEffects";
 import { CONTACT, SUBPAGE_FOOTER, OVERLAY_NAV, ROUTES } from "../components/site-data";
+import YhteysMobiili from "./mobiili/Mobiili";
 
 const OTSIKKO = "Yhteystiedot | WS Media, Espoo";
 const KUVAUS =
@@ -73,6 +74,11 @@ const TEKIJAT: [string, string, string][] = [
 
 export default function Yhteystiedot() {
   return (
+    <>
+      {/* Tyopoydan puu .mo-tyopoyta-kaaressa (display: contents, asettelu ei
+          muutu). Puhelinversio (max-width 767px) on taman JALKEEN, koska
+          tyopoydan skriptit hakevat ensimmaisen footerin ja headerin. */}
+      <div className="mo-tyopoyta">
     <div className="page-palvelu page-hakukoneoptimointi page-yhteystiedot wsx">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }} />
       <NetBackdrop merkit={false} />
@@ -191,5 +197,8 @@ export default function Yhteystiedot() {
       />
       <SiteEffects />
     </div>
+      </div>
+      <YhteysMobiili />
+    </>
   );
 }

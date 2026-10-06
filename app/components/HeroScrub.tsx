@@ -579,6 +579,9 @@ export default function HeroScrub() {
           maalausta ja siten LCP:ta. object-fit: cover keskitettyna on
           sama rajaus kuin canvasin drawImage-laskenta. */}
       <picture>
+        {/* Alle 768 px naytetaan puhelinversio (app/_etu-mobiili) ja tama
+            puu on piilossa; piilotettu <img> haettaisiin silti. */}
+        <source media="(max-width: 767px)" srcSet="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
         <source media="(max-width: 979px)" srcSet={frameSrc(SETS.m.dir, 0)} />
         <img
           src={frameSrc(SETS.d.dir, 0)}

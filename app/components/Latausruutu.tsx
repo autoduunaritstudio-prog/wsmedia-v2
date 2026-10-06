@@ -73,6 +73,17 @@ export default function Latausruutu({ video }: Props) {
     naytetty = true;
     const html = document.documentElement;
     const el = ruutu.current;
+    /* PUHELINVERSIO (6.10.2026). Sama ruutu on sivulla kerran: joko
+       tyopoydan puussa (palvelusivut) tai puhelinversion puussa
+       (etusivu). Jos tama ruutu ei ole nakyvissa (sen puu on piilossa
+       talla leveydella), se ei tee mitaan: ei lukitse vieritysta eika
+       aseta data-latausta. */
+    if (!el || el.getClientRects().length === 0) return;
+    /* Puhelinversiossa tyopoydan verkkotausta (NetBackdrop) ei piirry,
+       joten "tausta" on puhelinversion omat kuvat: sivun load-tapahtuma
+       (ruudun alapuoliset kuvat haetaan vasta sen jalkeen, ks.
+       mobiili/Moottori.tsx). */
+    const mobiili = !!document.querySelector(".mo-root")?.getClientRects().length;
     html.dataset.lataus = "1";
 
     const esta = (e: Event) => {
@@ -270,7 +281,14 @@ export default function Latausruutu({ video }: Props) {
     if (fontit) fontit.then(() => valmis("fontit"), () => valmis("fontit"));
     else valmis("fontit");
 
-    if (html.dataset.tausta === "1") valmis("tausta");
+    if (mobiili) {
+      if (document.readyState === "complete") valmis("tausta");
+      else {
+        const t = () => valmis("tausta");
+        window.addEventListener("load", t, { once: true });
+        siivous.push(() => window.removeEventListener("load", t));
+      }
+    } else if (html.dataset.tausta === "1") valmis("tausta");
     else {
       const t = () => valmis("tausta");
       window.addEventListener("ws-tausta-valmis", t, { once: true });

@@ -1,0 +1,14 @@
+/* HAKUKONEOPTIMOINNIN PUHELINVERSIO: toteutuksen lisat suunnitelman CSS:n
+   paalle (mobiili.css on generoitu suunnitelmasta eika sita muokata kasin).
+
+   Heron vierityksen mukana liikkuvat isot kerrokset (maasto, hehku,
+   SERP-kortin kallistus) omalle kerrokselleen vain heron ajaksi:
+   Efektit.tsx lisaa .mo-seo-liike kun hero on nakyvissa ja poistaa sen
+   kun kansi on peittanyt sen. */
+.mo-s-seo .mo-seo-liike [data-seo-wc] { will-change: transform, opacity }
+
+/* Valintapainikkeet (Hakutulokset/Tekoalyhaku, tasot, Sopii/Ei kannata)
+   ovat suunnitelmassa 40 px korkeita 48 px:n kehyksessa. Kosketusalue
+   ulotetaan kehyksen reunoihin (48 px) ilman ulkoasun muutosta. */
+.mo-s-seo .mo-l-seg button { position: relative }
+.mo-s-seo .mo-l-seg button::after { content: ""; position: absolute; left: 0; right: 0; top: -4px; bottom: -4px }

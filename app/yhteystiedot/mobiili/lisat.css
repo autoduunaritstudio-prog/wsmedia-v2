@@ -1,0 +1,14 @@
+/* PUHELINVERSIO: toteutuksen lisat suunnitelman CSS:n paalle
+   (mobiili.css on generoitu suunnitelmasta eika sita muokata kasin). */
+
+/* Kopioi-nappi: suunnitelma renderoi ikonin tilan mukaan (kop.ok/kop.ei).
+   Molemmat ovat merkinnassa, .mo-ok valitsee nakyvan. */
+.mo-s-yhteys .mo-m-kop .mo-kop-ok { display: none }
+.mo-s-yhteys .mo-m-kop.mo-ok .mo-kop-ok { display: inline }
+.mo-s-yhteys .mo-m-kop.mo-ok .mo-kop-ei { display: none }
+
+/* Heron jatkuvat animaatiot (verkon viivat ja pisteet, hehku) tauolle,
+   kun cover peittaa heron kokonaan (Efektit: data-hero-pois). */
+.mo-s-yhteys [data-hero-pois] .mo-m-net path,
+.mo-s-yhteys [data-hero-pois] .mo-m-net circle,
+.mo-s-yhteys [data-hero-pois] .mo-m-glow { animation-play-state: paused }

@@ -1,0 +1,41 @@
+/* GENEROITU suunnitelmasta Tietosuoja.dc.html (dc2jsx.mjs). Kaikki valitsimet .mo-s-tietosuoja-juuren alla. */
+.mo-s-tietosuoja a{color:#6fecff}.mo-s-tietosuoja a:hover{color:#ffffff}
+.mo-s-tietosuoja .mo-m-btn{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:999px;font-size:16px;font-weight:600;text-decoration:none;box-sizing:border-box;transition:transform .15s ease;border:0;font-family:inherit;cursor:pointer}
+.mo-s-tietosuoja .mo-m-btn:active{transform:scale(.97)}
+.mo-s-tietosuoja .mo-m-p{background:#6fecff;color:#0b1320}
+.mo-s-tietosuoja .mo-m-o{border:1.5px solid rgba(255,255,255,.35);color:#fff;background:transparent}
+.mo-s-tietosuoja .mo-m-shine::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);animation:mo-tietosuoja-m-shine 3.4s ease-in-out infinite}
+.mo-s-tietosuoja .mo-m-kick{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:.04em;color:#6fecff}
+.mo-s-tietosuoja .mo-m-h2{margin:0;font-size:31px;line-height:1.08;letter-spacing:-.032em;font-weight:700}
+.mo-s-tietosuoja .mo-m-p2{margin:0;font-size:16px;line-height:1.62;color:rgba(255,255,255,.76)}
+.mo-s-tietosuoja .mo-m-scroll{scrollbar-width:none}.mo-s-tietosuoja .mo-m-scroll::-webkit-scrollbar{display:none}
+.mo-s-tietosuoja .mo-m-vast{animation:mo-tietosuoja-m-in .3s ease both}
+.mo-s-tietosuoja .mo-rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.mo-s-tietosuoja .mo-rv.mo-on{opacity:1;transform:none}
+.mo-s-tietosuoja .mo-rv.mo-d1{transition-delay:.1s}.mo-s-tietosuoja .mo-rv.mo-d2{transition-delay:.2s}.mo-s-tietosuoja .mo-rv.mo-d3{transition-delay:.3s}
+.mo-s-tietosuoja .mo-li{animation:mo-tietosuoja-m-in .8s cubic-bezier(.2,.7,.2,1) both}.mo-s-tietosuoja .mo-li.mo-d1{animation-delay:.1s}.mo-s-tietosuoja .mo-li.mo-d2{animation-delay:.22s}.mo-s-tietosuoja .mo-li.mo-d3{animation-delay:.34s}.mo-s-tietosuoja .mo-li.mo-d4{animation-delay:.46s}
+@keyframes mo-tietosuoja-m-shine{0%{transform:translateX(-150%)}55%,100%{transform:translateX(320%)}}
+@keyframes mo-tietosuoja-m-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.mo-s-tietosuoja .mo-ts-sec{scroll-margin-top:140px;padding:44px 0 0}
+.mo-s-tietosuoja .mo-ts-h{display:grid;grid-template-columns:38px minmax(0,1fr);column-gap:12px;align-items:start;margin:0 0 16px;font-size:23px;line-height:1.18;letter-spacing:-.02em;font-weight:700}
+.mo-s-tietosuoja .mo-ts-num{width:38px;height:38px;border-radius:50%;border:1.5px solid #6fecff;color:#6fecff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:-4px}
+.mo-s-tietosuoja .mo-ts-body{display:flex;flex-direction:column;gap:14px}
+.mo-s-tietosuoja .mo-ts-body p{margin:0;font-size:16px;line-height:1.62;color:rgba(255,255,255,.78)}
+.mo-s-tietosuoja .mo-ts-body b{color:#fff}
+.mo-s-tietosuoja .mo-ts-sub{font-size:13px !important;font-weight:600;letter-spacing:.04em;color:#6fecff !important;margin-top:8px !important}
+.mo-s-tietosuoja .mo-ts-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.mo-s-tietosuoja .mo-ts-list li{position:relative;padding-left:22px;font-size:16px;line-height:1.6;color:rgba(255,255,255,.78)}
+.mo-s-tietosuoja .mo-ts-list li::before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;border-radius:50%;background:#6fecff}
+.mo-s-tietosuoja .mo-ts-kortti{padding:18px;border-radius:18px;background:#101b2c;border:1px solid rgba(255,255,255,.1)}
+.mo-s-tietosuoja .mo-ts-pieni{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.5);margin-bottom:4px}
+.mo-s-tietosuoja .mo-ts-tyyppi{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;font-size:12.5px;font-weight:600}
+.mo-s-tietosuoja .mo-ts-tyyppi-v{background:rgba(111,236,255,.14);color:#6fecff}
+.mo-s-tietosuoja .mo-ts-tyyppi-s{background:rgba(255,154,77,.16);color:#ffb37a}
+.mo-s-tietosuoja .mo-ts-koodi{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;color:#fff;background:rgba(255,255,255,.07);padding:3px 8px;border-radius:6px;word-break:break-all}
+.mo-s-tietosuoja .mo-ts-linkki{background:none;border:0;padding:0;font:inherit;color:#6fecff;text-decoration:underline;cursor:pointer;min-height:24px}
+.mo-s-tietosuoja .mo-ts-toc a{display:flex;align-items:center;gap:12px;min-height:46px;padding:0 6px;border-radius:10px;color:#fff;text-decoration:none;font-size:15.5px}
+.mo-s-tietosuoja .mo-ts-toc a:active{background:rgba(111,236,255,.1)}
+.mo-s-tietosuoja .mo-ts-toc span{flex:none;width:26px;font-size:13px;font-weight:700;color:#6fecff;font-variant-numeric:tabular-nums}
+.mo-s-tietosuoja .mo-ts-chev{transition:transform .3s ease}
+.mo-s-tietosuoja .mo-ts-chev.mo-auki{transform:rotate(180deg)}
+@media (prefers-reduced-motion: reduce){.mo-s-tietosuoja .mo-m-shine::after,.mo-s-tietosuoja .mo-li,.mo-s-tietosuoja .mo-m-vast{animation:none}.mo-s-tietosuoja .mo-rv{opacity:1;transform:none;transition:none}}

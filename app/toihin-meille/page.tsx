@@ -22,6 +22,7 @@ import {
   Tyonkuva,
 } from "./sections";
 import { Ukk } from "./ukk";
+import ToihinMobiili from "./mobiili/Mobiili";
 
 const TITLE = "Töihin WS Medialle | Freelancerit ja tekijät";
 const DESCRIPTION =
@@ -49,6 +50,11 @@ export const metadata: Metadata = {
  */
 export default function ToihinMeille() {
   return (
+    <>
+    {/* Tyopoydan puu .mo-tyopoyta-kaaressa (display: contents, asettelu ei
+        muutu). Puhelinversio on taman JALKEEN, koska tyopoydan skriptit
+        hakevat ensimmaisen footerin ja headerin koko dokumentista. */}
+    <div className="mo-tyopoyta">
     <div className="page-palvelu page-hakukoneoptimointi page-tm wsx">
       <script
         type="application/ld+json"
@@ -85,5 +91,10 @@ export default function ToihinMeille() {
       <HakemusIkkuna />
       <SiteEffects />
     </div>
+    </div>
+    {/* PUHELINVERSIO (6.10.2026): nakyy vain max-width 767px, ks.
+        app/components/mobiili/mobiili.css ja app/toihin-meille/mobiili. */}
+    <ToihinMobiili />
+    </>
   );
 }

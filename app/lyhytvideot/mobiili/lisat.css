@@ -1,0 +1,16 @@
+/* LYHYTVIDEOT-SIVUN PUHELINVERSIO: toteutuksen lisat suunnitelman CSS:n
+   paalle (mobiili.css on generoitu suunnitelmasta eika sita muokata).
+
+   Referenssikortin edistymispalkki: suunnitelma animoi leveytta
+   (width 0 -> 100 %), joka laskee asettelun joka kehys. Sama nakyma
+   scaleX:lla: palkilla ei ole omaa pyoristysta (sailio leikkaa), joten
+   tulos on pikselilleen sama. Reduced motion -saanto (animation: none)
+   tulee suunnitelman CSS:sta; silloin palkki on tyhja kuten suunnitelmassa. */
+.mo-s-lyhytvideot .mo-e-prog i { width: 100%; transform: scaleX(0); transform-origin: 0 50%; animation-name: mo-lyhytvideot-e-prog-x }
+@keyframes mo-lyhytvideot-e-prog-x { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+
+/* Heron otsikon vaihtuva sana on nowrap (suunnitelma, 390 px). Alle
+   359 px:n leveydella pisin sana ("näyttävät, mitä teette.") ei mahtuisi
+   ja leikkautuisi heron reunaan, joten koko pienenee nakyman mukana.
+   Leveydesta 359 px ylospain arvo on suunnitelman 33 px. */
+.mo-s-lyhytvideot [data-lv=teksti] h1 { font-size: min(33px, 9.2vw) !important }

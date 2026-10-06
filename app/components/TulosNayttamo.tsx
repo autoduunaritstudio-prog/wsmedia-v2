@@ -107,8 +107,11 @@ export default function TulosNayttamo({ tulokset }: { tulokset: Tulos[] }) {
             onClick={() => setValittu(i)}
           >
             <span className="tn-tab-yla">
+              {/* lazy (6.10.2026): valilehdet ovat syvalla ruudun alla, ja
+                  puhelimessa tama puu on piilossa, jolloin eager-kuva (280 kt
+                  PNG:ta) haettaisiin turhaan ennen puhelinversion LCP:ta. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={x.logo.src} alt="" width={x.logo.w} height={x.logo.h} className={x.logo.monogrammi ? "mono" : ""} />
+              <img src={x.logo.src} alt="" width={x.logo.w} height={x.logo.h} className={x.logo.monogrammi ? "mono" : ""} loading="lazy" decoding="async" />
               {x.logo.monogrammi ? <b>{x.nimi}</b> : <span className="vh">{x.nimi}</span>}
               <span className="tn-tab-palvelu">{x.palvelu}</span>
             </span>

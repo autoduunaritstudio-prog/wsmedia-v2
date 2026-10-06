@@ -1,0 +1,11 @@
+/* TIETOSUOJAN PUHELINVERSIO: toteutuksen lisat suunnitelman CSS:n paalle
+   (mobiili.css on generoitu suunnitelmasta eika sita muokata kasin).
+
+   Suunnitelman oma ylapalkki erosi kahdessa kohdassa Kuoren pienesta
+   palkista: tausta rgba(11,19,32,.9) ja valkoinen tunnus (ei beige). */
+.mo-root.mo-s-tietosuoja .mo-otsake-pieni > .mo-otsake-lasi { background: rgba(11,19,32,.9) }
+.mo-root.mo-s-tietosuoja .mo-otsake-pieni > .mo-otsake-logo { color: #fff }
+/* Sisallys auki: palkki ei piiloudu (suunnitelman piiloon = ... && !s.toc). */
+.mo-root.mo-s-tietosuoja[data-toc-auki] .mo-otsake.mo-otsake-pieni[data-piilo="1"] { transform: none }
+/* Suunnitelman CTA-pillerissa ei ole soittonappia (sahkoposti + Varaa). */
+.mo-root.mo-s-tietosuoja .mo-palkki-pieni a[href^="tel:"] { display: none }

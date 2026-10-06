@@ -9,6 +9,7 @@ import NetBackdrop from "../components/NetBackdrop";
 import Kopioi from "../components/Kopioi";
 import SiteEffects from "../components/SiteEffects";
 import { SUBPAGE_FOOTER, OVERLAY_NAV, ROUTES } from "../components/site-data";
+import LaskutusMobiili from "./mobiili/Mobiili";
 
 /* LAHTEET (tarkistettu 3.10.2026):
    - Y-tunnus, kotipaikka ja ALV-rekisterointi:
@@ -54,6 +55,11 @@ function Rivi({ k, v, kopio }: { k: string; v: string; kopio?: boolean }) {
 
 export default function Laskutustiedot() {
   return (
+    <>
+      {/* Tyopoydan puu .mo-tyopoyta-kaaressa (display: contents, asettelu ei
+          muutu). Puhelinversio (max-width 767px) on taman JALKEEN, koska
+          tyopoydan skriptit hakevat ensimmaisen footerin ja headerin. */}
+      <div className="mo-tyopoyta">
     <div className="page-palvelu page-hakukoneoptimointi page-laskutustiedot wsx">
       <NetBackdrop merkit={false} />
       <div className="rae" aria-hidden="true" />
@@ -115,5 +121,8 @@ export default function Laskutustiedot() {
       />
       <SiteEffects />
     </div>
+      </div>
+      <LaskutusMobiili />
+    </>
   );
 }

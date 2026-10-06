@@ -1,0 +1,31 @@
+/* GRAAFISEN SUUNNITTELUN PUHELINVERSIO: toteutuksen lisat suunnitelman
+   CSS:n paalle (mobiili.css on generoitu suunnitelmasta eika sita muokata
+   kasin).
+
+   Heron lapinakyva teippaussarja: suunnitelmassa sarja (3120x1300,
+   8x5 ruutua a 390x260, kaytossa 34) ladattiin heti. Tassa ensimmainen
+   ruutu on oma 15 kt:n kuvansa (alfa sailyy), joka piirtyy heti, ja koko
+   sarja (680 kt) haetaan sivun latauduttua (Efektit.tsx lisaa
+   .mo-film-valmis kun sarja on purettu). Koot prosentteina, jotta ruutu
+   taytaa nakyman leveyden milla tahansa puhelimella; 390 px:n
+   leveydella tulos on sama kuin suunnitelmassa. */
+.mo-s-graafinen .mo-g-teippi { background-image: url(/mobiili/graafinen-teippaus-alfa-0.webp); background-size: 100% 100% }
+.mo-s-graafinen .mo-g-teippi.mo-film-valmis { background-image: url(/mobiili/graafinen-teippaus-alfa.webp); background-size: 800% 500% }
+
+/* Kosketuskohteet vahintaan 44 px ilman ulkoasun muutosta: suunnitelman
+   40 px:n valitsinnapit, 36 px:n +/- -napit ja 40-42 px:n tekstinapit
+   saavat nakymattoman lisaosuma-alueen (::after). Valitsimen napit
+   laajenevat vain pystysuunnassa, jotta vierekkaiset eivat mene paallekkain. */
+.mo-s-graafinen .mo-l-seg button,
+.mo-s-graafinen [data-g-maara],
+.mo-s-graafinen [data-g=seonappi],
+.mo-s-graafinen #m-ukk a[data-ankkuri] { position: relative }
+.mo-s-graafinen .mo-l-seg button::after,
+.mo-s-graafinen [data-g-maara]::after,
+.mo-s-graafinen [data-g=seonappi]::after,
+.mo-s-graafinen #m-ukk a[data-ankkuri]::after { content: ""; position: absolute; left: 0; right: 0; top: -4px; bottom: -4px }
+.mo-s-graafinen [data-g-maara]::after { left: -4px; right: -4px }
+
+/* Reduced motion: pulssi on itsestaan pyoriva loop (projektin CLAUDE.md),
+   suunnitelman reduce-lohko sammutti vain .l-pulssin. */
+@media (prefers-reduced-motion: reduce) { .mo-s-graafinen .mo-g-pulssi { animation: none } }

@@ -18,6 +18,7 @@ import { buildJsonLd } from "./jsonld";
 import { Materiaalit, Miksi, Palvelut } from "./sections";
 import { Alueet, Hinta, Kaytannossa, Kenelle, Tarjous } from "./sections2";
 import { Ukk } from "./ukk";
+import GraafinenMobiili from "./mobiili/Mobiili";
 
 const TITLE = "Graafinen suunnittelu ja logo yritykselle | Espoo | WS Media";
 const DESCRIPTION =
@@ -42,6 +43,11 @@ export const metadata: Metadata = {
 
 export default function GraafinenSuunnittelu() {
   return (
+    <>
+    {/* Tyopoydan puu .mo-tyopoyta-kaaressa (display: contents, asettelu ei
+        muutu). Puhelinversio on taman JALKEEN, koska tyopoydan skriptit
+        hakevat ensimmaisen footerin ja headerin koko dokumentista. */}
+    <div className="mo-tyopoyta">
     <div className="page-palvelu page-graafinen-suunnittelu wsx">
       <script
         type="application/ld+json"
@@ -156,5 +162,10 @@ export default function GraafinenSuunnittelu() {
       />
       <SiteEffects />
     </div>
+    </div>
+    {/* PUHELINVERSIO (6.10.2026): nakyy vain max-width 767px, ks.
+        app/components/mobiili/mobiili.css ja ./mobiili. */}
+    <GraafinenMobiili />
+    </>
   );
 }

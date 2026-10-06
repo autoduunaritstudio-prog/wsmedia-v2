@@ -14,6 +14,7 @@ import { OVERLAY_NAV, SUBPAGE_FOOTER } from "../components/site-data";
 import Jakso from "../components/Jakso";
 import Hero from "./components/Hero";
 import { buildJsonLd } from "./jsonld";
+import VerkkosivutMobiili from "./mobiili/Mobiili";
 import { Laatta, Vaite } from "../components/Maasto";
 import Toimintaalue from "../components/Toimintaalue";
 import {
@@ -47,6 +48,10 @@ export const metadata: Metadata = {
 
 export default function Verkkosivut() {
   return (
+    <>
+    {/* Tyopoydan puu .mo-tyopoyta-kaareessa (display: contents). Puhelinversio
+        on taman JALKEEN, ks. app/components/mobiili/mobiili.css. */}
+    <div className="mo-tyopoyta">
     <div className="page-palvelu page-verkkosivut wsx">
       <script
         type="application/ld+json"
@@ -260,5 +265,9 @@ export default function Verkkosivut() {
       />
       <SiteEffects />
     </div>
+    </div>
+    {/* PUHELINVERSIO (6.10.2026): vain max-width 767px, ks. ./mobiili. */}
+    <VerkkosivutMobiili />
+    </>
   );
 }

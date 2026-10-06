@@ -26,8 +26,14 @@ export function Hero() {
   return (
     <header className="seo-hero tm-hero">
       <div className="hero-tausta" aria-hidden="true">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/kuvat/halli.webp" alt="" data-par="0.075" data-parx="0.018" />
+        {/* Alle 768 px naytetaan puhelinversio ja tama puu on piilossa;
+            piilotettu <img> haettaisiin silti (6.10.2026). display: contents
+            pitaa kuvan asettelun tasan ennallaan. */}
+        <picture style={{ display: "contents" }}>
+          <source media="(max-width: 767px)" srcSet="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/kuvat/halli.webp" alt="" data-par="0.075" data-parx="0.018" />
+        </picture>
       </div>
       <div className="swrap hero-sisalto tm-hero-in">
         <p className="tm-avoin">
