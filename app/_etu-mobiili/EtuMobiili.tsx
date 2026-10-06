@@ -467,7 +467,9 @@ export default function EtuMobiili() {
                           {" "}
                           <div className="mo-e-puh" style={{ position: "absolute", left: "50%", bottom: "-40px", width: "106px", height: "222px", marginLeft: "-53px", borderRadius: "26px", padding: "4px", boxSizing: "border-box", background: "#05070a", boxShadow: "0 0 0 1px #2c323b, 0 26px 40px -16px rgba(0,0,0,.95)" }}>
                             {" "}
-                            <video data-etu-tulos={tI} data-src={t.videoSrc} data-mo-poster={t.kuva} muted loop playsInline preload="none" aria-label={t.alt} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "22px", display: "block" }}></video>
+                            <img src={TYHJA} data-mo-src={t.kuva} alt={t.alt} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "22px", display: "block" }} loading="lazy" decoding="async" />
+                            {" "}
+                            <video data-etu-tulos={tI} data-src={t.videoSrc} muted loop playsInline preload="none" aria-hidden="true" style={{ position: "absolute", left: "4px", top: "4px", width: "calc(100% - 8px)", height: "calc(100% - 8px)", objectFit: "cover", borderRadius: "22px", display: "block", opacity: 0, transition: "opacity .3s" }}></video>
                             {" "}
                             <span style={{ position: "absolute", top: "11px", left: "50%", width: "36px", height: "10px", marginLeft: "-18px", borderRadius: "999px", background: "#000" }}></span>
                             {" "}

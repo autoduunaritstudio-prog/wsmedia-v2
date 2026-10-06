@@ -55,7 +55,7 @@
 .mo-s-etu .mo-rv-k.mo-on .mo-e-svc-img img{transform:none}
 .mo-s-etu .mo-rv-k .mo-e-ikoni{transform:scale(.6) rotate(-20deg);opacity:0;transition:transform .5s cubic-bezier(.3,1.4,.4,1) .07s,opacity .4s .07s}
 .mo-s-etu .mo-rv-k.mo-on .mo-e-ikoni{transform:none;opacity:1}
-.mo-s-etu .mo-rv .mo-e-tk{opacity:0;transform:translateX(56px);transition:opacity .5s cubic-bezier(.2,.7,.2,1),transform .5s cubic-bezier(.2,.7,.2,1)}
+.mo-s-etu .mo-rv .mo-e-tk{opacity:0;transform:translateY(18px);transition:opacity .5s cubic-bezier(.2,.7,.2,1),transform .5s cubic-bezier(.2,.7,.2,1)}
 .mo-s-etu .mo-rv.mo-on .mo-e-tk{opacity:1;transform:none}
 .mo-s-etu .mo-rv .mo-e-tk:nth-child(2){transition-delay:.024s}.mo-s-etu .mo-rv .mo-e-tk:nth-child(3){transition-delay:.048s}
 .mo-s-etu .mo-rv .mo-e-puh{transform:translateY(60px);transition:transform .5s cubic-bezier(.2,.7,.2,1) .06s}

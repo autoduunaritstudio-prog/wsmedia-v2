@@ -172,6 +172,9 @@ export default function EtuEfektit() {
       kehys = 0;
       const v = aktiivinen;
       if (!v) return;
+      /* Tuloskortin video tulee kansikuvan paalle vasta kun se oikeasti
+         toistaa; pysaytetty jaa viimeiseen kuvaansa. */
+      if (v.dataset.etuTulos !== undefined && v.currentTime > 0 && v.style.opacity !== "1") v.style.opacity = "1";
       const p = palkki(v);
       if (p && v.duration > 0) p.style.transform = `scaleX(${(v.currentTime / v.duration).toFixed(4)})`;
       if (!v.paused) kehys = requestAnimationFrame(piirra);
