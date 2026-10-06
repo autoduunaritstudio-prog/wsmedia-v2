@@ -37,8 +37,8 @@ export default function Hero() {
               oma margin-top 22px, sama kuin alkuperaisessa pinotussa
               asettelussa - ei uutta lukua. */}
           <p className="sub">
-            Lyhytvideot, verkkosivut ja graafinen ilme samalta tiimiltä. Kiinteä hinta, ei pitkiä
-            sopimuksia. Sinä hyväksyt, me hoidamme loput.
+            Espoolainen mainostoimisto, jolta saat lyhytvideot, verkkosivut ja graafisen ilmeen.
+            Kiinteä hinta, ei pitkiä sopimuksia. Sinä hyväksyt, me hoidamme loput.
           </p>
           {/* Nappirivi nousi samaan ryhmaan. Vali on .heroctas-saannon
               oma margin-top 34px, sama kuin alkuperaisessa pinotussa

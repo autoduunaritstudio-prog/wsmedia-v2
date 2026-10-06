@@ -2,6 +2,7 @@
  * mobiili-kehykset.mjs: puhelinversion vierityksen kehysajat (7.10.2026).
  *
  *   node scripts/mobiili-kehykset.mjs [--pohja=http://localhost:4100] [--out=tulos.json]
+ *     [--sivut=/,/verkkosivut] [--korkeus=664] [--cpu=4,6]
  *
  * Tuotantobuild (next build && next start), Playwright headless GPU-lipuilla
  * (scripts/_browser.mjs), nakyma 390 x 664 (iPhone 12:n Safarin nakyva alue),
@@ -19,8 +20,9 @@ const { launchOptions, requireBrowser } = await import(new URL("./_browser.mjs",
 const arg = (k, d) => process.argv.find((a) => a.startsWith(`--${k}=`))?.slice(k.length + 3) ?? d;
 const POHJA = arg("pohja", "http://localhost:4100");
 const OUT = arg("out", null);
-const SIVUT = ["/", "/lyhytvideot", "/verkkosivut", "/hakukoneoptimointi", "/graafinen-suunnittelu"];
-const HIDASTUS = [4, 6];
+const SIVUT = arg("sivut", "/,/lyhytvideot,/verkkosivut,/hakukoneoptimointi,/graafinen-suunnittelu").split(",");
+const HIDASTUS = arg("cpu", "4,6").split(",").map(Number);
+const KORKEUS = Number(arg("korkeus", "664"));
 const NOPEUS = 2400; // px/s
 
 const browser = await requireBrowser("chromium").launch(launchOptions("chromium"));
@@ -28,7 +30,7 @@ const tulokset = [];
 try {
   for (const cpu of HIDASTUS) {
     for (const r of SIVUT) {
-      const ctx = await browser.newContext({ viewport: { width: 390, height: 664 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
+      const ctx = await browser.newContext({ viewport: { width: 390, height: KORKEUS }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
       await ctx.addInitScript(`try{localStorage.setItem("wsmedia.consent",JSON.stringify({analytics:false,v:1,ts:Date.now()}))}catch(e){}`);
       await ctx.route("**/*", (q) => {
         const u = new URL(q.request().url());
@@ -62,7 +64,7 @@ try {
         await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
         const j = [...valit].sort((a, b) => a - b);
         const q = (x) => j[Math.min(j.length - 1, Math.floor(x * j.length))];
-        const t = { sivu: r, cpu, kehyksia: j.length, mediaani: +q(0.5).toFixed(1), p95: +q(0.95).toFixed(1), yli33: +((j.filter((x) => x > 33.4).length / j.length) * 100).toFixed(1) };
+        const t = { sivu: r, cpu, korkeus: KORKEUS, kehyksia: j.length, mediaani: +q(0.5).toFixed(1), p95: +q(0.95).toFixed(1), yli33: +((j.filter((x) => x > 33.4).length / j.length) * 100).toFixed(1) };
         tulokset.push(t);
         console.log(JSON.stringify(t));
       } finally {

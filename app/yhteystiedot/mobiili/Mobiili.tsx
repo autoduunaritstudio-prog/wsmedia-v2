@@ -273,7 +273,7 @@ export default function YhteysMobiili() {
         {" "}
         <div data-filmi="1" role="img" aria-label="WS Median kuvauksia" style={{ position: "relative", zIndex: "2", padding: "56px 0", background: "#0b0f14", overflow: "hidden" }}>
           {" "}
-          <div data-filmi-nauha="" style={{ display: "flex", gap: "0", width: "max-content", padding: "16px 0", background: "#05080c", transform: "translateX(0px) rotate(-2deg)", boxShadow: "0 30px 60px -30px rgba(0,0,0,.9)" }}>
+          <div data-filmi-nauha="" className="mo-yt-nauha" style={{ display: "flex", gap: "0", width: "max-content", padding: "16px 0", background: "#05080c", boxShadow: "0 30px 60px -30px rgba(0,0,0,.9)" }}>
             {" "}
             {(RUUDUT).map((r: any, rI: number) => (
               <Fragment key={rI}>
@@ -281,6 +281,18 @@ export default function YhteysMobiili() {
                 <div style={{ position: "relative", flex: "none", width: "214px", padding: "18px 7px", boxSizing: "border-box", backgroundImage: "repeating-linear-gradient(90deg, transparent 0 8px, rgba(233,212,180,.5) 8px 18px, transparent 18px 26px), repeating-linear-gradient(90deg, transparent 0 8px, rgba(233,212,180,.5) 8px 18px, transparent 18px 26px)", backgroundSize: "100% 7px, 100% 7px", backgroundPosition: "0 5px, 0 calc(100% - 5px)", backgroundRepeat: "no-repeat" }}>
                   {" "}
                   <img src={TYHJA} data-filmi-src={r.src} alt={r.alt} width="200" height="140" style={{ display: "block", width: "200px", height: "140px", objectFit: "cover", borderRadius: "4px" }} decoding="async" />
+                  {" "}
+                </div>
+                {" "}
+              </Fragment>
+            ))}
+            {/* Sama sisalto toiseen kertaan: saumaton silmukka (siirto -50 %). */}
+            {(RUUDUT).map((r: any, rI: number) => (
+              <Fragment key={"b" + rI}>
+                {" "}
+                <div style={{ position: "relative", flex: "none", width: "214px", padding: "18px 7px", boxSizing: "border-box", backgroundImage: "repeating-linear-gradient(90deg, transparent 0 8px, rgba(233,212,180,.5) 8px 18px, transparent 18px 26px), repeating-linear-gradient(90deg, transparent 0 8px, rgba(233,212,180,.5) 8px 18px, transparent 18px 26px)", backgroundSize: "100% 7px, 100% 7px", backgroundPosition: "0 5px, 0 calc(100% - 5px)", backgroundRepeat: "no-repeat" }}>
+                  {" "}
+                  <img src={TYHJA} data-filmi-src={r.src} alt="" width="200" height="140" style={{ display: "block", width: "200px", height: "140px", objectFit: "cover", borderRadius: "4px" }} decoding="async" />
                   {" "}
                 </div>
                 {" "}

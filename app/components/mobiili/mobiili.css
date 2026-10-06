@@ -158,3 +158,8 @@
 }
 /* Suljetun lomakeikkunan ja valikon animaatiot tauolla. */
 .mo-root .mo-ik:not(.mo-auki) *, .mo-root .mo-wv-cb:not(:checked) ~ .mo-wv-ov * { animation-play-state: paused !important }
+
+/* Hero kannen nousun ajan (Moottori.tsx): jatkuvat animaatiot tauolla,
+   pinnattu laatikko omaksi kerroksekseen vain taman ajan. */
+.mo-root .mo-hero-jaa *, .mo-root .mo-hero-jaa *::before, .mo-root .mo-hero-jaa *::after { animation-play-state: paused !important }
+.mo-root .mo-hero-nousu > * { will-change: transform }

@@ -110,7 +110,7 @@ export default function EtuMobiili() {
           {" "}
           <div data-teema="tumma" data-etu="hero" style={{ position: "sticky", top: "0", height: "100svh", overflow: "hidden", background: "#0b0f14" }}>
             {" "}
-            <div style={{ position: "absolute", left: "0", right: "0", top: "68px", height: "calc(100vw * 44 / 39)", transform: "translateY(0px)" }} data-etu="film">
+            <div style={{ position: "absolute", left: "0", right: "0", top: "0", height: "calc(100vw * 44 / 39)", transform: "translateY(0px)" }} data-etu="film">
               {" "}
               <div className="mo-e-film" role="img" aria-label="WS Media -tunnus syttyy ja kytkee puhelimen ja näytön yhteen" style={{ position: "absolute", inset: "0", backgroundPosition: "0% 0%" }} data-etu="ruutu"></div>
               {" "}
@@ -164,7 +164,7 @@ export default function EtuMobiili() {
               </h1>
               {" "}
               <p className="mo-e-tulo mo-e-t2" style={{ margin: "4px 0 0", fontSize: "16.5px", lineHeight: "1.55", color: "#d6d9e0" }}>
-                {"Lyhytvideot, verkkosivut ja graafinen ilme samalta tiimiltä. Kiinteä hinta, ei pitkiä sopimuksia. Sinä hyväksyt, me hoidamme loput."}
+                {"Espoolainen mainostoimisto, jolta saat lyhytvideot, verkkosivut ja graafisen ilmeen. Kiinteä hinta, ei pitkiä sopimuksia. Sinä hyväksyt, me hoidamme loput."}
               </p>
               {" "}
               <div className="mo-e-tulo mo-e-t3" style={{ display: "flex", gap: "10px", marginTop: "22px" }}>
@@ -423,7 +423,7 @@ export default function EtuMobiili() {
           {" "}
           {/* TULOKSET: pyyhkäistävät tuloskortit */}
           {" "}
-          <section id="m-tulokset" data-teema="tumma" data-verkko="tulokset" data-vari="#0b131d" style={{ position: "relative", zIndex: "1", padding: "0 0 120px", color: "#f5f5f7" }}>
+          <section id="m-tulokset" data-teema="tumma" data-verkko="tulokset" data-vari="#0b131d" style={{ position: "relative", zIndex: "1", padding: "0 0 48px", color: "#f5f5f7" }}>
             {" "}
             <div className="mo-rv" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px", margin: "0 22px 18px" }}>
               {" "}
@@ -591,7 +591,7 @@ export default function EtuMobiili() {
           {" "}
           {/* UKK */}
           {" "}
-          <section id="m-ukk" data-teema="vaalea" data-verkko="ukk" data-verkko-alfa="0.12" data-vari="#dae2eb" style={{ position: "relative", zIndex: "1", padding: "150px 22px 48px", color: "#11151a" }}>
+          <section id="m-ukk" data-teema="vaalea" data-verkko="ukk" data-verkko-alfa="0.12" data-vari="#dae2eb" style={{ position: "relative", zIndex: "1", padding: "56px 22px 48px", color: "#11151a" }}>
             {" "}
             <div className="mo-rv">
               {" "}

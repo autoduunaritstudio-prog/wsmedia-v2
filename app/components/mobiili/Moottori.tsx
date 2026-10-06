@@ -489,6 +489,41 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
   });
   siivous.push(irrota);
 
+  /* ---------------- HERO JAADYTETAAN KANNEN NOUSUN AJAKSI ----------------
+     Kun kansi ([data-kerros]) nousee heron paalle, heron jatkuvat
+     animaatiot ja videot pysahtyvat (.mo-hero-jaa, mobiili.css), ja hero on
+     omana kerroksenaan (will-change: transform) vain taman ajan. Kun kansi
+     palaa alas, ne jatkuvat. Lyhytvideoiden heroon ei kosketa. */
+  const heroKaari = kansi && !juuri.classList.contains("mo-s-lyhytvideot") ? (kansi.previousElementSibling as HTMLElement | null) : null;
+  let heroJaassa = false;
+  let heroKerros = false;
+  let jaaVideot: HTMLVideoElement[] = [];
+  const irrotaJaa = heroKaari
+    ? kuuntele({
+        lue: (t: Tila) => {
+          const kt = kansi!.getBoundingClientRect().top;
+          /* will-change vain nousun ajan (kansi osittain heron paalla). */
+          const kerros = kt < t.HV - 1 && kt > 0;
+          if (kerros !== heroKerros) {
+            heroKerros = kerros;
+            heroKaari.classList.toggle("mo-hero-nousu", kerros);
+          }
+          const jaa = kt < t.HV - 1;
+          if (jaa === heroJaassa) return;
+          heroJaassa = jaa;
+          heroKaari.classList.toggle("mo-hero-jaa", jaa);
+          if (jaa) {
+            jaaVideot = [...heroKaari.querySelectorAll("video")].filter((v) => !v.paused);
+            jaaVideot.forEach((v) => v.pause());
+          } else {
+            jaaVideot.forEach((v) => v.play().catch(() => {}));
+            jaaVideot = [];
+          }
+        },
+      })
+    : null;
+  if (irrotaJaa) siivous.push(irrotaJaa);
+
   /* ---------------- VERKKOKANGAS ---------------- */
   if (verkko) {
     const loppu = kaynnistaVerkko(juuri, verkko);
@@ -529,9 +564,11 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
 /* ==================================================================
    VERKKOKANGAS. Suunnitelman kaynnistaVerkko() ja savy() sellaisenaan;
    kaksi eroa toteutuksessa:
-   1. Taustan savyliuku piirretaan samaan canvasiin. Suunnitelma kirjoitti
-      sen joka kehys linear-gradientiksi erilliselle nakyman kokoiselle
-      kerrokselle, joka maalautui joka kehys uudelleen.
+   1. Taustan savyliuku on kaaren ([data-kerros]) sisainen kiintea kerros,
+      joka rakennetaan kerran kaistoista ja vierii sivun mukana
+      (rakennaSavy, 8.10.2026). Suunnitelma kirjoitti sen joka kehys
+      nakyman kokoiselle kerrokselle; kangas piirtaa nyt vain viivat ja
+      pisteet lapinakyvalle pohjalle.
    2. Kangas piirtaa vain kun se on nakyvissa, ja kaynnistyy vasta sivun
       latauduttua, jottei se kilpaile ensimmaisen piirron kanssa.
    Leveys on nakyman leveys (suunnitelmassa 390).
@@ -606,8 +643,7 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
      - savy() kerran kehyksessa 53 px:n kaistoille taulukkoon
      - viivat ja pisteet 6 lapinakyvyysluokkaan (etusivulla lisaksi 3
        savyluokkaa), yksi polku ja yksi strokeStyle per luokka
-     - taustaliuku rakennetaan uudelleen vain kun vierityskohta tai kaistat
-       muuttuvat. */
+     - taustaliuku ei ole kankaassa vaan omana kerroksenaan (rakennaSavy). */
   const LUOKAT = 6;
   const AMAX = cfg.tila === "etu" ? 0.46 * 0.62 : cfg.tila === "toihin" ? 0.25 : 0.46 * 0.55;
   const PMAX = cfg.tila === "etu" ? 0.55 * 0.62 : cfg.tila === "syaani" ? 0.55 * 0.55 : 0.3;
@@ -627,7 +663,6 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
   const pPolut: Path2D[] = [];
   const ASKEL = 53;
   let taulu: { d: number; a: number }[] = [];
-  let gradientti: CanvasGradient | null = null;
   let gradAvain = "";
 
   let sp = 0;
@@ -654,24 +689,21 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
     viimeAvain = avain;
     const ox = -Math.sin(sp * Math.PI) * PX, oy = -sp * PY;
     const fw = W + PX, fh = HH + PY;
-    // Savytaulukko 53 px:n kaistoille (myos reunojen yli LINK verran).
+    // Savytaulukko 53 px:n kaistoille (myos reunojen yli LINK verran):
+    // viivojen ja pisteiden tummuus ja himmennys. Itse savyliuku on oma
+    // kerroksensa kaaren sisalla (rakennaSavy), ei kankaassa.
     const gAvain = `${Math.round(pohja)}|${kaistaAvain}|${HH}`;
-    if (gAvain !== gradAvain || !gradientti) {
+    if (gAvain !== gradAvain || !taulu.length) {
       gradAvain = gAvain;
       const n = Math.ceil((HH + 2 * LINK) / ASKEL) + 1;
       taulu = new Array(n);
-      const g = ctx.createLinearGradient(0, 0, 0, HH);
       for (let k = 0; k < n; k++) {
-        const yy = k * ASKEL - LINK;
-        const sv = savy(pohja + yy);
+        const sv = savy(pohja + k * ASKEL - LINK);
         taulu[k] = { d: sv.d, a: sv.a };
-        if (yy >= 0 && yy <= HH) g.addColorStop(Math.min(1, yy / HH), `rgb(${sv.rgb.map((v) => Math.round(v)).join(",")})`);
       }
-      gradientti = g;
     }
     const savyY = (yy: number) => taulu[Math.max(0, Math.min(taulu.length - 1, Math.round((yy + LINK) / ASKEL)))];
-    ctx.fillStyle = gradientti;
-    ctx.fillRect(0, 0, W, HH);
+    ctx.clearRect(0, 0, W, HH);
     const xs: number[] = [], ys: number[] = [];
     for (const p of pts) {
       const x = taita(p.x0 + p.vx * t, fw) + ox, yv = taita(p.y0 + p.vy * t, fh) + oy;
@@ -728,6 +760,63 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
     }
   };
 
+  const mittaaKaistat = (y: number): Kaista[] =>
+    kaistaEl.map((n) => {
+      const r = n.getBoundingClientRect();
+      const teema = n.getAttribute("data-teema");
+      return {
+        Y: Math.round(r.top + y),
+        rgb: hex(n.getAttribute("data-vari") || "#0b131d"),
+        tumma: teema === "tumma" || teema === "tummaa" ? 1 : 0,
+        W: cfg.tila === "etu" && n.getAttribute("data-raja") === "terava" ? 1 : 460,
+        a: cfg.tila === "etu" || cfg.tila === "syaani" ? parseFloat(n.getAttribute("data-verkko-alfa") || "1") : 1,
+      };
+    });
+
+  /* SAVYLIUKU OMANA KERROKSENA (8.10.2026). Ennen liuku piirrettiin
+     kankaaseen 24 kertaa sekunnissa, ja tumma-vaalea-raja nyki
+     vieritettaessa. Nyt [data-kerros]-kaaren sisalla on koko kaaren
+     korkuinen kerros, jonka linear-gradient rakennetaan kerran kaistojen
+     paikoista (sama savy(), kaistan leveys 460 px tai terava raja). Se
+     vierii sivun mukana ilman JavaScriptia; uudelleen vain kun asettelu
+     muuttuu. Kerrosjarjestys: savykerros alimpana, kangas (sticky) sen
+     paalla, osiot ylimpana. */
+  const savyKerros = kerros ? document.createElement("div") : null;
+  if (savyKerros && kerros) {
+    savyKerros.setAttribute("aria-hidden", "true");
+    savyKerros.style.cssText = "position:absolute;left:0;right:0;top:0;height:100%;z-index:0;pointer-events:none";
+    kerros.prepend(savyKerros);
+  }
+  let savyAvain = "";
+  const rakennaSavy = () => {
+    if (!kerros || !savyKerros || loppu) return;
+    const y = window.scrollY;
+    const kTop = kerros.getBoundingClientRect().top + y;
+    const H = kerros.offsetHeight;
+    kaistat = mittaaKaistat(y);
+    const avain = `${Math.round(kTop)}|${H}|${kaistat.map((k) => k.Y).join(",")}`;
+    if (avain === savyAvain) return;
+    savyAvain = avain;
+    const stopit: string[] = [];
+    for (let yy = 0; yy <= H + ASKEL; yy += ASKEL) {
+      const c = savy(kTop + yy).rgb.map((v) => Math.round(v));
+      stopit.push(`rgb(${c.join(",")}) ${Math.min(yy, H)}px`);
+    }
+    savyKerros.style.background = `linear-gradient(180deg, ${stopit.join(", ")})`;
+    // Kankaan oma kiintea taustavari pois: liuku nakyy sen lapi.
+    for (const el of [...(cv.parentElement?.children ?? [])]) if (el !== cv) (el as HTMLElement).style.background = "transparent";
+  };
+  let savyRaf = 0;
+  const pyydaSavy = () => {
+    if (!savyRaf) savyRaf = requestAnimationFrame(() => { savyRaf = 0; rakennaSavy(); });
+  };
+  const ro = typeof ResizeObserver !== "undefined" && kerros ? new ResizeObserver(pyydaSavy) : null;
+  if (ro && kerros) ro.observe(kerros);
+  juuri.addEventListener("mo:mitat", pyydaSavy);
+  window.addEventListener("load", pyydaSavy);
+  document.fonts?.ready.then(pyydaSavy, () => {});
+  pyydaSavy();
+
   /* Kaistat, kerroksen ylareuna ja sivun korkeus luetaan vierityskehyksen
      lukuvaiheessa (vieritys.ts), ei piirtokehyksessa: piirto ei silloin
      pakota asettelua muiden kirjoitusten jalkeen. */
@@ -737,17 +826,7 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
       const kr = kerros ? kerros.getBoundingClientRect().top : 0;
       lt = Math.max(0, Math.round(kr));
       korkeus = document.documentElement.scrollHeight;
-      kaistat = kaistaEl.map((n) => {
-        const r = n.getBoundingClientRect();
-        const teema = n.getAttribute("data-teema");
-        return {
-          Y: Math.round(r.top + tl.y),
-          rgb: hex(n.getAttribute("data-vari") || "#0b131d"),
-          tumma: teema === "tumma" || teema === "tummaa" ? 1 : 0,
-          W: cfg.tila === "etu" && n.getAttribute("data-raja") === "terava" ? 1 : 460,
-          a: cfg.tila === "etu" || cfg.tila === "syaani" ? parseFloat(n.getAttribute("data-verkko-alfa") || "1") : 1,
-        };
-      });
+      kaistat = mittaaKaistat(tl.y);
     },
   });
 
@@ -758,7 +837,7 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
     const t = tilaNyt();
     if (t.W !== W || t.HV !== HH) {
       alusta();
-      gradientti = null;
+      gradAvain = "";
     }
   };
   window.addEventListener("resize", koko, { passive: true });
@@ -782,6 +861,11 @@ function kaynnistaVerkko(juuri: HTMLElement, cfg: NonNullable<Props["verkko"]>) 
     loppu = true;
     irrota();
     cancelAnimationFrame(raf);
+    cancelAnimationFrame(savyRaf);
+    ro?.disconnect();
+    juuri.removeEventListener("mo:mitat", pyydaSavy);
+    window.removeEventListener("load", pyydaSavy);
+    savyKerros?.remove();
     io.disconnect();
     window.removeEventListener("resize", koko);
     window.removeEventListener("load", odota);

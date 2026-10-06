@@ -12,3 +12,11 @@
 .mo-s-yhteys [data-hero-pois] .mo-m-net path,
 .mo-s-yhteys [data-hero-pois] .mo-m-net circle,
 .mo-s-yhteys [data-hero-pois] .mo-m-glow { animation-play-state: paused }
+
+/* VALOKUVANAUHA pyorii itsestaan (8.10.2026): tasainen nopeus, saumaton
+   silmukka (sisalto kahdesti, siirto -50 %), kallistus -2deg sailyy.
+   Tauolla nakyman ulkopuolella (Moottori.tsx, .mo-tauko). */
+.mo-s-yhteys .mo-yt-nauha { transform: rotate(-2deg) translateX(0); animation: mo-yhteys-nauha 38s linear infinite }
+/* Ensin kallistus, sitten siirto: siirto kulkee nauhan omaa akselia pitkin, jolloin silmukka on saumaton myos pystysuunnassa. */
+@keyframes mo-yhteys-nauha { from { transform: rotate(-2deg) translateX(0) } to { transform: rotate(-2deg) translateX(-50%) } }
+@media (prefers-reduced-motion: reduce) { .mo-s-yhteys .mo-yt-nauha { animation: none; transform: rotate(-2deg) translateX(0) } }

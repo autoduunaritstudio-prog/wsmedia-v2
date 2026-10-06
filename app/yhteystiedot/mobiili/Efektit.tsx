@@ -28,16 +28,11 @@ export default function Efektit() {
     const himmea = q("[data-hero-himmea]");
     const kulmat = [...juuri.querySelectorAll<HTMLElement>("[data-hero-kulma]")];
     let viimeHero = "";
-    /* ---------- FILMINAUHA: liukuu vierityksen mukaan ---------- */
+    /* FILMINAUHA pyorii itsestaan CSS-animaationa (lisat.css, 8.10.2026);
+       vierityssidonta poistettu. */
     const filmi = q("[data-filmi]");
-    const nauha = q("[data-filmi-nauha]");
-    let filmiTop = 0;
-    let viimeX = NaN;
     siivous.push(
       kuuntele({
-        lue: () => {
-          if (filmi) filmiTop = filmi.getBoundingClientRect().top;
-        },
         kirjoita: (t: Tila) => {
           const k = rajaa(t.y / PIN);
           const avain = k.toFixed(4);
@@ -54,13 +49,6 @@ export default function Efektit() {
               teksti.style.opacity = (1 - 0.5 * k).toFixed(3);
             }
             if (himmea) himmea.style.opacity = (0.6 * k).toFixed(3);
-          }
-          if (nauha) {
-            const x = Math.round(Math.max(-1100, Math.min(0, -40 - (t.HV - filmiTop) * 0.4)));
-            if (x !== viimeX) {
-              viimeX = x;
-              nauha.style.transform = `translateX(${x}px) rotate(-2deg)`;
-            }
           }
         },
       }),

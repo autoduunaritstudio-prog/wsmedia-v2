@@ -55,6 +55,10 @@ export const metadata: Metadata = {
      (laskutustiedot, tietosuoja), joilta og:type ja og:locale puuttuivat.
      Jakokuva tulee edelleen app/opengraph-image.tsx:sta. */
   openGraph: { type: "website", locale: "fi_FI", siteName: "WS Media" },
+  /* iOS Safari muuttaa muuten puhelinnumerot, paivamaarat ja osoitteet
+     linkeiksi ennen hydraatiota, mika voi aiheuttaa hydraatioeron
+     (ks. consent/CookieBanner.tsx). Linkit tehdaan sivulla itse (tel:). */
+  formatDetection: { telephone: false, date: false, address: false, email: false },
 };
 
 export default function RootLayout({

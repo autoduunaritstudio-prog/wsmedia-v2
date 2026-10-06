@@ -22,6 +22,15 @@ export default function CookieBanner() {
   const [analytics, setAnalytics] = useState(false);
   const toggleId = useId();
 
+  /* Oma tarkistus (8.10.2026): jos voimassa oleva valinta on tallessa,
+     banneri suljetaan myos silloin, kun <html data-suostumus> puuttuu.
+     Safarissa merkinta voi kadota, jos React piirtaa juuren uudelleen
+     hydraatioeron jalkeen (esim. iOS on muuttanut numeroita linkeiksi
+     ennen hydraatiota), jolloin pelkka CSS-saanto ei piilota banneria. */
+  useEffect(() => {
+    if (readConsent()) setOpen(false);
+  }, []);
+
   useEffect(() => {
     const onOpen = () => {
       // Piilotus on vain ensimmaista piirtoa varten; avaus ohittaa sen.

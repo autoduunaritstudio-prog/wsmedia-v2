@@ -34,7 +34,7 @@ export default function VerkkosivutMobiili() {
           {" "}
           <div data-teema="tumma" data-vs="hero" style={{ position: "sticky", top: "0", height: "100svh", overflow: "hidden", background: "#0b0f14" }}>
             {" "}
-            <div style={{ position: "absolute", left: "0", right: "0", top: "68px", height: "calc(100vw * 44 / 39)", transform: "translateY(0px)" }} data-vs="film">
+            <div style={{ position: "absolute", left: "0", right: "0", top: "0", height: "calc(100vw * 44 / 39)", transform: "translateY(0px)" }} data-vs="film">
               {" "}
               <div className="mo-v-film" role="img" aria-label="Koodi kirjoitetaan ja valmis verkkosivu syttyy toiselle näytölle" style={{ position: "absolute", inset: "0", backgroundPosition: "0% 0%" }} data-vs="ruutu"></div>
               {" "}
