@@ -251,13 +251,9 @@ export default function LyhytvideotMobiili() {
                 {"Lyhytvideot yrityksille, jotka"}
                 <span style={{ display: "block", height: "38px", color: "#6fecff", whiteSpace: "nowrap" }}>
                   {" "}
-                  <span className="mo-e-sana" data-sana="0" hidden>{"katsotaan loppuun."}</span>
-                  {" "}
-                  <span className="mo-e-sana" data-sana="1">{"näyttävät, mitä teette."}</span>
-                  {" "}
-                  <span className="mo-e-sana" data-sana="2" hidden>{"pysäyttävät selaajan."}</span>
-                  {" "}
-                  <span className="mo-e-sana" data-sana="3" hidden>{"tekevät teistä tutun."}</span>
+                  {/* H1:ssa vain nakyva alkumuoto (indeksi 1). Muut sanat ovat
+                      data-sanat-attribuutissa, josta Efektit vaihtaa tekstin. */}
+                  <span className="mo-e-sana" data-sanat="katsotaan loppuun.|näyttävät, mitä teette.|pysäyttävät selaajan.|tekevät teistä tutun.">{"näyttävät, mitä teette."}</span>
                   {" "}
                 </span>
               </h1>
@@ -1167,6 +1163,63 @@ export default function LyhytvideotMobiili() {
                     {" "}
                     <p style={{ margin: "10px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
                       {"Itse tekeminen on halvinta silloin, kun yrityksessä on henkilö, jolla on sekä taito että aika pitää julkaisutahtia yllä kuukaudesta toiseen. Käytännössä juuri tahti on se, mikä katkeaa ensimmäisenä kiireisenä kuukautena, ja katkennut tahti nollaa kertyneen näkyvyyden nopeammin kuin sen rakentaminen kesti. Ulkoistamisen todellinen hyöty ei ole pelkkä tuotannon laatu vaan se, että sisältöä syntyy myös silloin, kun yrityksellä on kiire."}
+                    </p>
+                    {" "}
+                    {/* Tyopoydan "Lyhytvideotuotanto käytännössä" -osion loppu
+                        sanatarkasti (components/sections2.tsx), jotta Google
+                        lukee sen myos puhelinpuusta (SEO-tarkistus 2.4). */}
+                    <h3 style={{ margin: "22px 0 0", fontSize: "19px", lineHeight: "1.25", fontWeight: "630" }}>
+                      {"Miksi lyhytvideot eivät tuo liidejä suoraan?"}
+                    </h3>
+                    {" "}
+                    <p style={{ margin: "10px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
+                      {"Yleisin pettymys lyhytvideoihin syntyy siitä, että niiltä odotetaan väärää asiaa. Orgaaninen lyhytvideo on brändityökalu: se kasvattaa tunnettuutta, rakentaa luottamusta ja tekee yrityksestä tutun ennen kuin katsojalla on ostotarvetta. Se on arvokasta, mutta se ei näy suoraan viikkotason tarjouspyyntöinä, eikä pidäkään."}
+                    </p>
+                    {" "}
+                    <p style={{ margin: "14px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
+                      {"Liidit syntyvät kahdesta muusta kanavasta, ja molemmat johtavat samaan paikkaan. "}
+                      <b style={{ color: "#fff" }}>
+                        {"Meta-mainonta"}
+                      </b>
+                      {" ottaa videot, jotka ovat jo osoittautuneet toimiviksi orgaanisesti, ja vie ne maksettuna Facebookiin ja Instagramiin tarkalla kohdennuksella: mainoseuro menee toistoihin sen sijaan, että sillä testattaisiin mikä sisältö puree. Mainonnan tehtävä ei ole myydä somessa vaan "}
+                      <b style={{ color: "#fff" }}>
+                        {"ohjata liikenne verkkosivullesi, jossa konversio tapahtuu"}
+                      </b>
+                      {". "}
+                      <b style={{ color: "#fff" }}>
+                        {"Hakukoneoptimointi"}
+                      </b>
+                      {" puolestaan poimii sen kysynnän, jonka video on luonut: kun ostaja lopulta hakee palvelua Googlesta, hän löytää sivustosi eikä kilpailijaa, ilman klikkikohtaista hintaa."}
+                    </p>
+                    {" "}
+                    <p style={{ margin: "14px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
+                      {"Ketju on kolmiosainen: video kasvattaa yleisöä ja tunnettuutta, Meta-mainonta ohjaa siitä syntyneen kiinnostuksen sivustolle, ja hakukoneoptimointi tuo lisäksi ne ostajat, jotka etsivät palvelua omatoimisesti. Konversio tapahtuu kaikissa tapauksissa verkkosivulla."}
+                    </p>
+                    {" "}
+                    <h3 style={{ margin: "22px 0 0", fontSize: "19px", lineHeight: "1.25", fontWeight: "630" }}>
+                      {"Missä WS Media kuvaa ja mitä muuta se tekee?"}
+                    </h3>
+                    {" "}
+                    <p style={{ margin: "10px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
+                      {"WS Media tuottaa lyhytvideot Espoosta ja kuvaa viikoittain Espoossa, Helsingissä ja Vantaalla. Koska teemme myös "}
+                      <a href="/verkkosivut">
+                        {"verkkosivut"}
+                      </a>
+                      {", "}
+                      <a href="/hakukoneoptimointi">
+                        {"hakukoneoptimoinnin"}
+                      </a>
+                      {", Meta-mainonnan ja "}
+                      <a href="/graafinen-suunnittelu">
+                        {"graafisen suunnittelun"}
+                      </a>
+                      {", sama kuvausmateriaali palvelee somen lisäksi sivustoasi ja mainontaasi, ja viesti pysyy yhtenäisenä kanavasta riippumatta."}
+                    </p>
+                    {" "}
+                    <p style={{ margin: "14px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
+                      <b style={{ color: "#fff" }}>
+                        {"Kolme alustaa, yksi kuvauspäivä"}
+                      </b>
                     </p>
                     {" "}
                   </div>

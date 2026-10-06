@@ -100,7 +100,7 @@ const UKK = [
   {"k": "Onko pakko sitoutua pitkäksi aikaa?", "v": "Perusta-taso jatkuu kuukausi kerrallaan yhden kuukauden irtisanomisajalla. Kasvu- ja Täysi-tasoilla vähimmäiskesto on kuusi kuukautta, koska lyhyemmässä ajassa työ ei ehdi tuottaa mitään mitattavaa. Kuuden kuukauden jälkeen yhteistyö jatkuu niin kauan kuin se tuottaa."},
   {"k": "Kannattaako valita halvin SEO-tarjous?", "v": "Halvin ja kannattavin ovat harvoin sama asia. Hyvin matalalla kuukausihinnalla ei ehdi tehdä juuri muuta kuin seurata sijoituksia ja lähettää raportti. Pahimmillaan edullinen työ tulee kalliiksi kahdesti: ensin maksat työstä joka ei tuota, sitten työstä jolla se korjataan."},
   {"k": "Mitä hakukoneoptimointi käytännössä sisältää?", "v": "Teknistä hakukoneoptimointia, sisältöä ja avainsanoja, auktoriteetin rakentamista sekä paikallista näkyvyyttä, ja nämä neljä tehdään rinnakkain eikä peräkkäin. Painotus riippuu siitä, missä kunnossa sivusto on lähtiessä: teknisesti rikkinäisellä sivustolla ensimmäiset kuukaudet ovat korjaamista, kunnossa olevalla päästään heti sisältöön."},
-  {"k": "Mikä on avainsanatutkimus?", "v": "Selvitys siitä, mitä asiakkaasi oikeasti kirjoittavat hakukenttään, kuinka paljon niitä hakuja tehdään ja kuinka kilpailtuja ne ovat. Se on koko työn kivijalka: ilman sitä optimoidaan sanoja joita kukaan ei hae, tai sanoja joilla ei ole ostoaikomusta."},
+  {"k": "Mikä on avainsanatutkimus?", "v": "Selvitys siitä, mitä asiakkaasi oikeasti kirjoittavat hakukenttään, kuinka paljon niitä hakuja tehdään ja kuinka kilpailtuja ne ovat. Se on koko työn kivijalka: ilman sitä optimoidaan sanoja joita kukaan ei hae, tai sanoja joilla ei ole ostoaikomusta.", "lisa": "Avainsanatutkimus on koko työn kivijalka: se kertoo mitä asiakkaasi oikeasti kirjoittavat hakukenttään ja millä hauilla on ostoaikomus. Sisältö rakennetaan niiden ympärille, ei toisin päin."},
   {"k": "Mikä on SEO-auditointi?", "v": "Sivuston nykytilan läpikäynti: indeksointi, sivurakenne, nopeus, metatiedot, sisäinen linkitys, sisältö ja linkkiprofiili. Auditoinnista syntyy priorisoitu korjauslista. Alustavan auditoinnin teemme maksutta ennen tarjousta."},
   {"k": "Pitääkö minun itse tehdä jotain?", "v": "Hyvin vähän. Tarvitsemme pääsyn sivustolle ja analytiikkaan sekä noin tunnin kuukaudessa aikaasi: sisältöjen hyväksynnän ja vastaukset toimialaa koskeviin kysymyksiin. Kirjoittaminen, tekniikka ja julkaisu hoituvat meiltä."},
   {"k": "Voinko tehdä hakukoneoptimoinnin itse?", "v": "Voit, ja pienellä sivustolla se on täysin realistista. Perusasiat, otsikot, metatiedot, sivurakenne ja Google-yritysprofiili, oppii viikossa. Ulkoistamisen etu ei ole salatieto vaan se, että työ jatkuu myös kiireisenä kuukautena, jolloin oma tekeminen tyypillisesti katkeaa."},
@@ -108,11 +108,15 @@ const UKK = [
   {"k": "Kuinka nopeasti hakukoneoptimointi tuo tuloksia?", "v": "Ensimmäiset merkit näkyvät tyypillisesti 3–6 kuukauden kuluttua ja selvä vaikutus liiketoiminnassa 6–12 kuukauden kohdalla. Nopeuteen vaikuttavat eniten toimialan kilpailutilanne ja sivuston lähtökunto."},
   {"k": "Voitteko luvata Googlen ykkössijan?", "v": "Emme. Kukaan vastuullisesti hakukoneoptimointia tekevä ei voi luvata tiettyä sijoitusta, koska tuloksiin vaikuttavat myös kilpailijoiden tekemiset ja algoritmipäivitykset. Sen sijaan sovimme etukäteen mittarit ja raportoimme ne rehellisesti myös silloin, kun kehitys on toivottua hitaampaa. Kannattaa olla varovainen toimijan kanssa, joka lupaa tietyn sijoituksen tai täyden tulostakuun."},
   {"k": "Miten hakukoneoptimointia mitataan ja raportoidaan?", "v": "Mittarit sovitaan ennen aloitusta ja raportti tulee sähköpostiin sovitussa syklissä. Saat myös pääsyn samoihin työkaluihin, Search Consoleen ja Analyticsiin, joista luvut tulevat, joten voit tarkistaa jokaisen luvun itse. Seurattavat hakusanat sovitaan yhdessä etukäteen, joten raportti mittaa niitä hakuja joilla yrityksesi haluaa näkyä."},
-  {"k": "Mitä tekoälyhakunäkyvyys tarkoittaa käytännössä?", "v": "Tavoite on eri kuin hakutuloksissa: ei sijoitus vaan se, että sisältösi on riittävän täsmällistä ja tarkistettavaa lainattavaksi. Käytännössä se tarkoittaa hintojen, aikataulujen ja toimitusehtojen kirjoittamista sivulle eikä vain kertomista puhelimessa. Emme voi luvata mainintoja, mutta seuraamme niitä toimialasi tärkeimmillä kysymyksillä."},
-  {"k": "Miten hakukoneoptimointi huomioidaan verkkosivu-uudistuksessa?", "v": "Uudistus on se hetki, jossa kertynyt näkyvyys joko säilyy tai katoaa. Vanhat osoitteet ohjataan uusiin, sivurakenne suunnitellaan hakusanojen pohjalta ja metatiedot siirretään hallitusti. Tämä tehdään ennen julkaisua eikä sen jälkeen, jälkikäteen korjaaminen maksaa moninkertaisesti. Lue lisää verkkosivujen toteutuksesta."},
+  {"k": "Mitä tekoälyhakunäkyvyys tarkoittaa käytännössä?", "v": "Tavoite on eri kuin hakutuloksissa: ei sijoitus vaan se, että sisältösi on riittävän täsmällistä ja tarkistettavaa lainattavaksi. Käytännössä se tarkoittaa hintojen, aikataulujen ja toimitusehtojen kirjoittamista sivulle eikä vain kertomista puhelimessa. Emme voi luvata mainintoja, mutta seuraamme niitä toimialasi tärkeimmillä kysymyksillä.", "lisa": "Strukturoitu data kertoo koneelle mitä palvelua tarjoat, missä ja millä hinnalla. Ilman sitä hakukone arvaa."},
+  {"k": "Miten hakukoneoptimointi huomioidaan verkkosivu-uudistuksessa?", "v": "Uudistus on se hetki, jossa kertynyt näkyvyys joko säilyy tai katoaa. Vanhat osoitteet ohjataan uusiin, sivurakenne suunnitellaan hakusanojen pohjalta ja metatiedot siirretään hallitusti. Tämä tehdään ennen julkaisua eikä sen jälkeen, jälkikäteen korjaaminen maksaa moninkertaisesti. Lue lisää verkkosivujen toteutuksesta.", "linkki": {"teksti": "verkkosivujen toteutuksesta", "href": "/verkkosivut"}},
   {"k": "Teettekö myös verkkosivut ja lyhytvideot?", "v": "Kyllä. WS Media tekee hakukoneoptimoinnin lisäksi verkkosivut, lyhytvideot TikTokiin, Instagram Reelsiin ja YouTube Shortsiin sekä Meta-mainonnan. Kun sivusto, sisältö ja mainonta tulevat samalta tiimiltä, hakukoneoptimointi rakennetaan sisään jo sivuston rakenteeseen sen sijaan että se korjattaisiin jälkikäteen."}
 ];
-/* Kaikki 16 HTML:aan (6 ensimmaista nakyvissa, ensimmainen auki). */
+/* Kaikki 16 HTML:aan (6 ensimmaista nakyvissa, ensimmainen auki).
+   lisa = toinen kappale ja linkki = tekstilinkki vastauksen sisalla.
+   Molemmat ovat tyopoydan tekstia sanatarkasti (components/Sisalto.tsx
+   ja faq.tsx), jotta Google lukee ne myos puhelinpuusta
+   (SEO-tarkistus 2.4). FAQPage-merkinta tulee faq.tsx:sta eika muutu. */
 const UKK_ = UKK.map((q, i) => { const auki = i === 0; return Object.assign({}, q, { auki, luokka: auki ? 'l-faq auki' : 'l-faq' }); });
 const ALUEET = [
   { t: 'Espoo', v: 'Toimipisteemme on Espoossa, ja pääkaupunkiseudun yrityksiä tapaamme mielellämme paikan päällä.' },
@@ -1116,8 +1120,21 @@ export default function HakuMobiili() {
                   {" "}
                   <div className="mo-e-vast" data-ukk-vast={qI} hidden={!q.auki} style={{ padding: "0 0 18px" }}>
                         <p style={{ margin: "0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
-                          {q.v}
+                          {q.linkki && q.v.includes(q.linkki.teksti) ? (
+                            <>
+                              {q.v.slice(0, q.v.indexOf(q.linkki.teksti))}
+                              <a href={q.linkki.href}>{q.linkki.teksti}</a>
+                              {q.v.slice(q.v.indexOf(q.linkki.teksti) + q.linkki.teksti.length)}
+                            </>
+                          ) : (
+                            q.v
+                          )}
                         </p>
+                        {q.lisa ? (
+                          <p style={{ margin: "10px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
+                            {q.lisa}
+                          </p>
+                        ) : null}
                       </div>
                   {" "}
                 </div>

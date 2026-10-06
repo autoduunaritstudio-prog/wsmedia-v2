@@ -81,14 +81,22 @@ export default function Efektit() {
       window.removeEventListener("load", lataaSarja);
     });
 
-    /* ---------- SANAVAIHTO 2,6 s valein heron aikana ---------- */
-    const sanat = qa("[data-sana]");
+    /* ---------- SANAVAIHTO 2,6 s valein heron aikana ----------
+       H1:ssa on yksi span ja vain ensimmainen muoto; muut sanat ovat
+       data-sanat-attribuutissa (|-eroteltu). Vaihto kirjoittaa tekstin ja
+       kaynnistaa .mo-e-sana-animaation alusta, kuten ennen piilotetun
+       spanin nakyviin tulo (display none -> inline-block) teki. */
+    const sanaEl = q("[data-sanat]");
+    const sanat = sanaEl?.dataset.sanat?.split("|") ?? [];
     let sana = 0;
     const ajastin = window.setInterval(() => {
+      if (!sanaEl || sanat.length < 2) return;
       if (window.scrollY >= KA + (window.innerHeight || 844)) return;
-      sanat[sana].hidden = true;
       sana = (sana + 1) % sanat.length;
-      sanat[sana].hidden = false;
+      sanaEl.textContent = sanat[sana];
+      sanaEl.style.animation = "none";
+      void sanaEl.offsetWidth;
+      sanaEl.style.animation = "";
     }, 2600);
     siivous.push(() => window.clearInterval(ajastin));
 

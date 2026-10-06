@@ -26,6 +26,16 @@ const nextConfig: NextConfig = {
        oletusta 75 eika yhdenkaan muun kuvan paino muutu. */
     qualities: [75, 88],
   },
+  /* Vanhan sivuston osoitteet, jotka ovat yha Googlen indeksissa
+     (site:wsmedia.fi 6.10.2026). permanent: true antaa 308:n, jonka
+     Google kasittelee kuten 301:n. Yksi hyppy suoraan lopulliseen
+     osoitteeseen, ei ketjuja. */
+  async redirects() {
+    return [
+      { source: "/rekry", destination: "/toihin-meille", permanent: true },
+      { source: "/lyhytvideot-yritykselle", destination: "/lyhytvideot", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

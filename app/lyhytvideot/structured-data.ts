@@ -52,10 +52,9 @@ export const structuredData = {
       "@id": "https://wsmedia.fi/lyhytvideot#murupolku",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Etusivu", item: "https://wsmedia.fi/" },
-        { "@type": "ListItem", position: 2, name: "Palvelut", item: "https://wsmedia.fi/#palvelut" },
         {
           "@type": "ListItem",
-          position: 3,
+          position: 2,
           name: "Lyhytvideotuotanto",
           item: "https://wsmedia.fi/lyhytvideot",
         },

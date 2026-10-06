@@ -66,12 +66,6 @@ const BASE_GRAPH = [
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Palvelut",
-          "item": "https://wsmedia.fi/#palvelut"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
           "name": "Hakukoneoptimointi",
           "item": "https://wsmedia.fi/hakukoneoptimointi"
         }

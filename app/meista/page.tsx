@@ -19,8 +19,10 @@ import MeistaMobiili from "./mobiili/Mobiili";
    espoo", "markkinointitoimisto espoo"), joissa hakutulosten karjessa
    ovat toimistojen Espoo-sivut. Palvelusivut kattavat palvelukohtaiset
    haut, joten Meista-sivun tehtava on yrityshaku ja paikkakunta:
-   otsikko, H1 ja ingressi sanovat molemmat. */
-const OTSIKKO = "Meistä | Mainostoimisto Espoossa | WS Media";
+   H1 ja ingressi sanovat molemmat. Otsikossa ei ole "Mainostoimisto
+   Espoossa", koska etusivun otsikko tavoittelee samaa hakua ja kaksi
+   sivua kilpailisi siita keskenaan (SEO-tarkistus 6.10.2026, 3.1). */
+const OTSIKKO = "Meistä: tekijät ja toimintatapa | WS Media";
 const KUVAUS =
   "Tutustu WS Median tekijöihin: espoolainen mainostoimisto, jossa lyhytvideot, verkkosivut, hakukoneoptimointi ja graafinen suunnittelu tehdään yhdessä.";
 

@@ -79,13 +79,9 @@ export default function VerkkosivutMobiili() {
                 {"Kotisivut yritykselle, jotka"}
                 <span style={{ display: "block", height: "38px", color: "#6fecff", whiteSpace: "nowrap" }}>
                   {" "}
-                  <span className="mo-e-sana" data-sana="0">{"löytyvät Googlesta."}</span>
-                  {" "}
-                  <span className="mo-e-sana" data-sana="1" hidden>{"latautuvat sekunnissa."}</span>
-                  {" "}
-                  <span className="mo-e-sana" data-sana="2" hidden>{"tuovat yhteydenottoja."}</span>
-                  {" "}
-                  <span className="mo-e-sana" data-sana="3" hidden>{"kestävät vuosia."}</span>
+                  {/* H1:ssa vain ensimmainen muoto. Muut sanat ovat
+                      data-sanat-attribuutissa, josta Efektit vaihtaa tekstin. */}
+                  <span className="mo-e-sana" data-sanat="löytyvät Googlesta.|latautuvat sekunnissa.|tuovat yhteydenottoja.|kestävät vuosia.">{"löytyvät Googlesta."}</span>
                   {" "}
                 </span>
               </h1>
@@ -565,7 +561,10 @@ export default function VerkkosivutMobiili() {
               </h2>
               {" "}
               <p className="mo-e-lead mo-rv mo-d2" style={{ marginTop: "14px", fontSize: "16px", color: "#c3d0dc" }}>
-                {"Hakukoneoptimoinnin perusta rakennetaan sivustoon sisään, ei päälle jälkikäteen."}
+                <a href="/hakukoneoptimointi">
+                  {"Hakukoneoptimoinnin"}
+                </a>
+                {" perusta rakennetaan sivustoon sisään, ei päälle jälkikäteen."}
               </p>
               {" "}
             </div>

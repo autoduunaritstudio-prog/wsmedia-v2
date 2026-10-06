@@ -772,6 +772,41 @@ export default function GraafinenMobiili() {
                       {"Suunnittelu ratkaisee, miltä lopputulos näyttää. Tuotanto ratkaisee, kuinka kauan se kestää. Ne ovat eri ammatteja, mutta niiden yhteensovittaminen ei kuulu asiakkaalle. Sinä hyväksyt luonnoksen ja saat valmiin lopputuloksen, ja kaikki siltä väliltä on meidän työtämme."}
                     </p>
                     {" "}
+                    {/* Tyopoydan otsikko "Graafinen suunnittelu käytännössä",
+                        logokortin kappale (sections.tsx, PALVELUT) ja "Mitä
+                        muuta WS Media tekee?" linkkeineen (sections2.tsx)
+                        sanatarkasti, jotta Google lukee ne myos puhelinpuusta
+                        (SEO-tarkistus 2.4). Otsikko on h2 kuten tyopoydalla,
+                        mutta saman haitarin h3-tyylilla; letterSpacing
+                        kumoaa perus.css:n paljaan h2-saannon. */}
+                    <h2 style={{ margin: "22px 0 0", fontSize: "19px", lineHeight: "1.25", fontWeight: "630", letterSpacing: "inherit" }}>
+                      {"Graafinen suunnittelu käytännössä"}
+                    </h2>
+                    {" "}
+                    <p style={{ margin: "10px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
+                      {"Logon suunnittelu on koko ilmeen pohja. Logon ympärille tehdään väripaletti, fontit ja graafinen ohjeisto, joiden ansiosta ilme pysyy samana, vaikka materiaalia tekisi joku muu."}
+                    </p>
+                    {" "}
+                    <h3 style={{ margin: "22px 0 0", fontSize: "19px", lineHeight: "1.25", fontWeight: "630" }}>
+                      {"Mitä muuta WS Media tekee?"}
+                    </h3>
+                    {" "}
+                    <p style={{ margin: "10px 0 0", fontSize: "15.5px", lineHeight: "1.65", color: "#b9c7d4" }}>
+                      {"WS Media tekee graafisen suunnittelun Espoosta käsin koko Suomeen. Koska teemme myös "}
+                      <a href="/verkkosivut">
+                        {"verkkosivut"}
+                      </a>
+                      {", "}
+                      <a href="/hakukoneoptimointi">
+                        {"hakukoneoptimoinnin"}
+                      </a>
+                      {" ja "}
+                      <a href="/lyhytvideot">
+                        {"lyhytvideot"}
+                      </a>
+                      {", sama ilme siirtyy suoraan sivustolle, someen ja mainontaan, eikä samaa työtä tehdä kahteen kertaan."}
+                    </p>
+                    {" "}
                   </div>
               {" "}
               <button type="button" data-g="seonappi" aria-expanded={false} className="mo-e-btn mo-e-o" style={{ height: "42px", marginTop: "16px", padding: "0 16px", fontSize: "14.5px" }}>

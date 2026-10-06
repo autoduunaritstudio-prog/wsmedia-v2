@@ -155,13 +155,10 @@ export default function EtuMobiili() {
                 {"Sisältöä, joka"}
                 <span style={{ display: "block", height: "86px", color: "#6fecff" }}>
                   {" "}
-                  <span className="mo-e-sana" data-sana="0">{"tuo asiakkaita."}</span>
-                  {" "}
-                  <span className="mo-e-sana" data-sana="1" hidden>{"pysäyttää skrollauksen."}</span>
-                  {" "}
-                  <span className="mo-e-sana" data-sana="2" hidden>{"tekee kauppaa."}</span>
-                  {" "}
-                  <span className="mo-e-sana" data-sana="3" hidden>{"jää mieleen."}</span>
+                  {/* H1:ssa vain ensimmainen muoto. Muut sanat ovat
+                      data-sanat-attribuutissa, josta EtuEfektit vaihtaa
+                      tekstin ja kaynnistaa sisaantulon uudelleen. */}
+                  <span className="mo-e-sana" data-sanat="tuo asiakkaita.|pysäyttää skrollauksen.|tekee kauppaa.|jää mieleen.">{"tuo asiakkaita."}</span>
                   {" "}
                 </span>
               </h1>
