@@ -7,7 +7,7 @@
 
 import { kytkeTarjous } from "@/app/components/mobiili/tarjous";
 import { useEffect } from "react";
-import { kuuntele, onMobiili, rajaa, type Tila, pyyda } from "@/app/components/mobiili/vieritys";
+import { kuuntele, onMobiili, rajaa, reduce, type Tila, pyyda } from "@/app/components/mobiili/vieritys";
 
 const SPRITE = "/mobiili/film-ikkuna.webp";
 
@@ -116,13 +116,14 @@ export default function EtuEfektit() {
         const on = k === i;
         a.style.transform = `scale(${on ? 1 : 0.9})`;
         a.style.opacity = String(on ? 1 : 0.55);
-        const p = a.querySelector<HTMLElement>(".mo-e-prog i");
-        if (p) p.style.animationPlayState = on ? "running" : "paused";
+        const v = a.querySelector<HTMLElement>("video");
+        if (v) v.style.opacity = on ? "1" : "0";
       });
       pisteet.forEach((p, k) => {
         p.style.width = `${k === i ? 22 : 6}px`;
         p.style.background = k === i ? "#6fecff" : "rgba(255,255,255,.28)";
       });
+      valitse();
     };
     refit?.addEventListener("scroll", onRefit, { passive: true });
     siivous.push(() => refit?.removeEventListener("scroll", onRefit));
@@ -145,6 +146,93 @@ export default function EtuEfektit() {
     };
     tul?.addEventListener("scroll", onTulos, { passive: true });
     siivous.push(() => tul?.removeEventListener("scroll", onTulos));
+
+    /* ---------- VIDEOT: tuloskortit ja referenssikaruselli (6.10.2026) ----------
+       Sama tapa kuin lyhytvideot-sivulla: muted + playsInline, ja video
+       haetaan vasta kun se toistetaan ensimmaisen kerran (data-src -> src).
+       Etusivulla pyorii enintaan yksi video kerrallaan: nakyva tuloskortti
+       (vahintaan puolet kortista ruudulla) tai aktiivinen referenssikortti,
+       kun karuselli on nakyvissa; kumpi on enemman ruudulla. Etenemispalkki
+       seuraa toistettavan videon currentTime / duration (transform scaleX).
+       Reduced motion: ei toistoa, kansikuva nakyy. Hylatty play() jattaa
+       kansikuvan nakyviin. */
+    const R = reduce();
+    const tulosVideot = [...juuri.querySelectorAll<HTMLVideoElement>("video[data-etu-tulos]")];
+    const refVideot = [...juuri.querySelectorAll<HTMLVideoElement>("video[data-etu-ref]")];
+    const kaikki = [...tulosVideot, ...refVideot];
+    kaikki.forEach((v) => {
+      v.muted = true;
+      v.defaultMuted = true;
+    });
+    const palkki = (v: HTMLVideoElement) => v.parentElement?.querySelector<HTMLElement>(".mo-e-prog i") ?? null;
+    const osuus = new Map<Element, number>();
+    let aktiivinen: HTMLVideoElement | null = null;
+    let kehys = 0;
+    const piirra = () => {
+      kehys = 0;
+      const v = aktiivinen;
+      if (!v) return;
+      const p = palkki(v);
+      if (p && v.duration > 0) p.style.transform = `scaleX(${(v.currentTime / v.duration).toFixed(4)})`;
+      if (!v.paused) kehys = requestAnimationFrame(piirra);
+    };
+    const kaynnista = () => {
+      if (!kehys) kehys = requestAnimationFrame(piirra);
+    };
+    kaikki.forEach((v) => v.addEventListener("playing", kaynnista));
+    const valitse = () => {
+      let kohde: HTMLVideoElement | null = null;
+      if (!R) {
+        let paras = 0;
+        tulosVideot.forEach((v) => {
+          const o = osuus.get(v.closest("article") as Element) ?? 0;
+          if (o >= 0.5 && o > paras) {
+            paras = o;
+            kohde = v;
+          }
+        });
+        const ro = refit ? osuus.get(refit) ?? 0 : 0;
+        if (ro >= 0.12 && ro > paras) kohde = refVideot[ref] ?? null;
+      }
+      kaikki.forEach((v) => {
+        if (v !== kohde && !v.paused) v.pause();
+      });
+      aktiivinen = kohde;
+      const v = kohde as HTMLVideoElement | null;
+      if (!v) return;
+      if (!v.getAttribute("src") && v.dataset.src) {
+        v.preload = "auto";
+        v.src = v.dataset.src;
+      }
+      v.muted = true;
+      if (v.paused) {
+        const lupaus = v.play();
+        if (lupaus && lupaus.catch) lupaus.catch(() => {});
+      }
+      kaynnista();
+    };
+    if (typeof IntersectionObserver !== "undefined" && !R) {
+      const io = new IntersectionObserver(
+        (ent) => {
+          ent.forEach((e) => osuus.set(e.target, e.isIntersecting ? e.intersectionRatio : 0));
+          valitse();
+        },
+        { threshold: [0, 0.12, 0.25, 0.5, 0.75, 1] },
+      );
+      tulosVideot.forEach((v) => {
+        const a = v.closest("article");
+        if (a) io.observe(a);
+      });
+      if (refit) io.observe(refit);
+      siivous.push(() => io.disconnect());
+    }
+    siivous.push(() => {
+      cancelAnimationFrame(kehys);
+      kaikki.forEach((v) => {
+        v.removeEventListener("playing", kaynnista);
+        v.pause();
+      });
+    });
 
     /* ---------- KLIKIT: tuloskortin Lue lisaa, UKK, Nayta kaikki ---------- */
     const mitat = () => juuri.dispatchEvent(new Event("mo:mitat"));

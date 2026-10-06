@@ -48,25 +48,25 @@ const PAL = [
     ]
 const PALVELUT = PAL.map((p, i) => Object.assign({}, p, { top: 84 + i * 14, skaala: "1.0000", himmea: "0.000" }));
 const REF = [
-      { nimi: 'ColorMaster', ala: 'Lyhytvideot · autojen maalaus', kuva: '/referenssit/colormaster.webp' },
-      { nimi: 'YDR Autohuolto', ala: 'Lyhytvideot · autohuolto', kuva: '/referenssit/ydr-autohuolto.webp' },
-      { nimi: 'White Star', ala: 'Lyhytvideot · auton muodonmuutos', kuva: '/referenssit/white-star.webp' },
-      { nimi: 'VauhtiVeikot', ala: 'Lyhytvideot · autotarvikkeet', kuva: '/referenssit/vauhtiveikot.webp' },
-      { nimi: 'Laaksolahden Sähkö', ala: 'Lyhytvideot · ilmalämpöpumput', kuva: '/referenssit/ilmalampopumput.webp' }
+      { nimi: 'ColorMaster', video: '/referenssit/colormaster.mp4', ala: 'Lyhytvideot · autojen maalaus', kuva: '/referenssit/colormaster.webp' },
+      { nimi: 'YDR Autohuolto', video: '/referenssit/ydr-autohuolto.mp4', ala: 'Lyhytvideot · autohuolto', kuva: '/referenssit/ydr-autohuolto.webp' },
+      { nimi: 'White Star', video: '/referenssit/white-star.mp4', ala: 'Lyhytvideot · auton muodonmuutos', kuva: '/referenssit/white-star.webp' },
+      { nimi: 'VauhtiVeikot', video: '/referenssit/vauhtiveikot.mp4', ala: 'Lyhytvideot · autotarvikkeet', kuva: '/referenssit/vauhtiveikot.webp' },
+      { nimi: 'Laaksolahden Sähkö', video: '/referenssit/ilmalampopumput.mp4', ala: 'Lyhytvideot · ilmalämpöpumput', kuva: '/referenssit/ilmalampopumput.webp' }
     ]
-const REFIT = REF.map((r, i) => { const on = i === 0; return Object.assign({}, r, { alt: r.nimi + ", lyhytvideon kansikuva", href: "#m-tulokset", sk: on ? 1 : 0.9, op: on ? 1 : 0.55, toisto: on ? "running" : "paused", piste: on ? 22 : 6, pisteVari: on ? "#6fecff" : "rgba(255,255,255,.28)" }); });
+const REFIT = REF.map((r, i) => { const on = i === 0; return Object.assign({}, r, { alt: r.nimi + ", lyhytvideon kansikuva", href: "#m-tulokset", sk: on ? 1 : 0.9, op: on ? 1 : 0.55, vOp: on ? 1 : 0, piste: on ? 22 : 6, pisteVari: on ? "#6fecff" : "rgba(255,255,255,.28)" }); });
 const IG = 'M7 3.5h10A3.5 3.5 0 0 1 20.5 7v10a3.5 3.5 0 0 1-3.5 3.5H7A3.5 3.5 0 0 1 3.5 17V7A3.5 3.5 0 0 1 7 3.5zM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM17 7h.01';
 const TT = 'M14 4v10.5a3.3 3.3 0 1 1-3.3-3.3M14 4c.5 2.3 2 3.8 4.6 4.1';
 const WEB = 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM3.5 12h17M12 3.5c2.4 2.4 3.4 5.2 3.4 8.5s-1 6.1-3.4 8.5c-2.4-2.4-3.4-5.2-3.4-8.5s1-6.1 3.4-8.5z';
 const IGBG = 'radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%)';
 type Rivi = { l: string; nyt: string; ennen?: string };
-type Tulos = { id: string; nimi: string; palvelu: string; luku: string; selite: string; logo: string; logoH: number; kick: string; tausta: string; video: boolean; sivusto: boolean; kuva?: string; alt?: string; kahva?: string; teimme: string; rivit: Rivi[]; linkit: { nimi: string; url: string; ikoni: string; bg: string }[] };
+type Tulos = { id: string; nimi: string; palvelu: string; luku: string; selite: string; logo: string; logoH: number; kick: string; tausta: string; video: boolean; sivusto: boolean; kuva?: string; videoSrc?: string; alt?: string; kahva?: string; teimme: string; rivit: Rivi[]; linkit: { nimi: string; url: string; ikoni: string; bg: string }[] };
 const TUL: Tulos[] = [
-      { id: 'colormaster', nimi: 'Colormaster', palvelu: 'Lyhytvideot', luku: '1,6 milj.', selite: 'katselukertaa neljässä kuukaudessa', logo: '/mobiili/logot/colormaster.webp', logoH: 22, kick: 'Colormaster · automaalaamo', tausta: '/referenssit/colormaster-tausta.webp', video: true, sivusto: false, kuva: '/referenssit/colormaster.webp', alt: 'Colormasterin lyhytvideo puhelimessa', kahva: 'colormaster.fi',
+      { id: 'colormaster', nimi: 'Colormaster', palvelu: 'Lyhytvideot', luku: '1,6 milj.', selite: 'katselukertaa neljässä kuukaudessa', logo: '/mobiili/logot/colormaster.webp', logoH: 22, kick: 'Colormaster · automaalaamo', tausta: '/referenssit/colormaster-tausta.webp', video: true, sivusto: false, kuva: '/referenssit/colormaster.webp', videoSrc: '/referenssit/colormaster.mp4', alt: 'Colormasterin lyhytvideo puhelimessa', kahva: 'colormaster.fi',
         teimme: 'Suunnittelimme, kuvasimme ja editoimme lyhytvideot Instagramiin ja TikTokiin. Näkyvyys tuli pelkällä sisällöllä, ilman maksettua mainontaa.',
         rivit: [{ l: 'Katselukerrat, 4 kk', nyt: '1,6 milj.' }, { l: 'Seuraajat Instagramissa', nyt: '1 600' }, { l: 'Seuraajat TikTokissa', nyt: '2 651' }],
         linkit: [{ nimi: 'Instagram', url: 'https://www.instagram.com/colormaster.fi/', ikoni: IG, bg: IGBG }, { nimi: 'TikTok', url: 'https://www.tiktok.com/@color.master.oy', ikoni: TT, bg: '#000' }] },
-      { id: 'ydr', nimi: 'YDR Autohuolto', palvelu: 'Lyhytvideot', luku: '1 milj.', selite: 'katselukertaa kolmessa kuukaudessa', logo: '/mobiili/logot/ydr-autohuolto.webp', logoH: 22, kick: 'YDR Autohuolto · autohuolto, Tuusula', tausta: '/referenssit/ydr-tausta.webp', video: true, sivusto: false, kuva: '/referenssit/ydr-autohuolto.webp', alt: 'YDR Autohuollon lyhytvideo puhelimessa', kahva: 'ydr_autohuolto',
+      { id: 'ydr', nimi: 'YDR Autohuolto', palvelu: 'Lyhytvideot', luku: '1 milj.', selite: 'katselukertaa kolmessa kuukaudessa', logo: '/mobiili/logot/ydr-autohuolto.webp', logoH: 22, kick: 'YDR Autohuolto · autohuolto, Tuusula', tausta: '/referenssit/ydr-tausta.webp', video: true, sivusto: false, kuva: '/referenssit/ydr-autohuolto.webp', videoSrc: '/referenssit/ydr-autohuolto.mp4', alt: 'YDR Autohuollon lyhytvideo puhelimessa', kahva: 'ydr_autohuolto',
         teimme: 'Some lähti liikkeelle lähes tyhjästä: TikTokissa ei ollut seuraajia lainkaan. Teemme korjaamon lyhytvideot Instagramiin ja TikTokiin alusta loppuun.',
         rivit: [{ l: 'Katselukerrat, 3 kk', nyt: '1 milj.' }, { l: 'Seuraajat Instagramissa', ennen: '250', nyt: '824' }, { l: 'Seuraajat TikTokissa', ennen: '0', nyt: '300' }],
         linkit: [{ nimi: 'Instagram', url: 'https://www.instagram.com/ydr_autohuolto/', ikoni: IG, bg: IGBG }, { nimi: 'TikTok', url: 'https://www.tiktok.com/@ydr_autohuolto', ikoni: TT, bg: '#000' }] },
@@ -306,10 +306,12 @@ export default function EtuMobiili() {
                     {" "}
                     <img src={TYHJA} data-mo-src={r.kuva} alt={r.alt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} loading="lazy" decoding="async" />
                     {" "}
+                    <video data-etu-ref={rI} data-src={r.video} muted loop playsInline preload="none" aria-hidden="true" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", display: "block", opacity: r.vOp, transition: "opacity .4s" }}></video>
+                    {" "}
                     <span style={{ position: "absolute", inset: "0", background: "linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 52%, rgba(0,0,0,.82) 100%)" }}></span>
                     {" "}
                     <span className="mo-e-prog">
-                      <i style={{ animationPlayState: r.toisto }}></i>
+                      <i></i>
                     </span>
                     {" "}
                     <span style={{ position: "absolute", left: "14px", right: "14px", bottom: "16px", textAlign: "left" }}>
@@ -465,7 +467,7 @@ export default function EtuMobiili() {
                           {" "}
                           <div className="mo-e-puh" style={{ position: "absolute", left: "50%", bottom: "-40px", width: "106px", height: "222px", marginLeft: "-53px", borderRadius: "26px", padding: "4px", boxSizing: "border-box", background: "#05070a", boxShadow: "0 0 0 1px #2c323b, 0 26px 40px -16px rgba(0,0,0,.95)" }}>
                             {" "}
-                            <img src={TYHJA} data-mo-src={t.kuva} alt={t.alt} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "22px", display: "block" }} loading="lazy" decoding="async" />
+                            <video data-etu-tulos={tI} data-src={t.videoSrc} data-mo-poster={t.kuva} muted loop playsInline preload="none" aria-label={t.alt} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "22px", display: "block" }}></video>
                             {" "}
                             <span style={{ position: "absolute", top: "11px", left: "50%", width: "36px", height: "10px", marginLeft: "-18px", borderRadius: "999px", background: "#000" }}></span>
                             {" "}
