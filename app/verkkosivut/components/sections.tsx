@@ -437,8 +437,8 @@ export function Hinnoittelu() {
           ))}
         </div>
         <p className="seo-body rv" style={{ marginTop: "32px" }}>
-          Ylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Verkkotunnus on yrityksesi nimissä. Hakukoneoptimoinnin jatkuva seuranta ja
-          parantaminen on erillinen palvelu, 190 €/kk + alv. Esimerkki toteutuksestamme:{" "}
+          Ylläpito maksaa 59 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Verkkotunnus on yrityksesi nimissä. Hakukoneoptimoinnin jatkuva seuranta ja
+          parantaminen on erillinen palvelu, alk. 190 €/kk + alv. Esimerkki toteutuksestamme:{" "}
           <a href="https://laaksolahdensahko.fi" target="_blank" rel="noopener">
             Laaksolahden Sähkö
           </a>

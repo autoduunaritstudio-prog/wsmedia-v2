@@ -280,12 +280,13 @@ export function Hinnoittelu() {
       <div className="swrap">
         <div className="seo-ord" data-rvs="">
           <span>Hinnoittelu</span>
-          <i>Kiinteä kuukausihinta · ei aloitusmaksua</i>
+          <i>Hinnat alkaen · ei aloitusmaksua</i>
         </div>
         <h2 className="seo-h2 rv">Paljonko hakukoneoptimointi maksaa?</h2>
         <p className="seo-lead rv" style={{ marginTop: "26px" }}>
-          Kolme tasoa ja kiinteä kuukausihinta. Tasot eroavat siinä, kuinka paljon uutta sisältöä
-          kuukaudessa syntyy ja rakennetaanko myös auktoriteettia.
+          Kolme tasoa ja maksuton kartoitus ennen aloitusta. Hinnat ovat alkaen-hintoja, ja
+          lopullinen hinta sovitaan kartoituksessa ennen kuin mitään laskutetaan. Tasot eroavat
+          siinä, kuinka paljon uutta sisältöä kuukaudessa syntyy ja rakennetaanko myös auktoriteettia.
         </p>
 
         <table className="spec hinta porras rv">
@@ -299,7 +300,7 @@ export function Hinnoittelu() {
                   {t.tag ? <em>{t.tag}</em> : null}
                   <b>{t.name}</b>
                   <span className="hinta-n">
-                    {t.price} <small>€/kk</small>
+                    <small>alk.</small> {t.price} <small>€/kk</small>
                   </span>
                   <span className="hinta-f">{t.for}</span>
                 </th>

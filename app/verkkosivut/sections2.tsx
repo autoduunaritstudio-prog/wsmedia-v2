@@ -135,7 +135,7 @@ export function Hinnoittelu() {
           </div>
           <div className="careprice">
             <div className="price">
-              190 <small>€/kk + alv</small>
+              <small>alk.</small> 190 <small>€/kk + alv</small>
             </div>
             <a className="btn" href="#tarjous">
               Pyydä suunnitelma

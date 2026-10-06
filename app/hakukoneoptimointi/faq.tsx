@@ -15,8 +15,8 @@ export const FAQ_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Paljonko hakukoneoptimointi maksaa kuukaudessa?",
-        a: "Meillä jatkuva hakukoneoptimointi maksaa 190–1 200 euroa kuukaudessa + alv 25,5 %. Hinta riippuu siitä, kuinka paljon uutta sisältöä tehdään: Perusta-taso pitää sivuston kunnossa ja seuraa hakusanoja, Kasvu- ja Täysi-tasoilla kirjoitetaan uusia sivuja ja artikkeleita joka kuukausi. Hintaan vaikuttavat eniten toimialan kilpailutilanne, sivuston lähtökunto ja tarvittavan uuden sisällön määrä.",
-        plain: "Meillä jatkuva hakukoneoptimointi maksaa 190–1 200 euroa kuukaudessa + alv 25,5 %. Hinta riippuu siitä, kuinka paljon uutta sisältöä tehdään: Perusta-taso pitää sivuston kunnossa ja seuraa hakusanoja, Kasvu- ja Täysi-tasoilla kirjoitetaan uusia sivuja ja artikkeleita joka kuukausi. Hintaan vaikuttavat eniten toimialan kilpailutilanne, sivuston lähtökunto ja tarvittavan uuden sisällön määrä.",
+        a: "Meillä jatkuva hakukoneoptimointi maksaa alkaen 190 euroa kuukaudessa + alv 25,5 %. Kasvu-taso alkaa 590 eurosta ja Täysi-taso 1 200 eurosta. Lopullinen hinta sovitaan kartoituksessa. Hintaan vaikuttavat eniten toimialan kilpailutilanne, sivuston lähtökunto ja tarvittavan uuden sisällön määrä.",
+        plain: "Meillä jatkuva hakukoneoptimointi maksaa alkaen 190 euroa kuukaudessa + alv 25,5 %. Kasvu-taso alkaa 590 eurosta ja Täysi-taso 1 200 eurosta. Lopullinen hinta sovitaan kartoituksessa. Hintaan vaikuttavat eniten toimialan kilpailutilanne, sivuston lähtökunto ja tarvittavan uuden sisällön määrä.",
       },
       {
         q: "Miksi hakukoneoptimointi maksaa niin paljon?",

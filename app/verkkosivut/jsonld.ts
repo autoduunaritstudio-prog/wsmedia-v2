@@ -139,11 +139,11 @@ const BASE_GRAPH = [
             "name": "Ylläpito",
             "description": "Palvelintila, verkkotunnus ja SSL-suojaus kuukausimaksulla.",
             "priceCurrency": "EUR",
-            "price": "49",
+            "price": "59",
             "priceSpecification": {
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
-              "price": "49",
+              "price": "59",
               "unitCode": "MON",
               "valueAddedTaxIncluded": false
             }

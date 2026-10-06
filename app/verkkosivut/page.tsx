@@ -32,7 +32,7 @@ import {
 export const metadata: Metadata = {
   title: "Kotisivut yritykselle alk. 1 490 € | Espoo | WS Media",
   description:
-    "Kotisivut ja nettisivut yritykselle avaimet käteen: suunnittelu, tekstit ja hakukoneoptimointi. Kiinteä hinta alk. 1 490 € + alv, ylläpito 49 €/kk.",
+    "Kotisivut ja nettisivut yritykselle avaimet käteen: suunnittelu, tekstit ja hakukoneoptimointi. Kiinteä hinta alk. 1 490 € + alv, ylläpito 59 €/kk.",
   alternates: { canonical: "https://wsmedia.fi/verkkosivut" },
   robots: { index: true, follow: true },
   openGraph: {
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     url: "https://wsmedia.fi/verkkosivut",
     title: "Kotisivut yritykselle alk. 1 490 € | Espoo | WS Media",
     description:
-      "Kotisivut ja nettisivut yritykselle avaimet käteen: suunnittelu, tekstit ja hakukoneoptimointi. Kiinteä hinta alk. 1 490 € + alv, ylläpito 49 €/kk.",
+      "Kotisivut ja nettisivut yritykselle avaimet käteen: suunnittelu, tekstit ja hakukoneoptimointi. Kiinteä hinta alk. 1 490 € + alv, ylläpito 59 €/kk.",
   },
 };
 

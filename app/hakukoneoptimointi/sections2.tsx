@@ -40,7 +40,8 @@ export function Hinnoittelu() {
           <span className="kick">Hinnoittelu</span>
           <h2>Paljonko hakukoneoptimointi maksaa?</h2>
           <p className="sub">
-            Kolme tasoa, kiinteä kuukausihinta ja maksuton kartoitus ennen aloitusta. Taso valitaan
+            Kolme tasoa ja maksuton kartoitus ennen aloitusta. Hinnat ovat alkaen-hintoja, ja
+            lopullinen hinta sovitaan kartoituksessa ennen kuin mitään laskutetaan. Taso valitaan
             sen mukaan, kuinka paljon uutta sisältöä tarvitaan ja kuinka kilpailtu toimiala on.
           </p>
         </div>
@@ -53,7 +54,7 @@ export function Hinnoittelu() {
                 <p className="pt">{t.tag}</p>
                 <h3>{t.name}</h3>
                 <div className="pp">
-                  {t.price} <small>€/kk</small>
+                  <small>alk.</small> {t.price} <small>€/kk</small>
                 </div>
                 <p className="pf">{t.for}</p>
               </div>

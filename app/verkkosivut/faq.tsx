@@ -16,13 +16,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Paljonko kotisivut maksavat yritykselle?",
-        a: "Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista. Ylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus.",
-        plain: "Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista. Ylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus.",
+        a: "Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista. Ylläpito maksaa 59 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus.",
+        plain: "Kiinteä projektihinta alkaa 1 490 eurosta + alv 25,5 %. Suppea kokonaisuus on edullisin, useamman sivun yrityssivusto asettuu 2 990–4 900 euroon ja täysin räätälöity toteutus alkaa 5 900 eurosta. Lopullinen hinta riippuu sivuston laajuudesta, sisällön määrästä ja tarvittavista toiminnallisuuksista. Ylläpito maksaa 59 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus.",
       },
       {
         q: "Mitä verkkosivujen hinta sisältää?",
-        a: "Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Ei aloitusmaksuja eikä piilokuluja. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 49 €/kk + alv.",
-        plain: "Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Ei aloitusmaksuja eikä piilokuluja. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 49 €/kk + alv.",
+        a: "Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Ei aloitusmaksuja eikä piilokuluja. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 59 €/kk + alv.",
+        plain: "Suunnittelun, toteutuksen, tekstit, kuvien viimeistelyn, teknisen hakukoneoptimoinnin, lomakkeet, analytiikan ja julkaisun. Ei aloitusmaksuja eikä piilokuluja. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 59 €/kk + alv.",
       },
       {
         q: "Kuinka nopeasti verkkosivut valmistuvat?",
@@ -31,13 +31,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Onko pakko sitoutua kuukausimaksuun?",
-        a: "Projektihinta on kertaluonteinen, ja sivusto on sen jälkeen sinun. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 49 €/kk + alv ja jonka voi irtisanoa kuukauden irtisanomisajalla. Sivuston voi myös siirtää omalle palvelimellesi.",
-        plain: "Projektihinta on kertaluonteinen, ja sivusto on sen jälkeen sinun. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 49 €/kk + alv ja jonka voi irtisanoa kuukauden irtisanomisajalla. Sivuston voi myös siirtää omalle palvelimellesi.",
+        a: "Projektihinta on kertaluonteinen, ja sivusto on sen jälkeen sinun. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 59 €/kk + alv ja jonka voi irtisanoa kuukauden irtisanomisajalla. Sivuston voi myös siirtää omalle palvelimellesi.",
+        plain: "Projektihinta on kertaluonteinen, ja sivusto on sen jälkeen sinun. Palvelintila, verkkotunnus ja SSL-suojaus kuuluvat ylläpitoon, joka maksaa 59 €/kk + alv ja jonka voi irtisanoa kuukauden irtisanomisajalla. Sivuston voi myös siirtää omalle palvelimellesi.",
       },
       {
         q: "Paljonko verkkosivujen ylläpito maksaa?",
-        a: "Perusylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, 190 €/kk + alv. Kun otat molemmat, saat ne yhteishintaan edullisemmin.",
-        plain: "Perusylläpito maksaa 49 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, 190 €/kk + alv. Kun otat molemmat, saat ne yhteishintaan edullisemmin.",
+        a: "Perusylläpito maksaa 59 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, alk. 190 €/kk + alv.",
+        plain: "Perusylläpito maksaa 59 €/kk + alv, ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Hakukoneoptimoinnin jatkuva seuranta ja parantaminen on erillinen palvelu, alk. 190 €/kk + alv.",
       },
       {
         q: "Miten hakukoneoptimointi vaikuttaa hintaan?",

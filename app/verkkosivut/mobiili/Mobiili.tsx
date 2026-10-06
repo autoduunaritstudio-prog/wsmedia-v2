@@ -1052,11 +1052,11 @@ export default function VerkkosivutMobiili() {
             <div className="mo-rv" style={{ marginTop: "12px", padding: "14px 16px", borderRadius: "18px", background: "rgba(255,255,255,.03)", boxShadow: "inset 0 0 0 1px rgba(255,255,255,.07)", fontSize: "13.5px", lineHeight: "1.55", color: "#a9b8c6" }}>
               {"Ylläpito maksaa "}
               <b style={{ color: "#eef3f7" }}>
-                {"49 €/kk + alv"}
+                {"59 €/kk + alv"}
               </b>
               {", ja siihen kuuluvat palvelintila, verkkotunnus ja SSL-suojaus. Verkkotunnus on yrityksesi nimissä. Hakukoneoptimoinnin jatkuva seuranta on erillinen palvelu, "}
               <b style={{ color: "#eef3f7" }}>
-                {"190 €/kk + alv"}
+                {"alk. 190 €/kk + alv"}
               </b>
               {". Esimerkki toteutuksestamme: "}
               <a href="https://laaksolahdensahko.fi/" className="mo-osuma">

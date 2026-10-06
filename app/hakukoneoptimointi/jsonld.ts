@@ -103,6 +103,7 @@ const BASE_GRAPH = [
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
               "price": "190",
+              "minPrice": "190",
               "unitCode": "MON",
               "valueAddedTaxIncluded": false
             }
@@ -117,6 +118,7 @@ const BASE_GRAPH = [
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
               "price": "590",
+              "minPrice": "590",
               "unitCode": "MON",
               "valueAddedTaxIncluded": false
             }
@@ -131,6 +133,7 @@ const BASE_GRAPH = [
               "@type": "UnitPriceSpecification",
               "priceCurrency": "EUR",
               "price": "1200",
+              "minPrice": "1200",
               "unitCode": "MON",
               "valueAddedTaxIncluded": false
             }

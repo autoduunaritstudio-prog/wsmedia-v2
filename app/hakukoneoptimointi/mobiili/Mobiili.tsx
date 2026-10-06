@@ -96,7 +96,7 @@ const EIK: { t: string; v?: string }[] = [{ t: 'Tarvitset asiakkaita ensi viikol
 /* Molemmat listat HTML:aan, "Sopii, jos" nakyvissa. */
 const KE_LISTA = [0, 1].map((k) => ({ avain: k, reuna: k === 0 ? 'rgba(111,236,255,.22)' : 'rgba(255,154,77,.28)', ikBg: k === 0 ? 'rgba(111,236,255,.16)' : 'rgba(255,154,77,.16)', ikVari: k === 0 ? '#6fecff' : '#ff9a4d', ikoni: k === 0 ? OK : EI, rivit: (k === 0 ? SOP : EIK).map((r, i) => ({ t: r.t, v: r.v || '', raja: i ? '1px solid rgba(255,255,255,.07)' : '0' })) }));
 const UKK = [
-  {"k": "Paljonko hakukoneoptimointi maksaa kuukaudessa?", "v": "Meillä jatkuva hakukoneoptimointi maksaa 190–1 200 euroa kuukaudessa + alv 25,5 %. Hinta riippuu siitä, kuinka paljon uutta sisältöä tehdään: Perusta-taso pitää sivuston kunnossa ja seuraa hakusanoja, Kasvu- ja Täysi-tasoilla kirjoitetaan uusia sivuja ja artikkeleita joka kuukausi. Hintaan vaikuttavat eniten toimialan kilpailutilanne, sivuston lähtökunto ja tarvittavan uuden sisällön määrä."},
+  {"k": "Paljonko hakukoneoptimointi maksaa kuukaudessa?", "v": "Meillä jatkuva hakukoneoptimointi maksaa alkaen 190 euroa kuukaudessa + alv 25,5 %. Kasvu-taso alkaa 590 eurosta ja Täysi-taso 1 200 eurosta. Lopullinen hinta sovitaan kartoituksessa. Hintaan vaikuttavat eniten toimialan kilpailutilanne, sivuston lähtökunto ja tarvittavan uuden sisällön määrä."},
   {"k": "Miksi hakukoneoptimointi maksaa niin paljon?", "v": "Suurin osa hinnasta on ihmisen aikaa: avainsanatutkimusta, sisällön kirjoittamista, teknistä korjaamista ja seurantaa. Kuukausihinta vastaa käytännössä tiettyä tuntimäärää asiantuntijatyötä. Käyttämiemme työkalujen lisenssimaksut sisältyvät hintaan."},
   {"k": "Onko pakko sitoutua pitkäksi aikaa?", "v": "Perusta-taso jatkuu kuukausi kerrallaan yhden kuukauden irtisanomisajalla. Kasvu- ja Täysi-tasoilla vähimmäiskesto on kuusi kuukautta, koska lyhyemmässä ajassa työ ei ehdi tuottaa mitään mitattavaa. Kuuden kuukauden jälkeen yhteistyö jatkuu niin kauan kuin se tuottaa."},
   {"k": "Kannattaako valita halvin SEO-tarjous?", "v": "Halvin ja kannattavin ovat harvoin sama asia. Hyvin matalalla kuukausihinnalla ei ehdi tehdä juuri muuta kuin seurata sijoituksia ja lähettää raportti. Pahimmillaan edullinen työ tulee kalliiksi kahdesti: ensin maksat työstä joka ei tuota, sitten työstä jolla se korjataan."},
@@ -924,7 +924,7 @@ export default function HakuMobiili() {
               </h2>
               {" "}
               <p className="mo-e-lead mo-rv mo-d1" style={{ marginTop: "14px", fontSize: "16px", color: "#c3d0dc" }}>
-                {"Kolme tasoa ja kiinteä kuukausihinta. Tasot eroavat siinä, kuinka paljon uutta sisältöä syntyy ja rakennetaanko myös auktoriteettia."}
+                {"Kolme tasoa ja maksuton kartoitus ennen aloitusta. Hinnat ovat alkaen-hintoja, ja lopullinen hinta sovitaan kartoituksessa ennen kuin mitään laskutetaan. Tasot eroavat siinä, kuinka paljon uutta sisältöä syntyy ja rakennetaanko myös auktoriteettia."}
               </p>
               {" "}
             </div>
@@ -960,6 +960,9 @@ export default function HakuMobiili() {
                   </div>
                   {" "}
                   <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginTop: "8px" }}>
+                    <span style={{ fontSize: "14px", color: "#a9b8c6" }}>
+                      {"alk."}
+                    </span>
                     <b style={{ fontSize: "46px", lineHeight: "1", letterSpacing: "-.04em", fontWeight: "680", fontVariantNumeric: "tabular-nums" }} data-seo-hinta={p.hinta}>
                       {p.hintaN}
                     </b>
