@@ -1,123 +1,148 @@
-/* Sivun tyylit: generoitu app/globals.css:sta, ks. scripts/tyylit.cjs. */
+/* Sivun tyylit: generoitu app/globals.css:sta, ks. scripts/tyylit.cjs.
+   Sama tumma .wsx-teema kuin Laskutustiedot- ja Yhteystiedot-sivuilla. */
 import "../_tyylit/tietosuoja.css";
 import type { Metadata } from "next";
 
-import Backdrop from "../components/Backdrop";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
+import NetBackdrop from "../components/NetBackdrop";
 import SiteEffects from "../components/SiteEffects";
-import { SUBPAGE_FOOTER, OVERLAY_NAV } from "../components/site-data";
+import { SUBPAGE_FOOTER, OVERLAY_NAV, ROUTES } from "../components/site-data";
 import CookieSettingsButton from "../components/consent/CookieSettingsButton";
 
-import { COOKIE_ROWS, SECTIONS } from "./content";
+import { EVASTEET, PAIVITETTY, SECTIONS } from "./content";
 
 export const metadata: Metadata = {
   title: "Tietosuojaseloste | WS Media",
   description:
-    "WS Media Oy:n tietosuojaseloste: mitä henkilötietoja keräämme ja miksi, mitä evästeitä sivustolla käytetään ja mitkä ovat oikeutesi.",
+    "WS Media Oy:n tietosuojaseloste: mitä henkilötietoja käsittelemme ja miksi, mitä evästeitä sivustolla käytetään, kuinka kauan tietoja säilytetään ja mitkä ovat oikeutesi.",
   alternates: { canonical: "https://wsmedia.fi/tietosuoja" },
-  /* Luonnos: ei indeksiin ennen oikeudellista tarkistusta. */
   robots: { index: false, follow: true },
 };
 
-const beforeCookies = SECTIONS.filter((s) => s.n < 7);
-const afterCookies = SECTIONS.filter((s) => s.n > 7);
-
-function SectionBlock({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
+function Evasteosio() {
   return (
-    <section className="ts-sec rv" id={`osio-${n}`}>
-      <h2>
-        <span className="ts-num">{n}</span>
-        {title}
-      </h2>
-      <div className="ts-body">{children}</div>
-    </section>
+    <>
+      <p>
+        Evästeet ovat pieniä tiedostoja, jotka sivusto tallentaa selaimeesi. Välttämätön tallenne on
+        aina käytössä. Analytiikka- ja markkinointievästeet otetaan käyttöön vain, jos hyväksyt ne
+        evästeilmoituksessa. Ennen suostumusta sivusto ei lataa Googlen eikä Metan seurantakoodeja.
+      </p>
+      <div className="ts-taulu" role="region" aria-label="Sivuston evästeet" tabIndex={0}>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Eväste</th>
+              <th scope="col">Palvelu ja tarkoitus</th>
+              <th scope="col">Säilyy</th>
+            </tr>
+          </thead>
+          <tbody>
+            {EVASTEET.map((e) => (
+              <tr key={e.nimi}>
+                <th scope="row">
+                  <code>{e.nimi}</code>
+                  <span className={`ts-tyyppi ts-tyyppi-${e.tyyppi === "Välttämätön" ? "v" : "s"}`}>{e.tyyppi}</span>
+                </th>
+                <td>
+                  <b>{e.palvelu}.</b> {e.tarkoitus}
+                </td>
+                <td>{e.kesto}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Google Search Consolen avulla seuraamme, millä hauilla sivusto näkyy Googlessa. Se ei aseta
+        sivustolla evästeitä, ja sen kautta saamme vain koostettuja tilastoja.
+      </p>
+      <p>
+        Voit muuttaa tai perua suostumuksesi milloin tahansa:{" "}
+        <CookieSettingsButton label="avaa evästeasetukset" />. Evästeet voi poistaa myös selaimen
+        asetuksista.
+      </p>
+    </>
   );
 }
 
 export default function Tietosuoja() {
   return (
-    <div className="page-tietosuoja">
-      <Backdrop variant="simple" />
+    <div className="page-palvelu page-hakukoneoptimointi page-tietosuoja wsx">
+      <NetBackdrop merkit={false} />
+      <div className="rae" aria-hidden="true" />
 
-      <Nav
-        anchorBase="/" links={OVERLAY_NAV} ctaHref="/#lomake" ctaLabel="Pyydä tarjous" logoHref="/" />
+      <Nav anchorBase="/" links={OVERLAY_NAV} ctaHref={ROUTES.yhteys} ctaLabel="Ota yhteyttä" logoHref="/" />
 
-      <header className="ts-head">
-        <div className="wrap-n">
-          <span className="kick li d1">WS Media Oy · Tietosuoja</span>
-          <h1 className="li d2">Tietosuojaseloste</h1>
-          <p className="ts-meta li d3">Laadittu 26.8.2026 · Sisäinen luonnos</p>
-
-          {/*
-            Lahdedokumentin oma varoitus. Sailytetty tarkoituksella: seloste ei
-            ole juridisesti tarkistettu eika hakasulkeissa olevia kohtia ole
-            taytetty. Poista tama vasta kun molemmat on hoidettu.
-          */}
-          <div className="ts-warn li d4" role="note">
-            <b>Luonnos</b>
-            <p>
-              Tämä dokumentti on rakennettu GDPR:n ja Suomen tietoyhteiskuntakaaren vakiorakenteen
-              mukaan, mutta se ei korvaa oikeudellista tarkistusta. Kaikki hakasulkeissa [ ] olevat
-              kohdat pitää täyttää tai vahvistaa ennen julkaisua.
+      <header className="seo-hero ts-hero">
+        <div className="swrap ts-in">
+          <div>
+            <h1 className="seo-h1">Tietosuojaseloste</h1>
+            <p className="hero-lead">
+              Tällä sivulla kerromme, mitä tietoja keräämme, mihin niitä käytetään ja kuinka kauan niitä
+              säilytetään. Seuranta- ja mainosevästeet otetaan käyttöön vain suostumuksellasi.
             </p>
+            <p className="ts-pvm">Päivitetty {PAIVITETTY}</p>
           </div>
+
+          <aside className="ts-arkki" aria-label="Tietosuoja lyhyesti">
+            <p className="ts-otsake">Lyhyesti</p>
+            <dl>
+              <div className="ts-rivi">
+                <dt>Rekisterinpitäjä</dt>
+                <dd>WS Media Oy</dd>
+              </div>
+              <div className="ts-rivi">
+                <dt>Seurantaevästeet</dt>
+                <dd>Vain suostumuksellasi</dd>
+              </div>
+              <div className="ts-rivi">
+                <dt>Tietojen myynti</dt>
+                <dd>Emme myy tietoja</dd>
+              </div>
+              <div className="ts-rivi">
+                <dt>Tietopyynnöt</dt>
+                <dd>
+                  <a href="mailto:info@wsmedia.fi">info@wsmedia.fi</a>
+                </dd>
+              </div>
+            </dl>
+            <CookieSettingsButton label="Evästeasetukset" />
+          </aside>
         </div>
       </header>
 
-      <div className="wrap-n ts-doc">
-        {beforeCookies.map((s) => (
-          <SectionBlock key={s.n} n={s.n} title={s.title}>
-            {s.body}
-          </SectionBlock>
-        ))}
+      <div className="swrap ts-doc">
+        <nav className="ts-toc" aria-label="Sisällys">
+          <p>Sisällys</p>
+          <ol>
+            {SECTIONS.map((s) => (
+              <li key={s.id}>
+                <a href={`#${s.id}`}>{s.lyhyt}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
 
-        <SectionBlock n={7} title="Käytössä olevat evästeet ja seurantatyökalut">
-          <p>
-            Verkkosivustolla käytetään seuraavia kolmannen osapuolen palveluita, jotka voivat
-            asettaa evästeitä laitteellesi:
-          </p>
-          <div className="ts-tablewrap">
-            <table className="ts-table">
-              <thead>
-                <tr>
-                  <th scope="col">Palvelu</th>
-                  <th scope="col">Tarkoitus</th>
-                  <th scope="col">Tietojen käsittelijä</th>
-                </tr>
-              </thead>
-              <tbody>
-                {COOKIE_ROWS.map((r) => (
-                  <tr key={r.service}>
-                    <th scope="row">{r.service}</th>
-                    <td>{r.purpose}</td>
-                    <td>{r.processor}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p>
-            Ei-välttämättömät evästeet (analytiikka ja markkinointi) asetetaan vasta kävijän
-            annettua suostumuksensa evästebannerin kautta. Voit milloin tahansa muuttaa
-            suostumustasi:{" "}
-            <CookieSettingsButton label="avaa evästeasetukset" />
-          </p>
-        </SectionBlock>
-
-        {afterCookies.map((s) => (
-          <SectionBlock key={s.n} n={s.n} title={s.title}>
-            {s.body}
-          </SectionBlock>
-        ))}
+        <div className="ts-osiot">
+          {SECTIONS.map((s) => (
+            <section key={s.id} id={s.id} className="ts-sec" aria-labelledby={`${s.id}-h`}>
+              <h2 id={`${s.id}-h`}>
+                <span className="ts-num">{s.n}</span>
+                {s.title}
+              </h2>
+              <div className="ts-body">{s.id === "evasteet" ? <Evasteosio /> : s.body}</div>
+            </section>
+          ))}
+        </div>
       </div>
 
       <Footer
         intro="Lyhytvideotuotanto, verkkosivut ja graafinen ilme yrityksille. Espoo ja Helsinki, koko Suomi."
         columns={SUBPAGE_FOOTER}
         base="© 2026 WS Media Oy"
+        brandHeading="h2"
       />
-
       <SiteEffects />
     </div>
   );

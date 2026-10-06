@@ -35,7 +35,7 @@ const KOHTEET = {
   "graafinen-suunnittelu": ["graafinen-suunnittelu", "palvelu"],
   meista: ["meista", "hakukoneoptimointi", "palvelu"],
   "toihin-meille": ["tm", "hakukoneoptimointi", "palvelu"],
-  tietosuoja: ["tietosuoja"],
+  tietosuoja: ["tietosuoja", "hakukoneoptimointi", "palvelu"],
   laskutustiedot: ["laskutustiedot", "hakukoneoptimointi", "palvelu"],
   yhteystiedot: ["yhteystiedot", "hakukoneoptimointi", "palvelu"],
 };

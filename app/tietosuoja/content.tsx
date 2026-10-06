@@ -1,12 +1,17 @@
 import type { ReactNode } from "react";
 
-export type Section = {
-  n: number;
-  title: string;
-  body: ReactNode;
-};
+/* TIETOSUOJASELOSTEEN SISALTO (5.10.2026).
 
-/** Luettelo, jota kaytetaan osioiden sisalla. */
+   Rakenne: GDPR 13 ja 14 artiklan vaatimat tiedot ja
+   tietoyhteiskuntakaaren 205 pykalan evastetiedot tavallisessa
+   jarjestyksessa. Kun sivustolle lisataan palvelu, joka kasittelee
+   henkilotietoja tai asettaa evasteita, lisaa se taalle (KASITTELIJAT ja
+   EVASTEET) ja paivita PAIVITETTY. */
+
+export const PAIVITETTY = "5.10.2026";
+
+export type Section = { n: number; id: string; title: string; lyhyt: string; body: ReactNode };
+
 function List({ items }: { items: ReactNode[] }) {
   return (
     <ul className="ts-list">
@@ -17,217 +22,307 @@ function List({ items }: { items: ReactNode[] }) {
   );
 }
 
+const Ulkoinen = ({ href, children }: { href: string; children: ReactNode }) => (
+  <a href={href} target="_blank" rel="noopener noreferrer">
+    {children}
+  </a>
+);
+
+/** Evasteet ja selaimen tallenteet. Kesto = kauanko tallenne sailyy selaimessa. */
+export const EVASTEET: { nimi: string; palvelu: string; tyyppi: string; tarkoitus: string; kesto: string }[] = [
+  {
+    nimi: "wsmedia.consent",
+    palvelu: "WS Media",
+    tyyppi: "Välttämätön",
+    tarkoitus: "Muistaa evästevalintasi, jotta kysymystä ei näytetä joka käynnillä.",
+    kesto: "180 päivää",
+  },
+  {
+    nimi: "_ga",
+    palvelu: "Google Analytics 4",
+    tyyppi: "Analytiikka",
+    tarkoitus: "Erottaa kävijät toisistaan kävijätilastoissa.",
+    kesto: "2 vuotta",
+  },
+  {
+    nimi: "_ga_<tunnus>",
+    palvelu: "Google Analytics 4",
+    tyyppi: "Analytiikka",
+    tarkoitus: "Pitää kirjaa käyntikerrasta.",
+    kesto: "2 vuotta",
+  },
+  {
+    nimi: "_fbp",
+    palvelu: "Meta Pixel",
+    tyyppi: "Markkinointi",
+    tarkoitus: "Tunnistaa selaimen, jotta Facebook- ja Instagram-mainosten tuloksia voidaan mitata ja mainoksia kohdentaa.",
+    kesto: "90 päivää",
+  },
+];
+
+/** Palveluntarjoajat, jotka kasittelevat tietoja WS Median lukuun. */
+const KASITTELIJAT: { nimi: string; mita: string }[] = [
+  {
+    nimi: "Google Ireland Limited",
+    mita: "Sähköposti ja kalenteri (Google Workspace), kartoitusten ajanvaraus, Google Analytics 4 ja Google Search Console.",
+  },
+  {
+    nimi: "Resend, Inc. (Yhdysvallat)",
+    mita: "Sivuston lomakkeilta lähetettyjen viestien ja vahvistusviestien sähköpostitoimitus.",
+  },
+  {
+    nimi: "Vercel Inc. (Yhdysvallat)",
+    mita: "Sivuston palvelin ja sen tekniset lokitiedot.",
+  },
+  {
+    nimi: "Meta Platforms Ireland Limited",
+    mita: "Meta Pixel: Facebook- ja Instagram-mainonnan mittaaminen ja kohdentaminen.",
+  },
+  {
+    nimi: "Microsoft Ireland Operations Limited",
+    mita: "Teams-etätapaamiset.",
+  },
+  {
+    nimi: "Kirjanpidon ja laskutuksen palveluntarjoajat",
+    mita: "Laskutus, verkkolaskujen välitys (Apix Messaging Oy) ja lakisääteinen kirjanpito.",
+  },
+];
+
 export const SECTIONS: Section[] = [
   {
     n: 1,
-    title: "Rekisterinpitäjä",
+    id: "rekisterinpitaja",
+    title: "Rekisterinpitäjä ja yhteystiedot",
+    lyhyt: "Rekisterinpitäjä",
     body: (
-      <address className="ts-address">
-        WS Media Oy
-        <br />
-        Y-tunnus: 3615084-4
-        <br />
-        Kuusiniementie 8 F 3, 02710 Espoo
-        <br />
-        <a href="mailto:info@wsmedia.fi">info@wsmedia.fi</a>
-        <br />
-        <a href="tel:+358405648770">040 564 8770</a>
-      </address>
+      <>
+        <address className="ts-address">
+          <b>WS Media Oy</b>
+          <br />
+          Y-tunnus 3615084-4
+          <br />
+          Kuusiniementie 8 F 3, 02710 Espoo
+          <br />
+          <a href="mailto:info@wsmedia.fi">info@wsmedia.fi</a>, <a href="tel:+358405648770">040 564 8770</a>
+        </address>
+        <p>
+          Tietosuojaa koskevissa asioissa yhteyshenkilö on Tuomas Ivanov. Tavoitat hänet osoitteesta{" "}
+          <a href="mailto:info@wsmedia.fi">info@wsmedia.fi</a>.
+        </p>
+      </>
     ),
   },
   {
     n: 2,
-    title: "Yhteyshenkilö tietosuoja-asioissa",
+    id: "tiedot",
+    title: "Mitä tietoja käsittelemme",
+    lyhyt: "Käsiteltävät tiedot",
     body: (
-      <p>
-        Tuomas Ivanov, <a href="mailto:info@wsmedia.fi">info@wsmedia.fi</a>
-      </p>
+      <>
+        <p className="ts-sub">Yhteydenotto ja tarjouspyyntö</p>
+        <p>
+          Kun lähetät viestin tai tarjouspyynnön sivuston lomakkeella, saamme antamasi tiedot: nimen,
+          sähköpostiosoitteen, puhelinnumeron, yrityksen nimen ja paikkakunnan, valitsemasi palvelut
+          ja budjetin sekä viestisi sisällön.
+        </p>
+        <p className="ts-sub">Kartoituksen ajanvaraus</p>
+        <p>
+          Ajanvarauksessa saamme yrityksen nimen, yhteyshenkilön nimen, puhelinnumeron ja
+          sähköpostiosoitteen, valitun ajan ja tapaamistavan sekä mahdolliset lisätiedot. Jos
+          kartoitus tehdään paikan päällä, saamme myös käyntiosoitteen.
+        </p>
+        <p className="ts-sub">Työhakemus</p>
+        <p>
+          Hakemuksesta saamme nimen, yhteystiedot, paikkakunnan, osaamisalueet, linkit työnäytteisiin,
+          palkka- tai hintatoiveen sekä viestin ja liitteet, jotka lähetät meille.
+        </p>
+        <p className="ts-sub">Asiakkuus</p>
+        <p>
+          Asiakassuhteen aikana käsittelemme yhteyshenkilöiden tietoja, sopimus- ja laskutustietoja
+          sekä yhteydenpitoa.
+        </p>
+        <p className="ts-sub">Sivuston käyttö</p>
+        <p>
+          Palvelin kirjaa teknisiä lokitietoja, kuten IP-osoitteen, käynnin ajankohdan ja selaimen
+          tiedot. Jos hyväksyt analytiikka- ja markkinointievästeet, saamme lisäksi tietoja siitä,
+          miten sivustoa käytetään (kohta 4).
+        </p>
+        <p>
+          Tiedot saadaan pääosin sinulta itseltäsi tai sivuston käytöstä. Yritysten yhteyshenkilöiden
+          tietoja voimme saada myös julkisista lähteistä, kuten yrityksen verkkosivuilta ja
+          kaupparekisteristä.
+        </p>
+      </>
     ),
   },
   {
     n: 3,
-    title: "Rekisterin nimi",
-    body: (
-      <p>
-        WS Media Oy:n asiakas- ja markkinointirekisteri sekä verkkosivuston kävijätietojen
-        käsittely.
-      </p>
-    ),
-  },
-  {
-    n: 4,
-    title: "Henkilötietojen käsittelyn tarkoitus ja oikeusperuste",
-    body: (
-      <>
-        <p>Käsittelemme henkilötietoja seuraaviin tarkoituksiin:</p>
-        <List
-          items={[
-            "Tarjouspyyntöjen ja yhteydenottojen käsittely (oikeusperuste: sopimuksen valmistelu, GDPR 6 art. 1 b)",
-            "Asiakassuhteen hoitaminen ja palveluiden toimittaminen (oikeusperuste: sopimus, GDPR 6 art. 1 b)",
-            "Markkinointi ja sivuston kehittäminen (oikeusperuste: oikeutettu etu, GDPR 6 art. 1 f, tai suostumus evästeiden osalta, GDPR 6 art. 1 a)",
-            "Verkkosivuston kävijäanalytiikka ja mainonnan kohdentaminen (oikeusperuste: suostumus, kerätään evästesuostumusbannerin kautta)",
-            "Lakisääteisten velvoitteiden täyttäminen, kuten kirjanpitolaki (oikeusperuste: lakisääteinen velvoite, GDPR 6 art. 1 c)",
-          ]}
-        />
-      </>
-    ),
-  },
-  {
-    n: 5,
-    title: "Käsiteltävät henkilötietoryhmät",
-    body: (
-      <>
-        <p className="ts-sub">Yhteydenottolomakkeen ja tarjouspyyntöjen kautta:</p>
-        <List
-          items={[
-            "Nimi",
-            "Sähköpostiosoite",
-            "Puhelinnumero",
-            "Yrityksen nimi (jos annettu)",
-            "Paikkakunta",
-            "Viestin tai tarjouspyynnön sisältö",
-          ]}
-        />
-        <p className="ts-sub">
-          Verkkosivuston kävijätiedot (evästeiden ja seurantatyökalujen kautta, kävijän
-          suostumuksella):
-        </p>
-        <List
-          items={[
-            "IP-osoite (osittain anonymisoituna, jos käytössä Google Analytics 4:n oletusasetukset)",
-            "Selain- ja laitetiedot",
-            "Sivustokäyttäytyminen (vieraillut sivut, viipymäaika, klikkaukset)",
-            "Liikenteen lähde (esim. mistä kävijä saapui sivustolle)",
-          ]}
-        />
-        <p className="ts-sub">Asiakassuhteen aikana:</p>
-        <List items={["Laskutus- ja sopimustiedot", "Viestintähistoria"]} />
-      </>
-    ),
-  },
-  {
-    n: 6,
-    title: "Säännönmukaiset tietolähteet",
-    body: (
-      <>
-        <p>
-          Tiedot saadaan pääosin rekisteröidyltä itseltään: yhteydenottolomakkeet, sähköposti,
-          puhelinkeskustelut ja sopimuksen solmimisen yhteydessä.
-        </p>
-        <p>
-          Verkkosivuston kävijätietoja kerätään evästeiden ja vastaavien seurantateknologioiden
-          avulla kävijän suostumuksella.
-        </p>
-      </>
-    ),
-  },
-  {
-    n: 8,
-    title: "Tietojen luovutus ja siirto EU:n/ETA:n ulkopuolelle",
-    body: (
-      <>
-        <p>
-          Emme myy tai luovuta henkilötietoja kolmansille osapuolille markkinointitarkoituksiin
-          ilman suostumusta. Käytämme seuraavia palveluntarjoajia, jotka voivat käsitellä tietoja
-          osana palveluaan:
-        </p>
-        <List
-          items={[
-            "Google Ireland Limited (Google Analytics) — tiedot voivat siirtyä EU:n/ETA:n ulkopuolelle Googlen EU:n komission hyväksymien vakiosopimuslausekkeiden (SCC) nojalla",
-            "Meta Platforms Ireland Limited (Meta Pixel) — vastaavasti SCC-lausekkeiden nojalla",
-            "[Muut käytössä olevat kolmannen osapuolen palvelut, esim. sähköpostimarkkinointi, laskutusjärjestelmä]",
-          ]}
-        />
-      </>
-    ),
-  },
-  {
-    n: 9,
-    title: "Henkilötietojen säilytysaika",
+    id: "tarkoitus",
+    title: "Käsittelyn tarkoitukset ja oikeusperusteet",
+    lyhyt: "Tarkoitukset",
     body: (
       <List
         items={[
-          "Tarjouspyynnöt ja yhteydenotot: [esim. 12 kuukautta, ellei johda asiakassuhteeseen]",
-          "Asiakassuhteen tiedot: asiakassuhteen keston ajan sekä kirjanpitolain edellyttämät 6 vuotta tilikauden päättymisestä",
-          "Verkkosivuston analytiikkatiedot: [Google Analyticsin oletusasetus tai erikseen määritelty, esim. 14 kuukautta]",
+          <>
+            <b>Yhteydenottoihin ja tarjouspyyntöihin vastaaminen sekä kartoitusten järjestäminen.</b>{" "}
+            Peruste: sopimuksen valmistelu (tietosuoja-asetuksen 6 artiklan 1 kohdan b alakohta).
+          </>,
+          <>
+            <b>Palvelujen toimittaminen ja asiakassuhteen hoitaminen.</b> Peruste: sopimus (b
+            alakohta).
+          </>,
+          <>
+            <b>Rekrytointi.</b> Peruste: toimet hakijan pyynnöstä ennen sopimuksen tekemistä (b
+            alakohta).
+          </>,
+          <>
+            <b>Sivuston toiminta ja tietoturva.</b> Peruste: oikeutettu etu (f alakohta).
+          </>,
+          <>
+            <b>Kävijäanalytiikka sekä mainonnan mittaaminen ja kohdentaminen.</b> Peruste: suostumus (a
+            alakohta), jonka voit perua milloin tahansa.
+          </>,
+          <>
+            <b>Markkinointi asiakkaille ja yhteistyökumppaneille.</b> Peruste: oikeutettu etu (f
+            alakohta). Voit kieltää suoramarkkinoinnin milloin tahansa.
+          </>,
+          <>
+            <b>Kirjanpito ja muut lakisääteiset velvoitteet.</b> Peruste: lakisääteinen velvoite (c
+            alakohta).
+          </>,
         ]}
       />
     ),
   },
   {
-    n: 10,
-    title: "Rekisterin suojauksen periaatteet",
+    n: 4,
+    id: "evasteet",
+    title: "Evästeet",
+    lyhyt: "Evästeet",
+    body: null /* renderoidaan page.tsx:ssa, koska siina on taulukko ja asetusnappi */,
+  },
+  {
+    n: 5,
+    id: "vastaanottajat",
+    title: "Palveluntarjoajat ja tietojen luovutus",
+    lyhyt: "Palveluntarjoajat",
+    body: (
+      <>
+        <p>
+          Seuraavat palveluntarjoajat käsittelevät tietoja meidän lukuumme ja sopimustemme mukaisesti:
+        </p>
+        <dl className="ts-kasittelijat">
+          {KASITTELIJAT.map((k) => (
+            <div key={k.nimi}>
+              <dt>{k.nimi}</dt>
+              <dd>{k.mita}</dd>
+            </div>
+          ))}
+        </dl>
+        <p>
+          Meta Pixelin tietojen keräämisessä WS Media ja Meta ovat yhteisrekisterinpitäjiä. Meta käyttää
+          tietoja myös omiin tarkoituksiinsa{" "}
+          <Ulkoinen href="https://www.facebook.com/privacy/policy/">Metan tietosuojakäytännön</Ulkoinen>{" "}
+          mukaisesti. Googlen käsittelystä kerrotaan{" "}
+          <Ulkoinen href="https://policies.google.com/privacy?hl=fi">Googlen tietosuojakäytännössä</Ulkoinen>.
+        </p>
+        <p>
+          Emme myy henkilötietoja. Viranomaisille luovutamme tietoja vain silloin, kun laki sitä
+          edellyttää.
+        </p>
+      </>
+    ),
+  },
+  {
+    n: 6,
+    id: "siirrot",
+    title: "Siirrot EU:n ja ETA:n ulkopuolelle",
+    lyhyt: "Siirrot EU:n ulkopuolelle",
     body: (
       <p>
-        Henkilötietoja säilytetään sähköisesti pääsynhallinnalla suojatuissa järjestelmissä. Pääsy
-        tietoihin on rajattu vain niille henkilöille, joiden työtehtävät sitä edellyttävät.
-        [Tarkenna käytössä olevat järjestelmät ja suojaustoimet, esim. palveluntarjoajien
-        tietoturvasertifioinnit.]
+        Google, Meta, Microsoft, Vercel ja Resend voivat käsitellä tietoja myös Yhdysvalloissa.
+        Siirrot perustuvat EU:n ja Yhdysvaltojen väliseen tietosuojakehykseen (Data Privacy Framework),
+        jos palveluntarjoaja on sitoutunut siihen. Muissa tapauksissa siirrot perustuvat Euroopan
+        komission hyväksymiin vakiosopimuslausekkeisiin.
       </p>
     ),
   },
   {
-    n: 11,
-    title: "Rekisteröidyn oikeudet",
+    n: 7,
+    id: "sailytys",
+    title: "Kuinka kauan tietoja säilytetään",
+    lyhyt: "Säilytysajat",
     body: (
       <>
-        <p>Sinulla on GDPR:n mukaisesti oikeus:</p>
         <List
           items={[
-            "saada tietoa henkilötietojesi käsittelystä",
-            "tarkastaa itseäsi koskevat tiedot",
-            "vaatia virheellisen tiedon oikaisua",
-            "vaatia tietojen poistamista (”oikeus tulla unohdetuksi”)",
-            "rajoittaa tietojesi käsittelyä",
-            "siirtää tiedot järjestelmästä toiseen (tietojen siirrettävyys)",
-            "vastustaa tietojesi käsittelyä, mukaan lukien suoramarkkinointi",
-            "peruuttaa antamasi suostumus milloin tahansa vaikuttamatta ennen peruutusta tapahtuneen käsittelyn lainmukaisuuteen",
+            "Yhteydenotot ja tarjouspyynnöt, jotka eivät johda asiakkuuteen: 12 kuukautta viimeisestä yhteydenpidosta.",
+            "Kartoitusten kalenterimerkinnät: 12 kuukautta kartoituksen jälkeen.",
+            "Työhakemukset: enintään kaksi vuotta haun päättymisestä, ellei hakijan kanssa sovita muuta.",
+            "Asiakkuuden tiedot: asiakassuhteen ajan.",
+            "Kirjanpitoaineisto: kirjanpitolain mukaan, eli kirjanpito ja tilinpäätös kymmenen vuotta tilikauden päättymisestä ja tositteet kuusi vuotta sen vuoden lopusta, jonka aikana tilikausi päättyi.",
+            "Google Analyticsin kävijätiedot: enintään 14 kuukautta.",
+            "Evästeet: kohdan 4 taulukon mukaisesti.",
           ]}
         />
-        <p>Näiden oikeuksien käyttämiseksi ota yhteyttä: [sähköposti]</p>
-        <p>
-          Sinulla on myös oikeus tehdä valitus valvontaviranomaiselle, jos katsot että
-          henkilötietojesi käsittelyssä on rikottu voimassa olevaa tietosuojalainsäädäntöä. Suomessa
-          valvontaviranomainen on tietosuojavaltuutetun toimisto (
-          <a href="https://tietosuoja.fi" target="_blank" rel="noopener noreferrer">
-            tietosuoja.fi
-          </a>
-          ).
-        </p>
+        <p>Kun säilytysaika päättyy, tiedot poistetaan tai muutetaan sellaisiksi, ettei niistä voi tunnistaa henkilöä.</p>
       </>
     ),
   },
   {
-    n: 12,
-    title: "Muutokset tietosuojaselosteeseen",
+    n: 8,
+    id: "tietoturva",
+    title: "Tietoturva",
+    lyhyt: "Tietoturva",
+    body: (
+      <p>
+        Sivusto ja sen lomakkeet käyttävät salattua HTTPS-yhteyttä. Tiedot säilytetään palveluissa,
+        joihin pääsee vain henkilökohtaisilla tunnuksilla, ja pääsy on rajattu niille, jotka
+        tarvitsevat tietoja työssään.
+      </p>
+    ),
+  },
+  {
+    n: 9,
+    id: "oikeudet",
+    title: "Sinun oikeutesi",
+    lyhyt: "Oikeutesi",
     body: (
       <>
+        <p>Sinulla on oikeus:</p>
+        <List
+          items={[
+            "saada tietää, mitä tietoja sinusta käsitellään, ja saada niistä kopio",
+            "vaatia virheellisten tietojen korjaamista",
+            "vaatia tietojesi poistamista",
+            "vaatia käsittelyn rajoittamista",
+            "vastustaa käsittelyä, joka perustuu oikeutettuun etuun, ja kieltää suoramarkkinointi",
+            "siirtää antamasi tiedot toiseen järjestelmään",
+            "perua suostumuksesi milloin tahansa, mikä ei vaikuta ennen perumista tehdyn käsittelyn lainmukaisuuteen",
+          ]}
+        />
         <p>
-          Pidätämme oikeuden päivittää tätä tietosuojaselostetta esimerkiksi lainsäädännön
-          muuttuessa tai palveluidemme kehittyessä. Suosittelemme tarkistamaan tämän sivun
-          ajoittain.
+          Lähetä pyyntö osoitteeseen <a href="mailto:info@wsmedia.fi">info@wsmedia.fi</a>. Vastaamme
+          viimeistään kuukauden kuluessa. Emme tee automaattisia päätöksiä, joilla olisi sinuun oikeudellisia tai
+          niihin verrattavia vaikutuksia.
         </p>
-        <p>Tämä seloste on päivitetty viimeksi: [pvm]</p>
+        <p>
+          Jos katsot, että tietojasi käsitellään lainvastaisesti, voit tehdä valituksen
+          tietosuojavaltuutetun toimistolle (<Ulkoinen href="https://tietosuoja.fi">tietosuoja.fi</Ulkoinen>).
+        </p>
       </>
     ),
   },
-];
-
-/** Osio 7 renderoidaan erikseen, koska siina on taulukko. */
-export const COOKIE_ROWS = [
   {
-    service: "Google Analytics 4",
-    purpose: "Kävijäanalytiikka, sivuston kehittäminen",
-    processor: "Google Ireland Limited",
-  },
-  {
-    service: "Meta Pixel",
-    purpose: "Mainonnan kohdentaminen ja mittaaminen (Facebook/Instagram)",
-    processor: "Meta Platforms Ireland Limited",
-  },
-  {
-    service: "[Muut, esim. Formspree lomakkeille]",
-    purpose: "[Tarkoitus]",
-    processor: "[Käsittelijä]",
+    n: 10,
+    id: "muutokset",
+    title: "Muutokset",
+    lyhyt: "Muutokset",
+    body: (
+      <p>
+        Päivitämme selostetta, kun palvelumme tai lainsäädäntö muuttuvat. Seloste on päivitetty
+        viimeksi {PAIVITETTY}.
+      </p>
+    ),
   },
 ];

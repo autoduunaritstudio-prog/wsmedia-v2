@@ -4506,84 +4506,113 @@ html[data-suostumus] .cc { display: none }
 }
 
 /* ==================================================================
-   TIETOSUOJASELOSTE
-   Dokumenttisivu: kapea palsta, pienempi otsikkoasteikko kuin
-   markkinointisivuilla, numeroidut osiot.
+   TIETOSUOJASELOSTE (5.10.2026)
+   Tumma .wsx-teema kuten Laskutustiedot: hero ja vaalea "Lyhyesti"-
+   arkki, sen alla sisallys (tarttuu tietokoneella) ja numeroidut osiot.
    ================================================================== */
-.page-tietosuoja section { padding: 0 }
-.page-tietosuoja h1 { font-size: var(--text-h1-doc); letter-spacing: -0.028em; line-height: 1.08 }
-.page-tietosuoja h2 { font-size: var(--text-title); font-weight: var(--weight-semibold); letter-spacing: -0.016em; line-height: 1.3 }
+.page-tietosuoja .ts-hero { padding-top: calc(var(--nav-top) + clamp(110px, 15vh, 170px)); padding-bottom: clamp(56px, 8vh, 96px) }
+.page-tietosuoja .ts-in { display: grid; gap: 48px; align-items: center }
+.page-tietosuoja .ts-hero .seo-h1 { margin: 0; font-size: clamp(42px, 5.2vw, 80px); line-height: 1; letter-spacing: -.04em; overflow-wrap: normal; word-break: normal; hyphens: manual }
+.page-tietosuoja .ts-hero .hero-lead { margin-top: 26px; max-width: 44ch; font-size: clamp(19px, 1.55vw, 23px); line-height: 1.55 }
+.page-tietosuoja .ts-pvm { margin: 24px 0 0; font-size: 15px; color: rgba(255,255,255,.55) }
 
-.ts-head { padding: 34px 0 8px; text-align: left }
-.ts-head .kick { margin-bottom: 14px }
-.ts-head h1 { max-width: 18ch }
-.ts-meta { margin-top: 14px; font-size: var(--text-label); color: var(--grey) }
+.page-tietosuoja .ts-arkki {
+  --muste: #0e141b; --haalea: #5d6873;
+  position: relative; color: var(--muste); background: #f3f5f7; border-radius: 8px; overflow: hidden;
+  padding: clamp(26px, 3vw, 40px) clamp(22px, 2.8vw, 38px);
+  box-shadow: 0 50px 90px -40px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.06);
+}
+.page-tietosuoja .ts-arkki::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px;
+  background: linear-gradient(90deg, var(--seo-hi), #007c8f);
+}
+.page-tietosuoja .ts-otsake { margin: 0 0 12px; font-size: clamp(26px, 2.4vw, 34px); font-weight: 700; letter-spacing: -.03em; line-height: 1.1 }
+.page-tietosuoja .ts-arkki dl { margin: 0 }
+.page-tietosuoja .ts-rivi { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 16px; padding: 13px 0; border-top: 1px solid rgba(14,20,27,.1) }
+.page-tietosuoja .ts-rivi dt { color: var(--haalea); font-size: 16px }
+.page-tietosuoja .ts-rivi dd { margin: 0; font-size: 17px; font-weight: 600 }
+.page-tietosuoja .ts-rivi a { color: #00697a; text-decoration: none }
+.page-tietosuoja .ts-rivi a:hover { text-decoration: underline }
+.page-tietosuoja .ts-arkki .cc-reopen {
+  margin-top: 20px; display: inline-flex; align-items: center; padding: 11px 20px; border-radius: 999px; cursor: pointer;
+  font: inherit; font-size: 15px; font-weight: 600; color: #fff; background: var(--muste); border: 0; text-decoration: none;
+  transition: background-color .2s, color .2s;
+}
+.page-tietosuoja .ts-arkki .cc-reopen:hover { background: var(--seo-hi); color: var(--muste) }
+.page-tietosuoja .ts-arkki .cc-reopen:focus-visible { outline: 2px solid #00697a; outline-offset: 3px }
+@media (min-width: 1000px) {
+  .page-tietosuoja .ts-in { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); column-gap: clamp(56px, 7vw, 120px) }
+  .page-tietosuoja .ts-arkki { rotate: 1.5deg }
+}
+@media (max-width: 520px) { .page-tietosuoja .ts-rivi { grid-template-columns: 1fr; gap: 2px } }
 
-/* Lahdedokumentin luonnosvaroitus. */
-.ts-warn {
-  margin-top: 26px; padding: 16px 18px;
-  background: var(--blue-tint); border: 1px solid #d6faff; border-radius: 14px;
+/* Dokumentti */
+.page-tietosuoja .ts-doc { display: grid; gap: 40px; padding-top: clamp(24px, 4vh, 48px); padding-bottom: clamp(80px, 12vh, 140px) }
+@media (min-width: 1000px) {
+  .page-tietosuoja .ts-doc { grid-template-columns: 230px minmax(0, 760px); column-gap: clamp(48px, 6vw, 110px); align-items: start }
+  .page-tietosuoja .ts-toc { position: sticky; top: calc(var(--nav-top) + 110px) }
 }
-.ts-warn b {
-  display: block; font-size: var(--text-caption-sm); font-weight: var(--weight-semibold);
-  letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 6px;
+.page-tietosuoja .ts-toc p { margin: 0 0 12px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.55) }
+.page-tietosuoja .ts-toc ol { list-style: none; margin: 0; padding: 0; counter-reset: toc; border-left: 1px solid rgba(255,255,255,.14) }
+.page-tietosuoja .ts-toc li { counter-increment: toc }
+.page-tietosuoja .ts-toc a {
+  display: flex; gap: 10px; padding: 6px 0 6px 16px; margin-left: -1px; border-left: 2px solid transparent;
+  font-size: 15px; line-height: 1.4; color: rgba(255,255,255,.72); text-decoration: none;
+  transition: color .2s, border-color .2s;
 }
-.ts-warn p { font-size: var(--text-ui-sm); color: var(--grey); line-height: 1.6 }
-
-.ts-doc { padding: 44px 0 110px }
-@media (max-width: 760px) { .ts-doc { padding: 32px 0 72px } }
-
-.ts-sec { padding: 30px 0 !important; border-top: 1px solid var(--hair) }
-.ts-sec:first-child { border-top: none; padding-top: 8px !important }
-.ts-sec h2 { display: flex; gap: 12px; align-items: baseline }
-.ts-num {
-  flex: none; width: 26px; font-size: var(--text-label-sm); font-weight: var(--weight-semibold);
-  color: var(--blue); font-variant-numeric: tabular-nums;
-}
-.ts-body { margin-top: 12px; padding-left: 38px }
-@media (max-width: 560px) { .ts-body { padding-left: 0 } }
-.ts-body p { font-size: var(--text-body); color: var(--grey); line-height: 1.65 }
-.ts-body p + p { margin-top: 12px }
-.ts-body a { color: var(--blue); text-decoration: none }
-.ts-body a:hover { text-decoration: underline }
-.ts-sub { font-weight: var(--weight-semibold); color: var(--ink) !important; margin-top: 18px }
-.ts-sub:first-child { margin-top: 0 }
-
-.ts-address { font-style: normal; font-size: var(--text-body); color: var(--grey); line-height: 1.75 }
-.ts-address a { color: var(--blue); text-decoration: none }
-
-.ts-list { list-style: none; margin-top: 10px }
-.ts-list li {
-  font-size: var(--text-body); color: var(--grey); line-height: 1.6;
-  padding: 5px 0 5px 20px; position: relative;
-}
-.ts-list li::before {
-  content: ""; position: absolute; left: 2px; top: 13px;
-  width: 5px; height: 5px; border-radius: 50%; background: var(--blue); opacity: .55;
+.page-tietosuoja .ts-toc a::before { content: counter(toc); min-width: 1.4em; color: var(--seo-hi); font-variant-numeric: tabular-nums }
+.page-tietosuoja .ts-toc a:hover { color: #fff; border-left-color: var(--seo-hi) }
+.page-tietosuoja .ts-toc a:focus-visible { outline: 2px solid var(--seo-hi); outline-offset: 2px }
+@media (max-width: 999px) {
+  .page-tietosuoja .ts-toc ol { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); border-left: 0 }
+  .page-tietosuoja .ts-toc a { padding-left: 0 }
 }
 
-/* Evastetaulukko. Vierii vaakasuunnassa omassa laatikossaan kapealla
-   naytolla, jotta sivu itse ei ala vierimaan sivusuunnassa. */
-.ts-tablewrap { margin: 16px 0; overflow-x: auto; -webkit-overflow-scrolling: touch }
-.ts-table { width: 100%; min-width: 520px; border-collapse: collapse; text-align: left }
-.ts-table th, .ts-table td {
-  padding: 12px 14px; font-size: var(--text-ui-sm); line-height: 1.5;
-  border-bottom: 1px solid var(--hair); vertical-align: top;
-}
-.ts-table thead th {
-  font-size: var(--text-caption-sm); font-weight: var(--weight-semibold); letter-spacing: .08em; text-transform: uppercase;
-  color: var(--grey); border-bottom-color: #d9d9df;
-}
-.ts-table tbody th { font-weight: var(--weight-semibold); color: var(--ink); white-space: nowrap }
-.ts-table td { color: var(--grey) }
-.ts-table tbody tr:last-child th, .ts-table tbody tr:last-child td { border-bottom: none }
+.page-tietosuoja .ts-sec { padding: 34px 0; border-top: 1px solid rgba(255,255,255,.12); scroll-margin-top: calc(var(--nav-top) + 90px) }
+.page-tietosuoja .ts-sec:first-child { border-top: 0; padding-top: 0 }
+.page-tietosuoja .ts-sec h2 { display: flex; gap: 14px; align-items: baseline; margin: 0; font-size: clamp(23px, 2vw, 30px); font-weight: 700; letter-spacing: -.02em; line-height: 1.25; color: #fff }
+.page-tietosuoja .ts-num { flex: none; min-width: 1.3em; font-size: .7em; font-weight: 600; color: var(--seo-hi); font-variant-numeric: tabular-nums }
+.page-tietosuoja .ts-body { margin-top: 16px }
+.page-tietosuoja .ts-body p { margin: 0; font-size: clamp(16.5px, 1.15vw, 18px); line-height: 1.7; color: rgba(255,255,255,.74) }
+.page-tietosuoja .ts-body p + p, .page-tietosuoja .ts-body .ts-list + p, .page-tietosuoja .ts-body .ts-taulu + p, .page-tietosuoja .ts-body dl + p, .page-tietosuoja .ts-body address + p { margin-top: 14px }
+.page-tietosuoja .ts-body b { color: #fff; font-weight: 600 }
+.page-tietosuoja .ts-body a { color: var(--seo-hi); text-decoration: none }
+.page-tietosuoja .ts-body a:hover { text-decoration: underline }
+.page-tietosuoja .ts-body .ts-sub { margin-top: 22px; font-weight: 600; color: #fff }
+.page-tietosuoja .ts-body .ts-sub:first-child { margin-top: 0 }
+.page-tietosuoja .ts-body .ts-sub + p { margin-top: 4px }
+.page-tietosuoja .ts-address { font-style: normal; font-size: clamp(16.5px, 1.15vw, 18px); line-height: 1.75; color: rgba(255,255,255,.74) }
+.page-tietosuoja .ts-list { list-style: none; margin: 0; padding: 0 }
+.page-tietosuoja .ts-list li { position: relative; padding: 7px 0 7px 22px; font-size: clamp(16.5px, 1.15vw, 18px); line-height: 1.6; color: rgba(255,255,255,.74) }
+.page-tietosuoja .ts-list li::before { content: ""; position: absolute; left: 3px; top: 1.05em; width: 6px; height: 6px; border-radius: 50%; background: var(--seo-hi) }
+
+/* Palveluntarjoajat */
+.page-tietosuoja .ts-kasittelijat { margin: 16px 0 0; display: grid; gap: 10px }
+@media (min-width: 640px) { .page-tietosuoja .ts-kasittelijat { grid-template-columns: 1fr 1fr } }
+.page-tietosuoja .ts-kasittelijat > div { padding: 16px 18px; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1) }
+.page-tietosuoja .ts-kasittelijat dt { font-size: 16px; font-weight: 600; color: #fff }
+.page-tietosuoja .ts-kasittelijat dd { margin: 6px 0 0; font-size: 15.5px; line-height: 1.55; color: rgba(255,255,255,.68) }
+
+/* Evastetaulukko: vierii omassa laatikossaan kapealla naytolla. */
+.page-tietosuoja .ts-taulu { margin: 18px 0; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,.12) }
+.page-tietosuoja .ts-taulu:focus-visible { outline: 2px solid var(--seo-hi); outline-offset: 2px }
+.page-tietosuoja .ts-taulu table { width: 100%; min-width: 560px; border-collapse: collapse; text-align: left }
+.page-tietosuoja .ts-taulu th, .page-tietosuoja .ts-taulu td { padding: 14px 16px; vertical-align: top; font-size: 15.5px; line-height: 1.55; border-top: 1px solid rgba(255,255,255,.1) }
+.page-tietosuoja .ts-taulu thead th { border-top: 0; font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,.55); background: rgba(255,255,255,.04) }
+.page-tietosuoja .ts-taulu tbody th { font-weight: 400; white-space: nowrap }
+.page-tietosuoja .ts-taulu td { color: rgba(255,255,255,.74) }
+.page-tietosuoja .ts-taulu td:last-child { white-space: nowrap }
+.page-tietosuoja .ts-taulu code { display: block; font-family: var(--font-mono, ui-monospace, monospace); font-size: 14.5px; color: #fff }
+.page-tietosuoja .ts-tyyppi { display: inline-block; margin-top: 6px; padding: 2px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 600 }
+.page-tietosuoja .ts-tyyppi-v { color: #0e141b; background: rgba(255,255,255,.85) }
+.page-tietosuoja .ts-tyyppi-s { color: var(--seo-hi); background: rgba(111,236,255,.12) }
 
 /* Evasteasetukset-nappi leipatekstin seassa. */
-.ts-body .cc-reopen {
-  display: inline; padding: 0; color: var(--blue);
-  text-decoration: underline; text-underline-offset: 2px;
+.page-tietosuoja .ts-body .cc-reopen {
+  display: inline; padding: 0; font: inherit; color: var(--seo-hi); background: none; border: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
 }
-.ts-body .cc-reopen:hover { color: var(--blue-d) }
+.page-tietosuoja .ts-body .cc-reopen:hover { color: #fff }
 
 
 /* Etusivun Graafinen suunnittelu -paneelin visuaali: pakettiauto.
