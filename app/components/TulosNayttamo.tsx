@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import TulosVideo from "./TulosVideo";
 import { InstagramUI } from "./SomeKayttoliittyma";
@@ -91,9 +91,33 @@ const LINKKI = {
 export default function TulosNayttamo({ tulokset }: { tulokset: Tulos[] }) {
   const [valittu, setValittu] = useState(0);
   const t = tulokset[valittu];
+  const juuri = useRef<HTMLDivElement>(null);
+
+  /* Kaikkien asiakkaiden pysakuvat valmiiksi kun lava lahestyy, jotta
+     asiakasta vaihdettaessa puhelimessa on heti kuva (ks. TulosVideo). */
+  useEffect(() => {
+    const el = juuri.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (e) => {
+        if (!e.some((x) => x.isIntersecting)) return;
+        io.disconnect();
+        for (const x of tulokset) {
+          if (!x.video) continue;
+          const im = new Image();
+          im.decoding = "async";
+          im.src = x.video.poster;
+          im.decode?.().catch(() => {});
+        }
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [tulokset]);
 
   return (
-    <div className="tn">
+    <div className="tn" ref={juuri}>
       <div className="tn-lista" role="tablist" aria-label="Asiakkaat">
         {tulokset.map((x, i) => (
           <button

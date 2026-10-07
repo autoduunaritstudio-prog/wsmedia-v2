@@ -18893,6 +18893,13 @@ dialog.yi { margin: auto; inset: 0; position: fixed }
     0 40px 70px -26px rgba(0,0,0,.9), 0 0 90px rgba(111,236,255,.2);
 }
 .tn-puhelin .tul-video { border-radius: 34px }
+/* Pysakuva on oma kuvansa (.tul-kansi) ja video sen paalla nakymattomana
+   kunnes se on esittanyt ruudun, ks. TulosVideo.tsx. Mitat annetaan
+   suoraan: absoluuttinen video ei veny insetilla vaan ottaisi oman
+   kokonsa (sama ansa kuin rivin ~1625 kommentissa). 8px = puhelimen
+   padding, prosentit padding-laatikosta, joten video peittaa kuvan tasan. */
+.tn-puhelin .tul-liike { position: absolute; top: 8px; left: 8px; width: calc(100% - 16px); height: calc(100% - 16px); max-width: none; background: transparent; opacity: 0 }
+.tn-puhelin .tul-liike[data-nakyy] { opacity: 1 }
 .tn-puhelin .some-ui { inset: 8px; border-radius: 34px }
 .tn-puhelin .some-yla { top: 40px }
 .tn-saari {

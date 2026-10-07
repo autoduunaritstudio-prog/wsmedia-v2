@@ -173,8 +173,10 @@ export default function EtuEfektit() {
       const v = aktiivinen;
       if (!v) return;
       /* Tuloskortin video tulee kansikuvan paalle vasta kun se oikeasti
-         toistaa; pysaytetty jaa viimeiseen kuvaansa. */
-      if (v.dataset.etuTulos !== undefined && v.currentTime > 0 && v.style.opacity !== "1") v.style.opacity = "1";
+         toistaa; pysaytetty jaa viimeiseen kuvaansa. Varapolku selaimille
+         ilman requestVideoFrameCallbackia (ks. ruutuEsitetty). */
+      if (v.dataset.etuTulos !== undefined && v.style.opacity !== "1" && (esitetty.has(v) || (!RVFC && v.currentTime > 0) || v.currentTime > 0.5))
+        v.style.opacity = "1";
       const p = palkki(v);
       if (p && v.duration > 0) p.style.transform = `scaleX(${(v.currentTime / v.duration).toFixed(4)})`;
       if (!v.paused) kehys = requestAnimationFrame(piirra);
@@ -183,6 +185,22 @@ export default function EtuEfektit() {
       if (!kehys) kehys = requestAnimationFrame(piirra);
     };
     kaikki.forEach((v) => v.addEventListener("playing", kaynnista));
+    /* currentTime > 0 ei takaa, etta ruutu on jo esitetty: iOS Safarissa
+       opacity ehti nousta ennen ensimmaista piirrettya ruutua, ja
+       videokerros nakyi mustana kansikuvan paalla. requestVideoFrameCallback
+       (iOS 15.4+, Chrome 83+) laukeaa vasta kun ruutu on esitetty.
+       currentTime > 0,5 on hata-varaventtiili, jos kutsu ei koskaan laukea. */
+    const RVFC = typeof HTMLVideoElement !== "undefined" && "requestVideoFrameCallback" in HTMLVideoElement.prototype;
+    const esitetty = new WeakSet<HTMLVideoElement>();
+    const odottaa = new WeakSet<HTMLVideoElement>();
+    const ruutuEsitetty = (v: HTMLVideoElement) => {
+      if (!RVFC || esitetty.has(v) || odottaa.has(v)) return;
+      odottaa.add(v);
+      v.requestVideoFrameCallback(() => {
+        esitetty.add(v);
+        kaynnista();
+      });
+    };
     const valitse = () => {
       let kohde: HTMLVideoElement | null = null;
       if (!R) {
@@ -208,6 +226,7 @@ export default function EtuEfektit() {
         v.src = v.dataset.src;
       }
       v.muted = true;
+      if (v.dataset.etuTulos !== undefined) ruutuEsitetty(v);
       if (v.paused) {
         const lupaus = v.play();
         if (lupaus && lupaus.catch) lupaus.catch(() => {});

@@ -536,8 +536,8 @@ function kayta(juuri: HTMLElement, otsake: Otsake, verkko: Props["verkko"], palj
      heti ensimmaisen piirron aikana, jolloin ne kilpailevat LCP:n kanssa.
      Tassa kuvat ([data-mo-src], [data-mo-srcset], [data-mo-poster],
      [data-mo-bg]) haetaan vasta sivun latauduttua ja kun ne ovat
-     nakyman paassa. Vaakakaruselli ladataan kokonaan kun se lahestyy,
-     ettei pyyhkaisy paljasta tyhjia kortteja. */
+     nakyman paassa. Vaakakaruselli ladataan kokonaan (eager + decode)
+     kun se lahestyy, ettei pyyhkaisy paljasta tyhjia kortteja. */
   siivous.push(lataaKuvat(juuri));
 
   /* ---------------- JATKUVAT ANIMAATIOT TAUOLLE ----------------
@@ -922,7 +922,21 @@ function lataaKuvat(juuri: HTMLElement) {
       (ent) =>
         ent.forEach((e) => {
           if (!e.isIntersecting) return;
-          kohteet.get(e.target)?.forEach(asetaKuva);
+          const l = kohteet.get(e.target);
+          l?.forEach(asetaKuva);
+          /* Vaakakaruselli: kortit ovat vieritettavan sisalla nakyman
+             sivulla, ja WebKit (iOS Safari) ei hae loading="lazy"-kuvaa
+             ennen kuin se tulee ruutuun, vaikka src on jo asetettu.
+             Pyyhkaisy paljasti silloin tyhjan kortin, tuloskortin
+             puhelimessa mustan pohjan (#05070a) koko latauksen ajan
+             (mitattu scripts/tulos-musta.mjs). Ajoitus on jo paatetty
+             tassa, joten kuvat haetaan heti ja puretaan valmiiksi. */
+          if (l && e.target !== l[0])
+            l.forEach((n) => {
+              if (!(n instanceof HTMLImageElement)) return;
+              n.loading = "eager";
+              n.decode?.().catch(() => {});
+            });
           io?.unobserve(e.target);
         }),
       { rootMargin: "200% 0px" },
