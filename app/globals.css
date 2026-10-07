@@ -1201,6 +1201,14 @@ h2.big { font-size: var(--text-h2-hero) }
    overflow: hidden jaadyttaa sen paikalleen. Sijainti on joka tapauksessa
    0, koska HeroScrub pakottaa sen ennen kerroksen haivytysta. */
 html.hero-locked { overflow: hidden }
+/* IKKUNOIDEN TAUSTALUKKO ILMAN LENISTA (7.10.2026). VarausIkkuna,
+   YhteysIkkuna ja HakemusIkkuna lisaavat <html>:lle .lukossa-luokan.
+   Lukko toimi ennen vain Lenisin kautta (lenis.stop() -> lenis-stopped
+   -> overflow: clip). Safarissa, Edgessa, iOS:ssa, kevyessa tilassa ja
+   reduced motion -tilassa Lenista ei ole, joten tausta vieri ikkunan
+   takana. Sama overflow-lukko kuin latausruudulla; html, ei body (ks.
+   CLAUDE.md body/sticky). */
+html.lukossa { overflow: hidden }
 .hero-load {
   position: fixed; inset: 0; z-index: 60;
   /* Sivuston oma tumma, ei puhdas musta: #000 ei esiinny sivustolla

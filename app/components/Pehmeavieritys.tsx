@@ -103,6 +103,25 @@ export default function Pehmeavieritys() {
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    /* SAFARI JA EDGE VIERITTAVAT ITSE (7.10.2026).
+       Lenis liikuttaa sivua sivun omissa animaatiokehyksissa. Safari
+       antaa niita vain 60 sekunnissa 120 Hz:n naytollakin (Chrome 120),
+       ja jokainen myohastynyt kehys pysayttaa koko vierityksen hetkeksi.
+       Natiivi vieritys kulkee selaimen omassa saikeessa naytoin
+       tahdissa eika pysahdy sivun hitaisiin kehyksiin. Todettu
+       kayttajan omassa Safarissa ?natiivi-vertailulla: tokkiminen
+       havisi. Edge rajoittaa ruudunpaivitysta herkemmin kuin Chrome
+       (tehokkuustila) ja kayttaja raportoi saman oireen, joten sama
+       ratkaisu. Chrome ja Firefox pitavat Lenisin.
+       Tunnistus: navigator.vendor (Apple = WebKit) ja Edgen oma
+       brandi userAgentDatassa tai Edg/-tunniste. */
+    const nav = navigator as Navigator & { userAgentData?: { brands?: { brand: string }[] } };
+    const webkit = /^Apple/.test(nav.vendor);
+    const edge =
+      !!nav.userAgentData?.brands?.some((b) => /Edge/i.test(b.brand)) || /\bEdg\//.test(nav.userAgent);
+    if (webkit || edge) return;
+    // Kevyt tila todettu jo ennen tata: ei luoda Lenista lainkaan.
+    if (document.documentElement.dataset.kevyt === "1") return;
 
     const lenis = new Lenis({
       lerp: 0.1,
@@ -135,10 +154,23 @@ export default function Pehmeavieritys() {
     const mo = new MutationObserver(tarkistaLukko);
     mo.observe(html, { attributes: true, attributeFilter: ["class"] });
 
-    return () => {
+    /* VARAVENTTIILI: kun kevyttila.ts toteaa laitteen hitaaksi
+       (kehysvalin mediaani yli 28 ms), Lenis sammuu missa tahansa
+       selaimessa ja vieritys palaa selaimelle. Sama syy kuin ylla:
+       hitaalla laitteella myohastyvat kehykset nakyisivat vierityksessa. */
+    let purettu = false;
+    const pura = () => {
+      if (purettu) return;
+      purettu = true;
       mo.disconnect();
       lenis.destroy();
       lenisRef.current = null;
+    };
+    window.addEventListener("ws-kevyt", pura);
+
+    return () => {
+      window.removeEventListener("ws-kevyt", pura);
+      pura();
     };
   }, []);
 

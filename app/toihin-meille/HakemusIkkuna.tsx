@@ -53,6 +53,9 @@ export default function HakemusIkkuna() {
       document.removeEventListener("click", klikki);
       d.removeEventListener("close", kiinni);
       d.removeEventListener("click", taustaklikki);
+      // Sivulta poistuttaessa (esim. takaisin-nappi ikkunan ollessa auki)
+      // close ei laukea; lukko ei saa jaada seuraavalle sivulle.
+      kiinni();
     };
   }, []);
 
