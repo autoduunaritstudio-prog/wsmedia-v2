@@ -14,8 +14,53 @@
    Uusi kuva piirretaan vasta kun video on esittanyt sen
    (requestVideoFrameCallback), eli 25..30 kertaa sekunnissa eika joka
    kehys. Selaimissa joissa sita ei ole, piirto kulkee rAF:ssa vain
-   toiston ajan. */
+   toiston ajan.
+
+   SAFARISSA (WebKit) EI PEILATA (7.10.2026). Safarissa kopio videosta
+   2D-kankaalle on kallis, natiivi video taas ei laske ruudunpaivitysta.
+   MITATTU oikealla Safarilla (safaridriver, scripts/safari-oikea.mjs),
+   etusivun Referenssit, viisi videota soi, 1440x900: yli 20 ms
+   kehyksia kankaan kautta 43-85 %, natiivina 0-11 %. Siksi WebKitissa
+   kankaalle ei piirreta: se piilotetaan VAIN toiston ajaksi, jolloin
+   sen alla oleva natiivi video nakyy (sama paikka, sama luokka).
+   Tauolla kangas on nakyvissa, koska PhoneReelin pysakuva on kankaan
+   taustakuvana (.phone .ph-kangas) - pysyva piilotus vei sen kevyesta
+   tilasta, saastotilasta ja ennen toiston alkua.
+   Tunnistus navigator.vendorista: se kertoo moottorin (Apple = WebKit). */
+const WEBKIT = typeof navigator !== "undefined" && /^Apple/.test(navigator.vendor);
+
 export function peilaaKankaalle(v: HTMLVideoElement, c: HTMLCanvasElement): () => void {
+  if (WEBKIT) {
+    // Piilotus vasta kun video on ESITTANYT ruudun (rVFC), ettei
+    // pysakuvan ja videon valiin jaa tyhjaa ruutua.
+    let odotus = 0;
+    const nayta = () => {
+      if (odotus) v.cancelVideoFrameCallback?.(odotus);
+      odotus = 0;
+      c.style.visibility = "";
+    };
+    const piilota = () => {
+      if (typeof v.requestVideoFrameCallback !== "function") {
+        c.style.visibility = "hidden";
+        return;
+      }
+      if (odotus) return;
+      odotus = v.requestVideoFrameCallback(() => {
+        odotus = 0;
+        if (!v.paused) c.style.visibility = "hidden";
+      });
+    };
+    v.addEventListener("playing", piilota);
+    v.addEventListener("pause", nayta);
+    v.addEventListener("emptied", nayta);
+    if (!v.paused && v.readyState >= 2) piilota();
+    return () => {
+      v.removeEventListener("playing", piilota);
+      v.removeEventListener("pause", nayta);
+      v.removeEventListener("emptied", nayta);
+      nayta();
+    };
+  }
   const x = c.getContext("2d", { alpha: true });
   if (!x) return () => {};
   let kaynnissa = false;

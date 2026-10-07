@@ -10,6 +10,8 @@ const arg = (k, d) => { const m = process.argv.find((a) => a.startsWith(`--${k}=
 const ENGINE = arg("engine", "webkit"), URL_ = arg("url", "https://wsmedia.fi/"), RUNS = +arg("runs", 3);
 const POS = arg("pos", "300,4300,5200,5500,5800,6100").split(",").map(Number);
 const NOPLAY = process.argv.includes("--noplay");
+const INIT = arg("init", ""); // JS-tiedosto, joka ajetaan sivulla ennen sen omia skripteja
+const VID = arg("vid", ""); // kansio, josta /referenssit/*.mp4 tarjoillaan (videokoodauksen kokeet)
 const CSS = arg("css", ""), BLOCK = arg("blockvars", ""), W = 1440, H = 900;
 const res = {};
 const b = await requireBrowser(ENGINE).launch(launchOptions(ENGINE));
@@ -18,6 +20,14 @@ try {
     const ctx = await b.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 2 });
     const page = await ctx.newPage();
     if (BLOCK) await page.addInitScript((list) => { const pre = list.split(","); const o = CSSStyleDeclaration.prototype.setProperty; CSSStyleDeclaration.prototype.setProperty = function (n, v, p) { if (pre.some((x) => n.startsWith(x))) return; return o.call(this, n, v, p); }; }, BLOCK);
+    if (VID) {
+      const { readFileSync } = await import("node:fs");
+      await page.route(/\/referenssit\/[^/?]+\.mp4/, (rt) => {
+        const n = new URL(rt.request().url()).pathname.split("/").pop();
+        rt.fulfill({ status: 200, contentType: "video/mp4", body: readFileSync(`${VID}/${n}`) });
+      });
+    }
+    if (INIT) await page.addInitScript({ path: INIT });
     if (NOPLAY) await page.addInitScript(() => { HTMLMediaElement.prototype.play = function () { return Promise.resolve(); }; });
     await page.addInitScript(() => {
       try { localStorage.setItem("wsmedia.consent", JSON.stringify({ analytics: false, v: 1, ts: Date.now() })); } catch {}
@@ -48,7 +58,7 @@ try {
     await ctx.close();
   }
 } finally { await b.close().catch(() => {}); }
-console.log(`${ENGINE} ${URL_} runs=${RUNS} ${CSS ? "css=" + CSS : ""} ${BLOCK ? "blockvars=" + BLOCK : ""}${NOPLAY ? " noplay" : ""}`);
+console.log(`${ENGINE} ${URL_} runs=${RUNS} ${CSS ? "css=" + CSS : ""} ${BLOCK ? "blockvars=" + BLOCK : ""}${NOPLAY ? " noplay" : ""}${VID ? " vid=" + VID.split("/").pop() : ""}${INIT ? " init=" + INIT.split("/").pop() : ""}`);
 for (const pos of POS) {
   const all = res[pos].flatMap((x) => x.f).sort((a, b) => a - b);
   const pr = res[pos].map((x) => (x.f.filter((d) => d > 20).length / x.f.length * 100).toFixed(0)).join("/");

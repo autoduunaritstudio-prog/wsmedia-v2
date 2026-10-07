@@ -251,7 +251,7 @@ export default function SiteEffects() {
       document.querySelectorAll<HTMLElement>(".wsx .seo-sec, .wsx .jakso-pari")
     );
     /* Valon oma kerros, ks. globals.css "OSION VALO OMANA ELEMENTTINAAN".
-       Lyhytvideoilla, verkkosivuilla ja graafisella sivulla, vain osioihin joiden ::before on valo. */
+       Lyhytvideoilla, verkkosivuilla, hakukoneoptimoinnissa ja graafisella sivulla, vain osioihin joiden ::before on valo. */
     const valoKerros = new WeakMap<HTMLElement, HTMLElement>();
     /* VALO PIENELLE KANKAALLE (1.10.2026 ilta).
        Valo oli osion korkuinen kerros, jossa kaksi liukuvaria ja maski.
@@ -353,10 +353,26 @@ export default function SiteEffects() {
       piirra(0.5);
       return { koko, piirra };
     };
-    if (document.querySelector(".page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu")) {
+    const hkSivu = !!document.querySelector(".page-hakukoneoptimointi");
+    const liikkuvaValo = (el: HTMLElement) => {
+      el.style.setProperty("--valo-q", "0");
+      const b0 = getComputedStyle(el, "::before").backgroundImage;
+      el.style.setProperty("--valo-q", "1");
+      const b1 = getComputedStyle(el, "::before").backgroundImage;
+      el.style.removeProperty("--valo-q");
+      return b0 !== b1;
+    };
+    if (document.querySelector(".page-lyhytvideot, .page-verkkosivut, .page-hakukoneoptimointi, .page-graafinen-suunnittelu")) {
       for (const el of valoEls) {
         const pse = getComputedStyle(el, "::before");
         if (pse.content === "none" || !pse.backgroundImage.includes("radial-gradient")) continue;
+        /* Vain vierityksen mukana liikkuva valo (riippuu --valo-q:sta).
+           Kiintea sivukohtainen valo, esim. hakukoneoptimoinnin
+           #sisalto::before, jaa ennalleen: sen kopio .osio-valoon
+           vaihtaisi sen muodon yleiseen. Testi vain hakukoneoptimointi-
+           luokan sivuilla (siella kiinteita valoja on); muilla sivuilla
+           se pakottaisi turhan tyylilaskennan latauksessa. */
+        if (hkSivu && !liikkuvaValo(el)) continue;
         const k = document.createElement("span");
         k.className = "osio-valo";
         k.setAttribute("aria-hidden", "true");
@@ -375,7 +391,9 @@ export default function SiteEffects() {
       // content: none tarkoittaa, ettei ::before piirry lainkaan (jakson
       // sisalla valo on jaksolla, ei osiolla). Silloin lukijaa ei ole.
       const pse = getComputedStyle(el, "::before");
-      valoQLukija.set(el, pse.content !== "none" && pse.backgroundImage.includes("radial-gradient"));
+      // Kiintea valo (hakukoneoptimoinnin #sisalto) ei lue --valo-q:ta:
+      // kirjoitus vain laskisi sen alipuun tyylit uudelleen.
+      valoQLukija.set(el, pse.content !== "none" && pse.backgroundImage.includes("radial-gradient") && !(hkSivu && !valoKerros.has(el) && !liikkuvaValo(el)));
     }
     const valoY = new WeakMap<HTMLElement, { y: number; h: number }>();
     const mittaaValo = () => {

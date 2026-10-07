@@ -15318,13 +15318,17 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
    SiteEffects lisaa osioon (vain talla sivulla ja vain jos ::before on
    valo) tyhjan .osio-valo-elementin ensimmaiseksi lapseksi ja merkitsee
    osion data-valokerros-attribuutilla. Valo piirretaan elementtiin samoin
-   arvoin kuin ::before, ja ::before sammuu. Ilman JS:aa ::before jaa. */
-:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) [data-valokerros]::before { content: none !important }
-:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .osio-valo {
+   arvoin kuin ::before, ja ::before sammuu. Ilman JS:aa ::before jaa.
+   Hakukoneoptimointi lisatty 7.10.2026: sen 1440 x 7890 px jakson valo
+   oli viela CSS:n ::before. MITATTU oikealla Safarilla jatkuvassa
+   vierityksessa: keskiosan kehys mediaani 43 ms, ilman jakson valoa
+   18 ms (scripts/safari-oikea.mjs --mode=kartta). */
+:is(.page-lyhytvideot, .page-verkkosivut, .page-hakukoneoptimointi, .page-graafinen-suunnittelu) [data-valokerros]::before { content: none !important }
+:is(.page-lyhytvideot, .page-verkkosivut, .page-hakukoneoptimointi, .page-graafinen-suunnittelu) .osio-valo {
   position: absolute; inset: 0; z-index: -1; pointer-events: none;
   will-change: transform;
 }
-:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .seo-sec > .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut, .page-hakukoneoptimointi, .page-graafinen-suunnittelu) .seo-sec > .osio-valo {
   
   --v: var(--valo-q, var(--valo, .5));
   background:
@@ -15339,7 +15343,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
   mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
 }
-:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .seo-sec:nth-of-type(even) > .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut, .page-hakukoneoptimointi, .page-graafinen-suunnittelu) .seo-sec:nth-of-type(even) > .osio-valo {
   background:
     radial-gradient(
       calc(44% + var(--v) * 14%) calc(26% + var(--v) * 10%)
@@ -15350,7 +15354,7 @@ html.rv-ready .wsx table.porras:not(.on) tbody tr { opacity: 0; transform: trans
       at calc(90% - var(--v) * 22%) calc(76% - var(--v) * 22%),
       rgba(0,124,143,.14), transparent 72%);
 }
-:is(.page-lyhytvideot, .page-verkkosivut, .page-graafinen-suunnittelu) .jakso-pari > .osio-valo {
+:is(.page-lyhytvideot, .page-verkkosivut, .page-hakukoneoptimointi, .page-graafinen-suunnittelu) .jakso-pari > .osio-valo {
   
   --v: var(--valo-q, var(--valo, .5));
   background:
@@ -15791,11 +15795,20 @@ html.lenis [data-lenis-prevent] { overscroll-behavior: contain }
       kokoiselle kankaalle ja lukee arvot ylla olevista saannoista, ks.
       teeValoKangas. Kun kangas on kaytossa, CSS:n oma maalaus ja maski
       sammuvat; ilman JS:aa tai jos luku epaonnistuu, luokkaa ei tule ja
-      kerros piirtyy kuten ennen. */
+      kerros piirtyy kuten ennen.
+
+      OMA KERROS PYSYY (7.10.2026). Tassa oli will-change: auto, mitattu
+      ohjelmistorasteroinnilla Chromessa. Safarissa (WebKit) kangas jai
+      silloin osion omaan maalaukseen: 8x suurennettu, osion korkuinen
+      kuva maalattiin uudelleen aina kun jokin osion sisalla liikkui,
+      eli joka kehys. MITATTU Playwright WebKit, /verkkosivut y5500-6500:
+      yli 20 ms kehyksia 58-76 % -> 6-9 %. Kankaan piirron jaadytys ei
+      auttanut, joten kuorma oli maalaus eika piirto
+      (scripts/safari-piste.mjs). */
 .osio-valo.kankaalla {
   background: none !important;
   -webkit-mask-image: none !important; mask-image: none !important;
-  will-change: auto !important;
+  will-change: transform !important;
 }
 .osio-valo.kankaalla > canvas { display: block; width: 100%; height: 100% }
 

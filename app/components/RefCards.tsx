@@ -122,65 +122,6 @@ function flushRewind(v: HTMLVideoElement) {
   if (v.paused) v.currentTime = 0;
 }
 
-/**
- * TAUKO VIERITYKSEN AJAKSI - VAIN WEBKIT (Safari). 7.10.2026.
- *
- * MITATTU (Playwright WebKit, 1440x900 @2, scripts/safari-piste.mjs):
- * kun kaikki viisi korttivideota toistavat, Referenssit-kohdassa 15-34 %
- * vierityksen kehyksista ylitti 20 ms; videot pysaytettyina 1-2 %.
- * Kuorma on viiden videon rinnakkainen purku: ilman kangaspeilausta
- * (natiivi <video>) tulos oli viela huonompi. Chromessa samaa ongelmaa
- * ei ole, joten se jaa ennalleen.
- *
- * Siksi WebKitissa videot pysahtyvat vierityksen ajaksi ja jatkavat
- * VIERITYS_LEPO_MS:n kuluttua viimeisesta vieritystapahtumasta.
- * Kangas pitaa viimeisen ruudun ja poster pysyy piilossa, joten
- * paikallaan ollessa ulkoasu on sama kuin ennen.
- *
- * Tunnistus navigator.vendorista: se kertoo moottorin (Apple = WebKit),
- * ei selaimen versiota. Ominaisuustunnistusta purkukuormalle ei ole.
- */
-const VIERITYS_LEPO_MS = 200;
-const vierityskuuntelijat = new Set<(vierii: boolean) => void>();
-let vierii = false;
-let lepoAjastin = 0;
-let edellinenY = 0;
-const onVieritys = () => {
-  // Lenisin pehmennys hiipuu 1 px:n askelin (WebKit pyoristaa scrollY:n
-  // kokonaisluvuksi) viela ~0,6 s sen jalkeen kun liike on silmalle
-  // loppunut. Mitattu: ilman tata rajaa videot jatkoivat vasta ~1 s
-  // rullauksen jalkeen. Yhden pikselin askel ei kuormita, joten se ei
-  // pida taukoa ylla.
-  const y = window.scrollY;
-  const dy = Math.abs(y - edellinenY);
-  edellinenY = y;
-  if (dy < 2) return;
-  if (!vierii) {
-    vierii = true;
-    for (const f of vierityskuuntelijat) f(true);
-  }
-  clearTimeout(lepoAjastin);
-  lepoAjastin = window.setTimeout(() => {
-    vierii = false;
-    for (const f of vierityskuuntelijat) f(false);
-  }, VIERITYS_LEPO_MS);
-};
-function seuraaVieritysta(f: (vierii: boolean) => void): () => void {
-  if (vierityskuuntelijat.size === 0) {
-    edellinenY = window.scrollY;
-    window.addEventListener("scroll", onVieritys, { passive: true });
-  }
-  vierityskuuntelijat.add(f);
-  return () => {
-    vierityskuuntelijat.delete(f);
-    if (vierityskuuntelijat.size === 0) {
-      window.removeEventListener("scroll", onVieritys);
-      clearTimeout(lepoAjastin);
-      vierii = false;
-    }
-  };
-}
-
 function stopOthers(el: HTMLVideoElement) {
   if (playingEl && playingEl !== el) pauseAndRewind(playingEl);
   playingEl = el;
@@ -237,13 +178,6 @@ function useCardVideo(media: boolean, label: string) {
     // pyytanyt vahemman liiketta. Reduced motion -tilassa poster jaa
     // nakyviin eika mitaan kaynnisteta.
     const auto = hover && !reduce;
-    // Ks. VIERITYS_LEPO_MS. Vain automaattitoistossa: kosketuspolulla
-    // kayttaja kaynnistaa videon itse, eika sita pysayteta hanelta.
-    const taukoVierittaessa = auto && /^Apple/.test(navigator.vendor);
-    /** Video on pysaytetty vain vierityksen ajaksi: poster pysyy piilossa. */
-    let vieritystauko = false;
-    /** Video olisi kaynnistetty vierityksen aikana; kaynnistetaan levossa. */
-    let odottaa = false;
 
     /** Mitatoi odottavat kuittaukset ja vapauttaa kahvat. */
     const disarm = () => {
@@ -310,16 +244,12 @@ function useCardVideo(media: boolean, label: string) {
     };
 
     const onPlaying = () => {
-      // Kaynnistys (myos nappaimistolla kesken vierityksen) purkaa tauon.
-      vieritystauko = false;
-      odottaa = false;
       arm();
       // Yhden-kerrallaan-vartija kuuluu vain kosketuspolulle.
       if (!auto) stopOthers(v);
     };
     const onPause = () => {
       disarm();
-      if (vieritystauko) return;
       setPlaying(false);
       if (playingEl === v) playingEl = null;
     };
@@ -337,36 +267,18 @@ function useCardVideo(media: boolean, label: string) {
     // osio on noussut sen paalle, ks. peitto.ts.
     let nakyy = false;
     let peitossa = false;
-    let vieriiNyt = taukoVierittaessa && vierii;
     const ohjaa = () => {
       if (nakyy && !peitossa) {
-        if (!auto) return;
-        if (vieriiNyt) {
-          // Pysaytetaan vain jos video jo soi; muuten se kaynnistyy
-          // vasta kun vieritys lepaa.
-          if (!v.paused) {
-            vieritystauko = true;
-            v.pause();
-          } else if (!vieritystauko) odottaa = true;
-          return;
+        if (auto) {
+          flushRewind(v);
+          v.play().catch(() => {});
         }
-        vieritystauko = false;
-        odottaa = false;
-        flushRewind(v);
-        v.play().catch(() => {});
       } else {
         // Kattely puretaan myos silloin kun elementti ei ollut soimassa:
         // play() on voitu kutsua ilman etta 'playing' ehti laueta, ja
         // sen kuittaus tulisi ruudun ulkopuolelta.
         disarm();
-        odottaa = false;
-        if (vieritystauko) {
-          // Jo pysaytetty vierityksen ajaksi, joten 'pause' ei laukea
-          // uudelleen: palautetaan poster ja kelaus tassa.
-          vieritystauko = false;
-          pauseAndRewind(v);
-          setPlaying(false);
-        } else if (!v.paused) pauseAndRewind(v);
+        if (!v.paused) pauseAndRewind(v);
       }
     };
     const io = new IntersectionObserver(
@@ -381,25 +293,8 @@ function useCardVideo(media: boolean, label: string) {
       peitossa = x;
       ohjaa();
     });
-    const irrotaVieritys = taukoVierittaessa
-      ? seuraaVieritysta((x) => {
-          vieriiNyt = x;
-          // Vierityksen alku vain pysayttaa soivan videon. Levossa
-          // jatketaan VAIN sen minka vieritys pysaytti tai esti
-          // kaynnistymasta (odottaa asetetaan vain nakyvyys- tai
-          // peittomuutoksesta). Muuten nappaimistolla pysaytetty video
-          // (Enter, WCAG 2.2.2) kaynnistyisi seuraavasta vierityksesta.
-          if (x) {
-            if (!v.paused && nakyy && !peitossa) {
-              vieritystauko = true;
-              v.pause();
-            }
-          } else if (vieritystauko || odottaa) ohjaa();
-        })
-      : () => {};
 
     return () => {
-      irrotaVieritys();
       irrotaPeitto();
       v.removeEventListener("playing", onPlaying);
       v.removeEventListener("pause", onPause);
