@@ -3173,6 +3173,32 @@ button.cal-day:focus-visible, button.cal-slot:focus-visible { outline: 2px solid
 }
 html.rv-ready .rv:not(.on) { opacity: 0; transform: translateY(26px) }
 .rv.on { opacity: 1; transform: none }
+/* SAFARI: ETUSIVUN ISOT LAATIKOT ILMAN SISAANTULOA (7.10.2026).
+   WebKit nostaa jokaisen paljastuvan elementin omalle kerrokselleen
+   animaation ajaksi ja maalaa sen lopuksi uudelleen; isoilla laatikoilla
+   se maksoi ensimmaisella alasvierityksella. Kuusi isoa laatikkoa on
+   Safarissa valmiina lopputilassaan (ei piilotusta eika siirtymaa), joten
+   ne vierivat nakyviin kuten muukin sisalto eivatka ponnahda. Otsikot ja
+   pienet tekstit animoituvat kuten ennen. Palvelukortit (#palvelut .svc)
+   samoin; niiden varjon hover-haivytys jaa.
+   Ehto osuu vain WebKitiin ja hiirella/ohjauslevylla kaytettaviin
+   laitteisiin, ei Chromeen, Firefoxiin eika puhelimiin; reduced motion
+   -tila hoidetaan omilla saannoillaan.
+   LUVUT: oikea Safari (safaridriver), 1440x900, live vs muutos, kaksi
+   kierrosta vuorotellen, scripts/safari-oikea.mjs --mode=kartta --runs=3:
+   Tulokset (--range=6200-8000) kehys mediaani 23-24 -> 18-19 ms, p90
+   33-36 -> 32 ms; koko sivu mediaani 18-19 -> 17 ms, p90 28-29 -> 26-28 ms. */
+@supports (font: -apple-system-body) {
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    #palvelut .svc.rv { transition: box-shadow .35s !important; opacity: 1 !important; transform: none !important }
+    .aftercover .kart-paneeli.rv,
+    .belowcover .etu-ukk-list.rv,
+    .belowcover .fcard.rv,
+    .stickyzone .logos.rv,
+    .belowcover .askel.rv { transition: none !important; opacity: 1 !important; transform: none !important }
+  }
+}
+
 /* PALVELUPANEELIT TULEVAT SIVUSTA, EIVAT ALHAALTA.
    Suunta seuraa paneelin omaa asettelua: kun kuva on vasemmalla
    (.svc ilman .rev) paneeli liukuu vasemmalta, ja kaannetyssa
