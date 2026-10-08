@@ -90,27 +90,27 @@ export const HOME_FAQ: HomeFaqItem[] = [
     q: "Paljonko graafinen suunnittelu maksaa?",
     a: (
       <>
-        Logo alkaa 690 eurosta ja yritysilme graafisine ohjeistoineen 1 490 eurosta. Painotuotteen
+        Logo alkaa 490 eurosta ja yritysilme graafisine ohjeistoineen 1 490 eurosta. Painotuotteen
         suunnittelu alkaa 190 eurosta. Suomessa kokeneen graafisen suunnittelijan tuntihinta on
         tyypillisesti 70–120 euroa. Hintoihin lisätään alv 25,5 %.{" "}
         <SmartLink href="/graafinen-suunnittelu">Lue lisää graafisesta suunnittelusta →</SmartLink>
       </>
     ),
     plain:
-      "Logo alkaa 690 eurosta ja yritysilme graafisine ohjeistoineen 1 490 eurosta. Painotuotteen suunnittelu alkaa 190 eurosta. Suomessa kokeneen graafisen suunnittelijan tuntihinta on tyypillisesti 70–120 euroa. Hintoihin lisätään alv 25,5 %.",
+      "Logo alkaa 490 eurosta ja yritysilme graafisine ohjeistoineen 1 490 eurosta. Painotuotteen suunnittelu alkaa 190 eurosta. Suomessa kokeneen graafisen suunnittelijan tuntihinta on tyypillisesti 70–120 euroa. Hintoihin lisätään alv 25,5 %.",
   },
   {
     q: "Mitä auton mainosteippaus maksaa?",
     a: (
       <>
         Hinta riippuu laajuudesta: markkinoilla logoteippaus asettuu 200–500 euroon, osateippaus
-        400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 590
+        400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 490
         eurosta ja sisältää suunnittelun, materiaalit ja asennuksen.{" "}
         <SmartLink href="/graafinen-suunnittelu">Lue lisää graafisesta suunnittelusta →</SmartLink>
       </>
     ),
     plain:
-      "Hinta riippuu laajuudesta: markkinoilla logoteippaus asettuu 200–500 euroon, osateippaus 400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 590 eurosta ja sisältää suunnittelun, materiaalit ja asennuksen.",
+      "Hinta riippuu laajuudesta: markkinoilla logoteippaus asettuu 200–500 euroon, osateippaus 400–1 500 euroon ja koko auton yliteippaus 1 500–4 000 euroon. Meidän hintamme alkaa 490 eurosta ja sisältää suunnittelun, materiaalit ja asennuksen.",
   },
   {
     q: "Kuka omistaa valmiit aineistot?",

@@ -3,7 +3,12 @@
  *
  * Kaikki sivuston lomakkeet lahettavat taman kautta: yhteysikkuna,
  * tarjouspyynto ja avoin hakemus. Tyhjat kentat jatetaan pois.
+ *
+ * Onnistunut lahetys kirjataan konversioksi (seuranta.ts), paitsi
+ * tyohakemus (hakemus) ja roskapostiansaan jaanyt lahetys.
  */
+import { kirjaaKonversio } from "./consent/seuranta";
+
 export type LomakeTyyppi = "yhteys" | "tarjous" | "hakemus";
 
 /** Liitteiden yhteiskoko enintaan 4 Mt (palvelimen raja 4,5 Mt). */
@@ -25,6 +30,7 @@ export async function lahetaLomake(
   for (const t of liitteet) f.append("liite", t, t.name);
   try {
     const r = await fetch("/api/lomake", { method: "POST", body: f });
+    if (r.ok && tyyppi !== "hakemus" && !f.has("verkkosivu")) kirjaaKonversio("lomake", { lomake: tyyppi });
     return r.ok;
   } catch {
     return false;

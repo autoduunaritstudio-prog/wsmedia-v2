@@ -43,7 +43,7 @@ export default function TietosuojaMobiili() {
           </p>
           {" "}
           <p className="mo-li mo-d2" style={{ margin: "14px 0 0", fontSize: "14px", color: "rgba(255,255,255,.55)" }}>
-            {"Päivitetty 5.10.2026"}
+            {"Päivitetty 8.10.2026"}
           </p>
           {" "}
           <aside className="mo-li mo-d3" aria-label="Tietosuoja lyhyesti" style={{ marginTop: "28px", padding: "22px 20px 20px", borderRadius: "22px", background: "#eef1f5", color: "#11151a", boxShadow: "0 30px 60px -30px rgba(0,0,0,.8)" }}>
@@ -542,6 +542,45 @@ export default function TietosuojaMobiili() {
                         {"Eväste"}
                       </span>
                       <code className="mo-ts-koodi">
+                        {"_gcl_au"}
+                      </code>
+                    </div>
+                    <span className="mo-ts-tyyppi mo-ts-tyyppi-s">
+                      {"Markkinointi"}
+                    </span>
+                  </div>
+                  {" "}
+                  <div>
+                    <span className="mo-ts-pieni">
+                      {"Palvelu ja tarkoitus"}
+                    </span>
+                    <p style={{ margin: "0", fontSize: "15.5px", lineHeight: "1.55", color: "rgba(255,255,255,.78)" }}>
+                      <b>
+                        {"Google Ads."}
+                      </b>
+                      {" Liittää sivustolla tehdyn yhteydenoton Google-mainoksen klikkaukseen, jotta mainonnan tuloksia voidaan mitata."}
+                    </p>
+                  </div>
+                  {" "}
+                  <div style={{ paddingTop: "10px", borderTop: "1px solid rgba(255,255,255,.08)", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                    <span className="mo-ts-pieni" style={{ margin: "0" }}>
+                      {"Säilyy"}
+                    </span>
+                    <b style={{ fontSize: "15.5px" }}>
+                      {"90 päivää"}
+                    </b>
+                  </div>
+                  {" "}
+                </div>
+                {" "}
+                <div className="mo-ts-kortti mo-rv" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {" "}
+                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+                    <div>
+                      <span className="mo-ts-pieni">
+                        {"Eväste"}
+                      </span>
+                      <code className="mo-ts-koodi">
                         {"_fbp"}
                       </code>
                     </div>
@@ -616,7 +655,7 @@ export default function TietosuojaMobiili() {
                     {"Google Ireland Limited"}
                   </dt>
                   <dd style={{ margin: "4px 0 0", fontSize: "15.5px", lineHeight: "1.55", color: "rgba(255,255,255,.72)" }}>
-                    {"Sähköposti ja kalenteri (Google Workspace), kartoitusten ajanvaraus, Google Analytics 4 ja Google Search Console."}
+                    {"Sähköposti ja kalenteri (Google Workspace), kartoitusten ajanvaraus, Google Analytics 4, Google Ads -mainonnan mittaaminen ja Google Search Console."}
                   </dd>
                 </div>
                 {" "}
@@ -870,7 +909,7 @@ export default function TietosuojaMobiili() {
             <div className="mo-ts-body">
               {" "}
               <p className="mo-rv">
-                {"Päivitämme selostetta, kun palvelumme tai lainsäädäntö muuttuvat. Seloste on päivitetty viimeksi 5.10.2026."}
+                {"Päivitämme selostetta, kun palvelumme tai lainsäädäntö muuttuvat. Seloste on päivitetty viimeksi 8.10.2026."}
               </p>
               {" "}
             </div>

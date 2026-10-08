@@ -4,6 +4,7 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 
 import { CONSENT_CHANGED, type Consent, readConsent } from "./consent";
+import { kirjaaKonversio } from "./seuranta";
 
 const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
@@ -33,9 +34,13 @@ const GRANTED = {
   analytics_storage: "granted",
 } as const;
 
-function push(args: GtagArgs) {
+/* gtag.js lukee komennot arguments-olioina, ei taulukkoina: sama muoto
+   kuin init-skriptin function gtag(){dataLayer.push(arguments)}. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function gtag(..._args: unknown[]) {
   window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push(args);
+  // eslint-disable-next-line prefer-rest-params
+  window.dataLayer.push(arguments as unknown as GtagArgs);
 }
 
 /**
@@ -44,18 +49,21 @@ function push(args: GtagArgs) {
  * Consent Mode v2: oletustila kirjoitetaan dataLayeriin heti ensirenderissa,
  * ennen kuin yhtaan kolmannen osapuolen skriptia on ladattu. Se on pelkka
  * dataLayer-push eika aiheuta verkkopyyntoa. Kun kavija hyvaksyy, tila
- * paivitetaan grantediksi ja vasta silloin gtag.js ja Pixel ladataan.
+ * paivitetaan grantediksi ja vasta silloin gtag.js ja Pixel ladataan. Kun
+ * kavija peruu, tila paivitetaan takaisin denied-arvoon.
  */
 export default function Analytics() {
   const [analytics, setAnalytics] = useState(false);
 
   useEffect(() => {
     // Oletus denied ennen mitaan latausta.
-    push(["consent", "default", { ...DENIED, wait_for_update: 500 }]);
+    gtag("consent", "default", { ...DENIED, wait_for_update: 500 });
 
+    /* Peruutus lahettaa denied-paivityksen: gtag.js jaa sivulle vaikka
+       skriptikomponentit poistuvat, joten sen on saatava tieto. */
     const apply = (consent: Consent | null) => {
       const granted = !!consent?.analytics;
-      if (granted) push(["consent", "update", { ...GRANTED }]);
+      gtag("consent", "update", granted ? { ...GRANTED } : { ...DENIED });
       setAnalytics(granted);
     };
 
@@ -63,7 +71,20 @@ export default function Analytics() {
 
     const onChange = (e: Event) => apply((e as CustomEvent<Consent>).detail);
     window.addEventListener(CONSENT_CHANGED, onChange);
-    return () => window.removeEventListener(CONSENT_CHANGED, onChange);
+
+    /* Puhelinnumeron klikkaus: yksi capture-vaiheen kuuntelija koko
+       sivustolle. CallButtonin ensimmainen painallus on <button> eika
+       laukaise tata, vasta toinen (<a href="tel:">). */
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as Element | null)?.closest?.('a[href^="tel:"]');
+      if (a) kirjaaKonversio("puhelu", { sivu: location.pathname });
+    };
+    document.addEventListener("click", onClick, { capture: true });
+
+    return () => {
+      window.removeEventListener(CONSENT_CHANGED, onChange);
+      document.removeEventListener("click", onClick, { capture: true });
+    };
   }, []);
 
   if (!analytics) return null;

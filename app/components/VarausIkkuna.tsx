@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { YhteysTieto } from "./Kehotukset";
+import { kirjaaKonversio } from "./consent/seuranta";
 import { maanantai, viikkoTeksti, viikot } from "./varausViikot";
 
 /**
@@ -171,6 +172,7 @@ export default function VarausIkkuna() {
         return;
       }
       if (!r.ok) throw new Error(String(r.status));
+      if (!g("verkkosivu")) kirjaaKonversio("varaus", { tapa: String(tapa) });
       setVaihe(4);
     } catch {
       setIlmoitus("Varaus ei mennyt perille. Yritä uudelleen tai soita 040 564 8770.");

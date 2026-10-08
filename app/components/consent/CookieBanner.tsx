@@ -78,7 +78,7 @@ export default function CookieBanner() {
           <div className="cc-opt">
             <label htmlFor={toggleId}>
               <b>Analytiikka &amp; markkinointi</b>
-              <small>Google Analytics 4 ja Meta Pixel</small>
+              <small>Google Analytics 4, Google Ads ja Meta Pixel</small>
             </label>
             <input
               id={toggleId}

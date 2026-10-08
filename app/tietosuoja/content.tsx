@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
    henkilotietoja tai asettaa evasteita, lisaa se taalle (KASITTELIJAT ja
    EVASTEET) ja paivita PAIVITETTY. */
 
-export const PAIVITETTY = "5.10.2026";
+export const PAIVITETTY = "8.10.2026";
 
 export type Section = { n: number; id: string; title: string; lyhyt: string; body: ReactNode };
 
@@ -52,6 +52,13 @@ export const EVASTEET: { nimi: string; palvelu: string; tyyppi: string; tarkoitu
     kesto: "2 vuotta",
   },
   {
+    nimi: "_gcl_au",
+    palvelu: "Google Ads",
+    tyyppi: "Markkinointi",
+    tarkoitus: "Liittää sivustolla tehdyn yhteydenoton Google-mainoksen klikkaukseen, jotta mainonnan tuloksia voidaan mitata.",
+    kesto: "90 päivää",
+  },
+  {
     nimi: "_fbp",
     palvelu: "Meta Pixel",
     tyyppi: "Markkinointi",
@@ -64,7 +71,7 @@ export const EVASTEET: { nimi: string; palvelu: string; tyyppi: string; tarkoitu
 const KASITTELIJAT: { nimi: string; mita: string }[] = [
   {
     nimi: "Google Ireland Limited",
-    mita: "Sähköposti ja kalenteri (Google Workspace), kartoitusten ajanvaraus, Google Analytics 4 ja Google Search Console.",
+    mita: "Sähköposti ja kalenteri (Google Workspace), kartoitusten ajanvaraus, Google Analytics 4, Google Ads -mainonnan mittaaminen ja Google Search Console.",
   },
   {
     nimi: "Resend, Inc. (Yhdysvallat)",
