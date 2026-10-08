@@ -186,7 +186,7 @@ export const SECTIONS: Section[] = [
             <b>Sivuston toiminta ja tietoturva.</b> Peruste: oikeutettu etu (f alakohta).
           </>,
           <>
-            <b>Kävijäanalytiikka sekä mainonnan mittaaminen ja kohdentaminen.</b> Peruste: suostumus (a
+            <b>Kävijäanalytiikka, mainonnan mittaaminen (Google Ads ja Meta) ja Meta-mainonnan kohdentaminen.</b> Peruste: suostumus (a
             alakohta), jonka voit perua milloin tahansa.
           </>,
           <>

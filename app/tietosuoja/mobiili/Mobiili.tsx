@@ -372,7 +372,7 @@ export default function TietosuojaMobiili() {
                 {" "}
                 <li className="mo-rv">
                   <b>
-                    {"Kävijäanalytiikka sekä mainonnan mittaaminen ja kohdentaminen."}
+                    {"Kävijäanalytiikka, mainonnan mittaaminen (Google Ads ja Meta) ja Meta-mainonnan kohdentaminen."}
                   </b>
                   {" Peruste: suostumus (a alakohta), jonka voit perua milloin tahansa."}
                 </li>

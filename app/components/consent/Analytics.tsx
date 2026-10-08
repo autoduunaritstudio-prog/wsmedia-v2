@@ -18,7 +18,11 @@ const TAGI_ID = GA4_ID || AW_TUNNUKSET[0];
    jarjestys gtag('js') -> config on taatusti oikea, ja next/script ajaa
    saman id:n inline-skriptin vain kerran sivulatauksen aikana (ei uudelleen
    suostumuksen vaihtuessa eika reitinvaihdossa). */
-const AW_CONFIG = AW_TUNNUKSET.map((id) => `\ngtag('config', '${id}');`).join("");
+/* allow_ad_personalization_signals: false = Ads vain konversioiden
+   mittaamiseen, ei uudelleenmarkkinointia eika kohdentamista. */
+const AW_CONFIG = AW_TUNNUKSET.map(
+  (id) => `\ngtag('config', '${id}', {allow_ad_personalization_signals: false});`,
+).join("");
 
 type GtagArgs = unknown[];
 
