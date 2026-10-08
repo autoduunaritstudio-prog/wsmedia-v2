@@ -79,7 +79,7 @@ const KASITTELIJAT: { nimi: string; mita: string }[] = [
   },
   {
     nimi: "Vercel Inc. (Yhdysvallat)",
-    mita: "Sivuston palvelin ja sen tekniset lokitiedot.",
+    mita: "Sivuston palvelin, sen tekniset lokitiedot ja lomakkeiden roskapostisuoja (selaimen ja laitteen tekniset tiedot lomakkeen lähetyksen yhteydessä).",
   },
   {
     nimi: "Meta Platforms Ireland Limited",

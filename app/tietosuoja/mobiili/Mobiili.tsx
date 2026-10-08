@@ -673,7 +673,7 @@ export default function TietosuojaMobiili() {
                     {"Vercel Inc. (Yhdysvallat)"}
                   </dt>
                   <dd style={{ margin: "4px 0 0", fontSize: "15.5px", lineHeight: "1.55", color: "rgba(255,255,255,.72)" }}>
-                    {"Sivuston palvelin ja sen tekniset lokitiedot."}
+                    {"Sivuston palvelin, sen tekniset lokitiedot ja lomakkeiden roskapostisuoja (selaimen ja laitteen tekniset tiedot lomakkeen lähetyksen yhteydessä)."}
                   </dd>
                 </div>
                 {" "}

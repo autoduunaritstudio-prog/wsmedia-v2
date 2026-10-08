@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withBotId } from "botid/next/config";
 
 /* Sivukohtaiset tyylitiedostot tuotetaan app/globals.css:sta ennen
    kaannosta ja kehityspalvelimen alussa; kehityspalvelimen aikana
@@ -71,4 +72,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+/* Bottisuoja (Vercel BotID): lisaa haasteskriptin ja sen valityspalvelimen
+   uudelleenohjaukset. Ks. app/components/botid.ts ja app/api/bottisuoja.ts. */
+export default withBotId(nextConfig);

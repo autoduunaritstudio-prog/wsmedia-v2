@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { YhteysTieto } from "./Kehotukset";
 import { kirjaaKonversio } from "./consent/seuranta";
 import { maanantai, viikkoTeksti, viikot } from "./varausViikot";
+import { aikarajalla, alustaBotId } from "./botid";
 
 /**
  * MAKSUTTOMAN KARTOITUKSEN VARAUS (4.10.2026).
@@ -147,23 +148,29 @@ export default function VarausIkkuna() {
     setLahettaa(true);
     setIlmoitus(null);
     try {
-      const r = await fetch("/api/varaus", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          aika,
-          tapa,
-          yritys: g("yritys"),
-          nimi: g("nimi"),
-          puhelin: g("puhelin"),
-          sahkoposti: g("sahkoposti"),
-          osoite: g("osoite"),
-          palvelu: palvelu ?? "",
-          lisatiedot: g("lisatiedot"),
-          sivu: location.pathname,
-          ansa: g("verkkosivu"),
-        }),
-      });
+      // Bottisuoja (ks. botid.ts): alustus ja lahetys aikarajassa, ettei
+      // epaonnistunut haaste jata varausta jumiin; aikaraja -> catch.
+      const r = await aikarajalla(
+        alustaBotId().then(() =>
+          fetch("/api/varaus", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              aika,
+              tapa,
+              yritys: g("yritys"),
+              nimi: g("nimi"),
+              puhelin: g("puhelin"),
+              sahkoposti: g("sahkoposti"),
+              osoite: g("osoite"),
+              palvelu: palvelu ?? "",
+              lisatiedot: g("lisatiedot"),
+              sivu: location.pathname,
+              ansa: g("verkkosivu"),
+            }),
+          }),
+        ),
+      );
       if (r.status === 409) {
         setIlmoitus("Joku ehti varata tämän ajan juuri äsken. Valitse toinen aika.");
         setAika(null);

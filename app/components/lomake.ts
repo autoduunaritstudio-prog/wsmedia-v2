@@ -8,6 +8,7 @@
  * tyohakemus (hakemus) ja roskapostiansaan jaanyt lahetys.
  */
 import { kirjaaKonversio } from "./consent/seuranta";
+import { aikarajalla, alustaBotId } from "./botid";
 
 export type LomakeTyyppi = "yhteys" | "tarjous" | "hakemus";
 
@@ -29,7 +30,13 @@ export async function lahetaLomake(
   if (!f.has("sivu")) f.set("sivu", location.pathname);
   for (const t of liitteet) f.append("liite", t, t.name);
   try {
-    const r = await fetch("/api/lomake", { method: "POST", body: f });
+    // Bottisuoja (ks. botid.ts): alustus varmistetaan ja koko lahetys
+    // aikarajassa, ettei epaonnistunut haaste jata lomaketta jumiin.
+    const koko = liitteet.reduce((s, x) => s + x.size, 0);
+    const r = await aikarajalla(
+      alustaBotId().then(() => fetch("/api/lomake", { method: "POST", body: f })),
+      koko,
+    );
     if (r.ok && tyyppi !== "hakemus" && !f.has("verkkosivu")) kirjaaKonversio("lomake", { lomake: tyyppi });
     return r.ok;
   } catch {

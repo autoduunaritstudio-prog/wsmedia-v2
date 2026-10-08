@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import YhteysIkkuna from "./YhteysIkkuna";
 import VarausIkkuna from "./VarausIkkuna";
+import { alustaBotId } from "./botid";
 
 /**
  * KAIKKI KEHOTUSPAINIKKEET AVAAVAT IKKUNAN (4.10.2026).
@@ -33,6 +34,19 @@ export type YhteysTieto = { palvelu?: string; paketti?: string; otsikko?: string
 export default function Kehotukset() {
   const polku = usePathname();
   const palvelu = PALVELU_POLUSTA[polku];
+
+  /* Bottisuojan alustus (ks. botid.ts): ensimmainen fokus lomakkeen tai
+     ikkunan kenttaan lataa kirjaston ja kaarii fetchin. Haasteskripti
+     haetaan vasta lahetyksessa. Sivulatauksessa ei ladata mitaan. */
+  useEffect(() => {
+    const fokus = (e: FocusEvent) => {
+      if (!(e.target as Element | null)?.closest?.("form, dialog")) return;
+      document.removeEventListener("focusin", fokus);
+      void alustaBotId();
+    };
+    document.addEventListener("focusin", fokus);
+    return () => document.removeEventListener("focusin", fokus);
+  }, []);
 
   useEffect(() => {
     const klikki = (e: MouseEvent) => {

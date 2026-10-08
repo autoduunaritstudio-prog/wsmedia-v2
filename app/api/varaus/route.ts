@@ -18,6 +18,7 @@
 import { NextResponse } from "next/server";
 import { luoTapahtuma, varatut } from "./google";
 import { INFO, PUHELIN, kehys, lahetaPosti, rajoitettu } from "../posti";
+import { onBotti } from "../bottisuoja";
 import { KESTO_MIN, onVarattavissa, varattavatPaivat, vapaat, helsinki, type Tapa } from "./ajat";
 
 export const runtime = "nodejs";
@@ -92,6 +93,8 @@ function ics(id: string, alku: Date, loppu: Date, paikka: string): string {
 }
 
 export async function POST(req: Request) {
+  /* Bottisuoja ennen kaikkea muuta, ks. ../bottisuoja.ts. */
+  if (await onBotti()) return NextResponse.json({ virhe: "botti" }, { status: 403 });
   let b: Pyynto;
   try {
     b = (await req.json()) as Pyynto;

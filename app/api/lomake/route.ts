@@ -14,6 +14,7 @@
  */
 import { NextResponse } from "next/server";
 import { INFO, PUHELIN, kehys, lahetaPosti, rajoitettu, sahkopostiOk, type PostiLiite } from "../posti";
+import { onBotti } from "../bottisuoja";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -67,6 +68,8 @@ const teksti = (s: unknown, max = 4000) =>
   String(s ?? "").replace(/\r\n?/g, "\n").replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, " ").trim().slice(0, max);
 
 export async function POST(req: Request) {
+  /* Bottisuoja ennen kaikkea muuta, ks. ../bottisuoja.ts. */
+  if (await onBotti()) return NextResponse.json({ virhe: "botti" }, { status: 403 });
   let f: FormData;
   try {
     f = await req.formData();
