@@ -1,11 +1,13 @@
 /**
- * KONVERSIOT OLEMASSA OLEVAN GOOGLE-TAGIN KAUTTA (8.10.2026).
+ * GOOGLE ADS -KONVERSIOT (8.10.2026).
  *
- * Kayttaa Analytics.tsx:n lataaman tagin window.gtag-funktiota. Ei lataa
- * mitaan, ei tee config-kutsua eika lisaa toista tagia: Google Ads on saman
- * GA4-tagin kohde. window.gtag on olemassa vasta kun kavija on hyvaksynyt
- * evasteet ja tagi on ladattu. Jos suostumus on myohemmin peruttu, tagi on
- * yha sivulla, joten suostumus tarkistetaan erikseen ennen lahetysta.
+ * Kayttaa Analytics.tsx:n lataaman gtag.js:n window.gtag-funktiota. Ads ei
+ * ole GA4-tagin kohde (eri Google-tunnukset), joten Analytics.tsx tekee
+ * gtag('config', 'AW-...') kerran jokaiselle AW_TUNNUKSET-tunnukselle samaan
+ * gtag.js:aan. Toista skriptia ei ladata. window.gtag on olemassa vasta kun
+ * kavija on hyvaksynyt evasteet ja tagi on ladattu. Jos suostumus on
+ * myohemmin peruttu, tagi on yha sivulla, joten suostumus tarkistetaan
+ * erikseen ennen lahetysta.
  *
  * send_to-arvot (muotoa AW-.../...) tulevat kaannoksessa Vercelin
  * ymparistomuuttujista. Tyhja muuttuja = Ads-konversiota ei laheteta
@@ -18,6 +20,19 @@ const SEND_TO = {
   varaus: process.env.NEXT_PUBLIC_GADS_SEND_TO_VARAUS,
   puhelu: process.env.NEXT_PUBLIC_GADS_SEND_TO_PUHELU,
 } as const;
+
+/** send_to-arvojen AW-tunnukset ("AW-123/abc" -> "AW-123"), uniikit.
+ *  Virheelliset arvot ohitetaan hiljaa: arvon on alettava "AW-" ja
+ *  sisallettava kauttaviiva, ja tunnusosassa saa olla vain kirjaimia,
+ *  numeroita, "-" ja "_", koska se kirjoitetaan init-skriptiin. */
+export const AW_TUNNUKSET: string[] = [
+  ...new Set(
+    Object.values(SEND_TO).flatMap((v) => {
+      const m = /^(AW-[A-Za-z0-9_-]+)\/\S+$/.exec(v?.trim() ?? "");
+      return m ? [m[1]] : [];
+    }),
+  ),
+];
 
 const GA4_TAPAHTUMA = { lomake: "generate_lead", varaus: "generate_lead", puhelu: "phone_click" } as const;
 

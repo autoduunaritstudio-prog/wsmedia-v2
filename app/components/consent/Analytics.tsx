@@ -4,10 +4,21 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 
 import { CONSENT_CHANGED, type Consent, readConsent } from "./consent";
-import { kirjaaKonversio } from "./seuranta";
+import { AW_TUNNUKSET, kirjaaKonversio } from "./seuranta";
 
 const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+
+/* gtag.js ladataan GA4-tunnuksella. Jos GA4_ID puuttuu mutta Ads-tunnuksia
+   on, ladataan sama gtag.js ensimmaisella AW-tunnuksella, jotta Ads-
+   konversiot eivat riipu GA4:sta (eri Google-tunnukset). Lataus on silti
+   suostumuksen takana, ja ilman kumpaakaan mitaan ei ladata. */
+const TAGI_ID = GA4_ID || AW_TUNNUKSET[0];
+/* Ads-tunnusten config samassa init-skriptissa GA4:n configin jalkeen:
+   jarjestys gtag('js') -> config on taatusti oikea, ja next/script ajaa
+   saman id:n inline-skriptin vain kerran sivulatauksen aikana (ei uudelleen
+   suostumuksen vaihtuessa eika reitinvaihdossa). */
+const AW_CONFIG = AW_TUNNUKSET.map((id) => `\ngtag('config', '${id}');`).join("");
 
 type GtagArgs = unknown[];
 
@@ -91,17 +102,16 @@ export default function Analytics() {
 
   return (
     <>
-      {GA4_ID && (
+      {TAGI_ID && (
         <>
           <Script
             id="ga4-src"
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${TAGI_ID}`}
             strategy="afterInteractive"
           />
           <Script id="ga4-init" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
-gtag('js', new Date());
-gtag('config', '${GA4_ID}');`}
+gtag('js', new Date());${GA4_ID ? `\ngtag('config', '${GA4_ID}');` : ""}${AW_CONFIG}`}
           </Script>
         </>
       )}
