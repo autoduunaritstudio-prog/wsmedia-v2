@@ -23,7 +23,7 @@ const YRITYS: [string, string][] = [
   ["Y-tunnus", "3615084-4"],
   ["ALV-tunnus", "FI36150844"],
   ["Kotipaikka", "Espoo"],
-  ["Postiosoite", "Kuusiniementie 8 F 3, 02710 Espoo"],
+  ["Postiosoite", "Kuusiniementie 8 F, 02710 Espoo"],
 ];
 
 const VERKKOLASKU: [string, string][] = [

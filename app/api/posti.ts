@@ -80,7 +80,7 @@ export function kehys(otsikko: string, kappaleet: string[], rivit: [string, stri
 <h1 style="margin:0 0 16px;font-size:21px;line-height:1.3;color:#0b0f14">${esc(otsikko)}</h1>
 ${p}${t}${v}
 </td></tr>
-<tr><td style="padding:16px 28px 24px;border-top:1px solid #e3e8ee;font-size:13px;line-height:1.6;color:#5b6876">WS Media Oy, Kuusiniementie 8 F 3, 02710 Espoo<br>${PUHELIN}, ${INFO}, wsmedia.fi</td></tr>
+<tr><td style="padding:16px 28px 24px;border-top:1px solid #e3e8ee;font-size:13px;line-height:1.6;color:#5b6876">WS Media Oy, Kuusiniementie 8 F, 02710 Espoo<br>${PUHELIN}, ${INFO}, wsmedia.fi</td></tr>
 </table></td></tr></table></body></html>`;
 }
 

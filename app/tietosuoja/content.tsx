@@ -101,7 +101,7 @@ export const SECTIONS: Section[] = [
           <br />
           Y-tunnus 3615084-4
           <br />
-          Kuusiniementie 8 F 3, 02710 Espoo
+          Kuusiniementie 8 F, 02710 Espoo
           <br />
           <a href="mailto:info@wsmedia.fi">info@wsmedia.fi</a>, <a href="tel:+358405648770">040 564 8770</a>
         </address>

@@ -87,7 +87,7 @@ export default function Footer({ intro, columns, base, brandHeading = "h4", tumm
             <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
             <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>
             {/* Valilyonti ennen <br />:aa. Ilman sita pelkkaa tekstia
-                poimiva lukija saa "Kuusiniementie 8 F 302710 Espoo":
+                poimiva lukija saa "Kuusiniementie 8 F02710 Espoo":
                 selain nayttaa rivinvaihdon, mutta textContentissa
                 merkkeja ei erota mikaan. Osoite on juuri se tieto joka
                 halutaan koneelle oikein. */}

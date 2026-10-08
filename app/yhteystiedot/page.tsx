@@ -19,7 +19,7 @@ import YhteysMobiili from "./mobiili/Mobiili";
 
 const OTSIKKO = "Yhteystiedot | WS Media, Espoo";
 const KUVAUS =
-  "Ota yhteyttä WS Mediaan: puh. 040 564 8770, info@wsmedia.fi, Kuusiniementie 8 F 3, Espoo. Avoinna ma–pe 9–18 ja la 11–16. Vastaamme 24 tunnissa.";
+  "Ota yhteyttä WS Mediaan: puh. 040 564 8770, info@wsmedia.fi, Kuusiniementie 8 F, Espoo. Avoinna ma–pe 9–18 ja la 11–16. Vastaamme 24 tunnissa.";
 
 export const metadata: Metadata = {
   title: OTSIKKO,

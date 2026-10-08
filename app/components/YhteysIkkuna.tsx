@@ -110,7 +110,7 @@ export default function YhteysIkkuna() {
             </li>
             <li>
               <span>Toimisto</span>
-              <b>Kuusiniementie 8 F 3, Espoo</b>
+              <b>Kuusiniementie 8 F, Espoo</b>
             </li>
             <li>
               <span>Aukioloajat</span>

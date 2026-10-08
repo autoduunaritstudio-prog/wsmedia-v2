@@ -86,7 +86,7 @@ export const OVERLAY_NAV: NavLink[] = [
 /** Yhteystiedot yhdessa paikassa: taysvalikko ja tietosuojasivu kayttavat samoja. */
 export const CONTACT = {
   company: "WS Media Oy",
-  street: "Kuusiniementie 8 F 3",
+  street: "Kuusiniementie 8 F",
   city: "02710 Espoo",
   email: "info@wsmedia.fi",
   phone: "040 564 8770",

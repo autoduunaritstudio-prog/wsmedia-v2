@@ -359,7 +359,7 @@ function Valikko({ reitti }: { reitti: MobiiliReitti }) {
             <span aria-hidden="true" style={{ display: "block", width: "40px", height: "2px", borderRadius: "2px", background: "#6fecff" }}></span>
             <address style={{ fontStyle: "normal", fontSize: "15.5px", lineHeight: "1.6", color: "rgba(255,255,255,.75)" }}>
               <b style={{ color: "#fff" }}>{"WS Media Oy"}</b>
-              {" Kuusiniementie 8 F 3 "}
+              {" Kuusiniementie 8 F "}
               <br />
               {"02710 Espoo "}
               <br />

@@ -194,9 +194,9 @@ export default function YhteysMobiili() {
               {" "}
               <dd style={{ margin: "6px 0 0", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
                 <span style={{ fontSize: "17px", lineHeight: "1.45", color: "#11151a" }}>
-                  {"Kuusiniementie 8 F 3, 02710 Espoo"}
+                  {"Kuusiniementie 8 F, 02710 Espoo"}
                 </span>
-                <Kop arvo="Kuusiniementie 8 F 3, 02710 Espoo" aria="Kopioi osoite" />
+                <Kop arvo="Kuusiniementie 8 F, 02710 Espoo" aria="Kopioi osoite" />
               </dd>
               {" "}
             </div>
@@ -454,7 +454,7 @@ export default function YhteysMobiili() {
               {"040 564 8770"}
             </a>
             <span style={{ display: "block", padding: "6px 0", color: "rgba(255,255,255,.75)" }}>
-              {"Kuusiniementie 8 F 3"}
+              {"Kuusiniementie 8 F"}
               <br />
               {"02710 Espoo"}
             </span>

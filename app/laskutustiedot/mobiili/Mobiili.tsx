@@ -23,7 +23,7 @@ const YRITYS = [
       ['Y-tunnus', '3615084-4'],
       ['ALV-tunnus', 'FI36150844'],
       ['Kotipaikka', 'Espoo'],
-      ['Postiosoite', 'Kuusiniementie 8 F 3, 02710 Espoo'],
+      ['Postiosoite', 'Kuusiniementie 8 F, 02710 Espoo'],
     ];
 const VERKKOLASKU = [
       ['Välittäjä', 'Apix Messaging Oy'],
@@ -349,7 +349,7 @@ export default function LaskutusMobiili() {
               {"040 564 8770"}
             </a>
             <span style={{ display: "block", padding: "6px 0", color: "rgba(255,255,255,.75)" }}>
-              {"Kuusiniementie 8 F 3"}
+              {"Kuusiniementie 8 F"}
               <br />
               {"02710 Espoo"}
             </span>

@@ -241,7 +241,7 @@ export default function TietosuojaMobiili() {
                 <br />
                 {"Y-tunnus 3615084-4"}
                 <br />
-                {"Kuusiniementie 8 F 3, 02710 Espoo"}
+                {"Kuusiniementie 8 F, 02710 Espoo"}
                 <br />
                 <a href="mailto:info@wsmedia.fi">
                   {"info@wsmedia.fi"}
@@ -969,7 +969,7 @@ export default function TietosuojaMobiili() {
               {"040 564 8770"}
             </a>
             <span style={{ display: "block", padding: "6px 0", color: "rgba(255,255,255,.75)" }}>
-              {"Kuusiniementie 8 F 3, 02710 Espoo"}
+              {"Kuusiniementie 8 F, 02710 Espoo"}
             </span>
           </div>
           {" "}

@@ -74,7 +74,7 @@ export default function Alatunniste({ etusivu = false }: { etusivu?: boolean }) 
                     {"Osoite"}
                   </span>
                   <b style={{ fontSize: "15.5px", fontWeight: "600" }}>
-                    {"Kuusiniementie 8 F 3, 02710 Espoo"}
+                    {"Kuusiniementie 8 F, 02710 Espoo"}
                   </b>
                 </span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6f8191" strokeWidth="2" strokeLinecap="round" aria-hidden="true">

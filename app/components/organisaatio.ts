@@ -35,7 +35,7 @@ export const ORGANISAATIO = {
   taxID: "3615084-4",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Kuusiniementie 8 F 3",
+    streetAddress: "Kuusiniementie 8 F",
     postalCode: "02710",
     addressLocality: "Espoo",
     addressRegion: "Uusimaa",
