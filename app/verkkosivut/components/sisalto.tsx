@@ -385,7 +385,7 @@ export const PLANS = [
     badge: "Suosituin",
     for: "Yritykselle, jolla on useita palveluita ja jonka pitää näkyä hauissa.",
     li: ["6–12 sisältösivua", "Oma alasivu jokaiselle palvelulle", "Laajempi sisältö- ja hakusanatyö", "Referenssit ja työnäytteet", "Lomakkeet ja analytiikka", "Laajennettava rakenne"],
-    price: "2 990",
+    price: "alk. 2 990",
     unit: "€ + alv",
     hl: true,
   },

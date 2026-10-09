@@ -112,7 +112,7 @@ export const KE_LISTA = [SOP, EI].map((lista: { t: string; v?: string }[], k) =>
 
 const PAK = [
   { nimi: "Startti", alk: "", hinta: "1 490", suosittu: false, kuvaus: "Pienyrittäjälle, joka tarvitsee uskottavat kotisivut nopeasti.", rivit: ["Etusivu ja 3 alasivua", "Ulkoasu ja tekstit valmiina", "Tekninen hakukoneoptimointi", "Yhteydenottolomake ja analytiikka", "Julkaisu 2 viikossa"] },
-  { nimi: "Yrityssivusto", alk: "", hinta: "2 990", suosittu: true, kuvaus: "Yritykselle, jolla on useita palveluita ja jonka pitää näkyä hauissa.", rivit: ["6–12 sisältösivua", "Oma alasivu jokaiselle palvelulle", "Laajempi sisältö- ja hakusanatyö", "Referenssit ja työnäytteet", "Lomakkeet ja analytiikka", "Laajennettava rakenne"] },
+  { nimi: "Yrityssivusto", alk: "alk.", hinta: "2 990", suosittu: true, kuvaus: "Yritykselle, jolla on useita palveluita ja jonka pitää näkyä hauissa.", rivit: ["6–12 sisältösivua", "Oma alasivu jokaiselle palvelulle", "Laajempi sisältö- ja hakusanatyö", "Referenssit ja työnäytteet", "Lomakkeet ja analytiikka", "Laajennettava rakenne"] },
   { nimi: "Räätälöity", alk: "alk.", hinta: "5 900", suosittu: false, kuvaus: "Kun tarpeet menevät pakettien yli.", rivit: ["Käsin koodattu toteutus", "Omat toiminnallisuudet ja integraatiot", "Verkkokauppa tai varausjärjestelmä", "Monikieliset sivut", "Ei ylärajaa sivumäärässä"] },
 ];
 export const PAKETTI_ALKU = 1;
