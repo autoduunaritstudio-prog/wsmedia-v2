@@ -87,7 +87,7 @@ export default function Efektit() {
     siivous.push(
       kuuntele({
         kirjoita: (t: Tila) => {
-          const { y, HV } = t;
+          const { yp: y, HV } = t;
           const ohi = y > KA + 2 * HV + 200;
           /* will-change vain heron liikkeen ajaksi. */
           aseta(hero, ".mo-seo-liike", ohi ? "0" : "1");

@@ -47,7 +47,7 @@ export default function Efektit() {
     siivous.push(
       kuuntele({
         kirjoita: (t: Tila) => {
-          const { y, HV } = t;
+          const { yp: y, HV } = t;
           yNyt = y;
           const kaari = KA + 2 * HV;
           // will-change vain heron ajaksi.

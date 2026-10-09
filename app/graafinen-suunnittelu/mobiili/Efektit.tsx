@@ -53,7 +53,7 @@ export default function GraafinenEfektit() {
     siivous.push(
       kuuntele({
         kirjoita: (t: Tila) => {
-          const { y, HV } = t;
+          const { yp: y, HV } = t;
           if (y > KA + 2 * HV + 200 && viime) return; // hero on jo kokonaan peitossa
           const pf = rajaa(y / SC);
           const f = Math.round(pf * RUUDUT);

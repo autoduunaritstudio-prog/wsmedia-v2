@@ -13,6 +13,11 @@
 export type Tila = {
   /** window.scrollY */
   y: number;
+  /** Pehmennetty scrollY heroille (9.10.2026): seuraa y:ta aikavakiolla
+      PEHMENNYS, joten sormen nykaykset ja elokuvaruutujen portaat
+      tasoittuvat. Reduced motionissa ja suurissa hypyissa = y. Kaytetaan
+      vain heron sisaisiin arvoihin; asettelu ja sticky seuraavat y:ta. */
+  yp: number;
   /** Nakyman korkeus, 100svh pikseleina (ei muutu osoitepalkin mukana). */
   HV: number;
   /** Nakyman leveys. */
@@ -38,6 +43,13 @@ let suunta = 0;
 let HV = 0;
 let W = 0;
 let mittari: HTMLDivElement | null = null;
+let yp = 0;
+let edAika = 0;
+let napsauta = true;
+
+/* Heron pehmennyksen aikavakio (s). 0,09 s: 95 % kiinni n. 0,27 s:ssa,
+   samaa luokkaa kuin GSAP scrub 0,3. Kehysnopeudesta riippumaton. */
+const PEHMENNYS = 0.09;
 
 export const reduce = () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 export const onMobiili = () => typeof matchMedia !== "undefined" && matchMedia(MOBIILI).matches;
@@ -57,16 +69,28 @@ function mittaa(pakota = false) {
   W = w;
 }
 
-function kehys() {
+function kehys(aika: number) {
   raf = 0;
   const y = window.scrollY;
   const ylos = y < edellinen;
   if (y > edellinen + 4) suunta = 1;
   else if (y < edellinen - 4) suunta = -1;
-  const t: Tila = { y, HV, W, ylos, suunta, reduce: reduce() };
+  const r = reduce();
+  /* Hyppy (ankkuri, uudelleenlataus, vierityksen palautus) napsautetaan
+     suoraan: yhden kehyksen siirtyma yli 0,6 nakymaa ei ole sormesta. */
+  const dt = edAika ? Math.min(0.1, Math.max(0, (aika - edAika) / 1000)) : 0;
+  edAika = aika;
+  if (r || napsauta || Math.abs(y - edellinen) > 0.6 * (HV || 800)) yp = y;
+  else yp += (y - yp) * (1 - Math.exp(-dt / PEHMENNYS));
+  if (Math.abs(y - yp) < 0.3) yp = y;
+  napsauta = false;
+  const t: Tila = { y, yp, HV, W, ylos, suunta, reduce: r };
   kuuntelijat.forEach((k) => k.lue?.(t));
   kuuntelijat.forEach((k) => k.kirjoita?.(t));
   edellinen = y;
+  /* Pehmennys kesken: jatketaan kehyksia kunnes yp saavuttaa y:n. */
+  if (yp !== y) pyyda();
+  else edAika = 0;
 }
 
 export function pyyda() {
@@ -83,6 +107,9 @@ function kaynnista() {
   kaynnissa = true;
   mittaa(true);
   edellinen = window.scrollY;
+  yp = edellinen;
+  edAika = 0;
+  napsauta = true;
   window.addEventListener("scroll", pyyda, { passive: true });
   window.addEventListener("resize", onResize, { passive: true });
   window.addEventListener("orientationchange", onResize, { passive: true });
@@ -114,12 +141,13 @@ export function kuuntele(k: Kuuntelija) {
 /** Nykyinen tila ilman kehysta (esim. tapahtumankasittelijoille). */
 export function tilaNyt(): Tila {
   if (!HV) mittaa(true);
-  return { y: window.scrollY, HV, W, ylos: false, suunta, reduce: reduce() };
+  return { y: window.scrollY, yp, HV, W, ylos: false, suunta, reduce: reduce() };
 }
 
 /** Hyppy ilman vieritysanimaatiota (html:lla on scroll-behavior: smooth). */
 export function hyppaa(top: number) {
   window.scrollTo({ top: Math.max(0, top), behavior: "instant" as ScrollBehavior });
+  napsauta = true;
   pyyda();
 }
 

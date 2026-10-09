@@ -38,7 +38,7 @@ export default function Efektit() {
           /* Heron jalkeen arvot pysyvat lopputilassa (hero on peitossa);
              avain estaa turhat kirjoitukset. Rajaus eika paluu, jotta myos
              suora hyppy heron ohi kirjoittaa lopputilan. */
-          const y = Math.min(t.y, KA + 2 * HV + 200);
+          const y = Math.min(t.yp, KA + 2 * HV + 200);
           const pf = rajaa(y / SC);
           const kansi = rajaa((y - KA) / HV);
           const avain = `${pf.toFixed(4)}|${kansi.toFixed(4)}|${y < 80 ? y : 80}`;

@@ -88,7 +88,9 @@ export default function Efektit() {
           viimeY = y;
           heroToisto(y < KA + HV);
           // Hero on kokonaan peitossa: ei kirjoiteta turhaan.
-          if (!(y > KA + 2 * HV + 200 && viime)) {
+          if (!(t.yp > KA + 2 * HV + 200 && viime)) {
+            /* Heron sisaiset arvot pehmennetysta vierityksesta (vieritys.ts). */
+            const y = t.yp;
             const pf = rajaa(y / SC);
             const e = pehmea(pf);
             const kansi = rajaa((y - KA) / HV);

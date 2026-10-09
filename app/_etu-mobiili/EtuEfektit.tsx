@@ -46,7 +46,7 @@ export default function EtuEfektit() {
     siivous.push(
       kuuntele({
         kirjoita: (t: Tila) => {
-          const { y, HV } = t;
+          const { yp: y, HV } = t;
           if (y > 650 + 2 * HV + 200 && viime) return; // hero on jo kokonaan peitossa
           const pf = rajaa(y / 650);
           const f = Math.round(pf * 37);

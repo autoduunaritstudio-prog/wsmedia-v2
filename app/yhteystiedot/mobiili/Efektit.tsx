@@ -34,7 +34,7 @@ export default function Efektit() {
     siivous.push(
       kuuntele({
         kirjoita: (t: Tila) => {
-          const k = rajaa(t.y / PIN);
+          const k = rajaa(t.yp / PIN);
           const avain = k.toFixed(4);
           if (avain !== viimeHero) {
             viimeHero = avain;
