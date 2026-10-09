@@ -9,7 +9,13 @@ import { kytkeTarjous } from "@/app/components/mobiili/tarjous";
 import { useEffect } from "react";
 import { kuuntele, onMobiili, rajaa, reduce, type Tila, pyyda } from "@/app/components/mobiili/vieritys";
 
-const SPRITE = "/mobiili/film-ikkuna.webp";
+/* Elokuvan ruudut erillisina kuvina (9.10.2026). Aiempi yksi sarja oli
+   6240 x 4400 px (27,5 Mpx), mika ylittaa iOS Safarin kuvarajan: Safari
+   pienensi tai purki kuvan uudelleen ruutua vaihtaessa ja hero tokki
+   (verkkosivujen 6,9 Mpx:n sarja ei). Ruudut 780 x 880 px, WebP q50,
+   pienin SSIM sarjan ruutuja vastaan 0,988. */
+const RUUDUT = 38;
+const RUUTU = (i: number) => `/mobiili/film-ruudut/${i}.webp`;
 
 export default function EtuEfektit() {
   useEffect(() => {
@@ -54,7 +60,7 @@ export default function EtuEfektit() {
           const avain = `${f}|${kansi.toFixed(4)}|${y < 720 ? y : 720}`;
           if (avain === viime) return;
           viime = avain;
-          if (ruutu) ruutu.style.backgroundPosition = `${((f % 8) / 7) * 100}% ${(Math.floor(f / 8) / 4) * 100}%`;
+          piirraRuutu(f);
           if (film) film.style.transform = `translateY(${(siirto - 60 * kansi).toFixed(1)}px)`;
           if (vihje) {
             vihje.style.opacity = (1 - rajaa((y - 560) / 150)).toFixed(3);
@@ -67,21 +73,60 @@ export default function EtuEfektit() {
       }),
     );
 
-    /* Elokuvan koko sarja (650 kt) haetaan vasta sivun latauduttua.
-       Siihen asti ruudussa on ensimmainen kuva (film-ikkuna-0.webp). */
+    /* Ruudut haetaan vasta sivun latauduttua. Siihen asti ruudussa on
+       ensimmainen kuva (film-ikkuna-0.webp, CSS-tausta ja LCP-ehdokas).
+       Canvas piirretaan vain kun nakyva ruutu vaihtuu; puuttuva ruutu
+       korvataan lahimmalla ladatulla. */
     let peruttu = false;
-    const lataaSarja = () => {
-      const img = new Image();
-      img.decoding = "async";
-      img.src = SPRITE;
-      const valmis = () => !peruttu && ruutu?.classList.add("mo-film-valmis");
-      (img.decode ? img.decode() : Promise.resolve()).then(valmis, valmis);
+    const kuvat: Array<HTMLImageElement | null> = new Array(RUUDUT).fill(null);
+    let kangas: HTMLCanvasElement | null = null;
+    let ctx: CanvasRenderingContext2D | null = null;
+    let haluttu = 0;
+    let piirretty = -1;
+    function piirraRuutu(f: number) {
+      haluttu = f;
+      if (!ctx) return;
+      let i = -1;
+      for (let d = 0; d < RUUDUT && i < 0; d++) {
+        if (kuvat[f - d]) i = f - d;
+        else if (kuvat[f + d]) i = f + d;
+      }
+      /* Ennen kuin canvas on nakyvissa, CSS-tausta (ruutu 0) on oikeampi
+         kuin lahin ladattu: canvas nostetaan vasta tarkalla ruudulla. */
+      if (i < 0 || i === piirretty || (i !== f && kangas?.style.opacity !== "1")) return;
+      piirretty = i;
+      ctx.drawImage(kuvat[i]!, 0, 0, 780, 880);
+      if (kangas) kangas.dataset.ruutu = String(i); // mittausta varten (scripts/mobiili-hero-pehmennys.mjs)
+      if (kangas && kangas.style.opacity !== "1") kangas.style.opacity = "1";
+    }
+    const lataaRuudut = () => {
+      if (!ruutu || peruttu) return;
+      kangas = document.createElement("canvas");
+      kangas.width = 780;
+      kangas.height = 880;
+      kangas.setAttribute("aria-hidden", "true");
+      kangas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0";
+      ctx = kangas.getContext("2d", { alpha: false });
+      ruutu.appendChild(kangas);
+      for (let i = 0; i < RUUDUT; i++) {
+        const img = new Image();
+        img.decoding = "async";
+        img.src = RUUTU(i);
+        const valmis = () => {
+          if (peruttu) return;
+          kuvat[i] = img;
+          piirretty = -1;
+          piirraRuutu(haluttu);
+        };
+        (img.decode ? img.decode() : Promise.resolve()).then(valmis, () => img.complete && img.naturalWidth && valmis());
+      }
     };
-    if (document.readyState === "complete") lataaSarja();
-    else window.addEventListener("load", lataaSarja, { once: true });
+    if (document.readyState === "complete") lataaRuudut();
+    else window.addEventListener("load", lataaRuudut, { once: true });
     siivous.push(() => {
       peruttu = true;
-      window.removeEventListener("load", lataaSarja);
+      window.removeEventListener("load", lataaRuudut);
+      kangas?.remove();
     });
 
     /* ---------- SANAVAIHTO 2,6 s valein heron aikana ----------

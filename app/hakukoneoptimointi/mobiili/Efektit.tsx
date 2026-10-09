@@ -1,7 +1,7 @@
 "use client";
 
 /* HAKUKONEOPTIMOINNIN PUHELINVERSION OMAT TEHOSTEET (suunnitelman
-   renderVals: h, tulokset, kipinat, tyot, nk, tyoTabit, tasot, ke, ukk,
+   renderVals: h, tulokset, tyot, nk, tyoTabit, tasot, ke, ukk,
    laheta). Kirjoittaa suoraan DOMiin, ei renderoi mitaan eika kayta
    Reactin tilaa vierityksen aikana. Yhteiset asiat (palkki, valikko,
    ikkunat, paljastukset, parallaksi, verkko, kuvat) ovat Moottori.tsx:ssa. */
@@ -60,7 +60,6 @@ export default function Efektit() {
     const rivit = qa("[data-seo-rivi]");
     const oma = rivit[4] ?? null;
     const merkki = q("[data-seo=merkki]");
-    const kipinat = qa("[data-seo-kipina]");
     const tyop = q("[data-seo=tyop]");
     const pillit = qa("[data-seo-pilli]");
     const vihje = q("[data-seo=vihje]");
@@ -129,7 +128,6 @@ export default function Efektit() {
             aseta(oma, ".mo-s-odota", pf < 0.01 ? "1" : "0");
             aseta(merkki, "background", yksi ? "#1e8e3e" : "#0b8aa3");
             aseta(merkki, "text", yksi ? "★ SIJA 1" : "SINÄ");
-            kipinat.forEach((k) => aseta(k, ".mo-on", yksi ? "1" : "0"));
           }
           aseta(tyop, "transform", `scaleX(${(Math.round(100 * rajaa(pf / 0.87)) / 100).toFixed(2)})`);
           pillit.forEach((p, i) => {

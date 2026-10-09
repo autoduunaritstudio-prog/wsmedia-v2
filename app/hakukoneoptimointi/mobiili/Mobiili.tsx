@@ -18,7 +18,7 @@
 import { Ansa, LomakeVirhe } from "@/app/components/mobiili/Lomakeosat";
 import "./mobiili.css";
 import "./lisat.css";
-import { Fragment, type CSSProperties } from "react";
+import { Fragment } from "react";
 import { mo, TYHJA, logoLeveys } from "@/app/components/mobiili/mo";
 import Kuori from "@/app/components/mobiili/Kuori";
 import Alatunniste from "@/app/components/mobiili/Alatunniste";
@@ -39,7 +39,6 @@ const TULOKSET = [
   ...MUUT.map((m, i) => Object.assign({}, m, { oma: false, y: Math.round((i + Math.max(0, Math.min(1, i + 1 - 4))) * RIVI), bg: '#fff', reuna: 'none', z: 1, sk: 1, op: '1.000', rad: 0, luokka: 's-rivi' })),
   { nimi: 'Yrityksesi Oy', polku: 'yrityksesi.fi', otsikko: 'Ilmalämpöpumpun asennus Espoossa | Yrityksesi Oy', ik: 'Y', vari: '#0b8aa3', oma: true, y: 4 * RIVI, bg: '#e8f9fc', reuna: 'inset 0 0 0 1.5px #0b8aa3, 0 8px 26px -10px rgba(11,138,163,.65)', z: 3, sk: 1, op: 1, rad: 10, merkki: '#0b8aa3', merkkiT: 'SINÄ', luokka: 's-rivi s-odota' }
 ];
-const KIPINAT = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => { const ang = -Math.PI * (0.1 + 0.8 * i / 7); return { luokka: 's-kipina', x: 40 + i * 38, dx: Math.round(Math.cos(ang) * 36), dy: Math.round(Math.sin(ang) * 30), c: i % 2 ? '#6fecff' : '#7ff0b0' }; });
 const TY = ['Tekninen', 'Sisältö', 'Linkit', 'Paikallinen'];
 const TYOT_PILLIT = TY.map((t) => ({ t, op: 0, bg: '#101a28', fg: '#8fa3b5', reuna: 'inset 0 0 0 1px rgba(255,255,255,.1)' }));
 const logot = [
@@ -261,12 +260,6 @@ export default function HakuMobiili() {
                         {" "}
                       </div>
                       {" "}
-                    </Fragment>
-                  ))}
-                  {" "}
-                  {(KIPINAT).map((k: any, kI: number) => (
-                    <Fragment key={kI}>
-                      <i className={mo(k.luokka)} data-seo-kipina="" style={{ left: `${k.x}px`, top: "16px", "--dx": `${k.dx}px`, "--dy": `${k.dy}px`, background: k.c } as CSSProperties}></i>
                     </Fragment>
                   ))}
                   {" "}

@@ -14,16 +14,21 @@ try {
     await ctx.route("**/*", (q) => (new URL(q.request().url()).hostname === "localhost" ? q.continue() : q.abort()));
     const p = await ctx.newPage();
     const errs = [];
+    const pyynnot = [];
     p.on("console", (m) => m.type() === "error" && errs.push(m.text()));
+    p.on("requestfailed", (q) => errs.push("FAIL " + q.url()));
+    p.on("response", (q) => /film-(ikkuna|ruudut)/.test(q.url()) && pyynnot.push(q.url().replace(/^.*\/mobiili\//, "") + " " + q.status()));
     await p.goto(POHJA + "/", { waitUntil: "load" });
     await p.waitForFunction(() => !document.documentElement.dataset.lataus, null, { timeout: 20000 }).catch(() => {});
     await p.waitForTimeout(1500);
     const r = await p.evaluate(async () => {
       const ruutu = document.querySelector("[data-etu=ruutu]");
+      const kangas = ruutu.querySelector("canvas");
       const teksti = document.querySelector("[data-etu=teksti]");
       const raf = () => new Promise((r) => requestAnimationFrame(r));
-      const tila = () => ruutu.style.backgroundPosition + " | " + teksti.style.transform;
-      const fi = () => { const [x, y] = ruutu.style.backgroundPosition.split(" ").map(parseFloat); return Math.round((x / 100) * 7) + 8 * Math.round((y / 100) * 4); };
+      /* Elokuva piirretaan canvasiin; piirretty ruutu on data-ruutu-attribuutissa. */
+      const fi = () => Number(kangas?.dataset.ruutu ?? 0);
+      const tila = () => fi() + " | " + teksti.style.transform;
       // Nykiva vieritys: 60 px askel joka 4. kehys, 0..640
       const hypyt = []; let ed = fi();
       for (let y = 60; y <= 600; y += 60) {
@@ -46,7 +51,7 @@ try {
     await p.reload({ waitUntil: "load" });
     await p.waitForTimeout(1500);
     const lataus = await p.evaluate(() => ({ y: scrollY, t: document.querySelector("[data-etu=teksti]").style.transform }));
-    console.log(JSON.stringify({ reduced, ...r, lataus, errs }, null, 1));
+    console.log(JSON.stringify({ reduced, ...r, lataus, errs, sprite: pyynnot.filter((x) => x.startsWith("film-ikkuna.webp")), ruutuja: pyynnot.filter((x) => x.startsWith("film-ruudut/") && x.endsWith(" 200")).length }, null, 1));
     await ctx.close();
   }
 } finally { await browser.close(); }

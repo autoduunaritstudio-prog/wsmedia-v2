@@ -3,9 +3,8 @@
 
    Heron elokuva: suunnitelmassa sarja (3120x2200, 8x5 ruutua a 390x440)
    ladattiin heti. Tassa ensimmainen ruutu on oma 12 kt:n kuvansa, joka
-   piirtyy heti, ja koko sarja (650 kt) haetaan sivun latauduttua
-   (EtuEfektit.tsx lisaa .mo-film-valmis kun sarja on purettu).
+   piirtyy heti. Muut ruudut (public/mobiili/film-ruudut/) haetaan sivun
+   latauduttua ja piirretaan canvasiin (EtuEfektit.tsx, 9.10.2026).
    Koot prosentteina, jotta ruutu taytaa nakyman leveyden millä tahansa
    puhelimella; 390 px:n leveydella tulos on sama kuin suunnitelmassa. */
 .mo-s-etu .mo-e-film { background-image: url(/mobiili/film-ikkuna-0.webp); background-size: 100% 100% }
-.mo-s-etu .mo-e-film.mo-film-valmis { background-image: url(/mobiili/film-ikkuna.webp); background-size: 800% 500% }
